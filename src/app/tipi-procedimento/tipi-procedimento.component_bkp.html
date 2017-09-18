@@ -1,0 +1,97 @@
+<dx-data-grid #tipiProcedimentoGrid id="procTypeGridContainer" [dataSource]="dataSourceTipiProcedimento" [allowColumnResizing]="true"
+  [columnAutoWidth]="true" [selectedRowKeys]="[]" (onEditingStart)="handleEvent('editingStart', $event)" (onInitNewRow)="handleEvent('InitNewRow', $event)"
+  (onRowInserting)="handleEvent('RowInserting',$event)" (onRowInserted)="handleEvent('RowInserted', $event)" (onRowUpdating)="handleEvent('RowUpdating', $event)"
+  (onRowUpdated)="handleEvent('RowUpdated', $event)" (onRowRemoving)="handleEvent('RowRemoving', $event)" (onRowRemoved)="handleEvent('RowRemoved', $event)"
+  (onSelectionChanged)="handleEvent('SelectionChanged', $event)">
+
+  <dxo-paging [enabled]="true"></dxo-paging>
+
+  <dxo-selection mode="single">
+  </dxo-selection>
+
+  <dxo-editing mode="popup" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true">
+
+   <dxo-form width="100%">
+
+
+      <dxi-item itemType="tabbed" [tabPanelOptions]="{ deferRendering: false, width: '100%' }">
+        <dxi-tab title="Dettagli Tipo Procedimento">
+          <dxi-item dataField="NomeTipoProcedimento"></dxi-item>
+          <dxi-item dataField="DescrizioneTipoProcedimentoDefault"></dxi-item>
+
+          <dxi-item dataField="ModoAperturaDefault">
+            <!--<dx-select-box [items]="defaultOpenModesSource" placeholder="Scegli Tipo Procedimento" [showClearButton]="true" [(value)]="ModoAperturaDefault">
+            </dx-select-box>-->
+          </dxi-item>
+        </dxi-tab>
+        <dxi-tab title="Aziende Collegate">
+          <dx-data-grid
+            #aziendeTipiProcedimentoGrid
+            id="companyProcTypeGridContainer"
+            [dataSource]="associatedCompaniesSource"
+            [allowColumnResizing]="true"
+            [columnAutoWidth]="true">
+            <dxo-editing
+              mode="form"
+              [allowUpdating]="true"
+              [allowDeleting]="true"
+              [allowAdding]="true">
+            </dxo-editing>
+
+              <dxi-column dataField="AziendaDetails.Nome"></dxi-column>
+              <dxi-column dataField="DescrizioneTipoProcedimento"></dxi-column>
+              <dxi-column dataField="ModoApertura"></dxi-column>
+          </dx-data-grid>
+        </dxi-tab>
+      </dxi-item>
+
+
+      <!--<dxi-item dataField="AziendeStruttureTipiProcedimentoDetails">-->
+      <!--<dx-tag-box-->
+      <!--[dataSource]="companyDataSource"-->
+      <!--displayExpr="Nome"-->
+      <!--valueExpr="Id">-->
+      <!--</dx-tag-box>-->
+      <!--</dxi-item>-->
+
+
+      <!--<dxi-item-->
+      <!--dataField="ModoAperturaDefault"-->
+      <!--[editorType]="dxSelectBox"-->
+      <!--[editorOptions]="{ items: defaultOpenModesSource, value: 'currentEditingRow?.ModoAperturaDefault', showClearButton: 'true', placeholder:'Scegli Tipo Procedimento' }">-->
+      <!--</dxi-item>-->
+
+    </dxo-form>
+
+  </dxo-editing>
+
+  <dxi-column dataField="IdTipoProcedimento" caption="Id"></dxi-column>
+  <dxi-column dataField="NomeTipoProcedimento"></dxi-column>
+  <dxi-column dataField="DescrizioneTipoProcedimentoDefault"></dxi-column>
+  <dxi-column dataField="ModoAperturaDefault">
+    <dxo-lookup [dataSource]="defaultOpenModesSource">
+    </dxo-lookup>
+  </dxi-column>
+  </dx-data-grid>
+
+  <!--<div id="events">-->
+  <!--<div>-->
+  <!--<div class="caption">-->
+  <!--Fired events-->
+  <!--</div>-->
+  <!--<dx-button id="clear" text="Clear" (onClick)="clearEvents()"></dx-button>-->
+  <!--</div>-->
+  <!--<ul>-->
+  <!--<li *ngFor="let event of events">{{event}}</li>-->
+  <!--</ul>-->
+  <!--</div>-->
+
+
+  <!--<div *ngIf="selectedRow">-->
+  <!--<p><b>con l'evento onSelectionChanged</b> {{selectedRow.DescrizioneTipoProcedimentoDefault}}</p>-->
+  <!--</div>-->
+
+
+  <!--<div *ngIf="tipiProcedimentoGrid.selectedRowKeys.length">-->
+  <!--<p><b>col SelectedRowKeys</b> {{tipiProcedimentoGrid.selectedRowKeys[0].DescrizioneTipoProcedimentoDefault}}</p>-->
+  <!--</div>-->

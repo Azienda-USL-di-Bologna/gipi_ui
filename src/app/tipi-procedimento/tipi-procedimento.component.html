@@ -1,0 +1,90 @@
+<dx-data-grid #tipiProcedimentoGrid id="procTypeGridContainer" [dataSource]="dataSourceTipiProcedimento" [allowColumnResizing]="true"
+  [columnAutoWidth]="true" [selectedRowKeys]="[]" (onEditingStart)="handleEvent('editingStart', $event)" (onInitNewRow)="handleEvent('InitNewRow', $event)"
+  (onInitialized)="handleEvent('procTypeGridInit', $event)" (onRowInserting)="handleEvent('RowInserting',$event)" (onRowInserted)="handleEvent('RowInserted', $event)"
+  (onRowUpdating)="handleEvent('RowUpdating', $event)" (onRowUpdated)="handleEvent('RowUpdated', $event)" (onRowRemoving)="handleEvent('RowRemoving', $event)"
+  (onRowRemoved)="handleEvent('RowRemoved', $event)" (onSelectionChanged)="handleEvent('SelectionChanged', $event)">
+
+  <dxo-paging [enabled]="true"></dxo-paging>
+
+  <dxo-selection mode="single">
+  </dxo-selection>
+
+
+
+  <!--  <dxo-editing mode="popup" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true">
+    <dxo-form width="100%">
+      <dxi-item itemType="tabbed" [tabPanelOptions]="{ deferRendering: false, width: '100%' }">
+        <dxi-tab title="Dettagli Tipo Procedimento">
+          <dxi-item dataField="NomeTipoProcedimento"></dxi-item>
+          <dxi-item dataField="DescrizioneTipoProcedimentoDefault"></dxi-item>
+          <dxi-item dataField="ModoAperturaDefault"></dxi-item>
+        </dxi-tab>
+        <dxi-tab title="Aziende Collegate">
+          <dxi-item>
+            <dx-data-grid #aziendeTipiProcedimentoGrid id="companyProcTypeGridContainer" [dataSource]='associatedCompaniesSource' [allowColumnResizing]="true"
+              [columnAutoWidth]="true" (onInitialized)="handleEvent('companyProcTypeGridInit', $event)">
+              <dxo-editing mode="form" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true">
+              </dxo-editing>
+
+              <dxi-column dataField="AziendaDetails.Nome"></dxi-column>
+              <dxi-column dataField="DescrizioneTipoProcedimento"></dxi-column>
+              <dxi-column dataField="ModoApertura"></dxi-column>
+              </dx-data-grid>
+          </dxi-item>
+        </dxi-tab>
+      </dxi-item>
+    </dxo-form>
+  </dxo-editing>
+
+-->
+
+
+
+
+  <dxi-column dataField="idTipoProcedimento" caption="Id"></dxi-column>
+  <dxi-column dataField="nomeTipoProcedimento"></dxi-column>
+  <dxi-column dataField="descrizioneTipoProcedimentoDefault"></dxi-column>
+  <dxi-column dataField="modoAperturaDefault">
+    <dxo-lookup [dataSource]="defaultOpenModesSource">
+    </dxo-lookup>
+  </dxi-column>
+
+
+
+
+  <dxo-editing mode="form" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true">
+    <dxo-form width="100%">
+      <dxi-item dataField="nomeTipoProcedimento"></dxi-item>
+      <dxi-item dataField="descrizioneTipoProcedimentoDefault"></dxi-item>
+      <dxi-item dataField="modoAperturaDefault"></dxi-item>
+    </dxo-form>
+  </dxo-editing>
+
+  <dxi-column caption="Associa" cellTemplate="buttonCellTemplate"></dxi-column>
+  <div *dxTemplate="let d of 'buttonCellTemplate'">
+    <dx-button icon="search" (onClick)="buttonAssociaClicked(d.key)"></dx-button>
+  </div>
+
+
+  </dx-data-grid>
+
+  <dx-popup title="associa aziende al Tipo Procedimento" [(visible)]="popupVisible">
+    <div *dxTemplate="let data of 'content'">
+      <dx-data-grid #aziendeTipiProcedimentoGrid id="companyProcTypeGridContainer" [dataSource]='associatedCompaniesSource' [allowColumnResizing]="true"
+        [columnAutoWidth]="true" (onRowUpdating)="handleEvent('aziendeTipiProcedimentoGridRowUpdating', $event)">
+        <dxo-editing mode="form" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true">
+        </dxo-editing>
+
+        <dxi-column dataField="idAzienda.id" >
+          <dxo-lookup [dataSource]="companyDataSource.store()" valueExpr="id" displayExpr="nome">
+          </dxo-lookup>
+        </dxi-column>
+
+        <dxi-column dataField="descrizioneTipoProcedimento"></dxi-column>
+        <dxi-column dataField="modoApertura">
+          <dxo-lookup [dataSource]="defaultOpenModesSource">
+          </dxo-lookup>
+        </dxi-column>
+        </dx-data-grid>
+    </div>
+  </dx-popup>
