@@ -3,6 +3,9 @@ import {NgModule} from '@angular/core';
 
 import 'devextreme/data/odata/store';
 import 'devextreme/data/odata/context';
+import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedimento/definizione-tipi-procedimento.service';
+import { UtilityFunctions } from './utility-functions';
+
 
 import {
   DxDataGridModule,
@@ -26,14 +29,14 @@ import {rootRouterConfig} from './app.routes';
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import {TipiProcedimentoComponent} from './tipi-procedimento/tipi-procedimento.component';
-import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/dettaglio-provvedimento.component'
+import { DefinizioneTipiProcedimentoComponent } from './definizione-tipi-procedimento/definizione-tipi-procedimento.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     TipiProcedimentoComponent,
-    DettaglioProvvedimentoComponent
+    DefinizioneTipiProcedimentoComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +55,7 @@ import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/detta
     DxCheckBoxModule,
     DxTextAreaModule
   ],
-  providers: [],
+  providers: [DefinizioneTipiProcedimentoService, UtilityFunctions],
   bootstrap: [AppComponent]
 })
 export class AppModule {
