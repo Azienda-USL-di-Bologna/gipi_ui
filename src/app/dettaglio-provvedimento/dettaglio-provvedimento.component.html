@@ -1,0 +1,103 @@
+<dx-responsive-box style="padding:16px;">
+  <dxi-row [ratio]="1"></dxi-row>
+
+  <dxi-col [ratio]="1"></dxi-col>
+  <dxi-col [ratio]="1"></dxi-col>
+
+
+  <dxi-item>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="lg"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="md"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="sm"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="xs"></dxi-location>
+    <div style="width: 100%; height: 100%;">
+
+      <div style="text-align: center; width: 100%; height: 100%;">
+        <div style="display: inline-block; text-align: initial;">
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Nome</div> <!-- nome -->
+            <div class="dx-field-value">
+              <dx-text-box placeholder="Inserire testo" [value]="procedimento.nomeTipoProcedimento" [disabled]="true">
+              </dx-text-box>
+            </div> <!-- end nome -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Descrizione</div> <!-- descrizione -->
+            <div class="dx-field-value">
+              <dx-text-area [height]="90" [(value)]="procedimento.descrizioneTipoProcedimentoDefault" [disabled]="true">
+              </dx-text-area>
+            </div> <!-- end descrizione -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Modo apertura</div> <!-- modo apertura -->
+            <div class="dx-field-value">
+              <dx-text-box placeholder="Inserire testo" [value]="procedimento.modoApertura" [disabled]="true">
+              </dx-text-box>
+            </div> <!-- end mod apertura -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Norma di riferimento</div> <!-- norma di rifermineto -->
+            <div class="dx-field-value">
+              <dx-text-area [height]="90" [(value)]="procedimento.normaRiferimento" [disabled]="true">
+              </dx-text-area>
+            </div> <!-- end norma di rifermineto -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Valido dal</div> <!-- valido dal -->
+            <div class="dx-field-value">
+              <dx-date-box  type="date" [displayFormat]= "'dd/MM/yyyy'" [disabled]="true" [value]="">
+              </dx-date-box>
+            </div> <!-- end valido dal -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Valido al</div> <!-- valido al -->
+            <div class="dx-field-value">
+              <dx-date-box  type="date" [displayFormat]= "'dd/MM/yyyy'" [disabled]="true">
+              </dx-date-box>
+            </div> <!-- end valido al -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Durata massima sospensione (gg)</div> <!-- durata max sospensione -->
+            <div class="dx-field-value">
+              <dx-text-box placeholder="Inserire testo" [value]="procedimento.durataMassimaSospensione" [disabled]="true">
+              </dx-text-box>
+            </div> <!-- end durata max sospensione -->
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </dxi-item>
+
+  <dxi-item>
+    <dxi-location [row]="0" [col]="1" [colspan]="1" screen="lg"></dxi-location>
+    <dxi-location [row]="0" [col]="1" [colspan]="1" screen="md"></dxi-location>
+    <dxi-location [row]="0" [col]="1" [colspan]="1" screen="sm"></dxi-location>
+    <dxi-location [row]="0" [col]="1" [colspan]="1" screen="xs"></dxi-location>
+    <div style="width: 100%; height: 100%; text-align: center;">
+      <div style="max-width:700px; text-align: initial;">
+        <h4 style="text-align: center; margin-bottom: 30px;">Aziende Associate</h4>
+
+        <div style="margin-bottom: 8px; overflow: auto;" *ngFor="let azienda of aziende">
+          <dx-check-box [value]="procedimento.aziendeAssociate[azienda] ? procedimento.aziendeAssociate[azienda].associata : false" [disabled]="true" #checkAssociata></dx-check-box>
+          <span style="margin-right: 16px;">{{azienda}}</span>
+          <div style="float:right;">
+            <dx-button [text]="checkAssociata.value ? 'Togli' : 'Associa'" [type]="confirm" (onClick)="associaDisassocia(azienda)" ></dx-button>
+            <dx-button [text]="'dettagli'" [type]="confirm" (onClick)="download()" [disabled]="!checkAssociata.value"></dx-button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </dxi-item>
+
+</dx-responsive-box>

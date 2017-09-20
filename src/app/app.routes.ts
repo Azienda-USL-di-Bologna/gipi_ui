@@ -8,8 +8,7 @@ import { DefinizioneTipiProcedimentoComponent } from './definizione-tipi-procedi
 
 export const rootRouterConfig: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent},
+  { path: 'home', component: DettaglioProvvedimentoComponent},
   { path: 'tipi-procedimento', component: TipiProcedimentoComponent},
   { path: 'definizione-tipi-procedimento', component: DefinizioneTipiProcedimentoComponent},
 ];
-

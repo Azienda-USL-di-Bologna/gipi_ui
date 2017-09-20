@@ -17,7 +17,10 @@ import {
   DxTagBoxModule,
   DxTabsModule,
   DxPopupModule,
-  DxDateBoxModule 
+  DxResponsiveBoxModule,
+  DxDateBoxModule,
+  DxCheckBoxModule,
+  DxTextAreaModule
 } from 'devextreme-angular';
 
 import {RouterModule} from '@angular/router';
@@ -47,7 +50,10 @@ import { DefinizioneTipiProcedimentoComponent } from './definizione-tipi-procedi
     DxTagBoxModule,
     DxTabsModule,
     DxPopupModule,
-    DxDateBoxModule 
+    DxResponsiveBoxModule,
+    DxDateBoxModule,
+    DxCheckBoxModule,
+    DxTextAreaModule
   ],
   providers: [DefinizioneTipiProcedimentoService],
   bootstrap: [AppComponent]
