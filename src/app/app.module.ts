@@ -13,7 +13,11 @@ import {
   DxTemplateModule,
   DxTagBoxModule,
   DxTabsModule,
-  DxPopupModule
+  DxPopupModule,
+  DxResponsiveBoxModule,
+  DxDateBoxModule,
+  DxCheckBoxModule,
+  DxTextAreaModule
 } from 'devextreme-angular';
 
 import {RouterModule} from '@angular/router';
@@ -21,13 +25,15 @@ import {rootRouterConfig} from './app.routes';
 
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
-import {TipiProcedimentoComponent} from './tipi-procedimento/tipi-procedimento.component'
+import {TipiProcedimentoComponent} from './tipi-procedimento/tipi-procedimento.component';
+import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/dettaglio-provvedimento.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    TipiProcedimentoComponent
+    TipiProcedimentoComponent,
+    DettaglioProvvedimentoComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +46,11 @@ import {TipiProcedimentoComponent} from './tipi-procedimento/tipi-procedimento.c
     DxTemplateModule,
     DxTagBoxModule,
     DxTabsModule,
-    DxPopupModule
+    DxPopupModule,
+    DxResponsiveBoxModule,
+    DxDateBoxModule,
+    DxCheckBoxModule,
+    DxTextAreaModule
   ],
   providers: [],
   bootstrap: [AppComponent]
