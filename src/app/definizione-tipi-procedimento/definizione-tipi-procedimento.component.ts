@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedimento.service';
-import {UtilityFunctions} from '../utility-functions';
+//import { UtilityFunctions } from '../utility-functions';
 
 
 @Component({
@@ -12,11 +12,11 @@ import {UtilityFunctions} from '../utility-functions';
 export class DefinizioneTipiProcedimentoComponent {
 
   private dataSource: DataSource;
-  
 
-  constructor(private service: DefinizioneTipiProcedimentoService, private utilityFunctions: UtilityFunctions) {
+
+  constructor(private service: DefinizioneTipiProcedimentoService) {
     this.dataSource = this.service.getTipiProcedimentoSource();
-    debugger;
+    //debugger;
     console.log(this.dataSource);
 
   }
@@ -28,39 +28,51 @@ export class DefinizioneTipiProcedimentoComponent {
 
   }
 
-  private laData(roba: any){
-    return roba.toString()+"!!!";
 
-  }
 
-  private calcolaSeAttiva(coso: any){
+
+  private calcolaSeAttiva(row: any) {
     //console.log(coso);
     //debugger;
+
+    //var utilityFunctions = new UtilityFunctions();
+
     var attivo: String;
+
+
+    var daAttivare: boolean;
+
+    var now = new Date();
+    var today = now.getTime();
+
+    if (row.dataInizioValidita == null)
+      daAttivare = false;
+    else if (row.dataInizioValidita > now)
+      daAttivare = false;
+    else if (row.dataFineValidita == null)
+      daAttivare = true;
+    else if (row.dataInizioValidita <= row.dataFineValidita)
+      daAttivare = true;
+    else
+      daAttivare = false;
+
+    //debugger;
+
+
+    /*    if(utilityFunctions.isDataBiggerOrEqual(new Date(),coso.dataInizioValidita) && coso.dataInizioValidita!= null)
+          attivo = "Sì";
+        else
+          attivo = "No";
     
+    
+        if((utilityFunctions.isDataBiggerOrEqual(coso.dataFineValidita, new Date()) || coso.dataFineValidita==null) && attivo=="Sì")
+          attivo = "Sì";
+        else
+          attivo = "No";*/
 
-    var utilityFunctions2 = new UtilityFunctions();
-
-    //var prova:boolean;
-    //prova = utilityFunctions2.isDataBiggerOrEqual(new Date(), new Date());
-
-    if(utilityFunctions2.isDataBiggerOrEqual(new Date(),coso.dataInizioValidita) && coso.dataInizioValidita!= null)
-      attivo = "Sì";
-    else
-      attivo = "No";
-
-
-    if((utilityFunctions2.isDataBiggerOrEqual(coso.dataFineValidita, new Date()) || coso.dataFineValidita==null) && attivo=="Sì")
-      attivo = "Sì";
-    else
-      attivo = "No";
+    attivo = daAttivare ? 'Sì' : 'No'
 
     return attivo;
-    
+
   }
-
-
-
-
-
 }

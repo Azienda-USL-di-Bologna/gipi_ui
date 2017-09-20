@@ -49,7 +49,7 @@ import { DefinizioneTipiProcedimentoComponent } from './definizione-tipi-procedi
     DxPopupModule,
     DxDateBoxModule 
   ],
-  providers: [DefinizioneTipiProcedimentoService, UtilityFunctions],
+  providers: [DefinizioneTipiProcedimentoService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
