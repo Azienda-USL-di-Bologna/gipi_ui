@@ -1,0 +1,41 @@
+<dx-data-grid 
+id="gridContainer"
+[dataSource]="dataSource"
+[allowColumnReordering]="true"
+(onEditingStart)="handleEvent('EditingStart',$event)"
+(onInitNewRow)="handleEvent('InitNewRow',$event)"
+(onRowInserting)="handleEvent('RowInserting',$event)"
+(onRowInserted)="handleEvent('RowInserted',$event)"
+(onRowUpdating)="handleEvent('RowUpdating',$event)"
+(onRowUpdated)="handleEvent('RowUpdated',$event)"
+(onRowRemoving)="handleEvent('RowRemoving',$event)"
+(onRowRemoved)="handleEvent('RowRemoved',$event)">
+
+<dxo-paging [enabled]="true"></dxo-paging>
+<dxo-editing 
+     mode="popup"
+     [allowUpdating]="true"
+     [allowDeleting]="false"
+     [allowAdding]="true">
+-      <dxo-form>
+         <dxi-item dataField="nomeTipoProcedimento"></dxi-item>
+         <dxi-item dataField="dataInizioValidita"></dxi-item>
+         <dxi-item dataField="dataFineValidita"></dxi-item>
+         <dxi-item dataField="modoApertura"></dxi-item>
+     </dxo-form>
+</dxo-editing>
+
+
+<dxi-column dataField="nomeTipoProcedimento"></dxi-column>
+<dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva"></dxi-column>
+<dxi-column dataField="dataInizioValidita" [dataType]="'String'" [format]="'dd/MM/yyyy'"></dxi-column>
+<dxi-column dataField="dataFineValidita" [dataType]="'String'" [format]="'dd/MM/yyyy'"></dxi-column>
+<dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
+
+
+
+
+</dx-data-grid>
+
+
+

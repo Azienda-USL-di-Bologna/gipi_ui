@@ -3,6 +3,9 @@ import {NgModule} from '@angular/core';
 
 import 'devextreme/data/odata/store';
 import 'devextreme/data/odata/context';
+import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedimento/definizione-tipi-procedimento.service';
+import { UtilityFunctions } from './utility-functions';
+
 
 import {
   DxDataGridModule,
@@ -13,7 +16,8 @@ import {
   DxTemplateModule,
   DxTagBoxModule,
   DxTabsModule,
-  DxPopupModule
+  DxPopupModule,
+  DxDateBoxModule 
 } from 'devextreme-angular';
 
 import {RouterModule} from '@angular/router';
@@ -21,13 +25,15 @@ import {rootRouterConfig} from './app.routes';
 
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
-import {TipiProcedimentoComponent} from './tipi-procedimento/tipi-procedimento.component'
+import {TipiProcedimentoComponent} from './tipi-procedimento/tipi-procedimento.component';
+import { DefinizioneTipiProcedimentoComponent } from './definizione-tipi-procedimento/definizione-tipi-procedimento.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    TipiProcedimentoComponent
+    TipiProcedimentoComponent,
+    DefinizioneTipiProcedimentoComponent
   ],
   imports: [
     BrowserModule,
@@ -40,9 +46,10 @@ import {TipiProcedimentoComponent} from './tipi-procedimento/tipi-procedimento.c
     DxTemplateModule,
     DxTagBoxModule,
     DxTabsModule,
-    DxPopupModule
+    DxPopupModule,
+    DxDateBoxModule 
   ],
-  providers: [],
+  providers: [DefinizioneTipiProcedimentoService, UtilityFunctions],
   bootstrap: [AppComponent]
 })
 export class AppModule {
