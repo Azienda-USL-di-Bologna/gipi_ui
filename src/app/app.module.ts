@@ -60,7 +60,7 @@ import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/detta
     DxTextAreaModule,
     HttpModule
   ],
-  providers: [DefinizioneTipiProcedimentoService, UtilityFunctions, DettaglioProvvedimentoService],
+  providers: [DefinizioneTipiProcedimentoService, DettaglioProvvedimentoService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
