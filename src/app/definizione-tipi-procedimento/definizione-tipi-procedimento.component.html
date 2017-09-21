@@ -28,8 +28,8 @@ id="gridContainer"
 
 <dxi-column dataField="nomeTipoProcedimento"></dxi-column>
 <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva"></dxi-column>
-<dxi-column dataField="dataInizioValidita" [dataType]="'String'" [format]="'dd/MM/yyyy'"></dxi-column>
-<dxi-column dataField="dataFineValidita" [dataType]="'String'" [format]="'dd/MM/yyyy'"></dxi-column>
+<dxi-column dataField="dataInizioValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'"></dxi-column>
+<dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'"></dxi-column>
 <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
 
 
