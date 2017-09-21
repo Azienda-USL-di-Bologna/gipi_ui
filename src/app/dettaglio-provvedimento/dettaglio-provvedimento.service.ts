@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, Response, RequestOptions } from '@angular/http';
+import { odataAziendeTipiProcPath } from '../../environments/app.constant';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class DettaglioProvvedimentoService {
@@ -16,7 +19,14 @@ export class DettaglioProvvedimentoService {
   }
 
   getDettaglioTipoProcedimento(idTipoProcedimento){
-    this._http.get('');
+    console.log('get of service');
+    let requestOptions = new RequestOptions({headers: this.headers});
+    let url = 'http://localhost:10006/odata.svc' + odataAziendeTipiProcPath + '?$filter=FK_id_tipo_procedimento eq ' + idTipoProcedimento + '&$expand=idAzienda';
+    console.log('url: ', url);
+    this.http.get(url).map((response:Response) => {
+                console.log(response.json());
+                response.json();
+            }).subscribe();;
   }
 
 }

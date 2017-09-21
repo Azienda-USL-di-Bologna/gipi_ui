@@ -92,7 +92,7 @@
           <span style="margin-right: 16px;">{{azienda}}</span>
           <div style="float:right;">
             <dx-button [text]="checkAssociata.value ? 'Togli' : 'Associa'" [type]="confirm" (onClick)="associaDisassocia(azienda)" ></dx-button>
-            <dx-button [text]="'dettagli'" [type]="confirm" (onClick)="download()" [disabled]="!checkAssociata.value"></dx-button>
+            <dx-button [text]="'dettagli'" [type]="confirm" (onClick)="getDettaglioTipoProcedimento(procedimento.idTipoProcedimento)" [disabled]="!checkAssociata.value"></dx-button>
           </div>
         </div>
 

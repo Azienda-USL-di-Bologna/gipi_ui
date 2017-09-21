@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DettaglioProvvedimentoService } from './dettaglio-provvedimento.service';
 
 @Component({
   selector: 'app-dettaglio-provvedimento',
@@ -10,8 +11,9 @@ export class DettaglioProvvedimentoComponent implements OnInit {
   procedimento: any;
   aziende: string[];
 
-  constructor() {
+  constructor(private service: DettaglioProvvedimentoService ) {
     this.procedimento = {
+      idTipoProcedimento: 3,
       nomeTipoProcedimento: 'nome azienda a caso',
       descrizioneTipoProcedimentoDefault: ' qui invece la descrizione',
       modoApertura: 'apri come vuoi',
@@ -40,6 +42,12 @@ export class DettaglioProvvedimentoComponent implements OnInit {
     }else{
       this.procedimento.aziendeAssociate[azienda] = {nome: azienda, associata: true};
     }
+  }
+
+  getDettaglioTipoProcedimento(){
+    console.log('Button get dettaglio tipo procedimento');
+    let json = this.service.getDettaglioTipoProcedimento(this.procedimento.idTipoProcedimento);
+    console.log('json obtained:', json);
   }
 
 }
