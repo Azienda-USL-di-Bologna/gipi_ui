@@ -10,7 +10,17 @@ import ODataStore from 'devextreme/data/odata/store';
 
 @Injectable()
 export class DefinizioneTipiProcedimentoService {
+  private selectRow: any;
+
+
+
   constructor() { }
+
+  valorizzaSelectedRow(riga: any){
+    this.selectRow=riga;
+    
+  }
+
   getTipiProcedimentoSource() {
 
     return new DataSource({

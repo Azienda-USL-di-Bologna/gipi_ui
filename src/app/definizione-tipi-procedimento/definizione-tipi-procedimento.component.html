@@ -1,39 +1,56 @@
 <dx-data-grid 
-id="gridContainer"
-[dataSource]="dataSource"
-[allowColumnReordering]="true"
-(onEditingStart)="handleEvent('EditingStart',$event)"
-(onInitNewRow)="handleEvent('InitNewRow',$event)"
-(onRowInserting)="handleEvent('RowInserting',$event)"
-(onRowInserted)="handleEvent('RowInserted',$event)"
-(onRowUpdating)="handleEvent('RowUpdating',$event)"
-(onRowUpdated)="handleEvent('RowUpdated',$event)"
-(onRowRemoving)="handleEvent('RowRemoving',$event)"
-(onRowRemoved)="handleEvent('RowRemoved',$event)">
-
-<dxo-paging [enabled]="true"></dxo-paging>
-<dxo-editing 
-     mode="popup"
-     [allowUpdating]="true"
-     [allowDeleting]="false"
-     [allowAdding]="true">
--      <dxo-form>
-         <dxi-item dataField="nomeTipoProcedimento"></dxi-item>
-         <dxi-item dataField="dataInizioValidita"></dxi-item>
-         <dxi-item dataField="dataFineValidita"></dxi-item>
-         <dxi-item dataField="modoApertura"></dxi-item>
-     </dxo-form>
-</dxo-editing>
+    id="gridContainer"
+    [dataSource]="dataSource"
+    [allowColumnReordering]="true"
+    [paging]="false"
+    (onEditingStart)="handleEvent('EditingStart',$event)"
+    (onInitNewRow)="handleEvent('InitNewRow',$event)"
+    (onRowInserting)="handleEvent('RowInserting',$event)"
+    (onRowInserted)="handleEvent('RowInserted',$event)"
+    (onRowUpdating)="handleEvent('RowUpdating',$event)"
+    (onRowUpdated)="handleEvent('RowUpdated',$event)"
+    (onRowRemoving)="handleEvent('RowRemoving',$event)"
+    (onRowRemoved)="handleEvent('RowRemoved',$event)">
 
 
-<dxi-column dataField="nomeTipoProcedimento"></dxi-column>
-<dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva"></dxi-column>
-<dxi-column dataField="dataInizioValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'"></dxi-column>
-<dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'"></dxi-column>
-<dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
+    <dxo-filter-row 
+        [visible]="true" 
+        [operationDescriptions]="filterOperationDescriptions">
+    </dxo-filter-row>
+    <dxo-editing 
+        mode="popup"
+        [allowUpdating]="true"
+        [allowDeleting]="false"
+        [allowAdding]="true">
+    -      <dxo-form>
+            <dxi-item dataField="nomeTipoProcedimento"></dxi-item>
+            <dxi-item dataField="descrizioneTipoProcedimentoDefault"></dxi-item>
+            <dxi-item dataField="modoApertura"></dxi-item>
+            <dxi-item dataField="normaRiferimento"></dxi-item>
+            <dxi-item dataField="dataInizioValidita"></dxi-item>
+            <dxi-item dataField="dataFineValidita"></dxi-item>
+            <dxi-item dataField="durataMassimaSospensione"></dxi-item>
+            
+        </dxo-form>
+    </dxo-editing>
 
 
+    <dxi-column dataField="nomeTipoProcedimento"></dxi-column>
+    <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva" [allowSorting]="true" [allowFiltering]="true"></dxi-column>
+    <dxi-column dataField="dataInizioValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="false"></dxi-column>
+    <dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="false"></dxi-column>
+    <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
+    <dxi-column caption="Associa Tipi a Strutture" cellTemplate="buttonCellTemplate"></dxi-column>
+    <div *dxTemplate="let d of 'buttonCellTemplate'">
+        <a routerLink="/home" routerLinkActive="active">
+            <dx-button text="Associa" (onClick)="handleEvent('associaClicked', $event)"></dx-button>
+        </a>
+        
+    </div>
 
+    <dxi-column dataField="descrizioneTipoProcedimentoDefault" [visible]="false"></dxi-column>
+    <dxi-column dataField="durataMassimaSospensione" [visible]="false"></dxi-column>
+    <dxi-column dataField="normaRiferimento" [visible]="false"></dxi-column>
 
 </dx-data-grid>
 
