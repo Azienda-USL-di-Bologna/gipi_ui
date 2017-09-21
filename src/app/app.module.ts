@@ -59,9 +59,8 @@ import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/detta
     DxCheckBoxModule,
     DxTextAreaModule,
     HttpModule
-    DxTextAreaModule
   ],
-  providers: [DefinizioneTipiProcedimentoService, UtilityFunctions, DettaglioProvvedimentoService],
+  providers: [DefinizioneTipiProcedimentoService, DettaglioProvvedimentoService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
