@@ -19,10 +19,10 @@ export class DettaglioProvvedimentoService {
     this.headers.append('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
   }
 
-  getDettaglioTipoProcedimento(idTipoProcedimento) : Observable<any>{
+  getAziendeAssociateRequest(idTipoProcedimento) : Observable<any>{
     let requestOptions = new RequestOptions({headers: this.headers});
     let url = 'http://localhost:10006/odata.svc' + odataAziendeTipiProcPath + '?$filter=FK_id_tipo_procedimento eq ' + idTipoProcedimento + '&$expand=idAzienda';
-    return this.http.get(url).map((response:Response) => {
+    return this.http.get(url).map(response => {
                 console.log('responde: ', response.json().d.results[0])
                 return response.json().d.results;
             });

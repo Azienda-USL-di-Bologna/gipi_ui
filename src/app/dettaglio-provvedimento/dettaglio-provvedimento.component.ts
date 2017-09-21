@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DettaglioProvvedimentoService } from './dettaglio-provvedimento.service';
+import { DefinizioneTipiProcedimentoService } from '../definizione-tipi-procedimento/definizione-tipi-procedimento.service';
 import 'rxjs/add/operator/toPromise';
 
 
@@ -13,7 +13,7 @@ export class DettaglioProvvedimentoComponent implements OnInit {
   procedimento: any;
   aziende: string[];
 
-  constructor(private service: DettaglioProvvedimentoService ) {
+  constructor(private service: DefinizioneTipiProcedimentoService ) {
     // Il procedimento viene passato dall'interfaccia principale. Qua recupero solo le associazioni con le aziende.
     this.procedimento = {
       idTipoProcedimento: 3,
@@ -53,7 +53,7 @@ export class DettaglioProvvedimentoComponent implements OnInit {
 
 
   getAziendeAssociate() {
-    this.service.getDettaglioTipoProcedimento(this.procedimento.idTipoProcedimento)
+    this.service.getAziendeAssociateRequest(this.procedimento.idTipoProcedimento)
                             .toPromise()
                             .then(response => response.forEach(a => {
                               this.procedimento.aziendeAssociate[a.idAzienda.nome] = a.idAzienda;
