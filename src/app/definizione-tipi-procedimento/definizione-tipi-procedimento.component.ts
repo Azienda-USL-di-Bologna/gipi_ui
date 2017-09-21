@@ -22,6 +22,7 @@ export class DefinizioneTipiProcedimentoComponent {
   }
 
   private handleEvent(name: String, event: Event) {
+    console.log(name, event);
     switch(name){
       case "associaClicked":
       this.associaClicked(event);
@@ -34,13 +35,13 @@ export class DefinizioneTipiProcedimentoComponent {
   }
 
   private associaClicked(e: Event){
-    console.log(e);
+
     this.service.valorizzaSelectedRow(e);
   
   }
 
 
-  private filterOperationDescriptions: Object = {"contains": "contiene", "notcontains": "non contiene", "=":"uguale", "<>":"diverso",
+  private filterOperationDescriptions: Object = {"contains": "contiene", "notContains": "non contiene", "equal":"uguale", "notEqual":"diverso",
     "startsWith":"comincia con",  "endsWith":"finisce con", "between":"compreso tra", "greaterThan":"maggiore di",
     "greaterThanOrEqual":"maggiore o uguale a","lessThan":"minore di", "lessThanOrEqual":"minore o uguale a" }
 

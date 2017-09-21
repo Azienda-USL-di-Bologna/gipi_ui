@@ -10,7 +10,11 @@
     (onRowUpdating)="handleEvent('RowUpdating',$event)"
     (onRowUpdated)="handleEvent('RowUpdated',$event)"
     (onRowRemoving)="handleEvent('RowRemoving',$event)"
-    (onRowRemoved)="handleEvent('RowRemoved',$event)">
+    (onRowRemoved)="handleEvent('RowRemoved',$event)"
+    (onRowClick)="handleEvent('RowClick',$event)"
+    (onSelectionChanged)="handleEvent('SelectionChanged',$event)"
+    (onCellClick)="handleEvent('CellClick',$event)"
+>
 
 
     <dxo-filter-row 
@@ -22,7 +26,7 @@
         [allowUpdating]="true"
         [allowDeleting]="false"
         [allowAdding]="true">
-    -      <dxo-form>
+        <dxo-form>
             <dxi-item dataField="nomeTipoProcedimento"></dxi-item>
             <dxi-item dataField="descrizioneTipoProcedimentoDefault"></dxi-item>
             <dxi-item dataField="modoApertura"></dxi-item>
@@ -30,7 +34,6 @@
             <dxi-item dataField="dataInizioValidita"></dxi-item>
             <dxi-item dataField="dataFineValidita"></dxi-item>
             <dxi-item dataField="durataMassimaSospensione"></dxi-item>
-            
         </dxo-form>
     </dxo-editing>
 

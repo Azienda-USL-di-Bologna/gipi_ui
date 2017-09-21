@@ -59,7 +59,6 @@ import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/detta
     DxCheckBoxModule,
     DxTextAreaModule,
     HttpModule
-    DxTextAreaModule
   ],
   providers: [DefinizioneTipiProcedimentoService, UtilityFunctions, DettaglioProvvedimentoService],
   bootstrap: [AppComponent]
