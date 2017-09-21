@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DettaglioProvvedimentoService } from './dettaglio-provvedimento.service';
+import 'rxjs/add/operator/toPromise';
+
 
 @Component({
   selector: 'app-dettaglio-provvedimento',
@@ -12,6 +14,7 @@ export class DettaglioProvvedimentoComponent implements OnInit {
   aziende: string[];
 
   constructor(private service: DettaglioProvvedimentoService ) {
+    // Il procedimento viene passato dall'interfaccia principale. Qua recupero solo le associazioni con le aziende.
     this.procedimento = {
       idTipoProcedimento: 3,
       nomeTipoProcedimento: 'nome azienda a caso',
@@ -23,31 +26,43 @@ export class DettaglioProvvedimentoComponent implements OnInit {
       durataMassimaSospensione: '',
       aziendeAssociate: new Array()
     }
-    this.aziende = ['AUSL BO', 'AOSP BO', 'IOR', 'AUSL IMOLA', 'AOSP FE', 'AUSL FE', 'AUSL PARMA'];
+    this.aziende = ['AUSLBO', 'AOSPBO', 'IOR', 'AUSLIMOLA', 'AOSPFE', 'AUSLFE', 'AUSLPARMA'];
     // TODO:  da commentare la parte sottostante
     let auslbo = {
       nome: 'AUSL BO',
       associata: false
     }
-    this.procedimento.aziendeAssociate['AUSL BO'] = auslbo;
+    this.getAziendeAssociate();
+    // this.procedimento.aziendeAssociate['AUSL BO'] = auslbo;
   }
 
   ngOnInit() {
   }
 
   associaDisassocia(azienda: string){
-    console.log('Azienda', azienda);
     if(this.procedimento.aziendeAssociate[azienda]){
-      this.procedimento.aziendeAssociate[azienda].associata = !this.procedimento.aziendeAssociate[azienda].associata;
+      // TODO: Chiamata al server per la disassociazione
+      this.procedimento.aziendeAssociate[azienda] = undefined;
+      // this.procedimento.aziendeAssociate[azienda].associata = !this.procedimento.aziendeAssociate[azienda].associata;
     }else{
-      this.procedimento.aziendeAssociate[azienda] = {nome: azienda, associata: true};
+      // TODO: Chiamata al server per la l'associazione
+      this.procedimento.aziendeAssociate[azienda] = {azienda};
     }
   }
 
-  getDettaglioTipoProcedimento(){
-    console.log('Button get dettaglio tipo procedimento');
-    let json = this.service.getDettaglioTipoProcedimento(this.procedimento.idTipoProcedimento);
-    console.log('json obtained:', json);
+
+
+  getAziendeAssociate() {
+    this.service.getDettaglioTipoProcedimento(this.procedimento.idTipoProcedimento)
+                            .toPromise()
+                            .then(response => response.forEach(a => {
+                              this.procedimento.aziendeAssociate[a.idAzienda.nome] = a.idAzienda;
+                            }));
   }
+
+  // isAssociata(azienda: string) : boolean {
+  //   console.log('Azienda: ', azienda)
+  //   return this.procedimento.aziendeAssociate[azienda];
+  // }
 
 }
