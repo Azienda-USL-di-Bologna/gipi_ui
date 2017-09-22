@@ -48,7 +48,7 @@
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
     <dxi-column caption="Associa Tipi a Strutture" cellTemplate="buttonCellTemplate"></dxi-column>
     <div *dxTemplate="let d of 'buttonCellTemplate'">
-        <a routerLink="/home" routerLinkActive="active">
+        <a routerLink="/app-dettaglio-provvedimento" routerLinkActive="active">
             <dx-button text="Associa" (onClick)="handleEvent('associaClicked', $event)"></dx-button>
         </a>
         
