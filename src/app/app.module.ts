@@ -30,7 +30,6 @@ import {rootRouterConfig} from './app.routes';
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import { DefinizioneTipiProcedimentoComponent } from './definizione-tipi-procedimento/definizione-tipi-procedimento.component';
-//import { DettaglioProvvedimentoService } from './dettaglio-provvedimento/dettaglio-provvedimento.service';
 import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/dettaglio-provvedimento.component';
 
 @NgModule({

@@ -26,7 +26,7 @@ export class DettaglioProvvedimentoComponent implements OnInit {
       durataMassimaSospensione: '',
       aziendeAssociate: new Array()
     }
-    this.aziende = ['AUSLBO', 'AOSPBO', 'IOR', 'AUSLIMOLA', 'AOSPFE', 'AUSLFE', 'AUSLPARMA'];
+    
     // TODO:  da commentare la parte sottostante
     let auslbo = {
       nome: 'AUSL BO',
@@ -34,6 +34,9 @@ export class DettaglioProvvedimentoComponent implements OnInit {
     }
     this.getAziendeAssociate();
     // this.procedimento.aziendeAssociate['AUSL BO'] = auslbo;
+
+    console.log('selectedRow', this.service.selectedRow);
+    
   }
 
   ngOnInit() {
@@ -57,6 +60,7 @@ export class DettaglioProvvedimentoComponent implements OnInit {
                             .toPromise()
                             .then(response => response.forEach(a => {
                               this.procedimento.aziendeAssociate[a.idAzienda.nome] = a.idAzienda;
+                              this.aziende = ['AUSLBO', 'AOSPBO', 'IOR', 'AUSLIMOLA', 'AOSPFE', 'AUSLFE', 'AUSLPARMA'];
                             }));
   }
 
