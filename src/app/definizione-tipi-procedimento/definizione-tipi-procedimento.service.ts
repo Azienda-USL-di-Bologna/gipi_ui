@@ -9,12 +9,12 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class DefinizioneTipiProcedimentoService {
 
-  private selectRow: any;
+  public selectedRow: any;
 
   constructor(private http: Http) { }
 
   valorizzaSelectedRow(riga: any){
-    this.selectRow=riga;
+    this.selectedRow=riga;
   }
 
   getTipiProcedimentoSource() {
