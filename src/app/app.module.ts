@@ -29,16 +29,14 @@ import {rootRouterConfig} from './app.routes';
 
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
-import {TipiProcedimentoComponent} from './tipi-procedimento/tipi-procedimento.component';;
 import { DefinizioneTipiProcedimentoComponent } from './definizione-tipi-procedimento/definizione-tipi-procedimento.component';
-import { DettaglioProvvedimentoService } from './dettaglio-provvedimento/dettaglio-provvedimento.service';
+//import { DettaglioProvvedimentoService } from './dettaglio-provvedimento/dettaglio-provvedimento.service';
 import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/dettaglio-provvedimento.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    TipiProcedimentoComponent,
     DefinizioneTipiProcedimentoComponent,
     DettaglioProvvedimentoComponent
   ],
@@ -60,7 +58,7 @@ import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/detta
     DxTextAreaModule,
     HttpModule
   ],
-  providers: [DefinizioneTipiProcedimentoService, DettaglioProvvedimentoService],
+  providers: [DefinizioneTipiProcedimentoService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

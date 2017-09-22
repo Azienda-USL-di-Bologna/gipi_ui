@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+/*import { Injectable } from '@angular/core';
 import { Headers, Http, Response, RequestOptions } from '@angular/http';
 import { odataAziendeTipiProcPath } from '../../environments/app.constant';
 import { Observable } from 'rxjs/Observable';
@@ -28,4 +28,4 @@ export class DettaglioProvvedimentoService {
             });
   }
 
-}
+}*/
