@@ -8,6 +8,8 @@ import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/detta
 
 export const rootRouterConfig: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: DettaglioProvvedimentoComponent},
+  { path: 'home', component: HomeComponent},
   { path: 'definizione-tipi-procedimento', component: DefinizioneTipiProcedimentoComponent},
+  { path: 'app-dettaglio-provvedimento', component: DettaglioProvvedimentoComponent},
+
 ];
