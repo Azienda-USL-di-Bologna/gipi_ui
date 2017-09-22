@@ -12,7 +12,12 @@ import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedime
 export class DefinizioneTipiProcedimentoComponent {
 
   private dataSource: DataSource;
+  private texts: Object={
+    editRow:"Modifica",
+    saveRowChanges:"Salva",
+    cancelRowChanges:"Annulla"
 
+  }
 
   constructor(private service: DefinizioneTipiProcedimentoService) {
     this.dataSource = this.service.getTipiProcedimentoSource();
@@ -31,7 +36,6 @@ export class DefinizioneTipiProcedimentoComponent {
     }
 
   }
-
 
 
   private cellClick(e: any){
