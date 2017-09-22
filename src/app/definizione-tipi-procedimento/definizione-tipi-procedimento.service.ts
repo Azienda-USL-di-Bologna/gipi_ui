@@ -41,7 +41,7 @@ export class DefinizioneTipiProcedimentoService {
   }
 
   getAziendeAssociateRequest(idTipoProcedimento: string) : Observable<any>{
-    let url = 'http://localhost:10006/odata.svc' + odataAziendeTipiProcPath + '?$filter=FK_id_tipo_procedimento eq ' + idTipoProcedimento + '&$expand=idAzienda';
+    let url = ODATA_STORE_ROOT_URL + odataAziendeTipiProcPath + '?$filter=FK_id_tipo_procedimento eq ' + idTipoProcedimento + '&$expand=idAzienda';
     return this.http.get(url).map(response => response.json().d.results );
   }
 
