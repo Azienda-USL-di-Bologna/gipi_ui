@@ -1,3 +1,9 @@
 /deep/ .dx-datagrid-action, .dx-datagrid-drag-action {
     text-align: center !important;
+    font-weight: bold;
+}
+
+/deep/.dx-datagrid-text-content {
+    text-align: center !important;
+    font-weight: bold;
 }
