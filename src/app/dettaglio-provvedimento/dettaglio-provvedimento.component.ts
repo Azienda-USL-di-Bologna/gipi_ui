@@ -15,45 +15,34 @@ export class DettaglioProvvedimentoComponent implements OnInit {
 
   constructor(private service: DefinizioneTipiProcedimentoService ) {
     // Il procedimento viene passato dall'interfaccia principale. Qua recupero solo le associazioni con le aziende.
+
     this.procedimento = {
-      idTipoProcedimento: 3,
-      nomeTipoProcedimento: 'nome azienda a caso',
-      descrizioneTipoProcedimentoDefault: ' qui invece la descrizione',
-      modoApertura: 'apri come vuoi',
-      normaRiferimento: '9999',
-      dataInizioValidita: new Date(),
-      dataFineValidita: '',
-      durataMassimaSospensione: '',
+      idTipoProcedimento: service.selectedRow.idTipoProcedimento,
+      nomeTipoProcedimento: service.selectedRow.nomeTipoProcedimento,
+      descrizioneTipoProcedimentoDefault: service.selectedRow.descrizioneTipoProcedimentoDefault,
+      modoApertura: service.selectedRow.modoApertura,
+      normaRiferimento: service.selectedRow.normaRiferimento,
+      dataInizioValidita: service.selectedRow.dataInizioValidita,
+      dataFineValidita: service.selectedRow.dataFineValidita,
+      durataMassimaSospensione: service.selectedRow.durataMassimaSospensione,
       aziendeAssociate: new Array()
     }
-    
-    // TODO:  da commentare la parte sottostante
-    let auslbo = {
-      nome: 'AUSL BO',
-      associata: false
-    }
     this.getAziendeAssociate();
-    // this.procedimento.aziendeAssociate['AUSL BO'] = auslbo;
-
-    console.log('selectedRow', this.service.selectedRow);
-    
   }
 
   ngOnInit() {
   }
 
-  associaDisassocia(azienda: string){
-    if(this.procedimento.aziendeAssociate[azienda]){
-      // TODO: Chiamata al server per la disassociazione
-      this.procedimento.aziendeAssociate[azienda] = undefined;
-      // this.procedimento.aziendeAssociate[azienda].associata = !this.procedimento.aziendeAssociate[azienda].associata;
-    }else{
-      // TODO: Chiamata al server per la l'associazione
-      this.procedimento.aziendeAssociate[azienda] = {azienda};
-    }
-  }
-
-
+  // associaDisassocia(azienda: string){
+  //   if(this.procedimento.aziendeAssociate[azienda]){
+  //     // TODO: Chiamata al server per la disassociazione
+  //     this.procedimento.aziendeAssociate[azienda] = undefined;
+  //     // this.procedimento.aziendeAssociate[azienda].associata = !this.procedimento.aziendeAssociate[azienda].associata;
+  //   }else{
+  //     // TODO: Chiamata al server per la l'associazione
+  //     this.procedimento.aziendeAssociate[azienda] = {azienda};
+  //   }
+  // }
 
   getAziendeAssociate() {
     this.service.getAziendeAssociateRequest(this.procedimento.idTipoProcedimento)
@@ -63,10 +52,5 @@ export class DettaglioProvvedimentoComponent implements OnInit {
                               this.aziende = ['AUSLBO', 'AOSPBO', 'IOR', 'AUSLIMOLA', 'AOSPFE', 'AUSLFE', 'AUSLPARMA'];
                             }));
   }
-
-  // isAssociata(azienda: string) : boolean {
-  //   console.log('Azienda: ', azienda)
-  //   return this.procedimento.aziendeAssociate[azienda];
-  // }
 
 }

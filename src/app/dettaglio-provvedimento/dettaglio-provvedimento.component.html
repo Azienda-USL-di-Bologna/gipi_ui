@@ -18,7 +18,7 @@
           <div style="margin-bottom: 8px; overflow: auto;">
             <div class="dx-field-label">Nome</div> <!-- nome -->
             <div class="dx-field-value">
-              <dx-text-box placeholder="Inserire testo" [value]="procedimento.nomeTipoProcedimento" [disabled]="true">
+              <dx-text-box [value]="procedimento.nomeTipoProcedimento" [disabled]="true">
               </dx-text-box>
             </div> <!-- end nome -->
           </div>
@@ -34,7 +34,7 @@
           <div style="margin-bottom: 8px; overflow: auto;">
             <div class="dx-field-label">Modo apertura</div> <!-- modo apertura -->
             <div class="dx-field-value">
-              <dx-text-box placeholder="Inserire testo" [value]="procedimento.modoApertura" [disabled]="true">
+              <dx-text-box [value]="procedimento.modoApertura" [disabled]="true">
               </dx-text-box>
             </div> <!-- end mod apertura -->
           </div>
@@ -50,7 +50,7 @@
           <div style="margin-bottom: 8px; overflow: auto;">
             <div class="dx-field-label">Valido dal</div> <!-- valido dal -->
             <div class="dx-field-value">
-              <dx-date-box  type="date" [displayFormat]= "'dd/MM/yyyy'" [disabled]="true" [value]="">
+              <dx-date-box  type="date" [displayFormat]= "'dd/MM/yyyy'" [disabled]="true" [value]="procedimento.dataInizioValidita">
               </dx-date-box>
             </div> <!-- end valido dal -->
           </div>
@@ -58,7 +58,7 @@
           <div style="margin-bottom: 8px; overflow: auto;">
             <div class="dx-field-label">Valido al</div> <!-- valido al -->
             <div class="dx-field-value">
-              <dx-date-box  type="date" [displayFormat]= "'dd/MM/yyyy'" [disabled]="true">
+              <dx-date-box  type="date" [displayFormat]= "'dd/MM/yyyy'" [disabled]="true" [value]="procedimento.dataFineValidita">
               </dx-date-box>
             </div> <!-- end valido al -->
           </div>
@@ -66,7 +66,7 @@
           <div style="margin-bottom: 8px; overflow: auto;">
             <div class="dx-field-label">Durata massima sospensione (gg)</div> <!-- durata max sospensione -->
             <div class="dx-field-value">
-              <dx-text-box placeholder="Inserire testo" [value]="procedimento.durataMassimaSospensione" [disabled]="true">
+              <dx-text-box [value]="procedimento.durataMassimaSospensione" [disabled]="true">
               </dx-text-box>
             </div> <!-- end durata max sospensione -->
           </div>
@@ -90,8 +90,8 @@
             <dx-check-box [value]="procedimento.aziendeAssociate[azienda] ? true : false" [disabled]="true" #checkAssociata></dx-check-box>
             <span style="margin-right: 16px;">{{azienda}}</span>
             <div style="float:right;">
-              <dx-button [text]="checkAssociata.value ? 'Togli' : 'Associa'" [type]="confirm" (onClick)="associaDisassocia(azienda)" ></dx-button>
-              <dx-button [text]="'dettagli'" [type]="confirm" (onClick)="getAziendeAssociate()" [disabled]="!checkAssociata.value"></dx-button>
+              <dx-button [text]="checkAssociata.value ? 'Togli' : 'Associa'" [type]="confirm"></dx-button>
+              <dx-button [text]="'dettagli'" [type]="confirm" [disabled]="!checkAssociata.value"></dx-button>
             </div>
           </div>
 
