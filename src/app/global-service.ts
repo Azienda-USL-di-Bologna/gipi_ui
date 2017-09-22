@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
-  ODATA_STORE_ROOT_URL, odataAziendeStruttureTipiProcPath,
+  ODATA_STORE_ROOT_URL, 
   odataTipiProcedimentoPath, odataCompanyPath
 } from '../environments/app.constant'
 

@@ -5,6 +5,5 @@
 
 export const environment = {
   production: false,
-  serverRootUrl: 'http://localhost:10006',
-  odataStoreRootUrl: 'http://localhost:10006/odata.svc' ,
+  odataStoreRootUrl: 'http://localhost:10006/gipi/odata.svc' ,
 };

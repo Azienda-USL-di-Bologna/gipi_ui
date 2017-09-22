@@ -24,22 +24,20 @@ export class DefinizioneTipiProcedimentoComponent {
   private handleEvent(name: String, event: Event) {
     console.log(name, event);
     switch(name){
-      case "associaClicked":
-      this.associaClicked(event);
-
-        //QUA CI VA LA FUNZIONE CHE CHIAMA LA VIDEATA DI FAY
+      case "CellClick":
+        this.cellClick(event);
         break;
 
     }
 
   }
 
-  private associaClicked(e: Event){
 
-    this.service.valorizzaSelectedRow(e);
-  
+
+  private cellClick(e: any){
+    this.service.valorizzaSelectedRow(e.data);
+
   }
-
 
   private filterOperationDescriptions: Object = {"contains": "contiene", "notContains": "non contiene", "equal":"uguale", "notEqual":"diverso",
     "startsWith":"comincia con",  "endsWith":"finisce con", "between":"compreso tra", "greaterThan":"maggiore di",
