@@ -47,10 +47,12 @@ export class DettaglioProvvedimentoComponent implements OnInit {
   getAziendeAssociate() {
     this.service.getAziendeAssociateRequest(this.procedimento.idTipoProcedimento)
                             .toPromise()
-                            .then(response => response.forEach(a => {
-                              this.procedimento.aziendeAssociate[a.idAzienda.nome] = a.idAzienda;
+                            .then(response => {
                               this.aziende = ['AUSLBO', 'AOSPBO', 'IOR', 'AUSLIMOLA', 'AOSPFE', 'AUSLFE', 'AUSLPARMA'];
-                            }));
+                              response.forEach(a => {
+                                this.procedimento.aziendeAssociate[a.idAzienda.nome] = a.idAzienda;
+                              })
+                          });
   }
 
 }

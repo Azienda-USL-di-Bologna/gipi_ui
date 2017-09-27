@@ -14,6 +14,7 @@ export class DefinizioneTipiProcedimentoComponent {
   private dataSource: DataSource;
   private texts: Object={
     editRow:"Modifica",
+    deleteRow:"Elimina",
     saveRowChanges:"Salva",
     cancelRowChanges:"Annulla",
     deleteRow: "Cancella",
