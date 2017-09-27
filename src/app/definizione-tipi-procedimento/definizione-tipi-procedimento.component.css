@@ -7,3 +7,55 @@
     text-align: center !important;
     font-weight: bold;
 }
+
+
+/deep/ .navbar {
+    border-color: #993366 !important;
+    background-color: #993366 !important;
+    border: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+
+/deep/ .navbar-nav > li > a{
+    color: white !important;
+    font-size: 24px !important;
+}
+
+/*le scritte del menu*/
+/deep/ .navbar-nav > li > a.active{
+    text-decoration: underline !important;
+}
+
+/*la barra del pulsante "Aggiungi" (toolbar)*/
+/deep/ .dx-datagrid-header-panel{
+    margin: 10px !important;
+}
+
+
+
+/deep/ .dx-header-row{
+    background-color: #D8D8D8 !important;
+    color: black !important;
+}
+
+/deep/ .dx-row.dx-data-row.dx-column-lines:nth-child(even) {
+    background-color: #EBEBEB !important;
+}
+
+/deep/ .dx-row.dx-data-row.dx-column-lines:hover{
+    background-color: #FFC057 !important;
+}
+
+#testata{
+    padding: 10px;
+    display: block !important;
+    background-color:  #FFC057 !important;
+    font-size: 40px !important;
+}
+
+
+/deep/ .dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title{
+    background-color:  #FFC057 !important;
+}

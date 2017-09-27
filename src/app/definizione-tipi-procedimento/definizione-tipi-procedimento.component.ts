@@ -15,8 +15,14 @@ export class DefinizioneTipiProcedimentoComponent {
   private texts: Object={
     editRow:"Modifica",
     saveRowChanges:"Salva",
-    cancelRowChanges:"Annulla"
+    cancelRowChanges:"Annulla",
+    deleteRow: "Cancella",
+    confirmDeleteMessage: "Stai per cancellare il tipo di procedimento: procedere?"
+  }
 
+  private loggaContesto(e: Object){
+    console.log(e);
+    
   }
 
   constructor(private service: DefinizioneTipiProcedimentoService) {
@@ -32,6 +38,12 @@ export class DefinizioneTipiProcedimentoComponent {
       case "CellClick":
         this.cellClick(event);
         break;
+      
+      case "ButtonClick":
+        console.log("button click");
+      
+        console.log(event);
+        break;
 
     }
 
@@ -40,6 +52,25 @@ export class DefinizioneTipiProcedimentoComponent {
 
   private cellClick(e: any){
     this.service.valorizzaSelectedRow(e.data);
+
+  }
+
+  private onToolbarPreparing(e: any){
+    console.log("onToolbarPreparing event!!!")
+    var toolbarItems = e.toolbarOptions.items;
+
+    toolbarItems.forEach(element => {
+      console.log(element);
+      if(element.name==="addRowButton")
+      {
+        element.options.hint="Aggiungi";
+        element.options.text="Aggiungi";
+        element.options.showText="always"
+        console.log(element);
+      }
+
+           
+    });
 
   }
 
