@@ -17,7 +17,6 @@ export class DefinizioneTipiProcedimentoComponent {
     deleteRow:"Elimina",
     saveRowChanges:"Salva",
     cancelRowChanges:"Annulla",
-    deleteRow: "Cancella",
     confirmDeleteMessage: "Stai per cancellare il tipo di procedimento: procedere?"
   }
 
