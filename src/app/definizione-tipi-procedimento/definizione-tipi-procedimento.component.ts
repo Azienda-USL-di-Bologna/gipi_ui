@@ -99,7 +99,7 @@ export class DefinizioneTipiProcedimentoComponent {
       daAttivare = false;
     else if (row.dataFineValidita == null)
       daAttivare = true;
-    else if (row.dataInizioValidita <= row.dataFineValidita)
+    else if (row.dataInizioValidita <= row.dataFineValidita && row.dataFineValidita>=now)
       daAttivare = true;
     else
       daAttivare = false;

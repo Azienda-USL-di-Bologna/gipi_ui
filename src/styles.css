@@ -2928,12 +2928,13 @@ html, body {
 .dx-theme-marker {
   font-family: 'dx.generic.light';
 }
-@font-face {
+/*queste righe (fatte dal generatore di template) dovrebbero tirare su delle icone: l'ho commentato, tanto non serve*/
+/*@font-face {
   font-family: 'DXIcons';
-  src: url(icons/dxicons.woff) format('woff'), url(icons/dxicons.ttf) format('truetype');
+  src: url(../node_modules/devextreme/dist/css/icons/dxicons.woff) format('woff'), url(../node_modules/devextreme/dist/css/icons/dxicons.ttf) format('truetype');
   font-weight: normal;
   font-style: normal;
-}
+}*/
 .dx-icon {
   display: inline-block;
   font-size: inherit;
