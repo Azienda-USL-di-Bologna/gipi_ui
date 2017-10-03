@@ -32,7 +32,7 @@ export class DefinizioneTipiProcedimentoComponent {
 
   }
 
-  private handleEvent(name: String, event: Event) {
+  private handleEvent(name: String, event: any) {
     console.log(name, event);
     switch(name){
       case "CellClick":
@@ -45,9 +45,21 @@ export class DefinizioneTipiProcedimentoComponent {
         console.log(event);
         break;
 
-    }
+      case "associaClicked":
+        console.log("entrato in associaClicked");
+        break;
+
+      case "editClicked":
+        console.log("entrato in editClicked");
+        break;
+
+      case "deleteClicked":
+        console.log("entrato in deleteClicked");
+        break;
+      }
 
   }
+
 
 
   private cellClick(e: any){
@@ -60,18 +72,29 @@ export class DefinizioneTipiProcedimentoComponent {
     var toolbarItems = e.toolbarOptions.items;
 
     toolbarItems.forEach(element => {
-      console.log(element);
       if(element.name==="addRowButton")
       {
         element.options.hint="Aggiungi";
         element.options.text="Aggiungi";
         element.options.showText="always"
-        console.log(element);
       }
 
            
     });
 
+  }
+
+  private onCellPrepared(e: any) {
+    
+    if (e.rowType === "data" && e.column.command === "edit") {
+        var isEditing = e.row.isEditing,
+            $links = e.cellElement.find(".dx-link");
+
+        $links.text("");
+        $links.filter(".dx-link-edit").addClass("dx-icon-edit");
+        $links.filter(".dx-link-delete").addClass("dx-icon-trash");     
+          
+    }
   }
 
   private filterOperationDescriptions: Object = {"contains": "contiene", "notContains": "non contiene", "equal":"uguale", "notEqual":"diverso",

@@ -1,7 +1,7 @@
-<div  id="testata">
+<!--<div  id="testata">
     Definizione tipi procedimento
 </div>
-
+-->
 
 <dx-data-grid 
     id="gridContainer"
@@ -18,8 +18,8 @@
     (onRowRemoved)="handleEvent('RowRemoved',$event)"
     (onRowClick)="handleEvent('RowClick',$event)"
     (onSelectionChanged)="handleEvent('SelectionChanged',$event)"
-    (onCellClick)="handleEvent('CellClick',$event)"
     (onToolbarPreparing)="onToolbarPreparing($event)"
+    (onCellPrepared)="onCellPrepared($event)"
     (onButtonClick)="handleEvent('ButtonClick',$event)"
 >
     
@@ -31,13 +31,13 @@
     <dxo-editing 
         mode="popup"
         cellTemplate="Modifica"
+        title="Modifica"
+        style="align-content: center; justify-content: center"
         [allowUpdating]="true"
-        [allowDeleting]="true"
+        [allowDeleting]="false"
         [allowAdding]="true"
         [texts]="texts">
         <dxo-popup
-            height="60%"
-            width="50%"
             title="Modifica Tipo Procedimento"
             [showTitle]="true">
         </dxo-popup>
@@ -50,19 +50,24 @@
             <dxi-item dataField="dataFineValidita"></dxi-item>
             <dxi-item dataField="durataMassimaSospensione"></dxi-item>
         </dxo-form>
-    </dxo-editing>
+    </dxo-editing> -->
 
+    <dxi-column dataField="idTipoProcedimento"></dxi-column>
     <dxi-column dataField="nomeTipoProcedimento"></dxi-column>
     <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva" [allowSorting]="true" [allowFiltering]="true"></dxi-column>
     <dxi-column dataField="dataInizioValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="false"></dxi-column>
     <dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="false"></dxi-column>
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
-    <dxi-column caption="Associa Tipi a Strutture" cellTemplate="buttonCellTemplate"></dxi-column>
-    <div *dxTemplate="let d of 'buttonCellTemplate'">
+    <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" ></dxi-column>
+    <div *dxTemplate="let d of 'buttonCellTemplate'" class="azioni">
         <a routerLink="/app-dettaglio-provvedimento" routerLinkActive="active">
-            <dx-button text="Associa" (onClick)="handleEvent('associaClicked', $event)"></dx-button>
+            <dx-button icon='preferences' text="" (onClick)="handleEvent('associaClicked', $event)"></dx-button>
         </a>
+        <dx-button text="" icon='edit' (onClick)="handleEvent('editClicked', $event)"></dx-button>
+        <dx-button text="" icon="/assets/images/eraser-512.png" (onClick)="handleEvent('deleteClicked', $event)"></dx-button>
     </div>
+    
+    
 
     <dxi-column dataField="descrizioneTipoProcedimentoDefault" [visible]="false"></dxi-column>
     <dxi-column dataField="durataMassimaSospensione" [visible]="false"></dxi-column>
