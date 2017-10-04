@@ -8,20 +8,13 @@
     </div>
 </nav>
 
+<!-- se si vuole usare il responsive-box in qualche componente, bisogna metterlo anche qui, altrimenti non funziona bene (specialmente con chrome)-->
 <dx-responsive-box class="overflowXChild">
     <dxi-row [ratio]="1"></dxi-row>
-    <dxi-row [ratio]="5"></dxi-row>
-
     <dxi-col [ratio]="1"></dxi-col>
 
     <dxi-item>
         <dxi-location [row]="0" [col]="0" [colspan]="1"></dxi-location>
-        <div style="width: 100%; height:100%">
-        </div>
-    </dxi-item>
-
-    <dxi-item>
-        <dxi-location [row]="1" [col]="0" [colspan]="1"></dxi-location>
         <div style="width: 100%; height:100%">
             <router-outlet></router-outlet>
             <!-- l'activate serve a intercettare l'evento del cambiamento del contenuto renderizzato dal router-outlet -->

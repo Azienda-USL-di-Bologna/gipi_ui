@@ -26,7 +26,6 @@ font-stretch: expanded !important;
     border-radius: 0 !important;
 }
 
-
 /deep/ .navbar-nav > li > a{
     color: white !important;
     font-size: 24px !important;
