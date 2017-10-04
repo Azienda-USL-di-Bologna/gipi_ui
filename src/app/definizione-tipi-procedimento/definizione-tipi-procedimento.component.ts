@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
+import { DxDataGridComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedimento.service';
+
 //import { UtilityFunctions } from '../utility-functions';
 
 
@@ -11,6 +13,7 @@ import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedime
 })
 export class DefinizioneTipiProcedimentoComponent {
 
+  @ViewChild('grid') grid: DxDataGridComponent; 
   private dataSource: DataSource;
   private texts: Object={
     editRow:"Modifica",
@@ -32,34 +35,63 @@ export class DefinizioneTipiProcedimentoComponent {
 
   }
 
+  private comando: any;
+  private selezionato: any;
+
+
   private handleEvent(name: String, event: any) {
-    console.log(name, event);
+    console.log("EVENTO "+name, event);
     switch(name){
       case "CellClick":
         this.cellClick(event);
-        break;
-      
-      case "ButtonClick":
-        console.log("button click");
-      
         console.log(event);
+        console.log(this.comando);
+        
+        /*this.selezionato = event.row;*/
         break;
 
-      case "associaClicked":
-        console.log("entrato in associaClicked");
+        case "cellHoverChanged":
+        console.log(event);
+        
         break;
 
-      case "editClicked":
-        console.log("entrato in editClicked");
-        break;
 
-      case "deleteClicked":
-        console.log("entrato in deleteClicked");
-        break;
+        case "ButtonClick":
+          console.log("button click");
+        
+          console.log(event);
+          break;
+
+        case "associaClicked":
+          console.log("entrato in associaClicked");
+          break;
+
+        case "editClicked": 
+          this.handleEvent("CellClick", event);
+          this.comando = "edita"
+          
+          break;
+
+        case "deleteClicked":
+          console.log("entrato in deleteClicked");
+          this.comando = "cancella"
+          break;
+
+        default:
+          break;
       }
 
   }
 
+
+  private funzioneAltra(e: Event){
+    console.log("FUNZIONE ALTRA");
+    console.log();
+           
+/*    this.grid.instance.editRow(1); */   
+    console.log(this.grid);
+
+  }
 
 
   private cellClick(e: any){

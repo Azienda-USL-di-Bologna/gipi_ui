@@ -6,6 +6,7 @@ import { DefinizioneTipiProcedimentoComponent } from './definizione-tipi-procedi
 import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/dettaglio-provvedimento.component';
 
 
+
 export const rootRouterConfig: Routes = [
   //ho reindirizzato la pagina di atterraggio a definizione-tipi-procedimento
   { path: '', redirectTo: 'home', pathMatch: 'full' },

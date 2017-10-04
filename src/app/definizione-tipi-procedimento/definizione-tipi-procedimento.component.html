@@ -3,7 +3,7 @@
 </div>
 -->
 
-<dx-data-grid 
+<dx-data-grid  #grid
     id="gridContainer"
     [dataSource]="dataSource"
     [allowColumnReordering]="true"
@@ -22,6 +22,7 @@
     (onToolbarPreparing)="onToolbarPreparing($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onButtonClick)="handleEvent('ButtonClick',$event)"
+    (cellHoverChanged)="handleEvent('cellHoverChanged', $event)"
 >
     
 
@@ -59,11 +60,12 @@
     <dxi-column dataField="dataInizioValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="false"></dxi-column>
     <dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="false"></dxi-column>
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
-    <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" ></dxi-column>
+    <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni"></dxi-column>
     <div *dxTemplate="let d of 'buttonCellTemplate'" class="azioni">
         <a routerLink="/app-dettaglio-provvedimento" routerLinkActive="active">
             <dx-button icon='preferences' text="" (onClick)="handleEvent('associaClicked', $event)"></dx-button>
         </a>
+       
         <dx-button text="" icon='edit' (onClick)="handleEvent('editClicked', $event)"></dx-button>
         <dx-button text="" icon="/assets/images/eraser-512.png" (onClick)="handleEvent('deleteClicked', $event)"></dx-button>
     </div>
