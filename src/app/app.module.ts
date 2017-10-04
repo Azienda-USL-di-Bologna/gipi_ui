@@ -44,7 +44,7 @@ import { AssociaDirective } from './associazioni/directives/associa.directive';
     HomeComponent,
     DefinizioneTipiProcedimentoComponent,
     DettaglioProvvedimentoComponent,
-    AziendeTipiProcedimentoComponent
+    AziendeTipiProcedimentoComponent,
     AssociaComponent,
     ProcedimentoComponent,
     AssociaDirective

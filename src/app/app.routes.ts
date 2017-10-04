@@ -10,7 +10,7 @@ import { AssociazioniComponent } from './associazioni/associazioni.component';
 
 
 export const rootRouterConfig: Routes = [
-  //ho reindirizzato la pagina di atterraggio a definizione-tipi-procedimento
+  // ho reindirizzato la pagina di atterraggio a definizione-tipi-procedimento
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent},
   { path: 'definizione-tipi-procedimento', component: DefinizioneTipiProcedimentoComponent},
