@@ -21,7 +21,8 @@ import {
   DxResponsiveBoxModule,
   DxDateBoxModule,
   DxCheckBoxModule,
-  DxTextAreaModule
+  DxTextAreaModule,
+  DxTreeViewModule
 } from 'devextreme-angular';
 
 import {RouterModule} from '@angular/router';
@@ -31,7 +32,11 @@ import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import { DefinizioneTipiProcedimentoComponent } from './definizione-tipi-procedimento/definizione-tipi-procedimento.component';
 import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/dettaglio-provvedimento.component';
+import { AssociazioniComponent } from './associazioni/associazioni.component';
 import { AziendeTipiProcedimentoComponent } from './aziende-tipi-procedimento/aziende-tipi-procedimento.component';
+import { AssociaComponent } from './associazioni/sub-view/associa/associa.component';
+import { ProcedimentoComponent } from './associazioni/sub-view/procedimento/procedimento.component';
+import { AssociaDirective } from './associazioni/directives/associa.directive';
 
 @NgModule({
   declarations: [
@@ -40,6 +45,9 @@ import { AziendeTipiProcedimentoComponent } from './aziende-tipi-procedimento/az
     DefinizioneTipiProcedimentoComponent,
     DettaglioProvvedimentoComponent,
     AziendeTipiProcedimentoComponent
+    AssociaComponent,
+    ProcedimentoComponent,
+    AssociaDirective
   ],
   imports: [
     BrowserModule,
@@ -57,10 +65,12 @@ import { AziendeTipiProcedimentoComponent } from './aziende-tipi-procedimento/az
     DxDateBoxModule,
     DxCheckBoxModule,
     DxTextAreaModule,
-    HttpModule
+    HttpModule,
+    DxTreeViewModule
   ],
   providers: [DefinizioneTipiProcedimentoService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [AssociaComponent, ProcedimentoComponent]
 })
 export class AppModule {
 }

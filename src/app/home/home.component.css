@@ -59,3 +59,17 @@
 /deep/ .dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title{
     background-color:  #FFC057 !important;
 }
+
+
+
+@media screen and (min-width: 1880px) {
+    .dx-responsive-box{
+       size: 80% !important;
+   }
+}
+
+@media screen and (min-width: 1692px) {
+    .dx-responsive-box{
+       font-size: 60% !important;
+   }
+}

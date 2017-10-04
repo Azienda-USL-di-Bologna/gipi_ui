@@ -1,3 +1,12 @@
+/*  
+/deep/ .navbar{
+/*font-family: Tahoma, Arial, Helvetica, sans-serif !important;
+font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
+font-stretch: expanded !important;
+}  
+*/  
+
+
 /deep/ .dx-datagrid-action, .dx-datagrid-drag-action {
     text-align: center !important;
     font-weight: bold;
@@ -55,7 +64,21 @@
     font-size: 40px !important;
 }
 
-
+/*
 /deep/ .dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title{
     background-color:  #FFC057 !important;
+}
+*/
+
+/deep/ .dx-command-edit .dx-link {
+    text-decoration: none;
+    font-size: 18px;
+    margin: 0 3px;
+}
+
+/deep/ .azioni{
+    width: auto !important;
+    text-align: center !important;
+    display: flex;
+    justify-content: space-around;
 }
