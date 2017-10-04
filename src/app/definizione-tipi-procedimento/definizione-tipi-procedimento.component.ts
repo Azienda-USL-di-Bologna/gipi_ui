@@ -35,62 +35,81 @@ export class DefinizioneTipiProcedimentoComponent {
 
   }
 
-  private comando: any;
-  private selezionato: any;
 
+  //questa proprietà serve per capire che pulsante è stato cliccato
+  private comando: any;
 
   private handleEvent(name: String, event: any) {
     console.log("EVENTO "+name, event);
     switch(name){
+      //Questo evento scatta al cliccare di qualsiasi cella: se però siamo sulla 5 colonna e si è cliccato un pulsante viene gestito
       case "CellClick":
-        this.cellClick(event);
-        console.log(event);
-        console.log(this.comando);
-        
-        /*this.selezionato = event.row;*/
+        console.log("CellClick --> COMANDO = ", this.comando);
+
+        if(event.columnIndex=== 5 && this.comando != null)  //se ho cliccato sulla colonna Azioni potrei modificare o cancellare la riga
+        { // a seconda del pulsante spinto viene editata o cancellata la riga.
+
+          console.log(event.columnIndex);
+
+          switch(this.comando){
+            case "edita":
+              this.modificaRiga(event.row);
+              break;
+
+            case "cancella":
+              this.cancellaRiga(event.row);
+              break;
+
+            default:
+              break;
+          }
+        }
         break;
 
-        case "cellHoverChanged":
+      case "ButtonClick":
+        console.log("button click");
+      
         console.log(event);
-        
         break;
 
+      case "associaClicked":
+        console.log("entrato in associaClicked");
+        this.comando = null;
+        break;
 
-        case "ButtonClick":
-          console.log("button click");
-        
-          console.log(event);
-          break;
+      //Ho cliccato sul pulsante per modificare la riga: quindi faccio diventare il comando "edita"
+      case "editClicked": 
+        this.comando = "edita";  
+        break;
 
-        case "associaClicked":
-          console.log("entrato in associaClicked");
-          break;
+      //Ho cliccato sul pulsante per modificare la riga: quindi faccio diventare il comando "cancella"
+      case "deleteClicked":
+        console.log("entrato in deleteClicked");
+        this.comando = "cancella";  //rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
+        break;
 
-        case "editClicked": 
-          this.handleEvent("CellClick", event);
-          this.comando = "edita"
-          
-          break;
-
-        case "deleteClicked":
-          console.log("entrato in deleteClicked");
-          this.comando = "cancella"
-          break;
-
-        default:
-          break;
-      }
+      default:
+        break;
+    }
 
   }
 
 
-  private funzioneAltra(e: Event){
-    console.log("FUNZIONE ALTRA");
-    console.log();
-           
-/*    this.grid.instance.editRow(1); */   
-    console.log(this.grid);
+  //cancello la riga passata come parametro
+  private cancellaRiga(row: any){
+    // prendo l'indice della riga selezionata e 
+    console.log("FUNZIONE CANCELLARIGA");
+    console.log(row.rowIndex);         
+    this.grid.instance.deleteRow(row.rowIndex); 
+    this.comando=null; //rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
+  }
 
+  //modifico la riga passata come parametro
+  private modificaRiga(row: any){
+    console.log("FUNZIONE MODIFICARIGA");
+    console.log(row.rowIndex);         
+    this.grid.instance.editRow(row.rowIndex); 
+    this.comando=null; //rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
   }
 
 

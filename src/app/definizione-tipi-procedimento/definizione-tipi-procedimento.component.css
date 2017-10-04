@@ -1,9 +1,10 @@
-/deep/ *{
-    /*font-family: Tahoma, Arial, Helvetica, sans-serif !important;*/
-    /*font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, serif !important;*/
-    }
-    
-    
+/*  
+/deep/ .navbar{
+/*font-family: Tahoma, Arial, Helvetica, sans-serif !important;
+font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
+font-stretch: expanded !important;
+}  
+*/  
 
 
 /deep/ .dx-datagrid-action, .dx-datagrid-drag-action {

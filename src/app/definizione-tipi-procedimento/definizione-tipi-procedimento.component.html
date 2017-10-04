@@ -22,7 +22,6 @@
     (onToolbarPreparing)="onToolbarPreparing($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onButtonClick)="handleEvent('ButtonClick',$event)"
-    (cellHoverChanged)="handleEvent('cellHoverChanged', $event)"
 >
     
 
@@ -35,7 +34,7 @@
         cellTemplate="Modifica"
         title="Modifica"
         style="align-content: center; justify-content: center"
-        [allowUpdating]="true"
+        [allowUpdating]="false"
         [allowDeleting]="false"
         [allowAdding]="true"
         [texts]="texts">
@@ -65,8 +64,9 @@
         <a routerLink="/app-dettaglio-provvedimento" routerLinkActive="active">
             <dx-button icon='preferences' text="" (onClick)="handleEvent('associaClicked', $event)"></dx-button>
         </a>
-       
+        
         <dx-button text="" icon='edit' (onClick)="handleEvent('editClicked', $event)"></dx-button>
+        
         <dx-button text="" icon="/assets/images/eraser-512.png" (onClick)="handleEvent('deleteClicked', $event)"></dx-button>
     </div>
     
