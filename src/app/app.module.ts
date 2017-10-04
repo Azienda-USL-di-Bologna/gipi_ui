@@ -9,20 +9,20 @@ import { UtilityFunctions } from './utility-functions';
 
 
 import {
-  DxDataGridModule,
-  DxFormModule,
-  DxButtonModule,
-  DxSelectBoxModule,
-  DxTextBoxModule,
-  DxTemplateModule,
-  DxTagBoxModule,
-  DxTabsModule,
-  DxPopupModule,
-  DxResponsiveBoxModule,
-  DxDateBoxModule,
-  DxCheckBoxModule,
-  DxTextAreaModule,
-  DxTreeViewModule
+    DxDataGridModule,
+    DxFormModule,
+    DxButtonModule,
+    DxSelectBoxModule,
+    DxTextBoxModule,
+    DxTemplateModule,
+    DxTagBoxModule,
+    DxTabsModule,
+    DxPopupModule,
+    DxResponsiveBoxModule,
+    DxDateBoxModule,
+    DxCheckBoxModule,
+    DxTextAreaModule,
+    DxTreeViewModule
 } from 'devextreme-angular';
 
 import {RouterModule} from '@angular/router';
@@ -39,38 +39,39 @@ import { ProcedimentoComponent } from './associazioni/sub-view/procedimento/proc
 import { AssociaDirective } from './associazioni/directives/associa.directive';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    DefinizioneTipiProcedimentoComponent,
-    DettaglioProvvedimentoComponent,
-    AziendeTipiProcedimentoComponent,
-    AssociaComponent,
-    ProcedimentoComponent,
-    AssociaDirective
-  ],
-  imports: [
-    BrowserModule,
-    RouterModule.forRoot(rootRouterConfig, {useHash: true}),
-    DxDataGridModule,
-    DxFormModule,
-    DxButtonModule,
-    DxSelectBoxModule,
-    DxTextBoxModule,
-    DxTemplateModule,
-    DxTagBoxModule,
-    DxTabsModule,
-    DxPopupModule,
-    DxResponsiveBoxModule,
-    DxDateBoxModule,
-    DxCheckBoxModule,
-    DxTextAreaModule,
-    HttpModule,
-    DxTreeViewModule
-  ],
-  providers: [DefinizioneTipiProcedimentoService],
-  bootstrap: [AppComponent],
-  entryComponents: [AssociaComponent, ProcedimentoComponent]
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        DefinizioneTipiProcedimentoComponent,
+        DettaglioProvvedimentoComponent,
+        AziendeTipiProcedimentoComponent,
+        AssociaComponent,
+        ProcedimentoComponent,
+        AssociaDirective,
+        AssociazioniComponent
+    ],
+    imports: [
+        BrowserModule,
+        RouterModule.forRoot(rootRouterConfig, { useHash: true }),
+        DxDataGridModule,
+        DxFormModule,
+        DxButtonModule,
+        DxSelectBoxModule,
+        DxTextBoxModule,
+        DxTemplateModule,
+        DxTagBoxModule,
+        DxTabsModule,
+        DxPopupModule,
+        DxResponsiveBoxModule,
+        DxDateBoxModule,
+        DxCheckBoxModule,
+        DxTextAreaModule,
+        HttpModule,
+        DxTreeViewModule
+    ],
+    providers: [DefinizioneTipiProcedimentoService],
+    bootstrap: [AppComponent],
+    entryComponents: [AssociaComponent, ProcedimentoComponent]
 })
 export class AppModule {
 }
