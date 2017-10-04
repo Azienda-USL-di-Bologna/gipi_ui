@@ -1,0 +1,116 @@
+<dx-responsive-box>
+  <dxi-row [ratio]="1"></dxi-row>
+
+  <dxi-col [ratio]="1"></dxi-col>
+
+
+  <dxi-item>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="lg"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="md"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="sm"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="xs"></dxi-location>
+    <div style="width: 100%; height: 100%;">
+
+      <div style="text-align: center; width: 100%; height: 100%;">
+        <div style="display: inline-block; text-align: initial; width:100%; max-width: 800px;">
+
+          <div style="text-align: right; margin-bottom: 30px">
+            <div style="display: inline-block; text-align: initial;">
+              <dx-button [type]="'success'" icon="edit"></dx-button>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Descrizione</div> <!-- descrizione -->
+            <div class="dx-field-value">
+              <dx-text-box [value]="'boh'" [disabled]="true">
+              </dx-text-box>
+            </div> <!-- end descrizione -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Modo apertura</div> <!-- modo apertura -->
+            <div class="dx-field-value">
+              <dx-text-box [value]="'boh'" [disabled]="true">
+              </dx-text-box>
+            </div> <!-- end mod apertura -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Norma di riferimento</div> <!-- norma di rifermineto -->
+            <div class="dx-field-value">
+              <dx-text-area [height]="90" [disabled]="true">
+              </dx-text-area>
+            </div> <!-- end norma di rifermineto -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Classificazione</div> <!-- Classificazione -->
+            <div class="dx-field-value">
+              <dx-text-box [value]="'boh'" [disabled]="true">
+              </dx-text-box>
+            </div> <!-- end Classificazione -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Durata massima sospensione (gg)</div> <!-- durata max sospensione -->
+            <div class="dx-field-value">
+              <dx-text-box [value]="'boh'" [disabled]="true">
+              </dx-text-box>
+            </div> <!-- end durata max sospensione -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Valido dal</div> <!-- valido dal -->
+            <div class="dx-field-value">
+              <dx-date-box  type="date" [displayFormat]= "'dd/MM/yyyy'" >
+              </dx-date-box>
+            </div> <!-- end valido dal -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Valido al</div> <!-- valido al -->
+            <div class="dx-field-value">
+              <dx-date-box  type="date" [displayFormat]= "'dd/MM/yyyy'" >
+              </dx-date-box>
+            </div> <!-- end valido al -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Titolare potere esecutivo</div> <!-- Titolare potere esecutivo -->
+            <div class="dx-field-value">
+              <dx-text-box [value]="'boh'" >
+              </dx-text-box>
+            </div> <!-- end Titolare potere esecutivo -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Modalità informativa</div> <!-- Modalità informativa -->
+            <div class="dx-field-value">
+              <dx-text-box [value]="'boh'">
+              </dx-text-box>
+            </div> <!-- end Modalità informativa -->
+          </div>
+
+          <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Atti da allegare</div> <!-- Atti da allegare -->
+            <div class="dx-field-value">
+              <dx-text-area [height]="90" >
+              </dx-text-area>
+            </div> <!-- end Atti da allegare -->
+          </div>
+
+          <div style="text-align: right; margin-top: 60px">
+            <div style="display: inline-block; text-align: initial;">
+              <dx-button [text]="'Annulla'" [type]="'success'"></dx-button>
+              <dx-button [text]="'Salva'" [type]="'success'"></dx-button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </dxi-item>
+</dx-responsive-box>

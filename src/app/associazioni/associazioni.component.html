@@ -1,0 +1,48 @@
+<dx-responsive-box style="padding:16px;">
+  <dxi-row [ratio]="1"></dxi-row>
+
+  <dxi-col [ratio]="1"></dxi-col>
+  <dxi-col [ratio]="5"></dxi-col>
+
+  <dxi-item>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="lg"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="md"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="sm"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="xs"></dxi-location>
+    <div>
+      <dx-text-box
+        #textBox
+        placeholder="Search"
+        [width]="300"
+        mode="search"
+        valueChangeEvent="keyup"
+        value=""
+        ></dx-text-box>
+      <dx-tree-view
+        id="selection-treeview"
+        [items]="products"
+        [width]="320"
+        showCheckBoxesMode="normal"
+        [searchValue]="textBox.value"
+        (onItemClick)="selectItem($event)"
+        >
+    </dx-tree-view>
+    </div>
+  </dxi-item>
+
+  <dxi-item>
+    <dxi-location [row]="0" [col]="1" [colspan]="1" screen="lg"></dxi-location>
+    <dxi-location [row]="0" [col]="1" [colspan]="1" screen="md"></dxi-location>
+    <dxi-location [row]="0" [col]="1" [colspan]="1" screen="sm"></dxi-location>
+    <dxi-location [row]="0" [col]="1" [colspan]="1" screen="xs"></dxi-location>
+    <div style="height:100%;">
+      <app-associa *ngIf="associata else procedimento"></app-associa>
+      <ng-template associa-host #procedimento>
+        <app-procedimento></app-procedimento>
+      </ng-template>
+      <!-- <button (click)="loadComponent()">Create success alert</button> -->
+      <!-- <button (click)="createComponent('danger')">Create danger alert</button> -->
+    </div>
+  </dxi-item>
+
+</dx-responsive-box>
