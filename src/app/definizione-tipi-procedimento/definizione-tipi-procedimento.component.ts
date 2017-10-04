@@ -22,12 +22,12 @@ export class DefinizioneTipiProcedimentoComponent {
 
   private loggaContesto(e: Object){
     console.log(e);
-    
+
   }
 
   constructor(private service: DefinizioneTipiProcedimentoService) {
     this.dataSource = this.service.getTipiProcedimentoSource();
-    //debugger;
+    // debugger;
     console.log(this.dataSource);
 
   }
@@ -38,10 +38,10 @@ export class DefinizioneTipiProcedimentoComponent {
       case "CellClick":
         this.cellClick(event);
         break;
-      
+
       case "ButtonClick":
         console.log("button click");
-      
+
         console.log(event);
         break;
 

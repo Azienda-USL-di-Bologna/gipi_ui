@@ -31,13 +31,15 @@ import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import { DefinizioneTipiProcedimentoComponent } from './definizione-tipi-procedimento/definizione-tipi-procedimento.component';
 import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/dettaglio-provvedimento.component';
+import { AziendeTipiProcedimentoComponent } from './aziende-tipi-procedimento/aziende-tipi-procedimento.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     DefinizioneTipiProcedimentoComponent,
-    DettaglioProvvedimentoComponent
+    DettaglioProvvedimentoComponent,
+    AziendeTipiProcedimentoComponent
   ],
   imports: [
     BrowserModule,

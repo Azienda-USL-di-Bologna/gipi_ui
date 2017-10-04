@@ -1,0 +1,156 @@
+<div id="page">
+    <dx-responsive-box
+            singleColumnScreen="sm"
+            [(screenByWidth)]="screen">
+        <dxi-row [ratio]="1"></dxi-row>
+        <dxi-row [ratio]="2" screen="xs"></dxi-row>
+        <dxi-row [ratio]="2"></dxi-row>
+        <dxi-row [ratio]="1"></dxi-row>
+
+        <dxi-col [ratio]="1"></dxi-col>
+        <dxi-col [ratio]="2" screen="lg"></dxi-col>
+        <dxi-col [ratio]="1"></dxi-col>
+        <dxi-item class="header item">
+            <dxi-location
+                    [row]="0"
+                    [col]="0"
+                    [colspan]="3"
+                    screen="lg"
+            ></dxi-location>
+            <dxi-location
+                    [row]="0"
+                    [col]="0"
+                    [colspan]="2"
+                    screen="sm"
+            ></dxi-location>
+            <p>Header</p>
+        </dxi-item>
+        <dxi-item class="content item">
+            <dxi-location
+                    [row]="1"
+                    [col]="1"
+                    screen="lg"
+            ></dxi-location>
+            <dxi-location
+                    [row]="1"
+                    [col]="0"
+                    [colspan]="2"
+                    screen="sm"
+            ></dxi-location>
+            <p>Content</p>
+        </dxi-item>
+        <dxi-item class="left-side-bar item">
+            <dxi-location
+                    [row]="1"
+                    [col]="0"
+                    screen="lg"
+            ></dxi-location>
+            <dxi-location
+                    [row]="2"
+                    [col]="0"
+                    screen="sm"
+            ></dxi-location>
+            <p>Left Bar</p>
+        </dxi-item>
+        <dxi-item class="right-side-bar item">
+            <dxi-location
+                    [row]="1"
+                    [col]="2"
+                    screen="lg"
+            ></dxi-location>
+            <dxi-location
+                    [row]="2"
+                    [col]="1"
+                    screen="sm"
+            ></dxi-location>
+            <p>Right Bar</p>
+        </dxi-item>
+        <dxi-item class="footer item">
+            <dxi-location
+                    [row]="2"
+                    [col]="0"
+                    [colspan]="3"
+                    screen="lg"
+            ></dxi-location>
+            <dxi-location
+                    [row]="3"
+                    [col]="0"
+                    [colspan]="2"
+                    screen="sm"
+            ></dxi-location>
+            <p>Footer</p>
+        </dxi-item>
+    </dx-responsive-box>
+</div>
+
+
+<!--<div id="page">-->
+<!--<dx-responsive-box singleColumnScreen="sm"-->
+                   <!--[(screenByWidth)]="screen">-->
+    <!--<dxi-row [ratio]="1"></dxi-row>-->
+    <!--<dxi-row [ratio]="1"></dxi-row>-->
+    <!--<dxi-row [ratio]="1"></dxi-row>-->
+    <!--<dxi-col [ratio]="1"></dxi-col>-->
+    <!--<dxi-col [ratio]="1"></dxi-col>-->
+    <!--<dxi-col [ratio]="1"></dxi-col>-->
+    <!--<dxi-item>-->
+        <!--<dxi-location [row]="0" [col]="0" [colspan]="1" [rowspan]="1" screen="lg"></dxi-location>-->
+        <!--<dxi-location [row]="0" [col]="0" [colspan]="1" [rowspan]="1" screen="md"></dxi-location>-->
+        <!--<div style="background-color: #ffd185">-->
+            <!--1111111-->
+        <!--</div>-->
+    <!--</dxi-item>-->
+    <!--<dxi-item>-->
+        <!--<dxi-location [row]="1" [col]="0" [colspan]="1" [rowspan]="1" screen="lg"></dxi-location>-->
+        <!--<dxi-location [row]="1" [col]="0" [colspan]="1" [rowspan]="1" screen="md"></dxi-location>-->
+        <!--<div style="background-color: #5cb85c">2222222</div>-->
+    <!--</dxi-item>-->
+    <!--<dxi-item>-->
+        <!--<dxi-location [row]="1" [col]="1" [colspan]="1" [rowspan]="1" screen="lg"></dxi-location>-->
+        <!--<dxi-location [row]="1" [col]="1" [colspan]="1" [rowspan]="1" screen="md"></dxi-location>-->
+        <!--<div style="background-color: #333333">3333333</div>-->
+    <!--</dxi-item>-->
+    <!--<dxi-item>-->
+        <!--<dxi-location [row]="1" [col]="2" [colspan]="1" [rowspan]="1" screen="lg"></dxi-location>-->
+        <!--<dxi-location [row]="1" [col]="2" [colspan]="1" [rowspan]="1" screen="md"></dxi-location>-->
+        <!--<div style="background-color: #5cb85c">44444444</div>-->
+    <!--</dxi-item>-->
+    <!--<dxi-item>-->
+        <!--<dxi-location [row]="2" [col]="0" [colspan]="1" [rowspan]="1" screen="lg"></dxi-location>-->
+        <!--<dxi-location [row]="2" [col]="0" [colspan]="1" [rowspan]="1" screen="md"></dxi-location>-->
+        <!--<div style="background-color: #ea4444">55555555</div>-->
+    <!--</dxi-item>-->
+<!--</dx-responsive-box>-->
+<!--</div>-->
+
+
+    <!---->
+<!--<dx-form  id="form"-->
+          <!--[(formData)]="aziendaProcedimento"-->
+          <!--[readOnly]="readOnly"-->
+          <!--[showColonAfterLabel]="showColon"-->
+          <!--[labelLocation]="labelLocation"-->
+          <!--[minColWidth]="minColWidth"-->
+          <!--[colCount]="colCount"-->
+          <!--[width]="width"-->
+<!--&gt;-->
+    <!--&lt;!&ndash;<dxi-item dataField="obbligoEsitoConclusivo" [editorOptions]="{ disabled: true }"></dxi-item>&ndash;&gt;-->
+<!--</dx-form>-->
+
+
+<!--<dx-button-->
+        <!--text="Click me"-->
+        <!--(onClick)="buttonClicked()">-->
+<!--</dx-button>-->
+<!--</dx-responsive-box>-->
+
+
+<!--<dx-responsive-box>-->
+    <!--<dxi-row [ratio]="1"></dxi-row>-->
+    <!--<dxi-col [ratio]="1"></dxi-col>-->
+    <!--<dxi-col [ratio]="3"></dxi-col>-->
+
+    <!--<dxi-item>-->
+        <!--<dxi-location [row]="0" [col]="0" [colspan]="1" [rowspan]="2" screnn="lg"></dxi-location>-->
+        <!--<dxi-location [row]="0" [col]="0" [colspan]="1" [rowspan]="2" screen="md"></dxi-location>-->
+        <!--<dxi-location [row]="0" [col]="0" [colspan]="1" [rowspan]="1" screen="sm"></dxi-location>-->
