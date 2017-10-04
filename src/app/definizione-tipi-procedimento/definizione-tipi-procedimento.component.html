@@ -62,12 +62,12 @@
     <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni"></dxi-column>
     <div *dxTemplate="let d of 'buttonCellTemplate'" class="azioni">
         <a routerLink="/app-dettaglio-provvedimento" routerLinkActive="active">
-            <dx-button icon='preferences' text="" (onClick)="handleEvent('associaClicked', $event)"></dx-button>
+            <dx-button text="" hint="Vedi dettagli provvedimento" icon='preferences' (onClick)="handleEvent('associaClicked', $event)" ></dx-button>
         </a>
-        
-        <dx-button text="" icon='edit' (onClick)="handleEvent('editClicked', $event)"></dx-button>
-        
-        <dx-button text="" icon="/assets/images/eraser-512.png" (onClick)="handleEvent('deleteClicked', $event)"></dx-button>
+
+        <dx-button text="" hint="Modifica dettagli tipo procedimento" icon='edit' (onClick)="handleEvent('editClicked', $event)"></dx-button>
+
+        <dx-button text="" hint="Elimina questo tipo procedimento" icon="/assets/images/eraser-512.png" (onClick)="handleEvent('deleteClicked', $event)"></dx-button>
     </div>
     
     
@@ -77,6 +77,10 @@
     <dxi-column dataField="normaRiferimento" [visible]="false"></dxi-column>
 
 </dx-data-grid>
+
+
+
+
 
 
 

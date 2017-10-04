@@ -44,6 +44,7 @@ export class DefinizioneTipiProcedimentoComponent {
     switch(name){
       //Questo evento scatta al cliccare di qualsiasi cella: se però siamo sulla 5 colonna e si è cliccato un pulsante viene gestito
       case "CellClick":
+        this.cellClick(event);
         console.log("CellClick --> COMANDO = ", this.comando);
 
         if(event.columnIndex=== 5 && this.comando != null)  //se ho cliccato sulla colonna Azioni potrei modificare o cancellare la riga
@@ -197,4 +198,5 @@ export class DefinizioneTipiProcedimentoComponent {
     return attivo;
 
   }
+
 }
