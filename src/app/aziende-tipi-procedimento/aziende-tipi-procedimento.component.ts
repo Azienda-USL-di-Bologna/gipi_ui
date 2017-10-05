@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import {Component, OnInit, ViewChild, AfterViewInit, Input} from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 import { ODATA_STORE_ROOT_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from '../../environments/app.constant';
 import {AziendaTipoProcedimento} from '../classi/azienda-tipo-procedimento';
 import {DxFormComponent} from 'devextreme-angular';
+import {TipoProcedimento} from '../classi/tipo-procedimento';
 
 @Component({
   selector: 'app-aziende-tipi-procedimento',
@@ -11,8 +12,13 @@ import {DxFormComponent} from 'devextreme-angular';
   styleUrls: ['./aziende-tipi-procedimento.component.css']
 })
 export class AziendeTipiProcedimentoComponent implements OnInit {
+  @Input() tipoProcedimento: TipoProcedimento;
 public datasource: DataSource ;
 public aziendaProcedimento:  AziendaTipoProcedimento = new AziendaTipoProcedimento();
+
+public descrizioneFieldName: string;
+public durataMassimaSospensioneFieldName: string;
+
 
   labelLocation: string;
   readOnly: boolean;
@@ -27,15 +33,20 @@ public aziendaProcedimento:  AziendaTipoProcedimento = new AziendaTipoProcedimen
     this.readOnly = false;
     this.showColon = true;
     this.minColWidth = 300;
-    this.colCount = 2;
+    this.colCount = 1;
     this.datasource = this.getTipiProcedimentoSource();
     // this.datasource.load();
-    this.datasource.load().done(res => this.test(res));
+    this.datasource.load().done(res => this.buildAziendaTipoProcedimento(res));
     // this.aziendaProcedimento = this.datasource['_items'][0];
   }
 
-  test(res) {
+  buildAziendaTipoProcedimento(res) {
     this.aziendaProcedimento = res[0];
+    this.aziendaProcedimento.descrizioneTipoProcedimento ?
+        this.descrizioneFieldName = 'descrizioneTipoProcedimento' : this.descrizioneFieldName = 'idTipoProcedimento.descrizioneTipoProcedimentoDefault';
+
+    this.aziendaProcedimento.durataMassimaSospensione ?
+        this.durataMassimaSospensioneFieldName = 'durataMassimaSospensione' : this.durataMassimaSospensioneFieldName = 'idTipoProcedimento.durataMassimaSospensione';
   }
 
   screen(width) {
@@ -53,9 +64,11 @@ public aziendaProcedimento:  AziendaTipoProcedimento = new AziendaTipoProcedimen
   // }
 
   buttonClicked() {
-    console.log(this.aziendaProcedimento);
+    console.log(sessionStorage.getItem('gdm'));
+    console.log(localStorage.getItem('gdm'));
     // Saving data
-    this.datasource.store().update(this.aziendaProcedimento.id, this.aziendaProcedimento);
+    // this.datasource.store().update(this.aziendaProcedimento.id, this.aziendaProcedimento);
+
   }
 
   onFormSubmit(e) {
@@ -91,7 +104,7 @@ public aziendaProcedimento:  AziendaTipoProcedimento = new AziendaTipoProcedimen
         // console.log(aziendaTipoProcedimento);
         return item;
       },
-      expand: ['idAzienda'],
+      expand: ['idAzienda', 'idTipoProcedimento', 'idTitolo'],
       filter: [['idTipoProcedimento.idTipoProcedimento', '=', 1], ['idAzienda.id', '=', 2]],
     });
   }

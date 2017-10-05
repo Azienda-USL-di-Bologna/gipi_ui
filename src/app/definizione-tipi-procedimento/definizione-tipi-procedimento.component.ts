@@ -13,7 +13,7 @@ import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedime
 })
 export class DefinizioneTipiProcedimentoComponent {
 
-  @ViewChild('grid') grid: DxDataGridComponent; 
+  @ViewChild('grid') grid: DxDataGridComponent;
   private dataSource: DataSource;
   private texts: Object={
     editRow:"Modifica",
@@ -198,5 +198,4 @@ export class DefinizioneTipiProcedimentoComponent {
     return attivo;
 
   }
-
 }
