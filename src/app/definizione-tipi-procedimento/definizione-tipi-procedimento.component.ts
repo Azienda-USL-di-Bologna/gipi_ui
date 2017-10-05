@@ -22,6 +22,7 @@ export class DefinizioneTipiProcedimentoComponent {
     cancelRowChanges:"Annulla",
     confirmDeleteMessage: "Stai per cancellare il tipo di procedimento: procedere?"
   }
+  
 
   private loggaContesto(e: Object){
     console.log(e);
