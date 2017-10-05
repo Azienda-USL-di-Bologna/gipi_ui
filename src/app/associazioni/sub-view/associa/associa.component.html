@@ -1,0 +1,21 @@
+<dx-responsive-box style="padding:16px; height:100%;">
+  <dxi-row [ratio]="1"></dxi-row>
+
+  <dxi-col [ratio]="1"></dxi-col>
+
+  <dxi-item>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="lg"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="md"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="sm"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="xs"></dxi-location>
+    <div>
+      <dx-button
+        icon="check"
+        type="success"
+        text="Done"
+        (onClick)="doneClick()">
+			</dx-button>
+    </div>
+  </dxi-item>
+
+</dx-responsive-box>
