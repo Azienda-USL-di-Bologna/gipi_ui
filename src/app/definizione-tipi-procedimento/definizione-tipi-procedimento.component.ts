@@ -22,15 +22,16 @@ export class DefinizioneTipiProcedimentoComponent {
     cancelRowChanges:"Annulla",
     confirmDeleteMessage: "Stai per cancellare il tipo di procedimento: procedere?"
   }
+  
 
   private loggaContesto(e: Object){
     console.log(e);
-
+    
   }
 
   constructor(private service: DefinizioneTipiProcedimentoService) {
     this.dataSource = this.service.getTipiProcedimentoSource();
-    // debugger;
+    //debugger;
     console.log(this.dataSource);
 
   }
@@ -69,7 +70,7 @@ export class DefinizioneTipiProcedimentoComponent {
 
       case "ButtonClick":
         console.log("button click");
-
+      
         console.log(event);
         break;
 

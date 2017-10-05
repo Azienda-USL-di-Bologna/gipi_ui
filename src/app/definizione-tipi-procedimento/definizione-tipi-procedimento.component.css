@@ -6,7 +6,6 @@ font-stretch: expanded !important;
 }  
 */  
 
-
 /deep/ .dx-datagrid-action, .dx-datagrid-drag-action {
     text-align: center !important;
     font-weight: bold;
@@ -25,6 +24,7 @@ font-stretch: expanded !important;
     margin: 0 !important;
     border-radius: 0 !important;
 }
+
 
 /deep/ .navbar-nav > li > a{
     color: white !important;
@@ -56,12 +56,14 @@ font-stretch: expanded !important;
     background-color: #FFC057 !important;
 }
 
+/*      //questo metteva la testata gialla al popup per la modifica del tipo di procedimento
 #testata{
     padding: 10px;
     display: block !important;
     background-color:  #FFC057 !important;
     font-size: 40px !important;
 }
+*/
 
 /*
 /deep/ .dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title{
@@ -75,6 +77,7 @@ font-stretch: expanded !important;
     margin: 0 3px;
 }
 
+/* I bottoni della colonna Azioni*/
 /deep/ .azioni{
     width: auto !important;
     text-align: center !important;
