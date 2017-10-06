@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ODATA_STORE_ROOT_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from '../../environments/app.constant';
+import { TipoProcedimento } from '../classi/tipo-procedimento';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 import { Http } from '@angular/http';
@@ -9,12 +10,12 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class DefinizioneTipiProcedimentoService {
 
-  public selectedRow: any;
+  public selectedRow: TipoProcedimento;
 
   constructor(private http: Http) { }
 
-  valorizzaSelectedRow(riga: any){
-    this.selectedRow=riga;
+  valorizzaSelectedRow(riga: TipoProcedimento){
+    this.selectedRow = riga;
   }
 
   getTipiProcedimentoSource() {
@@ -46,5 +47,3 @@ export class DefinizioneTipiProcedimentoService {
   }
 
 }
-
-

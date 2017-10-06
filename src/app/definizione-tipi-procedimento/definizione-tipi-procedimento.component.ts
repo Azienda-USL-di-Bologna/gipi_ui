@@ -22,17 +22,17 @@ export class DefinizioneTipiProcedimentoComponent {
     cancelRowChanges:"Annulla",
     confirmDeleteMessage: "Stai per cancellare il tipo di procedimento: procedere?"
   }
-  
+
 
   private loggaContesto(e: Object){
-    console.log(e);
-    
+    // console.log(e);
+
   }
 
   constructor(private service: DefinizioneTipiProcedimentoService) {
     this.dataSource = this.service.getTipiProcedimentoSource();
     //debugger;
-    console.log(this.dataSource);
+    // console.log(this.dataSource);
 
   }
 
@@ -41,17 +41,17 @@ export class DefinizioneTipiProcedimentoComponent {
   private comando: any;
 
   private handleEvent(name: String, event: any) {
-    console.log("EVENTO "+name, event);
+    // console.log("EVENTO "+name, event);
     switch(name){
       //Questo evento scatta al cliccare di qualsiasi cella: se però siamo sulla 5 colonna e si è cliccato un pulsante viene gestito
       case "CellClick":
         this.cellClick(event);
-        console.log("CellClick --> COMANDO = ", this.comando);
+        // console.log("CellClick --> COMANDO = ", this.comando);
 
         if(event.columnIndex=== 5 && this.comando != null)  //se ho cliccato sulla colonna Azioni potrei modificare o cancellare la riga
         { // a seconda del pulsante spinto viene editata o cancellata la riga.
 
-          console.log(event.columnIndex);
+          // console.log(event.columnIndex);
 
           switch(this.comando){
             case "edita":
@@ -69,24 +69,24 @@ export class DefinizioneTipiProcedimentoComponent {
         break;
 
       case "ButtonClick":
-        console.log("button click");
-      
-        console.log(event);
+        // console.log("button click");
+
+        // console.log(event);
         break;
 
       case "associaClicked":
-        console.log("entrato in associaClicked");
+        // console.log("entrato in associaClicked");
         this.comando = null;
         break;
 
       //Ho cliccato sul pulsante per modificare la riga: quindi faccio diventare il comando "edita"
-      case "editClicked": 
-        this.comando = "edita";  
+      case "editClicked":
+        this.comando = "edita";
         break;
 
       //Ho cliccato sul pulsante per modificare la riga: quindi faccio diventare il comando "cancella"
       case "deleteClicked":
-        console.log("entrato in deleteClicked");
+        // console.log("entrato in deleteClicked");
         this.comando = "cancella";  //rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
         break;
 
@@ -99,18 +99,18 @@ export class DefinizioneTipiProcedimentoComponent {
 
   //cancello la riga passata come parametro
   private cancellaRiga(row: any){
-    // prendo l'indice della riga selezionata e 
-    console.log("FUNZIONE CANCELLARIGA");
-    console.log(row.rowIndex);         
-    this.grid.instance.deleteRow(row.rowIndex); 
+    // prendo l'indice della riga selezionata e
+    // console.log("FUNZIONE CANCELLARIGA");
+    // console.log(row.rowIndex);
+    this.grid.instance.deleteRow(row.rowIndex);
     this.comando=null; //rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
   }
 
   //modifico la riga passata come parametro
   private modificaRiga(row: any){
-    console.log("FUNZIONE MODIFICARIGA");
-    console.log(row.rowIndex);         
-    this.grid.instance.editRow(row.rowIndex); 
+    // console.log("FUNZIONE MODIFICARIGA");
+    // console.log(row.rowIndex);
+    this.grid.instance.editRow(row.rowIndex);
     this.comando=null; //rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
   }
 
@@ -121,7 +121,7 @@ export class DefinizioneTipiProcedimentoComponent {
   }
 
   private onToolbarPreparing(e: any){
-    console.log("onToolbarPreparing event!!!")
+    // console.log("onToolbarPreparing event!!!")
     var toolbarItems = e.toolbarOptions.items;
 
     toolbarItems.forEach(element => {
@@ -132,21 +132,21 @@ export class DefinizioneTipiProcedimentoComponent {
         element.options.showText="always"
       }
 
-           
+
     });
 
   }
 
   private onCellPrepared(e: any) {
-    
+
     if (e.rowType === "data" && e.column.command === "edit") {
         var isEditing = e.row.isEditing,
             $links = e.cellElement.find(".dx-link");
 
         $links.text("");
         $links.filter(".dx-link-edit").addClass("dx-icon-edit");
-        $links.filter(".dx-link-delete").addClass("dx-icon-trash");     
-          
+        $links.filter(".dx-link-delete").addClass("dx-icon-trash");
+
     }
   }
 
@@ -187,8 +187,8 @@ export class DefinizioneTipiProcedimentoComponent {
           attivo = "Sì";
         else
           attivo = "No";
-    
-    
+
+
         if((utilityFunctions.isDataBiggerOrEqual(coso.dataFineValidita, new Date()) || coso.dataFineValidita==null) && attivo=="Sì")
           attivo = "Sì";
         else
