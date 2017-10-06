@@ -81,6 +81,7 @@ font-stretch: expanded !important;
 }
 
 
-/deep/ .dx-toolbar dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title{
+
+/deep/ .dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title{
     background-color: white !important;
 }
