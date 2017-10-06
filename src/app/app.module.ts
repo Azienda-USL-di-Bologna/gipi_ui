@@ -36,6 +36,7 @@ import { AssociazioniComponent } from './associazioni/associazioni.component';
 import { AssociaComponent } from './associazioni/sub-view/associa/associa.component';
 import { ProcedimentoComponent } from './associazioni/sub-view/procedimento/procedimento.component';
 import { AssociaDirective } from './associazioni/directives/associa.directive';
+import { AlberoStruttureComponent } from './associazioni/sub-view/albero-strutture/albero-strutture.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { AssociaDirective } from './associazioni/directives/associa.directive';
     AssociazioniComponent,
     AssociaComponent,
     ProcedimentoComponent,
-    AssociaDirective
+    AssociaDirective,
+    AlberoStruttureComponent
   ],
   imports: [
     BrowserModule,

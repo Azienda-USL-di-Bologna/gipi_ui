@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TipoProcedimento } from '../../../classi/tipo-procedimento';
 
 @Component({
   selector: 'app-procedimento',
@@ -7,9 +8,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProcedimentoComponent implements OnInit {
 
-  constructor() { }
+  mode : string = 'VISUAL-MODE';
+  procedimento : TipoProcedimento;
+
+  constructor() {
+    this.procedimento = new TipoProcedimento();
+    this.procedimento.descrizioneTipoProcedimentoDefault = 'descrizione a caso';
+    this.procedimento.modoApertura = 'questo è il modo apertura';
+    this.procedimento.normaRiferimento = 'norma 99/2a';
+    this.procedimento.durataMassimaSospensione = '22';
+    this.procedimento.dataInizioValidita = new Date();
+    this.procedimento.dataFineValidita = new Date();
+  }
+
+
 
   ngOnInit() {
+  }
+
+  switchMode(){
+    // console.log('switch')
+    this.mode = 'EDIT-MODE';
   }
 
 }

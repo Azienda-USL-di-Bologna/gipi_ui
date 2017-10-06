@@ -90,8 +90,7 @@
             <dx-check-box [value]="procedimento.aziendeAssociate[azienda] ? true : false" [disabled]="true" #checkAssociata></dx-check-box>
             <span style="margin-right: 16px;">{{azienda}}</span>
             <div style="float:right;">
-              <dx-button [text]="checkAssociata.value ? 'Togli' : 'Associa'" [type]="confirm"></dx-button>
-              <dx-button [text]="'dettagli'" [type]="confirm" [disabled]="!checkAssociata.value"></dx-button>
+              <dx-button [text]="checkAssociata.value ? 'Gestisci associazione' : 'Associa'" [type]="confirm"></dx-button>
             </div>
           </div>
 
