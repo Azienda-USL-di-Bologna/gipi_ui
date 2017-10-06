@@ -50,7 +50,8 @@ import { AlberoStruttureComponent } from './associazioni/sub-view/albero-struttu
         ProcedimentoComponent,
         AssociaDirective,
         AssociaDirective,
-        AssociazioniComponent   
+        AssociazioniComponent,
+        AlberoStruttureComponent 
     ],
     imports: [
         BrowserModule,

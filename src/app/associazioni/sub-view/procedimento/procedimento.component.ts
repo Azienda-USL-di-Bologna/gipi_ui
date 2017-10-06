@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import DataSource from 'devextreme/data/data_source';
+import ODataStore from 'devextreme/data/odata/store';
+import { ODATA_STORE_ROOT_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from '../../../../environments/app.constant';
 import { TipoProcedimento } from '../../../classi/tipo-procedimento';
+import { AziendaTipoProcedimento } from '../../../classi/azienda-tipo-procedimento';
 
 @Component({
   selector: 'app-procedimento',
@@ -10,6 +14,7 @@ export class ProcedimentoComponent implements OnInit {
 
   mode : string = 'VISUAL-MODE';
   procedimento : TipoProcedimento;
+  dataSource : DataSource;
 
   constructor() {
     this.procedimento = new TipoProcedimento();
@@ -21,7 +26,59 @@ export class ProcedimentoComponent implements OnInit {
     this.procedimento.dataFineValidita = new Date();
   }
 
+  getTipiProcedimentoSource() {
+     this.dataSource = new DataSource({
+      store: new ODataStore({
+        key: 'id',
+        url: ODATA_STORE_ROOT_URL + odataAziendeTipiProcPath,
+        // deserializeDates: true,
+        /*fieldTypes: {
+         id: 'Int32',
+         idAfferenzaStruttura: { 'type': 'Date' }
+         },*/
 
+      }),
+      map: function (item) {
+        if (item.dataInizioValidita != null) {
+          item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
+        }
+        if (item.dataFineValidita != null) {
+          item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);
+        }
+        if (item.idAzienda != null) {
+          item.nomeAzienda = item.idAzienda.descrizione;
+        }
+        // console.log('item', item);
+        // aziendaTipoProcedimento = new AziendaTipoProcedimento()[1];
+
+        // aziendaTipoProcedimento = item;
+        // console.log(aziendaTipoProcedimento);
+        return item;
+      },
+      expand: ['idAzienda', 'idTipoProcedimento', 'idTitolo'],
+      filter: [['idTipoProcedimento.idTipoProcedimento', '=', 1], ['idAzienda.id', '=', 2]],
+    });
+    this.dataSource.load().done(res => console.log(res));
+    // console.log(this.dataSource);
+  }
+
+  insertTipoProcedimento(procedimento : TipoProcedimento) {
+    // let aziendaProcedimento : AziendaTipoProcedimento = new AziendaTipoProcedimento();
+    // aziendaProcedimento.idTipoProcedimento = 3;
+    // aziendaProcedimento.idAzienda = 7;
+    let dataStore :ODataStore = this.dataSource.store() as ODataStore;
+    dataStore.insert(procedimento);
+  }
+
+  updateTipoProcedimento(key : number, procedimento : TipoProcedimento){
+    let dataStore :ODataStore = this.dataSource.store() as ODataStore;
+    dataStore.update(key, procedimento);
+  }
+
+  removeTipoProcedimento(key : number,){
+    let dataStore :ODataStore = this.dataSource.store() as ODataStore;
+    dataStore.remove(key);
+  }
 
   ngOnInit() {
   }
