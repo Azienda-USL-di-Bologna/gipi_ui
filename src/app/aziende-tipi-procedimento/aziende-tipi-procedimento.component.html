@@ -2,7 +2,7 @@
     <dx-responsive-box singleColumnScreen="sm" [(screenByWidth)]="screen">
         <dxi-row [ratio]="1"></dxi-row>
         <dxi-row [ratio]="2" screen="xs"></dxi-row>
-        <dxi-row [ratio]="2"></dxi-row>
+        <dxi-row [ratio]="8"></dxi-row>
         <dxi-row [ratio]="1"></dxi-row>
 
         <dxi-col [ratio]="1"></dxi-col>
@@ -16,7 +16,26 @@
         <dxi-item class="content item">
             <dxi-location [row]="1" [col]="1" screen="lg"></dxi-location>
             <dxi-location [row]="1" [col]="0" [colspan]="2" screen="sm"></dxi-location>
-            <p>Content</p>
+            <dx-form  id="form" #myform
+                      [(formData)]="aziendaProcedimento"
+                      [readOnly]="readOnly"
+                      [showColonAfterLabel]="showColon"
+                      [labelLocation]="labelLocation"
+                      [minColWidth]="minColWidth"
+                      [colCount]="colCount"
+                      [width]="width"
+            >
+                <!--<dxi-item *ngIf="aziendaProcedimento.durataMassimaSospensione" dataField="durataMassimaSospensione" [editorOptions]="{ disabled: true }"></dxi-item>-->
+                <!--<dxi-item *ngIf="aziendaProcedimento.idTipoProcedimento['durataMassimaSospensione']" dataField="idTipoProcedimento.durataMassimaSospensione" [editorOptions]="{ disabled: true }"></dxi-item>-->
+                <dxi-item dataField="{{descrizioneFieldName}}" [editorOptions]="{ disabled: true }"></dxi-item>
+                <dxi-item dataField="idTipoProcedimento.normaRiferimento" [editorOptions]="{ disabled: true }"></dxi-item>
+                <dxi-item dataField="modoApertura" [editorOptions]="{ disabled: true }"></dxi-item>
+                <dxi-item dataField="normaRiferimento" [editorOptions]="{ disabled: true }"></dxi-item>
+                <dxi-item dataField="dataInizioValidita" [editorOptions]="{ disabled: true }"></dxi-item>
+                <dxi-item dataField="dataFineValidita" [editorOptions]="{ disabled: true }"></dxi-item>
+                <dxi-item dataField="{{durataMassimaSospensioneFieldName}}" [editorOptions]="{ disabled: true }"></dxi-item>
+                <dxi-item dataField="idTitolo.nomeTitolo" [editorOptions]="{ disabled: true }"></dxi-item>
+            </dx-form>
         </dxi-item>
         <dxi-item class="left-side-bar item">
             <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
@@ -31,7 +50,7 @@
         <dxi-item class="footer item">
             <dxi-location [row]="2" [col]="0" [colspan]="3" screen="lg"></dxi-location>
             <dxi-location [row]="3" [col]="0" [colspan]="2" screen="sm"></dxi-location>
-            <p>Footer</p>
+            <dx-button (onClick) = "buttonClicked($event)" text = "clicca"></dx-button>
         </dxi-item>
     </dx-responsive-box>
 </div>
@@ -39,32 +58,8 @@
 
 
 <!---->
-<!--<dx-form  id="form"-->
-<!--[(formData)]="aziendaProcedimento"-->
-<!--[readOnly]="readOnly"-->
-<!--[showColonAfterLabel]="showColon"-->
-<!--[labelLocation]="labelLocation"-->
-<!--[minColWidth]="minColWidth"-->
-<!--[colCount]="colCount"-->
-<!--[width]="width"-->
-<!--&gt;-->
-<!--&lt;!&ndash;<dxi-item dataField="obbligoEsitoConclusivo" [editorOptions]="{ disabled: true }"></dxi-item>&ndash;&gt;-->
-<!--</dx-form>-->
 
 
-<!--<dx-button-->
-<!--text="Click me"-->
-<!--(onClick)="buttonClicked()">-->
-<!--</dx-button>-->
-<!--</dx-responsive-box>-->
 
 
-<!--<dx-responsive-box>-->
-<!--<dxi-row [ratio]="1"></dxi-row>-->
-<!--<dxi-col [ratio]="1"></dxi-col>-->
-<!--<dxi-col [ratio]="3"></dxi-col>-->
 
-<!--<dxi-item>-->
-<!--<dxi-location [row]="0" [col]="0" [colspan]="1" [rowspan]="2" screnn="lg"></dxi-location>-->
-<!--<dxi-location [row]="0" [col]="0" [colspan]="1" [rowspan]="2" screen="md"></dxi-location>-->
-<!--<dxi-location [row]="0" [col]="0" [colspan]="1" [rowspan]="1" screen="sm"></dxi-location>-->

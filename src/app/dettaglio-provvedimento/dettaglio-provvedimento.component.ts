@@ -54,5 +54,4 @@ export class DettaglioProvvedimentoComponent implements OnInit {
                               })
                           });
   }
-
 }
