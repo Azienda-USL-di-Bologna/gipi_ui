@@ -17,6 +17,7 @@
         mode="search"
         valueChangeEvent="keyup"
         value=""
+        style="margin-bottom:8px;"
         ></dx-text-box>
       <dx-tree-view
         id="selection-treeview"
@@ -42,6 +43,18 @@
       </ng-template>
       <!-- <button (click)="loadComponent()">Create success alert</button> -->
       <!-- <button (click)="createComponent('danger')">Create danger alert</button> -->
+      <dx-popup
+        class="popup"
+        [showTitle]="true"
+        [maxWidth]="500"
+        title="Albero strutture"
+        [dragEnabled]="false"
+        [closeOnOutsideClick]="true"
+        [(visible)]="popupVisible">
+        <div *dxTemplate="let data of 'content'">
+          <app-albero-strutture></app-albero-strutture>
+        </div>
+    </dx-popup>
     </div>
   </dxi-item>
 </dx-responsive-box>

@@ -1,51 +1,16 @@
-import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactory, ComponentFactoryResolver, ComponentRef } from '@angular/core';
-import { AssociaComponent } from './sub-view/associa/associa.component';
-import { ProcedimentoComponent } from './sub-view/procedimento/procedimento.component';
-import { AlberoStruttureComponent } from './sub-view/albero-strutture/albero-strutture.component';
-import { AssociaDirective } from './directives/associa.directive';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-associazioni',
-  templateUrl: './associazioni.component.html',
-  styleUrls: ['./associazioni.component.css']
+  selector: 'app-albero-strutture',
+  templateUrl: './albero-strutture.component.html',
+  styleUrls: ['./albero-strutture.component.css']
 })
-export class AssociazioniComponent implements OnInit {
+export class AlberoStruttureComponent implements OnInit {
 
   products: Product[];
-  associata: boolean = false;
-  popupVisible: boolean = true;
 
-  @ViewChild(AssociaDirective) container: AssociaDirective;
-  // associaRef : ComponentRef<any>;
-  // procedimentoRef : ComponentRef<any>;
-
-  constructor(private resolver: ComponentFactoryResolver) {
-    this.products = products
-
-    // this.container.clear();
-    //const factory: ComponentFactory<AssociaComponent> = this.resolver.resolveComponentFactory(AssociaComponent);
-  }
-
-  // ngAfterViewInit() {
-  //   // Component views are initialized
-  //   const factory = this.resolver.resolveComponentFactory(AssociaComponent);
-  //   let viewContainerRef = this.container.viewContainerRef;
-  //   viewContainerRef.clear();
-  //   let componentRef = viewContainerRef.createComponent(factory);
-  // }
-
-  loadComponent() {
-    // this.container.clear();
-    // const factory: ComponentFactory<AssociaComponent> = this.resolver.resolveComponentFactory(AssociaComponent);
-    // this.componentRef = this.container.createComponent(factory);
-
-      const factory = this.resolver.resolveComponentFactory(AssociaComponent);
-      let viewContainerRef = this.container.viewContainerRef;
-      viewContainerRef.clear();
-      let componentRef = viewContainerRef.createComponent(factory);
-
-      // const factory = this.resolver.resolveComponentFactory(ProcedimentoComponent);
-      // this.procedimentoRef = this.container.createComponent(factory);
+  constructor() {
+    this.products = products;
   }
 
   ngOnInit() {
