@@ -1,12 +1,25 @@
-<nav class="navbar navbar-default" role="navigation" style="width:100%">
-  <div style="padding:0px;" class="collapse navbar-collapse" id="skeleton-navigation-navbar-collapse">
-    <ul class="nav navbar-nav">
-      <li><a data-toggle="collapse" routerLink="/home" routerLinkActive="active">Home</a></li>
-      <li><a data-toggle="collapse" routerLink="/definizione-tipi-procedimento" routerLinkActive="active">Definizione Tipi Procedimento</a></li>
-    </ul>
-  </div>
-</nav>
 
-<main>
-  <router-outlet></router-outlet>
-</main>
+
+<!-- se si vuole usare il responsive-box in qualche componente, bisogna metterlo anche qui, altrimenti non funziona bene (specialmente con chrome)-->
+<dx-responsive-box class="overflowXChild">
+    <dxi-row [ratio]="1"></dxi-row>
+    <dxi-col [ratio]="1"></dxi-col>
+
+    <dxi-item>
+        <dxi-location [row]="0" [col]="0" [colspan]="1"></dxi-location>
+        <nav class="navbar navbar-default" role="navigation" style="width:100%">
+            <div style="padding:0px;" class="collapse navbar-collapse" id="skeleton-navigation-navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a data-toggle="collapse" routerLink="/home" routerLinkActive="active">Home</a></li>
+                    <li><a data-toggle="collapse" routerLink="/definizione-tipi-procedimento" routerLinkActive="active">Definizione Tipi Procedimento</a></li>
+                    <li><a data-toggle="collapse" routerLink="/aziende-tipi-procedimento" routerLinkActive="active">Tipi Di Procedimento Per Azienda</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class = "fullpage">
+            <router-outlet></router-outlet>
+            <!-- l'activate serve a intercettare l'evento del cambiamento del contenuto renderizzato dal router-outlet -->
+        </div>
+    </dxi-item>
+</dx-responsive-box>

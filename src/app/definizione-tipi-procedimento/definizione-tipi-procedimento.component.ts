@@ -13,7 +13,7 @@ import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedime
 })
 export class DefinizioneTipiProcedimentoComponent {
 
-  @ViewChild('grid') grid: DxDataGridComponent; 
+  @ViewChild('grid') grid: DxDataGridComponent;
   private dataSource: DataSource;
   private texts: Object={
     editRow:"Modifica",
@@ -22,6 +22,7 @@ export class DefinizioneTipiProcedimentoComponent {
     cancelRowChanges:"Annulla",
     confirmDeleteMessage: "Stai per cancellare il tipo di procedimento: procedere?"
   }
+  
 
   private loggaContesto(e: Object){
     console.log(e);
@@ -198,5 +199,4 @@ export class DefinizioneTipiProcedimentoComponent {
     return attivo;
 
   }
-
 }

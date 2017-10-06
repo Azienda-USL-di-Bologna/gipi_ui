@@ -8,6 +8,7 @@
     [dataSource]="dataSource"
     [allowColumnReordering]="true"
     [paging]="false"
+    
     (onEditingStart)="handleEvent('EditingStart',$event)"
     (onInitNewRow)="handleEvent('InitNewRow',$event)"
     (onRowInserting)="handleEvent('RowInserting',$event)"
@@ -53,7 +54,7 @@
         </dxo-form>
     </dxo-editing> -->
 
-    <dxi-column dataField="idTipoProcedimento"></dxi-column>
+    <dxi-column dataField="idTipoProcedimento" [width]="100" caption="# Tipo"></dxi-column>
     <dxi-column dataField="nomeTipoProcedimento"></dxi-column>
     <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva" [allowSorting]="true" [allowFiltering]="true"></dxi-column>
     <dxi-column dataField="dataInizioValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="false"></dxi-column>
@@ -75,7 +76,6 @@
     <dxi-column dataField="descrizioneTipoProcedimentoDefault" [visible]="false"></dxi-column>
     <dxi-column dataField="durataMassimaSospensione" [visible]="false"></dxi-column>
     <dxi-column dataField="normaRiferimento" [visible]="false"></dxi-column>
-
 </dx-data-grid>
 
 
