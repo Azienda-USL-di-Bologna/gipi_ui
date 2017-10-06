@@ -1,7 +1,5 @@
-
-
 <!-- se si vuole usare il responsive-box in qualche componente, bisogna metterlo anche qui, altrimenti non funziona bene (specialmente con chrome)-->
-<dx-responsive-box class="overflowXChild">
+<dx-responsive-box>
     <dxi-row [ratio]="1"></dxi-row>
     <dxi-col [ratio]="1"></dxi-col>
 
@@ -17,7 +15,7 @@
             </div>
         </nav>
 
-        <div class = "fullpage">
+        <div class="fullpage">
             <router-outlet></router-outlet>
             <!-- l'activate serve a intercettare l'evento del cambiamento del contenuto renderizzato dal router-outlet -->
         </div>
