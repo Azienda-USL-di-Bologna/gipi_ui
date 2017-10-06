@@ -56,7 +56,7 @@ font-stretch: expanded !important;
     background-color: #FFC057 !important;
 }
 
-/*      //questo metteva la testata gialla al popup per la modifica del tipo di procedimento
+/*  --> questo metteva la testata gialla al popup per la modifica del tipo di procedimento
 #testata{
     padding: 10px;
     display: block !important;
@@ -65,11 +65,6 @@ font-stretch: expanded !important;
 }
 */
 
-/*
-/deep/ .dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title{
-    background-color:  #FFC057 !important;
-}
-*/
 
 /deep/ .dx-command-edit .dx-link {
     text-decoration: none;
@@ -83,4 +78,9 @@ font-stretch: expanded !important;
     text-align: center !important;
     display: flex;
     justify-content: space-around;
+}
+
+
+/deep/ .dx-toolbar dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title{
+    background-color: white !important;
 }
