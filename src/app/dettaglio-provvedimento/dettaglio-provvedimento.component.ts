@@ -41,8 +41,6 @@ export class DettaglioProvvedimentoComponent implements OnInit {
     buttonClicked() {
         this.sharedData.getSharedObject().push(SharedObjectKeys.CURRENT_DOCUMENT, this.procedimento);
         this.router.navigate(['/aziende-tipi-procedimento']);
-        console.log(this.procedimento);
-        console.log(SharedObjectKeys);
     }
 
 }
