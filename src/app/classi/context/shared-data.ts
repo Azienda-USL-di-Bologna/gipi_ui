@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class SharedData {
 
-    sharedObject: any[] = new Array<Object>();
+    sharedObject: any = new Object();
 
     public constructor() { }
 

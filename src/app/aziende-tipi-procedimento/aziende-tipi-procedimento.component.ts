@@ -86,7 +86,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         // Saving data
         // this.datasource.store().update(this.aziendaProcedimento.id, this.aziendaProcedimento);
         this.statusPage = "insert-status";
-        console.log(this.sharedData.getSharedObject());
+        console.log(this.sharedData.getSharedObject()[SharedObjectKeys.CURRENT_DOCUMENT]);
     }
 
     buttonClicked2() {
