@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { DefinizioneTipiProcedimentoService } from '../definizione-tipi-procedimento/definizione-tipi-procedimento.service';
 import { TipoProcedimento } from '../classi/tipo-procedimento';
 import { SharedData, SharedObjectKeys } from '../classi/context/shared-data';
+import { Azienda, AZIENDE } from '../classi/aziende';
 import 'rxjs/add/operator/toPromise';
 
 @Component({
@@ -13,7 +14,7 @@ import 'rxjs/add/operator/toPromise';
 export class DettaglioProvvedimentoComponent implements OnInit {
 
     procedimento: TipoProcedimento;
-    aziende: string[];
+    aziende: Azienda[];
     router: Router;
 
     constructor(private service: DefinizioneTipiProcedimentoService, router: Router, private sharedData: SharedData) {
@@ -29,9 +30,8 @@ export class DettaglioProvvedimentoComponent implements OnInit {
         this.service.getAziendeAssociateRequest(this.procedimento.idTipoProcedimento.toString())
             .toPromise()
             .then(response => {
-                this.aziende = ['AUSLBO', 'AOSPBO', 'IOR', 'AUSLIMOLA', 'AOSPFE', 'AUSLFE', 'AUSLPARMA'];
-                this.procedimento.aziendeAssociate = new Array();
-                // console.log('RESPONSE: ', response);
+              this.aziende = AZIENDE;
+              this.procedimento.aziendeAssociate = new Array();
                 response.forEach(a => {
                     this.procedimento.aziendeAssociate[a.idAzienda.nome] = a.idAzienda;
                 })
@@ -39,7 +39,8 @@ export class DettaglioProvvedimentoComponent implements OnInit {
     }
 
     buttonClicked() {
-        this.sharedData.getSharedObject().push(SharedObjectKeys.CURRENT_DOCUMENT, this.procedimento);
+      // this.sharedData.getSharedObject().pop
+      //   this.sharedData.getSharedObject().push(SharedObjectKeys.CURRENT_DOCUMENT, this.procedimento);
         this.router.navigate(['/aziende-tipi-procedimento']);
     }
 
