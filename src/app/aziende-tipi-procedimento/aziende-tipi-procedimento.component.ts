@@ -5,6 +5,7 @@ import { ODATA_STORE_ROOT_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPa
 import {AziendaTipoProcedimento} from '../classi/azienda-tipo-procedimento';
 import {DxFormComponent} from 'devextreme-angular';
 import {TipoProcedimento} from '../classi/tipo-procedimento';
+import { SharedData, SharedObjectKeys } from '../classi/context/shared-data';
 
 @Component({
     selector: 'app-aziende-tipi-procedimento',
@@ -40,7 +41,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
 
     @ViewChild(DxFormComponent) myform: DxFormComponent;
 
-    constructor() {
+    constructor(private sharedData: SharedData) {
 
         this.testoBottoneConferma = "Conferma";
         this.disabilitaBottoneAssocia = false;
@@ -82,16 +83,14 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     // }
 
     buttonClicked1() {
-        console.log(sessionStorage.getItem('gdm'));
-        console.log(localStorage.getItem('gdm'));
         // Saving data
         // this.datasource.store().update(this.aziendaProcedimento.id, this.aziendaProcedimento);
         this.statusPage = "insert-status";
+        console.log(this.sharedData.getSharedObject());
     }
 
     buttonClicked2() {
-        console.log(sessionStorage.getItem('gdm'));
-        console.log(localStorage.getItem('gdm'));
+
         // Saving data
         // this.datasource.store().update(this.aziendaProcedimento.id, this.aziendaProcedimento);
         this.statusPage = "modify-status";

@@ -3,9 +3,13 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class SharedData {
 
-    public sharedObject: any;
+    sharedObject: any[] = new Array<Object>();
 
     public constructor() { }
+
+    public getSharedObject(): any {
+        return this.sharedObject;
+    }
 }
 
 export const SharedObjectKeys = {

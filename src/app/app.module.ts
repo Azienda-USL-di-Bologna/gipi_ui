@@ -6,7 +6,7 @@ import 'devextreme/data/odata/store';
 import 'devextreme/data/odata/context';
 import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedimento/definizione-tipi-procedimento.service';
 import { UtilityFunctions } from './utility-functions';
-
+import { SharedData } from './classi/context/shared-data'
 
 import {
     DxDataGridModule,
@@ -51,7 +51,7 @@ import { AlberoStruttureComponent } from './associazioni/sub-view/albero-struttu
         AssociaDirective,
         AssociaDirective,
         AssociazioniComponent,
-        AlberoStruttureComponent 
+        AlberoStruttureComponent
     ],
     imports: [
         BrowserModule,
@@ -72,7 +72,7 @@ import { AlberoStruttureComponent } from './associazioni/sub-view/albero-struttu
         HttpModule,
         DxTreeViewModule
     ],
-    providers: [DefinizioneTipiProcedimentoService],
+    providers: [DefinizioneTipiProcedimentoService, SharedData],
     bootstrap: [AppComponent],
     entryComponents: [AssociaComponent, ProcedimentoComponent]
 })
