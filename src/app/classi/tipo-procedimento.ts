@@ -1,4 +1,4 @@
-import { AziendaAssociata } from './azienda-associata';
+import { Azienda } from './aziende';
 
 export class TipoProcedimento {
       idTipoProcedimento: number;
@@ -9,5 +9,5 @@ export class TipoProcedimento {
       dataInizioValidita: Date;
       dataFineValidita: Date;
       durataMassimaSospensione: string;
-      aziendeAssociate: Array<AziendaAssociata>;
+      aziendeAssociate: Array<Azienda>;
 }

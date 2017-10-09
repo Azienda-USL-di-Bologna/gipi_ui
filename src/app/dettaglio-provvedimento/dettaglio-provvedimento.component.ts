@@ -33,7 +33,12 @@ export class DettaglioProvvedimentoComponent implements OnInit {
               this.aziende = AZIENDE;
               this.procedimento.aziendeAssociate = new Array();
                 response.forEach(a => {
-                    this.procedimento.aziendeAssociate[a.idAzienda.nome] = a.idAzienda;
+                  for (let azienda of this.aziende) {
+                      if(azienda.codice === a.idAzienda.nome){
+                        this.procedimento.aziendeAssociate[a.idAzienda.nome] = azienda;
+                        break;
+                      }
+                  }
                 })
             });
     }
