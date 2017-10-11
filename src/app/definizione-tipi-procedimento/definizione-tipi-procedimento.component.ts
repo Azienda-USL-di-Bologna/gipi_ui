@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { DxDataGridComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedimento.service';
+import {TipoProcedimento} from "../classi/tipo-procedimento";
+import {OdataContextDefinition, Entities} from "../classi/context/odata-context-definition";
 
 //import { UtilityFunctions } from '../utility-functions';
 
@@ -15,6 +17,7 @@ export class DefinizioneTipiProcedimentoComponent {
 
   @ViewChild('grid') grid: DxDataGridComponent;
   private dataSource: DataSource;
+  public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
   private texts: Object={
     editRow:"Modifica",
     deleteRow:"Elimina",
@@ -29,13 +32,29 @@ export class DefinizioneTipiProcedimentoComponent {
 
   }
 
-  constructor(private service: DefinizioneTipiProcedimentoService) {
-    this.dataSource = this.service.getTipiProcedimentoSource();
+  constructor(private service: DefinizioneTipiProcedimentoService, private odataContextDefinition:OdataContextDefinition) {
+    // this.dataSource = this.service.getTipiProcedimentoSource();
+    this.dataSource = new DataSource({
+      store: odataContextDefinition.getContext()[Entities.TipoProcedimentos],
+      map: function (item) {
+        if (item.dataInizioValidita != null)
+          item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
+        if (item.dataFineValidita != null)
+          item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);
+
+        //console.log('item', item);
+        return item;
+      }
+    });
+    this.dataSource.load().done(res => this.buildTipiProcedimento(res))
     //debugger;
     // console.log(this.dataSource);
 
   }
 
+  buildTipiProcedimento(res) {
+    this.tipiProcedimento = res;
+  }
 
   //questa proprietà serve per capire che pulsante è stato cliccato
   private comando: any;

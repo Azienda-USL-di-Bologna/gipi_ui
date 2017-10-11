@@ -38,6 +38,7 @@ import { AssociaComponent } from './associazioni/sub-view/associa/associa.compon
 import { ProcedimentoComponent } from './associazioni/sub-view/procedimento/procedimento.component';
 import { AssociaDirective } from './associazioni/directives/associa.directive';
 import { AlberoStruttureComponent } from './associazioni/sub-view/albero-strutture/albero-strutture.component';
+import {OdataContextDefinition} from "./classi/context/odata-context-definition";
 
 @NgModule({
     declarations: [
@@ -72,7 +73,7 @@ import { AlberoStruttureComponent } from './associazioni/sub-view/albero-struttu
         HttpModule,
         DxTreeViewModule
     ],
-    providers: [DefinizioneTipiProcedimentoService, SharedData],
+    providers: [DefinizioneTipiProcedimentoService, SharedData, OdataContextDefinition],
     bootstrap: [AppComponent],
     entryComponents: [AssociaComponent, ProcedimentoComponent]
 })
