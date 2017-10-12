@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { DefinizioneTipiProcedimentoService } from '../definizione-tipi-procedimento/definizione-tipi-procedimento.service';
 import { TipoProcedimento } from '../classi/tipo-procedimento';
-import { SharedData, SharedObjectKeys } from '../classi/context/shared-data';
+import { SharedData } from '../classi/context/shared-data';
 import { Azienda, AZIENDE } from '../classi/aziende';
 import 'rxjs/add/operator/toPromise';
 
@@ -43,9 +43,12 @@ export class DettaglioProvvedimentoComponent implements OnInit {
             });
     }
 
-    buttonClicked() {
-        //this.sharedData.getSharedObject().pop
-        this.sharedData.getSharedObject()[SharedObjectKeys.CURRENT_DOCUMENT] = this.procedimento;
+    buttonClicked(azienda) {
+        //MI COSTRUISCO UN OGGETTO "CARONTE" DA METTERE DENTRO L'OGGETTO SharedData  CHE IN QUESTO CASO PASSO ALLA VIDEATA aziende-tipi-procedimento
+        let obj = new Object();
+        obj["procedimento"] = this.procedimento;
+        obj["azienda"] = azienda;
+        this.sharedData.setSharedObject(obj);
         this.router.navigate(['/aziende-tipi-procedimento']);
     }
 
