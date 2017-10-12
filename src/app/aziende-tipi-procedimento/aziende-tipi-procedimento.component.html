@@ -14,8 +14,8 @@ DELLA RISOLUZIONE
             <dxi-item class="header item">
                 <dxi-location [row]="0" [col]="0" [colspan]="3" screen="lg"></dxi-location>
                 <dxi-location [row]="0" [col]="0" [colspan]="2" screen="sm"></dxi-location>
-                <h2>Tipo procedimento: {{testoHeaderTipoProcedimento}}</h2>
-                <h2>Azienda: {{testoHeaderAzienda}}</h2>
+                <h3><span class="header-font">Tipo procedimento:</span> <i>{{testoHeaderTipoProcedimento}}</i></h3>
+                <h3><span class="header-font">Azienda:</span> <i>{{testoHeaderAzienda}}</i></h3>
                 <div class="status-page {{statusPage}}"></div>
             </dxi-item>
             <dxi-item class="content item">
@@ -37,12 +37,12 @@ DELLA RISOLUZIONE
 
             <dxi-item class="left-side-bar item">
                 <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
-                <p>Left Bar</p>
+                <!-- colonna vuota sinistra -->
             </dxi-item>
 
             <dxi-item class="right-side-bar item">
                 <dxi-location [row]="1" [col]="2" screen="lg"></dxi-location>
-                <p>Right Bar</p>
+                <!-- colonna vuota destra -->
             </dxi-item>
 
             <dxi-item class="footer item">
@@ -69,7 +69,7 @@ DELLA RISOLUZIONE
                         <dx-button class="padding-button" (onClick)="buttonClicked4($event)" text="Associa a struttura" [disabled]="disabilitaBottoneAssocia" hint="Apre l'interfaccia per l'associazione alle strutture"></dx-button>
                     </dxi-item>
                 </dx-responsive-box>
-                <p>footer Bar</p>
+                <!-- colonna vuota sinistra -->
             </dxi-item>
 
         </dx-responsive-box>

@@ -5,7 +5,7 @@ import { ODATA_STORE_ROOT_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPa
 import {AziendaTipoProcedimento} from '../classi/azienda-tipo-procedimento';
 import {DxFormComponent} from 'devextreme-angular';
 import {TipoProcedimento} from '../classi/tipo-procedimento';
-import { SharedData, SharedObjectKeys } from '../classi/context/shared-data';
+import { SharedData } from '../classi/context/shared-data';
 
 @Component({
     selector: 'app-aziende-tipi-procedimento',
@@ -20,6 +20,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     durataMassimaSospensioneFieldName: string;
     aziendaProcedimento: AziendaTipoProcedimento = new AziendaTipoProcedimento();
 
+
     // settaggio variabili per impaginazione dati del form
     labelLocation: string;
     readOnly: boolean;
@@ -33,7 +34,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     testoBottoneConferma: string;
     disabilitaBottoneAssocia: boolean;
     disabilitaBottoneDisassocia: boolean;
-
+    
     statusPage: string;
 
     testoHeaderTipoProcedimento: string = "testo tipo procedimento passato da Fay";
@@ -47,6 +48,10 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         this.disabilitaBottoneAssocia = false;
         this.disabilitaBottoneDisassocia = false;
 
+        //LE INFO NECESSARIE A POPOLARE QUESTI DUE HEADER VENGONO SCRITTE NELLO SharedData DALLA VIDEATA dettaglio-provvedimento
+        this.testoHeaderTipoProcedimento = this.getDescrizioneTipoProcedimento();
+        this.testoHeaderAzienda = this.sharedData.getSharedObject().azienda.descrizione;
+        
         this.labelLocation = 'left';
         this.readOnly = false;
         this.showColon = true;
@@ -72,15 +77,9 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         return (width < 700) ? 'sm' : 'lg';
     }
 
+
     ngOnInit() {
-        // this.datasource = this.getTipiProcedimentoSource();
-        // this.datasource.load();
-
     }
-
-    // ngAfterViewInit() {
-    //   this.myform.instance.validate()
-    // }
 
     public buttonClicked1(event) {
         // Saving data
@@ -90,7 +89,6 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     }
 
     public buttonClicked2(event) {
-
         // Saving data
         // this.datasource.store().update(this.aziendaProcedimento.id, this.aziendaProcedimento);
         this.statusPage = "modify-status";
@@ -115,6 +113,12 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         console.log(e);
     }
 
+    getDescrizioneTipoProcedimento(): string { 
+          return this.sharedData.getSharedObject().procedimento.nomeTipoProcedimento ?
+              this.sharedData.getSharedObject().procedimento.nomeTipoProcedimento :
+              this.sharedData.getSharedObject().procedimento.descrizioneTipoProcedimentoDefault;
+     }
+
     getTipiProcedimentoSource() {
         return new DataSource({
             store: new ODataStore({
@@ -128,6 +132,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
 
             }),
             map: function(item) {
+                
                 if (item.dataInizioValidita != null) {
                     item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
                 }
@@ -137,39 +142,11 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
                 if (item.idAzienda != null) {
                     item.nomeAzienda = item.idAzienda.descrizione;
                 }
-                // console.log('item', item);
-                // aziendaTipoProcedimento = new AziendaTipoProcedimento()[1];
-
-                // aziendaTipoProcedimento = item;
-                // console.log(aziendaTipoProcedimento);
                 return item;
             },
             expand: ['idAzienda', 'idTipoProcedimento', 'idTitolo'],
             filter: [['idTipoProcedimento.idTipoProcedimento', '=', 1], ['idAzienda.id', '=', 2]],
         });
     }
-    //
-    // getTipiProcedimentoSource() {
-    //   return new DataSource({
-    //     store: new ODataStore({
-    //       key: 'id',
-    //       url: ODATA_STORE_ROOT_URL + odataAziendeTipiProcPath,
-    //       // deserializeDates: true,
-    //       /*fieldTypes: {
-    //        id: 'Int32',
-    //        idAfferenzaStruttura: { 'type': 'Date' }
-    //        },*/
-    //     }),
-    //     map: function (item) {
-    //       if (item.dataInizioValidita != null) {
-    //         item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
-    //       }
-    //       if (item.dataFineValidita != null) {
-    //         item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);
-    //       }
-    //       console.log('item', item);
-    //       return item;
-    //     }
-    //   });
-    // }
+    
 }
