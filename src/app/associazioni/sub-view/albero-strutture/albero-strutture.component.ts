@@ -16,6 +16,8 @@ export class AlberoStruttureComponent implements OnInit {
   ngOnInit() {
   }
 
+  public selectItem(e) {
+  }
 }
 
 export class Product {

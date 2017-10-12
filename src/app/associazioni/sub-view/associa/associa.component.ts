@@ -12,4 +12,7 @@ export class AssociaComponent implements OnInit {
   ngOnInit() {
   }
 
+  public doneClick() {
+
+  }
 }

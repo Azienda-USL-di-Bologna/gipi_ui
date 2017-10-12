@@ -82,21 +82,21 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     //   this.myform.instance.validate()
     // }
 
-    buttonClicked1() {
+    public buttonClicked1(event) {
         // Saving data
         // this.datasource.store().update(this.aziendaProcedimento.id, this.aziendaProcedimento);
         this.statusPage = "insert-status";
         console.log(this.sharedData.getSharedObject());
     }
 
-    buttonClicked2() {
+    public buttonClicked2(event) {
 
         // Saving data
         // this.datasource.store().update(this.aziendaProcedimento.id, this.aziendaProcedimento);
         this.statusPage = "modify-status";
     }
 
-    buttonClicked3() {
+    public buttonClicked3(event) {
         console.log(sessionStorage.getItem('gdm'));
         console.log(localStorage.getItem('gdm'));
         // Saving data
@@ -104,7 +104,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         this.statusPage = "delete-status";
     }
 
-    buttonClicked4() {
+    public buttonClicked4(event) {
         console.log(sessionStorage.getItem('gdm'));
         console.log(localStorage.getItem('gdm'));
         // Saving data
