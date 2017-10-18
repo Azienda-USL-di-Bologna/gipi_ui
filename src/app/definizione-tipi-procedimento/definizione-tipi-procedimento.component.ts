@@ -35,7 +35,7 @@ export class DefinizioneTipiProcedimentoComponent {
   constructor(private service: DefinizioneTipiProcedimentoService, private odataContextDefinition:OdataContextDefinition) {
     // this.dataSource = this.service.getTipiProcedimentoSource();
     this.dataSource = new DataSource({
-      store: odataContextDefinition.getContext()[Entities.TipoProcedimentos],
+      store: odataContextDefinition.getContext()[Entities.TipoProcedimento],
       map: function (item) {
         if (item.dataInizioValidita != null)
           item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);

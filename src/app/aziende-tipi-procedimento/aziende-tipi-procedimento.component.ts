@@ -66,11 +66,13 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
 
     buildAziendaTipoProcedimento(res) {
         this.aziendaProcedimento = res[0];
-        this.aziendaProcedimento.descrizioneTipoProcedimento ?
+        //debugger;
+        
+        /*this.aziendaProcedimento.descrizioneTipoProcedimento ?
             this.descrizioneFieldName = 'descrizioneTipoProcedimento' : this.descrizioneFieldName = 'idTipoProcedimento.descrizioneTipoProcedimentoDefault';
 
         this.aziendaProcedimento.durataMassimaSospensione ?
-            this.durataMassimaSospensioneFieldName = 'durataMassimaSospensione' : this.durataMassimaSospensioneFieldName = 'idTipoProcedimento.durataMassimaSospensione';
+            this.durataMassimaSospensioneFieldName = 'durataMassimaSospensione' : this.durataMassimaSospensioneFieldName = 'idTipoProcedimento.durataMassimaSospensione';*/
     }
 
     screen(width) {
@@ -120,6 +122,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
      }
 
     getTipiProcedimentoSource() {
+        console.log(this.sharedData);
         return new DataSource({
             store: new ODataStore({
                 key: 'id',
@@ -145,7 +148,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
                 return item;
             },
             expand: ['idAzienda', 'idTipoProcedimento', 'idTitolo'],
-            filter: [['idTipoProcedimento.idTipoProcedimento', '=', 1], ['idAzienda.id', '=', 2]],
+            filter: [['idTipoProcedimento.idTipoProcedimento', '=', this.sharedData.getSharedObject().procedimento.idTipoProcedimento], ['idAzienda.id', '=', this.sharedData.getSharedObject().azienda.id]],
         });
     }
     

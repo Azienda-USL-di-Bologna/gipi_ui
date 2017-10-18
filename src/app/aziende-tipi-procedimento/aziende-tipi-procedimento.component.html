@@ -23,14 +23,14 @@ DELLA RISOLUZIONE
                 <dxi-location [row]="1" [col]="0" [colspan]="2" screen="sm"></dxi-location>
                 <div class="center-div">
                     <dx-form id="form" #myform [(formData)]="aziendaProcedimento" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
-                        <dxi-item dataField="{{descrizioneFieldName}}" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: false }"></dxi-item>
+                        <dxi-item dataField="descrizioneTipoProcedimento" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: false }"></dxi-item>
                         <dxi-item dataField="modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: false }"></dxi-item>
-                        <dxi-item dataField="normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: false }"></dxi-item>
-                        <dxi-item dataField="dataInizioValidita" [label]="{text: 'Valido dal'}" [editorOptions]="{ disabled: false }"></dxi-item>
-                        <dxi-item dataField="dataFineValidita" [label]="{text: 'Al'}" [editorOptions]="{ disabled: false }"></dxi-item>
-                        <dxi-item dataField="{{durataMassimaSospensioneFieldName}}" [label]="{text: 'Durata massima sospensione (gg)'}" [editorOptions]="{ disabled: false }"></dxi-item>
+                        <!--<dxi-item dataField="normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: false }"></dxi-item>-->
+                        <dxi-item dataField="dataInizio" [label]="{text: 'Valido dal'}" [editorOptions]="{ disabled: false }"></dxi-item>
+                        <dxi-item dataField="dataFine" [label]="{text: 'Al'}" [editorOptions]="{ disabled: false }"></dxi-item>
+                        <dxi-item dataField="durataMassimaSospensione" [label]="{text: 'Durata massima sospensione (gg)'}" [editorOptions]="{ disabled: false }"></dxi-item>
                         <dxi-item dataField="idTitolo.nomeTitolo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
-                        <dxi-item dataField="obbligoEsitoConclusivo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: false }"></dxi-item>
+                        <dxi-item dataField="obbligoEsitoConclusivo" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>
                     </dx-form>
                 </div>
             </dxi-item>
