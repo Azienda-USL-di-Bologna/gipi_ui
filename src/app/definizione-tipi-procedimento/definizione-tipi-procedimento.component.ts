@@ -16,9 +16,9 @@ import {OdataContextDefinition, Entities} from "../classi/context/odata-context-
 export class DefinizioneTipiProcedimentoComponent {
 
   @ViewChild('grid') grid: DxDataGridComponent;
-  private dataSource: DataSource;
+  public dataSource: DataSource;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
-  private texts: Object={
+  public texts: Object={
     editRow:"Modifica",
     deleteRow:"Elimina",
     saveRowChanges:"Salva",
@@ -59,7 +59,7 @@ export class DefinizioneTipiProcedimentoComponent {
   //questa proprietà serve per capire che pulsante è stato cliccato
   private comando: any;
 
-  private handleEvent(name: String, event: any) {
+  public handleEvent(name: String, event: any) {
     // console.log("EVENTO "+name, event);
     switch(name){
       //Questo evento scatta al cliccare di qualsiasi cella: se però siamo sulla 5 colonna e si è cliccato un pulsante viene gestito
@@ -139,7 +139,7 @@ export class DefinizioneTipiProcedimentoComponent {
 
   }
 
-  private onToolbarPreparing(e: any){
+  public onToolbarPreparing(e: any){
     // console.log("onToolbarPreparing event!!!")
     var toolbarItems = e.toolbarOptions.items;
 
@@ -156,7 +156,7 @@ export class DefinizioneTipiProcedimentoComponent {
 
   }
 
-  private onCellPrepared(e: any) {
+  public onCellPrepared(e: any) {
 
     if (e.rowType === "data" && e.column.command === "edit") {
         var isEditing = e.row.isEditing,
@@ -169,12 +169,12 @@ export class DefinizioneTipiProcedimentoComponent {
     }
   }
 
-  private filterOperationDescriptions: Object = {"contains": "contiene", "notContains": "non contiene", "equal":"uguale", "notEqual":"diverso",
+  public filterOperationDescriptions: Object = {"contains": "contiene", "notContains": "non contiene", "equal":"uguale", "notEqual":"diverso",
     "startsWith":"comincia con",  "endsWith":"finisce con", "between":"compreso tra", "greaterThan":"maggiore di",
     "greaterThanOrEqual":"maggiore o uguale a","lessThan":"minore di", "lessThanOrEqual":"minore o uguale a" }
 
 
-  private calcolaSeAttiva(row: any) {
+  public calcolaSeAttiva(row: any) {
     //console.log(coso);
     //debugger;
 

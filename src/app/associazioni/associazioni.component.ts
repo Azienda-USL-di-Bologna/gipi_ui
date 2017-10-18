@@ -51,6 +51,9 @@ export class AssociazioniComponent implements OnInit {
   ngOnInit() {
   }
 
+  public selectItem(e) {
+      
+  }
 }
 
 export class Product {

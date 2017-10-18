@@ -80,6 +80,9 @@ export class ProcedimentoComponent implements OnInit {
     dataStore.remove(key);
   }
 
+  public annulla() {
+    
+  }
   ngOnInit() {
   }
 
