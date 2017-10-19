@@ -139,12 +139,12 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
             }),
             map: function(item) {
                 
-                if (item.dataInizioValidita != null) {
+/*                if (item.dataInizioValidita != null) {
                     item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
                 }
                 if (item.dataFineValidita != null) {
                     item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);
-                }
+                }*/
                 if (item.idAzienda != null) {
                     item.nomeAzienda = item.idAzienda.descrizione;
                 }

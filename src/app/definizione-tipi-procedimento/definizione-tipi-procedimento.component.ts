@@ -36,7 +36,9 @@ export class DefinizioneTipiProcedimentoComponent {
     // this.dataSource = this.service.getTipiProcedimentoSource();
     this.dataSource = new DataSource({
       store: odataContextDefinition.getContext()[Entities.TipoProcedimento],
-      map: function (item) {
+
+
+/*      map: function (item) {
         if (item.dataInizioValidita != null)
           item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
         if (item.dataFineValidita != null)
@@ -44,7 +46,7 @@ export class DefinizioneTipiProcedimentoComponent {
 
         //console.log('item', item);
         return item;
-      }
+      }*/
     });
     this.dataSource.load().done(res => this.buildTipiProcedimento(res))
     //debugger;
