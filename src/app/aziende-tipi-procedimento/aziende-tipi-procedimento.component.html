@@ -24,8 +24,8 @@ DELLA RISOLUZIONE
                 <div class="center-div">
                     <dx-form id="form" #myform [(formData)]="aziendaProcedimento" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
                         <dxi-item dataField="descrizioneTipoProcedimento" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: false }"></dxi-item>
-                        <dxi-item dataField="modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: false }"></dxi-item>
-                        <!--<dxi-item dataField="normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: false }"></dxi-item>-->
+                        <dxi-item dataField="modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
+                        <dxi-item dataField="normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
                         <dxi-item dataField="dataInizio" [label]="{text: 'Valido dal'}" editorType="dxDateBox" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }" ></dxi-item>
                         <dxi-item dataField="dataFine" [label]="{text: 'Al'}"  editorType="dxDateBox" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
                         <dxi-item dataField="durataMassimaSospensione" [label]="{text: 'Durata massima sospensione (gg)'}" [editorOptions]="{ disabled: false }"></dxi-item>

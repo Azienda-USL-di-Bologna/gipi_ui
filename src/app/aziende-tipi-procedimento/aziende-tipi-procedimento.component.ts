@@ -66,6 +66,9 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
 
     buildAziendaTipoProcedimento(res) {
         this.aziendaProcedimento = res[0];
+        this.aziendaProcedimento['modoApertura']=this.sharedData.getSharedObject().procedimento.modoApertura;
+        this.aziendaProcedimento['normaRiferimento']=this.sharedData.getSharedObject().procedimento.normaRiferimento;
+
         //debugger;
         
         /*this.aziendaProcedimento.descrizioneTipoProcedimento ?
