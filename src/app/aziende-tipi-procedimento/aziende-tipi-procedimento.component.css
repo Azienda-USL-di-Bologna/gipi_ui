@@ -72,3 +72,12 @@
     padding-top: 10px;
     text-align: center;
 }
+
+/deep/ #toast {
+           padding: 10px;
+}
+
+/deep/ .dx-toast-content {
+           min-width: 300px;
+           max-width: 400px;
+ }

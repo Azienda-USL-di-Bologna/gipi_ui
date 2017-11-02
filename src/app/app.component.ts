@@ -16,16 +16,16 @@ Date.prototype.getTimezoneOffset = function () {
     return DEFAULT_TIMEZONE_OFFSET;
 };
 
-const configObj = {
-    defaultCurrency: DEFAULT_CURRENCY,
-    forceIsoDateParsing: true
-};
-config.default(configObj);
+// const configObj = {
+//     defaultCurrency: DEFAULT_CURRENCY,
+//     forceIsoDateParsing: true
+// };
+// config.default(configObj);
 
-keyConverters['DateTime'] = function (value) {
-    const formattedDate = moment(value).format('YYYY-MM-DDTHH:mm:ss');
-    return new EdmLiteral('datetime\'' + formattedDate + '\'');
-};
+// keyConverters['DateTime'] = function (value) {
+//     const formattedDate = moment(value).format('YYYY-MM-DDTHH:mm:ss');
+//     return new EdmLiteral('datetime\'' + formattedDate + '\'');
+// };
 
 // customizzazione per filtri sulla data FINE
 
