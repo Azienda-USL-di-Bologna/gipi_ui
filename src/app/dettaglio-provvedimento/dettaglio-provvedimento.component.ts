@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { DefinizioneTipiProcedimentoService } from '../definizione-tipi-procedimento/definizione-tipi-procedimento.service';
-import { TipoProcedimento } from '../classi/tipo-procedimento';
+import { TipoProcedimento } from '../classi/entities/tipo-procedimento';
 import { SharedData } from '../classi/context/shared-data';
-import { Azienda, AZIENDE } from '../classi/aziende';
+// import {Azienda, AZIENDE} from '../classi/aziende';
 import 'rxjs/add/operator/toPromise';
+import DataSource from 'devextreme/data/data_source';
+import {OdataContextDefinition} from "../classi/context/odata-context-definition";
+import {Entities} from "../classi/context/context-utils";
+import {Azienda} from "../classi/entities/azienda";
 
 @Component({
     selector: 'app-dettaglio-provvedimento',
@@ -12,42 +16,62 @@ import 'rxjs/add/operator/toPromise';
     styleUrls: ['./dettaglio-provvedimento.component.css']
 })
 export class DettaglioProvvedimentoComponent implements OnInit {
-
+    private aziendeDatasource: DataSource;
     procedimento: TipoProcedimento;
-    aziende: Azienda[];
+    // aziende: Azienda[];
+    aziende: Array<Azienda>;
     router: Router;
 
-    constructor(private service: DefinizioneTipiProcedimentoService, router: Router, private sharedData: SharedData) {
+    constructor(private service: DefinizioneTipiProcedimentoService, router: Router, private sharedData: SharedData, private odataContextDefinition: OdataContextDefinition) {
         this.router = router;
         this.procedimento = service.selectedRow;
-        this.getAziendeAssociate();
+        this.aziendeDatasource = new DataSource({
+            store: odataContextDefinition.getContext()[Entities.Azienda],
+            expand: ["aziendaTipoProcedimentoList"]
+        });
+        this.aziendeDatasource.load().done(res => {this.aziende = res; this.getAziendeAssociate()});
+        // this.getAziendeAssociate();
     }
 
     ngOnInit() {
     }
-
     getAziendeAssociate() {
-        this.service.getAziendeAssociateRequest(this.procedimento.idTipoProcedimento.toString())
-            .toPromise()
-            .then(response => {
-              this.aziende = AZIENDE;
-              this.procedimento.aziendeAssociate = new Array();
-                response.forEach(a => {
-                  for (let azienda of this.aziende) {
-                      if(azienda.codice === a.idAzienda.nome){
-                        this.procedimento.aziendeAssociate[a.idAzienda.nome] = azienda;
-                        break;
-                      }
-                  }
-                })
-            });
+        this.procedimento.aziendeAssociate = new Array();
+        for (const azienda of this.aziende) {
+            if (azienda.aziendaTipoProcedimentoList.find(item => item.FK_id_azienda === azienda.id)) {
+                this.procedimento.aziendeAssociate[azienda.id] = azienda;
+            }
+        }
     }
+
+    // getAziendeAssociate() {
+    //     this.service.getAziendeAssociateRequest(this.procedimento.idTipoProcedimento.toString())
+    //         .toPromise()
+    //         .then(response => {
+    //           // this.aziende = AZIENDE;
+    //           this.procedimento.aziendeAssociate = new Array();
+    //             response.forEach(a => {
+    //               for (let azienda of this.aziende) {
+    //                   if(azienda.codice === a.idAzienda.codice){
+    //                     this.procedimento.aziendeAssociate[a.idAzienda.codice] = azienda;
+    //                     break;
+    //                   }
+    //               }
+    //             })
+    //         });
+    // }
 
     buttonClicked(azienda) {
         //MI COSTRUISCO UN OGGETTO "CARONTE" DA METTERE DENTRO L'OGGETTO SharedData  CHE IN QUESTO CASO PASSO ALLA VIDEATA aziende-tipi-procedimento
-        let obj = new Object();
-        obj["procedimento"] = this.procedimento;
-        obj["azienda"] = azienda;
+        let obj =
+        {
+            "DettaglioProvvedimentoComponent":
+            {
+                "tipoProcedimento": this.procedimento,
+                "azienda": azienda,
+                "aziendaAssociata": this.procedimento.aziendeAssociate[azienda.id] ? true: false
+            }
+        };
         this.sharedData.setSharedObject(obj);
         this.router.navigate(['/aziende-tipi-procedimento']);
     }

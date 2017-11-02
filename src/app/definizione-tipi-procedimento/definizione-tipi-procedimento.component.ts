@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild, } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { DxDataGridComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedimento.service';
-import {TipoProcedimento} from "../classi/tipo-procedimento";
-import {OdataContextDefinition, Entities} from "../classi/context/odata-context-definition";
+import {TipoProcedimento} from "../classi/entities/tipo-procedimento";
+import {OdataContextDefinition} from "../classi/context/odata-context-definition";
+import {Entities} from "../classi/context/context-utils";
 
 //import { UtilityFunctions } from '../utility-functions';
 

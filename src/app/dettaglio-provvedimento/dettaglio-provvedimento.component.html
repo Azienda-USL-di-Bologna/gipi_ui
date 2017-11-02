@@ -101,7 +101,7 @@
             <div style="max-width:700px; text-align: initial;">
                 <h4 style="text-align: center; margin-bottom: 30px;">Aziende Associate</h4>
                 <div style="margin-bottom: 8px; overflow: auto;" *ngFor="let azienda of aziende">
-                    <dx-check-box [value]="procedimento.aziendeAssociate[azienda.codice] ? true : false" [disabled]="true" #checkAssociata></dx-check-box>
+                    <dx-check-box [value]="procedimento.aziendeAssociate[azienda.id] ? true : false" [disabled]="true" #checkAssociata></dx-check-box>
                     <span style="margin-right: 16px;">{{azienda.descrizione}}</span>
                     <div style="float:right;">
                         <dx-button [text]="checkAssociata.value ? 'Gestisci associazione' : 'Associa'" (onClick)="buttonClicked(azienda)" [type]="confirm"></dx-button>

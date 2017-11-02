@@ -1,6 +1,6 @@
-<!-->PER GESTIRE L'IMPAGINAZIONE DEGLI ELEMENTI, UTILIZZIAMO 2 RISOLUZIONI DI RIFERIMENTO: sm,lg. LE RISOLUZIONI VENGONO CALCOLATE ALL'INTERNO DEL .TS CORRISPONDENTE A QUESTA PAGINA HTML LA PROPRIETA' SCREEN SERVE PER INDICARE IL CAMBIO DI LAYOUT AL CAMBIO
+<!--PER GESTIRE L'IMPAGINAZIONE DEGLI ELEMENTI, UTILIZZIAMO 2 RISOLUZIONI DI RIFERIMENTO: sm,lg. LE RISOLUZIONI VENGONO CALCOLATE ALL'INTERNO DEL .TS CORRISPONDENTE A QUESTA PAGINA HTML LA PROPRIETA' SCREEN SERVE PER INDICARE IL CAMBIO DI LAYOUT AL CAMBIO
 DELLA RISOLUZIONE
-<-->
+-->
     <div id="page">
         <dx-responsive-box singleColumnScreen="sm" [(screenByWidth)]="screen">
             <dxi-row [ratio]="2"></dxi-row>
@@ -14,15 +14,15 @@ DELLA RISOLUZIONE
             <dxi-item class="header item">
                 <dxi-location [row]="0" [col]="0" [colspan]="3" screen="lg"></dxi-location>
                 <dxi-location [row]="0" [col]="0" [colspan]="2" screen="sm"></dxi-location>
-                <h3><span class="header-font">Tipo procedimento:</span> <i>{{testoHeaderTipoProcedimento}}</i></h3>
-                <h3><span class="header-font">Azienda:</span> <i>{{testoHeaderAzienda}}</i></h3>
+                <h3><span class="header-font">Tipo procedimento:</span> <i>{{[(testoHeaderTipoProcedimento)]}}</i></h3>
+                <h3><span class="header-font">Azienda:</span> <i>{{[(testoHeaderAzienda)]}}</i></h3>
                 <div class="status-page {{statusPage}}"></div>
             </dxi-item>
             <dxi-item class="content item">
                 <dxi-location [row]="1" [col]="1" screen="lg"></dxi-location>
                 <dxi-location [row]="1" [col]="0" [colspan]="2" screen="sm"></dxi-location>
                 <div class="center-div">
-                    <dx-form id="form" #myform [(formData)]="aziendaProcedimento" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+                    <dx-form id="form" #myform [(formData)]="aziendaTipoProcedimento" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
                         <dxi-item dataField="descrizioneTipoProcedimento" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: false }"></dxi-item>
                         <dxi-item dataField="modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
                         <dxi-item dataField="normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
@@ -30,7 +30,7 @@ DELLA RISOLUZIONE
                         <dxi-item dataField="dataFine" [label]="{text: 'Al'}"  editorType="dxDateBox" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
                         <dxi-item dataField="durataMassimaSospensione" [label]="{text: 'Durata massima sospensione (gg)'}" [editorOptions]="{ disabled: false }"></dxi-item>
                         <dxi-item dataField="idTitolo.nomeTitolo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
-                        <dxi-item dataField="obbligoEsitoConclusivo" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>
+                        <dxi-item dataField="obbligoEsitoConclusivo" editorType="dxSwitch" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>
                     </dx-form>
                 </div>
             </dxi-item>
@@ -51,7 +51,7 @@ DELLA RISOLUZIONE
 
                 <!-- ABBIAMO DOVUTO INSERIRE I TASTI NEL FOOTER PERCHE ALTRIMENTI AVREMMO AVUTO DIFFICOLTA NEL POSIZIONARLI UTILIZZANDO IL RESPONSIVE BOX ALL INTERNO DELLA CELLA CONTENENTE IL FORM.
               PROBABILMENTE DIPENDE DAL FATTO CHE IL FORM STESSO UTILIZZA IL RESPONSIVE BOX PER POSIZIONARE I SUOI CAMPI -->
-                <dx-responsive-box singleColumnScreen="sm" [(screenByWidth)]="screen">
+                <dx-responsive-box id="responsive-box-buttons" singleColumnScreen="sm" [(screenByWidth)]="screen">
                     <dxi-row [ratio]="1"></dxi-row>
                     <!-- <dxi-row [ratio]="1"></dxi-row> -->
                     <dxi-col [ratio]="1"></dxi-col>
@@ -59,8 +59,8 @@ DELLA RISOLUZIONE
 
                     <dxi-item>
                         <dxi-location [row]="0" [col]="0"></dxi-location>
-                        <dx-button class="padding-button" (onClick)="buttonClicked1($event)" text="Annulla" hint="Annulla"></dx-button>
-                        <dx-button class="padding-button" (onClick)="buttonClicked2($event)" text="{{testoBottoneConferma}}" hint="Conferma"></dx-button>
+                        <dx-button class="padding-button" (onClick)="buttonChiudiClicked($event)" text="Chiudi" hint="Chiudi"></dx-button>
+                        <dx-button class="padding-button" (onClick)="buttonConfermaClicked($event)" text="{{testoBottoneConferma}}" hint="Conferma"></dx-button>
                     </dxi-item>
 
                     <dxi-item>
