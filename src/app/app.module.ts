@@ -39,6 +39,7 @@ import { ProcedimentoComponent } from './associazioni/sub-view/procedimento/proc
 import { AssociaDirective } from './associazioni/directives/associa.directive';
 import { AlberoStruttureComponent } from './associazioni/sub-view/albero-strutture/albero-strutture.component';
 import {OdataContextDefinition} from "./classi/context/odata-context-definition";
+import { StrutturaTipiProcedimentoComponent } from './struttura-tipi-procedimento/struttura-tipi-procedimento.component';
 
 @NgModule({
     declarations: [
@@ -52,7 +53,8 @@ import {OdataContextDefinition} from "./classi/context/odata-context-definition"
         AssociaDirective,
         AssociaDirective,
         AssociazioniComponent,
-        AlberoStruttureComponent
+        AlberoStruttureComponent,
+        StrutturaTipiProcedimentoComponent
     ],
     imports: [
         BrowserModule,

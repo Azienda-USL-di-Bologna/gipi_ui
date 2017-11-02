@@ -6,8 +6,7 @@ import { DefinizioneTipiProcedimentoComponent } from './definizione-tipi-procedi
 import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/dettaglio-provvedimento.component';
 import { AziendeTipiProcedimentoComponent } from './aziende-tipi-procedimento/aziende-tipi-procedimento.component';
 import { AssociazioniComponent } from './associazioni/associazioni.component';
-
-
+import { StrutturaTipiProcedimentoComponent } from './struttura-tipi-procedimento/struttura-tipi-procedimento.component';
 
 export const rootRouterConfig: Routes = [
   // ho reindirizzato la pagina di atterraggio a definizione-tipi-procedimento
@@ -16,6 +15,7 @@ export const rootRouterConfig: Routes = [
   { path: 'definizione-tipi-procedimento', component: DefinizioneTipiProcedimentoComponent},
   { path: 'app-dettaglio-provvedimento', component: DettaglioProvvedimentoComponent},
   { path: 'aziende-tipi-procedimento', component: AziendeTipiProcedimentoComponent},
-  { path: 'associazioni', component: AssociazioniComponent},
+  { path: 'associazioni', component: AssociazioniComponent },
+  { path: 'struttura-tipi-procedimento', component: StrutturaTipiProcedimentoComponent},
 
 ];

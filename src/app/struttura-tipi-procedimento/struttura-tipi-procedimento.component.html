@@ -1,0 +1,54 @@
+
+<div id="page">
+  <dx-responsive-box singleColumnScreen="sm" [(screenByWidth)]="screen">
+
+    <dxi-row [ratio]="2"></dxi-row>
+    <dxi-row [ratio]="2" screen="xs"></dxi-row>
+    <dxi-row [ratio]="7"></dxi-row>
+    <dxi-row [ratio]="2"></dxi-row>
+
+    <dxi-col [ratio]="1"></dxi-col>
+    <dxi-col [ratio]="2" screen="lg"></dxi-col>
+    <dxi-col [ratio]="1"></dxi-col>
+
+    <dxi-item>
+      <dxi-location [row]="0" [col]="0" [colspan]="3" screen="lg"></dxi-location>
+      <dxi-location [row]="0" [col]="0" [colspan]="2" screen="sm"></dxi-location>
+
+      <div style="background-color:red;">
+        <h3>
+          <span class="header-font">Tipo procedimento:</span>
+          <!-- <i>{{testoHeaderTipoProcedimento}}</i> -->
+        </h3>
+        <h3>
+          <span class="header-font">Azienda:</span>
+          <!-- <i>{{testoHeaderAzienda}}</i> -->
+        </h3>
+      </div>
+    </dxi-item>
+
+    <dxi-item>
+      <dxi-location [row]="1" [col]="1" screen="lg"></dxi-location>
+      <dxi-location [row]="1" [col]="0" [colspan]="2" screen="sm"></dxi-location>
+
+      <div class="center-div" style="background-color:yellowgreen;">
+        <span >Tipo procedimento:</span>
+      </div>
+    </dxi-item>
+
+    <dxi-item class="left-side-bar item" style="background-color:pink;">
+      <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
+      <!-- colonna vuota sinistra -->
+    </dxi-item>
+
+    <dxi-item class="right-side-bar item" style="background-color:orange;">
+      <dxi-location [row]="1" [col]="2" screen="lg"></dxi-location>
+      <!-- colonna vuota destra -->
+    </dxi-item>
+
+    <dxi-item class="footer item" style="background-color:violet;">
+      <span >Tipo procedimento:</span>
+    </dxi-item>
+
+  </dx-responsive-box>
+</div>
