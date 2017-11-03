@@ -1,13 +1,13 @@
-import {Entities, OdataForeignKey} from "../context/context-utils";
+import {Entity, OdataForeignKey} from "../context/entity";
 import {AfferenzaStruttura} from "./afferenza-struttura";
 import {Struttura} from "./struttura";
 import {Utente} from "./utente";
 
-export class UtenteStruttura {
-  id: number = null;
-  idAfferenzaStruttura: AfferenzaStruttura = null;
-  idStruttura: Struttura = null;
-  idUtente: Utente = null;
+export class UtenteStruttura extends Entity {
+  id: number;
+  idAfferenzaStruttura: AfferenzaStruttura;
+  idStruttura: Struttura;
+  idUtente: Utente;
 
   public static getOdataContextEntity(): any {
     return {
@@ -15,13 +15,10 @@ export class UtenteStruttura {
       keyType: "Int32",
       fieldTypes: {
         id: "Int32",
-        idAfferenzaStruttura: new OdataForeignKey(Entities.AfferenzaStruttura, "id"),
-        idStruttura: new OdataForeignKey(Entities.Struttura, "id"),
-        idUtente: new OdataForeignKey(Entities.Utente, "id")
+        idAfferenzaStruttura: new OdataForeignKey(AfferenzaStruttura, "id"),
+        idStruttura: new OdataForeignKey(Struttura, "id"),
+        idUtente: new OdataForeignKey(Utente, "id")
       }
     }
-  }
-
-  constructor() {
   }
 }

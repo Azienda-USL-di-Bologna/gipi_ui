@@ -6,9 +6,9 @@ import {DxFormComponent} from 'devextreme-angular';
 import {TipoProcedimento} from '../classi/entities/tipo-procedimento';
 import { SharedData } from '../classi/context/shared-data';
 import {OdataContextDefinition} from "../classi/context/odata-context-definition";
-import {Entities} from "../classi/context/context-utils";
 import {Azienda} from "../classi/entities/azienda";
 import notify from 'devextreme/ui/notify';
+import {Entities} from "../../environments/app.constants";
 
 @Component({
     selector: 'app-aziende-tipi-procedimento',
@@ -58,7 +58,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         this.maxColWidth = 200;
         this.colCount = 1;
         this.datasource = new DataSource({
-            store: this.odataContextDefinition.getContext()[Entities.AziendaTipoProcedimento],
+            store: this.odataContextDefinition.getContext()[Entities.AziendaTipoProcedimento.name],
             expand: ['idAzienda', 'idTipoProcedimento', 'idTitolo'],
             //filter: [['idTipoProcedimento.idTipoProcedimento', '=', this.sharedData.getSharedObject().procedimento.idTipoProcedimento], ['idAzienda.id', '=', this.sharedData.getSharedObject().azienda.id]],
         });
@@ -183,7 +183,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     getTipiProcedimentoSource() {
         console.log(this.sharedData);
         return new DataSource({
-            store: this.odataContextDefinition[Entities.AziendaTipoProcedimento],
+            store: this.odataContextDefinition[Entities.AziendaTipoProcedimento.name],
 //             map: function(item) {
 //
 // /*                if (item.dataInizioValidita != null) {

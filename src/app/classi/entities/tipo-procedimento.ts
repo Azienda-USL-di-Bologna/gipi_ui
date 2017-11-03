@@ -1,6 +1,7 @@
 import {Azienda} from "../aziende";
+import {Entity} from "../context/entity";
 
-export class TipoProcedimento {
+export class TipoProcedimento extends Entity{
     idTipoProcedimento: number;
     nomeTipoProcedimento: string;
     descrizioneTipoProcedimentoDefault: string;

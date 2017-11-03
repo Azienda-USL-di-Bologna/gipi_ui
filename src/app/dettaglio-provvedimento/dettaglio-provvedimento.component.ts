@@ -7,8 +7,8 @@ import { SharedData } from '../classi/context/shared-data';
 import 'rxjs/add/operator/toPromise';
 import DataSource from 'devextreme/data/data_source';
 import {OdataContextDefinition} from "../classi/context/odata-context-definition";
-import {Entities} from "../classi/context/context-utils";
 import {Azienda} from "../classi/entities/azienda";
+import {Entities} from "../../environments/app.constants";
 
 @Component({
     selector: 'app-dettaglio-provvedimento',
@@ -26,7 +26,7 @@ export class DettaglioProvvedimentoComponent implements OnInit {
         this.router = router;
         this.procedimento = service.selectedRow;
         this.aziendeDatasource = new DataSource({
-            store: odataContextDefinition.getContext()[Entities.Azienda],
+            store: odataContextDefinition.getContext()[Entities.Azienda.name],
             expand: ["aziendaTipoProcedimentoList"]
         });
         this.aziendeDatasource.load().done(res => {this.aziende = res; this.getAziendeAssociate()});

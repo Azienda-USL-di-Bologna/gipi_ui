@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
-import { ODATA_STORE_ROOT_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from '../../../../environments/app.constant';
+import { ODATA_BASE_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from '../../../../environments/app.constants';
 import { TipoProcedimento } from '../../../classi/entities/tipo-procedimento';
 import { AziendaTipoProcedimento } from '../../../classi/entities/azienda-tipo-procedimento';
 
@@ -30,7 +30,7 @@ export class ProcedimentoComponent implements OnInit {
      this.dataSource = new DataSource({
       store: new ODataStore({
         key: 'id',
-        url: ODATA_STORE_ROOT_URL + odataAziendeTipiProcPath,
+        url: ODATA_BASE_URL + odataAziendeTipiProcPath,
         // deserializeDates: true,
         /*fieldTypes: {
          id: 'Int32',

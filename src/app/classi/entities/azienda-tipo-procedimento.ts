@@ -1,8 +1,8 @@
-import {Azienda} from "../aziende";
+import {Azienda} from "./azienda";
 import {TipoProcedimento} from "./tipo-procedimento";
 import {Titolo} from "./titolo";
-import {Entities, OdataForeignKey} from "../context/context-utils";
-export class AziendaTipoProcedimento {
+import {Entity, OdataForeignKey} from "../context/entity";
+export class AziendaTipoProcedimento extends Entity {
     id: number;
     dataFine: Date;
     dataInizio: Date;
@@ -30,9 +30,9 @@ export class AziendaTipoProcedimento {
                 durataMassimaProcedimento: "String",
                 durataMassimaSospensione: "String",
                 obbligoEsitoConclusivo: "Boolean",
-                idAzienda: new OdataForeignKey(Entities.Azienda, "id"),
-                idTipoProcedimento: new OdataForeignKey(Entities.TipoProcedimento, "idTipoProcedimento"),
-                idTitolo: new OdataForeignKey(Entities.Titolo, "id")
+                idAzienda: new OdataForeignKey(Azienda, "id"),
+                idTipoProcedimento: new OdataForeignKey(TipoProcedimento, "idTipoProcedimento"),
+                idTitolo: new OdataForeignKey(Titolo, "id")
             }
         }
     }
