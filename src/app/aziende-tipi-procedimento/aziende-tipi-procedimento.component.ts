@@ -102,7 +102,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
             this.aziendaTipoProcedimento.obbligoEsitoConclusivo = false;
             this.aziendaTipoProcedimento.idAzienda = azienda;
             this.aziendaTipoProcedimento.idTipoProcedimento = tipoProcedimentoDefault;
-            this.setHeaders();
+            this.setFields(tipoProcedimentoDefault);
         }
         else {
             this.datasource.filter([
@@ -110,7 +110,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
                 ["idAzienda.id", "=", azienda.id]]);
             this.datasource.load().done(res => {
                 this.aziendaTipoProcedimento = res[0];
-                this.setHeaders();
+                this.setFields(tipoProcedimentoDefault);
             });
             console.log("loaded", this.datasource.isLoaded())
 
@@ -175,10 +175,12 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         console.log(e);
     }
 
-    private setHeaders() {
+    private setFields(tipoProcedimentoDefault: TipoProcedimento) {
         this.testoHeaderTipoProcedimento = this.aziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento;
         this.testoHeaderAzienda = this.aziendaTipoProcedimento.idAzienda.descrizione;
-     }
+        this.aziendaTipoProcedimento["modoApertura"] = tipoProcedimentoDefault.modoApertura;
+        this.aziendaTipoProcedimento["normaRiferimento"] = tipoProcedimentoDefault.normaRiferimento;
+    }
 
     getTipiProcedimentoSource() {
         console.log(this.sharedData);
