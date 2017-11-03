@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 import { ODATA_STORE_ROOT_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from '../../../../environments/app.constant';
-import { TipoProcedimento } from '../../../classi/tipo-procedimento';
-import { AziendaTipoProcedimento } from '../../../classi/azienda-tipo-procedimento';
+import { TipoProcedimento } from '../../../classi/entities/tipo-procedimento';
+import { AziendaTipoProcedimento } from '../../../classi/entities/azienda-tipo-procedimento';
 
 @Component({
   selector: 'app-procedimento',
@@ -80,6 +80,9 @@ export class ProcedimentoComponent implements OnInit {
     dataStore.remove(key);
   }
 
+  public annulla() {
+    
+  }
   ngOnInit() {
   }
 

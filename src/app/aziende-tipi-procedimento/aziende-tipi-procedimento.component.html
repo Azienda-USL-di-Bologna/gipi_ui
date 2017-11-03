@@ -1,6 +1,6 @@
-<!-->PER GESTIRE L'IMPAGINAZIONE DEGLI ELEMENTI, UTILIZZIAMO 2 RISOLUZIONI DI RIFERIMENTO: sm,lg. LE RISOLUZIONI VENGONO CALCOLATE ALL'INTERNO DEL .TS CORRISPONDENTE A QUESTA PAGINA HTML LA PROPRIETA' SCREEN SERVE PER INDICARE IL CAMBIO DI LAYOUT AL CAMBIO
+<!--PER GESTIRE L'IMPAGINAZIONE DEGLI ELEMENTI, UTILIZZIAMO 2 RISOLUZIONI DI RIFERIMENTO: sm,lg. LE RISOLUZIONI VENGONO CALCOLATE ALL'INTERNO DEL .TS CORRISPONDENTE A QUESTA PAGINA HTML LA PROPRIETA' SCREEN SERVE PER INDICARE IL CAMBIO DI LAYOUT AL CAMBIO
 DELLA RISOLUZIONE
-<-->
+-->
     <div id="page">
         <dx-responsive-box singleColumnScreen="sm" [(screenByWidth)]="screen">
             <dxi-row [ratio]="2"></dxi-row>
@@ -14,35 +14,35 @@ DELLA RISOLUZIONE
             <dxi-item class="header item">
                 <dxi-location [row]="0" [col]="0" [colspan]="3" screen="lg"></dxi-location>
                 <dxi-location [row]="0" [col]="0" [colspan]="2" screen="sm"></dxi-location>
-                <h2>Tipo procedimento: {{testoHeaderTipoProcedimento}}</h2>
-                <h2>Azienda: {{testoHeaderAzienda}}</h2>
+                <h3><span class="header-font">Tipo procedimento:</span> <i>{{[(testoHeaderTipoProcedimento)]}}</i></h3>
+                <h3><span class="header-font">Azienda:</span> <i>{{[(testoHeaderAzienda)]}}</i></h3>
                 <div class="status-page {{statusPage}}"></div>
             </dxi-item>
             <dxi-item class="content item">
                 <dxi-location [row]="1" [col]="1" screen="lg"></dxi-location>
                 <dxi-location [row]="1" [col]="0" [colspan]="2" screen="sm"></dxi-location>
                 <div class="center-div">
-                    <dx-form id="form" #myform [(formData)]="aziendaProcedimento" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
-                        <dxi-item dataField="{{descrizioneFieldName}}" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: false }"></dxi-item>
-                        <dxi-item dataField="modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: false }"></dxi-item>
-                        <dxi-item dataField="normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: false }"></dxi-item>
-                        <dxi-item dataField="dataInizioValidita" [label]="{text: 'Valido dal'}" [editorOptions]="{ disabled: false }"></dxi-item>
-                        <dxi-item dataField="dataFineValidita" [label]="{text: 'Al'}" [editorOptions]="{ disabled: false }"></dxi-item>
-                        <dxi-item dataField="{{durataMassimaSospensioneFieldName}}" [label]="{text: 'Durata massima sospensione (gg)'}" [editorOptions]="{ disabled: false }"></dxi-item>
+                    <dx-form id="form" #myform [(formData)]="aziendaTipoProcedimento" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+                        <dxi-item dataField="descrizioneTipoProcedimento" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: false }"></dxi-item>
+                        <dxi-item dataField="modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
+                        <dxi-item dataField="normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
+                        <dxi-item dataField="dataInizio" [label]="{text: 'Valido dal'}" editorType="dxDateBox" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }" ></dxi-item>
+                        <dxi-item dataField="dataFine" [label]="{text: 'Al'}"  editorType="dxDateBox" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+                        <dxi-item dataField="durataMassimaSospensione" [label]="{text: 'Durata massima sospensione (gg)'}" [editorOptions]="{ disabled: false }"></dxi-item>
                         <dxi-item dataField="idTitolo.nomeTitolo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
-                        <dxi-item dataField="obbligoEsitoConclusivo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: false }"></dxi-item>
+                        <dxi-item dataField="obbligoEsitoConclusivo" editorType="dxSwitch" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>
                     </dx-form>
                 </div>
             </dxi-item>
 
             <dxi-item class="left-side-bar item">
                 <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
-                <p>Left Bar</p>
+                <!-- colonna vuota sinistra -->
             </dxi-item>
 
             <dxi-item class="right-side-bar item">
                 <dxi-location [row]="1" [col]="2" screen="lg"></dxi-location>
-                <p>Right Bar</p>
+                <!-- colonna vuota destra -->
             </dxi-item>
 
             <dxi-item class="footer item">
@@ -51,7 +51,7 @@ DELLA RISOLUZIONE
 
                 <!-- ABBIAMO DOVUTO INSERIRE I TASTI NEL FOOTER PERCHE ALTRIMENTI AVREMMO AVUTO DIFFICOLTA NEL POSIZIONARLI UTILIZZANDO IL RESPONSIVE BOX ALL INTERNO DELLA CELLA CONTENENTE IL FORM.
               PROBABILMENTE DIPENDE DAL FATTO CHE IL FORM STESSO UTILIZZA IL RESPONSIVE BOX PER POSIZIONARE I SUOI CAMPI -->
-                <dx-responsive-box singleColumnScreen="sm" [(screenByWidth)]="screen">
+                <dx-responsive-box id="responsive-box-buttons" singleColumnScreen="sm" [(screenByWidth)]="screen">
                     <dxi-row [ratio]="1"></dxi-row>
                     <!-- <dxi-row [ratio]="1"></dxi-row> -->
                     <dxi-col [ratio]="1"></dxi-col>
@@ -59,8 +59,8 @@ DELLA RISOLUZIONE
 
                     <dxi-item>
                         <dxi-location [row]="0" [col]="0"></dxi-location>
-                        <dx-button class="padding-button" (onClick)="buttonClicked1($event)" text="Annulla" hint="Annulla"></dx-button>
-                        <dx-button class="padding-button" (onClick)="buttonClicked2($event)" text="{{testoBottoneConferma}}" hint="Conferma"></dx-button>
+                        <dx-button class="padding-button" (onClick)="buttonChiudiClicked($event)" text="Chiudi" hint="Chiudi"></dx-button>
+                        <dx-button class="padding-button" (onClick)="buttonConfermaClicked($event)" text="{{testoBottoneConferma}}" hint="Conferma"></dx-button>
                     </dxi-item>
 
                     <dxi-item>
@@ -69,7 +69,7 @@ DELLA RISOLUZIONE
                         <dx-button class="padding-button" (onClick)="buttonClicked4($event)" text="Associa a struttura" [disabled]="disabilitaBottoneAssocia" hint="Apre l'interfaccia per l'associazione alle strutture"></dx-button>
                     </dxi-item>
                 </dx-responsive-box>
-                <p>footer Bar</p>
+                <!-- colonna vuota sinistra -->
             </dxi-item>
 
         </dx-responsive-box>

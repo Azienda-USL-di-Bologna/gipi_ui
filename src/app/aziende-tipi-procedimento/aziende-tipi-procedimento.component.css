@@ -33,6 +33,10 @@
     background-color: #f47c92;
 }
 
+.header-font{
+   font-weight: bold;
+}
+
 /deep/ .demo-container, #page {
     height: 100%;
     min-height: 300px;
@@ -68,3 +72,12 @@
     padding-top: 10px;
     text-align: center;
 }
+
+/deep/ #toast {
+           padding: 10px;
+}
+
+/deep/ .dx-toast-content {
+           min-width: 300px;
+           max-width: 400px;
+ }

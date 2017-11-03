@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ODATA_STORE_ROOT_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from '../../environments/app.constant';
-import { TipoProcedimento } from '../classi/tipo-procedimento';
+import { TipoProcedimento } from '../classi/entities/tipo-procedimento';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 import { Http } from '@angular/http';
@@ -24,12 +24,12 @@ export class DefinizioneTipiProcedimentoService {
         key: 'idTipoProcedimento',
         url: ODATA_STORE_ROOT_URL + odataTipiProcedimentoPath,
         //deserializeDates: true,
-        /*fieldTypes: {
+/*        fieldTypes: {
           id: 'Int32',
-          idAfferenzaStruttura: { 'type': 'Date' }
+        
         },*/
-      }),
-      map: function (item) {
+      })
+/*      map: function (item) {
         if (item.dataInizioValidita != null)
           item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
         if (item.dataFineValidita != null)
@@ -37,7 +37,7 @@ export class DefinizioneTipiProcedimentoService {
 
         //console.log('item', item);
         return item;
-      }
+      }*/
     });
   }
 

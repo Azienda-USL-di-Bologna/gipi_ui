@@ -57,8 +57,8 @@
     <dxi-column dataField="idTipoProcedimento" [width]="100" caption="# Tipo"></dxi-column>
     <dxi-column dataField="nomeTipoProcedimento"></dxi-column>
     <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva" [allowSorting]="true" [allowFiltering]="true"></dxi-column>
-    <dxi-column dataField="dataInizioValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="false"></dxi-column>
-    <dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="false"></dxi-column>
+    <dxi-column dataField="dataInizioValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="true"></dxi-column>
+    <dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="true"></dxi-column>
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
     <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni"></dxi-column>
     <div *dxTemplate="let d of 'buttonCellTemplate'" class="azioni">
@@ -68,7 +68,7 @@
 
         <dx-button text="" hint="Modifica dettagli tipo procedimento" icon='edit' (onClick)="handleEvent('editClicked', $event)"></dx-button>
 
-        <dx-button text="" hint="Elimina questo tipo procedimento" icon="/assets/images/eraser-512.png" (onClick)="handleEvent('deleteClicked', $event)"></dx-button>
+        <dx-button text="" hint="Elimina questo tipo procedimento" icon="./assets/images/eraser-512.png" (onClick)="handleEvent('deleteClicked', $event)"></dx-button>
     </div>
     
     

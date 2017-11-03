@@ -9,6 +9,8 @@ export const ODATA_STORE_ROOT_URL: string = environment.odataStoreRootUrl;
 export const LOGIN_URL = '/auth/login';
 export const LOGOUT_URL = '/logout';
 
+export const DEFAULT_TIMEZONE_OFFSET = 0;
+export const DEFAULT_CURRENCY = 'EUR';
 
 // ======================= local save name ========================================
 export const STORAGE_SECURITY_TOKEN = 'hmacApp-security';

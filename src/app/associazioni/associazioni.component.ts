@@ -84,6 +84,9 @@ export class AssociazioniComponent implements OnInit {
     });
   }
 
+  public selectItem(e) {
+      
+  }
 }
 
 export class Product {
