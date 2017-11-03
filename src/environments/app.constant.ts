@@ -21,3 +21,4 @@ export const odataUtentiPath = '/Utentes';
 export const odataTipiProcedimentoPath = '/TipoProcedimentos';
 export const odataCompanyPath = '/Aziendas';
 export const odataAziendeTipiProcPath = '/AziendaTipoProcedimentos';
+export const odataStrutturePath = '/Strutturas';
