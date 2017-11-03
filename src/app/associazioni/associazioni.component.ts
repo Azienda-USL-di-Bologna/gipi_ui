@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactory, ComponentFactoryResolver, ComponentRef } from '@angular/core';
-import { ODATA_STORE_ROOT_URL, odataStrutturePath } from '../../environments/app.constant';
+import { ODATA_BASE_URL, odataStrutturePath } from '../../environments/app.constants';
 import { AssociaComponent } from './sub-view/associa/associa.component';
 import { ProcedimentoComponent } from './sub-view/procedimento/procedimento.component';
 import { AlberoStruttureComponent } from './sub-view/albero-strutture/albero-strutture.component';
@@ -61,7 +61,7 @@ export class AssociazioniComponent implements OnInit {
     this.aziende = new DataSource({
       store: new ODataStore({
         key: 'azienda',
-        url: ODATA_STORE_ROOT_URL + odataStrutturePath,
+        url: ODATA_BASE_URL + odataStrutturePath,
         //deserializeDates: true,
         /*fieldTypes: {
           id: 'Int32',
