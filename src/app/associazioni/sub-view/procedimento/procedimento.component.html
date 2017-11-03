@@ -124,12 +124,13 @@
               <dxi-item dataField="modoApertura" [editorOptions]="{ disabled: true }"></dxi-item>
               <dxi-item dataField="normaRiferimento" [editorOptions]="{ disabled: true }"></dxi-item>
               <dxi-item dataField="durataMassimaSospensione" [editorOptions]="{ disabled: true }"></dxi-item>
-              <dxi-item dataField="dataInizioValidita" editorType="dxDateBox" [editorOptions]="{ disabled: false }"></dxi-item>
-              <dxi-item dataField="dataFineValidita" editorType="dxDateBox" [editorOptions]="{ disabled: false }"></dxi-item>
+              <dxi-item dataField="dataInizioValidita" editorType="dxDateBox" [editorOptions]="{ disabled: mode==='EDIT-MODE'?false:true }"></dxi-item>
+              <dxi-item dataField="dataFineValidita" editorType="dxDateBox" [editorOptions]="{ disabled: mode==='EDIT-MODE'?false:true }"></dxi-item>
           </dx-form>
 
           <div style="text-align: right; margin-top: 60px">
             <div style="display: inline-block; text-align: initial;">
+              <dx-button [text]="'Gestisci associazioni'" [type]="'normal'" (onClick)="openAlberoStrutture()" [visible]="mode==='EDIT-MODE'?false:true"></dx-button>
               <dx-button [text]="'Annulla'" [type]="'normal'" (onClick)="annulla()" [visible]="mode==='EDIT-MODE'?true:false"></dx-button>
               <dx-button [text]="'Salva'" [type]="'normal'" (onClick)="getTipiProcedimentoSource()" [visible]="mode==='EDIT-MODE'?true:false"></dx-button>
             </div>

@@ -1,8 +1,12 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactory, ComponentFactoryResolver, ComponentRef } from '@angular/core';
+import { ODATA_STORE_ROOT_URL, odataStrutturePath } from '../../environments/app.constant';
 import { AssociaComponent } from './sub-view/associa/associa.component';
 import { ProcedimentoComponent } from './sub-view/procedimento/procedimento.component';
 import { AlberoStruttureComponent } from './sub-view/albero-strutture/albero-strutture.component';
 import { AssociaDirective } from './directives/associa.directive';
+import DataSource from 'devextreme/data/data_source';
+import ODataStore from 'devextreme/data/odata/store';
+import { Http } from '@angular/http';
 
 @Component({
   selector: 'app-associazioni',
@@ -12,8 +16,9 @@ import { AssociaDirective } from './directives/associa.directive';
 export class AssociazioniComponent implements OnInit {
 
   products: Product[];
+  aziende: DataSource;
   associata: boolean = false;
-  popupVisible: boolean = true;
+  popupVisible: boolean = false;
 
   @ViewChild(AssociaDirective) container: AssociaDirective;
   // associaRef : ComponentRef<any>;
@@ -21,6 +26,7 @@ export class AssociazioniComponent implements OnInit {
 
   constructor(private resolver: ComponentFactoryResolver) {
     this.products = products
+    this.getAlberoSource();
 
     // this.container.clear();
     //const factory: ComponentFactory<AssociaComponent> = this.resolver.resolveComponentFactory(AssociaComponent);
@@ -49,6 +55,33 @@ export class AssociazioniComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  getAlberoSource() {
+    this.aziende = new DataSource({
+      store: new ODataStore({
+        key: 'azienda',
+        url: ODATA_STORE_ROOT_URL + odataStrutturePath,
+        //deserializeDates: true,
+        /*fieldTypes: {
+          id: 'Int32',
+          idAfferenzaStruttura: { 'type': 'Date' }
+        },*/
+      }),
+      filter: [['attiva', '=', true]],
+      // map: function (item) {
+      //   if (item.dataInizioValidita != null)
+      //     item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
+      //   if (item.dataFineValidita != null)
+      //     item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);
+      //
+      //   //console.log('item', item);
+      //   return item;
+      // }
+    });
+    this.aziende.load().done(res => {
+      console.log('RES: ', res);
+    });
   }
 
   public selectItem(e) {

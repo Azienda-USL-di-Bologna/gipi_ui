@@ -21,7 +21,11 @@
         ></dx-text-box>
       <dx-tree-view
         id="selection-treeview"
-        [items]="products"
+        [dataSource]="aziende"
+        dataStructure="plain"
+        displayExpr="nome"
+        parentIdExpr="FK_id_struttura_padre"
+        keyExpr="id"
         [width]="320"
         showCheckBoxesMode="normal"
         [searchValue]="textBox.value"
