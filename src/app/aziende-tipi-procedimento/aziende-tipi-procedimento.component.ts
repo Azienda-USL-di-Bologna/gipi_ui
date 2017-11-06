@@ -85,6 +85,13 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         // this.aziendaProcedimento = this.datasource['_items'][0];
     }
 
+    ngOnInit() {
+    }
+
+    screen(width) {
+        return (width < 700) ? 'sm' : 'lg';
+    }
+
     private setDataFromDettaglioProcedimentoComponent() {
         this.dataFromDettaglioProcedimentoComponent = this.sharedData.getSharedObject()["DettaglioProvvedimentoComponent"];
     }
@@ -117,13 +124,17 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         }
     }
 
-
-    screen(width) {
-        return (width < 700) ? 'sm' : 'lg';
+    private setFields(tipoProcedimentoDefault: TipoProcedimento) {
+        this.testoHeaderTipoProcedimento = this.aziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento;
+        this.testoHeaderAzienda = this.aziendaTipoProcedimento.idAzienda.descrizione;
+        this.aziendaTipoProcedimento["modoApertura"] = tipoProcedimentoDefault.modoApertura;
+        this.aziendaTipoProcedimento["normaRiferimento"] = tipoProcedimentoDefault.normaRiferimento;
+        if (this.aziendaTipoProcedimento.idTitolo)
+            this.aziendaTipoProcedimento["nomeTitolo"] = this.aziendaTipoProcedimento.idTitolo.nomeTitolo
     }
 
-
-    ngOnInit() {
+    public formFieldDataChanged(event) {
+            console.log("dataChanged")
     }
 
     public buttonChiudiClicked(event) {
@@ -141,7 +152,8 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         }
         else {
             this.statusPage = "modify-status";
-            this.datasource.store().update(this.aziendaTipoProcedimento.id, this.aziendaTipoProcedimento);
+            // this.datasource.store().update(this.aziendaTipoProcedimento.id, this.aziendaTipoProcedimento).done(res => (this.setFields(this.dataFromDettaglioProcedimentoComponent["tipoProcedimento"])));
+            this.datasource.store().update(this.aziendaTipoProcedimento.id, this.aziendaTipoProcedimento).done(res => (this.buildAziendaTipoProcedimento()));
         }
         // notify("salvataggio effettuato con successo", "success", 600);
         notify( {
@@ -173,13 +185,6 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
 
     onFormSubmit(e) {
         console.log(e);
-    }
-
-    private setFields(tipoProcedimentoDefault: TipoProcedimento) {
-        this.testoHeaderTipoProcedimento = this.aziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento;
-        this.testoHeaderAzienda = this.aziendaTipoProcedimento.idAzienda.descrizione;
-        this.aziendaTipoProcedimento["modoApertura"] = tipoProcedimentoDefault.modoApertura;
-        this.aziendaTipoProcedimento["normaRiferimento"] = tipoProcedimentoDefault.normaRiferimento;
     }
 
     getTipiProcedimentoSource() {
