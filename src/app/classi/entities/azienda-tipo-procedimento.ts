@@ -16,7 +16,7 @@ export class AziendaTipoProcedimento extends Entity {
     idTipoProcedimento: TipoProcedimento;
     FK_id_titolo: number;
     idTitolo: Titolo;
-    //procedimentoList: Array<Procedimento>;
+    procedimentoList: Array<Titolo>;
 
     public static getOdataContextEntity(): any {
         return {

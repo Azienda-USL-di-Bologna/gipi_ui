@@ -15,5 +15,20 @@ export class Titolo extends Entity {
             }
         }
     }
+
+    public gdmgdm(obj): any {
+        // return super.isEquals(obj);
+        // const propertiesObj1: Array<string> = Object.getOwnPropertyNames(this);
+        //
+        // for (const prop of propertiesObj1) {
+        //     console.log("1", prop);
+        //     if (this[prop] === obj[prop]) {
+        //         console.log(prop, "uguale")
+        //     }
+        //     else {
+        console.log("diversa")
+        //     }
+        // }
+    }
 }
 

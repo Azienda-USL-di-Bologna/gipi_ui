@@ -1,7 +1,6 @@
 import {OdataContextDefinition} from "./odata-context-definition";
 import {CustomLoadingFilterParams} from "./custom-loading-filter-params";
-import {isArray} from "rxjs/util/isArray";
-export class OdataContextDefinitionImpl extends OdataContextDefinition {
+import {isArray} from "util";export class OdataContextDefinitionImpl extends OdataContextDefinition {
   constructor() {
     super();
   }
