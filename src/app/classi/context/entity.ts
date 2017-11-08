@@ -13,9 +13,17 @@ export abstract class Entity {
     /**
      * costruisce l'oggetto a partire dai dati raw popolando le proprietà indicate nei fieldTypes dell'oggetto tornato dal metodo getOdataContextEntity()
      */
-    public build(srcObj: any, entityConst: any) {
+    public build(srcObj: any, entityClass: typeof Entity) {
         // const properties: Array<string> = Object.getOwnPropertyNames(Entities[this.constructor.name].class.getOdataContextEntity().fieldTypes);
-        const properties: Array<string> = Object.getOwnPropertyNames(entityConst.class.getOdataContextEntity().fieldTypes);
+        // const entities: Array<string> = Object.getOwnPropertyNames(Entities);
+        // let entityClass;
+        // for (const entity of entities) {
+        //     if (Entities[entity].name === entity) {
+        //         entityClass = Entities[entity].class;
+        //         break;
+        //     }
+        // }
+        const properties: Array<string> = Object.getOwnPropertyNames(entityClass.getOdataContextEntity().fieldTypes);
         for (const prop of properties) {
             this[prop] = srcObj[prop];
         }
