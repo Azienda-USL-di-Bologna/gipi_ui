@@ -23,7 +23,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
 
     @Input() tipoProcedimento: TipoProcedimento;
     private datasource: DataSource;
-    private nuovaAssociazione: boolean;
+    public nuovaAssociazione: boolean;
     private dataFromDettaglioProcedimentoComponent;
     public aziendaTipoProcedimento: AziendaTipoProcedimento = new AziendaTipoProcedimento();
     public initialAziendaTipoProcedimento: AziendaTipoProcedimento;
@@ -40,8 +40,9 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     width: any;
 
     // Variabili per FormLook dei pulsanti
+    public testoBottoneAnnulla: string = "Indietro";
     public testoBottoneConferma: string;
-    public abilitaBottoneAnnulla: boolean = false;
+    public abilitaAnnulla: boolean = false;
     public abilitaBottoneAssocia: boolean;
     public abilitaBottoneDisassocia: boolean;
     public nomeTitolo: string;
@@ -122,7 +123,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
                 ["idAzienda.id", "=", azienda.id]]);
             this.datasource.load().done(res => {
                 // this.aziendaTipoProcedimento = res[0] as AziendaTipoProcedimento;
-                this.aziendaTipoProcedimento.build(res[0]);
+                this.aziendaTipoProcedimento.build(res[0], Entities.AziendaTipoProcedimento);
                 this.setFields(tipoProcedimentoDefault);
                 if (setInitialValues) {
                     this.setInitialValues();
@@ -147,22 +148,39 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
 
     public formFieldDataChanged(event) {
         console.log("dataChanged: ", Entity.isEquals(this.aziendaTipoProcedimento, this.initialAziendaTipoProcedimento));
-        this.abilitaBottoneAnnulla = !Entity.isEquals(this.aziendaTipoProcedimento, this.initialAziendaTipoProcedimento);
+        this.abilitaAnnulla = !Entity.isEquals(this.aziendaTipoProcedimento, this.initialAziendaTipoProcedimento);
+        if (this.abilitaAnnulla)
+            this.testoBottoneAnnulla = "Annulla";
+        else
+            this.testoBottoneAnnulla = "Indietro"
     }
 
     public buttonAnnullaClicked(event) {
-        const confirmDialog = custom(
-            {
-                title: "Annullare?",
-                message: "Annullare le modifiche e tornare indetro?",
-                buttons: [{ text: "Si", onClick: function () {return "Si";}}, { text: "No", onClick: function () {return "No";}}]
-            });
-        confirmDialog.show().done(
-            dialogResult => {
-                if (dialogResult === "Si") {
-                    this.router.navigate(["/app-dettaglio-provvedimento"]);
-                }
-            });
+        if (this.abilitaAnnulla) {
+            const confirmDialog = custom(
+                {
+                    title: "Annullare?",
+                    message: "Annullare le modifiche e tornare indetro?",
+                    buttons: [{
+                        text: "Si", onClick: function () {
+                            return "Si";
+                        }
+                    }, {
+                        text: "No", onClick: function () {
+                            return "No";
+                        }
+                    }]
+                });
+            confirmDialog.show().done(
+                dialogResult => {
+                    if (dialogResult === "Si") {
+                        this.router.navigate(["/app-dettaglio-provvedimento"]);
+                    }
+                });
+        }
+        else {
+            this.router.navigate(["/app-dettaglio-provvedimento"]);
+        }
         // Saving data
         // this.datasource.store().update(this.aziendaProcedimento.id, this.aziendaProcedimento);
     }
@@ -171,13 +189,13 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         // Saving data
         if (this.nuovaAssociazione) {
             this.statusPage = "insert-status";
-            this.datasource.store().insert(this.aziendaTipoProcedimento).done(res => {this.buildAziendaTipoProcedimento(false)});
+            this.datasource.store().insert(this.aziendaTipoProcedimento).done(res => {this.buildAziendaTipoProcedimento(true)});
             this.nuovaAssociazione = false;
         }
         else {
             this.statusPage = "modify-status";
             // this.datasource.store().update(this.aziendaTipoProcedimento.id, this.aziendaTipoProcedimento).done(res => (this.setFields(this.dataFromDettaglioProcedimentoComponent["tipoProcedimento"])));
-            this.datasource.store().update(this.aziendaTipoProcedimento.id, this.aziendaTipoProcedimento).done(res => (this.buildAziendaTipoProcedimento(false)));
+            this.datasource.store().update(this.aziendaTipoProcedimento.id, this.aziendaTipoProcedimento).done(res => (this.buildAziendaTipoProcedimento(true)));
         }
         notify( {
             message: "salvataggio effettuato con successo",

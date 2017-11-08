@@ -13,8 +13,9 @@ export abstract class Entity {
     /**
      * costruisce l'oggetto a partire dai dati raw popolando le proprietà indicate nei fieldTypes dell'oggetto tornato dal metodo getOdataContextEntity()
      */
-    public build(srcObj: any) {
-        const properties: Array<string> = Object.getOwnPropertyNames(Entities[this.constructor.name].class.getOdataContextEntity().fieldTypes);
+    public build(srcObj: any, entityConst: any) {
+        // const properties: Array<string> = Object.getOwnPropertyNames(Entities[this.constructor.name].class.getOdataContextEntity().fieldTypes);
+        const properties: Array<string> = Object.getOwnPropertyNames(entityConst.class.getOdataContextEntity().fieldTypes);
         for (const prop of properties) {
             this[prop] = srcObj[prop];
         }
@@ -69,7 +70,6 @@ export abstract class Entity {
      * @returns {boolean}
      */
     private static arrayEquals(array1: Array<any>, array2: Array<any>): boolean {
-        console.log("a: ", array1, "b: ", array2);
         return arraysAreEqual(array1, array2, (a, b) => {return Entity.isEquals(a, b)});
     }
 }

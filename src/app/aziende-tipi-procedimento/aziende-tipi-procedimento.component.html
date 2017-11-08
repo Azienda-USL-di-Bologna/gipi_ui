@@ -16,6 +16,7 @@ DELLA RISOLUZIONE
                 <dxi-location [row]="0" [col]="0" [colspan]="2" screen="sm"></dxi-location>
                 <h3><span class="header-font">Tipo procedimento:</span> <i>{{[(testoHeaderTipoProcedimento)]}}</i></h3>
                 <h3><span class="header-font">Azienda:</span> <i>{{[(testoHeaderAzienda)]}}</i></h3>
+                <h3 *ngIf="nuovaAssociazione"><span class="header-italic-font">Nuova Associazione:</span></h3>
                 <div class="status-page {{statusPage}}"></div>
             </dxi-item>
             <dxi-item class="content item">
@@ -34,9 +35,11 @@ DELLA RISOLUZIONE
                         <dxi-item dataField="durataMassimaSospensione" [label]="{text: 'Durata massima sospensione (gg)'}" [editorOptions]="{ disabled: false }"></dxi-item>
                         <!--<div *ngIf="show; else elseBlock">Text to show</div>-->
                         <!--<ng-template #elseBlock>Alternate text while primary text is hidden</ng-template>-->
-                        <dxi-item *ngIf="aziendaTipoProcedimento.idTitolo; else elseBlock" dataField ="idTitolo.nomeTitolo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
-                        <ng-template #elseBlock> <dxi-item itemType="empty"></dxi-item></ng-template>
-                        <dxi-item dataField="obbligoEsitoConclusivo" editorType="dxSwitch" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>
+                        <!--<dxi-item *ngIf="aziendaTipoProcedimento.idTitolo" dataField ="idTitolo.nomeTitolo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>-->
+                        <!--<dxi-item *ngIf="aziendaTipoProcedimento.idTitolo; else elseBlock" dataField ="idTitolo.nomeTitolo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>-->
+                        <!--<ng-template #elseBlock> <dxi-item itemType="empty"></dxi-item></ng-template>-->
+                        <!--<dxi-item dataField="obbligoEsitoConclusivo" editorType="dxSwitch" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>-->
+                        <dxi-item dataField="obbligoEsitoConclusivo" editorType="dxCheckBox" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>
                     </dx-form>
                 </div>
             </dxi-item>
@@ -65,7 +68,7 @@ DELLA RISOLUZIONE
 
                     <dxi-item>
                         <dxi-location [row]="0" [col]="0"></dxi-location>
-                        <dx-button class="padding-button" (onClick)="buttonAnnullaClicked($event)" text="Annulla" hint="Annulla le modifiche" [disabled]="!abilitaBottoneAnnulla"></dx-button>
+                        <dx-button class="padding-button" (onClick)="buttonAnnullaClicked($event)" text="{{testoBottoneAnnulla}}" hint="Annulla le modifiche"></dx-button>
                         <dx-button class="padding-button" (onClick)="buttonConfermaClicked($event)" text="{{testoBottoneConferma}}" hint="Conferma"></dx-button>
                     </dxi-item>
 
