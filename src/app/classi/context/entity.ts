@@ -1,5 +1,4 @@
 import {Entities} from "../../../environments/app.constants";
-import {FormGroup} from "@angular/forms";
 import {isArray} from "util";
 import {arraysAreEqual} from "tslint/lib/utils";
 export abstract class Entity {
@@ -14,15 +13,6 @@ export abstract class Entity {
      * costruisce l'oggetto a partire dai dati raw popolando le proprietà indicate nei fieldTypes dell'oggetto tornato dal metodo getOdataContextEntity()
      */
     public build(srcObj: any, entityClass: typeof Entity) {
-        // const properties: Array<string> = Object.getOwnPropertyNames(Entities[this.constructor.name].class.getOdataContextEntity().fieldTypes);
-        // const entities: Array<string> = Object.getOwnPropertyNames(Entities);
-        // let entityClass;
-        // for (const entity of entities) {
-        //     if (Entities[entity].name === entity) {
-        //         entityClass = Entities[entity].class;
-        //         break;
-        //     }
-        // }
         const properties: Array<string> = Object.getOwnPropertyNames(entityClass.getOdataContextEntity().fieldTypes);
         for (const prop of properties) {
             this[prop] = srcObj[prop];
@@ -30,7 +20,7 @@ export abstract class Entity {
     }
 
     /**
-     * Torna true se i due oggetti sono uguali (vengono controllate solo le proprietà, non i metodi), false altrimenti
+     * torna true se i due oggetti sono uguali (vengono controllate solo le proprietà, non i metodi), false altrimenti
      * @param obj1
      * @param obj2
      * @returns {boolean} Torna true se i due oggetti sono uguali, false altrimenti
