@@ -39,6 +39,16 @@ import { ProcedimentoComponent } from './associazioni/sub-view/procedimento/proc
 import { AssociaDirective } from './associazioni/directives/associa.directive';
 import { AlberoStruttureComponent } from './associazioni/sub-view/albero-strutture/albero-strutture.component';
 import {OdataContextDefinition} from "./classi/context/odata-context-definition";
+import {AuthenticationJwtModule} from "./authentication-jwt/authentication-jwt.module";
+import { LoginComponent } from './login/login.component';
+import {NoLoginGuard} from "./login/guards/no-login.guard";
+import {LoginGuard} from "./login/guards/login.guard";
+
+import { FormsModule } from "@angular/forms";
+import { HttpClientModule } from '@angular/common/http';
+import {MomentModule} from "angular2-moment";
+import {NgIdleKeepaliveModule} from "@ng-idle/keepalive";
+import {SessionManager} from "./login/session-manager";
 
 @NgModule({
     declarations: [
@@ -52,7 +62,8 @@ import {OdataContextDefinition} from "./classi/context/odata-context-definition"
         AssociaDirective,
         AssociaDirective,
         AssociazioniComponent,
-        AlberoStruttureComponent
+        AlberoStruttureComponent,
+        LoginComponent
     ],
     imports: [
         BrowserModule,
@@ -71,9 +82,14 @@ import {OdataContextDefinition} from "./classi/context/odata-context-definition"
         DxCheckBoxModule,
         DxTextAreaModule,
         HttpModule,
-        DxTreeViewModule
+        DxTreeViewModule,
+        AuthenticationJwtModule,
+        FormsModule,
+        HttpClientModule,
+        MomentModule,
+        NgIdleKeepaliveModule.forRoot()
     ],
-    providers: [DefinizioneTipiProcedimentoService, SharedData, OdataContextDefinition],
+    providers: [DefinizioneTipiProcedimentoService, SharedData, OdataContextDefinition, SessionManager, LoginGuard, NoLoginGuard],
     bootstrap: [AppComponent],
     entryComponents: [AssociaComponent, ProcedimentoComponent]
 })

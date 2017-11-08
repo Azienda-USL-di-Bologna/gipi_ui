@@ -27,7 +27,7 @@ export const HEADER_AUTH_TOKEN_NAME = 'authorization';
 // ========================= Url =====================================
 export const ODATA_BASE_URL: string = environment.odataStoreRootUrl;
 // login
-export const LOGIN_URL = '/auth/login';
+export const LOGIN_URL: string = environment.loginUrl;
 export const LOGOUT_URL = '/logout';
 
 export const DEFAULT_TIMEZONE_OFFSET = 0;

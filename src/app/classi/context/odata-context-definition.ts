@@ -6,6 +6,7 @@ import {MyContext} from "../entities/my-context";
 import * as moment from "moment";
 import * as config from "devextreme/core/config";
 import {OdataForeignKey} from "./entity";
+import {JwtInterceptor} from "../../authentication-jwt/jwt.interceptor";
 
 @Injectable()
 export class OdataContextDefinition {
@@ -17,7 +18,11 @@ export class OdataContextDefinition {
             this.setCustomConfiguration();
             this.odataContext = new ODataContext({
                 url: ODATA_BASE_URL,
-                entities: MyContext.getOdataContextEntitiesDefinition()
+                entities: MyContext.getOdataContextEntitiesDefinition(),
+                beforeSend: function (request: any) {
+                    console.info(JSON.stringify(request));
+                    request.headers = {"Authorization": "Bearer " + JwtInterceptor.getToken()};
+                }
             });
             const entities: Array<string> = Object.getOwnPropertyNames(Entities);
             for (const entity of entities) {
