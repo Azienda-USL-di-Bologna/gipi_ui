@@ -123,7 +123,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
                 ["idAzienda.id", "=", azienda.id]]);
             this.datasource.load().done(res => {
                 // this.aziendaTipoProcedimento = res[0] as AziendaTipoProcedimento;
-                this.aziendaTipoProcedimento.build(res[0], Entities.AziendaTipoProcedimento.class);
+                this.aziendaTipoProcedimento.build(res[0], AziendaTipoProcedimento);
                 this.setFields(tipoProcedimentoDefault);
                 if (setInitialValues) {
                     this.setInitialValues();
