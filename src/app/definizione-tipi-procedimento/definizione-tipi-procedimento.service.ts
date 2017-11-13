@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ODATA_STORE_ROOT_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from '../../environments/app.constant';
+import { ODATA_BASE_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from '../../environments/app.constants';
 import { TipoProcedimento } from '../classi/entities/tipo-procedimento';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
@@ -22,7 +22,7 @@ export class DefinizioneTipiProcedimentoService {
     return new DataSource({
       store: new ODataStore({
         key: 'idTipoProcedimento',
-        url: ODATA_STORE_ROOT_URL + odataTipiProcedimentoPath,
+        url: ODATA_BASE_URL + odataTipiProcedimentoPath,
         //deserializeDates: true,
 /*        fieldTypes: {
           id: 'Int32',
@@ -42,7 +42,7 @@ export class DefinizioneTipiProcedimentoService {
   }
 
   getAziendeAssociateRequest(idTipoProcedimento: string) : Observable<any>{
-    let url = ODATA_STORE_ROOT_URL + odataAziendeTipiProcPath + '?$filter=FK_id_tipo_procedimento eq ' + idTipoProcedimento + '&$expand=idAzienda';
+    let url = ODATA_BASE_URL + odataAziendeTipiProcPath + '?$filter=FK_id_tipo_procedimento eq ' + idTipoProcedimento + '&$expand=idAzienda';
     return this.http.get(url).map(response => response.json().d.results );
   }
 

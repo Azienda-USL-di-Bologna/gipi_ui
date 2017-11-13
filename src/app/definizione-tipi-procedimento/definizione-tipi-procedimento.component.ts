@@ -4,7 +4,7 @@ import { DxDataGridComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedimento.service';
 import {TipoProcedimento} from "../classi/entities/tipo-procedimento";
 import {OdataContextDefinition} from "../classi/context/odata-context-definition";
-import {Entities} from "../classi/context/context-utils";
+import {Entities} from "../../environments/app.constants";
 
 //import { UtilityFunctions } from '../utility-functions';
 
@@ -36,7 +36,7 @@ export class DefinizioneTipiProcedimentoComponent {
   constructor(private service: DefinizioneTipiProcedimentoService, private odataContextDefinition:OdataContextDefinition) {
     // this.dataSource = this.service.getTipiProcedimentoSource();
     this.dataSource = new DataSource({
-      store: odataContextDefinition.getContext()[Entities.TipoProcedimento],
+      store: odataContextDefinition.getContext()[Entities.TipoProcedimento.name],
 
 
 /*      map: function (item) {

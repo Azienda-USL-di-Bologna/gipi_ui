@@ -37,6 +37,12 @@
    font-weight: bold;
 }
 
+.header-italic-font{
+    font-weight: bold;
+    font-style: italic;
+    color: red;
+}
+
 /deep/ .demo-container, #page {
     height: 100%;
     min-height: 300px;

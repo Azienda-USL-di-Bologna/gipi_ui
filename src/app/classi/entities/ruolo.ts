@@ -1,4 +1,5 @@
-export class Ruolo {
+import {Entity} from "../context/entity";
+export class Ruolo extends Entity {
   id: number;
   titolo: string;
 
@@ -11,5 +12,9 @@ export class Ruolo {
         titolo: "String"
       }
     }
+  }
+
+  constructor(){
+    super();
   }
 }

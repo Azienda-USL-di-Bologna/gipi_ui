@@ -1,6 +1,7 @@
 import {Struttura} from "./struttura";
 import {AziendaTipoProcedimento} from "./azienda-tipo-procedimento";
-export class Azienda {
+import {Entity} from "../context/entity";
+export class Azienda extends Entity {
   id: number;
   nome: string;
   aoo: string;

@@ -1,8 +1,6 @@
 import {OdataContextDefinition} from "./odata-context-definition";
-import {isArray} from "rxjs/util/isArray";
-import {CustomLoadingFilterParams} from "../custom-loading-filter-params";
-
-export class CustomOdataContextDefinition extends OdataContextDefinition {
+import {CustomLoadingFilterParams} from "./custom-loading-filter-params";
+import {isArray} from "util";export class OdataContextDefinitionImpl extends OdataContextDefinition {
   constructor() {
     super();
   }
@@ -13,8 +11,8 @@ export class CustomOdataContextDefinition extends OdataContextDefinition {
     // console.log("option", loadOption);
     if (loadOption.filter != null && customLoadingFilterParams != null) {
       const currentFilter = loadOption.filter;
+      const targetField: string = customLoadingFilterParams.getTargetField();
       for (const i in currentFilter) {
-        const targetField: string = customLoadingFilterParams.getTargetField();
         let currentField: any;
         let currentValue: any;
         if (isArray(currentFilter[i][0])) {

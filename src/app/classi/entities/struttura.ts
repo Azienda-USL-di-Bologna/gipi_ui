@@ -1,6 +1,6 @@
 import {Azienda} from "./azienda";
-import {Entities, OdataForeignKey} from "../context/context-utils";
-export class Struttura {
+import {Entity, OdataForeignKey} from "../context/entity";
+export class Struttura extends Entity {
   id: number;
   attiva: boolean;
   codice: number;
@@ -33,9 +33,9 @@ export class Struttura {
         nome: "String",
         spettrale: "Boolean",
         usaSegreteriaBucataPadre: "Boolean",
-        idAzienda: new OdataForeignKey(Entities.Azienda, "id"),
-        idStrutturaPadre: new OdataForeignKey(Entities.Struttura, "id"),
-        idStrutturaSegreteria: new OdataForeignKey(Entities.Struttura, "id"),
+        idAzienda: new OdataForeignKey(Azienda, "id"),
+        idStrutturaPadre: new OdataForeignKey(Struttura, "id"),
+        idStrutturaSegreteria: new OdataForeignKey(Struttura, "id"),
       }
     }
   }

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {DEFAULT_INTERRUPTSOURCES, Idle} from "@ng-idle/core";
+import {Keepalive} from "@ng-idle/keepalive";
+import {Router} from "@angular/router";
+import {SessionManager} from "../login/session-manager";
 
 @Component({
   selector: 'app-home',
@@ -7,8 +11,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private sessionManager: SessionManager){
+    sessionManager.setExpireTokenOnIdle(10);
+  }
   ngOnInit() {
   }
 

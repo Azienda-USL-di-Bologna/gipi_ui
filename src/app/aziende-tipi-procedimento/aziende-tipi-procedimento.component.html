@@ -16,21 +16,30 @@ DELLA RISOLUZIONE
                 <dxi-location [row]="0" [col]="0" [colspan]="2" screen="sm"></dxi-location>
                 <h3><span class="header-font">Tipo procedimento:</span> <i>{{[(testoHeaderTipoProcedimento)]}}</i></h3>
                 <h3><span class="header-font">Azienda:</span> <i>{{[(testoHeaderAzienda)]}}</i></h3>
+                <h3 *ngIf="nuovaAssociazione"><span class="header-italic-font">Nuova Associazione:</span></h3>
                 <div class="status-page {{statusPage}}"></div>
             </dxi-item>
             <dxi-item class="content item">
                 <dxi-location [row]="1" [col]="1" screen="lg"></dxi-location>
                 <dxi-location [row]="1" [col]="0" [colspan]="2" screen="sm"></dxi-location>
                 <div class="center-div">
-                    <dx-form id="form" #myform [(formData)]="aziendaTipoProcedimento" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+                    <dx-form id="form" #myform [(formData)]="aziendaTipoProcedimento"
+                             [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation"
+                             [minColWidth]="minColWidth" [colCount]="colCount" [width]="width"
+                             (onFieldDataChanged)="formFieldDataChanged($event)">
                         <dxi-item dataField="descrizioneTipoProcedimento" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: false }"></dxi-item>
                         <dxi-item dataField="modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
                         <dxi-item dataField="normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
                         <dxi-item dataField="dataInizio" [label]="{text: 'Valido dal'}" editorType="dxDateBox" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }" ></dxi-item>
                         <dxi-item dataField="dataFine" [label]="{text: 'Al'}"  editorType="dxDateBox" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
                         <dxi-item dataField="durataMassimaSospensione" [label]="{text: 'Durata massima sospensione (gg)'}" [editorOptions]="{ disabled: false }"></dxi-item>
-                        <dxi-item dataField="idTitolo.nomeTitolo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
-                        <dxi-item dataField="obbligoEsitoConclusivo" editorType="dxSwitch" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>
+                        <!--<div *ngIf="show; else elseBlock">Text to show</div>-->
+                        <!--<ng-template #elseBlock>Alternate text while primary text is hidden</ng-template>-->
+                        <!--<dxi-item *ngIf="aziendaTipoProcedimento.idTitolo" dataField ="idTitolo.nomeTitolo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>-->
+                        <!--<dxi-item *ngIf="aziendaTipoProcedimento.idTitolo; else elseBlock" dataField ="idTitolo.nomeTitolo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>-->
+                        <!--<ng-template #elseBlock> <dxi-item itemType="empty"></dxi-item></ng-template>-->
+                        <!--<dxi-item dataField="obbligoEsitoConclusivo" editorType="dxSwitch" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>-->
+                        <dxi-item dataField="obbligoEsitoConclusivo" editorType="dxCheckBox" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>
                     </dx-form>
                 </div>
             </dxi-item>
@@ -59,14 +68,14 @@ DELLA RISOLUZIONE
 
                     <dxi-item>
                         <dxi-location [row]="0" [col]="0"></dxi-location>
-                        <dx-button class="padding-button" (onClick)="buttonChiudiClicked($event)" text="Chiudi" hint="Chiudi"></dx-button>
+                        <dx-button class="padding-button" (onClick)="buttonAnnullaClicked($event)" text="{{testoBottoneAnnulla}}" hint="Annulla le modifiche"></dx-button>
                         <dx-button class="padding-button" (onClick)="buttonConfermaClicked($event)" text="{{testoBottoneConferma}}" hint="Conferma"></dx-button>
                     </dxi-item>
 
                     <dxi-item>
                         <dxi-location [row]="0" [col]="1"></dxi-location>
-                        <dx-button class="padding-button" (onClick)="buttonClicked3($event)" text="Disassocia da azienda" [disabled]="disabilitaBottoneDisassocia" hint="Toglie l'associazione del tipo procedimento dall'azienda"></dx-button>
-                        <dx-button class="padding-button" (onClick)="buttonClicked4($event)" text="Associa a struttura" [disabled]="disabilitaBottoneAssocia" hint="Apre l'interfaccia per l'associazione alle strutture"></dx-button>
+                        <dx-button class="padding-button" (onClick)="buttonDisassociaClicked($event)" text="Disassocia da azienda" [disabled]="!abilitaBottoneDisassocia" hint="Toglie l'associazione del tipo procedimento dall'azienda"></dx-button>
+                        <dx-button class="padding-button" (onClick)="buttonAssociaClicked($event)" text="Associa a struttura" [disabled]="!abilitaBottoneAssocia" hint="Apre l'interfaccia per l'associazione alle strutture"></dx-button>
                     </dxi-item>
                 </dx-responsive-box>
                 <!-- colonna vuota sinistra -->
