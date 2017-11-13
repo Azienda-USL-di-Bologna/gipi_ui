@@ -3,7 +3,6 @@ import {DEFAULT_INTERRUPTSOURCES, Idle} from "@ng-idle/core";
 import {Keepalive} from "@ng-idle/keepalive";
 import {Router} from "@angular/router";
 import {SessionManager} from "../login/session-manager";
-import {OdataContextDefinition} from "../context/odata-context-definition";
 
 @Component({
   selector: 'app-home',

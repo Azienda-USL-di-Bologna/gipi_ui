@@ -1,4 +1,4 @@
-import {Entity} from "../../../context/entity";
+import {Entity} from "context/entity";
 export class Ruolo extends Entity {
   id: number;
   titolo: string;

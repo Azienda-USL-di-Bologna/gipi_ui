@@ -1,8 +1,8 @@
 import {Azienda} from "./azienda";
 import {Ruolo} from "./ruolo";
 import {Entities} from "../../../../environments/app.constants";
-import {Entity} from "../../../context/entity";
-import {OdataForeignKey} from "../../../context/server-object";
+import {Entity} from "context/entity";
+import {OdataForeignKey} from "context/server-object";
 
 export class Utente extends Entity {
   attivo: boolean;

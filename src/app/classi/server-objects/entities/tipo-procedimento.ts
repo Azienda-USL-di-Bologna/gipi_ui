@@ -1,5 +1,5 @@
 import {Azienda} from "../../aziende";
-import {Entity} from "../../../context/entity";
+import {Entity} from "context/entity";
 
 export class TipoProcedimento extends Entity{
     idTipoProcedimento: number;

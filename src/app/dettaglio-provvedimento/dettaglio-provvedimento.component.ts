@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { DefinizioneTipiProcedimentoService } from '../definizione-tipi-procedimento/definizione-tipi-procedimento.service';
 import { TipoProcedimento } from '../classi/server-objects/entities/tipo-procedimento';
-import { SharedData } from '../context/shared-data';
+import { SharedData } from 'context/shared-data';
 // import {Azienda, AZIENDE} from '../classi/aziende';
 import 'rxjs/add/operator/toPromise';
 import DataSource from 'devextreme/data/data_source';
-import {OdataContextDefinition} from "../context/odata-context-definition";
+import {OdataContextDefinition} from "context/odata-context-definition";
 import {Azienda} from "../classi/server-objects/entities/azienda";
 import {Entities} from "../../environments/app.constants";
-import {OdataContextFactory} from "../context/odata-context-factory";
+import {OdataContextFactory} from "context/odata-context-factory";
 
 @Component({
     selector: 'app-dettaglio-provvedimento',

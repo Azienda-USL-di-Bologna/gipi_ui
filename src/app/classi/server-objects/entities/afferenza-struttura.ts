@@ -1,4 +1,4 @@
-import {Entity} from "../../../context/entity";
+import {Entity} from "context/entity";
 export class AfferenzaStruttura extends Entity {
   id: number;
   descrizione: string;

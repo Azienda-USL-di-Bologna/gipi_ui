@@ -1,7 +1,7 @@
 import {Azienda} from "./azienda";
-import {Entity} from "../../../context/entity";
+import {Entity} from "context/entity";
 import {Entities} from "../../../../environments/app.constants";
-import {OdataForeignKey} from "../../../context/server-object";
+import {OdataForeignKey} from "context/server-object";
 export class Struttura extends Entity {
   id: number;
   attiva: boolean;

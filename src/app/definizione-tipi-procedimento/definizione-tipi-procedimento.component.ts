@@ -3,9 +3,9 @@ import DataSource from 'devextreme/data/data_source';
 import { DxDataGridComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedimento.service';
 import {TipoProcedimento} from "../classi/server-objects/entities/tipo-procedimento";
-import {OdataContextDefinition} from "../context/odata-context-definition";
+import {OdataContextDefinition} from "context/odata-context-definition";
 import {Entities} from "../../environments/app.constants";
-import {OdataContextFactory} from "../context/odata-context-factory";
+import {OdataContextFactory} from "context/odata-context-factory";
 
 //import { UtilityFunctions } from '../utility-functions';
 
