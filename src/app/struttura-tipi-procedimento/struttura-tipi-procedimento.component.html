@@ -1,4 +1,3 @@
-
 <div id="page">
   <dx-responsive-box singleColumnScreen="sm" [(screenByWidth)]="screen">
 
@@ -15,7 +14,7 @@
       <dxi-location [row]="0" [col]="0" [colspan]="3" screen="lg"></dxi-location>
       <dxi-location [row]="0" [col]="0" [colspan]="2" screen="sm"></dxi-location>
 
-      <div style="background-color:red;">
+      <div class = "header item" style="background-color:orange">
         <h3>
           <span class="header-font">Tipo procedimento:</span>
           <!-- <i>{{testoHeaderTipoProcedimento}}</i> -->
@@ -32,13 +31,32 @@
       <dxi-location [row]="1" [col]="0" [colspan]="2" screen="sm"></dxi-location>
 
       <div class="center-div" style="background-color:yellowgreen;">
-        <span >Tipo procedimento:</span>
+        <!-- <dx-form id="form" #myform [(formData)]="aziendaProcedimento" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
+          <dxi-item dataField="descrizioneTipoProcedimento" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: false }"></dxi-item>
+          <dxi-item dataField="modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="dataInizio" [label]="{text: 'Valido dal'}" editorType="dxDateBox" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }" ></dxi-item>
+          <dxi-item dataField="dataFine" [label]="{text: 'Al'}"  editorType="dxDateBox" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+          <dxi-item dataField="durataMassimaSospensione" [label]="{text: 'Durata massima sospensione (gg)'}" [editorOptions]="{ disabled: false }"></dxi-item>
+          <dxi-item dataField="idTitolo.nomeTitolo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="obbligoEsitoConclusivo" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>
+      </dx-form> -->
       </div>
     </dxi-item>
 
     <dxi-item class="left-side-bar item" style="background-color:pink;">
       <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
-      <!-- colonna vuota sinistra -->
+
+      <div style="text-align:center">
+        <div style="text-align:initial;display:inline-block;">
+          <dx-text-box #textBox placeholder="Search" [width]="300" mode="search" valueChangeEvent="keyup" value="" style="margin-bottom:8px;"></dx-text-box>
+          <div id="container-tree">
+            <dx-tree-view id="simple-treeview" [dataSource]="datasource" [height]="300" keyExpr="id" displayExpr="nome" dataStructure="plain" parentIdExpr="FK_id_struttura_padre"
+              [searchValue]="textBox.value"  showCheckBoxesMode="normal"  (onItemClick)="handleEvent('treeItemSelectionChanged', $event)"></dx-tree-view>
+          </div>
+        </div>
+      </div>
+
     </dxi-item>
 
     <dxi-item class="right-side-bar item" style="background-color:orange;">
@@ -47,7 +65,7 @@
     </dxi-item>
 
     <dxi-item class="footer item" style="background-color:violet;">
-      <span >Tipo procedimento:</span>
+      <span>Tipo procedimento:</span>
     </dxi-item>
 
   </dx-responsive-box>
