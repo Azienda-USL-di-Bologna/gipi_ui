@@ -1,18 +1,17 @@
 import {Component, OnInit, ViewChild, AfterViewInit, Input} from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { Router } from '@angular/router';
-import {AziendaTipoProcedimento} from '../classi/entities/azienda-tipo-procedimento';
+import {AziendaTipoProcedimento} from '../classi/server-objects/entities/azienda-tipo-procedimento';
 import {DxFormComponent} from 'devextreme-angular';
-import {TipoProcedimento} from '../classi/entities/tipo-procedimento';
-import { SharedData } from '../classi/context/shared-data';
-import {OdataContextDefinition} from "../classi/context/odata-context-definition";
-import {Azienda} from "../classi/entities/azienda";
+import {TipoProcedimento} from '../classi/server-objects/entities/tipo-procedimento';
+import { SharedData } from '../context/shared-data';
+import {OdataContextDefinition} from "../context/odata-context-definition";
+import {Azienda} from "../classi/server-objects/entities/azienda";
 import notify from 'devextreme/ui/notify';
 import {Entities} from "../../environments/app.constants";
-import {FormGroup} from "@angular/forms";
-import {Entity} from "../classi/context/entity";
-import {Titolo} from "../classi/entities/titolo";
+import {Entity} from "../context/entity";
 import {custom} from "devextreme/ui/dialog";
+import {OdataContextFactory} from "../context/odata-context-factory";
 
 @Component({
     selector: 'app-aziende-tipi-procedimento',
@@ -27,8 +26,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     private dataFromDettaglioProcedimentoComponent;
     public aziendaTipoProcedimento: AziendaTipoProcedimento = new AziendaTipoProcedimento();
     public initialAziendaTipoProcedimento: AziendaTipoProcedimento;
-
-    public a:Titolo = new Titolo();
+    private odataContextEntitiesDefinition: OdataContextDefinition;
 
     // settaggio variabili per impaginazione dati del form
     labelLocation: string;
@@ -54,7 +52,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
 
     @ViewChild(DxFormComponent) myform: DxFormComponent;
 
-    constructor(private sharedData: SharedData, private odataContextDefinition: OdataContextDefinition, private router: Router) {
+    constructor(private odataContexFactory: OdataContextFactory, private sharedData: SharedData, private router: Router) {
 
         this.labelLocation = 'left';
         this.readOnly = false;
@@ -62,8 +60,10 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         this.minColWidth = 100;
         this.maxColWidth = 200;
         this.colCount = 1;
+
+        this.odataContextEntitiesDefinition = this.odataContexFactory.buildOdataContextEntitiesDefinition();
         this.datasource = new DataSource({
-            store: this.odataContextDefinition.getContext()[Entities.AziendaTipoProcedimento.name]
+            store: this.odataContextEntitiesDefinition.getContext()[Entities.AziendaTipoProcedimento.name]
                 .on("modifying", () => {console.log("modified")})
                 .on("modified", () => {console.log("modified")}),
             expand: ['idAzienda', 'idTipoProcedimento', 'idTitolo'],

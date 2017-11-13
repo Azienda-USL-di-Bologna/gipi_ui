@@ -8,10 +8,15 @@ export class JwtInterceptor implements HttpInterceptor{
 
     constructor(){}
 
-    public static getToken: () => string = () =>{
+    // public static getToken: () => string = () =>{
+    //     console.log("getToken() : " + JSON.stringify(sessionStorage.getItem("token")));
+    //     return sessionStorage.getItem("token");
+    // };
+
+    public static getToken(): string {
         console.log("getToken() : " + JSON.stringify(sessionStorage.getItem("token")));
         return sessionStorage.getItem("token");
-    };
+    }
 
     intercept(request: HttpRequest<any>,next: HttpHandler): Observable<HttpEvent<any>> {
         

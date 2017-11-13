@@ -5,8 +5,6 @@ import { HttpModule } from '@angular/http';
 import 'devextreme/data/odata/store';
 import 'devextreme/data/odata/context';
 import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedimento/definizione-tipi-procedimento.service';
-import { UtilityFunctions } from './utility-functions';
-import { SharedData } from './classi/context/shared-data'
 
 import {
     DxDataGridModule,
@@ -38,7 +36,6 @@ import { AssociaComponent } from './associazioni/sub-view/associa/associa.compon
 import { ProcedimentoComponent } from './associazioni/sub-view/procedimento/procedimento.component';
 import { AssociaDirective } from './associazioni/directives/associa.directive';
 import { AlberoStruttureComponent } from './associazioni/sub-view/albero-strutture/albero-strutture.component';
-import {OdataContextDefinition} from "./classi/context/odata-context-definition";
 import {AuthenticationJwtModule} from "./authentication-jwt/authentication-jwt.module";
 import { LoginComponent } from './login/login.component';
 import {NoLoginGuard} from "./login/guards/no-login.guard";
@@ -49,6 +46,8 @@ import { HttpClientModule } from '@angular/common/http';
 import {MomentModule} from "angular2-moment";
 import {NgIdleKeepaliveModule} from "@ng-idle/keepalive";
 import {SessionManager} from "./login/session-manager";
+import {ContextModule} from "./context/context.module";
+import {contextModuleConfig} from "./module-configurations";
 
 @NgModule({
     declarations: [
@@ -87,9 +86,11 @@ import {SessionManager} from "./login/session-manager";
         FormsModule,
         HttpClientModule,
         MomentModule,
-        NgIdleKeepaliveModule.forRoot()
+        NgIdleKeepaliveModule.forRoot(),
+        ContextModule.forRoot(contextModuleConfig)
     ],
-    providers: [DefinizioneTipiProcedimentoService, SharedData, OdataContextDefinition, SessionManager, LoginGuard, NoLoginGuard],
+    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard,
+        ],
     bootstrap: [AppComponent],
     entryComponents: [AssociaComponent, ProcedimentoComponent]
 })

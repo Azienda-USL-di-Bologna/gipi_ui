@@ -1,7 +1,8 @@
 import {Azienda} from "./azienda";
 import {Ruolo} from "./ruolo";
-import {Entities} from "../../../environments/app.constants";
-import {Entity, OdataForeignKey} from "../context/entity";
+import {Entities} from "../../../../environments/app.constants";
+import {Entity} from "../../../context/entity";
+import {OdataForeignKey} from "../../../context/server-object";
 
 export class Utente extends Entity {
   attivo: boolean;
@@ -46,8 +47,8 @@ export class Utente extends Entity {
         omonimia: "Boolean",
         passwordHash: "String",
         telefono: "String",
-        idRuolo: new OdataForeignKey(Ruolo, "id"),
-        idAzienda: new OdataForeignKey(Azienda, "id")
+        idRuolo: new OdataForeignKey(Entities.Ruolo, "id"),
+        idAzienda: new OdataForeignKey(Entities.Azienda, "id")
       }
     }
   }

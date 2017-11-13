@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ODATA_BASE_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from '../../environments/app.constants';
-import { TipoProcedimento } from '../classi/entities/tipo-procedimento';
+import { TipoProcedimento } from '../classi/server-objects/entities/tipo-procedimento';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 import { Http } from '@angular/http';

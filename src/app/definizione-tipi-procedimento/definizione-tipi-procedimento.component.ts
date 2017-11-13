@@ -2,9 +2,10 @@ import { Component, OnInit, ViewChild, } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { DxDataGridComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedimento.service';
-import {TipoProcedimento} from "../classi/entities/tipo-procedimento";
-import {OdataContextDefinition} from "../classi/context/odata-context-definition";
+import {TipoProcedimento} from "../classi/server-objects/entities/tipo-procedimento";
+import {OdataContextDefinition} from "../context/odata-context-definition";
 import {Entities} from "../../environments/app.constants";
+import {OdataContextFactory} from "../context/odata-context-factory";
 
 //import { UtilityFunctions } from '../utility-functions';
 
@@ -18,6 +19,7 @@ export class DefinizioneTipiProcedimentoComponent {
 
   @ViewChild('grid') grid: DxDataGridComponent;
   public dataSource: DataSource;
+  private odataContextDefinition:OdataContextDefinition;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
   public texts: Object={
     editRow:"Modifica",
@@ -28,15 +30,18 @@ export class DefinizioneTipiProcedimentoComponent {
   }
 
 
+
+
   private loggaContesto(e: Object){
     // console.log(e);
 
   }
 
-  constructor(private service: DefinizioneTipiProcedimentoService, private odataContextDefinition:OdataContextDefinition) {
-    // this.dataSource = this.service.getTipiProcedimentoSource();
+  constructor(private odataContexFactory: OdataContextFactory, private service: DefinizioneTipiProcedimentoService) {
+
+    this.odataContextDefinition = odataContexFactory.buildOdataContextEntitiesDefinition();
     this.dataSource = new DataSource({
-      store: odataContextDefinition.getContext()[Entities.TipoProcedimento.name],
+      store: this.odataContextDefinition.getContext()[Entities.TipoProcedimento.name],
 
 
 /*      map: function (item) {

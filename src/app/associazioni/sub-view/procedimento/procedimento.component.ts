@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 import { ODATA_BASE_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from '../../../../environments/app.constants';
-import { TipoProcedimento } from '../../../classi/entities/tipo-procedimento';
-import { AziendaTipoProcedimento } from '../../../classi/entities/azienda-tipo-procedimento';
+import { TipoProcedimento } from '../../../classi/server-objects/entities/tipo-procedimento';
+import { AziendaTipoProcedimento } from '../../../classi/server-objects/entities/azienda-tipo-procedimento';
 
 @Component({
   selector: 'app-procedimento',

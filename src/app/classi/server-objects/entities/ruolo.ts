@@ -1,7 +1,7 @@
-import {Entity} from "../context/entity";
-export class AfferenzaStruttura extends Entity {
+import {Entity} from "../../../context/entity";
+export class Ruolo extends Entity {
   id: number;
-  descrizione: string;
+  titolo: string;
 
   public static getOdataContextEntity(): any {
     return {
@@ -9,8 +9,12 @@ export class AfferenzaStruttura extends Entity {
       keyType: "Int32",
       fieldTypes: {
         id: "Int32",
-        descrizione: "String"
+        titolo: "String"
       }
     }
+  }
+
+  constructor(){
+    super();
   }
 }

@@ -3,6 +3,7 @@ import {DEFAULT_INTERRUPTSOURCES, Idle} from "@ng-idle/core";
 import {Keepalive} from "@ng-idle/keepalive";
 import {Router} from "@angular/router";
 import {SessionManager} from "../login/session-manager";
+import {OdataContextDefinition} from "../context/odata-context-definition";
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,7 @@ import {SessionManager} from "../login/session-manager";
 export class HomeComponent implements OnInit {
 
   constructor(private sessionManager: SessionManager){
-    sessionManager.setExpireTokenOnIdle(10);
+    sessionManager.setExpireTokenOnIdle(100);
   }
   ngOnInit() {
   }

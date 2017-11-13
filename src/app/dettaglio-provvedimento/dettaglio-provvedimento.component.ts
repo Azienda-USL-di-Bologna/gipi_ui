@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { DefinizioneTipiProcedimentoService } from '../definizione-tipi-procedimento/definizione-tipi-procedimento.service';
-import { TipoProcedimento } from '../classi/entities/tipo-procedimento';
-import { SharedData } from '../classi/context/shared-data';
+import { TipoProcedimento } from '../classi/server-objects/entities/tipo-procedimento';
+import { SharedData } from '../context/shared-data';
 // import {Azienda, AZIENDE} from '../classi/aziende';
 import 'rxjs/add/operator/toPromise';
 import DataSource from 'devextreme/data/data_source';
-import {OdataContextDefinition} from "../classi/context/odata-context-definition";
-import {Azienda} from "../classi/entities/azienda";
+import {OdataContextDefinition} from "../context/odata-context-definition";
+import {Azienda} from "../classi/server-objects/entities/azienda";
 import {Entities} from "../../environments/app.constants";
+import {OdataContextFactory} from "../context/odata-context-factory";
 
 @Component({
     selector: 'app-dettaglio-provvedimento',
@@ -17,16 +18,18 @@ import {Entities} from "../../environments/app.constants";
 })
 export class DettaglioProvvedimentoComponent implements OnInit {
     private aziendeDatasource: DataSource;
+    private odataContextDefinition: OdataContextDefinition;
     procedimento: TipoProcedimento;
     // aziende: Azienda[];
     aziende: Array<Azienda>;
     router: Router;
 
-    constructor(private service: DefinizioneTipiProcedimentoService, router: Router, private sharedData: SharedData, private odataContextDefinition: OdataContextDefinition) {
+    constructor(private service: DefinizioneTipiProcedimentoService, router: Router, private sharedData: SharedData, private odataContexFactory: OdataContextFactory) {
         this.router = router;
         this.procedimento = service.selectedRow;
+        this.odataContextDefinition = odataContexFactory.buildOdataContextEntitiesDefinition();
         this.aziendeDatasource = new DataSource({
-            store: odataContextDefinition.getContext()[Entities.Azienda.name],
+            store: this.odataContextDefinition.getContext()[Entities.Azienda.name],
             expand: ["aziendaTipoProcedimentoList"]
         });
         this.aziendeDatasource.load().done(res => {this.aziende = res; this.getAziendeAssociate()});

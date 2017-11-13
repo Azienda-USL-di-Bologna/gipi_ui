@@ -1,7 +1,9 @@
-import {Entity, OdataForeignKey} from "../context/entity";
+import {Entity} from "../../../context/entity";
 import {AfferenzaStruttura} from "./afferenza-struttura";
 import {Struttura} from "./struttura";
 import {Utente} from "./utente";
+import {Entities} from "../../../../environments/app.constants";
+import {OdataForeignKey} from "../../../context/server-object";
 
 export class UtenteStruttura extends Entity {
   id: number;
@@ -15,9 +17,9 @@ export class UtenteStruttura extends Entity {
       keyType: "Int32",
       fieldTypes: {
         id: "Int32",
-        idAfferenzaStruttura: new OdataForeignKey(AfferenzaStruttura, "id"),
-        idStruttura: new OdataForeignKey(Struttura, "id"),
-        idUtente: new OdataForeignKey(Utente, "id")
+        idAfferenzaStruttura: new OdataForeignKey(Entities.AfferenzaStruttura, "id"),
+        idStruttura: new OdataForeignKey(Entities.Struttura, "id"),
+        idUtente: new OdataForeignKey(Entities.Utente, "id")
       }
     }
   }
