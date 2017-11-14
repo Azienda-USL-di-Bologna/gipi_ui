@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { Router } from '@angular/router';
-import { SharedData } from '../classi/context/shared-data';
-import {OdataContextDefinition} from "../classi/context/odata-context-definition";
-import { Entities } from "../classi/context/context-utils";
-import { Struttura } from "../classi/entities/struttura";
+import { SharedData } from "context/shared-data";
+import {OdataContextDefinition} from "context/odata-context-definition";
 import ODataStore from 'devextreme/data/odata/store';
+import {Struttura} from "../classi/server-objects/entities/struttura";
 
 @Component({
   selector: 'app-struttura-tipi-procedimento',
@@ -14,7 +13,7 @@ import ODataStore from 'devextreme/data/odata/store';
 })
 export class StrutturaTipiProcedimentoComponent implements OnInit {
 
-  private datasource: DataSource;
+  public datasource: DataSource;
   public strutture: Struttura = new Struttura();
   
   constructor(private sharedData: SharedData, private odataContextDefinition: OdataContextDefinition, private router: Router) {
