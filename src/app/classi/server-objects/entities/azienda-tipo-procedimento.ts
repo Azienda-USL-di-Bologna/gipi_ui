@@ -1,9 +1,9 @@
 import {Azienda} from "./azienda";
 import {TipoProcedimento} from "./tipo-procedimento";
 import {Titolo} from "./titolo";
-import {OdataForeignKey} from "context/server-object";
+import {OdataForeignKey} from "@bds/nt-angular-context/server-object";
 import {Entities} from "../../../../environments/app.constants";
-import {Entity} from "context/entity";
+import {Entity} from "@bds/nt-angular-context/entity";
 export class AziendaTipoProcedimento extends Entity {
     id: number;
     dataFine: Date;

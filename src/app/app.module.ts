@@ -48,7 +48,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {MomentModule} from "angular2-moment";
 import {NgIdleKeepaliveModule} from "@ng-idle/keepalive";
 import {SessionManager} from "./login/session-manager";
-import {ContextModule} from "context/context.module";
+import {ContextModule} from "@bds/nt-angular-context/context.module";
 import {contextModuleConfig} from "./module-configurations";
 
 @NgModule({
