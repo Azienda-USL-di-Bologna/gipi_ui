@@ -36,6 +36,8 @@ import { AssociaComponent } from './associazioni/sub-view/associa/associa.compon
 import { ProcedimentoComponent } from './associazioni/sub-view/procedimento/procedimento.component';
 import { AssociaDirective } from './associazioni/directives/associa.directive';
 import { AlberoStruttureComponent } from './associazioni/sub-view/albero-strutture/albero-strutture.component';
+import { StrutturaTipiProcedimentoComponent } from './struttura-tipi-procedimento/struttura-tipi-procedimento.component';
+
 import {AuthenticationJwtModule} from "./authentication-jwt/authentication-jwt.module";
 import { LoginComponent } from './login/login.component';
 import {NoLoginGuard} from "./login/guards/no-login.guard";
@@ -62,6 +64,7 @@ import {contextModuleConfig} from "./module-configurations";
         AssociaDirective,
         AssociazioniComponent,
         AlberoStruttureComponent,
+        StrutturaTipiProcedimentoComponent,
         LoginComponent
     ],
     imports: [
