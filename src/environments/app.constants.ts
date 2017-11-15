@@ -8,7 +8,7 @@ import {TipoProcedimento} from "../app/classi/server-objects/entities/tipo-proce
 import {Ruolo} from "../app/classi/server-objects/entities/ruolo";
 import {AziendaTipoProcedimento} from "../app/classi/server-objects/entities/azienda-tipo-procedimento";
 import {Titolo} from "../app/classi/server-objects/entities/titolo";
-import {ServerObjectsDescriptor} from "context/context-module-config";
+import {ServerObjectsDescriptor} from "@bds/nt-angular-context/context-module-config";
 
 export const Entities: ServerObjectsDescriptor = {
     Azienda: {name: "Aziendas", class: Azienda},

@@ -1,4 +1,4 @@
-import {Entity} from "context/entity";
+import {Entity} from "@bds/nt-angular-context/entity";
 export class Titolo extends Entity {
     idTitolo: number;
     nomeTitolo: string;

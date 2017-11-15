@@ -4,14 +4,14 @@ import { Router } from '@angular/router';
 import {AziendaTipoProcedimento} from '../classi/server-objects/entities/azienda-tipo-procedimento';
 import {DxFormComponent} from 'devextreme-angular';
 import {TipoProcedimento} from '../classi/server-objects/entities/tipo-procedimento';
-import { SharedData } from 'context/shared-data';
-import {OdataContextDefinition} from "context/odata-context-definition";
+import { SharedData } from '@bds/nt-angular-context/shared-data';
+import {OdataContextDefinition} from "@bds/nt-angular-context/odata-context-definition";
 import {Azienda} from "../classi/server-objects/entities/azienda";
 import notify from 'devextreme/ui/notify';
 import {Entities} from "../../environments/app.constants";
-import {Entity} from "context/entity";
+import {Entity} from "@bds/nt-angular-context/entity";
 import {custom} from "devextreme/ui/dialog";
-import {OdataContextFactory} from "context/odata-context-factory";
+import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
 
 @Component({
     selector: 'app-aziende-tipi-procedimento',

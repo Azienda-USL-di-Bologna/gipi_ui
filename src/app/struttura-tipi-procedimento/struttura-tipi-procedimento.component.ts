@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { Router } from '@angular/router';
-import { SharedData } from "context/shared-data";
-import {OdataContextDefinition} from "context/odata-context-definition";
+import { SharedData } from "@bds/nt-angular-context/shared-data";
+import {OdataContextDefinition} from "@bds/nt-angular-context/odata-context-definition";
 import ODataStore from 'devextreme/data/odata/store';
 import {Struttura} from "../classi/server-objects/entities/struttura";
 

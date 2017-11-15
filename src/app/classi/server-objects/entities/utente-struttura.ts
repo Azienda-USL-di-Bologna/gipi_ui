@@ -1,9 +1,9 @@
-import {Entity} from "context/entity";
+import {Entity} from "@bds/nt-angular-context/entity";
 import {AfferenzaStruttura} from "./afferenza-struttura";
 import {Struttura} from "./struttura";
 import {Utente} from "./utente";
 import {Entities} from "../../../../environments/app.constants";
-import {OdataForeignKey} from "context/server-object";
+import {OdataForeignKey} from "@bds/nt-angular-context/server-object";
 
 export class UtenteStruttura extends Entity {
   id: number;
