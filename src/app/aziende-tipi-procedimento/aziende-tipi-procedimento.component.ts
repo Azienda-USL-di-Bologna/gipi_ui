@@ -27,6 +27,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     public aziendaTipoProcedimento: AziendaTipoProcedimento = new AziendaTipoProcedimento();
     public initialAziendaTipoProcedimento: AziendaTipoProcedimento;
     private odataContextEntitiesDefinition: OdataContextDefinition;
+    private dataSourceClassificazione: DataSource;
 
     // settaggio variabili per impaginazione dati del form
     labelLocation: string;
@@ -73,6 +74,12 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         this.setNuovaAssociazione();
         this.buildAziendaTipoProcedimento(true);
 
+        console.log('999 shared object:', this.sharedData)
+        this.dataSourceClassificazione = new DataSource({
+            store: this.odataContextEntitiesDefinition.getContext()[Entities.Titolo.name],
+            filter: [['idAzienda', '=', this.sharedData.getSharedObject()["DettaglioProvvedimentoComponent"]["azienda"]["id"]]]
+        })
+        this.dataSourceClassificazione.load();
         //LE INFO NECESSARIE A POPOLARE QUESTI DUE HEADER VENGONO SCRITTE NELLO SharedData DALLA VIDEATA dettaglio-provvedimento
     }
 
