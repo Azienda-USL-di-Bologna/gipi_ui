@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { Router } from '@angular/router';
 import { SharedData } from "@bds/nt-angular-context/shared-data";
@@ -7,6 +7,7 @@ import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory
 import ODataStore from 'devextreme/data/odata/store';
 import { Struttura } from "../classi/server-objects/entities/struttura";
 import { FunctionsImport } from "../../environments/app.constants";
+
 
 @Component({
   selector: 'app-struttura-tipi-procedimento',
@@ -19,6 +20,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   public strutture: Struttura = new Struttura();
   private odataContextDefinition;
   private contextMenuItems;
+  private nodeSelectedFromContextMenu : any;
+  @ViewChild("treeView") treeView: any;
 
   constructor(private sharedData: SharedData, private odataContextFactory: OdataContextFactory, private router: Router) {
 
@@ -52,14 +55,25 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   }
 
+  //Questo evento scatta quando clicchiamo sul nodo dell'albero per far aprire il menu contestuale: in questo momento ci salviamo il nodo cliccato
   openContextMenu(e) { 
-    // console.log("Menu contestuale");
-    // console.log(e);
+    this.nodeSelectedFromContextMenu = e.itemData;
+    //this.abilitaRicorsione = true;
   }
 
+  //Questo scatta quando clicchiamo sulla voce del menu contestuale "Espandi..."
   contextualItemClick(e) { 
-    console.log("Menu contestuale cliccato");
-    console.log(e);
+  
+    //FUNZIONE CHE SELEZIONA TUTTI I FIGLI
+    console.log(this.datasource);
+
+    
+    this.treeView.selectNodesRecursive = true;
+    this.treeView.instance.selectItem(this.nodeSelectedFromContextMenu.id);
+    this.treeView.selectNodesRecursive = false;
+
+    this.nodeSelectedFromContextMenu.selected = true;
+    
   }
 
   screen(width) {
@@ -77,5 +91,11 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   // private treeItemSelectionChanged(e) {
   //   this.emitTreeNodeSelected.emit(e.node);
   // }
+
+  private setSelectedNodeRecursively(node : any) : void {
+
+    // this.node.item
+  
+  }
 
 }
