@@ -20,7 +20,8 @@ import {
     DxDateBoxModule,
     DxCheckBoxModule,
     DxTextAreaModule,
-    DxTreeViewModule
+    DxTreeViewModule,
+    DxContextMenuModule
 } from 'devextreme-angular';
 
 import {RouterModule} from '@angular/router';
@@ -85,6 +86,7 @@ import {contextModuleConfig} from "./module-configurations";
         DxTextAreaModule,
         HttpModule,
         DxTreeViewModule,
+        DxContextMenuModule,
         AuthenticationJwtModule,
         FormsModule,
         HttpClientModule,

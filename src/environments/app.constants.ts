@@ -8,7 +8,8 @@ import {TipoProcedimento} from "../app/classi/server-objects/entities/tipo-proce
 import {Ruolo} from "../app/classi/server-objects/entities/ruolo";
 import {AziendaTipoProcedimento} from "../app/classi/server-objects/entities/azienda-tipo-procedimento";
 import {Titolo} from "../app/classi/server-objects/entities/titolo";
-import {ServerObjectsDescriptor} from "@bds/nt-angular-context/context-module-config";
+import { ServerObjectsDescriptor } from "@bds/nt-angular-context/context-module-config";
+import {GetStruttureByTipoProcedimento} from "../app/classi/server-objects/functions-import/get-strutture-by-tipo-procedimento";
 
 export const Entities: ServerObjectsDescriptor = {
     Azienda: {name: "Aziendas", class: Azienda},
@@ -22,6 +23,9 @@ export const Entities: ServerObjectsDescriptor = {
     Titolo: {name: "Titolos", class: Titolo}
 }
 
+export const FunctionsImport: ServerObjectsDescriptor = {
+    GetStruttureByTipoProcedimento: {name: "GetStruttureByTipoProcedimento", class: GetStruttureByTipoProcedimento}
+}    
 
 // header http
 export const HEADER_AUTH_TOKEN_NAME = 'authorization';
