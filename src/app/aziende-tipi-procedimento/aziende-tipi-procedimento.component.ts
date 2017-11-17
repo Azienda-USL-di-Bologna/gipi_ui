@@ -12,6 +12,8 @@ import {Entities} from "../../environments/app.constants";
 import {Entity} from "@bds/nt-angular-context/entity";
 import {custom} from "devextreme/ui/dialog";
 import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
+import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
+
 
 @Component({
     selector: 'app-aziende-tipi-procedimento',
@@ -26,7 +28,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     private dataFromDettaglioProcedimentoComponent;
     public aziendaTipoProcedimento: AziendaTipoProcedimento = new AziendaTipoProcedimento();
     public initialAziendaTipoProcedimento: AziendaTipoProcedimento;
-    private odataContextEntitiesDefinition: OdataContextDefinition;
+    private odataContextEntitiesAziendaTipoProcedimento: OdataContextDefinition;
     private dataSourceClassificazione: DataSource;
 
     // settaggio variabili per impaginazione dati del form
@@ -53,7 +55,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
 
     @ViewChild(DxFormComponent) myform: DxFormComponent;
 
-    constructor(private odataContexFactory: OdataContextFactory, private sharedData: SharedData, private router: Router) {
+    constructor(private odataContextFactory: OdataContextFactory, private sharedData: SharedData, private router: Router) {
 
         this.labelLocation = 'left';
         this.readOnly = false;
@@ -62,9 +64,9 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         this.maxColWidth = 200;
         this.colCount = 1;
 
-        this.odataContextEntitiesDefinition = this.odataContexFactory.buildOdataContextEntitiesDefinition();
+        this.odataContextEntitiesAziendaTipoProcedimento = this.odataContextFactory.buildOdataContextEntitiesDefinition();
         this.datasource = new DataSource({
-            store: this.odataContextEntitiesDefinition.getContext()[Entities.AziendaTipoProcedimento.name]
+            store: this.odataContextEntitiesAziendaTipoProcedimento.getContext()[Entities.AziendaTipoProcedimento.name]
                 .on("modifying", () => {console.log("modified")})
                 .on("modified", () => {console.log("modified")}),
             expand: ['idAzienda', 'idTipoProcedimento', 'idTitolo'],
@@ -74,12 +76,26 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         this.setNuovaAssociazione();
         this.buildAziendaTipoProcedimento(true);
 
-        console.log('999 shared object:', this.sharedData)
+        const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+        const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nomeTitolo");
+        customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
+
         this.dataSourceClassificazione = new DataSource({
-            store: this.odataContextEntitiesDefinition.getContext()[Entities.Titolo.name],
+            store: oataContextDefinitionTitolo.getContext()[Entities.Titolo.name].on('loading', (loadOptions) =>{
+                loadOptions.userData['customLoadingFilterParams'] = customLoadingFilterParams;
+                oataContextDefinitionTitolo.customLoading(loadOptions);
+            }),
             filter: [['idAzienda', '=', this.sharedData.getSharedObject()["DettaglioProvvedimentoComponent"]["azienda"]["id"]]]
-        })
-        this.dataSourceClassificazione.load();
+        });
+        //this.dataSourceClassificazione.load();
+
+        /*
+            this.dataSourceClassificazione = new DataSource({
+                store: this.odataContextEntitiesDefinition.getContext()[Entities.Titolo.name],
+                filter: [['idAzienda', '=', this.sharedData.getSharedObject()["DettaglioProvvedimentoComponent"]["azienda"]["id"]]]
+            })
+            this.dataSourceClassificazione.load();
+        */
         //LE INFO NECESSARIE A POPOLARE QUESTI DUE HEADER VENGONO SCRITTE NELLO SharedData DALLA VIDEATA dettaglio-provvedimento
     }
 
