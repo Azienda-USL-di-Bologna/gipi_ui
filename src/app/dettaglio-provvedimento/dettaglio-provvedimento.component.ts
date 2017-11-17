@@ -32,7 +32,7 @@ export class DettaglioProvvedimentoComponent implements OnInit {
             store: this.odataContextDefinition.getContext()[Entities.Azienda.name],
             expand: ["aziendaTipoProcedimentoList"]
         });
-        this.aziendeDatasource.load().done(res => {this.aziende = res; this.getAziendeAssociate()});
+        this.aziendeDatasource.load().then(res => {this.aziende = res; this.getAziendeAssociate()});
         // this.getAziendeAssociate();
     }
 

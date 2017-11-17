@@ -58,7 +58,7 @@ export class ProcedimentoComponent implements OnInit {
       expand: ['idAzienda', 'idTipoProcedimento', 'idTitolo'],
       filter: [['idTipoProcedimento.idTipoProcedimento', '=', 1], ['idAzienda.id', '=', 2]],
     });
-    this.dataSource.load().done(res => console.log(res));
+    this.dataSource.load().then(res => console.log(res));
     // console.log(this.dataSource);
   }
 

@@ -79,7 +79,7 @@ export class AssociazioniComponent implements OnInit {
       //   return item;
       // }
     });
-    this.aziende.load().done(res => {
+    this.aziende.load().then(res => {
       console.log('RES: ', res);
     });
   }

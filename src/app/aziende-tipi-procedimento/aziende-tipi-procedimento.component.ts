@@ -144,7 +144,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
             this.datasource.filter([
                 ["idTipoProcedimento.idTipoProcedimento", "=", tipoProcedimentoDefault.idTipoProcedimento],
                 ["idAzienda.id", "=", azienda.id]]);
-            this.datasource.load().done(res => {
+            this.datasource.load().then(res => {
                 // this.aziendaTipoProcedimento = res[0] as AziendaTipoProcedimento;
                 this.aziendaTipoProcedimento.build(res[0], AziendaTipoProcedimento);
                 this.setFields(tipoProcedimentoDefault);

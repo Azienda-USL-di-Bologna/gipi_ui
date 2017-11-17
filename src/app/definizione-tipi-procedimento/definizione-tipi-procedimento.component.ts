@@ -54,7 +54,7 @@ export class DefinizioneTipiProcedimentoComponent {
         return item;
       }*/
     });
-    this.dataSource.load().done(res => this.buildTipiProcedimento(res))
+    this.dataSource.load().then(res => this.buildTipiProcedimento(res))
     //debugger;
     // console.log(this.dataSource);
 
