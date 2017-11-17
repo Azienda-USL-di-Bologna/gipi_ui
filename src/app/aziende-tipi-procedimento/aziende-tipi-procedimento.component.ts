@@ -27,7 +27,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     public aziendaTipoProcedimento: AziendaTipoProcedimento = new AziendaTipoProcedimento();
     public initialAziendaTipoProcedimento: AziendaTipoProcedimento;
     private odataContextEntitiesDefinition: OdataContextDefinition;
-    private dataSourceClassificazione: DataSource;
+    public dataSourceClassificazione: DataSource;
 
     // settaggio variabili per impaginazione dati del form
     labelLocation: string;

@@ -19,7 +19,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   public datasource: DataSource;
   public strutture: Struttura = new Struttura();
   private odataContextDefinition;
-  private contextMenuItems;
+  public contextMenuItems;
   private nodeSelectedFromContextMenu : any;
   @ViewChild("treeView") treeView: any;
 
