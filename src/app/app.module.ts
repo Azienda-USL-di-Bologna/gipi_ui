@@ -21,7 +21,8 @@ import {
     DxCheckBoxModule,
     DxTextAreaModule,
     DxTreeViewModule,
-    DxContextMenuModule
+    DxContextMenuModule,
+    DxLookupModule
 } from 'devextreme-angular';
 
 import {RouterModule} from '@angular/router';
@@ -84,6 +85,7 @@ import {contextModuleConfig} from "./module-configurations";
         DxDateBoxModule,
         DxCheckBoxModule,
         DxTextAreaModule,
+        DxLookupModule,
         HttpModule,
         DxTreeViewModule,
         DxContextMenuModule,
