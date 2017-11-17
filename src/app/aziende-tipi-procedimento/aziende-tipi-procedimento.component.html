@@ -40,7 +40,7 @@ DELLA RISOLUZIONE
                         <!--<ng-template #elseBlock> <dxi-item itemType="empty"></dxi-item></ng-template>-->
                         <!--<dxi-item dataField="obbligoEsitoConclusivo" editorType="dxSwitch" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>-->
                         <dxi-item dataField="obbligoEsitoConclusivo" editorType="dxCheckBox" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>
-                        <dxi-item dataField="Classificazione" editorType="dxLookup" [editorOptions]="{ 
+                        <dxi-item itemType="simple" dataField="Classificazione" editorType="dxLookup" [editorOptions]="{ 
                             dataSource: dataSourceClassificazione, 
                             displayExpr: 'nomeTitolo', 
                             closeOnOutsideClick: true, 
