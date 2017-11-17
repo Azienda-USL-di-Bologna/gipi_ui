@@ -22,6 +22,6 @@ export const rootRouterConfig: Routes = [
   { path: 'app-dettaglio-provvedimento', component: DettaglioProvvedimentoComponent, canActivate: [LoginGuard]},
   { path: 'aziende-tipi-procedimento', component: AziendeTipiProcedimentoComponent, canActivate: [LoginGuard]},
   { path: 'associazioni', component: AssociazioniComponent, canActivate: [LoginGuard]},
-{ path: 'struttura-tipi-procedimento', component: StrutturaTipiProcedimentoComponent}
+  { path: 'struttura-tipi-procedimento', component: StrutturaTipiProcedimentoComponent, canActivate: [LoginGuard]}
 ];
 

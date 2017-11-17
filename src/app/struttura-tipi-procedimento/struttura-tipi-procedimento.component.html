@@ -51,11 +51,19 @@
         <div style="text-align:initial;display:inline-block;">
           <dx-text-box #textBox placeholder="Search" [width]="300" mode="search" valueChangeEvent="keyup" value="" style="margin-bottom:8px;"></dx-text-box>
           <div id="container-tree">
-            <dx-tree-view id="simple-treeview" [dataSource]="datasource" [height]="300" keyExpr="id" displayExpr="nome" dataStructure="plain" parentIdExpr="FK_id_struttura_padre"
-              [searchValue]="textBox.value"  showCheckBoxesMode="normal"  (onItemClick)="handleEvent('treeItemSelectionChanged', $event)"></dx-tree-view>
+            <dx-tree-view #treeView id="simple-treeview" [dataSource]="datasource" [height]="300" keyExpr="id" displayExpr="nome" dataStructure="plain" parentIdExpr="idStrutturaPadre"
+              [searchValue]="textBox.value"  showCheckBoxesMode="normal" [selectNodesRecursive]= "false"  (onItemClick)="handleEvent('treeItemSelectionChanged', $event)" 
+              (onItemContextMenu)="openContextMenu($event)" (onItemSelectionChanged)="caricamentoAlbero($event)" ></dx-tree-view>
           </div>
         </div>
       </div>
+
+      <dx-context-menu 
+        [dataSource]="contextMenuItems" 
+        [width]="200" 
+        target="#simple-treeview" 
+        (onItemClick)="contextualItemClick($event)">
+      </dx-context-menu>
 
     </dxi-item>
 
