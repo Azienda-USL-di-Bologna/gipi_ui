@@ -171,6 +171,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
 
     public formFieldDataChanged(event) {
         console.log("dataChanged: ", Entity.isEquals(this.aziendaTipoProcedimento, this.initialAziendaTipoProcedimento));
+        console.log('Event object: ', event)
         this.abilitaAnnulla = !Entity.isEquals(this.aziendaTipoProcedimento, this.initialAziendaTipoProcedimento);
         if (this.abilitaAnnulla)
             this.testoBottoneAnnulla = "Annulla";
@@ -253,5 +254,9 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
 
     onFormSubmit(e) {
         console.log(e);
+    }
+
+    public valueTitoloChanged(e){
+        console.log('Value Titolo Changed: ', e)
     }
 }
