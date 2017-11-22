@@ -40,18 +40,19 @@ import { AssociaDirective } from './associazioni/directives/associa.directive';
 import { AlberoStruttureComponent } from './associazioni/sub-view/albero-strutture/albero-strutture.component';
 import { StrutturaTipiProcedimentoComponent } from './struttura-tipi-procedimento/struttura-tipi-procedimento.component';
 
-import {AuthenticationJwtModule} from "./authentication-jwt/authentication-jwt.module";
+import {AuthenticationJwtModule} from './authentication-jwt/authentication-jwt.module';
 import { LoginComponent } from './login/login.component';
-import {NoLoginGuard} from "./login/guards/no-login.guard";
-import {LoginGuard} from "./login/guards/login.guard";
+import {NoLoginGuard} from './login/guards/no-login.guard';
+import {LoginGuard} from './login/guards/login.guard';
 
-import { FormsModule } from "@angular/forms";
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import {MomentModule} from "angular2-moment";
-import {NgIdleKeepaliveModule} from "@ng-idle/keepalive";
-import {SessionManager} from "./login/session-manager";
-import {ContextModule} from "@bds/nt-angular-context/context.module";
-import {contextModuleConfig} from "./module-configurations";
+import {MomentModule} from 'angular2-moment';
+import {NgIdleKeepaliveModule} from '@ng-idle/keepalive';
+import {SessionManager} from './login/session-manager';
+import {ContextModule} from '@bds/nt-angular-context/context.module';
+import {contextModuleConfig} from './module-configurations';
+import { ProcedimentiAttiviComponent } from './procedimenti-attivi/procedimenti-attivi.component';
 
 @NgModule({
     declarations: [
@@ -67,7 +68,8 @@ import {contextModuleConfig} from "./module-configurations";
         AssociazioniComponent,
         AlberoStruttureComponent,
         StrutturaTipiProcedimentoComponent,
-        LoginComponent
+        LoginComponent,
+        ProcedimentiAttiviComponent
     ],
     imports: [
         BrowserModule,

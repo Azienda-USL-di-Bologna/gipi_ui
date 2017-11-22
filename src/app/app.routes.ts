@@ -7,9 +7,10 @@ import { DettaglioProvvedimentoComponent } from './dettaglio-provvedimento/detta
 import { AziendeTipiProcedimentoComponent } from './aziende-tipi-procedimento/aziende-tipi-procedimento.component';
 import { AssociazioniComponent } from './associazioni/associazioni.component';
 import { StrutturaTipiProcedimentoComponent } from './struttura-tipi-procedimento/struttura-tipi-procedimento.component';
-import {LoginComponent} from "./login/login.component";
-import {NoLoginGuard} from "./login/guards/no-login.guard";
-import {LoginGuard} from "./login/guards/login.guard";
+import {LoginComponent} from './login/login.component';
+import {NoLoginGuard} from './login/guards/no-login.guard';
+import {LoginGuard} from './login/guards/login.guard';
+import { ProcedimentiAttiviComponent } from 'app/procedimenti-attivi/procedimenti-attivi.component';
 
 
 
@@ -22,6 +23,7 @@ export const rootRouterConfig: Routes = [
   { path: 'app-dettaglio-provvedimento', component: DettaglioProvvedimentoComponent, canActivate: [LoginGuard]},
   { path: 'aziende-tipi-procedimento', component: AziendeTipiProcedimentoComponent, canActivate: [LoginGuard]},
   { path: 'associazioni', component: AssociazioniComponent, canActivate: [LoginGuard]},
-  { path: 'struttura-tipi-procedimento', component: StrutturaTipiProcedimentoComponent, canActivate: [LoginGuard]}
+  { path: 'struttura-tipi-procedimento', component: StrutturaTipiProcedimentoComponent},
+  { path: 'procedimenti-attivi', component: ProcedimentiAttiviComponent }
 ];
 
