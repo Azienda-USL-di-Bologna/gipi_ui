@@ -56,3 +56,17 @@
   flex-grow: initial !important;
   flex-basis: initial !important;
 }
+
+@media screen and (max-width: 1280px) {
+  /deep/ #gridContainer {
+    padding: 0;
+  }
+
+  /deep/ .dx-widget, /deep/ .dx-box-item-content {
+    font-size: 12px !important;
+  }
+
+  /deep/ .dx-datagrid .dx-row > td {
+    padding: 7px 3px;
+  }
+}
