@@ -75,7 +75,7 @@ export class ProcedimentiAttiviComponent {
   }
 
   // Calcolo la Width dei widget in base alla grandezza della finestra del browser.
-  calcWidth(divisore, responsive) {
+  calcWidth(divisore, responsive = false) {
     if (responsive && window.innerWidth < 1280)
       return "90%";
     return window.innerWidth / divisore;
