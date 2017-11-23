@@ -21,7 +21,8 @@ import {
     DxCheckBoxModule,
     DxTextAreaModule,
     DxTreeViewModule,
-    DxContextMenuModule
+    DxContextMenuModule,
+    DxLookupModule
 } from 'devextreme-angular';
 
 import {RouterModule} from '@angular/router';
@@ -86,6 +87,7 @@ import { StruttureTreeComponent } from "./reusable-component/strutture-tree/stru
         DxDateBoxModule,
         DxCheckBoxModule,
         DxTextAreaModule,
+        DxLookupModule,
         HttpModule,
         DxTreeViewModule,
         DxContextMenuModule,
