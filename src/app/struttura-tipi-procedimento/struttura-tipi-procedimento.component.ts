@@ -50,10 +50,6 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   constructor(private odataContextFactory: OdataContextFactory, private sharedData: SharedData, private router: Router) {
 
-    console.log("Header", this.sharedData.getSharedObject()["HeaderAzienda"]["headerAzienda"]);
-    this.headerTipoProcedimento = this.sharedData.getSharedObject()["HeaderTipoProcedimento"]["headerTipoProcedimento"];
-    this.headerAzienda = this.sharedData.getSharedObject()["HeaderAzienda"]["headerAzienda"];
-
     this.setDataFromDettaglioProcedimentoComponent();
     this.strutturaSelezionata = new Struttura();
     this.strutturaSelezionata.id = 10;
@@ -86,7 +82,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       idAziendaTipoProcedimento: 33,
       idAzienda: 5
     }
-  });*/
+  });
   this.setInitialValues();
   this.caricaDettaglioProcedimento();
  }
@@ -178,92 +174,92 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.headerTipoProcedimento = this.sharedData.getSharedObject()["HeaderTipoProcedimento"]["headerTipoProcedimento"];
+    this.headerAzienda = this.sharedData.getSharedObject()["HeaderAzienda"]["headerAzienda"];
   }
 
 
-  caricamentoAlbero(e) {
-    const value = e.node;
-  }
+  // caricamentoAlbero(e) {
+  //   const value = e.node;
+  // }
 
   /*Questo evento scatta quando clicchiamo sul nodo dell'albero per far aprire il menu contestuale
      in questo momento ci salviamo il nodo cliccato */
-  openContextMenu(e) {
-    this.nodeSelectedFromContextMenu = e.itemData;
-    // this.abilitaRicorsione = true;
-  }
+  // openContextMenu(e) {
+  //   this.nodeSelectedFromContextMenu = e.itemData;
+  //   // this.abilitaRicorsione = true;
+  // }
 
-  // Questo scatta quando clicchiamo sulla voce del menu contestuale "Espandi..."
-  contextualItemClick(e) {
 
    // this.treeView.selectNodesRecursive = true;
   //Questo scatta quando clicchiamo sulla voce del menu contestuale "Espandi..."
-  contextualItemClick(e) {
+  // contextualItemClick(e) {
 
-    //FUNZIONE CHE SELEZIONA TUTTI I FIGLI
-    console.log(this.datasource);
+  //   //FUNZIONE CHE SELEZIONA TUTTI I FIGLI
+  //   console.log(this.datasource);
 
 
-    this.treeView.selectNodesRecursive = true;
-    this.treeView.instance.selectItem(this.nodeSelectedFromContextMenu.id);
-   // this.treeView.selectNodesRecursive = false;
+  //   this.treeView.selectNodesRecursive = true;
+  //   this.treeView.instance.selectItem(this.nodeSelectedFromContextMenu.id);
+  //  // this.treeView.selectNodesRecursive = false;
 
-    this.nodeSelectedFromContextMenu.selected = true;
+  //   this.nodeSelectedFromContextMenu.selected = true;
 
-    // console.log('VAL: ' + this.nodeSelectedFromContextMenu.id);
-  }
+  //   // console.log('VAL: ' + this.nodeSelectedFromContextMenu.id);
+  // }
 
   screen(width) {
     return (width < 700) ? "sm" : "lg";
   }
 
-  handleEvent(eventName: string, e: Event) {
-    switch (eventName) {
-      // case 'treeItemSelectionChanged':
-      //   this.treeItemSelectionChanged(e);
-      //   break;
-    }
-  }
+  // handleEvent(eventName: string, e: Event) {
+  //   switch (eventName) {
+  //     // case 'treeItemSelectionChanged':
+  //     //   this.treeItemSelectionChanged(e);
+  //     //   break;
+  //   }
+  // }
 
   // private treeItemSelectionChanged(e) {
   //   this.emitTreeNodeSelected.emit(e.node);
   // }
 
-  private setSelectedNodeRecursively(node: any): void {
-    // this.node.item
-      console.log("item: " + node);
-      const res = this.getNestedChildren(this.datasource.items(), node.id);
+  // private setSelectedNodeRecursively(node: any): void {
+  //   // this.node.item
+  //     console.log("item: " + node);
+  //     const res = this.getNestedChildren(this.datasource.items(), node.id);
 
-      console.log("TREE");
-      res.forEach(function (element) {
-          element.selected = true;
-          console.log(element.nome);
-      });
-  }
+  //     console.log("TREE");
+  //     res.forEach(function (element) {
+  //         element.selected = true;
+  //         console.log(element.nome);
+  //     });
+  // }
 
-    private getNestedChildren(inputArray, selectedNode) {
-    const result = []
-    for (const i in inputArray) {
-        if (inputArray[i].idStrutturaPadre === selectedNode) {
-             this.getNestedChildren(inputArray, inputArray[i].id);
-            this.treeView.instance.selectItem(inputArray[i].id);
-            result.push(inputArray[i]);
-        }
-    }
-    return result;
-    }
+  //   private getNestedChildren(inputArray, selectedNode) {
+  //   const result = []
+  //   for (const i in inputArray) {
+  //       if (inputArray[i].idStrutturaPadre === selectedNode) {
+  //            this.getNestedChildren(inputArray, inputArray[i].id);
+  //           this.treeView.instance.selectItem(inputArray[i].id);
+  //           result.push(inputArray[i]);
+  //       }
+  //   }
+  //   return result;
+  //   }
 
-    private esegui() {
-      const res = this.datasource.items();
-        res.forEach(function (element) {
-            if (element.selected === true) {
-                console.log(element.nome);
-            }
-        });
-    }
+  //   private esegui() {
+  //     const res = this.datasource.items();
+  //       res.forEach(function (element) {
+  //           if (element.selected === true) {
+  //               console.log(element.nome);
+  //           }
+  //       });
+  //   }
 
-    private setInitialState() {
-         this.initialState = this.datasource.items();
-    }
+    // private setInitialState() {
+    //      this.initialState = this.datasource.items();
+    // }
 }
 
 
