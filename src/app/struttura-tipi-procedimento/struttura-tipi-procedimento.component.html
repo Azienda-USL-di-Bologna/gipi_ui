@@ -58,9 +58,10 @@
 
     <dxi-item class="left-side-bar item">
       <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
-
+        <strutture-tree [idAzienda]="5" [idAziendaTipoProcedimento]="55" [readOnly]="false" [enableCheckRecursively]="false"></strutture-tree>
       <div style="text-align:center">
         <div style="text-align:initial;display:inline-block;">
+
           <dx-text-box #textBox placeholder="Search" [width]="300" mode="search" valueChangeEvent="keyup" value="" style="margin-bottom:8px;"></dx-text-box>
           <div id="container-tree">
             <dx-tree-view #treeView id="simple-treeview" [dataSource]="datasource" [height]="300" keyExpr="id" displayExpr="nome" dataStructure="plain" parentIdExpr="idStrutturaPadre"
@@ -103,7 +104,7 @@
           <dx-button class="padding-button" (onClick)="bottoneAnnulla()" text="Annulla" hint="Annulla le modifiche"></dx-button>
         </dxi-item>
       </dx-responsive-box>
+      </dxi-item>
     </dxi-item>
-
   </dx-responsive-box>
 </div>

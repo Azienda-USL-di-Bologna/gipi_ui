@@ -30,7 +30,7 @@ export const FunctionsImport: ServerObjectsDescriptor = {
 }
 
 // header http
-export const HEADER_AUTH_TOKEN_NAME = 'authorization';
+export const HEADER_AUTH_TOKEN_NAME = "authorization";
 
 // ========================= Url =====================================
 export const ODATA_BASE_URL: string = environment.odataStoreRootUrl;

@@ -52,6 +52,7 @@ import {NgIdleKeepaliveModule} from '@ng-idle/keepalive';
 import {SessionManager} from './login/session-manager';
 import {ContextModule} from '@bds/nt-angular-context/context.module';
 import {contextModuleConfig} from './module-configurations';
+import { StruttureTreeComponent } from "./reusable-component/strutture-tree/strutture-tree.component";
 import { ProcedimentiAttiviComponent } from './procedimenti-attivi/procedimenti-attivi.component';
 
 @NgModule({
@@ -69,6 +70,7 @@ import { ProcedimentiAttiviComponent } from './procedimenti-attivi/procedimenti-
         AlberoStruttureComponent,
         StrutturaTipiProcedimentoComponent,
         LoginComponent,
+        StruttureTreeComponent,
         ProcedimentiAttiviComponent
     ],
     imports: [

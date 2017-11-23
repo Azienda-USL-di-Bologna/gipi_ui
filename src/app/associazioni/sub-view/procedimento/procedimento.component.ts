@@ -55,8 +55,8 @@ export class ProcedimentoComponent implements OnInit {
         // console.log(aziendaTipoProcedimento);
         return item;
       },
-      expand: ['idAzienda', 'idTipoProcedimento', 'idTitolo'],
-      filter: [['idTipoProcedimento.idTipoProcedimento', '=', 1], ['idAzienda.id', '=', 2]],
+      expand: ['idAzienda', 'idAziendaTipoProcedimento', 'idTitolo'],
+      filter: [['idTipoProcedimento.idAziendaTipoProcedimento', '=', 1], ['idAzienda.id', '=', 2]],
     });
     this.dataSource.load().then(res => console.log(res));
     // console.log(this.dataSource);
@@ -64,7 +64,7 @@ export class ProcedimentoComponent implements OnInit {
 
   insertTipoProcedimento(procedimento : TipoProcedimento) {
     // let aziendaProcedimento : AziendaTipoProcedimento = new AziendaTipoProcedimento();
-    // aziendaProcedimento.idTipoProcedimento = 3;
+    // aziendaProcedimento.idAziendaTipoProcedimento = 3;
     // aziendaProcedimento.idAzienda = 7;
     let dataStore :ODataStore = this.dataSource.store() as ODataStore;
     dataStore.insert(procedimento);

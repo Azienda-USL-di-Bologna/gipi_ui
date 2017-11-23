@@ -48,7 +48,7 @@ export class DettaglioProvvedimentoComponent implements OnInit {
     }
 
     // getAziendeAssociate() {
-    //     this.service.getAziendeAssociateRequest(this.procedimento.idTipoProcedimento.toString())
+    //     this.service.getAziendeAssociateRequest(this.procedimento.idAziendaTipoProcedimento.toString())
     //         .toPromise()
     //         .then(response => {
     //           // this.aziende = AZIENDE;

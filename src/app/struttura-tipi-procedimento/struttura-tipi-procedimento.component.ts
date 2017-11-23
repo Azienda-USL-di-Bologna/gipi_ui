@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
-import { Router } from '@angular/router';
+import {Component, Input, OnInit, ViewChild} from "@angular/core";
+import DataSource from "devextreme/data/data_source";
+import { Router } from "@angular/router";
 import { SharedData } from '@bds/nt-angular-context/shared-data';
 import { OdataContextDefinition } from '@bds/nt-angular-context/odata-context-definition';
 import {OdataContextFactory} from '@bds/nt-angular-context/odata-context-factory';
-import ODataStore from 'devextreme/data/odata/store';
+import ODataStore from "devextreme/data/odata/store";
 import { Struttura } from '../classi/server-objects/entities/struttura';
 import { FunctionsImport, Entities } from '../../environments/app.constants';
 import { OdataContextEntitiesDefinition } from '@bds/nt-angular-context/odata-context-entities-definition';
@@ -13,12 +13,13 @@ import { Procedimento } from 'app/classi/server-objects/entities/procedimento';
 import { Entity } from '@bds/nt-angular-context/entity';
 import notify from 'devextreme/ui/notify';
 import { CustomLoadingFilterParams } from '@bds/nt-angular-context/custom-loading-filter-params';
+import {forEach} from "@angular/router/src/utils/collection";
 
 
 @Component({
-  selector: 'app-struttura-tipi-procedimento',
-  templateUrl: './struttura-tipi-procedimento.component.html',
-  styleUrls: ['./struttura-tipi-procedimento.component.css']
+  selector: "app-struttura-tipi-procedimento",
+  templateUrl: "./struttura-tipi-procedimento.component.html",
+  styleUrls: ["./struttura-tipi-procedimento.component.css"]
 })
 export class StrutturaTipiProcedimentoComponent implements OnInit {
 
@@ -28,6 +29,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   public contextMenuItems;
   private nodeSelectedFromContextMenu: any;
   @ViewChild('treeView') treeView: any;
+  private initialState: any;
+
 
   private dataSourceProcedimento: DataSource;
   private dataSourceUtente: DataSource;
@@ -80,10 +83,10 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   this.datasource = new DataSource({
     store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
     customQueryParams: {
-      idTipoProcedimento: 33,
+      idAziendaTipoProcedimento: 33,
       idAzienda: 5
     }
-  });
+  });*/
   this.setInitialValues();
   this.caricaDettaglioProcedimento();
  }
@@ -179,17 +182,20 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
 
   caricamentoAlbero(e) {
-    let value = e.node;
-    console.log(e.node);
-
+    const value = e.node;
   }
 
-  //Questo evento scatta quando clicchiamo sul nodo dell'albero per far aprire il menu contestuale: in questo momento ci salviamo il nodo cliccato
+  /*Questo evento scatta quando clicchiamo sul nodo dell'albero per far aprire il menu contestuale
+     in questo momento ci salviamo il nodo cliccato */
   openContextMenu(e) {
     this.nodeSelectedFromContextMenu = e.itemData;
-    //this.abilitaRicorsione = true;
+    // this.abilitaRicorsione = true;
   }
 
+  // Questo scatta quando clicchiamo sulla voce del menu contestuale "Espandi..."
+  contextualItemClick(e) {
+
+   // this.treeView.selectNodesRecursive = true;
   //Questo scatta quando clicchiamo sulla voce del menu contestuale "Espandi..."
   contextualItemClick(e) {
 
@@ -199,17 +205,18 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
     this.treeView.selectNodesRecursive = true;
     this.treeView.instance.selectItem(this.nodeSelectedFromContextMenu.id);
-    this.treeView.selectNodesRecursive = false;
+   // this.treeView.selectNodesRecursive = false;
 
     this.nodeSelectedFromContextMenu.selected = true;
 
+    // console.log('VAL: ' + this.nodeSelectedFromContextMenu.id);
   }
 
   screen(width) {
-    return (width < 700) ? 'sm' : 'lg';
+    return (width < 700) ? "sm" : "lg";
   }
 
-  handleEvent(eventName:string, e:Event) {
+  handleEvent(eventName: string, e: Event) {
     switch (eventName) {
       // case 'treeItemSelectionChanged':
       //   this.treeItemSelectionChanged(e);
@@ -221,10 +228,42 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   //   this.emitTreeNodeSelected.emit(e.node);
   // }
 
-  private setSelectedNodeRecursively(node : any) : void {
-
+  private setSelectedNodeRecursively(node: any): void {
     // this.node.item
+      console.log("item: " + node);
+      const res = this.getNestedChildren(this.datasource.items(), node.id);
 
+      console.log("TREE");
+      res.forEach(function (element) {
+          element.selected = true;
+          console.log(element.nome);
+      });
   }
 
+    private getNestedChildren(inputArray, selectedNode) {
+    const result = []
+    for (const i in inputArray) {
+        if (inputArray[i].idStrutturaPadre === selectedNode) {
+             this.getNestedChildren(inputArray, inputArray[i].id);
+            this.treeView.instance.selectItem(inputArray[i].id);
+            result.push(inputArray[i]);
+        }
+    }
+    return result;
+    }
+
+    private esegui() {
+      const res = this.datasource.items();
+        res.forEach(function (element) {
+            if (element.selected === true) {
+                console.log(element.nome);
+            }
+        });
+    }
+
+    private setInitialState() {
+         this.initialState = this.datasource.items();
+    }
 }
+
+
