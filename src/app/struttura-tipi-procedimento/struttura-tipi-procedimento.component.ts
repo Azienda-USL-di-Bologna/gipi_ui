@@ -33,7 +33,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
 
   private dataSourceProcedimento: DataSource;
-  private dataSourceUtente: DataSource;
+  public dataSourceUtente: DataSource;
   private strutturaSelezionata: Struttura;
   public procedimento: Procedimento = new Procedimento();
   public initialProcedimento: Procedimento;
@@ -47,6 +47,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   public headerTipoProcedimento;
   public headerAzienda;
 
+  public popupVisible: boolean = false;
 
   constructor(private odataContextFactory: OdataContextFactory, private sharedData: SharedData, private router: Router) {
 
@@ -178,6 +179,10 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.headerAzienda = this.sharedData.getSharedObject()["HeaderAzienda"]["headerAzienda"];
   }
 
+
+  showPopup() { 
+    this.popupVisible = true;
+  }
 
   // caricamentoAlbero(e) {
   //   const value = e.node;

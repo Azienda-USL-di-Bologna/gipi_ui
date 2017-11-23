@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from "@angular/core";
+import {Component, OnInit, ViewChild, Input} from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { Router } from "@angular/router";
 import { SharedData } from "@bds/nt-angular-context/shared-data";
@@ -25,6 +25,12 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
   private initialState: any;
 
   @ViewChild("treeView") treeView: StruttureTreeComponent;
+  
+  @Input("idAzienda") idAzienda: number;
+  @Input("idAziendaTipoProcedimento") idAziendaTipoProcedimento: number;
+  @Input("readOnly") readOnly: boolean;
+  @Input("enableCheckRecursively") enableCheckRecursively: boolean;
+
 
   constructor(private sharedData: SharedData, private odataContextFactory: OdataContextFactory, private router: Router) {
  }
