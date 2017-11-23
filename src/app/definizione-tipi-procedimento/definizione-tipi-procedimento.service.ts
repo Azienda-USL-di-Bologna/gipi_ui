@@ -21,7 +21,7 @@ export class DefinizioneTipiProcedimentoService {
   getTipiProcedimentoSource() {
     return new DataSource({
       store: new ODataStore({
-        key: 'idTipoProcedimento',
+        key: 'idAziendaTipoProcedimento',
         url: ODATA_BASE_URL + odataTipiProcedimentoPath,
         //deserializeDates: true,
 /*        fieldTypes: {

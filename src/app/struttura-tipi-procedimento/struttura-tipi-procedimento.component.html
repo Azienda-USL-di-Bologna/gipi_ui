@@ -46,35 +46,21 @@
 
     <dxi-item class="left-side-bar item" style="background-color:pink;">
       <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
-
+        <strutture-tree [idAzienda]="5" [idAziendaTipoProcedimento]="55" [readOnly]="false" [enableCheckRecursively]="false"></strutture-tree>
       <div style="text-align:center">
         <div style="text-align:initial;display:inline-block;">
-          <dx-text-box #textBox placeholder="Search" [width]="300" mode="search" valueChangeEvent="keyup" value="" style="margin-bottom:8px;"></dx-text-box>
-          <div id="container-tree">
-            <dx-tree-view #treeView id="simple-treeview" [dataSource]="datasource" [height]="300" keyExpr="id" displayExpr="nome" dataStructure="plain" parentIdExpr="idStrutturaPadre"
-              [searchValue]="textBox.value"  showCheckBoxesMode="normal" [selectNodesRecursive]= "false"  (onItemClick)="handleEvent('treeItemSelectionChanged', $event)" 
-              (onItemContextMenu)="openContextMenu($event)" (onItemSelectionChanged)="caricamentoAlbero($event)" ></dx-tree-view>
-          </div>
+
         </div>
       </div>
-
-      <dx-context-menu 
-        [dataSource]="contextMenuItems" 
-        [width]="200" 
-        target="#simple-treeview" 
-        (onItemClick)="contextualItemClick($event)">
-      </dx-context-menu>
 
     </dxi-item>
 
     <dxi-item class="right-side-bar item" style="background-color:orange;">
       <dxi-location [row]="1" [col]="2" screen="lg"></dxi-location>
-      <!-- colonna vuota destra -->
-    </dxi-item>
 
-    <dxi-item class="footer item" style="background-color:violet;">
-      <span>Tipo procedimento:</span>
+      <dxi-item class="footer item" style="background-color:violet;">
+        <span>Tipo procedimento:</span>
+      </dxi-item>
     </dxi-item>
-
   </dx-responsive-box>
 </div>

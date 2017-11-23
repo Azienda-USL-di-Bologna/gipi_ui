@@ -51,6 +51,7 @@ import {NgIdleKeepaliveModule} from "@ng-idle/keepalive";
 import {SessionManager} from "./login/session-manager";
 import {ContextModule} from "@bds/nt-angular-context/context.module";
 import {contextModuleConfig} from "./module-configurations";
+import { StruttureTreeComponent } from "./reusable-component/strutture-tree/strutture-tree.component";
 
 @NgModule({
     declarations: [
@@ -66,7 +67,8 @@ import {contextModuleConfig} from "./module-configurations";
         AssociazioniComponent,
         AlberoStruttureComponent,
         StrutturaTipiProcedimentoComponent,
-        LoginComponent
+        LoginComponent,
+        StruttureTreeComponent
     ],
     imports: [
         BrowserModule,
