@@ -70,7 +70,7 @@ import { ProcedimentiAttiviComponent } from './procedimenti-attivi/procedimenti-
         AlberoStruttureComponent,
         StrutturaTipiProcedimentoComponent,
         LoginComponent,
-        StruttureTreeComponent
+        StruttureTreeComponent,
         ProcedimentiAttiviComponent
     ],
     imports: [
