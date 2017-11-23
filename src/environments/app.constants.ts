@@ -1,26 +1,28 @@
 import {environment} from './environment';
-import {Azienda} from "../app/classi/server-objects/entities/azienda";
-import {Utente} from "../app/classi/server-objects/entities/utente";
-import {Struttura} from "../app/classi/server-objects/entities/struttura";
-import {UtenteStruttura} from "../app/classi/server-objects/entities/utente-struttura";
-import {AfferenzaStruttura} from "../app/classi/server-objects/entities/afferenza-struttura";
-import {TipoProcedimento} from "../app/classi/server-objects/entities/tipo-procedimento";
-import {Ruolo} from "../app/classi/server-objects/entities/ruolo";
-import {AziendaTipoProcedimento} from "../app/classi/server-objects/entities/azienda-tipo-procedimento";
-import {Titolo} from "../app/classi/server-objects/entities/titolo";
-import { ServerObjectsDescriptor } from "@bds/nt-angular-context/context-module-config";
+import {Azienda} from '../app/classi/server-objects/entities/azienda';
+import {Utente} from '../app/classi/server-objects/entities/utente';
+import {Struttura} from '../app/classi/server-objects/entities/struttura';
+import {UtenteStruttura} from '../app/classi/server-objects/entities/utente-struttura';
+import {AfferenzaStruttura} from '../app/classi/server-objects/entities/afferenza-struttura';
+import {TipoProcedimento} from '../app/classi/server-objects/entities/tipo-procedimento';
+import {Ruolo} from '../app/classi/server-objects/entities/ruolo';
+import {AziendaTipoProcedimento} from '../app/classi/server-objects/entities/azienda-tipo-procedimento';
+import {Titolo} from '../app/classi/server-objects/entities/titolo';
+import {ServerObjectsDescriptor} from '@bds/nt-angular-context/context-module-config';
+import {Procedimento} from '../app/classi/server-objects/entities/procedimento';
 import {GetStruttureByTipoProcedimento} from "../app/classi/server-objects/functions-import/get-strutture-by-tipo-procedimento";
 
 export const Entities: ServerObjectsDescriptor = {
-    Azienda: {name: "Aziendas", class: Azienda},
-    Utente: {name: "Utentes", class: Utente},
-    Struttura: {name: "Strutturas", class: Struttura},
-    UtenteStruttura: {name: "UtenteStrutturas", class: UtenteStruttura},
-    AfferenzaStruttura: {name: "AfferenzaStrutturas", class: AfferenzaStruttura},
-    TipoProcedimento: {name: "TipoProcedimentos", class: TipoProcedimento},
-    Ruolo: {name: "Ruolos", class: Ruolo},
-    AziendaTipoProcedimento: {name: "AziendaTipoProcedimentos", class: AziendaTipoProcedimento},
-    Titolo: {name: "Titolos", class: Titolo}
+    Azienda: {name: 'Aziendas', class: Azienda},
+    Utente: {name: 'Utentes', class: Utente},
+    Struttura: {name: 'Strutturas', class: Struttura},
+    UtenteStruttura: {name: 'UtenteStrutturas', class: UtenteStruttura},
+    AfferenzaStruttura: {name: 'AfferenzaStrutturas', class: AfferenzaStruttura},
+    TipoProcedimento: {name: 'TipoProcedimentos', class: TipoProcedimento},
+    Ruolo: {name: 'Ruolos', class: Ruolo},
+    AziendaTipoProcedimento: {name: 'AziendaTipoProcedimentos', class: AziendaTipoProcedimento},
+    Titolo: {name: 'Titolos', class: Titolo},
+    Procedimento: {name: 'Procedimentos', class: Procedimento}
 }
 
 export const FunctionsImport: ServerObjectsDescriptor = {

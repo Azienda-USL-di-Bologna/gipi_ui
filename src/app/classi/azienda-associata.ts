@@ -5,6 +5,6 @@ export class AziendaAssociata {
     constructor(){}
 
     public testMethod(par: string) {
-        console.log("sono dentro", par);
+        console.log('sono dentro', par);
     }
 }
