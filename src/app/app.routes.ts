@@ -11,7 +11,7 @@ import {LoginComponent} from './login/login.component';
 import {NoLoginGuard} from './login/guards/no-login.guard';
 import {LoginGuard} from './login/guards/login.guard';
 import { ProcedimentiAttiviComponent } from 'app/procedimenti-attivi/procedimenti-attivi.component';
-
+import { PopupStrutturaTipiProcedimentoComponent } from 'app/popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component';
 
 
 export const rootRouterConfig: Routes = [
@@ -24,6 +24,7 @@ export const rootRouterConfig: Routes = [
   { path: 'aziende-tipi-procedimento', component: AziendeTipiProcedimentoComponent, canActivate: [LoginGuard]},
   { path: 'associazioni', component: AssociazioniComponent, canActivate: [LoginGuard]},
   { path: 'struttura-tipi-procedimento', component: StrutturaTipiProcedimentoComponent},
-  { path: 'procedimenti-attivi', component: ProcedimentiAttiviComponent }
+  { path: 'procedimenti-attivi', component: ProcedimentiAttiviComponent },
+  { path: 'popup-struttura-tipi-procedimento', component: PopupStrutturaTipiProcedimentoComponent }
 ];
 

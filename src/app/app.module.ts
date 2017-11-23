@@ -54,6 +54,7 @@ import {ContextModule} from '@bds/nt-angular-context/context.module';
 import {contextModuleConfig} from './module-configurations';
 import { StruttureTreeComponent } from "./reusable-component/strutture-tree/strutture-tree.component";
 import { ProcedimentiAttiviComponent } from './procedimenti-attivi/procedimenti-attivi.component';
+import { PopupStrutturaTipiProcedimentoComponent } from './popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component';
 
 @NgModule({
     declarations: [
@@ -71,7 +72,8 @@ import { ProcedimentiAttiviComponent } from './procedimenti-attivi/procedimenti-
         StrutturaTipiProcedimentoComponent,
         LoginComponent,
         StruttureTreeComponent,
-        ProcedimentiAttiviComponent
+        ProcedimentiAttiviComponent,
+        PopupStrutturaTipiProcedimentoComponent
     ],
     imports: [
         BrowserModule,

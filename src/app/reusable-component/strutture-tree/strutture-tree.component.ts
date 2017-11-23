@@ -21,13 +21,15 @@ export class StruttureTreeComponent implements OnInit {
   private nodeSelectedFromContextMenu: any;
   private nodeInvolved: Object = {};
 
-  @ViewChild("treeView") treeView: any;
+  @ViewChild("treeViewChild") treeViewChild: any;
 
   @Input("idAzienda") idAzienda: number;
   @Input("idAziendaTipoProcedimento") idAziendaTipoProcedimento: number;
   @Input("readOnly") readOnly: boolean;
   @Input("enableCheckRecursively") enableCheckRecursively: boolean;
 
+  enterIntoChangeSelection : boolean = true;
+  
   constructor(private http: HttpClient, private odataContextFactory: OdataContextFactory) {
 
     // costruzione menù contestuale sull'albero
@@ -36,18 +38,22 @@ export class StruttureTreeComponent implements OnInit {
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }
 
-
-
   selectionChanged(e) {
+
     if (this.readOnly) {
-      // (e.event) indica se il metodo è chiamato da un evento, oppure no.
-      // Al click del checkbox, la prima chiamata alla funzione arriverà attraverso un evento; la senconda invece no
-      if (e.event) {
+     
+      if (this.enterIntoChangeSelection) {
+
+        this.enterIntoChangeSelection = !this.enterIntoChangeSelection;
         if (e.itemData.selected === false) {
-          this.treeView.instance.selectItem(e.itemData.id);
+          this.treeViewChild.instance.selectItem(e.itemData.id);
         } else {
-          this.treeView.instance.unselectItem(e.itemData.id);
+          this.treeViewChild.instance.unselectItem(e.itemData.id);
         }
+        
+      }
+      else { 
+        this.enterIntoChangeSelection = !this.enterIntoChangeSelection;
       }
     }
     else {
@@ -81,7 +87,7 @@ export class StruttureTreeComponent implements OnInit {
   contextualItemClick(e) {
 
     // this.treeView.selectNodesRecursive = true;
-    this.treeView.instance.selectItem(this.nodeSelectedFromContextMenu.id);
+    this.treeViewChild.instance.selectItem(this.nodeSelectedFromContextMenu.id);
     // this.treeView.selectNodesRecursive = false;
 
     this.nodeSelectedFromContextMenu.selected = true;
@@ -106,14 +112,15 @@ export class StruttureTreeComponent implements OnInit {
     for (const i in inputArray) {
       if (inputArray[i].idStrutturaPadre === selectedNode) {
         this.getNestedChildren(inputArray, inputArray[i].id);
-        this.treeView.instance.selectItem(inputArray[i].id);
+        this.treeViewChild.instance.selectItem(inputArray[i].id);
         result.push(inputArray[i]);
       }
     }
     return result;
   }
 
-  sendData() {
+  public sendData() {
+    console.log("Sono arrivato al figlio");
     const req = this.http.post("http://localhost:10006/gipi/resources/custom/updateProcedimenti", {
       idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
       nodeInvolved: this.nodeInvolved
@@ -129,4 +136,4 @@ export class StruttureTreeComponent implements OnInit {
   }
 }
 
-const NodeOperations  = {INSERT: "insert", DELETE: "delete"}
+const NodeOperations  = {INSERT: "INSERT", DELETE: "DELETE"}
