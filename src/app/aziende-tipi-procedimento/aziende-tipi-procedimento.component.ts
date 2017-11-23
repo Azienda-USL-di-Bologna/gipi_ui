@@ -47,7 +47,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     public abilitaBottoneAssocia: boolean;
     public abilitaBottoneDisassocia: boolean;
     public nomeTitolo: string;
-    
+
     statusPage: string;
 
     testoHeaderTipoProcedimento: string = "testo tipo procedimento passato da Fay";
@@ -246,10 +246,25 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     }
 
 
-
     public buttonAssociaClicked(event) {
         console.log(sessionStorage.getItem('gdm'));
         console.log(localStorage.getItem('gdm'));
+    }
+
+    public buttonVediAssociazioni(azienda) {
+        const obj = {
+            AziendeTipiProcedimentoComponent: {
+                aziendaTipoProcedimento: azienda
+            },
+            HeaderAzienda: {
+                headerAzienda: this.testoHeaderAzienda
+            },
+            HeaderTipoProcedimento: {
+                headerTipoProcedimento: this.testoHeaderTipoProcedimento
+            }
+        };
+        this.sharedData.setSharedObject(obj);
+        this.router.navigate(['/struttura-tipi-procedimento']);
     }
 
     onFormSubmit(e) {

@@ -1,12 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { Router } from '@angular/router';
-import { SharedData } from "@bds/nt-angular-context/shared-data";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
-import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
+import { SharedData } from '@bds/nt-angular-context/shared-data';
+import { OdataContextDefinition } from '@bds/nt-angular-context/odata-context-definition';
+import {OdataContextFactory} from '@bds/nt-angular-context/odata-context-factory';
 import ODataStore from 'devextreme/data/odata/store';
-import { Struttura } from "../classi/server-objects/entities/struttura";
-import { FunctionsImport } from "../../environments/app.constants";
+import { Struttura } from '../classi/server-objects/entities/struttura';
+import { FunctionsImport, Entities } from '../../environments/app.constants';
+import { OdataContextEntitiesDefinition } from '@bds/nt-angular-context/odata-context-entities-definition';
+import { AziendaTipoProcedimento } from 'app/classi/server-objects/entities/azienda-tipo-procedimento';
+import { Procedimento } from 'app/classi/server-objects/entities/procedimento';
+import { Entity } from '@bds/nt-angular-context/entity';
+import notify from 'devextreme/ui/notify';
+import { CustomLoadingFilterParams } from '@bds/nt-angular-context/custom-loading-filter-params';
 
 
 @Component({
@@ -20,22 +26,57 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   public strutture: Struttura = new Struttura();
   private odataContextDefinition;
   public contextMenuItems;
-  private nodeSelectedFromContextMenu : any;
-  @ViewChild("treeView") treeView: any;
+  private nodeSelectedFromContextMenu: any;
+  @ViewChild('treeView') treeView: any;
 
-  constructor(private sharedData: SharedData, private odataContextFactory: OdataContextFactory, private router: Router) {
+  private dataSourceProcedimento: DataSource;
+  private dataSourceUtente: DataSource;
+  private strutturaSelezionata: Struttura;
+  public procedimento: Procedimento = new Procedimento();
+  public initialProcedimento: Procedimento;
+  private dataFromAziendaTipiProcedimentoComponent;
 
-    //COSTRUZIONE MENU CONTESTUALE SULL'ALBERO
-    this.contextMenuItems = [{ text: "Espandi a strutture figlie" }];
+  public abilitaSalva: boolean = false;
+  public campiEditabiliDisabilitati: boolean = true;
+  public testoBottone: string = "Modifica";
+
+  private idAziendaProcedimentoProva: number = 55;
+  public headerTipoProcedimento;
+  public headerAzienda;
+
+
+  constructor(private odataContextFactory: OdataContextFactory, private sharedData: SharedData, private router: Router) {
+
+    console.log("Header", this.sharedData.getSharedObject()["HeaderAzienda"]["headerAzienda"]);
+    this.headerTipoProcedimento = this.sharedData.getSharedObject()["HeaderTipoProcedimento"]["headerTipoProcedimento"];
+    this.headerAzienda = this.sharedData.getSharedObject()["HeaderAzienda"]["headerAzienda"];
+
+    this.setDataFromDettaglioProcedimentoComponent();
+    this.strutturaSelezionata = new Struttura();
+    this.strutturaSelezionata.id = 10;
+    // COSTRUZIONE MENU CONTESTUALE SULL'ALBERO
+    this.contextMenuItems = [{ text: 'Espandi a strutture figlie' }];
 
   //   this.datasource = new DataSource({
   //     store: this.odataContextDefinition.getContext()[Entities.Struttura],
   //     filter: ['FK_id_azienda', '=', 5], //Il valore numerico è l'id dell'azienda, aperto RM per renderlo parametrizzabile
   //   });
   //  }
-  
-  this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();  
-  
+
+  this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
+
+  const odataContextDefinitionUtente: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+  const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("descrizione");
+  customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
+
+  this.dataSourceUtente = new DataSource({
+    store: odataContextDefinitionUtente.getContext()[Entities.Utente.name].on('loading', (loadOptions) => {
+      loadOptions.userData['customLoadingFilterParams'] = customLoadingFilterParams;
+      odataContextDefinitionUtente.customLoading(loadOptions);
+    }),
+    filter: [['idAzienda.id', '=', this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"]["aziendaTipoProcedimento"]["idAzienda"]["id"]]]
+  });
+  console.log("SENSAZIONI", this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"]["aziendaTipoProcedimento"]["idAzienda"]["id"]);
   this.datasource = new DataSource({
     store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
     customQueryParams: {
@@ -43,37 +84,125 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       idAzienda: 5
     }
   });
- }  
+  this.setInitialValues();
+  this.caricaDettaglioProcedimento();
+ }
+
+     /** aziendaTipoProcedimento.id
+     * Legge i dati passatti dall'interfaccia precedente AziendeTipiProcedimentoComponent
+     */
+  private setDataFromDettaglioProcedimentoComponent() {
+    this.dataFromAziendaTipiProcedimentoComponent = this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"];
+    this.headerAzienda = this.dataFromAziendaTipiProcedimentoComponent.descrizione;
+    console.log("CIAO", this.dataFromAziendaTipiProcedimentoComponent);
+  }
+
+  private caricaDettaglioProcedimento() {
+    const odataContextDefinitionProcedimento: OdataContextEntitiesDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    const aziendaTipoProcedimento: AziendaTipoProcedimento = this.dataFromAziendaTipiProcedimentoComponent["aziendaTipoProcedimento"];
+    console.log("Azienda", aziendaTipoProcedimento);
+    if (!this.dataSourceProcedimento) {
+      this.dataSourceProcedimento = new DataSource({
+        store: odataContextDefinitionProcedimento.getContext()[Entities.Procedimento.name],
+        expand: ["idAziendaTipoProcedimento", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento", "idAziendaTipoProcedimento.idTitolo"],
+        filter: [["idAziendaTipoProcedimento.id", "=", this.idAziendaProcedimentoProva]/* , "and", ["idStruttura.id", "=", this.strutturaSelezionata.id] */]
+      })
+    } else {
+      console.log("ELSE");
+      // this.dataSourceProcedimento.filter([["idAziendaTipoProcedimento.id", "=", aziendaTipoProcedimento.id], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]);
+      this.dataSourceProcedimento.filter(["idAziendaTipoProcedimento.id", "=", this.idAziendaProcedimentoProva]);
+    }
+    this.dataSourceProcedimento.load().then(res => {
+        this.procedimento.build(res[0], Procedimento);
+        console.log("Procedimento", this.procedimento);
+     });
+  }
+
+  public sbloccaCampiEditabili() {
+    this.abilitaSalva = false;
+    this.campiEditabiliDisabilitati = false;
+  }
+
+  public bottoneSalvaProcedimento(flagSalva: boolean) {
+    // !this.abilitaSalva ? this.testoBottone = "Salva" : this.testoBottone = "Modifica";
+    if (!this.abilitaSalva) {
+      this.testoBottone = "Salva";
+    } else {
+      this.testoBottone = "Modifica";
+      if (flagSalva) {
+        this.dataSourceProcedimento.store()
+          .update(this.procedimento.idProcedimento, this.procedimento)
+          .done(res => (this.caricaDettaglioProcedimento()));
+        notify( {
+          message: "salvataggio effettuato con successo",
+          type: "success",
+          displayTime: 1200,
+          position: {
+              my: "bottom",
+              at: "top",
+              of: "#responsive-box-buttons"
+          }
+        });
+      }
+    }
+    this.abilitaSalva = !this.abilitaSalva;
+    this.campiEditabiliDisabilitati = !this.campiEditabiliDisabilitati;
+  }
+
+  public bottoneAnnulla() {
+    if (!Entity.isEquals(this.procedimento, this.initialProcedimento)) {
+      this.caricaDettaglioProcedimento();
+      this.bottoneSalvaProcedimento(false);
+    }
+    // this.router.navigate(["/aziende-tipi-procedimento"]);
+  }
+
+  setInitialValues() {
+    console.log("onInitialized");
+    this.initialProcedimento = Object.assign({}, this.procedimento);
+  }
+
+  public formFieldDataChanged(event) {
+    console.log("dataChanged: ", Entity.isEquals(this.procedimento, this.initialProcedimento));
+    console.log('Event object: ', event)
+    this.abilitaSalva = !Entity.isEquals(this.procedimento, this.initialProcedimento);
+    if (this.abilitaSalva) {
+        this.testoBottone = "Salva";
+        this.setInitialValues();
+    } else {
+        this.testoBottone = "Modifica";
+    }
+  }
 
   ngOnInit() {
   }
 
 
-  caricamentoAlbero(e) { 
+  caricamentoAlbero(e) {
     let value = e.node;
     console.log(e.node);
 
   }
 
   //Questo evento scatta quando clicchiamo sul nodo dell'albero per far aprire il menu contestuale: in questo momento ci salviamo il nodo cliccato
-  openContextMenu(e) { 
+  openContextMenu(e) {
     this.nodeSelectedFromContextMenu = e.itemData;
     //this.abilitaRicorsione = true;
   }
 
   //Questo scatta quando clicchiamo sulla voce del menu contestuale "Espandi..."
-  contextualItemClick(e) { 
-  
+  contextualItemClick(e) {
+
     //FUNZIONE CHE SELEZIONA TUTTI I FIGLI
     console.log(this.datasource);
 
-    
+
     this.treeView.selectNodesRecursive = true;
     this.treeView.instance.selectItem(this.nodeSelectedFromContextMenu.id);
     this.treeView.selectNodesRecursive = false;
 
     this.nodeSelectedFromContextMenu.selected = true;
-    
+
   }
 
   screen(width) {
@@ -95,7 +224,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   private setSelectedNodeRecursively(node : any) : void {
 
     // this.node.item
-  
+
   }
 
 }
