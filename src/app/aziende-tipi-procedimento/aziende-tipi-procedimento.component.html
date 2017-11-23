@@ -1,4 +1,4 @@
-<!--PER GESTIRE L'IMPAGINAZIONE DEGLI ELEMENTI, UTILIZZIAMO 2 RISOLUZIONI DI RIFERIMENTO: sm,lg. LE RISOLUZIONI VENGONO CALCOLATE ALL'INTERNO DEL .TS CORRISPONDENTE A QUESTA PAGINA HTML LA PROPRIETA' SCREEN SERVE PER INDICARE IL CAMBIO DI LAYOUT AL CAMBIO
+<!--PER GESTIRE L'IMPAGINAZIONE DEGLI ELEMENTI, UTILIZZIAMO 2 RISOLUZIONI DI RIFERIMENTO: sm,lg. LE RISOLUZIONI VENGONO CALCOLATE ALL'INTERNO DEL .TS CORRISPONDENTE A QUESTA PAGINA HTML LA PROPRIETA' SCREEN SERVE PER nCARE IL CAMBIO DI LAYOUT AL CAMBIO
 DELLA RISOLUZIONE
 -->
     <div id="page">
@@ -75,15 +75,21 @@ DELLA RISOLUZIONE
                     <!-- <dxi-row [ratio]="1"></dxi-row> -->
                     <dxi-col [ratio]="1"></dxi-col>
                     <dxi-col [ratio]="1"></dxi-col>
+                    <dxi-col [ratio]="1"></dxi-col>
 
                     <dxi-item>
                         <dxi-location [row]="0" [col]="0"></dxi-location>
+                        <dx-button class="padding-button" (onClick)="buttonVediAssociazioni(aziendaTipoProcedimento)"text="Vedi Associazioni" hint="Associazioni"></dx-button>
+                    </dxi-item>
+
+                    <dxi-item>
+                        <dxi-location [row]="0" [col]="1"></dxi-location>
                         <dx-button class="padding-button" (onClick)="buttonAnnullaClicked($event)" text="{{testoBottoneAnnulla}}" hint="Annulla le modifiche"></dx-button>
                         <dx-button class="padding-button" (onClick)="buttonConfermaClicked($event)" text="{{testoBottoneConferma}}" hint="Conferma"></dx-button>
                     </dxi-item>
 
                     <dxi-item>
-                        <dxi-location [row]="0" [col]="1"></dxi-location>
+                        <dxi-location [row]="0" [col]="2"></dxi-location>
                         <dx-button class="padding-button" (onClick)="buttonDisassociaClicked($event)" text="Disassocia da azienda" [disabled]="!abilitaBottoneDisassocia" hint="Toglie l'associazione del tipo procedimento dall'azienda"></dx-button>
                         <dx-button class="padding-button" (onClick)="buttonAssociaClicked($event)" text="Associa a struttura" [disabled]="!abilitaBottoneAssocia" hint="Apre l'interfaccia per l'associazione alle strutture"></dx-button>
                     </dxi-item>

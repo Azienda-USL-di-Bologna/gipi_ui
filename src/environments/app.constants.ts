@@ -21,13 +21,13 @@ export const Entities: ServerObjectsDescriptor = {
     TipoProcedimento: {name: 'TipoProcedimentos', class: TipoProcedimento},
     Ruolo: {name: 'Ruolos', class: Ruolo},
     AziendaTipoProcedimento: {name: 'AziendaTipoProcedimentos', class: AziendaTipoProcedimento},
-    Titolo: {name: 'Titolos', class: Titolo},
-    Procedimento: {name: 'Procedimentos', class: Procedimento}
+    Titolo: {name: "Titolos", class: Titolo},
+    Procedimento: {name: "Procedimentos", class: Procedimento}
 }
 
 export const FunctionsImport: ServerObjectsDescriptor = {
     GetStruttureByTipoProcedimento: {name: "GetStruttureByTipoProcedimento", class: GetStruttureByTipoProcedimento}
-}    
+}
 
 // header http
 export const HEADER_AUTH_TOKEN_NAME = "authorization";

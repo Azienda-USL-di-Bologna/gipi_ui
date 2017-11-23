@@ -14,15 +14,19 @@
       <dxi-location [row]="0" [col]="0" [colspan]="3" screen="lg"></dxi-location>
       <dxi-location [row]="0" [col]="0" [colspan]="2" screen="sm"></dxi-location>
 
-      <div class = "header item" style="background-color:orange">
+      <div class = "header item">
         <h3>
           <span class="header-font">Tipo procedimento:</span>
-          <!-- <i>{{testoHeaderTipoProcedimento}}</i> -->
+          <i>{{headerTipoProcedimento}}</i>
         </h3>
         <h3>
           <span class="header-font">Azienda:</span>
-          <!-- <i>{{testoHeaderAzienda}}</i> -->
+          <i>{{headerAzienda}}</i>
         </h3>
+        <h3>
+            <span class="header-font">Struttura:</span>
+            <i>Affari Generali</i>
+          </h3>
       </div>
     </dxi-item>
 
@@ -30,37 +34,80 @@
       <dxi-location [row]="1" [col]="1" screen="lg"></dxi-location>
       <dxi-location [row]="1" [col]="0" [colspan]="2" screen="sm"></dxi-location>
 
-      <div class="center-div" style="background-color:yellowgreen;">
-        <!-- <dx-form id="form" #myform [(formData)]="aziendaProcedimento" [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width">
-          <dxi-item dataField="descrizioneTipoProcedimento" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: false }"></dxi-item>
-          <dxi-item dataField="modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="dataInizio" [label]="{text: 'Valido dal'}" editorType="dxDateBox" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }" ></dxi-item>
-          <dxi-item dataField="dataFine" [label]="{text: 'Al'}"  editorType="dxDateBox" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-          <dxi-item dataField="durataMassimaSospensione" [label]="{text: 'Durata massima sospensione (gg)'}" [editorOptions]="{ disabled: false }"></dxi-item>
-          <dxi-item dataField="idTitolo.nomeTitolo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="obbligoEsitoConclusivo" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>
-      </dx-form> -->
+      <div class="center-div">
+        <dx-form id="form" #myform [(formData)]="procedimento">  <!-- [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width" -->
+          <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: true }"></dxi-item>
+          <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nomeTitolo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" [label]="{text: 'Durata massima sospensione'}" [editorOptions]="{ disabled: true }" ></dxi-item>
+          <dxi-item dataField="dataInizio" [label]="{text: 'Valido dal'}" editorType="dxDateBox" [editorOptions]="{ disabled: campiEditabiliDisabilitati, displayFormat: 'dd/MM/yyyy' }" ></dxi-item>
+          <dxi-item dataField="dataFine" [label]="{text: 'Al'}"  editorType="dxDateBox" [editorOptions]="{ disabled: campiEditabiliDisabilitati, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+          <dxi-item dataField="idTitolarePotereSostitutivo.id" [label]="{text: 'Titolare potere sostitutivo'}" editorType="dxLookup" [editorOptions]="{ 
+            disabled: campiEditabiliDisabilitati,
+            dataSource: dataSourceUtente, 
+            displayExpr: 'descrizione', 
+            closeOnOutsideClick: true, 
+            showPopupTitle: false, 
+            showCancelButton: false, 
+            placeholder: 'Seleziona una voce...', 
+            searchPlaceholder: 'Cerca...',
+            valueExpr: 'id'
+          }"></dxi-item>
+          <dxi-item dataField="modalitaInfo" [label]="{text: 'Modalità informativa'}" [editorOptions]="{ disabled: campiEditabiliDisabilitati }"></dxi-item>
+          <dxi-item dataField="descrizioneAtti" [label]="{text: 'Atti da allegare'}" editorType="dxTextArea" [editorOptions]="{ height:70, disabled: campiEditabiliDisabilitati }"></dxi-item>
+        </dx-form>
       </div>
     </dxi-item>
 
-    <dxi-item class="left-side-bar item" style="background-color:pink;">
+    <dxi-item class="left-side-bar item">
       <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
         <strutture-tree [idAzienda]="5" [idAziendaTipoProcedimento]="55" [readOnly]="false" [enableCheckRecursively]="false"></strutture-tree>
       <div style="text-align:center">
         <div style="text-align:initial;display:inline-block;">
 
+          <dx-text-box #textBox placeholder="Search" [width]="300" mode="search" valueChangeEvent="keyup" value="" style="margin-bottom:8px;"></dx-text-box>
+          <div id="container-tree">
+            <dx-tree-view #treeView id="simple-treeview" [dataSource]="datasource" [height]="300" keyExpr="id" displayExpr="nome" dataStructure="plain" parentIdExpr="idStrutturaPadre"
+              [searchValue]="textBox.value"  showCheckBoxesMode="normal" [selectNodesRecursive]= "false"  (onItemClick)="handleEvent('treeItemSelectionChanged', $event)" 
+              (onItemContextMenu)="openContextMenu($event)" (onItemSelectionChanged)="caricamentoAlbero($event)" ></dx-tree-view>
+          </div>
         </div>
       </div>
 
+      <dx-context-menu 
+        [dataSource]="contextMenuItems" 
+        [width]="200" 
+        target="#simple-treeview" 
+        (onItemClick)="contextualItemClick($event)">
+      </dx-context-menu>
+
     </dxi-item>
 
-    <dxi-item class="right-side-bar item" style="background-color:orange;">
+    <dxi-item class="right-side-bar item">
       <dxi-location [row]="1" [col]="2" screen="lg"></dxi-location>
-
-      <dxi-item class="footer item" style="background-color:violet;">
-        <span>Tipo procedimento:</span>
-      </dxi-item>
+      <!-- colonna vuota destra -->
     </dxi-item>
+
+    <dxi-item class="footer item">
+      <dxi-location [row]="2" [col]="1"></dxi-location>
+      <dx-responsive-box id="responsive-box-buttons" singleColumnScreen="sm" [(screenByWidth)]="screen">
+        <dxi-row [ratio]="1"></dxi-row>
+        <dxi-col [ratio]="1"></dxi-col>
+        <dxi-col [ratio]="1"></dxi-col>
+        <!-- <dxi-item>      
+          <dxi-location [row]="0" [col]="0"></dxi-location>
+          <dx-button class="padding-button" (onClick)="sbloccaCampiEditabili()" text="{{ testoBottone }}" [disabled]="!abilitaSalva" hint="Modifica i campi"></dx-button>
+        </dxi-item> -->
+        <dxi-item>      
+            <dxi-location [row]="0" [col]="0"></dxi-location>
+            <dx-button class="padding-button" (onClick)="bottoneSalvaProcedimento(true)" text="{{ testoBottone }}" hint="Salva i campi"></dx-button>          
+          </dxi-item>
+        <dxi-item>      
+          <dxi-location [row]="0" [col]="1"></dxi-location>
+          <dx-button class="padding-button" (onClick)="bottoneAnnulla()" text="Annulla" hint="Annulla le modifiche"></dx-button>
+        </dxi-item>
+      </dx-responsive-box>
+      </dxi-item>
   </dx-responsive-box>
 </div>

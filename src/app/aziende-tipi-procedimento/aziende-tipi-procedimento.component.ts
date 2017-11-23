@@ -47,7 +47,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     public abilitaBottoneAssocia: boolean;
     public abilitaBottoneDisassocia: boolean;
     public nomeTitolo: string;
-    
+
     statusPage: string;
 
     testoHeaderTipoProcedimento: string = "testo tipo procedimento passato da Fay";
@@ -69,8 +69,8 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
             store: this.odataContextEntitiesAziendaTipoProcedimento.getContext()[Entities.AziendaTipoProcedimento.name]
                 .on("modifying", () => {console.log("modified")})
                 .on("modified", () => {console.log("modified")}),
-            expand: ['idAzienda', 'idAziendaTipoProcedimento', 'idTitolo'],
-            //filter: [['idAziendaTipoProcedimento.idAziendaTipoProcedimento', '=', this.sharedData.getSharedObject().procedimento.idAziendaTipoProcedimento], ['idAzienda.id', '=', this.sharedData.getSharedObject().azienda.id]],
+            expand: ['idAzienda', 'idTipoProcedimento', 'idTitolo'],
+            //filter: [['idTipoProcedimento.idTipoProcedimento', '=', this.sharedData.getSharedObject().procedimento.idAziendaTipoProcedimento], ['idAzienda.id', '=', this.sharedData.getSharedObject().azienda.id]],
         });
         this.setDataFromDettaglioProcedimentoComponent();
         this.setNuovaAssociazione();
@@ -142,7 +142,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         }
         else {
             this.datasource.filter([
-                ["idTipoProcedimento.idAziendaTipoProcedimento", "=", tipoProcedimentoDefault.idTipoProcedimento],
+                ["idTipoProcedimento.idTipoProcedimento", "=", tipoProcedimentoDefault.idTipoProcedimento],
                 ["idAzienda.id", "=", azienda.id]]);
             this.datasource.load().then(res => {
                 // this.aziendaTipoProcedimento = res[0] as AziendaTipoProcedimento;
@@ -246,17 +246,32 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     }
 
 
-
     public buttonAssociaClicked(event) {
         console.log(sessionStorage.getItem('gdm'));
         console.log(localStorage.getItem('gdm'));
+    }
+
+    public buttonVediAssociazioni(azienda) {
+        const obj = {
+            AziendeTipiProcedimentoComponent: {
+                aziendaTipoProcedimento: azienda
+            },
+            HeaderAzienda: {
+                headerAzienda: this.testoHeaderAzienda
+            },
+            HeaderTipoProcedimento: {
+                headerTipoProcedimento: this.testoHeaderTipoProcedimento
+            }
+        };
+        this.sharedData.setSharedObject(obj);
+        this.router.navigate(['/struttura-tipi-procedimento']);
     }
 
     onFormSubmit(e) {
         console.log(e);
     }
 
-    public valueTitoloChanged(e){
+    public valueTitoloChanged(e) {
         console.log('Value Titolo Changed: ', e)
     }
 }
