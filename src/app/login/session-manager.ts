@@ -31,7 +31,7 @@ export class SessionManager {
                 this.router.navigate(['/login']);
             }
             else{
-                this.router.navigateByUrl("https://gdml.internal.ausl.bologna.it/Shibboleth.sso/Logout");
+                window.location.href = "https://gdml.internal.ausl.bologna.it/Shibboleth.sso/Logout";
             }
 
         });
