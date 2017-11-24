@@ -26,7 +26,14 @@ export class SessionManager {
             console.log("token expired!");
             this.idleState = 'Timed out!';
             this.timedOut = true;
-            this.router.navigate(['/login']);
+
+            if(sessionStorage.getItem("loginMethod") != "sso"){
+                this.router.navigate(['/login']);
+            }
+            else{
+                this.router.navigateByUrl("https://gdml.internal.ausl.bologna.it/Shibboleth.sso/Logout");
+            }
+
         });
         //idle.onIdleStart.subscribe(() => this.idleState = 'You\'ve gone idle!');
         this.idle.onIdleStart.subscribe(() => console.log('You\'ve gone idle!'));

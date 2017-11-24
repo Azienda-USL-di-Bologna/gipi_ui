@@ -12,7 +12,7 @@ import {SessionManager} from "../login/session-manager";
 export class HomeComponent implements OnInit {
 
   constructor(private sessionManager: SessionManager){
-    sessionManager.setExpireTokenOnIdle(300);
+    sessionManager.setExpireTokenOnIdle(10);
   }
   ngOnInit() {
   }

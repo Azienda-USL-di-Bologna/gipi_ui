@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
               data => {
                   sessionStorage.setItem("token", data.token);
                   sessionStorage.setItem("userinfo", data.username);
+                  sessionStorage.setItem("loginMethod", "sso");
                   this.router.navigate(["/home"]);
               })
   }
@@ -43,6 +44,7 @@ export class LoginComponent implements OnInit {
             (data: any) => {
               sessionStorage.setItem("token", data.token);
               sessionStorage.setItem("userinfo", data.username);
+              sessionStorage.setItem("loginMethod", "local");
               this.router.navigate(["/home"]);
             },
             (err) => {
