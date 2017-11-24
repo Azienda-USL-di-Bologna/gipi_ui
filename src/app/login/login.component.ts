@@ -16,7 +16,14 @@ export class LoginComponent implements OnInit {
   constructor(public httpClient: HttpClient, private router:Router) { }
 
   ngOnInit() {
-
+      this.httpClient.get<any>(LOGIN_URL)
+          .subscribe(
+              // Successful responses call the first callback.
+              data => {
+                  sessionStorage.setItem("token", data.token);
+                  sessionStorage.setItem("userinfo", data.username);
+                  this.router.navigate(["/home"]);
+              })
   }
 
   /* login(form: NgForm){
@@ -30,11 +37,12 @@ export class LoginComponent implements OnInit {
 
   login(form: NgForm) {
     this.errorMessage = "";
+
     this.httpClient.post(LOGIN_URL,{username : form.value.email , "password": form.value.password })
         .subscribe(
-            (data : any) => {
-              sessionStorage.setItem("token",data.token);
-              sessionStorage.setItem("userinfo",data.username);
+            (data: any) => {
+              sessionStorage.setItem("token", data.token);
+              sessionStorage.setItem("userinfo", data.username);
               this.router.navigate(["/home"]);
             },
             (err) => {
