@@ -5,7 +5,7 @@
                 dataStructure="plain" parentIdExpr="idStrutturaPadre" [searchValue]="textBox.value"
                 showCheckBoxesMode="normal" [selectNodesRecursive]= "enableCheckRecursively"
                 (onItemContextMenu)="openContextMenu($event)" (onItemSelectionChanged)="selectionChanged($event)"
-  [class]="readOnly ? 'readOnly' : null"></dx-tree-view>
+  [class]="getClass()"></dx-tree-view>
 </div>
 
 <dx-context-menu *ngIf="!readOnly"

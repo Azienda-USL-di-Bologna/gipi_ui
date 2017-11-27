@@ -134,6 +134,16 @@ export class StruttureTreeComponent implements OnInit {
             }
         );
   }
+
+  getClass() {
+    if(this.readOnly)
+      return "tree-readonly dx-checkbox-icon";
+    else
+      return "tree-not-readonly dx-checkbox-icon";
+  }
+
 }
+
+
 
 const NodeOperations  = {INSERT: "INSERT", DELETE: "DELETE"}

@@ -1,4 +1,15 @@
-/deep/ .readOnly .dx-checkbox-icon{
+/deep/ .tree-readonly .dx-checkbox-icon{
     cursor: default;
-    /* background-color: lightgrey; */
+    background-color: lightgrey;
+    
+}
+
+/deep/ .tree-not-readonly .dx-checkbox-icon{
+    cursor: pointer;
+    background-color: white; 
+    
+}
+
+/deep/ .dx-treeview{
+    width: 100%;
 }

@@ -61,10 +61,11 @@
     </dxi-item>
 
     <dxi-item class="left-side-bar item">
-      <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
-      <dx-button class="padding-button" (onClick)="showPopup()" text="Associa a strutture" hint="Associa a strutture"></dx-button>
-        <strutture-tree [idAzienda]="5" [idAziendaTipoProcedimento]="55" [readOnly]="true" [enableCheckRecursively]="false"></strutture-tree>
-
+      <div style="padding-left:10%">
+        <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
+          <dx-button class="padding-button" (onClick)="showPopup()" text="Associa a strutture" hint="Associa a strutture"></dx-button>
+          <strutture-tree [idAzienda]="5" [idAziendaTipoProcedimento]="55" [readOnly]="true" [enableCheckRecursively]="false"></strutture-tree>
+      </div>
     </dxi-item>
 
     <dxi-item class="right-side-bar item">
