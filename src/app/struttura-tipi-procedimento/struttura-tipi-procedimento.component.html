@@ -87,11 +87,11 @@
         </dxi-item> -->
         <dxi-item>      
             <dxi-location [row]="0" [col]="0"></dxi-location>
-            <dx-button class="padding-button" (onClick)="bottoneSalvaProcedimento(true)" text="{{ testoBottone }}" hint="Salva i campi"></dx-button>          
+            <dx-button class="padding-button" [visible]=formVisible (onClick)="bottoneSalvaProcedimento(true)" text="{{ testoBottone }}" hint="Salva i campi"></dx-button>
           </dxi-item>
         <dxi-item>      
           <dxi-location [row]="0" [col]="1"></dxi-location>
-            <dx-button class="padding-button" (onClick)="bottoneAnnulla()" text="Annulla" hint="Annulla le modifiche"></dx-button>
+            <dx-button class="padding-button" [visible]=formVisible (onClick)="bottoneAnnulla()" text="Annulla" hint="Annulla le modifiche"></dx-button>
         </dxi-item>
       </dx-responsive-box>
       </dxi-item>
