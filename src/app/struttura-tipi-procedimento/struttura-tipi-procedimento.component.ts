@@ -148,8 +148,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public bottoneAnnulla() {
     if (!Entity.isEquals(this.procedimento, this.initialProcedimento)) {
-      this.caricaDettaglioProcedimento(false);
-      this.bottoneSalvaProcedimento(false);
+      // this.caricaDettaglioProcedimento(false);
     }
     // this.router.navigate(["/aziende-tipi-procedimento"]);
   }
