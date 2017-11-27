@@ -76,3 +76,7 @@
     padding-top: 10px;
     text-align: center;
 }
+
+/deep/ .dx-popup-content{
+    padding:0px;
+}
