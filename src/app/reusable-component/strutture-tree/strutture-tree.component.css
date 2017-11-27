@@ -13,3 +13,7 @@
 /deep/ .dx-treeview{
     width: 100%;
 }
+
+/deep/ .dx-texteditor .dx-texteditor-empty .dx-textbox{
+    width: 100%;
+}
