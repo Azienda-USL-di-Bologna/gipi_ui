@@ -76,7 +76,6 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     }),
     filter: [['idAzienda.id', '=', this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"]["aziendaTipoProcedimento"]["idAzienda"]["id"]]]
   });
-  console.log("SENSAZIONI", this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"]["aziendaTipoProcedimento"]["idAzienda"]["id"]);
   this.datasource = new DataSource({
     store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
     customQueryParams: {
@@ -84,8 +83,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       idAzienda: 5
     }
   });
-  this.setInitialValues();
-  this.caricaDettaglioProcedimento();
+  this.caricaDettaglioProcedimento(true);
  }
 
      /** aziendaTipoProcedimento.id
@@ -94,13 +92,11 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   private setDataFromDettaglioProcedimentoComponent() {
     this.dataFromAziendaTipiProcedimentoComponent = this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"];
     this.headerAzienda = this.dataFromAziendaTipiProcedimentoComponent.descrizione;
-    console.log("CIAO", this.dataFromAziendaTipiProcedimentoComponent);
   }
 
-  private caricaDettaglioProcedimento() {
+  private caricaDettaglioProcedimento(setInitialValue: boolean) {
     const odataContextDefinitionProcedimento: OdataContextEntitiesDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     const aziendaTipoProcedimento: AziendaTipoProcedimento = this.dataFromAziendaTipiProcedimentoComponent["aziendaTipoProcedimento"];
-    console.log("Azienda", aziendaTipoProcedimento);
     if (!this.dataSourceProcedimento) {
       this.dataSourceProcedimento = new DataSource({
         store: odataContextDefinitionProcedimento.getContext()[Entities.Procedimento.name],
@@ -108,13 +104,14 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         filter: [["idAziendaTipoProcedimento.id", "=", this.idAziendaProcedimentoProva]/* , "and", ["idStruttura.id", "=", this.strutturaSelezionata.id] */]
       })
     } else {
-      console.log("ELSE");
       // this.dataSourceProcedimento.filter([["idAziendaTipoProcedimento.id", "=", aziendaTipoProcedimento.id], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]);
       this.dataSourceProcedimento.filter(["idAziendaTipoProcedimento.id", "=", this.idAziendaProcedimentoProva]);
     }
     this.dataSourceProcedimento.load().then(res => {
         this.procedimento.build(res[0], Procedimento);
-        console.log("Procedimento", this.procedimento);
+        if (setInitialValue) {
+            this.setInitialValues();
+        }
      });
   }
 
@@ -132,7 +129,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       if (flagSalva) {
         this.dataSourceProcedimento.store()
           .update(this.procedimento.idProcedimento, this.procedimento)
-          .done(res => (this.caricaDettaglioProcedimento()));
+          .done(res => (this.caricaDettaglioProcedimento(true)));
         notify( {
           message: "salvataggio effettuato con successo",
           type: "success",
@@ -151,7 +148,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public bottoneAnnulla() {
     if (!Entity.isEquals(this.procedimento, this.initialProcedimento)) {
-      this.caricaDettaglioProcedimento();
+      this.caricaDettaglioProcedimento(false);
       this.bottoneSalvaProcedimento(false);
     }
     // this.router.navigate(["/aziende-tipi-procedimento"]);
@@ -164,7 +161,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public formFieldDataChanged(event) {
     console.log("dataChanged: ", Entity.isEquals(this.procedimento, this.initialProcedimento));
-    console.log('Event object: ', event)
+    console.log('Event object: ', event);
     this.abilitaSalva = !Entity.isEquals(this.procedimento, this.initialProcedimento);
     if (this.abilitaSalva) {
         this.testoBottone = "Salva";
@@ -175,12 +172,12 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.headerTipoProcedimento = this.sharedData.getSharedObject()["HeaderTipoProcedimento"]["headerTipoProcedimento"];
-    this.headerAzienda = this.sharedData.getSharedObject()["HeaderAzienda"]["headerAzienda"];
+    this.headerTipoProcedimento = this.sharedData.getSharedObject()["headerTipoProcedimento"];
+    this.headerAzienda = this.sharedData.getSharedObject()["headerAzienda"];
   }
 
 
-  showPopup() { 
+  showPopup() {
     this.popupVisible = true;
   }
 

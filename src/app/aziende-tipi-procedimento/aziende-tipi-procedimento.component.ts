@@ -256,12 +256,8 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
             AziendeTipiProcedimentoComponent: {
                 aziendaTipoProcedimento: azienda
             },
-            HeaderAzienda: {
-                headerAzienda: this.testoHeaderAzienda
-            },
-            HeaderTipoProcedimento: {
-                headerTipoProcedimento: this.testoHeaderTipoProcedimento
-            }
+            headerAzienda: this.testoHeaderAzienda,
+            headerTipoProcedimento: this.testoHeaderTipoProcedimento
         };
         this.sharedData.setSharedObject(obj);
         this.router.navigate(['/struttura-tipi-procedimento']);
