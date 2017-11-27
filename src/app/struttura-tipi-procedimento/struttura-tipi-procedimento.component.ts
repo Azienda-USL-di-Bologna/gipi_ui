@@ -43,9 +43,11 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   public campiEditabiliDisabilitati: boolean = true;
   public testoBottone: string = "Modifica";
 
-  private idAziendaProcedimentoProva: number = 55;
   public headerTipoProcedimento;
   public headerAzienda;
+  public headerStruttura;
+
+  public formVisible: boolean = false;
 
   public popupVisible: boolean = false;
 
@@ -53,7 +55,6 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
     this.setDataFromDettaglioProcedimentoComponent();
     this.strutturaSelezionata = new Struttura();
-    this.strutturaSelezionata.id = 10;
     // COSTRUZIONE MENU CONTESTUALE SULL'ALBERO
     this.contextMenuItems = [{ text: 'Espandi a strutture figlie' }];
 
@@ -79,16 +80,15 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   this.datasource = new DataSource({
     store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
     customQueryParams: {
-      idAziendaTipoProcedimento: 33,
-      idAzienda: 5
+      idAziendaTipoProcedimento: this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"]["aziendaTipoProcedimento"]["idTipoProcedimento"]["idTipoProcedimento"],
+      idAzienda: this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"]["aziendaTipoProcedimento"]["idAzienda"]["id"]
     }
   });
-  this.caricaDettaglioProcedimento(true);
  }
 
-     /** aziendaTipoProcedimento.id
-     * Legge i dati passatti dall'interfaccia precedente AziendeTipiProcedimentoComponent
-     */
+   /** aziendaTipoProcedimento.id
+   * Legge i dati passatti dall'interfaccia precedente AziendeTipiProcedimentoComponent
+   */
   private setDataFromDettaglioProcedimentoComponent() {
     this.dataFromAziendaTipiProcedimentoComponent = this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"];
     this.headerAzienda = this.dataFromAziendaTipiProcedimentoComponent.descrizione;
@@ -100,24 +100,20 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     if (!this.dataSourceProcedimento) {
       this.dataSourceProcedimento = new DataSource({
         store: odataContextDefinitionProcedimento.getContext()[Entities.Procedimento.name],
+        requireTotalCount: true,
         expand: ["idAziendaTipoProcedimento", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento", "idAziendaTipoProcedimento.idTitolo"],
-        filter: [["idAziendaTipoProcedimento.id", "=", this.idAziendaProcedimentoProva]/* , "and", ["idStruttura.id", "=", this.strutturaSelezionata.id] */]
+        filter: [["idAziendaTipoProcedimento.id", "=", aziendaTipoProcedimento.id], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id] ]
       })
     } else {
-      // this.dataSourceProcedimento.filter([["idAziendaTipoProcedimento.id", "=", aziendaTipoProcedimento.id], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]);
-      this.dataSourceProcedimento.filter(["idAziendaTipoProcedimento.id", "=", this.idAziendaProcedimentoProva]);
+      this.dataSourceProcedimento.filter([["idAziendaTipoProcedimento.id", "=", aziendaTipoProcedimento.id], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]);
     }
     this.dataSourceProcedimento.load().then(res => {
-        this.procedimento.build(res[0], Procedimento);
-        if (setInitialValue) {
-            this.setInitialValues();
-        }
-     });
-  }
-
-  public sbloccaCampiEditabili() {
-    this.abilitaSalva = false;
-    this.campiEditabiliDisabilitati = false;
+      res.length ? this.formVisible = true : this.formVisible = false;
+      this.procedimento.build(res[0], Procedimento);
+      if (setInitialValue) {
+          this.setInitialValues();
+      }
+    });
   }
 
   public bottoneSalvaProcedimento(flagSalva: boolean) {
@@ -131,7 +127,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
           .update(this.procedimento.idProcedimento, this.procedimento)
           .done(res => (this.caricaDettaglioProcedimento(true)));
         notify( {
-          message: "salvataggio effettuato con successo",
+          message: "Salvataggio effettuato con successo",
           type: "success",
           displayTime: 1200,
           position: {
@@ -142,40 +138,42 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         });
       }
     }
-    this.abilitaSalva = !this.abilitaSalva;
-    this.campiEditabiliDisabilitati = !this.campiEditabiliDisabilitati;
+    this.cambiaStatoForm();
   }
 
   public bottoneAnnulla() {
     if (!Entity.isEquals(this.procedimento, this.initialProcedimento)) {
       this.caricaDettaglioProcedimento(false);
       this.bottoneSalvaProcedimento(false);
+    } else {
+      if (!this.campiEditabiliDisabilitati) {
+        this.testoBottone = "Modifica";
+        this.cambiaStatoForm();
+      }
     }
     // this.router.navigate(["/aziende-tipi-procedimento"]);
   }
 
+  private cambiaStatoForm() {
+    this.abilitaSalva = !this.abilitaSalva;
+    this.campiEditabiliDisabilitati = !this.campiEditabiliDisabilitati;
+  }
+
   setInitialValues() {
-    console.log("onInitialized");
     this.initialProcedimento = Object.assign({}, this.procedimento);
   }
 
-  public formFieldDataChanged(event) {
-    console.log("dataChanged: ", Entity.isEquals(this.procedimento, this.initialProcedimento));
-    console.log('Event object: ', event);
-    this.abilitaSalva = !Entity.isEquals(this.procedimento, this.initialProcedimento);
-    if (this.abilitaSalva) {
-        this.testoBottone = "Salva";
-        this.setInitialValues();
-    } else {
-        this.testoBottone = "Modifica";
-    }
+  selezionaStruttura(obj) {
+    this.headerStruttura = obj.nome;
+    this.strutturaSelezionata.id = obj.id;
+    this.caricaDettaglioProcedimento(true);
   }
 
   ngOnInit() {
     this.headerTipoProcedimento = this.sharedData.getSharedObject()["headerTipoProcedimento"];
     this.headerAzienda = this.sharedData.getSharedObject()["headerAzienda"];
+    this.headerStruttura = "Seleziona una struttura...";
   }
-
 
   showPopup() {
     this.popupVisible = true;

@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, ViewChild} from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import {Struttura} from "../../classi/server-objects/entities/struttura";
 import DataSource from "devextreme/data/data_source";
 import ODataStore from "devextreme/data/odata/store";
@@ -27,7 +27,7 @@ export class StruttureTreeComponent implements OnInit {
   @Input("idAziendaTipoProcedimento") idAziendaTipoProcedimento: number;
   @Input("readOnly") readOnly: boolean;
   @Input("enableCheckRecursively") enableCheckRecursively: boolean;
-
+  @Output("strutturaSelezionata") strutturaSelezionata = new EventEmitter<Object>();
   enterIntoChangeSelection : boolean = true;
   
   constructor(private http: HttpClient, private odataContextFactory: OdataContextFactory) {
@@ -140,6 +140,14 @@ export class StruttureTreeComponent implements OnInit {
       return "tree-readonly dx-checkbox-icon";
     else
       return "tree-not-readonly dx-checkbox-icon";
+  }
+
+  selezionaStruttura(e) {
+    const obj = {
+      id: e.itemData.id,
+      nome: e.itemData.nome
+    };
+    this.strutturaSelezionata.emit(obj);
   }
 
 }

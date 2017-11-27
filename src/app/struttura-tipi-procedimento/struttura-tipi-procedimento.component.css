@@ -37,6 +37,16 @@
    font-weight: bold;
 }
 
+.no-procedimento {
+    padding-top: 20%;
+    text-align: center;
+    color: #444;
+    font-size: 35px;
+    line-height: 44px;
+    letter-spacing: -2px;
+    font-weight: bold
+}
+
 /deep/ .demo-container, #page {
     height: 100%;
     min-height: 300px;
