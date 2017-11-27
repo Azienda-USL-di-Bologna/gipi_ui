@@ -10,6 +10,10 @@
     margin-bottom: 5px;
 }
 
+.allinea-a-sinistra{
+    margin-left: 0px;
+}
+
 .center-div {
     margin-top: 2%;
     margin-left: 5%;
@@ -81,4 +85,8 @@
     font-size: 20px;
     padding-top: 10px;
     text-align: center;
+}
+
+/deep/ .dx-popup-content{
+    padding:0px;
 }

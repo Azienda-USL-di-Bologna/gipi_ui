@@ -143,8 +143,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public bottoneAnnulla() {
     if (!Entity.isEquals(this.procedimento, this.initialProcedimento)) {
-      this.caricaDettaglioProcedimento(false);
-      this.bottoneSalvaProcedimento(false);
+      // this.caricaDettaglioProcedimento(false);
     } else {
       if (!this.campiEditabiliDisabilitati) {
         this.testoBottone = "Modifica";

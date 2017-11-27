@@ -5,6 +5,7 @@ import ODataStore from "devextreme/data/odata/store";
 import {OdataContextFactory} from "@bds/nt-angular-context";
 import {FunctionsImport} from "../../../environments/app.constants";
 import {HttpClient} from "@angular/common/http";
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: "strutture-tree",
@@ -120,22 +121,21 @@ export class StruttureTreeComponent implements OnInit {
   }
 
   public sendData() {
-    console.log("Sono arrivato al figlio");
     const req = this.http.post("http://localhost:10006/gipi/resources/custom/updateProcedimenti", {
       idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
       nodeInvolved: this.nodeInvolved
     })
-        .subscribe(
+      .subscribe(
             res => {
-              console.log(res);
+              this.showStatusOperation("Modifica andata a buon fine", "success");
             },
             err => {
-              console.log("Error occured");
+              this.showStatusOperation("Associazione non andata a buon fine", "error");
             }
         );
   }
 
-  getClass() {
+public getClass() {
     if(this.readOnly)
       return "tree-readonly dx-checkbox-icon";
     else
@@ -150,8 +150,20 @@ export class StruttureTreeComponent implements OnInit {
     this.strutturaSelezionata.emit(obj);
   }
 
+public showStatusOperation(message:string, type:string){
+  
+    notify( {
+      message: message,
+      type: type,
+      displayTime: 1700,
+      position: {
+          my: "bottom",
+          at: "top",
+          of: "#responsive-box-buttons"
+       }
+    });
+  }
+
 }
-
-
 
 const NodeOperations  = {INSERT: "INSERT", DELETE: "DELETE"}
