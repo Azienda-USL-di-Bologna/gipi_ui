@@ -1,10 +1,11 @@
-import {Component, Input, OnChanges, OnInit, ViewChild} from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import {Struttura} from "../../classi/server-objects/entities/struttura";
 import DataSource from "devextreme/data/data_source";
 import ODataStore from "devextreme/data/odata/store";
 import {OdataContextFactory} from "@bds/nt-angular-context";
 import {FunctionsImport} from "../../../environments/app.constants";
 import {HttpClient} from "@angular/common/http";
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: "strutture-tree",
@@ -27,7 +28,7 @@ export class StruttureTreeComponent implements OnInit {
   @Input("idAziendaTipoProcedimento") idAziendaTipoProcedimento: number;
   @Input("readOnly") readOnly: boolean;
   @Input("enableCheckRecursively") enableCheckRecursively: boolean;
-
+  @Output("strutturaSelezionata") strutturaSelezionata = new EventEmitter<Object>();
   enterIntoChangeSelection : boolean = true;
   
   constructor(private http: HttpClient, private odataContextFactory: OdataContextFactory) {
@@ -120,20 +121,49 @@ export class StruttureTreeComponent implements OnInit {
   }
 
   public sendData() {
-    console.log("Sono arrivato al figlio");
     const req = this.http.post("http://localhost:10006/gipi/resources/custom/updateProcedimenti", {
       idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
       nodeInvolved: this.nodeInvolved
     })
-        .subscribe(
+      .subscribe(
             res => {
-              console.log(res);
+              this.showStatusOperation("Modifica andata a buon fine", "success");
             },
             err => {
-              console.log("Error occured");
+              this.showStatusOperation("Associazione non andata a buon fine", "error");
             }
         );
   }
+
+public getClass() {
+    if(this.readOnly)
+      return "tree-readonly dx-checkbox-icon";
+    else
+      return "tree-not-readonly dx-checkbox-icon";
+  }
+
+  selezionaStruttura(e) {
+    const obj = {
+      id: e.itemData.id,
+      nome: e.itemData.nome
+    };
+    this.strutturaSelezionata.emit(obj);
+  }
+
+public showStatusOperation(message:string, type:string){
+  
+    notify( {
+      message: message,
+      type: type,
+      displayTime: 1700,
+      position: {
+          my: "bottom",
+          at: "top",
+          of: "#responsive-box-buttons"
+       }
+    });
+  }
+
 }
 
 const NodeOperations  = {INSERT: "INSERT", DELETE: "DELETE"}

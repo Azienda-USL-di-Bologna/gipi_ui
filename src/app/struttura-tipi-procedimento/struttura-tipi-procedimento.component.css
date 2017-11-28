@@ -10,6 +10,10 @@
     margin-bottom: 5px;
 }
 
+.allinea-a-sinistra{
+    margin-left: 0px;
+}
+
 .center-div {
     margin-top: 2%;
     margin-left: 5%;
@@ -35,6 +39,16 @@
 
 .header-font{
    font-weight: bold;
+}
+
+.no-procedimento {
+    padding-top: 20%;
+    text-align: center;
+    color: #444;
+    font-size: 35px;
+    line-height: 44px;
+    letter-spacing: -2px;
+    font-weight: bold
 }
 
 /deep/ .demo-container, #page {
@@ -71,4 +85,8 @@
     font-size: 20px;
     padding-top: 10px;
     text-align: center;
+}
+
+/deep/ .dx-popup-content{
+    padding:0px;
 }

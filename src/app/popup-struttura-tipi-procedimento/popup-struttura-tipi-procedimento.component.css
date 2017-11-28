@@ -4,7 +4,7 @@
 }
 
 .padding-button {
-    margin-top: 5px;
+    margin-top: 15px;
     margin-left: 15%;
     margin-right: 15%;
     margin-bottom: 5px;
@@ -45,6 +45,7 @@
 /deep/ #page .header {
     /*background-color: rgba(243, 158, 108, 0.80);*/
     text-align: center;
+    margin-bottom: 0px;
 }
 
 /deep/ #page .content {

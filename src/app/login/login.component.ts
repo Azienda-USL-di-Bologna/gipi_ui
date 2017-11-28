@@ -22,6 +22,11 @@ export class LoginComponent implements OnInit {
               data => {
                   sessionStorage.setItem("token", data.token);
                   sessionStorage.setItem("userinfo", data.username);
+
+                  //la mappa userInfoMap contiene i seguenti oggetti:
+                  //username -> username dell'utente; ruolo -> oggetto Ruolo
+                  //azienda -> oggetto Azienda attaccato all'utente; strutture -> ArrayList delle strutture dell'utente 
+                  sessionStorage.setItem("userInfoMap", data.userInfoMap);
                   sessionStorage.setItem("loginMethod", "sso");
                   this.router.navigate(["/home"]);
               })
@@ -44,8 +49,14 @@ export class LoginComponent implements OnInit {
             (data: any) => {
               sessionStorage.setItem("token", data.token);
               sessionStorage.setItem("userinfo", data.username);
+
+              //la mappa userInfoMap contiene i seguenti oggetti:
+              //username -> username dell'utente; ruolo -> oggetto Ruolo
+              //azienda -> oggetto Azienda attaccato all'utente; strutture -> ArrayList delle strutture dell'utente 
+              sessionStorage.setItem("userInfoMap", data.userInfoMap);
               sessionStorage.setItem("loginMethod", "local");
               this.router.navigate(["/home"]);
+
             },
             (err) => {
               console.log(err)
