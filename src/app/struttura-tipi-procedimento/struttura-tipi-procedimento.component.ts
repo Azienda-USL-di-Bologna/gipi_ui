@@ -47,6 +47,10 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   public headerAzienda;
   public headerStruttura;
 
+  /* Variabili passate all'albero */
+  public idAziendaFront;
+  public idAziendaTipoProcedimentoFront;
+
   public formVisible: boolean = false;
 
   public popupVisible: boolean = false;
@@ -64,34 +68,35 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   //   });
   //  }
 
-  this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
+    this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
 
-  const odataContextDefinitionUtente: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
-  const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("descrizione");
-  customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
+    const odataContextDefinitionUtente: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("descrizione");
+    customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
 
-  this.dataSourceUtente = new DataSource({
-    store: odataContextDefinitionUtente.getContext()[Entities.Utente.name].on('loading', (loadOptions) => {
-      loadOptions.userData['customLoadingFilterParams'] = customLoadingFilterParams;
-      odataContextDefinitionUtente.customLoading(loadOptions);
-    }),
-    filter: [['idAzienda.id', '=', this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"]["aziendaTipoProcedimento"]["idAzienda"]["id"]]]
-  });
-  this.datasource = new DataSource({
-    store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
-    customQueryParams: {
-      idAziendaTipoProcedimento: this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"]["aziendaTipoProcedimento"]["idTipoProcedimento"]["idTipoProcedimento"],
-      idAzienda: this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"]["aziendaTipoProcedimento"]["idAzienda"]["id"]
-    }
-  });
+    this.dataSourceUtente = new DataSource({
+      store: odataContextDefinitionUtente.getContext()[Entities.Utente.name].on('loading', (loadOptions) => {
+        loadOptions.userData['customLoadingFilterParams'] = customLoadingFilterParams;
+        odataContextDefinitionUtente.customLoading(loadOptions);
+      }),
+      filter: [['idAzienda.id', '=', this.idAziendaFront]]
+    });
+
+    this.datasource = new DataSource({
+      store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
+      customQueryParams: {
+        idAziendaTipoProcedimento: this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"]["aziendaTipoProcedimento"]["idTipoProcedimento"]["idTipoProcedimento"],
+        idAzienda: this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"]["aziendaTipoProcedimento"]["idAzienda"]["id"]
+      }
+    });
  }
 
-   /** aziendaTipoProcedimento.id
-   * Legge i dati passatti dall'interfaccia precedente AziendeTipiProcedimentoComponent
-   */
+  /* Legge i dati passatti dall'interfaccia precedente AziendeTipiProcedimentoComponent e setto le variabili */
   private setDataFromDettaglioProcedimentoComponent() {
     this.dataFromAziendaTipiProcedimentoComponent = this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"];
-    this.headerAzienda = this.dataFromAziendaTipiProcedimentoComponent.descrizione;
+    const aziendaTipoProcedimento: AziendaTipoProcedimento = this.dataFromAziendaTipiProcedimentoComponent["aziendaTipoProcedimento"];
+    this.idAziendaFront = aziendaTipoProcedimento.idAzienda.id;
+    this.idAziendaTipoProcedimentoFront = aziendaTipoProcedimento.id;
   }
 
   private caricaDettaglioProcedimento(setInitialValue: boolean) {
@@ -117,7 +122,6 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   public bottoneSalvaProcedimento(flagSalva: boolean) {
-    // !this.abilitaSalva ? this.testoBottone = "Salva" : this.testoBottone = "Modifica";
     if (!this.abilitaSalva) {
       this.testoBottone = "Salva";
     } else {
@@ -167,8 +171,13 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.headerStruttura = obj.nome;
     this.strutturaSelezionata.id = obj.id;
     this.caricaDettaglioProcedimento(true);
+    if (!this.campiEditabiliDisabilitati) {
+      this.testoBottone = "Modifica";
+      this.cambiaStatoForm();
+    }
   }
 
+  /* Leggo qui dallo SharedData gli header perché vengono caricati prima del constructor */
   ngOnInit() {
     this.headerTipoProcedimento = this.sharedData.getSharedObject()["headerTipoProcedimento"];
     this.headerAzienda = this.sharedData.getSharedObject()["headerAzienda"];
