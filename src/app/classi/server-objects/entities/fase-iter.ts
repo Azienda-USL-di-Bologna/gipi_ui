@@ -1,6 +1,6 @@
 /*
 import {Fase} from "./fase";
-import {Iter} from "./fase";
+import {Iter} from "./iter";
 */
 import {Entity} from "@bds/nt-angular-context/entity";
 export class FaseIter extends Entity {
