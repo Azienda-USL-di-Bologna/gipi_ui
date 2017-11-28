@@ -1,0 +1,43 @@
+
+<div class="headerDiv">
+  <h3><span class="header-font">Azienda:</span> <i>blabla</i></h3>
+  <h3><span class="header-font">Struttura:</span> <i>blablablabla</i></h3>
+  <h3><span class="header-font">Tipo procedimento:</span> <i>blabla</i></h3>
+  <h3><span class="header-font">Iter N. </span> <i>blablabla</i></h3>
+</div>
+<dx-responsive-box class="contentWrapper">
+  <dxi-row [ratio]="1"></dxi-row>
+
+  <dxi-col [ratio]="1"></dxi-col>
+  <dxi-col [ratio]="1"></dxi-col>
+
+  <dxi-item>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="lg"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="md"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="sm"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="xs"></dxi-location>
+    <div>
+      LEFT
+      <!-- <dx-form 
+        id="form"
+        [colCount]="1"
+        [formData]="procedimento">
+          <dxi-item dataField="modoApertura" [editorOptions]="{ disabled: true }"></dxi-item>
+      </dx-form> -->
+    </div>
+  </dxi-item>
+
+  <dxi-item>
+    <dxi-location [row]="0" [col]="1" [colspan]="1" screen="lg"></dxi-location>
+    <dxi-location [row]="0" [col]="1" [colspan]="1" screen="md"></dxi-location>
+    <dxi-location [row]="0" [col]="1" [colspan]="1" screen="sm"></dxi-location>
+    <dxi-location [row]="0" [col]="1" [colspan]="1" screen="xs"></dxi-location>
+    <div>
+      RIGHT
+    </div>
+  </dxi-item>
+</dx-responsive-box>
+<div class="footerDiv">
+    <dx-button [text]="'Annulla'" [type]="normal"></dx-button>
+    <dx-button [text]="'Conferma'" [type]="normal"></dx-button>
+</div>
