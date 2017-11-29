@@ -202,87 +202,23 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.popupVisible = true;
   }
 
-  // caricamentoAlbero(e) {
-  //   const value = e.node;
-  // }
+  //QUESTO EVENTO VIENE EMESSO DALLA POPUP E INDICA ALLA PAGINA SOTTOSTANTE CHE DEVE RICARICARE L'ALBERO PER FAR VEDERE LE MODIFICHE EFFETTUATE
+  refresh(nodeInvolved) { 
+    
+    //TODO qui al posto di fare questa load, vado a ciclare sugli elementi dell'albero in modo da modificare il check direttamente 
+    //sui nodi dell'albero. Non posso fare il .load() sul datasource perchè poi ogni volta mi richiude l'albero
+    console.log(this.treeView.datasource._items);
 
-  /*Questo evento scatta quando clicchiamo sul nodo dell'albero per far aprire il menu contestuale
-     in questo momento ci salviamo il nodo cliccato */
-  // openContextMenu(e) {
-  //   this.nodeSelectedFromContextMenu = e.itemData;
-  //   // this.abilitaRicorsione = true;
-  // }
-
-
-   // this.treeView.selectNodesRecursive = true;
-  //Questo scatta quando clicchiamo sulla voce del menu contestuale "Espandi..."
-  // contextualItemClick(e) {
-
-  //   //FUNZIONE CHE SELEZIONA TUTTI I FIGLI
-  //   console.log(this.datasource);
-
-
-  //   this.treeView.selectNodesRecursive = true;
-  //   this.treeView.instance.selectItem(this.nodeSelectedFromContextMenu.id);
-  //  // this.treeView.selectNodesRecursive = false;
-
-  //   this.nodeSelectedFromContextMenu.selected = true;
-
-  //   // console.log('VAL: ' + this.nodeSelectedFromContextMenu.id);
-  // }
+    // nodeInvolved.forEach(element => {
+    //   let pos = this.treeView.datasource._items.search
+    // });
+    
+    this.treeView.datasource.load();
+  }
 
   screen(width) {
     return (width < 700) ? "sm" : "lg";
   }
-
-  // handleEvent(eventName: string, e: Event) {
-  //   switch (eventName) {
-  //     // case 'treeItemSelectionChanged':
-  //     //   this.treeItemSelectionChanged(e);
-  //     //   break;
-  //   }
-  // }
-
-  // private treeItemSelectionChanged(e) {
-  //   this.emitTreeNodeSelected.emit(e.node);
-  // }
-
-  // private setSelectedNodeRecursively(node: any): void {
-  //   // this.node.item
-  //     console.log("item: " + node);
-  //     const res = this.getNestedChildren(this.datasource.items(), node.id);
-
-  //     console.log("TREE");
-  //     res.forEach(function (element) {
-  //         element.selected = true;
-  //         console.log(element.nome);
-  //     });
-  // }
-
-  //   private getNestedChildren(inputArray, selectedNode) {
-  //   const result = []
-  //   for (const i in inputArray) {
-  //       if (inputArray[i].idStrutturaPadre === selectedNode) {
-  //            this.getNestedChildren(inputArray, inputArray[i].id);
-  //           this.treeView.instance.selectItem(inputArray[i].id);
-  //           result.push(inputArray[i]);
-  //       }
-  //   }
-  //   return result;
-  //   }
-
-  //   private esegui() {
-  //     const res = this.datasource.items();
-  //       res.forEach(function (element) {
-  //           if (element.selected === true) {
-  //               console.log(element.nome);
-  //           }
-  //       });
-  //   }
-
-    // private setInitialState() {
-    //      this.initialState = this.datasource.items();
-    // }
 }
 
 

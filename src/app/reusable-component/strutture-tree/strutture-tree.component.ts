@@ -3,7 +3,8 @@ import {Struttura} from "../../classi/server-objects/entities/struttura";
 import DataSource from "devextreme/data/data_source";
 import ODataStore from "devextreme/data/odata/store";
 import {OdataContextFactory} from "@bds/nt-angular-context";
-import {FunctionsImport} from "../../../environments/app.constants";
+import { FunctionsImport } from "../../../environments/app.constants";
+import { SharedData } from '@bds/nt-angular-context/shared-data';
 import {HttpClient} from "@angular/common/http";
 import notify from 'devextreme/ui/notify';
 
@@ -15,7 +16,7 @@ import notify from 'devextreme/ui/notify';
 export class StruttureTreeComponent implements OnInit {
 
   public datasource: DataSource;
-  public datasourceForController: DataSource;
+  public datasourceOriginal: DataSource;
   public strutture: Struttura = new Struttura();
   private odataContextDefinition;
   public contextMenuItems;
@@ -29,6 +30,8 @@ export class StruttureTreeComponent implements OnInit {
   @Input("readOnly") readOnly: boolean;
   @Input("enableCheckRecursively") enableCheckRecursively: boolean;
   @Output("strutturaSelezionata") strutturaSelezionata = new EventEmitter<Object>();
+  @Output("refreshAfterChange") refreshAfterChange = new EventEmitter <Object>();
+  
   enterIntoChangeSelection : boolean = true;
   
   constructor(private http: HttpClient, private odataContextFactory: OdataContextFactory) {
@@ -74,8 +77,24 @@ export class StruttureTreeComponent implements OnInit {
         idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
         idAzienda: this.idAzienda
       }
-    });
+    }); 
   }
+
+  // private caricaAlberoStrutture(setInitialValue: boolean) { 
+
+  //   this.datasource = new DataSource({
+  //     store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
+  //     customQueryParams: {
+  //       idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
+  //       idAzienda: this.idAzienda
+  //     }
+  //   }); 
+
+  // }
+
+  // private setInitialValues() { 
+  //   this.datasourceOriginal = Object.assign({}, this.datasource);
+  // }
 
   /*Questo evento scatta quando clicchiamo sul nodo dell'albero per far aprire il menu contestuale
    in questo momento ci salviamo il nodo cliccato */
@@ -98,13 +117,10 @@ export class StruttureTreeComponent implements OnInit {
 
   private setSelectedNodeRecursively(node: any): void {
     // this.node.item
-    console.log("item: " + node);
     const res = this.getNestedChildren(this.datasource.items(), node.id);
 
-    console.log("TREE");
     res.forEach(function (element) {
       element.selected = true;
-      console.log(element.nome);
     });
   }
 
@@ -120,7 +136,7 @@ export class StruttureTreeComponent implements OnInit {
     return result;
   }
 
-  public sendData() {
+  public sendDataConfirm() {
     const req = this.http.post("http://localhost:10006/gipi/resources/custom/updateProcedimenti", {
       idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
       nodeInvolved: this.nodeInvolved
@@ -128,11 +144,17 @@ export class StruttureTreeComponent implements OnInit {
       .subscribe(
             res => {
               this.showStatusOperation("Modifica andata a buon fine", "success");
+              this.refreshAfterChange.emit(this.nodeInvolved);
             },
             err => {
               this.showStatusOperation("Associazione non andata a buon fine", "error");
             }
         );
+  }
+
+  public setDataCancel() {  
+    this.datasource.load();
+    this.refreshAfterChange.emit();
   }
 
 public getClass() {
@@ -142,7 +164,7 @@ public getClass() {
       return "tree-not-readonly dx-checkbox-icon";
   }
 
-  selezionaStruttura(e) {
+public  selezionaStruttura(e) {
     const obj = {
       id: e.itemData.id,
       nome: e.itemData.nome
