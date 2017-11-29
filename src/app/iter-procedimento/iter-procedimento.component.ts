@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {SequenzaDelleFasiComponent} from './sequenza-delle-fasi/sequenza-delle-fasi.component'
 
 @Component({
   selector: 'app-iter-procedimento',
