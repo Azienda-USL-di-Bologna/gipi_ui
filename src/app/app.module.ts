@@ -57,6 +57,8 @@ import {contextModuleConfig} from './module-configurations';
 import { StruttureTreeComponent } from "./reusable-component/strutture-tree/strutture-tree.component";
 import { ProcedimentiAttiviComponent } from './procedimenti-attivi/procedimenti-attivi.component';
 import { PopupStrutturaTipiProcedimentoComponent } from './popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component';
+import { IterProcedimentoComponent } from './iter-procedimento/iter-procedimento.component';
+import { SequenzaDelleFasiComponent } from './iter-procedimento/sequenza-delle-fasi/sequenza-delle-fasi.component';
 
 @NgModule({
     declarations: [
@@ -75,7 +77,9 @@ import { PopupStrutturaTipiProcedimentoComponent } from './popup-struttura-tipi-
         LoginComponent,
         StruttureTreeComponent,
         ProcedimentiAttiviComponent,
-        PopupStrutturaTipiProcedimentoComponent
+        PopupStrutturaTipiProcedimentoComponent,
+        IterProcedimentoComponent,
+        SequenzaDelleFasiComponent
     ],
     imports: [
         BrowserModule,
