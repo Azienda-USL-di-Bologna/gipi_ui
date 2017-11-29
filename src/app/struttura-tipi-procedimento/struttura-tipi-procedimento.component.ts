@@ -113,7 +113,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       this.dataSourceProcedimento.filter([["idAziendaTipoProcedimento.id", "=", aziendaTipoProcedimento.id], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]);
     }
     this.dataSourceProcedimento.load().then(res => {
-      res.length ? this.formVisible = true : this.formVisible = false;
+      res.length ? this.formVisible = true : this.formVisible = false;  /* Se non ho risultato nascondo il form */
       this.procedimento.build(res[0], Procedimento);
       if (setInitialValue) {
           this.setInitialValues();
@@ -124,25 +124,39 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   public bottoneSalvaProcedimento(flagSalva: boolean) {
     if (!this.abilitaSalva) {
       this.testoBottone = "Salva";
+      this.cambiaStatoForm();
     } else {
-      this.testoBottone = "Modifica";
       if (flagSalva) {
-        this.dataSourceProcedimento.store()
+        if (!(this.procedimento.dataFine < this.procedimento.dataInizio) || this.procedimento.dataFine === null) {
+          this.dataSourceProcedimento.store()
           .update(this.procedimento.idProcedimento, this.procedimento)
           .done(res => (this.caricaDettaglioProcedimento(true)));
-        notify( {
-          message: "Salvataggio effettuato con successo",
-          type: "success",
-          displayTime: 1200,
-          position: {
-              my: "bottom",
-              at: "top",
-              of: "#responsive-box-buttons"
-          }
-        });
+          notify( {
+            message: "Salvataggio effettuato con successo",
+            type: "success",
+            displayTime: 1200,
+            position: {
+                my: "bottom",
+                at: "top",
+                of: "#responsive-box-buttons"
+            }
+          });
+          this.testoBottone = "Modifica";
+          this.cambiaStatoForm();
+        } else {
+            notify( {
+              message: "Correggere l'intervallo di validità",
+              type: "error",
+              displayTime: 1200,
+              position: {
+                  my: "bottom",
+                  at: "top",
+                  of: "#responsive-box-buttons"
+              }
+            });
+        }
       }
     }
-    this.cambiaStatoForm();
   }
 
   public bottoneAnnulla() {

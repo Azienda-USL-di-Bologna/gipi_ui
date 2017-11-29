@@ -22,7 +22,9 @@ import {
     DxTextAreaModule,
     DxTreeViewModule,
     DxContextMenuModule,
-    DxLookupModule
+    DxLookupModule,
+    DxValidatorModule,
+    DxValidationSummaryModule
 } from 'devextreme-angular';
 
 import {RouterModule} from '@angular/router';
@@ -99,6 +101,8 @@ import { PopupStrutturaTipiProcedimentoComponent } from './popup-struttura-tipi-
         FormsModule,
         HttpClientModule,
         MomentModule,
+        DxValidatorModule,
+        DxValidationSummaryModule,
         NgIdleKeepaliveModule.forRoot(),
         ContextModule.forRoot(contextModuleConfig)
     ],
