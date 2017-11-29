@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-sequenza-delle-fasi',
@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sequenza-delle-fasi.component.scss']
 })
 export class SequenzaDelleFasiComponent implements OnInit {
-
+  
+  
   constructor() { }
 
   ngOnInit() {
