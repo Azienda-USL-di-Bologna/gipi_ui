@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { FaseIter } from '../../classi/server-objects/entities/fase-iter';
+
 
 @Component({
   selector: 'app-sequenza-delle-fasi',
