@@ -72,7 +72,7 @@ export class DettaglioProvvedimentoComponent implements OnInit {
             {
                 "tipoProcedimento": this.procedimento,
                 "azienda": azienda,
-                "aziendaAssociata": this.procedimento.aziendeAssociate[azienda.id] ? true: false
+                "aziendaAssociata": this.procedimento.aziendeAssociate[azienda.id] ? true : false, 
             }
         };
         this.sharedData.setSharedObject(obj);

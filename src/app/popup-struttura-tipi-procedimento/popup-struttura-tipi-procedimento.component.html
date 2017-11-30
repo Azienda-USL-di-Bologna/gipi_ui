@@ -7,8 +7,6 @@
     <dxi-row [ratio]="2"></dxi-row>
 
     <dxi-col [ratio]="1"></dxi-col>
-    <!-- <dxi-col [ratio]="2" screen="lg"></dxi-col> -->
-    <!-- <dxi-col [ratio]="1"></dxi-col> -->
 
     <dxi-item>
       <dxi-location [row]="0" [col]="0" [colspan]="3" screen="lg"></dxi-location>
@@ -17,34 +15,28 @@
       <div class = "header item" >
         <h5>
           <span class="header-font">Tipo procedimento:</span>
-          <!-- <i>{{testoHeaderTipoProcedimento}}</i> -->
+           <i>{{testoHeaderTipoProcedimento}}</i>
         </h5>
         <h5>
           <span class="header-font">Azienda:</span>
-          <!-- <i>{{testoHeaderAzienda}}</i> -->
+          <i>{{testoHeaderAzienda}}</i>
         </h5>
       </div>
     </dxi-item>
 
     <dxi-item>
-      <!-- <dxi-location [row]="1" [col]="1" [colspan]="3" screen="lg"></dxi-location> -->
       <dxi-location [row]="1" [col]="0" ></dxi-location>
 
       <div class="center-div">
-        <strutture-tree #treeView [idAzienda]="idAzienda" [idAziendaTipoProcedimento]="idAziendaTipoProcedimento" [readOnly]="readOnly" [enableCheckRecursively]="enableCheckRecursively"></strutture-tree>
+        <strutture-tree #treeView [idAzienda]="idAzienda" 
+                                  [idAziendaTipoProcedimento]="idAziendaTipoProcedimento" 
+                                  [readOnly]="readOnly" 
+                                  [enableCheckRecursively]="enableCheckRecursively" 
+                                  (refreshAfterChange)="refresh($event)">
+        </strutture-tree>
       </div>
     </dxi-item>
-
-    <!-- <dxi-item class="left-side-bar item">
-      <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
-          
-    </dxi-item>
-
-    <dxi-item class="right-side-bar item" style="background-color:orange;">
-      <dxi-location [row]="1" [col]="2" screen="lg"></dxi-location>
-
-    </dxi-item> -->
-
+    
     <!-- QUI COSTRUISCO I PULSANTI, FACCIO IN MODO DI METTERNE 2 ALLINEATI -->
     <dxi-item class="footer item">
       <!-- <dxi-location [row]="2" [col]="1" screen="lg"></dxi-location> -->
@@ -61,12 +53,12 @@
 
         <dxi-item>
           <dxi-location [row]="0" [col]="0"></dxi-location>
-          <dx-button class="padding-button" (onClick)="sendData()" text="Annulla"></dx-button>    
+          <dx-button class="padding-button" (onClick)="sendDataCancel()" text="Annulla"></dx-button>    
         </dxi-item>
 
         <dxi-item>
           <dxi-location [row]="0" [col]="1"></dxi-location>
-          <dx-button class="padding-button" (onClick)="sendData()" text="Associa"></dx-button>    
+          <dx-button class="padding-button" (onClick)="sendDataConfirm()" text="Associa"></dx-button>    
         </dxi-item>
       </dx-responsive-box>
     </dxi-item>
