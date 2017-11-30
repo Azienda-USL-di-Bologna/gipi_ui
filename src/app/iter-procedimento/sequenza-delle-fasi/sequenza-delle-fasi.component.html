@@ -1,5 +1,7 @@
-<dx-responsive-box>
-
-
-
-</dx-responsive-box>
+<dx-data-grid #contentWrapper
+        [dataSource]="datasource"
+    >
+    <dxi-column dataField="idFase.nomeFase" [width]="100" caption="Fase"></dxi-column>
+    <dxi-column dataField="dataInizioFase" [width]="100" caption="Data Inizio"></dxi-column>
+    <dxi-column dataField="dataFineFase" [width]="100" caption="Data Fine"></dxi-column>
+</dx-data-grid>

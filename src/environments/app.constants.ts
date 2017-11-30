@@ -11,6 +11,9 @@ import {Titolo} from '../app/classi/server-objects/entities/titolo';
 import {ServerObjectsDescriptor} from '@bds/nt-angular-context/context-module-config';
 import {Procedimento} from '../app/classi/server-objects/entities/procedimento';
 import {GetStruttureByTipoProcedimento} from "../app/classi/server-objects/functions-import/get-strutture-by-tipo-procedimento";
+import { Iter } from 'app/classi/server-objects/entities/iter';
+import { Fase } from 'app/classi/server-objects/entities/fase';
+import { FaseIter } from 'app/classi/server-objects/entities/fase-iter';
 
 export const Entities: ServerObjectsDescriptor = {
     Azienda: {name: 'Aziendas', class: Azienda},
@@ -22,7 +25,11 @@ export const Entities: ServerObjectsDescriptor = {
     Ruolo: {name: 'Ruolos', class: Ruolo},
     AziendaTipoProcedimento: {name: 'AziendaTipoProcedimentos', class: AziendaTipoProcedimento},
     Titolo: {name: "Titolos", class: Titolo},
-    Procedimento: {name: "Procedimentos", class: Procedimento}
+    Procedimento: {name: "Procedimentos", class: Procedimento},
+    Iter: {name: "Iters", class: Iter},
+    Fase: {name: "Fases", class: Fase},
+    FaseIter: {name: "FaseIters", class: FaseIter}
+    
 }
 
 export const FunctionsImport: ServerObjectsDescriptor = {
