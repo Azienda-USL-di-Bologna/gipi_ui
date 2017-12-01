@@ -14,7 +14,7 @@ export class FaseIter extends Entity {
     public static getOdataContextEntity(): any {
         return {
             key:'idFaseIter',
-            keyType: 'Int32',
+            keyTypes: 'Int32',
             fieldsTypes: {
                 idFaseIter: 'Int32',
                 idFase: 'Int32',
