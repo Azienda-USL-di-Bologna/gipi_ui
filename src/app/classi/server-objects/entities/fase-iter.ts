@@ -3,12 +3,16 @@ import {Fase} from "./fase";
 import {Iter} from "./iter";
 */
 import {Entity} from "@bds/nt-angular-context/entity";
+import { Iter } from "app/classi/server-objects/entities/iter";
+import { Fase } from "app/classi/server-objects/entities/fase";
 export class FaseIter extends Entity {
     idFaseIter: number;
-    idIter: number;
-    idFase: number;
-    data_inizio_fase: Date;
-    data_fine_fase: Date;
+    FK_id_iter: number;
+    idIter: Iter;
+    FK_id_fase: number;
+    idFase: Fase;
+    dataInizioFase: Date;
+    dataFineFase: Date;
 
 
     public static getOdataContextEntity(): any {
@@ -19,8 +23,8 @@ export class FaseIter extends Entity {
                 idFaseIter: 'Int32',
                 idFase: 'Int32',
                 idIter: 'Int32',
-                data_inizio_fase: 'DateTime',
-                data_fine_fase: 'DateTime'
+                dataInizioFase: 'DateTime',
+                dataFineFase: 'DateTime'
             }
         }
     }

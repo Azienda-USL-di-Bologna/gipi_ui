@@ -28,10 +28,10 @@ export const Entities: ServerObjectsDescriptor = {
     AziendaTipoProcedimento: {name: 'AziendaTipoProcedimentos', class: AziendaTipoProcedimento},
     Titolo: {name: "Titolos", class: Titolo},
     Procedimento: {name: "Procedimentos", class: Procedimento},
-    Evento: {name: "Eventos", class: Evento},
     Iter: {name: "Iters", class: Iter},
     Fase: {name: "Fases", class: Fase},
-    FaseIter: {name: "FaseIters", class: FaseIter},
+    FaseIter: {name: "FaseIters", class: FaseIter}
+    Evento: {name: "Eventos", class: Evento},
     EventoIter: {name: "EventoIters", class: EventoIter}
 }
 
