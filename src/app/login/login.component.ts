@@ -3,6 +3,10 @@ import { NgForm} from '@angular/forms';
 import { Router, CanActivate} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {LOGIN_URL} from "../../environments/app.constants";
+import { SharedData } from "@bds/nt-angular-context/shared-data";
+import { log } from 'util';
+import { Ruolo } from 'app/classi/server-objects/entities/ruolo';
+import { Azienda } from 'app/classi/server-objects/entities/azienda';
 
 @Component({
   selector: 'app-login',
@@ -10,10 +14,9 @@ import {LOGIN_URL} from "../../environments/app.constants";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
   errorMessage: string = "";
 
-  constructor(public httpClient: HttpClient, private router:Router) { }
+  constructor(public httpClient: HttpClient, private router:Router, private sharedData: SharedData) { }
 
   ngOnInit() {
       this.httpClient.get<any>(LOGIN_URL)
@@ -22,12 +25,14 @@ export class LoginComponent implements OnInit {
               data => {
                   sessionStorage.setItem("token", data.token);
                   sessionStorage.setItem("userinfo", data.username);
+                  sessionStorage.setItem("loginMethod", "sso");
 
                   //la mappa userInfoMap contiene i seguenti oggetti:
                   //username -> username dell'utente; ruolo -> oggetto Ruolo
                   //azienda -> oggetto Azienda attaccato all'utente; strutture -> ArrayList delle strutture dell'utente 
-                  sessionStorage.setItem("userInfoMap", data.userInfoMap);
-                  sessionStorage.setItem("loginMethod", "sso");
+                  let uim: Object = data.userInfoMap;
+                  console.log("LOGGO UIM!! -> ",JSON.stringify(uim));
+                  sessionStorage.setItem("userInfoMap", JSON.stringify(uim));
                   this.router.navigate(["/home"]);
               })
   }
@@ -49,12 +54,15 @@ export class LoginComponent implements OnInit {
             (data: any) => {
               sessionStorage.setItem("token", data.token);
               sessionStorage.setItem("userinfo", data.username);
+              sessionStorage.setItem("loginMethod", "local");
 
               //la mappa userInfoMap contiene i seguenti oggetti:
               //username -> username dell'utente; ruolo -> oggetto Ruolo
               //azienda -> oggetto Azienda attaccato all'utente; strutture -> ArrayList delle strutture dell'utente 
-              sessionStorage.setItem("userInfoMap", data.userInfoMap);
-              sessionStorage.setItem("loginMethod", "local");
+              let uim: Object = data.userInfoMap;
+              console.log("LOGGO UIM!! -> ",JSON.stringify(uim));
+
+              sessionStorage.setItem("userInfoMap", JSON.stringify(uim));
               this.router.navigate(["/home"]);
 
             },

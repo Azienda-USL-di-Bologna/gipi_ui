@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, Input} from "@angular/core";
+import {Component, OnInit, ViewChild, Input, Output, EventEmitter} from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { Router } from "@angular/router";
 import { SharedData } from "@bds/nt-angular-context/shared-data";
@@ -23,27 +23,43 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
   public contextMenuItems;
   private nodeSelectedFromContextMenu: any;
   private initialState: any;
+  public testoHeaderTipoProcedimento: string;
+  public testoHeaderAzienda: string;
+  public idAzienda: number;
+  public idAziendaTipoProcedimento: number;
 
   @ViewChild("treeView") treeView: StruttureTreeComponent;
-  
-  @Input("idAzienda") idAzienda: number;
-  @Input("idAziendaTipoProcedimento") idAziendaTipoProcedimento: number;
   @Input("readOnly") readOnly: boolean;
   @Input("enableCheckRecursively") enableCheckRecursively: boolean;
-
+  @Input("aziendaTipoProcedimentoObj") aziendaTipoProcedimentoObj: any;
+  @Output("refreshAfterChange") refreshAfterChange = new EventEmitter<Object>();
 
   constructor(private sharedData: SharedData, private odataContextFactory: OdataContextFactory, private router: Router) {
  }
 
   ngOnInit() {
+
+    this.idAzienda = this.aziendaTipoProcedimentoObj.aziendaTipoProcedimento.idAzienda.id;
+    this.idAziendaTipoProcedimento = this.aziendaTipoProcedimentoObj.aziendaTipoProcedimento.id;
+    this.testoHeaderAzienda = this.aziendaTipoProcedimentoObj.aziendaTipoProcedimento.idAzienda.descrizione;
+    this.testoHeaderTipoProcedimento = this.aziendaTipoProcedimentoObj.aziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento;
   }
 
   screen(width) {
     return (width < 700) ? "sm" : "lg";
   }
 
-  sendData() { 
-    //INOLTRO LA CHIAMATA AL FIGLIO
-    this.treeView.sendData();
+  sendDataConfirm() {
+     //INOLTRO LA CHIAMATA AL FIGLIO
+     this.treeView.sendDataConfirm();
+  }
+
+  sendDataCancel() { 
+    this.treeView.setDataCancel();
+  }
+
+  //La popup avvisa il padre che è cambiata la configurazione dell'albero
+  refresh(nodeInvolved) { 
+    this.refreshAfterChange.emit(nodeInvolved);
   }
 }

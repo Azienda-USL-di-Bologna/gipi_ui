@@ -35,24 +35,25 @@
       <dxi-location [row]="1" [col]="0" [colspan]="2" screen="sm"></dxi-location>
 
       <div class="center-div">
-        <dx-form id="form" #myform [(formData)]="procedimento" [visible]=formVisible>  <!-- [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width" -->
+        <dx-form id="form" #myform [(formData)]="procedimento" [visible]="formVisible">  <!-- [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width" -->
           <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: true }"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nomeTitolo" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" [label]="{text: 'Durata massima sospensione'}" [editorOptions]="{ disabled: true }" ></dxi-item>
           <dxi-item dataField="dataInizio" [label]="{text: 'Valido dal'}" editorType="dxDateBox" [editorOptions]="{ disabled: campiEditabiliDisabilitati, displayFormat: 'dd/MM/yyyy' }" ></dxi-item>
-          <dxi-item dataField="dataFine" [label]="{text: 'Al'}"  editorType="dxDateBox" [editorOptions]="{ disabled: campiEditabiliDisabilitati, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-          <dxi-item dataField="idTitolarePotereSostitutivo.id" [label]="{text: 'Titolare potere sostitutivo'}" editorType="dxLookup" [editorOptions]="{ 
+          <dxi-item dataField="dataFine" [label]="{text: 'Al'}" editorType="dxDateBox" [editorOptions]="{ disabled: campiEditabiliDisabilitati, displayFormat: 'dd/MM/yyyy', 
+              min: procedimento.dataInizio, dateOutOfRangeMessage: 'Il valore è fuori dall\'intervallo'}"></dxi-item>
+          <dxi-item dataField="idTitolarePotereSostitutivo" [label]="{text: 'Titolare potere sostitutivo'}" editorType="dxLookup" [editorOptions]="{ 
             disabled: campiEditabiliDisabilitati,
             dataSource: dataSourceUtente, 
-            displayExpr: 'descrizione', 
+            displayExpr: 'descrizione',
             closeOnOutsideClick: true, 
             showPopupTitle: false, 
-            showCancelButton: false, 
+            showCancelButton: false,
             placeholder: 'Seleziona una voce...', 
             searchPlaceholder: 'Cerca...',
-            valueExpr: 'id'
+            valueExpr: 'this'
           }"></dxi-item>
           <dxi-item dataField="modalitaInfo" [label]="{text: 'Modalità informativa'}" [editorOptions]="{ disabled: campiEditabiliDisabilitati }"></dxi-item>
           <dxi-item dataField="descrizioneAtti" [label]="{text: 'Atti da allegare'}" editorType="dxTextArea" [editorOptions]="{ height:70, disabled: campiEditabiliDisabilitati }"></dxi-item>
@@ -65,7 +66,7 @@
       <div style="padding-left:10%">
         <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
           <dx-button class="padding-button allinea-a-sinistra" (onClick)="showPopup()" text="Associa a strutture" hint="Associa a strutture"></dx-button>
-          <strutture-tree [idAzienda]=idAziendaFront [idAziendaTipoProcedimento]=idAziendaTipoProcedimentoFront [readOnly]="true" [enableCheckRecursively]="false"
+          <strutture-tree #treeView [idAzienda]=idAziendaFront [idAziendaTipoProcedimento]=idAziendaTipoProcedimentoFront [readOnly]="true" [enableCheckRecursively]="false"
             (strutturaSelezionata)="selezionaStruttura($event)"></strutture-tree>
       </div>
     </dxi-item>
@@ -109,6 +110,12 @@ title="Associa a strutture"
 [closeOnOutsideClick]="false"
 [(visible)]="popupVisible">
 <div *dxTemplate="let data of 'content'">
-  <popup-struttura-tipi-procedimento [idAzienda]="5" [idAziendaTipoProcedimento]="55" [readOnly]="false" [enableCheckRecursively]="false"></popup-struttura-tipi-procedimento>
+  <popup-struttura-tipi-procedimento [readOnly]="false" 
+                                     [enableCheckRecursively]="false" 
+                                     [aziendaTipoProcedimentoObj] = "dataFromAziendaTipiProcedimentoComponent" 
+                                     (refreshAfterChange) = "refresh($event)">
+  </popup-struttura-tipi-procedimento>
+
+
 </div>
 </dx-popup>

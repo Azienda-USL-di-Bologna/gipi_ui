@@ -22,7 +22,9 @@ import {
     DxTextAreaModule,
     DxTreeViewModule,
     DxContextMenuModule,
-    DxLookupModule
+    DxLookupModule,
+    DxValidatorModule,
+    DxValidationSummaryModule
 } from 'devextreme-angular';
 
 import {RouterModule} from '@angular/router';
@@ -56,6 +58,7 @@ import { StruttureTreeComponent } from "./reusable-component/strutture-tree/stru
 import { ProcedimentiAttiviComponent } from './procedimenti-attivi/procedimenti-attivi.component';
 import { PopupStrutturaTipiProcedimentoComponent } from './popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component';
 import { IterProcedimentoComponent } from './iter-procedimento/iter-procedimento.component';
+import { SequenzaDelleFasiComponent } from './iter-procedimento/sequenza-delle-fasi/sequenza-delle-fasi.component';
 
 @NgModule({
     declarations: [
@@ -75,7 +78,8 @@ import { IterProcedimentoComponent } from './iter-procedimento/iter-procedimento
         StruttureTreeComponent,
         ProcedimentiAttiviComponent,
         PopupStrutturaTipiProcedimentoComponent,
-        IterProcedimentoComponent
+        IterProcedimentoComponent,
+        SequenzaDelleFasiComponent
     ],
     imports: [
         BrowserModule,
@@ -101,6 +105,8 @@ import { IterProcedimentoComponent } from './iter-procedimento/iter-procedimento
         FormsModule,
         HttpClientModule,
         MomentModule,
+        DxValidatorModule,
+        DxValidationSummaryModule,
         NgIdleKeepaliveModule.forRoot(),
         ContextModule.forRoot(contextModuleConfig)
     ],
