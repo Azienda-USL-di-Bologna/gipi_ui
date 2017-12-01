@@ -1,6 +1,29 @@
-<p test>
-  home works!
-</p>
+<div style="position: absolute; z-index: 2;
+  top: 10%; left: 5%">
+
+    <table>
+      <tr>
+          <td><h4>USERNAME</h4></td>
+          <td>&emsp;&emsp;</td>
+          <td><h4>{{username}}</h4></td>
+      </tr>
+      <tr>
+        <td><h4>RUOLO</h4></td>
+        <td>&emsp;&emsp;</td>
+        <td><h4>{{ruolo.titolo}}</h4></td>
+      </tr>
+      <tr>
+        <td><h4>AZIENDA</h4></td>
+        <td>&emsp;&emsp;</td>
+        <td><h4>{{azienda.nome}}</h4></td>
+      </tr>
+      <tr>
+        <td><h4>STRUTTURE</h4></td>
+        <td>&emsp;&emsp;</td>
+        <td><h4>{{struttureDiSeguito}}</h4></td>
+      </tr>
+    </table>
+</div>
 
 
 <a routerLink="../definizione-tipi-procedimento" routerLinkActive="active" alt="CLICCATE">
