@@ -26,17 +26,26 @@ export class HomeComponent implements OnInit {
   constructor(private sessionManager: SessionManager){
     sessionManager.setExpireTokenOnIdle(300);
     this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
-    console.log("Vediamo se suca: ",this.userInfoMap)
 
     this.username = this.userInfoMap["username"];
     this.azienda = this.userInfoMap["azienda"];
     this.strutture = this.userInfoMap["strutture"];
     this.ruolo = this.userInfoMap["ruolo"];
+    console.log("loggo le strutture", this.strutture);
 
-    this.strutture.forEach(element => {
-      this.struttureDiSeguito = this.struttureDiSeguito + ";";
-    });
-    this.struttureDiSeguito = this.struttureDiSeguito == "" ? "Nessuna struttura associata" : this.struttureDiSeguito;
+    for(var i=0; i < this.strutture.length; i++){
+      let st: any = this.strutture[i];
+      var mostra = st.idStruttura.nome + " (afferenza " +st.idAfferenzaStruttura.descrizione+")";
+      if(this.struttureDiSeguito===""){
+        this.struttureDiSeguito = mostra
+      }
+      else{
+        this.struttureDiSeguito = this.struttureDiSeguito + ";\n" + mostra;
+      }
+    }
+
+    console.log("Loggalo lì ",this.struttureDiSeguito)
+    this.struttureDiSeguito = this.struttureDiSeguito === "" ? "Nessuna struttura associata" : this.struttureDiSeguito;
 
   }
   ngOnInit() {
