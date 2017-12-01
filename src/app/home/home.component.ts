@@ -17,11 +17,11 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 })
 export class HomeComponent implements OnInit {
   private userInfoMap: Object;
-  private username: String;
-  private ruolo: Ruolo;
-  private azienda: Azienda;
-  private strutture: Struttura[];
-  private struttureDiSeguito = "";
+  username: String;
+  ruolo: Ruolo;
+  azienda: Azienda;
+  strutture: Struttura[];
+  struttureDiSeguito = "";
 
   constructor(private sessionManager: SessionManager){
     sessionManager.setExpireTokenOnIdle(300);

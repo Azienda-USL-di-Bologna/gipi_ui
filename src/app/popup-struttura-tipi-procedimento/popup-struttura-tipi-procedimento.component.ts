@@ -23,10 +23,10 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
   public contextMenuItems;
   private nodeSelectedFromContextMenu: any;
   private initialState: any;
-  private testoHeaderTipoProcedimento: string;
-  private testoHeaderAzienda: string;
-  private idAzienda: number;
-  private idAziendaTipoProcedimento: number;
+  public testoHeaderTipoProcedimento: string;
+  public testoHeaderAzienda: string;
+  public idAzienda: number;
+  public idAziendaTipoProcedimento: number;
 
   @ViewChild("treeView") treeView: StruttureTreeComponent;
   @Input("readOnly") readOnly: boolean;
