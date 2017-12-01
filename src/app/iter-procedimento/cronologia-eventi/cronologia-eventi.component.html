@@ -1,12 +1,12 @@
+<h4>Cronologia eventi</h4>
 <dx-data-grid
         [dataSource] = "dataSourceEventoIter"
         columnAutoWidth="true"
         noDataText="Non ci sono dati da visualizzare"
         hoverStateEnabled="true"
-        showBorders="true"
->
-  <dxi-column dataField="dataOraEvento" caption="il" [dataType]="'Date'" alignment="center" format="dd/MM/yyyy" [allowSorting]="false" [allowFiltering]="false"></dxi-column>
-  <dxi-column dataField="autore" caption="Autore" [dataType]="'string'" alignment="center" [allowSorting]="false" [allowFiltering]="false"></dxi-column>
-  <dxi-column dataField="idEvento.nomeEvento" caption="Evento" [dataType]="'string'" alignment="center" [allowSorting]="false" [allowFiltering]="false"></dxi-column>
-  <dxi-column dataField="idFaseIter.idFase.nomeFase" caption="Fase" [dataType]="'string'" alignment="center" [allowSorting]="false" [allowFiltering]="false"></dxi-column>
+        showBorders="true">
+  <dxi-column dataField="dataOraEvento" caption="il" [dataType]="'Date'" width="100" alignment="center" format="dd/MM/yyyy" [allowSorting]="false" ></dxi-column>
+  <dxi-column dataField="autore" caption="Autore" [dataType]="'string'" width="auto" alignment="center" [allowSorting]="false"></dxi-column>
+  <dxi-column dataField="idEvento.nomeEvento" caption="Evento" [dataType]="'string'" width="100" alignment="center" [allowSorting]="false"></dxi-column>
+  <dxi-column dataField="idFaseIter.idFase.nomeFase" caption="Fase" [dataType]="'string'" width="100" alignment="center" [allowSorting]="false"></dxi-column>
 </dx-data-grid>
