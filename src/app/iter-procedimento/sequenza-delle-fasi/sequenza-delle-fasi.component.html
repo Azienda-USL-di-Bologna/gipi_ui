@@ -1,7 +1,31 @@
-<dx-data-grid #contentWrapper
+<div #headerSequenzaDelleFasi>
+    <h1 style="text-align:center"><b>Sequenza delle fasi</b></h1>
+</div>
+
+<dx-data-grid #fasiContent
         [dataSource]="datasource"
     >
-    <dxi-column dataField="idFase.nomeFase" [width]="100" caption="Fase"></dxi-column>
-    <dxi-column dataField="dataInizioFase" [width]="100" caption="Data Inizio"></dxi-column>
-    <dxi-column dataField="dataFineFase" [width]="100" caption="Data Fine"></dxi-column>
+    <dxi-column class="fasiContentCol" dataField="idFase.nomeFase" caption="Fase"></dxi-column>
+    <dxi-column class="fasiContentCol" dataField="dataInizioFase" caption="Data Inizio"></dxi-column>
+    <dxi-column class="fasiContentCol" dataField="dataFineFase" caption="Data Fine"></dxi-column>
 </dx-data-grid>
+<!---
+<dx-responsive-box #fasiContent>
+    <dxi-row [ratio]="1"></dxi-row>
+    <dxi-col [ratio]="1"></dxi-col>
+    <dxi-col [ratio]="1"></dxi-col>
+    <dxi-col [ratio]="1"></dxi-col>
+
+    <dx-item>
+        <dx-location [row]="0" [col]="0">FASE</dx-location>
+    </dx-item>
+    <dx-item>
+        <dx-location [row]="0" [col]="1">DATA_IN</dx-location>
+    </dx-item>
+    <dx-item>
+            <dx-location [row]="0" [col]="2">DATA_FIN</dx-location>
+    </dx-item>
+
+
+</dx-responsive-box>
+-->

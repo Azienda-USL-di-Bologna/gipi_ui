@@ -14,7 +14,7 @@ import { Entity } from '@bds/nt-angular-context/entity';
 import notify from 'devextreme/ui/notify';
 import { CustomLoadingFilterParams } from '@bds/nt-angular-context/custom-loading-filter-params';
 import {forEach} from "@angular/router/src/utils/collection";
-
+import { NodeOperations } from "../reusable-component/strutture-tree/strutture-tree.component";
 
 @Component({
   selector: "app-struttura-tipi-procedimento",
@@ -30,7 +30,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   private nodeSelectedFromContextMenu: any;
   @ViewChild('treeView') treeView: any;
   private initialState: any;
-
+  public nodeInvolved : Object = {};
 
   private dataSourceProcedimento: DataSource;
   public dataSourceUtente: DataSource;
@@ -204,16 +204,34 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   //QUESTO EVENTO VIENE EMESSO DALLA POPUP E INDICA ALLA PAGINA SOTTOSTANTE CHE DEVE RICARICARE L'ALBERO PER FAR VEDERE LE MODIFICHE EFFETTUATE
   refresh(nodeInvolved) { 
-    
-    //TODO qui al posto di fare questa load, vado a ciclare sugli elementi dell'albero in modo da modificare il check direttamente 
+    // qui al posto di fare questa load, vado a ciclare sugli elementi dell'albero in modo da modificare il check direttamente 
     //sui nodi dell'albero. Non posso fare il .load() sul datasource perchè poi ogni volta mi richiude l'albero
-    console.log(this.treeView.datasource._items);
-
-    // nodeInvolved.forEach(element => {
-    //   let pos = this.treeView.datasource._items.search
-    // });
+    //  console.log(this.treeView.datasource);
     
-    this.treeView.datasource.load();
+    this.nodeInvolved = nodeInvolved;
+
+    if (nodeInvolved != null) {
+      var keys = Object.keys(nodeInvolved);
+      console.log(nodeInvolved);
+
+      const nodes = this.treeView.datasource._items;
+
+      for (let key of keys) {
+        
+        const node = nodes.find(item =>
+          item.id == key
+        );
+
+        if (nodeInvolved[key] == NodeOperations.INSERT) {
+          this.treeView.treeViewChild.instance.selectItem(node);
+        }
+        else {
+          this.treeView.treeViewChild.instance.unselectItem(node);
+        }
+
+      }
+    }
+  //this.treeView.datasource.reload();
   }
 
   screen(width) {
