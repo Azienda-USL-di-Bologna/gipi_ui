@@ -22,6 +22,7 @@ export class StruttureTreeComponent implements OnInit {
   public contextMenuItems;
   private nodeSelectedFromContextMenu: any;
   private nodeInvolved: Object = {};
+  private _nodesToCheckSelectedStatus : Object = {};  
 
   @ViewChild("treeViewChild") treeViewChild: any;
 
@@ -41,6 +42,18 @@ export class StruttureTreeComponent implements OnInit {
 
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }
+
+  @Input()
+  set nodesToCheckSelectedStatus(nodes: any) { 
+
+    console.log("da setter: ", nodes);
+
+    //this._nodesToCheckSelectedStatus = nodes;
+  }  
+
+  get nodesToCheckSelectedStatus(): any {
+    return this._nodesToCheckSelectedStatus;
+   }
 
   selectionChanged(e) {
 
@@ -188,4 +201,4 @@ public showStatusOperation(message:string, type:string){
 
 }
 
-const NodeOperations  = {INSERT: "INSERT", DELETE: "DELETE"}
+export const NodeOperations  = {INSERT: "INSERT", DELETE: "DELETE"}
