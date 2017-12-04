@@ -59,6 +59,7 @@ import { ProcedimentiAttiviComponent } from './procedimenti-attivi/procedimenti-
 import { PopupStrutturaTipiProcedimentoComponent } from './popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component';
 import { IterProcedimentoComponent } from './iter-procedimento/iter-procedimento.component';
 import { SequenzaDelleFasiComponent } from './iter-procedimento/sequenza-delle-fasi/sequenza-delle-fasi.component';
+import { CronologiaEventiComponent } from './iter-procedimento/cronologia-eventi/cronologia-eventi.component';
 
 @NgModule({
     declarations: [
@@ -79,7 +80,8 @@ import { SequenzaDelleFasiComponent } from './iter-procedimento/sequenza-delle-f
         ProcedimentiAttiviComponent,
         PopupStrutturaTipiProcedimentoComponent,
         IterProcedimentoComponent,
-        SequenzaDelleFasiComponent
+        SequenzaDelleFasiComponent,
+        CronologiaEventiComponent
     ],
     imports: [
         BrowserModule,

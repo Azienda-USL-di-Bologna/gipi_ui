@@ -15,7 +15,7 @@ export class Fase extends Entity {
     return {
       key: "id",
       keyType: "Int32",
-      fieldType: {
+      fieldTypes: {
         id: "Int32",
         nomeFase: "String",
         ordinale: "Int32",
