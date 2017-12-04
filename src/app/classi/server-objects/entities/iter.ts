@@ -7,7 +7,7 @@ import { Fase } from "./fase";
 
 export class Iter extends Entity {
   id: number;
-  idResponsabileProcedimento: number;
+  idResponsabileProcedimento: Utente;
   numeroIter: number;
   annoIter: number;
   oggetto: string;
@@ -39,7 +39,7 @@ export class Iter extends Entity {
     return {
       key: "id",
       keyType: "Int32",
-      fieldType: {
+      fieldTypes: {
         id: "Int32",
         idResponsabileProcedimento: "Int32",
         numeroIter: "Int32",

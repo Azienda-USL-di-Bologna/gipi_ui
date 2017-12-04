@@ -2,8 +2,8 @@
     font-weight: bold;
  }
  .footerDiv{
-    position: fixed;
-    bottom: 0;
+    // position: fixed;
+    // bottom: 0;
     text-align: right;
     width: 100%;
  }
@@ -11,10 +11,13 @@
     display: inline-block;
     margin: 16px;
  }
- .contentWrapper{
-     height: auto !important;
- }
+//  .contentWrapper{
+//      height: auto !important;
+//  }
  .headerDiv{
      text-align: center;
      margin: 0 0 32px 0;
+ }
+ .boxes{
+     padding: 32px;
  }

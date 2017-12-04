@@ -24,7 +24,7 @@ export class Struttura extends Entity {
     return {
       key: "id",
       keyType: "Int32",
-      fieldType: {
+      fieldTypes: {
         id: "Int32",
         attiva: "Boolean",
         codice: "Int32",
