@@ -55,7 +55,8 @@
     <dxi-location [row]="0" [col]="1" [colspan]="1" screen="xs"></dxi-location>
     <div class="boxes">
       <app-sequenza-delle-fasi [idIter]="idIter"></app-sequenza-delle-fasi>
-      <app-cronologia-eventi></app-cronologia-eventi>
+      <app-cronologia-eventi [idIter]="idIter"></app-cronologia-eventi>
+      <documenti-iter [idIter]="idIter"></documenti-iter>
     </div>
   </dxi-item>
 </dx-responsive-box>
