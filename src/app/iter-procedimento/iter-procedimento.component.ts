@@ -23,6 +23,7 @@ export class IterProcedimentoComponent implements OnInit {
   public iter: Iter = new Iter();
   public dataSourceIter: DataSource;
   public durataPrevista: number;
+  public idIter: string = '6';
 
   constructor(private odataContextFactory: OdataContextFactory, private sharedData: SharedData) { 
     const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
