@@ -23,6 +23,8 @@ export class StruttureTreeComponent implements OnInit {
   private nodeSelectedFromContextMenu: any;
   private nodeInvolved: Object = {};
   private _nodesToCheckSelectedStatus : Object = {};  
+  private _popupVisible:boolean ;
+
 
   @ViewChild("treeViewChild") treeViewChild: any;
 
@@ -30,7 +32,6 @@ export class StruttureTreeComponent implements OnInit {
   @Input("idAziendaTipoProcedimento") idAziendaTipoProcedimento: number;
   @Input("readOnly") readOnly: boolean;
   @Input("enableCheckRecursively") enableCheckRecursively: boolean;
-  @Input("popupVisible") popupVisible: boolean;
   @Input("nodesToCheckSelectedStatus") nodesToCheckSelectedStatus: any;
   @Output("strutturaSelezionata") strutturaSelezionata = new EventEmitter<Object>();
   @Output("refreshAfterChange") refreshAfterChange = new EventEmitter <Object>();
@@ -45,10 +46,12 @@ export class StruttureTreeComponent implements OnInit {
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }
 
-  click(e) {
-    console.log("albero", this.treeViewChild);
-    this.treeViewChild.instance.selectItem(3890);
-   }
+  @Input()
+  set popupVisible(visibile: boolean) {
+    this._popupVisible = visibile;
+  }
+
+  get popupVisible() : boolean { return this._popupVisible }
 
   selectionChanged(e) {
     //Devo controllare se la popup è visibile perchè, se lo è devo disabilitare momentaneamente questa parte di codice
@@ -56,7 +59,7 @@ export class StruttureTreeComponent implements OnInit {
     //vedere l'albero nella pagina sottostante aggiornarsi in real-time in base alle modifiche fatte nella popup. Quando
     //la popup torna non visibile, allora la funzionalità seguente rientra in funzione.
     if (this.readOnly) {  
-      if (!this.popupVisible) {
+      if (!this._popupVisible) {
 
         if (this.enterIntoChangeSelection) {
           
@@ -91,22 +94,6 @@ export class StruttureTreeComponent implements OnInit {
       }
     }); 
   }
-
-  // private caricaAlberoStrutture(setInitialValue: boolean) { 
-
-  //   this.datasource = new DataSource({
-  //     store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
-  //     customQueryParams: {
-  //       idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
-  //       idAzienda: this.idAzienda
-  //     }
-  //   }); 
-
-  // }
-
-  // private setInitialValues() { 
-  //   this.datasourceOriginal = Object.assign({}, this.datasource);
-  // }
 
   /*Questo evento scatta quando clicchiamo sul nodo dell'albero per far aprire il menu contestuale
    in questo momento ci salviamo il nodo cliccato */
@@ -149,24 +136,32 @@ export class StruttureTreeComponent implements OnInit {
   }
 
   public sendDataConfirm() {
-    const req = this.http.post("http://localhost:10006/gipi/resources/custom/updateProcedimenti", {
-      idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
-      nodeInvolved: this.nodeInvolved
-    })
-      .subscribe(
-            res => {
-              this.showStatusOperation("Modifica andata a buon fine", "success");
-              this.refreshAfterChange.emit(this.nodeInvolved);
-            },
-            err => {
-              this.showStatusOperation("Associazione non andata a buon fine", "error");
-            }
+    if (Object.keys(this.nodeInvolved).length > 0) {
+      const req = this.http.post("http://localhost:10006/gipi/resources/custom/updateProcedimenti", {
+        idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
+        nodeInvolved: this.nodeInvolved
+      })
+        .subscribe(
+        res => {
+          this.showStatusOperation("Modifica andata a buon fine", "success");
+          this.refreshAfterChange.emit(this.nodeInvolved);
+          this.nodeInvolved = {};
+        },
+        err => {
+          this.showStatusOperation("Associazione non andata a buon fine", "error");
+        }
         );
+    }
+    else { 
+      this.refreshAfterChange.emit(this.nodeInvolved);
+      this.nodeInvolved = {};
+    }
   }
 
   public setDataCancel() {  
     this.datasource.load();
-    this.refreshAfterChange.emit();
+    this.nodeInvolved = {};
+    this.refreshAfterChange.emit(this.nodeInvolved);
   }
 
 public getClass() {
@@ -191,9 +186,9 @@ public showStatusOperation(message:string, type:string){
       type: type,
       displayTime: 1700,
       position: {
-          my: "bottom",
+          my: "top",
           at: "top",
-          of: "#responsive-box-buttons"
+          of: "#center-div"
        }
     });
   }

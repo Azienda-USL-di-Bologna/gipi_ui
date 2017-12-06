@@ -9,14 +9,9 @@
   [class]="getClass()"></dx-tree-view>
 </div>
 
-<dx-button [text]="Test" [type]="normal" (onClick)="click($event)"></dx-button>
-
 <dx-context-menu *ngIf="!readOnly"
         [dataSource]="contextMenuItems"
         [width]="200"
         target="#simple-treeview"
         (onItemClick)="contextualItemClick($event)">
 </dx-context-menu>
-
-
-<!-- <dx-button (onClick)="sendData()" text="Salva"></dx-button> -->

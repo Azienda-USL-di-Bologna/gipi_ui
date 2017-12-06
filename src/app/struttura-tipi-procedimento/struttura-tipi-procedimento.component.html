@@ -34,7 +34,7 @@
       <dxi-location [row]="1" [col]="1" screen="lg"></dxi-location>
       <dxi-location [row]="1" [col]="0" [colspan]="2" screen="sm"></dxi-location>
 
-      <div class="center-div">
+      <div class="center-div" id="center-div">
         <dx-form id="form" #myform [(formData)]="procedimento" [visible]="formVisible">  <!-- [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width" -->
           <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: true }"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>

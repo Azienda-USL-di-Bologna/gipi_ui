@@ -231,6 +231,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         }
       }
     }
+
+    this.popupVisible = false;
   }
 
   screen(width) {
