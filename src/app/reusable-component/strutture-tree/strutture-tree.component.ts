@@ -7,6 +7,7 @@ import { FunctionsImport } from "../../../environments/app.constants";
 import { SharedData } from '@bds/nt-angular-context/shared-data';
 import {HttpClient} from "@angular/common/http";
 import notify from 'devextreme/ui/notify';
+import { CUSTOM_RESOURCES_BASE_URL } from '../../../environments/app.constants';
 
 @Component({
   selector: "strutture-tree",
@@ -125,6 +126,7 @@ export class StruttureTreeComponent implements OnInit {
 
   private getNestedChildren(inputArray, selectedNode) {
     const result = []
+
     for (const i in inputArray) {
       if (inputArray[i].idStrutturaPadre === selectedNode) {
         this.getNestedChildren(inputArray, inputArray[i].id);
@@ -137,7 +139,8 @@ export class StruttureTreeComponent implements OnInit {
 
   public sendDataConfirm() {
     if (Object.keys(this.nodeInvolved).length > 0) {
-      const req = this.http.post("http://localhost:10006/gipi/resources/custom/updateProcedimenti", {
+      // const req = this.http.post("http://localhost:10006/gipi/resources/custom/updateProcedimenti", {
+        const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "updateProcedimenti", {
         idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
         nodeInvolved: this.nodeInvolved
       })
