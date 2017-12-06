@@ -21,6 +21,8 @@ export class ProcedimentiAttiviComponent {
   public descrizioneAzienda: string = "Azienda USL Parma";
   public dataSourceProcedimenti: DataSource;
   public popupButtons: any[];
+  public popupNuovoIterVisible: boolean = false;
+  public procedimentoDaPassare: object;
 
   constructor(private odataContextFactory: OdataContextFactory) {
     const now = new Date();
@@ -113,6 +115,14 @@ export class ProcedimentiAttiviComponent {
       case "infoOnClick":
         this.rigaSelezionata = e.row;
         this.apriDettaglio(e.row);
+      break
+      case "iterOnClick":
+        this.popupNuovoIterVisible = true;
+        console.log(e);
+        this.procedimentoDaPassare = [{
+          id: e.row.data.idProcedimento,
+          nome: e.row.data.idAziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento
+        }];
       break
     }
   }
