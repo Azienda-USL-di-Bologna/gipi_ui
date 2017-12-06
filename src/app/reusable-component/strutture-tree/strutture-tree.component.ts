@@ -92,21 +92,7 @@ export class StruttureTreeComponent implements OnInit {
     }); 
   }
 
-  // private caricaAlberoStrutture(setInitialValue: boolean) { 
 
-  //   this.datasource = new DataSource({
-  //     store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
-  //     customQueryParams: {
-  //       idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
-  //       idAzienda: this.idAzienda
-  //     }
-  //   }); 
-
-  // }
-
-  // private setInitialValues() { 
-  //   this.datasourceOriginal = Object.assign({}, this.datasource);
-  // }
 
   /*Questo evento scatta quando clicchiamo sul nodo dell'albero per far aprire il menu contestuale
    in questo momento ci salviamo il nodo cliccato */

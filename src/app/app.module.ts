@@ -6,6 +6,8 @@ import "devextreme/data/odata/store";
 import "devextreme/data/odata/context";
 import { DefinizioneTipiProcedimentoService } from "./definizione-tipi-procedimento/definizione-tipi-procedimento.service";
 
+import { SidebarModule } from 'ng-sidebar';
+
 import {
     DxDataGridModule,
     DxFormModule,
@@ -24,7 +26,7 @@ import {
     DxContextMenuModule,
     DxLookupModule,
     DxValidatorModule,
-    DxValidationSummaryModule
+    DxValidationSummaryModule, DxSlideOutModule, DxToolbarModule, DxSwitchModule
 } from "devextreme-angular";
 
 import {RouterModule} from "@angular/router";
@@ -59,6 +61,10 @@ import { ProcedimentiAttiviComponent } from "./procedimenti-attivi/procedimenti-
 import { PopupStrutturaTipiProcedimentoComponent } from "./popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component";
 import { IterProcedimentoComponent } from "./iter-procedimento/iter-procedimento.component";
 import { SequenzaDelleFasiComponent } from "./iter-procedimento/sequenza-delle-fasi/sequenza-delle-fasi.component";
+import { TestLayoutComponent } from './test-layout/test-layout.component';
+import {Service} from "./test-layout/service";
+import { ButtonsBarComponent } from './buttons-bar/buttons-bar.component';
+import {GlobalContextService} from "./global-context.service";
 import { CronologiaEventiComponent } from "./iter-procedimento/cronologia-eventi/cronologia-eventi.component";
 import { DocumentiIterComponent } from "./iter-procedimento/documenti-iter/documenti-iter.component";
 import { AvviaNuovoIterComponent } from './procedimenti-attivi/avvia-nuovo-iter/avvia-nuovo-iter.component';
@@ -85,6 +91,8 @@ import { TestTreeComponent } from './test/test-tree/test-tree.component';
         PopupStrutturaTipiProcedimentoComponent,
         IterProcedimentoComponent,
         SequenzaDelleFasiComponent,
+        TestLayoutComponent,
+        ButtonsBarComponent,
         CronologiaEventiComponent,
         DocumentiIterComponent,
         TestTreeComponent,
@@ -117,9 +125,13 @@ import { TestTreeComponent } from './test/test-tree/test-tree.component';
         DxValidatorModule,
         DxValidationSummaryModule,
         NgIdleKeepaliveModule.forRoot(),
-        ContextModule.forRoot(contextModuleConfig)
+        DxSlideOutModule,
+        DxToolbarModule,
+        DxSwitchModule,
+        ContextModule.forRoot(contextModuleConfig),
+        SidebarModule.forRoot()
     ],
-    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard,
+    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard, GlobalContextService
         ],
     bootstrap: [AppComponent],
     entryComponents: [AssociaComponent, ProcedimentoComponent]

@@ -1,22 +1,101 @@
 <!-- se si vuole usare il responsive-box in qualche componente, bisogna metterlo anche qui, altrimenti non funziona bene (specialmente con chrome)-->
 <dx-responsive-box>
     <dxi-row [ratio]="1"></dxi-row>
+    <dxi-row [ratio]="10"></dxi-row>
     <dxi-col [ratio]="1"></dxi-col>
+
+
+
+
 
     <dxi-item>
         <dxi-location [row]="0" [col]="0" [colspan]="1"></dxi-location>
-        <nav class="navbar navbar-default" role="navigation" style="width:100%">
-            <div style="padding:0px;" class="collapse navbar-collapse" id="skeleton-navigation-navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li><a data-toggle="collapse" routerLink="/home" routerLinkActive="active">Home</a></li>
-                    <li><a data-toggle="collapse" routerLink="/definizione-tipi-procedimento" routerLinkActive="active">Definizione Tipi Procedimento</a></li>
-                </ul>
+            <div class="header">
+                <p>Super Header</p>
             </div>
-        </nav>
-
-        <div class="fullpage">
-            <router-outlet></router-outlet>
-            <!-- l'activate serve a intercettare l'evento del cambiamento del contenuto renderizzato dal router-outlet -->
-        </div>
     </dxi-item>
+
+    <dxi-item>
+        <dxi-location [row]="1" [col]="0" [colspan]="10"></dxi-location>
+
+
+
+        <ng-sidebar-container>
+
+            <!-- A sidebar -->
+            <ng-sidebar #sidebar [(opened)]="_opened" position="left" mode="push">
+                <p>Sidebar contents</p>
+                <button (click)="sidebar.close()">Close sidebar</button>
+            </ng-sidebar>
+
+            <!-- Page content -->
+            <div ng-sidebar-content class="gdm">
+
+
+                <div id="page">
+                    <dx-responsive-box
+                            [(screenByWidth)]="screen">
+                        <dxi-row [ratio]="1"></dxi-row>
+                        <!--<dxi-row [ratio]="2" screen="xs"></dxi-row>-->
+                        <dxi-row [ratio]="10"></dxi-row>
+                        <dxi-row [ratio]="1"></dxi-row>
+
+                        <dxi-col [ratio]="1"></dxi-col>
+                        <!--<dxi-col [ratio]="2" screen="lg"></dxi-col>-->
+                        <dxi-item class="header item">
+                            <dxi-location
+                                    [row]="0"
+                                    [col]="0"
+                            ></dxi-location>
+
+                                <dx-responsive-box [(screenByWidth)]="screen">
+                                    <dxi-row [ratio]="1"></dxi-row>
+                                    <dxi-col [ratio]="1"></dxi-col>
+                                    <dxi-col [ratio]="35"></dxi-col>
+
+                                    <dxi-item class="header item">
+                                        <dxi-location
+                                                [row]="0"
+                                                [col]="0"
+                                        ></dxi-location>
+                                        <div id="toggle-sidebar-div">
+                                            <dx-button class="toggle-sidebar-button" icon="menu" (click)="_toggleSidebar()"></dx-button>
+                                        </div>
+                                    </dxi-item>
+
+                                    <dxi-item class="header item">
+                                        <dxi-location
+                                                [row]="0"
+                                                [col]="1"
+                                        ></dxi-location>
+                                        <div id="navbar">
+                                            navbar
+                                        </div>
+                                    </dxi-item>
+                                </dx-responsive-box>
+                        </dxi-item>
+                        <dxi-item class="content item">
+                            <dxi-location
+                                    [row]="1"
+                                    [col]="0"
+                            ></dxi-location>
+                            <router-outlet></router-outlet>
+                        </dxi-item>
+                        <dxi-item class="footer item">
+                            <dxi-location
+                                    [row]="2"
+                                    [col]="0"
+                            ></dxi-location>
+                            <p>Footer</p>
+                        </dxi-item>
+                    </dx-responsive-box>
+                </div>
+            </div>
+
+        </ng-sidebar-container>
+    </dxi-item>
+
 </dx-responsive-box>
+
+
+

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, } from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild,} from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedimento.service';
@@ -6,6 +6,9 @@ import {TipoProcedimento} from '../classi/server-objects/entities/tipo-procedime
 import {OdataContextDefinition} from '@bds/nt-angular-context/odata-context-definition';
 import {Entities} from '../../environments/app.constants';
 import {OdataContextFactory} from '@bds/nt-angular-context/odata-context-factory';
+import {ActivatedRoute, Router} from "@angular/router";
+import {SharedData} from "@bds/nt-angular-context";
+import {GlobalContextService} from "../global-context.service";
 
 // import { UtilityFunctions } from '../utility-functions';
 
@@ -15,7 +18,7 @@ import {OdataContextFactory} from '@bds/nt-angular-context/odata-context-factory
   templateUrl: './definizione-tipi-procedimento.component.html',
   styleUrls: ['./definizione-tipi-procedimento.component.css']
 })
-export class DefinizioneTipiProcedimentoComponent {
+export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
   @ViewChild('grid') grid: DxDataGridComponent;
   public dataSource: DataSource;
@@ -30,14 +33,10 @@ export class DefinizioneTipiProcedimentoComponent {
   }
 
 
+  constructor(private odataContexFactory: OdataContextFactory, private service: DefinizioneTipiProcedimentoService,
+              private router: Router, private activatedRoute: ActivatedRoute, private sharedData: SharedData) {
 
-
-  private loggaContesto(e: Object){
-    // console.log(e);
-
-  }
-
-  constructor(private odataContexFactory: OdataContextFactory, private service: DefinizioneTipiProcedimentoService) {
+    this.sharedData.setSharedObject({route: "definizione-tipi-procedimento"});
 
     this.odataContextDefinition = odataContexFactory.buildOdataContextEntitiesDefinition();
     this.dataSource = new DataSource({
@@ -55,8 +54,24 @@ export class DefinizioneTipiProcedimentoComponent {
       }*/
     });
     this.dataSource.load().then(res => this.buildTipiProcedimento(res))
+
+
     // debugger;
     // console.log(this.dataSource);
+
+  }
+
+
+  ngOnInit() {
+    // this.globalContext.setButtonBarVisible(false);
+  }
+
+  ngOnDestroy() {
+    console.log("destroy")
+  }
+
+  private loggaContesto(e: Object){
+    // console.log(e);
 
   }
 

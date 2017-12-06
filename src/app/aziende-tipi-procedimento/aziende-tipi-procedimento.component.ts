@@ -18,7 +18,7 @@ import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loadin
 @Component({
     selector: 'app-aziende-tipi-procedimento',
     templateUrl: './aziende-tipi-procedimento.component.html',
-    styleUrls: ['./aziende-tipi-procedimento.component.css']
+    styleUrls: ['./aziende-tipi-procedimento.component.scss']
 })
 export class AziendeTipiProcedimentoComponent implements OnInit {
 
