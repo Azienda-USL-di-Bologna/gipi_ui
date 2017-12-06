@@ -16,6 +16,7 @@ import { Iter } from '../app/classi/server-objects/entities/iter';
 import { Evento } from '../app/classi/server-objects/entities/evento';
 import { Fase } from '../app/classi/server-objects/entities/fase';
 import { FaseIter } from '../app/classi/server-objects/entities/fase-iter';
+import { ProcedimentoCache } from '../app/classi/server-objects/entities/procedimento-cache';
 
 export const Entities: ServerObjectsDescriptor = {
     Azienda: {name: 'Aziendas', class: Azienda},
@@ -32,7 +33,8 @@ export const Entities: ServerObjectsDescriptor = {
     Fase: {name: "Fases", class: Fase},
     FaseIter: {name: "FaseIters", class: FaseIter},
     Evento: {name: "Eventos", class: Evento},
-    EventoIter: {name: "EventoIters", class: EventoIter}
+    EventoIter: {name: "EventoIters", class: EventoIter},
+    ProcedimentoCache: {name: "ProcedimentoCaches", class: ProcedimentoCache}
 }
 
 export const FunctionsImport: ServerObjectsDescriptor = {
