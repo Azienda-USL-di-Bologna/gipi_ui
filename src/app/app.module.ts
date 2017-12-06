@@ -60,6 +60,7 @@ import { PopupStrutturaTipiProcedimentoComponent } from './popup-struttura-tipi-
 import { IterProcedimentoComponent } from './iter-procedimento/iter-procedimento.component';
 import { SequenzaDelleFasiComponent } from './iter-procedimento/sequenza-delle-fasi/sequenza-delle-fasi.component';
 import { CronologiaEventiComponent } from './iter-procedimento/cronologia-eventi/cronologia-eventi.component';
+import { TestTreeComponent } from './test/test-tree/test-tree.component';
 
 @NgModule({
     declarations: [
@@ -81,7 +82,8 @@ import { CronologiaEventiComponent } from './iter-procedimento/cronologia-eventi
         PopupStrutturaTipiProcedimentoComponent,
         IterProcedimentoComponent,
         SequenzaDelleFasiComponent,
-        CronologiaEventiComponent
+        CronologiaEventiComponent,
+        TestTreeComponent,
     ],
     imports: [
         BrowserModule,

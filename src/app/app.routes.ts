@@ -13,7 +13,7 @@ import { LoginGuard } from './login/guards/login.guard';
 import { ProcedimentiAttiviComponent } from 'app/procedimenti-attivi/procedimenti-attivi.component';
 import { PopupStrutturaTipiProcedimentoComponent } from 'app/popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component';
 import { IterProcedimentoComponent } from 'app/iter-procedimento/iter-procedimento.component';
-
+import { TestTreeComponent } from './test/test-tree/test-tree.component';
 
 export const rootRouterConfig: Routes = [
   // ho reindirizzato la pagina di atterraggio a definizione-tipi-procedimento
@@ -27,6 +27,7 @@ export const rootRouterConfig: Routes = [
   { path: 'struttura-tipi-procedimento', component: StrutturaTipiProcedimentoComponent},
   { path: 'procedimenti-attivi', component: ProcedimentiAttiviComponent },
   { path: 'popup-struttura-tipi-procedimento', component: PopupStrutturaTipiProcedimentoComponent },
-  { path: 'iter-procedimento', component: IterProcedimentoComponent }
+  { path: 'iter-procedimento', component: IterProcedimentoComponent },
+  { path: 'app-test-tree', component: TestTreeComponent }
 ];
 

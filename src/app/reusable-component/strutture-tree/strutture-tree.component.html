@@ -5,9 +5,11 @@
                 dataStructure="plain" parentIdExpr="idStrutturaPadre" [searchValue]="textBox.value"
                 showCheckBoxesMode="normal" [selectNodesRecursive]= "enableCheckRecursively"
                 (onItemContextMenu)="openContextMenu($event)" (onItemSelectionChanged)="selectionChanged($event)"
-                (onItemClick)="selezionaStruttura($event)"
+                (onItemClick)="selezionaStruttura($event)" 
   [class]="getClass()"></dx-tree-view>
 </div>
+
+<dx-button [text]="Test" [type]="normal" (onClick)="click($event)"></dx-button>
 
 <dx-context-menu *ngIf="!readOnly"
         [dataSource]="contextMenuItems"

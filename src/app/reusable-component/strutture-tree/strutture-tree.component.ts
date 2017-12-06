@@ -30,6 +30,8 @@ export class StruttureTreeComponent implements OnInit {
   @Input("idAziendaTipoProcedimento") idAziendaTipoProcedimento: number;
   @Input("readOnly") readOnly: boolean;
   @Input("enableCheckRecursively") enableCheckRecursively: boolean;
+  @Input("popupVisible") popupVisible: boolean;
+  @Input("nodesToCheckSelectedStatus") nodesToCheckSelectedStatus: any;
   @Output("strutturaSelezionata") strutturaSelezionata = new EventEmitter<Object>();
   @Output("refreshAfterChange") refreshAfterChange = new EventEmitter <Object>();
   
@@ -43,34 +45,31 @@ export class StruttureTreeComponent implements OnInit {
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }
 
-  @Input()
-  set nodesToCheckSelectedStatus(nodes: any) { 
-
-    console.log("da setter: ", nodes);
-
-    //this._nodesToCheckSelectedStatus = nodes;
-  }  
-
-  get nodesToCheckSelectedStatus(): any {
-    return this._nodesToCheckSelectedStatus;
+  click(e) {
+    console.log("albero", this.treeViewChild);
+    this.treeViewChild.instance.selectItem(3890);
    }
 
   selectionChanged(e) {
+    //Devo controllare se la popup è visibile perchè, se lo è devo disabilitare momentaneamente questa parte di codice
+    //che non permette di cambiare lo stato del selected in quanto lo rimette come era prima. Questo perchè voglio
+    //vedere l'albero nella pagina sottostante aggiornarsi in real-time in base alle modifiche fatte nella popup. Quando
+    //la popup torna non visibile, allora la funzionalità seguente rientra in funzione.
+    if (this.readOnly) {  
+      if (!this.popupVisible) {
 
-    if (this.readOnly) {
-     
-      if (this.enterIntoChangeSelection) {
-
-        this.enterIntoChangeSelection = !this.enterIntoChangeSelection;
-        if (e.itemData.selected === false) {
-          this.treeViewChild.instance.selectItem(e.itemData.id);
-        } else {
-          this.treeViewChild.instance.unselectItem(e.itemData.id);
-        }
-        
-      }
-      else { 
-        this.enterIntoChangeSelection = !this.enterIntoChangeSelection;
+        if (this.enterIntoChangeSelection) {
+          
+            this.enterIntoChangeSelection = !this.enterIntoChangeSelection;
+              if (e.itemData.selected === false) {
+                     this.treeViewChild.instance.selectItem(e.itemData.id);
+              } else {
+                    this.treeViewChild.instance.unselectItem(e.itemData.id);
+              }      
+          }
+          else { 
+            this.enterIntoChangeSelection = !this.enterIntoChangeSelection;
+          }
       }
     }
     else {

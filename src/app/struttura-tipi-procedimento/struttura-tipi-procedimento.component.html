@@ -66,8 +66,9 @@
       <div style="padding-left:10%">
         <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
           <dx-button class="padding-button allinea-a-sinistra" (onClick)="showPopup()" text="Associa a strutture" hint="Associa a strutture"></dx-button>
-          <strutture-tree #treeView [idAzienda]=idAziendaFront [nodesToCheckSelectedStatus]= "nodeInvolved" [idAziendaTipoProcedimento]=idAziendaTipoProcedimentoFront [readOnly]="true" [enableCheckRecursively]="false"
-            (strutturaSelezionata)="selezionaStruttura($event)"></strutture-tree>
+          <strutture-tree #treeView [idAzienda]=idAziendaFront [nodesToCheckSelectedStatus]= "nodeInvolved" [popupVisible]="popupVisible" 
+                                    [idAziendaTipoProcedimento]=idAziendaTipoProcedimentoFront [readOnly]="true" [enableCheckRecursively]="false"
+            (strutturaSelezionata)="selezionaStruttura($event)" ></strutture-tree>
       </div>
     </dxi-item>
 
@@ -113,7 +114,7 @@ title="Associa a strutture"
   <popup-struttura-tipi-procedimento [readOnly]="false" 
                                      [enableCheckRecursively]="false" 
                                      [aziendaTipoProcedimentoObj] = "dataFromAziendaTipiProcedimentoComponent" 
-                                     (refreshAfterChange) = "refresh($event)">
+                                     (refreshAfterChange) = "refreshTreeView($event)">
   </popup-struttura-tipi-procedimento>
 
 
