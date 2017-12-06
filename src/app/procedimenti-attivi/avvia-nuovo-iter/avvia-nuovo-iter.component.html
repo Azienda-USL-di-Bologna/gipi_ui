@@ -1,0 +1,26 @@
+<h2 class="titolo-procedimento">Procedimento: {{nomeProcedimento}}</h2>
+<dx-form
+[(formData)]="iter">
+  <dxi-item dataField="dataCreazione" editorType="dxDateBox" format="dd/mm/yyyy" [label]="{text: 'Data creazione iter'}" [editorOptions]="{ disabled: true }"></dxi-item>
+  <dxi-item dataField="dataAvvio" editorType="dxDateBox" [label]="{text: 'Data avvio iter'}" [editorOptions]="{ disabled: false }"></dxi-item>
+  <dxi-item dataField="oggetto" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
+  <dxi-item dataField="FK_id_responsabile_procedimento" editorType="dxLookup" [label]="{text: 'Responsabile procedimento'}"
+  [editorOptions]="{ 
+    disabled: false,
+    dataSource: dataSourceUtenti,
+    valueExpr: 'id',
+    displayExpr: 'descrizione',
+    searchEnabled: true,
+    placeholder: 'Seleziona il responsabile del procedimento..'
+  }">
+  </dxi-item> 
+</dx-form>
+<div class="buttons">
+    <dx-button
+    text="Annulla">
+  </dx-button>
+  <dx-button
+    text="Procedi"
+    (onClick)="handleEvent('onClickProcedi',event)">
+  </dx-button>
+</div>

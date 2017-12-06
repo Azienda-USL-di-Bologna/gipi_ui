@@ -30,7 +30,7 @@
   </div>
   <dxi-column caption="Avvia nuovo iter" cellTemplate="buttonIter" alignment="center" cssClass="azioni"></dxi-column>
   <div *dxTemplate="let element of 'buttonIter'" class="buttons">
-    <dx-button text="" icon='repeat'></dx-button>
+    <dx-button text="" icon='repeat' (onClick)="handleEvent('iterOnClick', element)"></dx-button>
   </div>
   <dxi-column dataField="idAziendaTipoProcedimento.durataMassimaSospensione" [dataType]="'number'" [allowEditing]="false" [visible]="false"></dxi-column>  
   <dxi-column dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" [dataType]="'string'" [allowEditing]="false" [visible]="false"></dxi-column>  
@@ -60,10 +60,20 @@
       <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [label]="{text:'Durata massim (gg)'}" [colSpan]="1" cssClass="item"></dxi-item>      
       <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" [label]="{text:'Durata massima sospensione (gg)'}" [colSpan]="1" cssClass="item"></dxi-item>
       <dxi-item dataField="dataInizio" [label]="{text:'Valido dal'}" [colSpan]="1" cssClass="item"></dxi-item>
-      <dxi-item dataField="dataFine"[label]="{text:'Al'}" [colSpan]="1" cssClass="item"></dxi-item>
+      <dxi-item dataField="dataFine" [label]="{text:'Al'}" [colSpan]="1" cssClass="item"></dxi-item>
       <dxi-item dataField="idTitolarePotereSostitutivo.descrizione" [label]="{text:'Titolare Potere Sostitutivo'}" [colSpan]="1" cssClass="item"></dxi-item>
       <dxi-item dataField="modalitaInfo" [label]="{text:'Modalità informativa'}" [colSpan]="1" cssClass="item"></dxi-item>
       <dxi-item dataField="descrizioneAtti" [label]="{text:'Atti da allegare'}" [colSpan]="1" cssClass="item"></dxi-item>
     </dxo-form>
   </dxo-editing>
 </dx-data-grid>
+
+<dx-popup
+  title="Avvia nuovo iter"
+  [width]="calcWidth(2,true)"
+  [showTitle]="true"
+  [(visible)]="popupNuovoIterVisible">
+  <div *dxTemplate="let data of 'content'">
+    <avvia-nuovo-iter  *ngFor="let obj of procedimentoDaPassare" [procedimentoSelezionato]="obj"></avvia-nuovo-iter>
+  </div>
+</dx-popup>

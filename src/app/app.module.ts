@@ -61,6 +61,7 @@ import { IterProcedimentoComponent } from "./iter-procedimento/iter-procedimento
 import { SequenzaDelleFasiComponent } from "./iter-procedimento/sequenza-delle-fasi/sequenza-delle-fasi.component";
 import { CronologiaEventiComponent } from "./iter-procedimento/cronologia-eventi/cronologia-eventi.component";
 import { DocumentiIterComponent } from "./iter-procedimento/documenti-iter/documenti-iter.component";
+import { AvviaNuovoIterComponent } from './procedimenti-attivi/avvia-nuovo-iter/avvia-nuovo-iter.component';
 import { TestTreeComponent } from './test/test-tree/test-tree.component';
 
 
@@ -87,6 +88,7 @@ import { TestTreeComponent } from './test/test-tree/test-tree.component';
         CronologiaEventiComponent,
         DocumentiIterComponent,
         TestTreeComponent,
+        AvviaNuovoIterComponent
     ],
     imports: [
         BrowserModule,
