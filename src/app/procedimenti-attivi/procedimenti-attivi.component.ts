@@ -8,7 +8,7 @@ import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-de
 @Component({
   selector: "procedimenti-attivi",
   templateUrl: "./procedimenti-attivi.component.html",
-  styleUrls: ["./procedimenti-attivi.component.css"]
+  styleUrls: ["./procedimenti-attivi.component.scss"]
 })
 export class ProcedimentiAttiviComponent {
 

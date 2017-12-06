@@ -30,7 +30,7 @@ export const rootRouterConfig: Routes = [
   { path: 'procedimenti-attivi', component: ProcedimentiAttiviComponent },
   { path: 'popup-struttura-tipi-procedimento', component: PopupStrutturaTipiProcedimentoComponent },
   { path: 'iter-procedimento', component: IterProcedimentoComponent },
-  { path: 'test-layout', component: TestLayoutComponent}
+  { path: 'test-layout', component: TestLayoutComponent},
   { path: 'app-test-tree', component: TestTreeComponent }
 ];
 

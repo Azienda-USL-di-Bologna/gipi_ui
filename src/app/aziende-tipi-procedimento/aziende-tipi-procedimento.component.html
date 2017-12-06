@@ -1,7 +1,7 @@
 <!--PER GESTIRE L'IMPAGINAZIONE DEGLI ELEMENTI, UTILIZZIAMO 2 RISOLUZIONI DI RIFERIMENTO: sm,lg. LE RISOLUZIONI VENGONO CALCOLATE ALL'INTERNO DEL .TS CORRISPONDENTE A QUESTA PAGINA HTML LA PROPRIETA' SCREEN SERVE PER nCARE IL CAMBIO DI LAYOUT AL CAMBIO
 DELLA RISOLUZIONE
 -->
-    <div id="page1">
+    <div id="page">
         <dx-responsive-box singleColumnScreen="sm" [(screenByWidth)]="screen">
             <dxi-row [ratio]="2"></dxi-row>
             <dxi-row [ratio]="2" screen="xs"></dxi-row>
@@ -11,25 +11,18 @@ DELLA RISOLUZIONE
             <dxi-col [ratio]="1"></dxi-col>
             <dxi-col [ratio]="2" screen="lg"></dxi-col>
             <dxi-col [ratio]="1"></dxi-col>
-            <dxi-item>
+            <dxi-item class="header item">
                 <dxi-location [row]="0" [col]="0" [colspan]="3" screen="lg"></dxi-location>
                 <dxi-location [row]="0" [col]="0" [colspan]="2" screen="sm"></dxi-location>
-                <h3><span>Tipo procedimento:</span> <i>{{[(testoHeaderTipoProcedimento)]}}</i></h3>
-                <h3><span>Azienda:</span> <i>{{[(testoHeaderAzienda)]}}</i></h3>
-                <h3 *ngIf="nuovaAssociazione"><span>Nuova Associazione:</span></h3>
-                <div></div>
+                <h3><span class="header-font">Tipo procedimento:</span> <i>{{[(testoHeaderTipoProcedimento)]}}</i></h3>
+                <h3><span class="header-font">Azienda:</span> <i>{{[(testoHeaderAzienda)]}}</i></h3>
+                <h3 *ngIf="nuovaAssociazione"><span class="header-italic-font">Nuova Associazione:</span></h3>
+                <div class="status-page {{statusPage}}"></div>
             </dxi-item>
-
-
-            <dxi-item>
-                <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
-                <!-- colonna vuota sinistra -->
-            </dxi-item>
-
-            <dxi-item>
+            <dxi-item class="content item">
                 <dxi-location [row]="1" [col]="1" screen="lg"></dxi-location>
                 <dxi-location [row]="1" [col]="0" [colspan]="2" screen="sm"></dxi-location>
-                <div>
+                <div class="center-div">
                     <dx-form id="form" #myform [(formData)]="aziendaTipoProcedimento"
                              [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation"
                              [minColWidth]="minColWidth" [colCount]="colCount" [width]="width"
@@ -47,13 +40,13 @@ DELLA RISOLUZIONE
                         <!--<ng-template #elseBlock> <dxi-item itemType="empty"></dxi-item></ng-template>-->
                         <!--<dxi-item dataField="obbligoEsitoConclusivo" editorType="dxSwitch" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>-->
                         <dxi-item dataField="obbligoEsitoConclusivo" editorType="dxCheckBox" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>
-                        <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [editorOptions]="{
-                            dataSource: dataSourceClassificazione,
-                            displayExpr: 'nomeTitolo',
-                            closeOnOutsideClick: true,
-                            showPopupTitle: false,
-                            showCancelButton: false,
-                            placeholder: 'Seleziona una voce...',
+                        <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [editorOptions]="{ 
+                            dataSource: dataSourceClassificazione, 
+                            displayExpr: 'nomeTitolo', 
+                            closeOnOutsideClick: true, 
+                            showPopupTitle: false, 
+                            showCancelButton: false, 
+                            placeholder: 'Seleziona una voce...', 
                             searchPlaceholder: 'Cerca...',
                             valueExpr: 'this'
                         }"></dxi-item>
@@ -61,22 +54,23 @@ DELLA RISOLUZIONE
                 </div>
             </dxi-item>
 
-            <dxi-item>
+            <dxi-item class="left-side-bar item">
+                <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
+                <!-- colonna vuota sinistra -->
+            </dxi-item>
+
+            <dxi-item class="right-side-bar item">
                 <dxi-location [row]="1" [col]="2" screen="lg"></dxi-location>
                 <!-- colonna vuota destra -->
             </dxi-item>
 
-            <dxi-item>
-                <dxi-location [row]="2" [col]="0" screen="lg"></dxi-location>
-                <!-- colonna vuota sinistra -->
-            </dxi-item>
-            <dxi-item>
+            <dxi-item class="footer item">
                 <dxi-location [row]="2" [col]="1" screen="lg"></dxi-location>
                 <dxi-location [row]="3" [col]="1" screen="sm"></dxi-location>
 
                 <!-- ABBIAMO DOVUTO INSERIRE I TASTI NEL FOOTER PERCHE ALTRIMENTI AVREMMO AVUTO DIFFICOLTA NEL POSIZIONARLI UTILIZZANDO IL RESPONSIVE BOX ALL INTERNO DELLA CELLA CONTENENTE IL FORM.
               PROBABILMENTE DIPENDE DAL FATTO CHE IL FORM STESSO UTILIZZA IL RESPONSIVE BOX PER POSIZIONARE I SUOI CAMPI -->
-                <dx-responsive-box id="responsive-box-buttons1" singleColumnScreen="sm" [(screenByWidth)]="screen">
+                <dx-responsive-box id="responsive-box-buttons" singleColumnScreen="sm" [(screenByWidth)]="screen">
                     <dxi-row [ratio]="1"></dxi-row>
                     <!-- <dxi-row [ratio]="1"></dxi-row> -->
                     <dxi-col [ratio]="1"></dxi-col>
@@ -85,26 +79,22 @@ DELLA RISOLUZIONE
 
                     <dxi-item>
                         <dxi-location [row]="0" [col]="0"></dxi-location>
-                        <dx-button  (onClick)="buttonVediAssociazioni(aziendaTipoProcedimento)"text="Vedi Associazioni" hint="Associazioni"></dx-button>
+                        <dx-button class="padding-button" (onClick)="buttonVediAssociazioni(aziendaTipoProcedimento)"text="Vedi Associazioni" hint="Associazioni"></dx-button>
                     </dxi-item>
 
                     <dxi-item>
                         <dxi-location [row]="0" [col]="1"></dxi-location>
-                        <dx-button  (onClick)="buttonAnnullaClicked($event)" text="{{testoBottoneAnnulla}}" hint="Annulla le modifiche"></dx-button>
-                        <dx-button  (onClick)="buttonConfermaClicked($event)" text="{{testoBottoneConferma}}" hint="Conferma"></dx-button>
+                        <dx-button class="padding-button" (onClick)="buttonAnnullaClicked($event)" text="{{testoBottoneAnnulla}}" hint="Annulla le modifiche"></dx-button>
+                        <dx-button class="padding-button" (onClick)="buttonConfermaClicked($event)" text="{{testoBottoneConferma}}" hint="Conferma"></dx-button>
                     </dxi-item>
 
                     <dxi-item>
                         <dxi-location [row]="0" [col]="2"></dxi-location>
-                        <dx-button  (onClick)="buttonDisassociaClicked($event)" text="Disassocia da azienda" [disabled]="!abilitaBottoneDisassocia" hint="Toglie l'associazione del tipo procedimento dall'azienda"></dx-button>
-                        <dx-button  (onClick)="buttonAssociaClicked($event)" text="Associa a struttura" [disabled]="!abilitaBottoneAssocia" hint="Apre l'interfaccia per l'associazione alle strutture"></dx-button>
+                        <dx-button class="padding-button" (onClick)="buttonDisassociaClicked($event)" text="Disassocia da azienda" [disabled]="!abilitaBottoneDisassocia" hint="Toglie l'associazione del tipo procedimento dall'azienda"></dx-button>
+                        <dx-button class="padding-button" (onClick)="buttonAssociaClicked($event)" text="Associa a struttura" [disabled]="!abilitaBottoneAssocia" hint="Apre l'interfaccia per l'associazione alle strutture"></dx-button>
                     </dxi-item>
                 </dx-responsive-box>
                 <!-- colonna vuota sinistra -->
-            </dxi-item>
-            <dxi-item>
-                <dxi-location [row]="2" [col]="2" screen="lg"></dxi-location>
-                <!-- colonna vuota destra -->
             </dxi-item>
 
         </dx-responsive-box>
