@@ -1,3 +1,19 @@
-.contentWrapper{
+.fasiContent{
     height: auto !important;
+    width: 75%;
+}
+.fasiContentCol{
+    width: auto !important;
+}
+.headerSequenzaDelleFasi{
+    width: 75%;
+    text-align: center;
+}
+.title{
+    margin: 0 0 16px;
+    font-size: 20px;
+    display: block;
+}
+/deep/ label{
+    font-weight: 400;
 }

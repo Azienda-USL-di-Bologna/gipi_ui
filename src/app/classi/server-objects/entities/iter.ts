@@ -7,7 +7,7 @@ import { Fase } from "./fase";
 
 export class Iter extends Entity {
   id: number;
-  idResponsabileProcedimento: number;
+  idResponsabileProcedimento: Utente;
   numeroIter: number;
   annoIter: number;
   oggetto: string;

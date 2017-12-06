@@ -16,14 +16,35 @@
     <dxi-location [row]="0" [col]="0" [colspan]="1" screen="md"></dxi-location>
     <dxi-location [row]="0" [col]="0" [colspan]="1" screen="sm"></dxi-location>
     <dxi-location [row]="0" [col]="0" [colspan]="1" screen="xs"></dxi-location>
-    <div>
-      LEFT
-      <!-- <dx-form 
+    <div class="boxes">
+      <dx-form 
         id="form"
         [colCount]="1"
-        [formData]="procedimento">
-          <dxi-item dataField="modoApertura" [editorOptions]="{ disabled: true }"></dxi-item>
-      </dx-form> -->
+        [formData]="iter">
+        <dxi-item itemType="group">
+          <dxi-item dataField="oggetto" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="idResponsabileProcedimento.nome" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="Tit. potere sostitutivo" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="promotore" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="presenzaControinteressati" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="idFase.nomeFase" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="stato" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="esito" [editorOptions]="{ disabled: true }"></dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" caption="Dati temporali">
+          <dxi-item dataField="dataAvvio" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="Data chiusura prevista" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="dataChiusura" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="derogaSospensione" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="Durata dell'iter" [editorOptions]="{ disabled: true }"></dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" caption="Dati di archivio">
+          <dxi-item dataField="idIterPrecedente.numeroIter" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="idFascicolo" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="Classificazione" [editorOptions]="{ disabled: true }"></dxi-item>
+        </dxi-item>
+      </dx-form> 
     </div>
   </dxi-item>
 
@@ -32,13 +53,14 @@
     <dxi-location [row]="0" [col]="1" [colspan]="1" screen="md"></dxi-location>
     <dxi-location [row]="0" [col]="1" [colspan]="1" screen="sm"></dxi-location>
     <dxi-location [row]="0" [col]="1" [colspan]="1" screen="xs"></dxi-location>
-    <div>
-      RIGHT
-      <app-sequenza-delle-fasi></app-sequenza-delle-fasi>
-      <app-cronologia-eventi></app-cronologia-eventi>
+    <div class="boxes">
+      <app-sequenza-delle-fasi [idIter]="idIter"></app-sequenza-delle-fasi>
+      <app-cronologia-eventi [idIter]="idIter"></app-cronologia-eventi>
+      <documenti-iter [idIter]="idIter"></documenti-iter>
     </div>
   </dxi-item>
 </dx-responsive-box>
+
 <div class="footerDiv">
     <dx-button [text]="'Annulla'" [type]="'normal'"></dx-button>
     <dx-button [text]="'Conferma'" [type]="'normal'"></dx-button>

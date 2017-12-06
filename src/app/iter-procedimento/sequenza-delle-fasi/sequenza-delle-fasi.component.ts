@@ -1,12 +1,13 @@
 import DataSource from "devextreme/data/data_source";
-import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { DxDataGridComponent } from 'devextreme-angular';
+import { Component, Input, ViewEncapsulation, OnInit } from '@angular/core';
+import { DxDataGridComponent} from 'devextreme-angular';
 import { FaseIter } from '../../classi/server-objects/entities/fase-iter';
 import { Fase } from '../../classi/server-objects/entities/fase';
 import { Iter } from '../../classi/server-objects/entities/iter';
 import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
 import {OdataContextDefinition} from '@bds/nt-angular-context/odata-context-definition';
 import { Entities } from "environments/app.constants";
+import { isUndefined } from "util";
 
 
 @Component({
@@ -14,12 +15,14 @@ import { Entities } from "environments/app.constants";
   templateUrl: './sequenza-delle-fasi.component.html',
   styleUrls: ['./sequenza-delle-fasi.component.scss']
 })
-export class SequenzaDelleFasiComponent {
+export class SequenzaDelleFasiComponent implements OnInit {
 
   public datasource: DataSource;
 
   //qua devo prendermi poi il parametro dell'oggetto Iter che mi passa la videata
-  public idIter = 6;
+  @Input("idIter") idIter: string;
+
+  
   
   public faseIter: FaseIter = new FaseIter;
   public iter: Iter = new Iter();
@@ -28,14 +31,24 @@ export class SequenzaDelleFasiComponent {
   
   constructor(private odataContextFactory: OdataContextFactory) {
     this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
+
+    // this.datasource = new DataSource({
+    //   store: this.odataContextDefinition.getContext()[Entities.FaseIter.name],
+    //   expand: ['idFase'],
+    //   filter: ['FK_id_iter', '=', this.idIter]
+    //   //sort: ['dataInizioFase']
+    // });
+    // this.datasource.sort({ getter: "dataInizioFase", desc: true });
+   }
+
+   ngOnInit(){
     this.datasource = new DataSource({
       store: this.odataContextDefinition.getContext()[Entities.FaseIter.name],
       expand: ['idFase'],
-      filter: ['FK_id_iter', '=', this.idIter]
+      filter: ['FK_id_iter', '=', parseInt(this.idIter)]
       //sort: ['dataInizioFase']
     });
     this.datasource.sort({ getter: "dataInizioFase", desc: true });
-
 
    }
 
