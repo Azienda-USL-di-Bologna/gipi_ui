@@ -1,9 +1,9 @@
-import {Component, Input, OnInit, ViewChild} from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { Router } from "@angular/router";
 import { SharedData } from '@bds/nt-angular-context/shared-data';
 import { OdataContextDefinition } from '@bds/nt-angular-context/odata-context-definition';
-import {OdataContextFactory} from '@bds/nt-angular-context/odata-context-factory';
+import { OdataContextFactory } from '@bds/nt-angular-context/odata-context-factory';
 import ODataStore from "devextreme/data/odata/store";
 import { Struttura } from '../classi/server-objects/entities/struttura';
 import { FunctionsImport, Entities } from '../../environments/app.constants';
@@ -13,7 +13,7 @@ import { Procedimento } from 'app/classi/server-objects/entities/procedimento';
 import { Entity } from '@bds/nt-angular-context/entity';
 import notify from 'devextreme/ui/notify';
 import { CustomLoadingFilterParams } from '@bds/nt-angular-context/custom-loading-filter-params';
-import {forEach} from "@angular/router/src/utils/collection";
+import { forEach } from "@angular/router/src/utils/collection";
 import { NodeOperations } from "../reusable-component/strutture-tree/strutture-tree.component";
 
 @Component({
@@ -30,7 +30,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   private nodeSelectedFromContextMenu: any;
   @ViewChild('treeView') treeView: any;
   private initialState: any;
-  public nodeInvolved : Object = {};
+  public nodeInvolved: Object = {};
 
   private dataSourceProcedimento: DataSource;
   public dataSourceUtente: DataSource;
@@ -62,11 +62,11 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     // COSTRUZIONE MENU CONTESTUALE SULL'ALBERO
     this.contextMenuItems = [{ text: 'Espandi a strutture figlie' }];
 
-  //   this.datasource = new DataSource({
-  //     store: this.odataContextDefinition.getContext()[Entities.Struttura],
-  //     filter: ['FK_id_azienda', '=', 5], //Il valore numerico è l'id dell'azienda, aperto RM per renderlo parametrizzabile
-  //   });
-  //  }
+    //   this.datasource = new DataSource({
+    //     store: this.odataContextDefinition.getContext()[Entities.Struttura],
+    //     filter: ['FK_id_azienda', '=', 5], //Il valore numerico è l'id dell'azienda, aperto RM per renderlo parametrizzabile
+    //   });
+    //  }
 
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
 
@@ -89,7 +89,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         idAzienda: this.sharedData.getSharedObject()["AziendeTipiProcedimentoComponent"]["aziendaTipoProcedimento"]["idAzienda"]["id"]
       }
     });
- }
+  }
 
   /* Legge i dati passatti dall'interfaccia precedente AziendeTipiProcedimentoComponent e setto le variabili */
   private setDataFromDettaglioProcedimentoComponent() {
@@ -107,7 +107,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         store: odataContextDefinitionProcedimento.getContext()[Entities.Procedimento.name],
         requireTotalCount: true,
         expand: ["idAziendaTipoProcedimento", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento", "idAziendaTipoProcedimento.idTitolo"],
-        filter: [["idAziendaTipoProcedimento.id", "=", aziendaTipoProcedimento.id], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id] ]
+        filter: [["idAziendaTipoProcedimento.id", "=", aziendaTipoProcedimento.id], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]
       })
     } else {
       this.dataSourceProcedimento.filter([["idAziendaTipoProcedimento.id", "=", aziendaTipoProcedimento.id], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]);
@@ -116,7 +116,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       res.length ? this.formVisible = true : this.formVisible = false;  /* Se non ho risultato nascondo il form */
       this.procedimento.build(res[0], Procedimento);
       if (setInitialValue) {
-          this.setInitialValues();
+        this.setInitialValues();
       }
     });
   }
@@ -129,31 +129,31 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       if (flagSalva) {
         if (!(this.procedimento.dataFine < this.procedimento.dataInizio) || this.procedimento.dataFine === null) {
           this.dataSourceProcedimento.store()
-          .update(this.procedimento.idProcedimento, this.procedimento)
-          .done(res => (this.caricaDettaglioProcedimento(true)));
-          notify( {
+            .update(this.procedimento.idProcedimento, this.procedimento)
+            .done(res => (this.caricaDettaglioProcedimento(true)));
+          notify({
             message: "Salvataggio effettuato con successo",
             type: "success",
             displayTime: 1200,
             position: {
-                my: "bottom",
-                at: "top",
-                of: "#responsive-box-buttons"
+              my: "bottom",
+              at: "top",
+              of: "#responsive-box-buttons"
             }
           });
           this.testoBottone = "Modifica";
           this.cambiaStatoForm();
         } else {
-            notify( {
-              message: "Correggere l'intervallo di validità",
-              type: "error",
-              displayTime: 1200,
-              position: {
-                  my: "bottom",
-                  at: "top",
-                  of: "#responsive-box-buttons"
-              }
-            });
+          notify({
+            message: "Correggere l'intervallo di validità",
+            type: "error",
+            displayTime: 1200,
+            position: {
+              my: "bottom",
+              at: "top",
+              of: "#responsive-box-buttons"
+            }
+          });
         }
       }
     }
@@ -203,35 +203,36 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   //QUESTO EVENTO VIENE EMESSO DALLA POPUP E INDICA ALLA PAGINA SOTTOSTANTE CHE DEVE RICARICARE L'ALBERO PER FAR VEDERE LE MODIFICHE EFFETTUATE
-  refresh(nodeInvolved) { 
-    // qui al posto di fare questa load, vado a ciclare sugli elementi dell'albero in modo da modificare il check direttamente 
-    //sui nodi dell'albero. Non posso fare il .load() sul datasource perchè poi ogni volta mi richiude l'albero
-    //  console.log(this.treeView.datasource);
-    
-    this.nodeInvolved = nodeInvolved;
+  // qui al posto di fare questa load, vado a ciclare sugli elementi dell'albero in modo da modificare il check direttamente 
+  //sui nodi dell'albero. Non posso fare il .load() sul datasource perchè poi ogni volta mi richiude l'albero
+  //  console.log(this.treeView.datasource);
+  refreshTreeView(nodesInvolved) {
 
-    if (nodeInvolved != null) {
-      var keys = Object.keys(nodeInvolved);
-      console.log(nodeInvolved);
+    if (nodesInvolved != new Object() && nodesInvolved != {}) {
+      var keys = Object.keys(nodesInvolved);
+      console.log(nodesInvolved);
+      
+      if (this.treeView.treeViewChild.items != null) {
+        const nodes = this.treeView.treeViewChild.items;
 
-      const nodes = this.treeView.datasource._items;
+        for (let key of keys) {
 
-      for (let key of keys) {
-        
-        const node = nodes.find(item =>
-          item.id == key
-        );
-
-        if (nodeInvolved[key] == NodeOperations.INSERT) {
-          this.treeView.treeViewChild.instance.selectItem(node);
+          console.log("Operation", nodesInvolved[key]);
+          const node = nodes.find(item =>
+            item.id == key
+          );
+          
+           if (nodesInvolved[key] == NodeOperations.INSERT) {
+             this.treeView.treeViewChild.instance.selectItem(node.id);
+           }
+           else {
+              this.treeView.treeViewChild.instance.unselectItem(node.id);      
+           }
         }
-        else {
-          this.treeView.treeViewChild.instance.unselectItem(node);
-        }
-
       }
     }
-  //this.treeView.datasource.reload();
+
+    this.popupVisible = false;
   }
 
   screen(width) {

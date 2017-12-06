@@ -9,6 +9,7 @@ import { ProcedimentoCache } from "./procedimento-cache";
 export class Iter extends Entity {
   id: number;
   idResponsabileProcedimento: Utente;
+  FK_id_responsabile_procedimento: number;
   numeroIter: number;
   annoIter: number;
   oggetto: string;
@@ -45,7 +46,7 @@ export class Iter extends Entity {
       keyType: "Int32",
       fieldTypes: {
         id: "Int32",
-        idResponsabileProcedimento: "Int32",
+        idResponsabileProcedimento: new OdataForeignKey(Entities.Utente, "id"),
         numeroIter: "Int32",
         annoIter: "Int32",
         oggetto: "String",
