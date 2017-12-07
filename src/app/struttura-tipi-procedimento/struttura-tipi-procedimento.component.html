@@ -34,7 +34,7 @@
       <dxi-location [row]="1" [col]="1" screen="lg"></dxi-location>
       <dxi-location [row]="1" [col]="0" [colspan]="2" screen="sm"></dxi-location>
 
-      <div class="center-div">
+      <div class="center-div" id="center-div">
         <dx-form id="form" #myform [(formData)]="procedimento" [visible]="formVisible">  <!-- [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width" -->
           <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: true }"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
@@ -66,8 +66,9 @@
       <div style="padding-left:10%">
         <dxi-location [row]="1" [col]="0" screen="lg"></dxi-location>
           <dx-button class="padding-button allinea-a-sinistra" (onClick)="showPopup()" text="Associa a strutture" hint="Associa a strutture"></dx-button>
-          <strutture-tree #treeView [idAzienda]=idAziendaFront [nodesToCheckSelectedStatus]= "nodeInvolved" [idAziendaTipoProcedimento]=idAziendaTipoProcedimentoFront [readOnly]="true" [enableCheckRecursively]="false"
-            (strutturaSelezionata)="selezionaStruttura($event)"></strutture-tree>
+          <strutture-tree #treeView [idAzienda]=idAziendaFront [nodesToCheckSelectedStatus]= "nodeInvolved" [popupVisible]="popupVisible" 
+                                    [idAziendaTipoProcedimento]=idAziendaTipoProcedimentoFront [readOnly]="true" [enableCheckRecursively]="false"
+            (strutturaSelezionata)="selezionaStruttura($event)" ></strutture-tree>
       </div>
     </dxi-item>
 
@@ -113,7 +114,7 @@ title="Associa a strutture"
   <popup-struttura-tipi-procedimento [readOnly]="false" 
                                      [enableCheckRecursively]="false" 
                                      [aziendaTipoProcedimentoObj] = "dataFromAziendaTipiProcedimentoComponent" 
-                                     (refreshAfterChange) = "refresh($event)">
+                                     (refreshAfterChange) = "refreshTreeView($event)">
   </popup-struttura-tipi-procedimento>
 
 

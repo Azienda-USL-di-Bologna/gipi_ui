@@ -16,6 +16,8 @@ import { Iter } from '../app/classi/server-objects/entities/iter';
 import { Evento } from '../app/classi/server-objects/entities/evento';
 import { Fase } from '../app/classi/server-objects/entities/fase';
 import { FaseIter } from '../app/classi/server-objects/entities/fase-iter';
+import { ProcedimentoCache } from '../app/classi/server-objects/entities/procedimento-cache';
+import { DocumentoIter } from 'app/classi/server-objects/entities/documento-iter';
 
 export const Entities: ServerObjectsDescriptor = {
     Azienda: {name: 'Aziendas', class: Azienda},
@@ -32,7 +34,9 @@ export const Entities: ServerObjectsDescriptor = {
     Fase: {name: "Fases", class: Fase},
     FaseIter: {name: "FaseIters", class: FaseIter},
     Evento: {name: "Eventos", class: Evento},
-    EventoIter: {name: "EventoIters", class: EventoIter}
+    EventoIter: {name: "EventoIters", class: EventoIter},
+    ProcedimentoCache: {name: "ProcedimentoCaches", class: ProcedimentoCache}
+    DocumentoIter: {name: "DocumentiIters", class: DocumentoIter}
 }
 
 export const FunctionsImport: ServerObjectsDescriptor = {
@@ -44,6 +48,7 @@ export const HEADER_AUTH_TOKEN_NAME = "authorization";
 
 // ========================= Url =====================================
 export const ODATA_BASE_URL: string = environment.odataStoreRootUrl;
+export const CUSTOM_RESOURCES_BASE_URL: string = environment.customResourcesBaseUrl;
 // login
 export const LOGIN_URL: string = environment.loginUrl;
 export const LOGOUT_URL = '/logout';

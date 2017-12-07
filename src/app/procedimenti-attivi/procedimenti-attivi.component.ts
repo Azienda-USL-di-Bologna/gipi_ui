@@ -21,6 +21,8 @@ export class ProcedimentiAttiviComponent {
   public descrizioneAzienda: string = "Azienda USL Parma";
   public dataSourceProcedimenti: DataSource;
   public popupButtons: any[];
+  public popupNuovoIterVisible: boolean = false;
+  public procedimentoDaPassare: object;
 
   constructor(private odataContextFactory: OdataContextFactory) {
     const now = new Date();
@@ -76,14 +78,14 @@ export class ProcedimentiAttiviComponent {
   }
 
   // Calcolo la Width dei widget in base alla grandezza della finestra del browser.
-  calcWidth(divisore, responsive = false) {
+  calcWidth(divisore: number, responsive = false): any {
     if (responsive && window.innerWidth < 1280)
       return "90%";
     return window.innerWidth / divisore;
   }
 
   // Creo un template per item "puri"
-  itemClear(data, itemElement) {
+  itemClear(data, itemElement): string {
     const rowData = this.gridContainer.instance.getDataSource().items()[this.rigaSelezionata.rowIndex];
     return data.dataField.split(".").reduce((o, i) => o[i], rowData); // Devo parsare il dataField per entrare in profondità nell'oggetto
   }
@@ -113,6 +115,14 @@ export class ProcedimentiAttiviComponent {
       case "infoOnClick":
         this.rigaSelezionata = e.row;
         this.apriDettaglio(e.row);
+      break
+      case "iterOnClick":
+        this.popupNuovoIterVisible = true;
+        console.log(e);
+        this.procedimentoDaPassare = [{
+          id: e.row.data.idProcedimento,
+          nome: e.row.data.idAziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento
+        }];
       break
     }
   }

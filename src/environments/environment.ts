@@ -6,5 +6,6 @@
 export const environment = {
     production: false,
     odataStoreRootUrl: "http://localhost:10006/gipi/resources/odata.svc",
+    customResourcesBaseUrl : "http://localhost:10006/gipi/resources/custom/",
     loginUrl: "http://localhost:10006/gipi/user/login/"
 };
