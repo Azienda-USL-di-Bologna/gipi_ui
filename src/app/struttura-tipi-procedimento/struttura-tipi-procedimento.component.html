@@ -83,15 +83,15 @@
         <dxi-row [ratio]="1"></dxi-row>
         <dxi-col [ratio]="1"></dxi-col>
         <dxi-col [ratio]="1"></dxi-col>
-        <!-- <dxi-item>      
+        <!-- <dxi-item>
           <dxi-location [row]="0" [col]="0"></dxi-location>
           <dx-button class="padding-button" (onClick)="sbloccaCampiEditabili()" text="{{ testoBottone }}" [disabled]="!abilitaSalva" hint="Modifica i campi"></dx-button>
         </dxi-item> -->
-        <dxi-item>      
+        <dxi-item>
             <dxi-location [row]="0" [col]="0"></dxi-location>
             <dx-button class="padding-button" [visible]=formVisible (onClick)="bottoneSalvaProcedimento(true)" text="{{ testoBottone }}" hint="Salva i campi"></dx-button>
           </dxi-item>
-        <dxi-item>      
+        <dxi-item>
           <dxi-location [row]="0" [col]="1"></dxi-location>
             <dx-button class="padding-button" [visible]=formVisible (onClick)="bottoneAnnulla()" text="Annulla" hint="Annulla le modifiche"></dx-button>
         </dxi-item>

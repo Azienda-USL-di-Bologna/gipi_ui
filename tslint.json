@@ -36,7 +36,7 @@
           "private-static-field",
           "private-instance-field",
           "public-static-field",
-          "public-instance-field",
+          "public-instance-field"
           /* "private-constructor",
           "public-constructor",
           "public-instance-method",
