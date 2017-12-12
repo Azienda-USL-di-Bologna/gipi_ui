@@ -32,7 +32,7 @@ export class Iter extends Entity {
   derogaSospensione: number;
   motivoDerogaSospensione: string;
   idResponsabileAdozioneProcedimentoFinale: Utente; 
-  idFase: Fase;
+  idFaseCorrente: Fase;
   iterList: Iter[];
   idIterPrecedente: Iter;
   faseIterList: FaseIter[];
@@ -69,7 +69,7 @@ export class Iter extends Entity {
         derogaSospensione: "Int32",
         motivoDerogaSospensione: "String",
         idResponsabileAdozioneProcedimentoFinale: new OdataForeignKey(Entities.Utente, "id"),
-        idFase: new OdataForeignKey(Entities.Fase, "id"),
+        idFaseCorrente: new OdataForeignKey(Entities.Fase, "id"),
         idIterPrecedente: new OdataForeignKey(Entities.Iter, "id"),
         procedimentoCache: new OdataForeignKey(Entities.ProcedimentoCache, "idIter")
       }
