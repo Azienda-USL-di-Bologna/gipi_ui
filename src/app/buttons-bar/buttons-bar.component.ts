@@ -1,6 +1,5 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Router} from "@angular/router";
-import {SharedData} from "@bds/nt-angular-context";
 
 @Component({
   selector: 'app-buttons-bar',
@@ -11,7 +10,7 @@ export class ButtonsBarComponent implements OnInit {
 
   @Output("out") out = new EventEmitter<Object>();
 
-  constructor(private router: Router, private sharedData: SharedData) { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }

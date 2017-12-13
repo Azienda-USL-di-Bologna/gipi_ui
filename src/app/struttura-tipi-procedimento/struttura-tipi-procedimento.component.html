@@ -1,10 +1,10 @@
 <div id="page">
   <dx-responsive-box singleColumnScreen="sm" [(screenByWidth)]="screen">
 
-    <dxi-row [ratio]="2"></dxi-row>
+    <dxi-row [ratio]="3"></dxi-row>
     <dxi-row [ratio]="2" screen="xs"></dxi-row>
-    <dxi-row [ratio]="7"></dxi-row>
-    <dxi-row [ratio]="2"></dxi-row>
+    <dxi-row [ratio]="12"></dxi-row>
+    <dxi-row [ratio]="1"></dxi-row>
 
     <dxi-col [ratio]="1"></dxi-col>
     <dxi-col [ratio]="2" screen="lg"></dxi-col>
@@ -34,7 +34,7 @@
       <dxi-location [row]="1" [col]="1" screen="lg"></dxi-location>
       <dxi-location [row]="1" [col]="0" [colspan]="2" screen="sm"></dxi-location>
 
-      <div class="center-div">
+      <div class="center-div item classculo">
         <dx-form id="form" #myform [(formData)]="procedimento" [visible]="formVisible">  <!-- [readOnly]="readOnly" [showColonAfterLabel]="showColon" [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width" -->
           <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: true }"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
@@ -55,8 +55,8 @@
             searchPlaceholder: 'Cerca...',
             valueExpr: 'this'
           }"></dxi-item>
+          <dxi-item style="height: 100%" dataField="descrizioneAtti" [label]="{text: 'Atti da allegare'}" editorType="dxTextArea" [editorOptions]="{ disabled: campiEditabiliDisabilitati }"></dxi-item>
           <dxi-item dataField="modalitaInfo" [label]="{text: 'Modalità informativa'}" [editorOptions]="{ disabled: campiEditabiliDisabilitati }"></dxi-item>
-          <dxi-item dataField="descrizioneAtti" [label]="{text: 'Atti da allegare'}" editorType="dxTextArea" [editorOptions]="{ height:70, disabled: campiEditabiliDisabilitati }"></dxi-item>
         </dx-form>
         <span *ngIf="!formVisible"><h2 class="no-procedimento">Nessun procedimento associato alla struttura</h2></span>
       </div>
@@ -78,7 +78,7 @@
     </dxi-item>
 
     <dxi-item class="footer item">
-      <dxi-location [row]="2" [col]="1"></dxi-location>
+      <dxi-location [row]="2" [col]="1" ></dxi-location>
       <dx-responsive-box id="responsive-box-buttons" singleColumnScreen="sm" [(screenByWidth)]="screen">
         <dxi-row [ratio]="1"></dxi-row>
         <dxi-col [ratio]="1"></dxi-col>

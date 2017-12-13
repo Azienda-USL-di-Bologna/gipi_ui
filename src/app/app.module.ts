@@ -6,7 +6,7 @@ import "devextreme/data/odata/store";
 import "devextreme/data/odata/context";
 import { DefinizioneTipiProcedimentoService } from "./definizione-tipi-procedimento/definizione-tipi-procedimento.service";
 
-import { SidebarModule } from 'ng-sidebar';
+import { SidebarModule } from "ng-sidebar";
 
 import {
     DxDataGridModule,
@@ -35,7 +35,7 @@ import {rootRouterConfig} from "./app.routes";
 import {AppComponent} from "./app.component";
 import {HomeComponent} from "./home/home.component";
 import { DefinizioneTipiProcedimentoComponent } from "./definizione-tipi-procedimento/definizione-tipi-procedimento.component";
-import { DettaglioProvvedimentoComponent } from "./dettaglio-provvedimento/dettaglio-provvedimento.component";
+import { DettaglioProcedimentoComponent } from "./dettaglio-procedimento/dettaglio-procedimento.component";
 import { AssociazioniComponent } from "./associazioni/associazioni.component";
 import { AziendeTipiProcedimentoComponent } from "./aziende-tipi-procedimento/aziende-tipi-procedimento.component";
 import { AssociaComponent } from "./associazioni/sub-view/associa/associa.component";
@@ -61,14 +61,14 @@ import { ProcedimentiAttiviComponent } from "./procedimenti-attivi/procedimenti-
 import { PopupStrutturaTipiProcedimentoComponent } from "./popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component";
 import { IterProcedimentoComponent } from "./iter-procedimento/iter-procedimento.component";
 import { SequenzaDelleFasiComponent } from "./iter-procedimento/sequenza-delle-fasi/sequenza-delle-fasi.component";
-import { TestLayoutComponent } from './test-layout/test-layout.component';
+import { TestLayoutComponent } from "./test-layout/test-layout.component";
 import {Service} from "./test-layout/service";
-import { ButtonsBarComponent } from './buttons-bar/buttons-bar.component';
-import {GlobalContextService} from "./global-context.service";
+import { ButtonsBarComponent } from "./buttons-bar/buttons-bar.component";
 import { CronologiaEventiComponent } from "./iter-procedimento/cronologia-eventi/cronologia-eventi.component";
 import { DocumentiIterComponent } from "./iter-procedimento/documenti-iter/documenti-iter.component";
-import { AvviaNuovoIterComponent } from './procedimenti-attivi/avvia-nuovo-iter/avvia-nuovo-iter.component';
-import { TestTreeComponent } from './test/test-tree/test-tree.component';
+import { AvviaNuovoIterComponent } from "./procedimenti-attivi/avvia-nuovo-iter/avvia-nuovo-iter.component";
+import { TestTreeComponent } from "./test/test-tree/test-tree.component";
+import { BreadcrumpsComponent } from "./breadcrumps/breadcrumps.component";
 
 
 @NgModule({
@@ -76,7 +76,7 @@ import { TestTreeComponent } from './test/test-tree/test-tree.component';
         AppComponent,
         HomeComponent,
         DefinizioneTipiProcedimentoComponent,
-        DettaglioProvvedimentoComponent,
+        DettaglioProcedimentoComponent,
         AziendeTipiProcedimentoComponent,
         AssociaComponent,
         ProcedimentoComponent,
@@ -96,7 +96,8 @@ import { TestTreeComponent } from './test/test-tree/test-tree.component';
         CronologiaEventiComponent,
         DocumentiIterComponent,
         TestTreeComponent,
-        AvviaNuovoIterComponent
+        AvviaNuovoIterComponent,
+        BreadcrumpsComponent
     ],
     imports: [
         BrowserModule,
@@ -131,7 +132,7 @@ import { TestTreeComponent } from './test/test-tree/test-tree.component';
         ContextModule.forRoot(contextModuleConfig),
         SidebarModule.forRoot()
     ],
-    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard, GlobalContextService
+    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard
         ],
     bootstrap: [AppComponent],
     entryComponents: [AssociaComponent, ProcedimentoComponent]

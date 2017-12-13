@@ -1,40 +1,48 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {CustomReuseStrategy} from "@bds/nt-angular-context/Routes/custom-reuse-strategy";
 import {ActivatedRoute} from "@angular/router";
-import {GlobalContextService} from "./global-context.service";
 import {Observable} from "rxjs/Observable";
 import {Ruolo} from "./classi/server-objects/entities/ruolo";
 import {Azienda} from "./classi/server-objects/entities/azienda";
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+    selector: "app-root",
+    templateUrl: "./app.component.html",
+    styleUrls: ["./app.component.scss"]
 })
 export class AppComponent implements OnInit {
 
     _opened= false;
-    buttonBar: Observable<boolean>;
+    // buttonBar: Observable<boolean>;
 
     private userInfoMap: Object;
     username: String = "";
     azienda: Azienda;
 
-    private _toggleSidebar() {
+    public col2Class: string = "d-none";
+
+    _toggleSidebar() {
         this._opened = !this._opened;
     }
 
-    constructor(private location: Location, private activatedRoute: ActivatedRoute, private globalContext: GlobalContextService) {
+    constructor(private location: Location, private activatedRoute: ActivatedRoute) {
         this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
-        if (this.userInfoMap){
+        if (this.userInfoMap) {
             this.username = this.userInfoMap["username"];
             this.azienda = this.userInfoMap["azienda"];
         }
     }
 
+    slide(){
+        console.log("toggle");
+        if (this.col2Class === "d-none")
+            this.col2Class = "col-3";
+        else
+            this.col2Class = "d-none";
+    }
     screen(width) {
-        return ( width < 700 ) ? 'sm' : 'lg';
+        return ( width < 700 ) ? "sm" : "lg";
     }
 
     ngOnInit() {
@@ -54,6 +62,14 @@ export class AppComponent implements OnInit {
         this.activatedRoute.queryParams.subscribe(
             params => console.log("params: ", params));
 
-        this.buttonBar = this.globalContext.buttonBarVisible;
+        // this.buttonBar = this.globalContext.buttonBarVisible;
     }
 }
+
+export interface SidebarItem {
+    description: string,
+    routerLInk: string,
+    children?: Array<SidebarItem>
+}
+
+

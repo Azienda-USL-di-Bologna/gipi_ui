@@ -3,7 +3,6 @@ import {DEFAULT_INTERRUPTSOURCES, Idle} from "@ng-idle/core";
 import {Keepalive} from "@ng-idle/keepalive";
 import {Router} from "@angular/router";
 import {SessionManager} from "../login/session-manager";
-import { SharedData } from '@bds/nt-angular-context/shared-data';
 import { log } from 'util';
 import { Ruolo } from 'app/classi/server-objects/entities/ruolo';
 import { Azienda } from 'app/classi/server-objects/entities/azienda';
