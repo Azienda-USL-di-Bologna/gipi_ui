@@ -34,7 +34,7 @@
       {
         "order": [
           "public-static-field",
-          "public-instance-field",
+          "public-instance-field"
           "private-instance-field",
           "private-static-field",
           "public-constructor",

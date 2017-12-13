@@ -1,9 +1,9 @@
 
 <div class="headerDiv">
-  <h3><span class="header-font">Azienda:</span> <i>blabla</i></h3>
-  <h3><span class="header-font">Struttura:</span> <i>blablablabla</i></h3>
-  <h3><span class="header-font">Tipo procedimento:</span> <i>blabla</i></h3>
-  <h3><span class="header-font">Iter N. </span> <i>blablabla</i></h3>
+  <h3><span class="header-font">Azienda:</span> <i>{{infoGeneriche.azienda}}</i></h3>
+  <h3><span class="header-font">Struttura:</span> <i>{{infoGeneriche.struttura}}</i></h3>
+  <h3><span class="header-font">Tipo procedimento:</span> <i>{{infoGeneriche.tipoProcedimento}}</i></h3>
+  <h3><span class="header-font">Iter N. </span> <i>{{infoGeneriche.numeroIter}}</i></h3>
 </div>
 <dx-responsive-box class="contentWrapper">
   <dxi-row [ratio]="1"></dxi-row>
@@ -21,27 +21,64 @@
         id="form"
         [colCount]="1"
         [formData]="iter">
-        <dxi-item itemType="group">
-          <dxi-item dataField="oggetto" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="idResponsabileProcedimento.nome" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="Tit. potere sostitutivo" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="promotore" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="presenzaControinteressati" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="idFase.nomeFase" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="stato" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="esito" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item itemType="group" [colCount]="2">
+          <dxi-item [colSpan]="2" dataField="oggetto" [editorOptions]="{ disabled: true }"></dxi-item>
+
+          <dxi-item [colSpan]="2" dataField="idResponsabileProcedimento.nome" [editorOptions]="{ disabled: true }">
+              <dxo-label text="Resp. procedimento"></dxo-label>
+          </dxi-item>
+
+          <dxi-item [colSpan]="2" dataField="procedimentoCache.idTitolarePotereSostitutivo.descrizione" [editorOptions]="{ disabled: true }">
+              <dxo-label text="Tit. potere sostitutivo"></dxo-label>
+          </dxi-item>
+
+          <dxi-item [colSpan]="2" dataField="promotore" [editorOptions]="{ disabled: true }"></dxi-item>
+
+          <dxi-item [colSpan]="1" dataField="presenzaControinteressati" editorType="dxCheckBox" [editorOptions]="{ disabled: true}">
+              <dxo-label text="Controinteressati"></dxo-label>
+          </dxi-item>
+
+          <dxi-item [colSpan]="1">
+              <dx-button text="Note controinteressati" type="default" (onClick)="updateNoteControInteressati()"></dx-button>
+          </dxi-item>
+
+          <dxi-item [colSpan]="2" dataField="idFase.nomeFase" [editorOptions]="{ disabled: true }">
+              <dxo-label text="Fase corrente"></dxo-label>
+          </dxi-item>
+
+          <dxi-item [colSpan]="2" dataField="stato" [editorOptions]="{ disabled: true }"></dxi-item>
+
+          <dxi-item [colSpan]="1" dataField="esito" [editorOptions]="{ disabled: true }"></dxi-item>
+
+          <dxi-item [colSpan]="1">
+              <dx-button text="Motivazione" type="default" (onClick)="updateEsitoMotivazione()"></dx-button>
+          </dxi-item>
         </dxi-item>
+
         <dxi-item itemType="group" caption="Dati temporali">
-          <dxi-item dataField="dataAvvio" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="Data chiusura prevista" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="dataChiusura" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="dataAvvio" editorType="dxDateBox" [editorOptions]="{ disabled: true }"></dxi-item>
+
+          <dxi-item dataField="dataChiusuraPrevista" editorType="dxDateBox" [editorOptions]="{ disabled: true }">
+              <dxo-label text="Data chiusura prevista"></dxo-label>
+          </dxi-item>
+
+          <dxi-item dataField="dataChiusura" editorType="dxDateBox" [editorOptions]="{ disabled: true }"></dxi-item>
+
           <dxi-item dataField="derogaSospensione" [editorOptions]="{ disabled: true }"></dxi-item>
+
           <dxi-item dataField="Durata dell'iter" [editorOptions]="{ disabled: true }"></dxi-item>
         </dxi-item>
+
         <dxi-item itemType="group" caption="Dati di archivio">
-          <dxi-item dataField="idIterPrecedente.numeroIter" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }"></dxi-item>
-          <dxi-item dataField="idFascicolo" [editorOptions]="{ disabled: true }"></dxi-item>
+          <dxi-item dataField="idIterPrecedente.numeroIter" [editorOptions]="{ disabled: true }">
+              <dxo-label text="Coll. precedente"></dxo-label>
+          </dxi-item>
+          <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }">
+              <dxo-label text="Motivo collegamento"></dxo-label>
+          </dxi-item>
+          <dxi-item dataField="idFascicolo" [editorOptions]="{ disabled: true }">
+              <dxo-label text="Fascicolo dell'iter"></dxo-label>
+          </dxi-item>
           <dxi-item dataField="Classificazione" [editorOptions]="{ disabled: true }"></dxi-item>
         </dxi-item>
       </dx-form> 
@@ -65,3 +102,24 @@
     <dx-button [text]="'Annulla'" [type]="'normal'"></dx-button>
     <dx-button [text]="'Conferma'" [type]="'normal'"></dx-button>
 </div>
+
+<dx-popup
+  class="popup"
+  [width]="500"
+  [height]="300"
+  [showTitle]="true"
+  [title]="popupData.title"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="true"
+  [(visible)]="popupData.visible">
+  <div *dxTemplate="let data of 'content'">
+      <dx-text-area
+        [height]="150"
+        [(value)]="popupData.fieldValue">
+      </dx-text-area>
+      <div class="wrapperPulsantiPopup">
+          <dx-button text="Annulla" type="normal"></dx-button>
+          <dx-button text="Salva" type="default"></dx-button>
+      </div> 
+  </div>
+</dx-popup>
