@@ -4,6 +4,7 @@
   <h3><span class="header-font">Struttura:</span> <i>{{infoGeneriche.struttura}}</i></h3>
   <h3><span class="header-font">Tipo procedimento:</span> <i>{{infoGeneriche.tipoProcedimento}}</i></h3>
   <h3><span class="header-font">Iter N. </span> <i>{{infoGeneriche.numeroIter}}</i></h3>
+  <div><dx-button [text]="'Link'" (onClick)="passaggioDiFase()"></dx-button></div>
 </div>
 <dx-responsive-box class="contentWrapper">
   <dxi-row [ratio]="1"></dxi-row>
@@ -123,3 +124,18 @@
       </div> 
   </div>
 </dx-popup>
+
+
+<dx-popup
+    class="popup"
+    [width]="700"
+    [height]="700"
+    [showTitle]="true"
+    [title]="popupData.title"
+    [dragEnabled]="false"
+    [closeOnOutsideClick]="true"
+    [(visible)]="passaggioDiFaseVisible">
+    <div *dxTemplate="let data of 'content'">
+        <app-passaggio-di-fase [idIter]="idIter" (messageEvent)="receiveMessage($event)"></app-passaggio-di-fase>
+    </div>
+</dx-popup>>

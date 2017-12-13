@@ -63,6 +63,7 @@ import { CronologiaEventiComponent } from "./iter-procedimento/cronologia-eventi
 import { DocumentiIterComponent } from "./iter-procedimento/documenti-iter/documenti-iter.component";
 import { AvviaNuovoIterComponent } from './procedimenti-attivi/avvia-nuovo-iter/avvia-nuovo-iter.component';
 import { TestTreeComponent } from './test/test-tree/test-tree.component';
+import { PassaggioDiFaseComponent } from './iter-procedimento/passaggio-di-fase/passaggio-di-fase.component';
 
 
 @NgModule({
@@ -88,7 +89,8 @@ import { TestTreeComponent } from './test/test-tree/test-tree.component';
         CronologiaEventiComponent,
         DocumentiIterComponent,
         TestTreeComponent,
-        AvviaNuovoIterComponent
+        AvviaNuovoIterComponent,
+        PassaggioDiFaseComponent
     ],
     imports: [
         BrowserModule,
