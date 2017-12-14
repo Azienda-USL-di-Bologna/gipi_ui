@@ -119,12 +119,12 @@
     </div>
     <div style="display: table-row-group">
         <div class="row" style="height: 100%;">
-            <div [class]="col2Class" class="col-2">
-                <div id="sidebar-items" >SIDEBAR-ITEMS</div>
-            </div>
+            <sidebar></sidebar>
             <div class="col">
                 <div class="row">
-                    <button id="sidebar-toggle-button" class="btn btn-inverse" (click)="slide()">TOGGLE</button>
+                    <button id="sidebar-toggle-button" type="button" class="btn btn-default" (click)="slide()">
+                        <span class="dx-icon-menu"></span>
+                    </button>
                     <div>
                         breadcrumps
                     </div>
