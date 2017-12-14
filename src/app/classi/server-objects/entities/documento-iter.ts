@@ -8,7 +8,6 @@ export class DocumentoIter extends Entity {
   numeroRegistro: number;
   anno: number;
   registro: string;
-  idGddoc: number;
   idIter: Iter;
   FK_id_iter: number;
 
@@ -21,7 +20,6 @@ export class DocumentoIter extends Entity {
         numeroRegistro: "Int32",
         anno: "Int32",
         registro: "String",
-        idGddoc: "Int32",
         idIter: new OdataForeignKey(Entities.Iter, "id")
       }
     };
