@@ -51,7 +51,9 @@ export class PassaggioDiFaseComponent implements OnInit {
 export class IterParams{
   idIter: number;
   dataPassaggio: Date;
-  documento: DocumentoIter;
+  codiceRegistroDocumento: string;
+  numeroDocumento: string;
+  annoDocumento: number;
   notePassaggio: string;
   esito: string;
   motivazioneEsito: string;

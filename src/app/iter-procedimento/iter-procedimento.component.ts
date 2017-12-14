@@ -11,7 +11,7 @@ import { Utente } from '../classi/server-objects/entities/utente';
 import { Fase } from '../classi/server-objects/entities/fase';
 import { FaseIter } from '../classi/server-objects/entities/fase-iter';
 import { ProcedimentoCache } from '../classi/server-objects/entities/procedimento-cache';
-import { PassaggioDiFaseComponent } from 'app/iter-procedimento/passaggio-di-fase/passaggio-di-fase.component';
+import { PassaggioDiFaseComponent } from './passaggio-di-fase/passaggio-di-fase.component';
 
 @Component({
   selector: 'app-iter-procedimento',

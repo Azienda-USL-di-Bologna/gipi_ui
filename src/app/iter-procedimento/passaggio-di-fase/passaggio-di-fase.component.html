@@ -1,50 +1,65 @@
-<dx-responsive-box class="passaggioFaseMegaBox">
-    <dxi-row [ratio]="2"></dxi-row>
-    <dxi-row [ratio]="5"></dxi-row>
-    <dxi-row [ratio]="1"></dxi-row>
-    <dxi-col [ratio]="1"></dxi-col>
-    <dxi-col [ratio]="1"></dxi-col>
-    <dxi-col [ratio]="1"></dxi-col>
+<div class="container-fluid">
     <!-- Prima riga: fasi -->
-    <dxi-item class="colonnePrima">
-        <dxi-location [row]="0" [col]="0" [colspan]="1" screen="lg"></dxi-location>
-        <dxi-location [row]="0" [col]="0" [colspan]="1" screen="md"></dxi-location>
-        <dxi-location [row]="0" [col]="0" [colspan]="1" screen="sm"></dxi-location>
-        <dxi-location [row]="0" [col]="0" [colspan]="1" screen="xs"></dxi-location>
-        <h4>Fase attuale</h4>
-    </dxi-item>
-    
-    <dxi-item class="colonnePrima">
-        <dxi-location [row]="0" [col]="1" [colspan]="1" screen="lg"></dxi-location>
-        <dxi-location [row]="0" [col]="1" [colspan]="1" screen="md"></dxi-location>
-        <dxi-location [row]="0" [col]="1" [colspan]="1" screen="sm"></dxi-location>
-        <dxi-location [row]="0" [col]="1" [colspan]="1" screen="xs"></dxi-location>
-        <div><img  class="freccia" src="../../assets/images/right_arrow.png"></div>
-    </dxi-item>
-    
-    <dxi-item class="colonnePrima">
-        <dxi-location [row]="0" [col]="2" [colspan]="1" screen="lg"></dxi-location>
-        <dxi-location [row]="0" [col]="2" [colspan]="1" screen="md"></dxi-location>
-        <dxi-location [row]="0" [col]="2" [colspan]="1" screen="sm"></dxi-location>
-        <dxi-location [row]="0" [col]="2" [colspan]="1" screen="xs"></dxi-location>
-        <h4>Fase successiva</h4>
-    </dxi-item>
+    <div class="row">
+        <div class="col">
+            <h4>Fase attuale</h4>
+        </div>
 
+        <div class="col">
+            <img  class="freccia" src="../../assets/images/right_arrow.png">
+        </div>
+        
+        <div class="col">
+            <h4>Fase successiva</h4>
+        </div>
+    </div>  
+
+    <br>
 
     <!-- Seconda riga: dati passaggio fase -->
-    <dxi-item>
-        <!-- ETICHETTE DEI DATI -->
-        <dxi-location [row]="1" [col]="0" [colspan]="1" screen="lg"></dxi-location>
-        <dxi-location [row]="1" [col]="0" [colspan]="1" screen="md"></dxi-location>
-        <dxi-location [row]="1" [col]="0" [colspan]="1" screen="sm"></dxi-location>
-        <dxi-location [row]="1" [col]="0" [colspan]="1" screen="xs"></dxi-location>
-        <h5>Dati di passaggio</h5>
+    <div class="row">
+        <div class="col-2"></div>
+
+        <!-- I DATI    -->
+        <div class="col">
+            <dx-form [formData]="iterParams">
+                <dxi-item editorType="dxDateBox" [label]="{text: 'Data Passaggio'}" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+
+                <dxi-item itemType="group" >
+                    <dxi-item [colSpan]="1" dataField="codiceRegistroDocumento" [label]="{text: 'Reg.'}" [editorOptions]="{ disabled: false }"></dxi-item>
+                    <dxi-item [colSpan]="1" dataField="numeroDocumento" [label]="{text: 'Num.'}" [editorOptions]="{disabled: false }"></dxi-item>
+                    <dxi-item [colSpan]="1" dataField="annoDocumento" [label]="{text: 'Anno'}" [editorOptions]="{disabled: false }"></dxi-item>
+                </dxi-item>                
+
+                <dxi-item dataField="notePassaggio" [label]="{text: 'Note Passaggio'}" [editorOptions]="{disabled: false }"></dxi-item>
+                <dxi-item dataField="esito" [label]="{text: 'Esito'}" [editorOptions]="{disabled: false }"></dxi-item>
+                <dxi-item dataField="motivazioneEsito" [label]="{text: 'Motivo Esito'}" [editorOptions]="{disabled: false }"></dxi-item>
+            </dx-form>
+        </div>
+
+        <div class="col-2"></div>
+    </div> 
+
+    <br>
+    
+    <!-- Terza riga: 'Salva o annulla' -->
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-3">
+            <dx-button text="Annulla" type="normal" (onClick)="annulla()"></dx-button>
+        </div>
+        <div class="col-3">
+            <dx-button text="Procedi" type="default" (onClick)="procedi()"></dx-button>
+        </div>
+        <div class="col"></div>
+    </div>     
+</div>
         <!-- Data passaggio -->
         <!-- Documento  -->
         <!-- Note passaggio -->
         <!-- Esito  -->
         <!-- Motivazione esito -->
-        <dx-responsive-box>
+<!--         <dx-responsive-box>
             <dxi-row [ratio]="1"></dxi-row>
             <dxi-row [ratio]="1"></dxi-row>
             <dxi-row [ratio]="1"></dxi-row>
@@ -88,12 +103,11 @@
                 <p>Motivazione esito</p>
             </dxi-item>
         </dx-responsive-box>
-    </dxi-item>
+    </div>
+ -->
 
-
-    <dxi-item>
         <!--        DATI         -->
-        <dxi-location [row]="1" [col]="1" [colspan]="2" screen="lg"></dxi-location>
+<!--         <dxi-location [row]="1" [col]="1" [colspan]="2" screen="lg"></dxi-location>
         <dxi-location [row]="1" [col]="1" [colspan]="2" screen="md"></dxi-location>
         <dxi-location [row]="1" [col]="1" [colspan]="2" screen="sm"></dxi-location>
         <dxi-location [row]="1" [col]="1" [colspan]="2" screen="xs"></dxi-location>
@@ -113,9 +127,9 @@
                 <dxi-location [row]="0" [col]="0" [colspan]="1" screen="xs"></dxi-location>
                 <dx-date-box dataField="iterParams.dataPassaggio"></dx-date-box>
             </dxi-item>
-            <dxi-item>
+            <dxi-item> -->
                 <!--Qua c'è la parte coi dati del documento attaccato    -->
-                <dxi-location [row]="1" [col]="0" [colspan]="1" screen="lg"></dxi-location>
+   <!--              <dxi-location [row]="1" [col]="0" [colspan]="1" screen="lg"></dxi-location>
                 <dxi-location [row]="1" [col]="0" [colspan]="1" screen="md"></dxi-location>
                 <dxi-location [row]="1" [col]="0" [colspan]="1" screen="sm"></dxi-location>
                 <dxi-location [row]="1" [col]="0" [colspan]="1" screen="xs"></dxi-location>
@@ -131,9 +145,9 @@
                         <dxo-label text="Anno"></dxo-label>
                     </dxi-item>
                 </dx-form>
-            </dxi-item>
+            </dxi-item> -->
             <!--Seguono tre campi da riempire con del testo    -->
-            <dxi-item>
+      <!--       <dxi-item>
                 <dxi-location [row]="2" [col]="0" [colspan]="1" screen="lg"></dxi-location>
                 <dxi-location [row]="2" [col]="0" [colspan]="1" screen="md"></dxi-location>
                 <dxi-location [row]="2" [col]="0" [colspan]="1" screen="sm"></dxi-location>
@@ -158,11 +172,11 @@
                 <p></p>
             </dxi-item>
         </dx-responsive-box>
-    </dxi-item>
+    </dxi-item> -->
 
 
     <!-- Terza riga: 'Salva o annulla' -->
-    <dxi-item>
+   <!--  <dxi-item>
         <dxi-location [row]="2" [col]="1" [colspan]="1" screen="lg"></dxi-location>
         <dxi-location [row]="2" [col]="1" [colspan]="1" screen="md"></dxi-location>
         <dxi-location [row]="2" [col]="1" [colspan]="1" screen="sm"></dxi-location>
@@ -171,6 +185,5 @@
             <dx-button text="Annulla" type="normal" (onClick)="annulla()"></dx-button>
             <dx-button text="Procedi" type="default" (onClick)="procedi()"></dx-button>
         </div> 
-    </dxi-item>
+    </dxi-item> -->
 
-</dx-responsive-box>
