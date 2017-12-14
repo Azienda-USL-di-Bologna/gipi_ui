@@ -31,7 +31,7 @@ export class EventoIter extends Entity {
         idFaseIter: new OdataForeignKey(Entities.FaseIter, "id"),
         idDocumentoIter: new OdataForeignKey(Entities.DocumentoIter, "id"),
         dataOraEvento: "DateTime",
-        autore: "String",
+        autore: new OdataForeignKey(Entities.Utente, "id"),
         noteEventoIter: "String"
       }
     };
