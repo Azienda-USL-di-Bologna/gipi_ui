@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
     azienda: Azienda;
 
     public col2Class: string = "d-none";
-
+    private sidebarClass: string = "sidebar";
     _toggleSidebar() {
         this._opened = !this._opened;
     }
@@ -35,11 +35,16 @@ export class AppComponent implements OnInit {
     }
 
     slide(){
+        let sideBar = document.getElementById("sidebar");
+        let contentPage = document.getElementById("sidebar-page");
         console.log("toggle");
-        if (this.col2Class === "d-none")
-            this.col2Class = "col-3";
-        else
-            this.col2Class = "d-none";
+        if (sideBar.classList.contains("active")) {
+            sideBar.classList.remove("active");
+            contentPage.classList.remove("active");
+        } else {
+          sideBar.classList.add("active");
+          contentPage.classList.add("active");
+        }
     }
     screen(width) {
         return ( width < 700 ) ? "sm" : "lg";
