@@ -4,7 +4,6 @@ import DataSource from "devextreme/data/data_source";
 import ODataStore from "devextreme/data/odata/store";
 import {OdataContextFactory} from "@bds/nt-angular-context";
 import { FunctionsImport } from "../../../environments/app.constants";
-import { SharedData } from '@bds/nt-angular-context/shared-data';
 import {HttpClient} from "@angular/common/http";
 import notify from 'devextreme/ui/notify';
 import { CUSTOM_RESOURCES_BASE_URL } from '../../../environments/app.constants';

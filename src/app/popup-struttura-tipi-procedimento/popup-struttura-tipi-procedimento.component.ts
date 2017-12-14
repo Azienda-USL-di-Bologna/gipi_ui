@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild, Input, Output, EventEmitter} from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { Router } from "@angular/router";
-import { SharedData } from "@bds/nt-angular-context/shared-data";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
 import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
 import ODataStore from "devextreme/data/odata/store";
@@ -9,6 +8,7 @@ import { Struttura } from "../classi/server-objects/entities/struttura";
 import { FunctionsImport } from "../../environments/app.constants";
 import {forEach} from "@angular/router/src/utils/collection";
 import { StruttureTreeComponent } from "../reusable-component/strutture-tree/strutture-tree.component";
+import {  GlobalContextService } from "@bds/nt-angular-context/global-context.service";
 
 @Component({
   selector: 'popup-struttura-tipi-procedimento',
@@ -34,7 +34,7 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
   @Input("aziendaTipoProcedimentoObj") aziendaTipoProcedimentoObj: any;
   @Output("refreshAfterChange") refreshAfterChange = new EventEmitter<Object>();
 
-  constructor(private sharedData: SharedData, private odataContextFactory: OdataContextFactory, private router: Router) {
+  constructor(private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory, private router: Router) {
  }
 
   ngOnInit() {
@@ -50,7 +50,7 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   sendDataConfirm() {
-     //INOLTRO LA CHIAMATA AL FIGLIO
+     // INOLTRO LA CHIAMATA AL FIGLIO
      this.treeView.sendDataConfirm();
   }
 
@@ -58,7 +58,7 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
     this.treeView.setDataCancel();
   }
 
-  //La popup avvisa il padre che è cambiata la configurazione dell'albero
+  // La popup avvisa il padre che è cambiata la configurazione dell'albero
   refresh(nodeInvolved) { 
     this.refreshAfterChange.emit(nodeInvolved);
   }

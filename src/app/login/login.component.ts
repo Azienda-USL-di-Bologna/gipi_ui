@@ -3,7 +3,6 @@ import { NgForm} from '@angular/forms';
 import { Router, CanActivate} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {LOGIN_URL} from "../../environments/app.constants";
-import { SharedData } from "@bds/nt-angular-context/shared-data";
 import { log } from 'util';
 import { Ruolo } from 'app/classi/server-objects/entities/ruolo';
 import { Azienda } from 'app/classi/server-objects/entities/azienda';
@@ -16,7 +15,7 @@ import { Azienda } from 'app/classi/server-objects/entities/azienda';
 export class LoginComponent implements OnInit {
   errorMessage: string = "";
 
-  constructor(public httpClient: HttpClient, private router:Router, private sharedData: SharedData) { }
+  constructor(public httpClient: HttpClient, private router: Router) { }
 
   ngOnInit() {
       this.httpClient.get<any>(LOGIN_URL)

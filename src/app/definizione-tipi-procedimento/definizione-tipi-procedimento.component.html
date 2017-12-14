@@ -3,6 +3,8 @@
 </div>
 -->
 
+<app-buttons-bar></app-buttons-bar>
+
 <dx-data-grid  #grid
     id="gridContainer"
     [dataSource]="dataSource"
@@ -70,8 +72,6 @@
 
         <dx-button text="" hint="Elimina questo tipo procedimento" icon="./assets/images/eraser-512.png" (onClick)="handleEvent('deleteClicked', $event)"></dx-button>
     </div>
-    
-    
 
     <dxi-column dataField="descrizioneTipoProcedimentoDefault" [visible]="false"></dxi-column>
     <dxi-column dataField="durataMassimaSospensione" [visible]="false"></dxi-column>

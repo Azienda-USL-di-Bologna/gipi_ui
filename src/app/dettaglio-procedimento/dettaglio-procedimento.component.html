@@ -1,0 +1,85 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div style="margin-bottom: 8px; overflow: auto;">
+                <div class="dx-field-label">Nome</div>
+                <!-- nome -->
+                <div class="dx-field-value">
+                    <dx-text-box [value]="procedimento.nomeTipoProcedimento" [disabled]="true">
+                    </dx-text-box>
+                </div>
+                <!-- end nome -->
+            </div>
+
+            <div style="margin-bottom: 8px; overflow: auto;">
+                <div class="dx-field-label">Descrizione</div>
+                <!-- descrizione -->
+                <div class="dx-field-value">
+                    <dx-text-area [height]="90" [(value)]="procedimento.descrizioneTipoProcedimentoDefault" [disabled]="true">
+                    </dx-text-area>
+                </div>
+                <!-- end descrizione -->
+            </div>
+
+            <div style="margin-bottom: 8px; overflow: auto;">
+                <div class="dx-field-label">Modo apertura</div>
+                <!-- modo apertura -->
+                <div class="dx-field-value">
+                    <dx-text-box [value]="procedimento.modoApertura" [disabled]="true">
+                    </dx-text-box>
+                </div>
+                <!-- end mod apertura -->
+            </div>
+
+            <div style="margin-bottom: 8px; overflow: auto;">
+                <div class="dx-field-label">Norma di riferimento</div>
+                <!-- norma di rifermineto -->
+                <div class="dx-field-value">
+                    <dx-text-area [height]="90" [(value)]="procedimento.normaRiferimento" [disabled]="true">
+                    </dx-text-area>
+                </div>
+                <!-- end norma di rifermineto -->
+            </div>
+
+            <div style="margin-bottom: 8px; overflow: auto;">
+                <div class="dx-field-label">Valido dal</div>
+                <!-- valido dal -->
+                <div class="dx-field-value">
+                    <dx-date-box type="date" [displayFormat]="'dd/MM/yyyy'" [disabled]="true" [value]="procedimento.dataInizioValidita">
+                    </dx-date-box>
+                </div>
+                <!-- end valido dal -->
+            </div>
+
+            <div style="margin-bottom: 8px; overflow: auto;">
+                <div class="dx-field-label">Valido al</div>
+                <!-- valido al -->
+                <div class="dx-field-value">
+                    <dx-date-box type="date" [displayFormat]="'dd/MM/yyyy'" [disabled]="true" [value]="procedimento.dataFineValidita">
+                    </dx-date-box>
+                </div>
+                <!-- end valido al -->
+            </div>
+
+            <div style="margin-bottom: 8px; overflow: auto;">
+                <div class="dx-field-label">Durata massima sospensione (gg)</div>
+                <!-- durata max sospensione -->
+                <div class="dx-field-value">
+                    <dx-text-box [value]="procedimento.durataMassimaSospensione" [disabled]="true">
+                    </dx-text-box>
+                </div>
+                <!-- end durata max sospensione -->
+            </div>
+        </div>
+        <div class="col">
+            <h4 style="text-align: center; margin-bottom: 30px;">Aziende Associate</h4>
+            <div style="margin-bottom: 8px; overflow: auto;" *ngFor="let azienda of aziende">
+                <dx-check-box [value]="procedimento.aziendeAssociate[azienda.id] ? true : false" [disabled]="true" #checkAssociata></dx-check-box>
+                <span style="margin-right: 16px;">{{azienda.descrizione}}</span>
+                <div style="float:right;">
+                    <dx-button [text]="checkAssociata.value ? 'Gestisci associazione' : 'Associa'" (onClick)="buttonClicked(azienda)" [type]="confirm"></dx-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

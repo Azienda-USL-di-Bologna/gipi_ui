@@ -1,43 +1,43 @@
-import { Component, OnInit, ViewChild, } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
-import { DxDataGridComponent } from 'devextreme-angular';
-import { DefinizioneTipiProcedimentoService } from './definizione-tipi-procedimento.service';
-import {TipoProcedimento} from '../classi/server-objects/entities/tipo-procedimento';
-import {OdataContextDefinition} from '@bds/nt-angular-context/odata-context-definition';
-import {Entities} from '../../environments/app.constants';
-import {OdataContextFactory} from '@bds/nt-angular-context/odata-context-factory';
-
+import {Component, OnDestroy, OnInit, ViewChild, } from "@angular/core";
+import DataSource from "devextreme/data/data_source";
+import { DxDataGridComponent } from "devextreme-angular";
+import { DefinizioneTipiProcedimentoService } from "./definizione-tipi-procedimento.service";
+import {TipoProcedimento} from "../classi/server-objects/entities/tipo-procedimento";
+import {OdataContextDefinition} from "@bds/nt-angular-context/odata-context-definition";
+import {Entities} from "../../environments/app.constants";
+import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
+import {ActivatedRoute, Router} from "@angular/router";
+import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
 // import { UtilityFunctions } from '../utility-functions';
 
 
 @Component({
-  selector: 'app-definizione-tipi-procedimento',
-  templateUrl: './definizione-tipi-procedimento.component.html',
-  styleUrls: ['./definizione-tipi-procedimento.component.css']
+  selector: "app-definizione-tipi-procedimento",
+  templateUrl: "./definizione-tipi-procedimento.component.html",
+  styleUrls: ["./definizione-tipi-procedimento.component.css"]
 })
-export class DefinizioneTipiProcedimentoComponent {
+export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
-  @ViewChild('grid') grid: DxDataGridComponent;
+  @ViewChild("grid") grid: DxDataGridComponent;
   public dataSource: DataSource;
   private odataContextDefinition: OdataContextDefinition;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
   public texts: Object= {
-    editRow: 'Modifica',
-    deleteRow: 'Elimina',
-    saveRowChanges: 'Salva',
-    cancelRowChanges: 'Annulla',
-    confirmDeleteMessage: 'Stai per cancellare il tipo di procedimento: procedere?'
-  }
+    editRow: "Modifica",
+    deleteRow: "Elimina",
+    saveRowChanges: "Salva",
+    cancelRowChanges: "Annulla",
+    confirmDeleteMessage: "Stai per cancellare il tipo di procedimento: procedere?"
+  };
 
 
+  constructor(private odataContexFactory: OdataContextFactory,
+              private service: DefinizioneTipiProcedimentoService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private globalContextService: GlobalContextService) {
 
-
-  private loggaContesto(e: Object){
-    // console.log(e);
-
-  }
-
-  constructor(private odataContexFactory: OdataContextFactory, private service: DefinizioneTipiProcedimentoService) {
+    // this.sharedData.setSharedObject({route: "definizione-tipi-procedimento"});
 
     this.odataContextDefinition = odataContexFactory.buildOdataContextEntitiesDefinition();
     this.dataSource = new DataSource({
@@ -54,9 +54,25 @@ export class DefinizioneTipiProcedimentoComponent {
         return item;
       }*/
     });
-    this.dataSource.load().then(res => this.buildTipiProcedimento(res))
+    this.dataSource.load().then(res => this.buildTipiProcedimento(res));
+
+
     // debugger;
     // console.log(this.dataSource);
+
+  }
+
+
+  ngOnInit() {
+    // this.globalContext.setButtonBarVisible(false);
+  }
+
+  ngOnDestroy() {
+    // console.log("destroy");
+  }
+
+  private loggaContesto(e: Object){
+    // console.log(e);
 
   }
 
@@ -71,7 +87,7 @@ export class DefinizioneTipiProcedimentoComponent {
     // console.log("EVENTO "+name, event);
     switch (name){
       // Questo evento scatta al cliccare di qualsiasi cella: se però siamo sulla 5 colonna e si è cliccato un pulsante viene gestito
-      case 'CellClick':
+      case "CellClick":
         this.cellClick(event);
         // console.log("CellClick --> COMANDO = ", this.comando);
 
@@ -81,11 +97,11 @@ export class DefinizioneTipiProcedimentoComponent {
           // console.log(event.columnIndex);
 
           switch (this.comando){
-            case 'edita':
+            case "edita":
               this.modificaRiga(event.row);
               break;
 
-            case 'cancella':
+            case "cancella":
               this.cancellaRiga(event.row);
               break;
 
@@ -95,26 +111,26 @@ export class DefinizioneTipiProcedimentoComponent {
         }
         break;
 
-      case 'ButtonClick':
+      case "ButtonClick":
         // console.log("button click");
 
         // console.log(event);
         break;
 
-      case 'associaClicked':
+      case "associaClicked":
         // console.log("entrato in associaClicked");
         this.comando = null;
         break;
 
       // Ho cliccato sul pulsante per modificare la riga: quindi faccio diventare il comando "edita"
-      case 'editClicked':
-        this.comando = 'edita';
+      case "editClicked":
+        this.comando = "edita";
         break;
 
       // Ho cliccato sul pulsante per modificare la riga: quindi faccio diventare il comando "cancella"
-      case 'deleteClicked':
+      case "deleteClicked":
         // console.log("entrato in deleteClicked");
-        this.comando = 'cancella';  // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
+        this.comando = "cancella";  // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
         break;
 
       default:
@@ -149,14 +165,14 @@ export class DefinizioneTipiProcedimentoComponent {
 
   public onToolbarPreparing(e: any){
     // console.log("onToolbarPreparing event!!!")
-    var toolbarItems = e.toolbarOptions.items;
+    let toolbarItems = e.toolbarOptions.items;
 
     toolbarItems.forEach(element => {
-      if (element.name === 'addRowButton')
+      if (element.name === "addRowButton")
       {
-        element.options.hint = 'Aggiungi';
-        element.options.text = 'Aggiungi';
-        element.options.showText = 'always'
+        element.options.hint = "Aggiungi";
+        element.options.text = "Aggiungi";
+        element.options.showText = "always";
       }
 
 
@@ -166,20 +182,20 @@ export class DefinizioneTipiProcedimentoComponent {
 
   public onCellPrepared(e: any) {
 
-    if (e.rowType === 'data' && e.column.command === 'edit') {
-        var isEditing = e.row.isEditing,
-            $links = e.cellElement.find('.dx-link');
+    if (e.rowType === "data" && e.column.command === "edit") {
+        let isEditing = e.row.isEditing,
+            $links = e.cellElement.find(".dx-link");
 
-        $links.text('');
-        $links.filter('.dx-link-edit').addClass('dx-icon-edit');
-        $links.filter('.dx-link-delete').addClass('dx-icon-trash');
+        $links.text("");
+        $links.filter(".dx-link-edit").addClass("dx-icon-edit");
+        $links.filter(".dx-link-delete").addClass("dx-icon-trash");
 
     }
   }
 
-  public filterOperationDescriptions: Object = {'contains': 'contiene', 'notContains': 'non contiene', 'equal': 'uguale', 'notEqual': 'diverso',
-    'startsWith': 'comincia con',  'endsWith': 'finisce con', 'between': 'compreso tra', 'greaterThan': 'maggiore di',
-    'greaterThanOrEqual': 'maggiore o uguale a', 'lessThan': 'minore di', 'lessThanOrEqual': 'minore o uguale a' }
+  public filterOperationDescriptions: Object = {"contains": "contiene", "notContains": "non contiene", "equal": "uguale", "notEqual": "diverso",
+    "startsWith": "comincia con",  "endsWith": "finisce con", "between": "compreso tra", "greaterThan": "maggiore di",
+    "greaterThanOrEqual": "maggiore o uguale a", "lessThan": "minore di", "lessThanOrEqual": "minore o uguale a" };
 
 
   public calcolaSeAttiva(row: any) {
@@ -188,13 +204,13 @@ export class DefinizioneTipiProcedimentoComponent {
 
     // var utilityFunctions = new UtilityFunctions();
 
-    var attivo: String;
+    let attivo: String;
 
 
-    var daAttivare: boolean;
+    let daAttivare: boolean;
 
-    var now = new Date();
-    var today = now.getTime();
+    let now = new Date();
+    let today = now.getTime();
 
     if (row.dataInizioValidita == null)
       daAttivare = false;
@@ -221,7 +237,7 @@ export class DefinizioneTipiProcedimentoComponent {
         else
           attivo = "No";*/
 
-    attivo = daAttivare ? 'Sì' : 'No'
+    attivo = daAttivare ? "Sì" : "No";
 
     return attivo;
 
