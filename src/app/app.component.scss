@@ -61,3 +61,40 @@
 .row-fluid .col-0 + [class*="col"]{
   margin-left: 0;
 }
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+#sidebar-page {
+  width: 100%;
+  //padding: 40px;
+  //min-height: 96vh;
+  transition: all 0.3s;
+  position: absolute;
+  //top: 0;
+  right: 0;
+}
+#sidebar-page.active {
+  width: calc(100% - 200px);
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+@media (max-width: 768px) {
+  #sidebar {
+    margin-left: -200px;
+  }
+  #sidebar.active {
+    margin-left: 0;
+  }
+  #sidebar-page {
+    width: 100%;
+  }
+  #sidebar-page.active {
+    width: calc(100% - 200px);
+  }
+  #sidebarCollapse span {
+    display: none;
+  }
+}

@@ -5,9 +5,6 @@
 
 .padding-button {
     margin-top: 15px;
-    margin-left: 15%;
-    margin-right: 15%;
-    margin-bottom: 5px;
 }
 
 .center-div {
@@ -35,6 +32,10 @@
 
 .header-font{
    font-weight: bold;
+}
+
+.center-text{
+    text-align: center;
 }
 
 /deep/ .demo-container, #page {
