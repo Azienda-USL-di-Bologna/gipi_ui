@@ -1,67 +1,35 @@
-<div id="page">
-  <dx-responsive-box singleColumnScreen="sm" [(screenByWidth)]="screen">
+<div class="container-fluid">
+  <div class="row">
+    <div class="col center-text">
+      <h5>
+        <span class="header-font">Tipo procedimento:</span>
+        <i>{{testoHeaderTipoProcedimento}}</i>
+      </h5>
+      <h5>
+        <span class="header-font">Azienda:</span>
+        <i>{{testoHeaderAzienda}}</i>
+      </h5>
+    </div>
+  </div>
 
-    <dxi-row [ratio]="1"></dxi-row>
-    <dxi-row [ratio]="2" screen="xs"></dxi-row>
-    <dxi-row [ratio]="7"></dxi-row>
-    <dxi-row [ratio]="2"></dxi-row>
+  <div class="row">
+    <div class="col-12">
+      <strutture-tree #treeView [idAzienda]="idAzienda" [idAziendaTipoProcedimento]="idAziendaTipoProcedimento" [readOnly]="readOnly"
+        [enableCheckRecursively]="enableCheckRecursively" (refreshAfterChange)="refresh($event)">
+      </strutture-tree>
+    </div>
+  </div>
 
-    <dxi-col [ratio]="1"></dxi-col>
 
-    <dxi-item>
-      <dxi-location [row]="0" [col]="0" [colspan]="3" screen="lg"></dxi-location>
-      <dxi-location [row]="0" [col]="0" [colspan]="2" screen="sm"></dxi-location>
-
-      <div class = "header item" >
-        <h5>
-          <span class="header-font">Tipo procedimento:</span>
-           <i>{{testoHeaderTipoProcedimento}}</i>
-        </h5>
-        <h5>
-          <span class="header-font">Azienda:</span>
-          <i>{{testoHeaderAzienda}}</i>
-        </h5>
-      </div>
-    </dxi-item>
-
-    <dxi-item>
-      <dxi-location [row]="1" [col]="0" ></dxi-location>
-
-      <div class="center-div">
-        <strutture-tree #treeView [idAzienda]="idAzienda" 
-                                  [idAziendaTipoProcedimento]="idAziendaTipoProcedimento" 
-                                  [readOnly]="readOnly" 
-                                  [enableCheckRecursively]="enableCheckRecursively" 
-                                  (refreshAfterChange)="refresh($event)">
-        </strutture-tree>
-      </div>
-    </dxi-item>
-    
-    <!-- QUI COSTRUISCO I PULSANTI, FACCIO IN MODO DI METTERNE 2 ALLINEATI -->
-    <dxi-item class="footer item">
-      <!-- <dxi-location [row]="2" [col]="1" screen="lg"></dxi-location> -->
-      <!-- <dxi-location [row]="4" [col]="0" [colspan]="2" screen="sm"></dxi-location> -->
-      <dxi-location [row]="2" [col]="0"></dxi-location> 
-      <br>
-      <br>
-
-      <dx-responsive-box singleColumnScreen="sm" [(screenByWidth)]="screen">
-
-        <dxi-row [ratio]="2"></dxi-row>
-        <dxi-col [ratio]="1"></dxi-col>
-        <dxi-col [ratio]="1"></dxi-col>
-
-        <dxi-item>
-          <dxi-location [row]="0" [col]="0"></dxi-location>
-          <dx-button class="padding-button" (onClick)="sendDataCancel()" text="Annulla"></dx-button>    
-        </dxi-item>
-
-        <dxi-item>
-          <dxi-location [row]="0" [col]="1"></dxi-location>
-          <dx-button class="padding-button" (onClick)="sendDataConfirm()" text="Salva"></dx-button>    
-        </dxi-item>
-      </dx-responsive-box>
-    </dxi-item>
-
-  </dx-responsive-box>
+  <!-- QUI COSTRUISCO I PULSANTI, FACCIO IN MODO DI METTERNE 2 ALLINEATI -->
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-3">
+        <dx-button class="padding-button" [width]="160" (onClick)="sendDataCancel()" text="Annulla"></dx-button>
+    </div>
+    <div class="col-3">
+        <dx-button class="padding-button" [width]="160" (onClick)="sendDataConfirm()" text="Salva"></dx-button>
+    </div>
+    <div class="col"></div>
+  </div>
 </div>

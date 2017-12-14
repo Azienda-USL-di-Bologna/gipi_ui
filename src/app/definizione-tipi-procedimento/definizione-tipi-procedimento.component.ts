@@ -8,6 +8,8 @@ import {Entities} from "../../environments/app.constants";
 import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
 import {ActivatedRoute, Router} from "@angular/router";
 import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
+import {Blocco} from "../buttons-bar/buttons-bar.component";
+import {ButtonAppearance} from "../classi/client-objects/ButtonAppearance";
 // import { UtilityFunctions } from '../utility-functions';
 
 
@@ -30,12 +32,22 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     confirmDeleteMessage: "Stai per cancellare il tipo di procedimento: procedere?"
   };
 
+  public backBtn: ButtonAppearance;
+  public saveBtn: ButtonAppearance;
+  public reloadBtn: ButtonAppearance;
+  public restoreBtn: ButtonAppearance;
 
   constructor(private odataContexFactory: OdataContextFactory,
               private service: DefinizioneTipiProcedimentoService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private globalContextService: GlobalContextService) {
+
+    this.backBtn = new ButtonAppearance("indietro", "back", true);
+    this.saveBtn = new ButtonAppearance("salva", "save", true);
+    this.reloadBtn = new ButtonAppearance("refresh", "refresh", true);
+    this.restoreBtn = new ButtonAppearance("ripristina", "revert", true);
+
 
     // this.sharedData.setSharedObject({route: "definizione-tipi-procedimento"});
 
