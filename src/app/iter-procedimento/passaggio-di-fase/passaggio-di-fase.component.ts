@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 import { Iter } from 'app/classi/server-objects/entities/iter';
-import DataSource from 'devextreme/data/data_source';
+import DataSource from "devextreme/data/data_source";
 import { Entities } from 'environments/app.constants';
 import { log } from 'util';
-import { OdataContextFactory } from '@bds/nt-angular-context';
+import { OdataContextFactory } from "@bds/nt-angular-context";
 import { DocumentoIter } from 'app/classi/server-objects/entities/documento-iter';
 
 @Component({
@@ -14,6 +14,8 @@ import { DocumentoIter } from 'app/classi/server-objects/entities/documento-iter
 export class PassaggioDiFaseComponent implements OnInit {
   public iterParams: IterParams = new IterParams();
   public visibile = false;
+  public faseAttuale: string = "Semo qua";
+  public faseSuccessiva: string = "Annamo là";
 
   @Input()
   set idIter(idIter: any) {

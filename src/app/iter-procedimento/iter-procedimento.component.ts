@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
+import DataSource from "devextreme/data/data_source";
+import { OdataContextDefinition } from '@bds/nt-angular-context/odata-context-definition';
 import { Entities } from "../../environments/app.constants";
-import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
-import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
+import { CustomLoadingFilterParams } from '@bds/nt-angular-context/custom-loading-filter-params';
+import { OdataContextFactory } from '@bds/nt-angular-context/odata-context-factory';
 
 import { SequenzaDelleFasiComponent } from './sequenza-delle-fasi/sequenza-delle-fasi.component';
 import { Iter } from '../classi/server-objects/entities/iter';

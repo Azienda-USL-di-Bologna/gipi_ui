@@ -70,6 +70,8 @@ import { AvviaNuovoIterComponent } from "./procedimenti-attivi/avvia-nuovo-iter/
 import { TestTreeComponent } from "./test/test-tree/test-tree.component";
 import { BreadcrumpsComponent } from "./breadcrumps/breadcrumps.component";
 import { PassaggioDiFaseComponent } from 'app/iter-procedimento/passaggio-di-fase/passaggio-di-fase.component';
+import { SidebarComponent } from "./sidebar/sidebar.component";
+
 
 
 @NgModule({
@@ -99,7 +101,8 @@ import { PassaggioDiFaseComponent } from 'app/iter-procedimento/passaggio-di-fas
         TestTreeComponent,
         AvviaNuovoIterComponent,
         BreadcrumpsComponent,
-        PassaggioDiFaseComponent
+        PassaggioDiFaseComponent,
+        SidebarComponent
     ],
     imports: [
         BrowserModule,
