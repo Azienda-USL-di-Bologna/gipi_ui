@@ -77,6 +77,14 @@
 #sidebar-page.active {
   width: calc(100% - 200px);
 }
+.row{
+  margin: 0;
+}
+.clFooter{
+  position: absolute;
+  bottom: 0;
+}
+
 
 /* ---------------------------------------------------
     MEDIAQUERIES

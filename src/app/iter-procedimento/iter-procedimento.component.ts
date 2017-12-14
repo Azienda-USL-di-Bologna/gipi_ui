@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
+import DataSource from "devextreme/data/data_source";
+import { OdataContextDefinition } from '@bds/nt-angular-context/odata-context-definition';
 import { Entities } from "../../environments/app.constants";
-import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
-import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
+import { CustomLoadingFilterParams } from '@bds/nt-angular-context/custom-loading-filter-params';
+import { OdataContextFactory } from '@bds/nt-angular-context/odata-context-factory';
 
 import { SequenzaDelleFasiComponent } from './sequenza-delle-fasi/sequenza-delle-fasi.component';
 import { Iter } from '../classi/server-objects/entities/iter';
@@ -11,6 +11,7 @@ import { Utente } from '../classi/server-objects/entities/utente';
 import { Fase } from '../classi/server-objects/entities/fase';
 import { FaseIter } from '../classi/server-objects/entities/fase-iter';
 import { ProcedimentoCache } from '../classi/server-objects/entities/procedimento-cache';
+import { PassaggioDiFaseComponent } from './passaggio-di-fase/passaggio-di-fase.component';
 
 @Component({
   selector: 'app-iter-procedimento',
@@ -20,12 +21,25 @@ import { ProcedimentoCache } from '../classi/server-objects/entities/procediment
 })
 export class IterProcedimentoComponent implements OnInit {
 
+  @ViewChild(PassaggioDiFaseComponent) child;
+
+  ngAfterViewInit() {
+    this.passaggioDiFaseVisible = this.child.visibile;
+  }
+
+  receiveMessage($event) {
+    console.log($event);
+    this.passaggioDiFaseVisible = false;
+  }
+
   public iter: Iter = new Iter();
+  public idIterArray: object;
   public procedimentoCache = new ProcedimentoCache;
   public dataSourceIter: DataSource;
   public durataPrevista: number;
   public idIter: string = '6';
   public popupVisible: boolean = false;
+  public passaggioDiFaseVisible: boolean = false;
   // Dati che verranno ricevuti dall'interfaccia chiamante
   public infoGeneriche: any = { azienda: 'AOSP-BO',
                               struttura: 'UO DaTer',
@@ -71,5 +85,16 @@ export class IterProcedimentoComponent implements OnInit {
     this.popupData.fieldValue = this.iter.esitoMotivazione;
     this.popupData.visible = true;
   }
+
+  public passaggioDiFase() {
+    /*this.idIterArray = [6];
+    this.popupData.title = 'Esito motivazione';
+    this.popupData.field = 'esitoMotivazione';
+    this.popupData.fieldValue = this.iter.esitoMotivazione;
+    this.popupData.visible = true;*/
+    this.passaggioDiFaseVisible = true;
+    this.popupData.title = 'Passaggio Di Fase';
+  }
+  
 
 }
