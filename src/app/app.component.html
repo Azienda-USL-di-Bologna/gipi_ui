@@ -81,21 +81,21 @@
 
 
 
-<div class="container-fluid">
+<!-- <div class="container-fluid">
     <div class="row header-app-component">
         <div class="col">
             HEADER
         </div>
     </div>
     <div class="row">
-        <div [class]="col2Class">
-            <div id="sidebar-items" >SIDEBAR-ITEMS</div>
-        </div>
+        <sidebar></sidebar>
         <div id="sidebar-page" class="col">
             <div class="row">
 
                 <div class="col-2">
-                    <button id="sidebar-toggle-button" class="btn btn-inverse" (click)="slide()">TOGGLE</button>
+                    <button id="sidebar-toggle-button" type="button" class="btn btn-default" (click)="slide()">
+                        <span class="dx-icon-menu"></span>
+                    </button>
                 </div>
                 <div class="col">
                     <app-navbar></app-navbar>
@@ -107,10 +107,63 @@
                     <router-outlet></router-outlet>
                 </div>
                 <div class="w-100"></div>
-            <div class="col-12 fixed-bottom">
+            <div class="col-12">
                 footer
             </div>
             </div>
         </div>
     </div>
+</div> -->
+
+<div class="pageWrapper">
+    <div class="clHeader">
+        HEADER
+    </div>
+    <div class="clContentBody">
+        <div class="row">
+            <sidebar id="sidebar" [sidebarItems]="sidebarItems"></sidebar>
+            <div class="col">
+                <div class="row">
+                    <dx-button id="sidebar-toggle-button" icon="menu" type="default" text="Menu" (click)="slide()"></dx-button>
+                    <div>
+                        breadcrumps
+                    </div>
+                </div>
+                <div>
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <div>
+        FOOTER
+    </div>
 </div>
+
+
+<!-- <div style="width:100%; height:100%">
+    <div>
+        HEADER
+    </div>
+    <div>
+        <div class="row" style="height: 100%;">
+            <div [class]="col2Class" class="col-2">
+                <div id="sidebar-items" >SIDEBAR-ITEMS</div>
+            </div>
+            <div>
+                <div class="row">
+                    <button id="sidebar-toggle-button" class="btn btn-inverse" (click)="slide()">TOGGLE</button>
+                    <div>
+                        breadcrumps
+                    </div>
+                </div>
+                <div style="height: 100%;">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <div class="clFooter">
+        FOOTER
+    </div>
+</div> -->

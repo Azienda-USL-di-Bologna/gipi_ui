@@ -1,2 +1,20 @@
-<dx-button text="menu1" (onClick)="click1()"></dx-button>
-<dx-button text="menu2" (onClick)="click2()"></dx-button>
+<div class="row container-button-bar">
+    <div  *ngIf="backButton !== null && backButton !== undefined">
+        <dx-button  id="labelBackButton"  text={{backButton.label}} icon={{backButton.icon}} (onClick)="back()"></dx-button>
+    </div>
+
+    <div *ngIf="restoreButton !== null && restoreButton !== undefined">
+        <dx-button id="labelRestoreButton" text={{restoreButton.label}} icon={{restoreButton.icon}} (onClick)="restore()"></dx-button>
+    </div>
+
+    <div *ngIf="saveButton !== null && saveButton !== undefined">
+        <dx-button id="labelSaveButton" text={{saveButton.label}} icon={{saveButton.icon}} (onClick)="save()"></dx-button>
+    </div>
+
+    <div *ngIf="reloadButton !== null && reloadButton !== undefined">
+        <dx-button id="labelReloadButton" text={{reloadButton.label}} icon={{reloadButton.icon}} (onClick)="reload()"></dx-button>
+    </div>
+
+    <div>
+    </div>
+</div>

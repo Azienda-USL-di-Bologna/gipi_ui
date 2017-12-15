@@ -70,6 +70,8 @@ import { AvviaNuovoIterComponent } from "./procedimenti-attivi/avvia-nuovo-iter/
 import { TestTreeComponent } from "./test/test-tree/test-tree.component";
 import { BreadcrumpsComponent } from "./breadcrumps/breadcrumps.component";
 import { NavbarComponent } from './navbar/navbar.component';
+import { SidebarComponent } from "./sidebar/sidebar.component";
+
 
 
 @NgModule({
@@ -100,6 +102,8 @@ import { NavbarComponent } from './navbar/navbar.component';
         AvviaNuovoIterComponent,
         BreadcrumpsComponent,
         NavbarComponent
+        PassaggioDiFaseComponent,
+        SidebarComponent
     ],
     imports: [
         BrowserModule,

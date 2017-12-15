@@ -3,7 +3,17 @@
 </div>
 -->
 
-<app-buttons-bar></app-buttons-bar>
+<app-buttons-bar
+        (command)="manageCommand($event)"
+        (onReloadButton)="onReload()"
+        (onSaveButton)= "onSave()"
+        (onBackButton) = "onBack()"
+        (onRestoreButton) = "onRestore()"
+        [backButton]="backBtn"
+        [saveButton]="saveBtn"
+        [reloadButton]="reloadBtn"
+        [restoreButton]="restoreBtn" >
+</app-buttons-bar>
 
 <dx-data-grid  #grid
     id="gridContainer"
