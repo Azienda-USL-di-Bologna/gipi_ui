@@ -14,7 +14,14 @@ export class ButtonsBarComponent implements OnInit {
   @Input("reloadButton") reloadButton: ButtonAppearance;
   @Input("restoreButton") restoreButton: ButtonAppearance;
 
-  @Output("out") out = new EventEmitter<Object>();
+  // comando con la label
+  @Output("command") command = new EventEmitter<Object>();
+
+  // lancio di eventi di output
+  @Output("onBackButton") onBackButton = new EventEmitter();
+  @Output("onSaveButton") onSaveButton = new EventEmitter();
+  @Output("onReloadButton") onReloadButton = new EventEmitter();
+  @Output("onRestoreButton") onRestoreButton = new EventEmitter();
 
   constructor(private router: Router) { }
 
@@ -31,7 +38,8 @@ export class ButtonsBarComponent implements OnInit {
       baseUrl = this.router.url;
     }
     this.router.navigate([baseUrl], { queryParams: { save: true }});
-    this.out.emit("save");
+    this.command.emit("save");
+    this.onSaveButton.emit();
   }
 
   reload() {
@@ -43,7 +51,8 @@ export class ButtonsBarComponent implements OnInit {
       baseUrl = this.router.url;
     }
     this.router.navigate([baseUrl], { queryParams: { reload: true }});
-    this.out.emit("reload");
+    this.command.emit("reload");
+    this.onReloadButton.emit();
   }
 
   back(){
@@ -55,7 +64,8 @@ export class ButtonsBarComponent implements OnInit {
       baseUrl = this.router.url;
     }
     this.router.navigate([baseUrl], { queryParams: { back: true }});
-    this.out.emit("back");
+    this.command.emit("back");
+    this.onBackButton.emit();
   }
 
   restore(){
@@ -67,7 +77,8 @@ export class ButtonsBarComponent implements OnInit {
       baseUrl = this.router.url;
     }
     this.router.navigate([baseUrl], { queryParams: { restore: true }});
-    this.out.emit("restore");
+    this.command.emit("restore");
+    this.onRestoreButton.emit();
   }
 }
 
