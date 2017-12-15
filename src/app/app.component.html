@@ -119,10 +119,14 @@
     </div>
     <div style="display: table-row-group">
         <div class="row" style="height: 100%;">
-            <sidebar id="sidebar" [sidebarItems]="sidebarItems"></sidebar>
+            <div id="sidebar-id" *ngIf="router.url !== '/login'" class="sidebar-style">
+                <sidebar [sidebarItems]="sidebarItems"></sidebar>
+            </div>
             <div class="col">
                 <div class="row">
-                    <dx-button id="sidebar-toggle-button" icon="menu" type="default" text="Menu" (click)="slide()"></dx-button>
+                    <div *ngIf="router.url !== '/login'">
+                        <dx-button id="sidebar-toggle-button" icon="menu" type="default" (click)="slide()"></dx-button>
+                    </div>
                     <div>
                         breadcrumps
                     </div>
