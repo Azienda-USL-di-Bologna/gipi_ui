@@ -113,12 +113,12 @@
     </div>
 </div> -->
 
-<div style="display: table; width:100%; height:100%">
-    <div style="display: table-header-group">
+<div class="pageWrapper">
+    <div class="clHeader">
         HEADER
     </div>
-    <div style="display: table-row-group">
-        <div class="row" style="height: 100%;">
+    <div class="clContentBody">
+        <div class="row">
             <div id="sidebar-id" *ngIf="router.url !== '/login'" class="sidebar-style">
                 <sidebar [sidebarItems]="sidebarItems"></sidebar>
             </div>
