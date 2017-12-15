@@ -1,0 +1,16 @@
+<nav>
+  <ul class="list-unstyled components margine-sinistro">
+    <li *ngFor="let items of sidebarItems">
+      <div *ngIf="!items.children">
+        <a href="#{{items.routerLink}}">{{ items.description }}</a>
+      </div>
+      <div *ngIf="items.children">
+        <a href="#submenu" data-toggle="collapse" aria-expanded="false"><span style="color: #993366">{{ items.description }}</span></a>
+        <ul class="collapse list-unstyled margine-sinistro" id="submenu">
+          <li *ngFor="let childrens of items.children"></li>
+          <sidebar [sidebarItems]="items.children"></sidebar>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</nav>

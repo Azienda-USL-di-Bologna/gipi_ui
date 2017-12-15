@@ -3,6 +3,7 @@ import { Entity } from '@bds/nt-angular-context/entity';
 export class Evento extends Entity {
   id: number;
   nomeEvento: string;
+  codice: string;
 
   public static getOdataContextEntity(): any {
     return {
@@ -10,7 +11,8 @@ export class Evento extends Entity {
       keyType: "Int32",
       fieldTypes: {
         id: "Int32",
-        nomeEvento: "String"
+        nomeEvento: "String",
+        codice: "String"
       }
     }
   }
