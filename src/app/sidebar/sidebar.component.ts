@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { SidebarItem } from "../classi/client-objects/SidebarItem";
 
 @Component({
@@ -7,14 +7,10 @@ import { SidebarItem } from "../classi/client-objects/SidebarItem";
   styleUrls: ["./sidebar.component.scss"]
 })
 export class SidebarComponent implements OnInit {
-
-  public sidebarItems: Array<SidebarItem> = [];
-  public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
+  @Input() sidebarItems: Array<SidebarItem>;
 
   constructor() {
-    this.sidebarItems.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
-    this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
-    this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi", this.sidebarItems2));
+
   }
 
   ngOnInit() {

@@ -119,12 +119,10 @@
     </div>
     <div style="display: table-row-group">
         <div class="row" style="height: 100%;">
-            <sidebar></sidebar>
+            <sidebar id="sidebar" [sidebarItems]="sidebarItems"></sidebar>
             <div class="col">
                 <div class="row">
-                    <button id="sidebar-toggle-button" type="button" class="btn btn-default" (click)="slide()">
-                        <span class="dx-icon-menu"></span>
-                    </button>
+                    <dx-button id="sidebar-toggle-button" icon="menu" type="default" text="Menu" (click)="slide()"></dx-button>
                     <div>
                         breadcrumps
                     </div>
@@ -139,7 +137,6 @@
         FOOTER
     </div>
 </div>
-
 
 
 <!-- <div style="width:100%; height:100%">

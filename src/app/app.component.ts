@@ -5,6 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import {Observable} from "rxjs/Observable";
 import {Ruolo} from "./classi/server-objects/entities/ruolo";
 import {Azienda} from "./classi/server-objects/entities/azienda";
+import { SidebarItem } from "./classi/client-objects/SidebarItem";
 
 @Component({
     selector: "app-root",
@@ -20,8 +21,9 @@ export class AppComponent implements OnInit {
     username: String = "";
     azienda: Azienda;
 
-    public col2Class: string = "d-none";
-    private sidebarClass: string = "sidebar";
+    public sidebarItems: Array<SidebarItem> = [];
+    public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
+
     _toggleSidebar() {
         this._opened = !this._opened;
     }
@@ -32,6 +34,10 @@ export class AppComponent implements OnInit {
             this.username = this.userInfoMap["username"];
             this.azienda = this.userInfoMap["azienda"];
         }
+      this.sidebarItems.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
+      this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
+      this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi", this.sidebarItems2));
+      this.sidebarItems2.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
     }
 
     slide(){
