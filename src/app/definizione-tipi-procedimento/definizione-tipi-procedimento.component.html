@@ -64,8 +64,8 @@
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
     <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni"></dxi-column>
     <div *dxTemplate="let d of 'buttonCellTemplate'" class="azioni">
-        <a routerLink="/app-dettaglio-provvedimento" routerLinkActive="active">
-            <dx-button text="" hint="Vedi dettagli provvedimento" icon='preferences' (onClick)="handleEvent('associaClicked', $event)" ></dx-button>
+        <a routerLink="/app-dettaglio-procedimento" routerLinkActive="active">
+            <dx-button text="" hint="Vedi dettagli procedimento" icon='preferences' (onClick)="handleEvent('associaClicked', $event)" ></dx-button>
         </a>
 
         <dx-button text="" hint="Modifica dettagli tipo procedimento" icon='edit' (onClick)="handleEvent('editClicked', $event)"></dx-button>
