@@ -1,28 +1,29 @@
-<nav id="sidebar" (clickOutside)= "close()">
+<nav id="sidebar">
   <div class="sidebar-header">
     <h3>Sidebar</h3>
   </div>
   <ul class="list-unstyled components margine-sinistro">
     <p>Heading</p>
-    <li>
-      <a href="#">Home</a>
-    </li>
-    <li>
-      <a href="#definizione-tipi-procedimento">Definizione Tipi Procedimento</a>
-    </li>
-    <li>
-      <a href="#iter-procedimento">Iter Procedimento</a>
-    </li>
-    <li>
-      <a href="#procedimenti-attivi">Procedimenti Attivi</a>
-    </li>
-    <li>
-      <a href="#submenu" data-toggle="collapse" aria-expanded="false">Submenu</a>
+    <li *ngFor="let items of sidebarItems">
+      <div *ngIf="!items.children">
+        <a href="#{{items.routerLink}}">{{ items.description }}</a>
+      </div>
+      <div *ngIf="items.children">
+      <a href="#submenu" data-toggle="collapse" aria-expanded="false">{{ items.description }}</a>
       <ul class="collapse list-unstyled margine-sinistro" id="submenu">
-        <li><a href="#">Sub 1</a></li>
-        <li><a href="#">Sub 2</a></li>
-        <li><a href="#">Sub 3</a></li>
+        <li *ngFor="let childrens of items.children">
+          <a href="#{{ childrens.routerLink }}">{{ childrens.description }}</a>
+        </li>
       </ul>
+      </div>
     </li>
+    <!--<li>-->
+      <!--<a href="#submenu" data-toggle="collapse" aria-expanded="false">Submenu</a>-->
+      <!--<ul class="collapse list-unstyled margine-sinistro" id="submenu">-->
+        <!--<li *ngFor="let childrens of sidebarItems['children']">-->
+          <!--<a href="#{{ childrens.routerLink }}">{{ childrens.description }}</a>-->
+        <!--</li>-->
+      <!--</ul>-->
+    <!--</li>-->
   </ul>
 </nav>

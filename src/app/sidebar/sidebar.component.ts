@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { SidebarItem } from "../classi/client-objects/SidebarItem";
 
 @Component({
   selector: "sidebar",
@@ -7,22 +8,16 @@ import { Component, OnInit } from "@angular/core";
 })
 export class SidebarComponent implements OnInit {
 
-  constructor() { }
+  public sidebarItems: Array<SidebarItem> = [];
+  public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
 
-  ngOnInit() {
+  constructor() {
+    this.sidebarItems.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
+    this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
+    this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi", this.sidebarItems2));
   }
 
-  close(){
-    let sideBar = document.getElementById("sidebar");
-    let contentPage = document.getElementById("sidebar-page");
-    console.log("toggle");
-    if (sideBar.classList.contains("active")) {
-      sideBar.classList.remove("active");
-      contentPage.classList.remove("active");
-    } else {
-      sideBar.classList.add("active");
-      contentPage.classList.add("active");
-    }
+  ngOnInit() {
   }
 
 }
