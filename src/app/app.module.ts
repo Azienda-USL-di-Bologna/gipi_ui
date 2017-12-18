@@ -71,6 +71,7 @@ import { TestTreeComponent } from "./test/test-tree/test-tree.component";
 import { NavbarComponent } from "./navbar/navbar.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
 import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/passaggio-di-fase.component";
+import {BreadcrumpsComponent} from "./breadcrumps/breadcrumps.component";
 
 
 
@@ -102,7 +103,8 @@ import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/pa
         AvviaNuovoIterComponent,
         NavbarComponent,
         PassaggioDiFaseComponent,
-        SidebarComponent
+        SidebarComponent,
+        BreadcrumpsComponent
     ],
     imports: [
         BrowserModule,

@@ -121,22 +121,24 @@
     </div>
     <div class="clContentBody">
         <div class="row">
-            <div id="sidebar-id" *ngIf="router.url !== '/login'" class="sidebar-style">
+            <div id="sidebar-id" *ngIf="route !== '/login'" class="sidebar-style">
                 <sidebar [sidebarItems]="sidebarItems"></sidebar>
             </div>
             <div class="col">
                 <div class="row">
-                    <div *ngIf="router.url !== '/login'">
+                    <div *ngIf="route !== '/login'">
+                        <dx-button id="sidebar-toggle-button" icon="menu" type="default" (click)="slide()"></dx-button>
+                    </div>
                     <div class="col">
                         <app-navbar></app-navbar>
                     </div>
-                    </div>
+
                 </div>
                 <div>
                     <router-outlet></router-outlet>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
     <div>
         FOOTER
@@ -157,7 +159,7 @@
                 <div class="row">
                     <button id="sidebar-toggle-button" class="btn btn-inverse" (click)="slide()">TOGGLE</button>
                     <div>
-                        breadcrumps
+                        <app-navbar></app-navbar>
                     </div>
                 </div>
                 <div style="height: 100%;">
