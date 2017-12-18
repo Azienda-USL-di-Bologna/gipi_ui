@@ -9,6 +9,8 @@ import { Fase } from "app/classi/server-objects/entities/fase";
 import { HttpClient } from "@angular/common/http";
 import { element } from "protractor";
 import { forEach } from "@angular/router/src/utils/collection";
+import { Subscription } from "rxjs/Subscription";
+import { Subscriber } from "rxjs/Subscriber";
 
 @Component({
   selector: 'app-passaggio-di-fase',
@@ -27,9 +29,6 @@ export class PassaggioDiFaseComponent implements OnInit {
   public faseAttuale: string = "";
   public faseSuccessiva: string = "";
 
-  public faseCaricata: {
-    nomeFase: string;
-  }
 
   @Input()
   set idIter(idIter: any) {
@@ -45,14 +44,18 @@ export class PassaggioDiFaseComponent implements OnInit {
     const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.iterParams.idIter)
     .subscribe(
       res => {
-        console.log("Preso il processStatus!");
-        console.log(res);
+        let o: any = res;
+        var current = JSON.parse(o.currentFase);
+        var next = JSON.parse(o.nextFase);
+        this.faseAttuale = current.nomeFase;
+        this.faseSuccessiva = next.nomeFase;        
       },
       err => {
         this.showStatusOperation("Boh, che sarà successo", "error");
       }
     );
-    console.log(req);
+
+
   }
 
   @Output() messageEvent = new EventEmitter<string>();
