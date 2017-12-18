@@ -2,7 +2,7 @@
   <ul class="list-unstyled components margine-sinistro">
     <li *ngFor="let items of sidebarItems">
       <div *ngIf="!items.children; else submenuEntry ">
-        <a href="#{{items.routerLink}}">{{ items.description }}</a>
+        <a routerLink="{{items.routerLink}}">{{ items.description }}</a>
       </div>
       <ng-template #submenuEntry>
         <a href="#submenu" data-toggle="collapse" aria-expanded="false"><span style="color: #993366">{{ items.description }}</span></a>

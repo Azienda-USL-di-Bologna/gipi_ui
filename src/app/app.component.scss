@@ -71,6 +71,7 @@
 }
 .clHeader{
   display: table-header-group;
+  padding: 0 32px;
 }
 .clContentBody{
   display: table-row-group;
@@ -148,3 +149,31 @@
 //    display: none;
 //  }
 //}
+
+.navbar-login
+{
+  width: 305px;
+  padding: 10px;
+  padding-bottom: 0px;
+}
+
+.navbar-login-session
+{
+  padding: 10px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+
+.icon-size
+{
+  font-size: 87px;
+}
+
+#userProfile{
+  float: right;
+  margin-right: 32px;
+}
+
+.menuPosition{
+  transform: translate3d(-260px, 19px, 0px);
+}

@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
     username: String = "";
     azienda: Azienda;
     route: string;
+    ruolo: Ruolo;
 
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
