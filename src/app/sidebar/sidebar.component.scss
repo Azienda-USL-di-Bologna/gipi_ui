@@ -1,3 +1,63 @@
 .margine-sinistro {
   padding-left: 5%;
 }
+
+.main-menu {
+  background:#fbfbfb;
+  border-right:1px solid #e5e5e5;
+  height: 100%;
+}
+
+.main-menu li {
+  position:relative;
+  display:block;
+}
+
+.main-menu a {
+  position:relative;
+  display:table;
+  border-collapse:collapse;
+  border-spacing:0;
+  color:#999;
+  font-family: arial;
+  font-size: 18px;
+  text-decoration:none;
+  -webkit-transform:translateZ(0) scale(1,1);
+  -webkit-transition:all .1s linear;
+  transition:all .1s linear;
+}
+
+.main-menu .nav-icon {
+  position:relative;
+  display:table-cell;
+  width:60px;
+  height:36px;
+  text-align:center;
+  vertical-align:middle;
+  font-size:18px;
+}
+
+.main-menu .nav-text {
+  position:relative;
+  display:table-cell;
+  vertical-align:middle;
+  width:190px;
+  font-family: sans-serif;
+}
+
+.main-menu a:hover {
+  color:#fff;
+  background-color:#5fa2db;
+  text-decoration: none;
+}
+
+.arrow-down a:after {
+  color: #999;
+  content: ' ▼';
+  font-size: 15px;
+  vertical-align: 1px;
+}
+
+.arrow-down:hover > a:after {
+  color: #fff;
+}
