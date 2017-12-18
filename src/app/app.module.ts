@@ -68,9 +68,9 @@ import { CronologiaEventiComponent } from "./iter-procedimento/cronologia-eventi
 import { DocumentiIterComponent } from "./iter-procedimento/documenti-iter/documenti-iter.component";
 import { AvviaNuovoIterComponent } from "./procedimenti-attivi/avvia-nuovo-iter/avvia-nuovo-iter.component";
 import { TestTreeComponent } from "./test/test-tree/test-tree.component";
-import { BreadcrumpsComponent } from "./breadcrumps/breadcrumps.component";
-import { PassaggioDiFaseComponent } from 'app/iter-procedimento/passaggio-di-fase/passaggio-di-fase.component';
+import { NavbarComponent } from "./navbar/navbar.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
+import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/passaggio-di-fase.component";
 
 
 
@@ -100,7 +100,7 @@ import { SidebarComponent } from "./sidebar/sidebar.component";
         DocumentiIterComponent,
         TestTreeComponent,
         AvviaNuovoIterComponent,
-        BreadcrumpsComponent,
+        NavbarComponent,
         PassaggioDiFaseComponent,
         SidebarComponent
     ],

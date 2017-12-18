@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {CustomReuseStrategy} from "@bds/nt-angular-context/Routes/custom-reuse-strategy";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {Observable} from "rxjs/Observable";
 import {Ruolo} from "./classi/server-objects/entities/ruolo";
 import {Azienda} from "./classi/server-objects/entities/azienda";
@@ -43,10 +43,15 @@ export class AppComponent implements OnInit {
 
     slide(){
         let sideBar = document.getElementById("sidebar-id");
+        let sideBar = document.getElementById("sidebar");
+        let contentPage = document.getElementById("sidebar-page");
+        console.log("toggle");
         if (sideBar.classList.contains("active")) {
             sideBar.classList.remove("active");
+            contentPage.classList.remove("active");
         } else {
           sideBar.classList.add("active");
+          contentPage.classList.add("active");
         }
     }
     screen(width) {
@@ -68,8 +73,9 @@ export class AppComponent implements OnInit {
             }
         );
 
-        this.activatedRoute.queryParams.subscribe(
-            params => console.log("params: ", params));
+        // this.activatedRoute.queryParams.subscribe(
+        //     params => console.log("params: ", params));
+
 
         // this.buttonBar = this.globalContext.buttonBarVisible;
     }

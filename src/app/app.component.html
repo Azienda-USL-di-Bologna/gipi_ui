@@ -91,14 +91,16 @@
         <sidebar></sidebar>
         <div id="sidebar-page" class="col">
             <div class="row">
+
                 <div class="col-2">
                     <button id="sidebar-toggle-button" type="button" class="btn btn-default" (click)="slide()">
                         <span class="dx-icon-menu"></span>
                     </button>
                 </div>
                 <div class="col">
-                    breadcrumps
+                    <app-navbar></app-navbar>
                 </div>
+
             </div>
             <div class="row">
                 <div class="col-12">
@@ -125,10 +127,9 @@
             <div class="col">
                 <div class="row">
                     <div *ngIf="router.url !== '/login'">
-                        <dx-button id="sidebar-toggle-button" icon="menu" type="default" (click)="slide()"></dx-button>
+                    <div class="col">
+                        <app-navbar></app-navbar>
                     </div>
-                    <div>
-                        breadcrumps
                     </div>
                 </div>
                 <div>
