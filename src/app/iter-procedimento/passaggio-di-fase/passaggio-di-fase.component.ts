@@ -5,6 +5,10 @@ import { Entities, CUSTOM_RESOURCES_BASE_URL } from 'environments/app.constants'
 import { log } from 'util';
 import { OdataContextFactory } from "@bds/nt-angular-context";
 import { DocumentoIter } from 'app/classi/server-objects/entities/documento-iter';
+import { Fase } from "app/classi/server-objects/entities/fase";
+import { HttpClient } from "@angular/common/http";
+import { element } from "protractor";
+import { forEach } from "@angular/router/src/utils/collection";
 
 @Component({
   selector: 'app-passaggio-di-fase',
@@ -12,26 +16,43 @@ import { DocumentoIter } from 'app/classi/server-objects/entities/documento-iter
   styleUrls: ['./passaggio-di-fase.component.scss']
 })
 export class PassaggioDiFaseComponent implements OnInit {
+
   showStatusOperation(arg0: any, arg1: any): any {
     throw new Error("Method not implemented.");
   }
-  http: any;
+
   public iterParams: IterParams = new IterParams();
-  public visibile = false;
-  public faseAttuale: string = "Semo qua";
-  public faseSuccessiva: string = "Annamo là";
+  public visibile: boolean = false;
+  public fase: Fase = new Fase();
+  public faseAttuale: string = "";
+  public faseSuccessiva: string = "";
+
+  public faseCaricata: {
+    nomeFase: string;
+  }
 
   @Input()
   set idIter(idIter: any) {
     this.iterParams.idIter = parseInt(idIter);
   }
 
-  constructor() {
+  constructor(private http: HttpClient) {
    }
 
   ngOnInit() { 
     console.log("STO A LOGGAAAAAA!!!")
     console.log(this.iterParams)
+    const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.iterParams.idIter)
+    .subscribe(
+      res => {
+        console.log("Preso il processStatus!");
+        console.log(res);
+      },
+      err => {
+        this.showStatusOperation("Boh, che sarà successo", "error");
+      }
+    );
+    console.log(req);
   }
 
   @Output() messageEvent = new EventEmitter<string>();
@@ -40,7 +61,7 @@ export class PassaggioDiFaseComponent implements OnInit {
     console.log("PROCEDI");
     console.log("faccio roba...");
     console.log(this.iterParams);
-    this.sendMessage(); 
+    
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", Object.assign({}, this.iterParams))
       .subscribe(
         res => {
@@ -51,6 +72,7 @@ export class PassaggioDiFaseComponent implements OnInit {
           this.showStatusOperation("Boh, che sarà successo", "error");
         }
       );
+    this.sendMessage();   
   }
 
   annulla(){
