@@ -89,7 +89,7 @@
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
-#sidebar {
+.sidebar-style {
   font-family: "Open Sans", sans-serif;
   width: 200px;
   top: 0;
@@ -101,50 +101,50 @@
   color: #fff;
 }
 
-#sidebar.active {
+ .active {
   margin-left: 0;
 }
 
-#sidebar .sidebar-header {
-  padding: 10px;
-  background: #993366;
-  margin-left: 2px;
-}
-
-#sidebar ul.components {
-  margin-left: 2px;
-  border: 1px solid #47748b;
-  border-radius: 1px;
-}
-
-#sidebar ul p {
-  color: #7386D5;
-  padding: 5px;
-  font-size: 1.2em;
-}
-
-#sidebar ul li a {
-  padding: 10px;
-  font-size: 1.1em;
-  display: block;
-}
-
-#sidebar ul li a:hover {
-  background: #FFC057;
-}
+//#sidebar .sidebar-header {
+//  padding: 10px;
+//  background: #993366;
+//  margin-left: 2px;
+//}
+//
+//#sidebar ul.components {
+//  margin-left: 2px;
+//  border: 1px solid #47748b;
+//  border-radius: 1px;
+//}
+//
+//#sidebar ul p {
+//  color: #7386D5;
+//  padding: 5px;
+//  font-size: 1.2em;
+//}
+//
+//#sidebar ul li a {
+//  padding: 10px;
+//  font-size: 1.1em;
+//  display: block;
+//}
+//
+//#sidebar ul li a:hover {
+//  background: #FFC057;
+//}
 
 
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
-@media (max-width: 768px) {
-  #sidebar {
-    margin-left: -200px;
-  }
-  #sidebar.active {
-    margin-left: 0;
-  }
-  #sidebarCollapse span {
-    display: none;
-  }
-}
+//@media (max-width: 768px) {
+//  #sidebar {
+//    margin-left: -200px;
+//  }
+//  #sidebar.active {
+//    margin-left: 0;
+//  }
+//  #sidebarCollapse span {
+//    display: none;
+//  }
+//}

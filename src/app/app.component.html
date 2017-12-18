@@ -121,12 +121,15 @@
     </div>
     <div class="clContentBody">
         <div class="row">
-            <sidebar id="sidebar" [sidebarItems]="sidebarItems"></sidebar>
+            <div id="sidebar-id" *ngIf="router.url !== '/login'" class="sidebar-style">
+                <sidebar [sidebarItems]="sidebarItems"></sidebar>
+            </div>
             <div class="col">
                 <div class="row">
-                    <dx-button id="sidebar-toggle-button" icon="menu" type="default" text="Menu" (click)="slide()"></dx-button>
+                    <div *ngIf="router.url !== '/login'">
                     <div class="col">
                         <app-navbar></app-navbar>
+                    </div>
                     </div>
                 </div>
                 <div>

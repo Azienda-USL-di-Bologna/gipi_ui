@@ -6,6 +6,7 @@ import {Observable} from "rxjs/Observable";
 import {Ruolo} from "./classi/server-objects/entities/ruolo";
 import {Azienda} from "./classi/server-objects/entities/azienda";
 import { SidebarItem } from "./classi/client-objects/SidebarItem";
+import { getElement } from "devextreme-angular";
 
 @Component({
     selector: "app-root",
@@ -41,6 +42,7 @@ export class AppComponent implements OnInit {
     }
 
     slide(){
+        let sideBar = document.getElementById("sidebar-id");
         let sideBar = document.getElementById("sidebar");
         let contentPage = document.getElementById("sidebar-page");
         console.log("toggle");
@@ -55,6 +57,7 @@ export class AppComponent implements OnInit {
     screen(width) {
         return ( width < 700 ) ? "sm" : "lg";
     }
+
 
     ngOnInit() {
         /** sottoscrivendosi a questo evento è possibile intercettare la pressione di indietro o aventi del browser
