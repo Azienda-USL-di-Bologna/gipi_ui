@@ -24,10 +24,11 @@ export class IterProcedimentoComponent implements OnInit {
   @ViewChild(PassaggioDiFaseComponent) child;
 
   ngAfterViewInit() {
-    this.passaggioDiFaseVisible = this.child.visibile;
+    //this.passaggioDiFaseVisible = this.child.visibile;
   }
 
   receiveMessage($event) {
+    console.log("loggo il messaggio....");
     console.log($event);
     this.passaggioDiFaseVisible = false;
   }

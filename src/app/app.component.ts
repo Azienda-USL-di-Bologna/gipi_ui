@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
 import {CustomReuseStrategy} from "@bds/nt-angular-context/Routes/custom-reuse-strategy";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {Observable} from "rxjs/Observable";
 import {Ruolo} from "./classi/server-objects/entities/ruolo";
 import {Azienda} from "./classi/server-objects/entities/azienda";
@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
     private userInfoMap: Object;
     username: String = "";
     azienda: Azienda;
+    route: string;
 
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
@@ -29,7 +30,7 @@ export class AppComponent implements OnInit {
         this._opened = !this._opened;
     }
 
-    constructor(private location: Location, private activatedRoute: ActivatedRoute, private router: Router) {
+    constructor(private location: Location, private router: Router) {
         this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
         if (this.userInfoMap) {
             this.username = this.userInfoMap["username"];
@@ -39,10 +40,12 @@ export class AppComponent implements OnInit {
       this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
       this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi", this.sidebarItems2));
       this.sidebarItems2.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
+      this.route = this.router.url;
     }
 
     slide(){
         let sideBar = document.getElementById("sidebar-id");
+
         if (sideBar.classList.contains("active")) {
             sideBar.classList.remove("active");
         } else {
@@ -68,8 +71,9 @@ export class AppComponent implements OnInit {
             }
         );
 
-        this.activatedRoute.queryParams.subscribe(
-            params => console.log("params: ", params));
+        // this.activatedRoute.queryParams.subscribe(
+        //     params => console.log("params: ", params));
+
 
         // this.buttonBar = this.globalContext.buttonBarVisible;
     }

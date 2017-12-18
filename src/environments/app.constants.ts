@@ -48,6 +48,7 @@ export const HEADER_AUTH_TOKEN_NAME = "authorization";
 
 // ========================= Url =====================================
 export const ODATA_BASE_URL: string = environment.odataStoreRootUrl;
+// export const ODATA_BASE_URL: string = window.location.protocol + '//' + window.location.host;
 export const CUSTOM_RESOURCES_BASE_URL: string = environment.customResourcesBaseUrl;
 // login
 export const LOGIN_URL: string = environment.loginUrl;
