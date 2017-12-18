@@ -28,6 +28,7 @@ export class PassaggioDiFaseComponent implements OnInit {
   public fase: Fase = new Fase();
   public faseAttuale: string = "";
   public faseSuccessiva: string = "";
+  public isNextFaseCloser: boolean;
 
 
   @Input()
@@ -44,11 +45,14 @@ export class PassaggioDiFaseComponent implements OnInit {
     const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.iterParams.idIter)
     .subscribe(
       res => {
+        console.log(res);
         let o: any = res;
         var current = JSON.parse(o.currentFase);
         var next = JSON.parse(o.nextFase);
         this.faseAttuale = current.nomeFase;
-        this.faseSuccessiva = next.nomeFase;        
+        this.faseSuccessiva = next.nomeFase;    
+        this.isNextFaseCloser = next.faseDiChiusura;
+        //this.isNextFaseCloser = true;
       },
       err => {
         this.showStatusOperation("Boh, che sarà successo", "error");
