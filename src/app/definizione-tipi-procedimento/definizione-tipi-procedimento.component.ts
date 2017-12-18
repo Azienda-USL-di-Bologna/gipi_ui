@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild, } from "@angular/core";
+import {Component, Input, OnDestroy, OnInit, ViewChild,} from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { DxDataGridComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from "./definizione-tipi-procedimento.service";
@@ -21,6 +21,8 @@ import {ButtonAppearance} from "../classi/client-objects/ButtonAppearance";
 export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
   @ViewChild("grid") grid: DxDataGridComponent;
+  @Input("refreshButton") resfreshButton;
+
   public dataSource: DataSource;
   private odataContextDefinition: OdataContextDefinition;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
@@ -74,6 +76,25 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
   }
 
+  public manageCommand(e){
+    console.log("evento: ", e);
+  }
+
+  public onReload(){
+    console.log("event: onReload");
+  }
+
+  public onSave(){
+    console.log("event: onSave");
+  }
+
+  public onRestore(){
+    console.log("event: onRestore");
+  }
+
+  public onBack(){
+    console.log("event: onBack");
+  }
 
   ngOnInit() {
     // this.globalContext.setButtonBarVisible(false);
@@ -254,4 +275,6 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     return attivo;
 
   }
+
+
 }
