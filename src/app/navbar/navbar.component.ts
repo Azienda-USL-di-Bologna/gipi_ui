@@ -17,7 +17,7 @@ export class NavbarComponent implements OnInit {
         this.router.events
             .filter(event => event instanceof ResolveEnd)
             .subscribe(
-                (next: NavigationEnd) => {
+                (next: ResolveEnd) => {
                     // console.log("boh", next.url);
                     const url = next.url;
                     const path = url.substring(1);
