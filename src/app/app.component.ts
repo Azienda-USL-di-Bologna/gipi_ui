@@ -28,6 +28,7 @@ export class AppComponent implements OnInit {
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
 
     public userInfoMap$:  Observable<Object>;
+    public switchResetBreadcrumps: number = 0;
 
     private userInfoMap: object;
 
@@ -35,7 +36,7 @@ export class AppComponent implements OnInit {
     //     this._opened = !this._opened;
     // }
 
-    constructor(private location: Location, private router: Router, private globalContextService: GlobalContextService) {
+    constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService) {
         // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
         // if (this.userInfoMap) {
         //     this.username = this.userInfoMap["username"];
@@ -110,6 +111,10 @@ export class AppComponent implements OnInit {
 
 
         // this.buttonBar = this.globalContext.buttonBarVisible;
+    }
+
+    public resetBreadcrumbs() {
+        this.switchResetBreadcrumps = 1 - this.switchResetBreadcrumps;
     }
 }
 
