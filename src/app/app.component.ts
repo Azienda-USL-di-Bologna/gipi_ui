@@ -16,35 +16,38 @@ import {GlobalContextService} from "@bds/nt-angular-context";
 })
 export class AppComponent implements OnInit {
 
-    _opened= false;
+    // _opened= false;
     // buttonBar: Observable<boolean>;
 
-    username: Observable<string>;
-    azienda: Azienda;
-    route: string;
-    ruolo: Ruolo;
-    private userInfoMap: Object;
+    public username: string;
+    public azienda: Observable<string>;
+    public ruolo: Observable<string>;
+    public route: string;
 
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
 
-    _toggleSidebar() {
-        this._opened = !this._opened;
-    }
+    public userInfoMap$:  Observable<Object>;
+
+    private userInfoMap: object;
+
+    // _toggleSidebar() {
+    //     this._opened = !this._opened;
+    // }
 
     constructor(private location: Location, private router: Router, private globalContextService: GlobalContextService) {
-        this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
-        if (this.userInfoMap) {
-            this.username = this.userInfoMap["username"];
-            this.azienda = this.userInfoMap["azienda"];
-        }
+        // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
+        // if (this.userInfoMap) {
+        //     this.username = this.userInfoMap["username"];
+        //     this.azienda = this.userInfoMap["azienda"];
+        // }
       this.sidebarItems.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
       this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
       this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi", this.sidebarItems2));
       this.sidebarItems2.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
       this.route = this.router.url;
 
-      this.globalContextService.setSubjectInnerSharedObject("utente", null);
+      this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);
 
 
     }
@@ -77,7 +80,31 @@ export class AppComponent implements OnInit {
             }
         );
 
-        this.username = this.globalContextService.getSubjectInnerSharedObject("utente");
+        if (sessionStorage.getItem("userInfoMap")){
+            this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
+            this.username = this.userInfoMap["username"];
+            this.ruolo = this.userInfoMap["ruolo"];
+        }
+
+        this.userInfoMap$ = this.globalContextService.getSubjectInnerSharedObject("userInfoMap");
+        this.userInfoMap$.subscribe(
+            value =>
+            {
+                if (value){
+                    this.userInfoMap = value;
+                    this.username = value["username"];
+                    this.ruolo = value["ruolo"];
+                }
+
+            }
+        );
+
+        // if (this.userInfoMap) {
+        //     this.username = this.userInfoMap["username"];
+        //     this.azienda = this.userInfoMap["azienda"];
+        // }
+
+
         // this.activatedRoute.queryParams.subscribe(
         //     params => console.log("params: ", params));
 
