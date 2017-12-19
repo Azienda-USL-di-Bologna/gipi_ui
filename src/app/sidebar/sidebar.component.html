@@ -1,15 +1,15 @@
 <nav class="main-menu">
-  <ul class="nav navbar-nav components margine-sinistro">
-    <li *ngFor="let items of sidebarItems">
+  <ul class="components margine-sinistro">
+    <li *ngFor="let items of sidebarItems" (click)="clicked = items">
       <div *ngIf="!items.children; else submenuEntry ">
-        <a href="#{{items.routerLink}}"><span class="nav-text">{{ items.description }}</span></a>
+        <a routerLink="{{items.routerLink}}" (click)="prova($event)"><span [class.active]="clicked">{{ items.description }}</span></a>
       </div>
       <ng-template #submenuEntry>
         <div class="arrow-down">
           <a href="#submenu" data-toggle="collapse" aria-expanded="false" class="espanso"> {{ items.description }} </a>
         </div>
         <ul class="collapse margine-sinistro" id="submenu">
-          <li *ngFor="let childrens of items.children"></li>
+          <!--<li *ngFor="let childrens of items.children"></li>-->
           <sidebar [sidebarItems]="items.children"></sidebar>
         </ul>
       </ng-template>

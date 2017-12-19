@@ -9,6 +9,8 @@ import { SidebarItem } from "../classi/client-objects/SidebarItem";
 export class SidebarComponent implements OnInit {
   @Input() sidebarItems: Array<SidebarItem>;
 
+   public clicked = true;
+
   constructor() {
 
   }
@@ -16,4 +18,13 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
   }
 
+  selectItem(event) {
+    console.log("LOGGO: ", event);
+
+  }
+
+  public prova(event){
+    console.log("evento: ", event);
+    // this.clicked = true;
+  }
 }

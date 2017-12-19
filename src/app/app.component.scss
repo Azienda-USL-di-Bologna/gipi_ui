@@ -85,53 +85,28 @@
   position: absolute;
   bottom: 0;
 }
+#sidebar-toggle-button {
+  height: 2.7rem;
+  width: 2.7rem;
+  //padding: 4px;
+}
 
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
 .sidebar-style {
-  font-family: "Open Sans", sans-serif;
-  width: 20%;
+  width: 16%;
   top: 0;
   left: 0;
   height: 96vh;
   z-index: 999;
-  margin-left: -20%;
+  margin-left: -16%;
   transition: all 0.3s;
 }
 
  .active {
   margin-left: 0;
 }
-
-//#sidebar .sidebar-header {
-//  padding: 10px;
-//  background: #993366;
-//  margin-left: 2px;
-//}
-//
-//#sidebar ul.components {
-//  margin-left: 2px;
-//  border: 1px solid #47748b;
-//  border-radius: 1px;
-//}
-//
-//#sidebar ul p {
-//  color: #7386D5;
-//  padding: 5px;
-//  font-size: 1.2em;
-//}
-//
-//#sidebar ul li a {
-//  padding: 10px;
-//  font-size: 1.1em;
-//  display: block;
-//}
-//
-//#sidebar ul li a:hover {
-//  background: #FFC057;
-//}
-
 
 /* ---------------------------------------------------
     MEDIAQUERIES
