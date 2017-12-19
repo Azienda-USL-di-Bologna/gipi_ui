@@ -7,6 +7,7 @@ import {Ruolo} from "./classi/server-objects/entities/ruolo";
 import {Azienda} from "./classi/server-objects/entities/azienda";
 import { SidebarItem } from "./classi/client-objects/SidebarItem";
 import { getElement } from "devextreme-angular";
+import {GlobalContextService} from "@bds/nt-angular-context";
 
 @Component({
     selector: "app-root",
@@ -18,11 +19,11 @@ export class AppComponent implements OnInit {
     _opened= false;
     // buttonBar: Observable<boolean>;
 
-    private userInfoMap: Object;
-    username: String = "";
+    username: Observable<string>;
     azienda: Azienda;
     route: string;
     ruolo: Ruolo;
+    private userInfoMap: Object;
 
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
@@ -31,7 +32,7 @@ export class AppComponent implements OnInit {
         this._opened = !this._opened;
     }
 
-    constructor(private location: Location, private router: Router) {
+    constructor(private location: Location, private router: Router, private globalContextService: GlobalContextService) {
         this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
         if (this.userInfoMap) {
             this.username = this.userInfoMap["username"];
@@ -42,6 +43,10 @@ export class AppComponent implements OnInit {
       this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi", this.sidebarItems2));
       this.sidebarItems2.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
       this.route = this.router.url;
+
+      this.globalContextService.setSubjectInnerSharedObject("utente", null);
+
+
     }
 
     slide(){
@@ -72,6 +77,7 @@ export class AppComponent implements OnInit {
             }
         );
 
+        this.username = this.globalContextService.getSubjectInnerSharedObject("utente");
         // this.activatedRoute.queryParams.subscribe(
         //     params => console.log("params: ", params));
 

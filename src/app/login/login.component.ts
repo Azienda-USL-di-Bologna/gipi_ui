@@ -6,6 +6,7 @@ import {LOGIN_URL} from "../../environments/app.constants";
 import { log } from 'util';
 import { Ruolo } from 'app/classi/server-objects/entities/ruolo';
 import { Azienda } from 'app/classi/server-objects/entities/azienda';
+import {GlobalContextService} from "@bds/nt-angular-context";
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ import { Azienda } from 'app/classi/server-objects/entities/azienda';
 export class LoginComponent implements OnInit {
   errorMessage: string = "";
 
-  constructor(public httpClient: HttpClient, private router: Router) { }
+  constructor(public httpClient: HttpClient, private router: Router, private globalContextService: GlobalContextService) { }
 
   ngOnInit() {
       this.httpClient.get<any>(LOGIN_URL)
@@ -26,6 +27,8 @@ export class LoginComponent implements OnInit {
                   sessionStorage.setItem("userinfo", data.username);
                   sessionStorage.setItem("loginMethod", "sso");
 
+                  this.globalContextService.setSubjectInnerSharedObject("utente", data.username);
+
                   //la mappa userInfoMap contiene i seguenti oggetti:
                   //username -> username dell'utente; ruolo -> oggetto Ruolo
                   //azienda -> oggetto Azienda attaccato all'utente; strutture -> ArrayList delle strutture dell'utente 
@@ -33,7 +36,7 @@ export class LoginComponent implements OnInit {
                   console.log("LOGGO UIM!! -> ",JSON.stringify(uim));
                   sessionStorage.setItem("userInfoMap", JSON.stringify(uim));
                   this.router.navigate(["/home"]);
-              })
+              });
   }
 
   /* login(form: NgForm){
@@ -54,6 +57,8 @@ export class LoginComponent implements OnInit {
               sessionStorage.setItem("token", data.token);
               sessionStorage.setItem("userinfo", data.username);
               sessionStorage.setItem("loginMethod", "local");
+
+                this.globalContextService.setSubjectInnerSharedObject("utente", data.username);
 
               //la mappa userInfoMap contiene i seguenti oggetti:
               //username -> username dell'utente; ruolo -> oggetto Ruolo
