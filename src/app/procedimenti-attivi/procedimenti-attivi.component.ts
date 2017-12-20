@@ -12,10 +12,10 @@ import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-de
 })
 export class ProcedimentiAttiviComponent {
 
-  @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
-
   private odataContextDefinition: OdataContextDefinition;
   private rigaSelezionata: any;
+
+  @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
 
   public idAzienda: number = 5;
   public descrizioneAzienda: string = "Azienda USL Parma";
@@ -64,7 +64,7 @@ export class ProcedimentiAttiviComponent {
               this.gridContainer.instance.cancelEditData();
           }
       }
-    }]
+    }];
   }
 
   // Gestisco la toolbar di ricerca. La voglio centrale.
@@ -98,11 +98,11 @@ export class ProcedimentiAttiviComponent {
         if (this.dataType === "string" && !this.lookup && value) {
           return ["tolower(" + this.dataField + ")",
             selectedFilterOperation || "contains",
-            value.toLowerCase()]
+            value.toLowerCase()];
         } else {
           return defaultCalculateFilterExpression.apply(this, arguments);
         }
-      }
+      };
     });
   }
 
@@ -115,15 +115,15 @@ export class ProcedimentiAttiviComponent {
       case "infoOnClick":
         this.rigaSelezionata = e.row;
         this.apriDettaglio(e.row);
-      break
+      break;
       case "iterOnClick":
         this.popupNuovoIterVisible = true;
-        console.log(e);
         this.procedimentoDaPassare = [{
-          id: e.row.data.idProcedimento,
-          nome: e.row.data.idAziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento
+          idAzienda: this.idAzienda,
+          idProcedimento: e.row.data.idProcedimento,
+          nomeProcedimento: e.row.data.idAziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento
         }];
-      break
+      break;
     }
   }
 }
