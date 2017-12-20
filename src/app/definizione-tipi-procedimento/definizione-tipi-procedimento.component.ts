@@ -16,7 +16,7 @@ import {ButtonAppearance} from "../classi/client-objects/ButtonAppearance";
 @Component({
   selector: "app-definizione-tipi-procedimento",
   templateUrl: "./definizione-tipi-procedimento.component.html",
-  styleUrls: ["./definizione-tipi-procedimento.component.css"]
+  styleUrls: ["./definizione-tipi-procedimento.component.scss"]
 })
 export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
