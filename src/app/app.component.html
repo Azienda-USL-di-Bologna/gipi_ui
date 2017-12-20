@@ -134,7 +134,8 @@
                             </div>
                             <div class="col-lg-8">
                                 <p class="text-left"><strong>Informazioni Utente</strong></p>
-                                <p class="text-left small">{{username}}</p>
+                                <p class="text-left small">Azienda: {{username}}</p>
+                                <p class="text-left small">Ruolo: {{ruolo}}</p>
                             </div>
                         </div>
                     </div>
@@ -157,7 +158,7 @@
     <div class="clContentBody">
         <div class="row">
             <div id="sidebar-id" *ngIf="router.url !== '/login'" class="sidebar-style">
-                <sidebar [sidebarItems]="sidebarItems"></sidebar>
+                <sidebar [sidebarItems]="sidebarItems" (resetBreadcrumbs)="resetBreadcrumbs()"></sidebar>
             </div>
             <div class="col ovf-auto">
                 <div class="row">

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, SimpleChanges } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
 import { Entities } from "environments/app.constants";
@@ -14,7 +14,7 @@ export class DocumentiIterComponent {
   private odataContextDefinition: OdataContextDefinition;
   public dataSourceDocumentiIter: DataSource;
 
-   @Input("idIter") idIter: string;
+   @Input("modifiche") modifiche: Object;
   
   constructor(private odataContextFactory: OdataContextFactory) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -24,7 +24,15 @@ export class DocumentiIterComponent {
     this.dataSourceDocumentiIter = new DataSource({
       store: this.odataContextDefinition.getContext()[Entities.DocumentoIter.name],
       expand: ["eventoIterList/idEvento"],
-      filter: ['FK_id_iter', '=', parseInt(this.idIter)]
+      filter: ['FK_id_iter', '=', parseInt(this.modifiche['idIter'])]
     });
    }
+
+     ngOnChanges(changes: SimpleChanges) {
+    if (this.dataSourceDocumentiIter != undefined) {
+      //debugger;
+      this.dataSourceDocumentiIter.load();
+    }
+
+  }
 }

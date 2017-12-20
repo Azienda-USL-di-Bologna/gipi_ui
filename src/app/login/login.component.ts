@@ -1,39 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { NgForm} from '@angular/forms';
-import { Router, CanActivate} from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from "@angular/core";
+import { NgForm} from "@angular/forms";
+import { Router } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
 import {LOGIN_URL} from "../../environments/app.constants";
-import { log } from 'util';
-import { Ruolo } from 'app/classi/server-objects/entities/ruolo';
-import { Azienda } from 'app/classi/server-objects/entities/azienda';
+import {GlobalContextService} from "@bds/nt-angular-context";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent implements OnInit {
-  errorMessage: string = "";
+  errorMessage = "";
 
-  constructor(public httpClient: HttpClient, private router: Router) { }
+  constructor(public httpClient: HttpClient, private router: Router, private globalContextService: GlobalContextService) { }
 
   ngOnInit() {
       this.httpClient.get<any>(LOGIN_URL)
           .subscribe(
               // Successful responses call the first callback.
               data => {
-                  sessionStorage.setItem("token", data.token);
-                  sessionStorage.setItem("userinfo", data.username);
-                  sessionStorage.setItem("loginMethod", "sso");
-
-                  //la mappa userInfoMap contiene i seguenti oggetti:
-                  //username -> username dell'utente; ruolo -> oggetto Ruolo
-                  //azienda -> oggetto Azienda attaccato all'utente; strutture -> ArrayList delle strutture dell'utente 
-                  let uim: Object = data.userInfoMap;
-                  console.log("LOGGO UIM!! -> ",JSON.stringify(uim));
-                  sessionStorage.setItem("userInfoMap", JSON.stringify(uim));
-                  this.router.navigate(["/home"]);
-              })
+                  this.setDataLogin(data);
+              });
   }
 
   /* login(form: NgForm){
@@ -48,33 +36,34 @@ export class LoginComponent implements OnInit {
   login(form: NgForm) {
     this.errorMessage = "";
 
-    this.httpClient.post(LOGIN_URL,{username : form.value.email , "password": form.value.password })
+    this.httpClient.post(LOGIN_URL, {username : form.value.username , "password": form.value.password })
         .subscribe(
             (data: any) => {
-              sessionStorage.setItem("token", data.token);
-              sessionStorage.setItem("userinfo", data.username);
-              sessionStorage.setItem("loginMethod", "local");
-
-              //la mappa userInfoMap contiene i seguenti oggetti:
-              //username -> username dell'utente; ruolo -> oggetto Ruolo
-              //azienda -> oggetto Azienda attaccato all'utente; strutture -> ArrayList delle strutture dell'utente 
-              let uim: Object = data.userInfoMap;
-              console.log("LOGGO UIM!! -> ",JSON.stringify(uim));
-
-              sessionStorage.setItem("userInfoMap", JSON.stringify(uim));
-              this.router.navigate(["/home"]);
-
+                this.setDataLogin(data);
             },
             (err) => {
-              console.log(err)
-              form.value.email = "";
+              console.log(err);
+              form.value.username = "";
               form.value.password = "";
               console.log("Errore nel login!");
-              this.errorMessage = "Errore: username e/o password errati"
+              this.errorMessage = "Errore: username e/o password errati";
             }
         );
   }
 
 
+  private setDataLogin(data: any){
+      sessionStorage.setItem("token", data.token);
+      sessionStorage.setItem("userinfo", data.username);
+      sessionStorage.setItem("loginMethod", "local");
+
+      let userInfoMap: Object = data.userInfoMap;
+
+      sessionStorage.setItem("userInfoMap", JSON.stringify(userInfoMap));
+
+      this.globalContextService.setSubjectInnerSharedObject("userInfoMap", userInfoMap);
+
+      this.router.navigate(["/home"]);
+  }
 
 }

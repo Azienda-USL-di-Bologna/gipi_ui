@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, SimpleChanges } from "@angular/core";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
@@ -15,7 +15,8 @@ export class CronologiaEventiComponent implements OnInit {
   public dataSourceEventoIter: DataSource;
   private odataContextDefinition: OdataContextDefinition;
 
-  @Input("idIter") idIter: string;
+  //@Input("idIter") idIter: string;
+  @Input("modifiche") modifiche: Object;
 
   constructor(private odataContextFactory: OdataContextFactory) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -24,8 +25,14 @@ export class CronologiaEventiComponent implements OnInit {
   ngOnInit() {
     this.dataSourceEventoIter = new DataSource({
       store: this.odataContextDefinition.getContext()[Entities.EventoIter.name],
-      expand: ["idEvento", "idIter" , "idFaseIter.idFase"],
-      filter: ['FK_id_iter', '=', parseInt(this.idIter)]
+      expand: ["idEvento", "idIter", "idFaseIter.idFase", "autore"],
+      filter: ['FK_id_iter', '=', parseInt(this.modifiche['idIter'])]
     })
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.dataSourceEventoIter != undefined) {
+      this.dataSourceEventoIter.load();
+    }
   }
 }

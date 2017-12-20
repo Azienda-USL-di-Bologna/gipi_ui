@@ -5,7 +5,7 @@ import { Entities } from "../../../../environments/app.constants";
 
 export class DocumentoIter extends Entity {
   id: number;
-  numeroRegistro: number;
+  numeroRegistro: string;
   anno: number;
   registro: string;
   idIter: Iter;
@@ -17,7 +17,7 @@ export class DocumentoIter extends Entity {
       keyType: "Int32",
       fieldTypes: {
         id: "Int32",
-        numeroRegistro: "Int32",
+        numeroRegistro: "String",
         anno: "Int32",
         registro: "String",
         idIter: new OdataForeignKey(Entities.Iter, "id")

@@ -19,11 +19,14 @@ export class JwtInterceptor implements HttpInterceptor{
     }
 
     intercept(request: HttpRequest<any>,next: HttpHandler): Observable<HttpEvent<any>> {
+
+
         
         const token = JwtInterceptor.getToken();
         request = request.clone({
             setHeaders: {"Authorization": `Bearer ${token}`}
         });
+        
         
         console.log("request_da_inviare: " + JSON.stringify(request));
 
