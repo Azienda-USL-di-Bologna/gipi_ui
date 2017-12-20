@@ -43,7 +43,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     // Variabili per FormLook dei pulsanti
     public testoBottoneAnnulla = "Indietro";
     public testoBottoneConferma: string;
-    public abilitaAnnulla = false;
+    public datiModificati = false;
     public abilitaBottoneAssocia: boolean;
     public abilitaBottoneDisassocia: boolean;
     public nomeTitolo: string;
@@ -73,10 +73,10 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         this.maxColWidth = 200;
         this.colCount = 1;
 
-        this.backBtn = new ButtonAppearance("indietro", "back", true);
-        this.saveBtn = new ButtonAppearance("salva", "save", true);
-        this.reloadBtn = new ButtonAppearance("refresh", "refresh", true);
-        this.restoreBtn = new ButtonAppearance("ripristina", "revert", true);
+        this.backBtn = new ButtonAppearance("indietro", "back", true, false);
+        this.saveBtn = new ButtonAppearance("salva", "save", true, false);
+        this.reloadBtn = new ButtonAppearance("refresh", "refresh", true, false);
+        this.restoreBtn = new ButtonAppearance("ripristina", "revert", true, false);
 
         this.odataContextEntitiesAziendaTipoProcedimento = this.odataContextFactory.buildOdataContextEntitiesDefinition();
         this.datasource = new DataSource({
@@ -129,6 +129,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         const azienda: Azienda = this.dataFromDettaglioProcedimentoComponent["azienda"];
         const tipoProcedimentoDefault: TipoProcedimento = this.dataFromDettaglioProcedimentoComponent["tipoProcedimento"];
         if (this.nuovaAssociazione) {
+            this.restoreBtn.disabled = true;
             this.aziendaTipoProcedimento.descrizioneTipoProcedimento = tipoProcedimentoDefault.descrizioneTipoProcedimentoDefault;
             this.aziendaTipoProcedimento.durataMassimaSospensione = tipoProcedimentoDefault.durataMassimaSospensione;
             this.aziendaTipoProcedimento.obbligoEsitoConclusivo = false;
@@ -140,6 +141,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
             }
         }
         else {
+            this.restoreBtn.disabled = false;
             this.datasource.filter([
                 ["idTipoProcedimento.idTipoProcedimento", "=", tipoProcedimentoDefault.idTipoProcedimento],
                 ["idAzienda.id", "=", azienda.id]]);
@@ -157,15 +159,15 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     public formFieldDataChanged(event) {
         console.log("dataChanged: ", Entity.isEquals(this.aziendaTipoProcedimento, this.initialAziendaTipoProcedimento));
         console.log("Event object: ", event);
-        this.abilitaAnnulla = !Entity.isEquals(this.aziendaTipoProcedimento, this.initialAziendaTipoProcedimento);
-        if (this.abilitaAnnulla)
-            this.testoBottoneAnnulla = "Annulla";
-        else
-            this.testoBottoneAnnulla = "Indietro";
+        this.datiModificati = !Entity.isEquals(this.aziendaTipoProcedimento, this.initialAziendaTipoProcedimento);
+        // if (this.datiModificati)
+        //     this.testoBottoneAnnulla = "Annulla";
+        // else
+        //     this.testoBottoneAnnulla = "Indietro";
     }
 
     public buttonAnnullaClicked(event) {
-        if (this.abilitaAnnulla) {
+        if (this.datiModificati) {
             const confirmDialog = custom(
                 {
                     title: "Annullare?",
@@ -213,7 +215,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
             position: {
                 my: "bottom",
                 at: "top",
-                of: "#responsive-box-buttons"
+                of: "#button-row-2"
             }
         });
     }
@@ -259,12 +261,38 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     }
 
     onBack(){
+        if (this.datiModificati) {
+            const confirmDialog = custom(
+                {
+                    title: "Annullare?",
+                    message: "Annullare le modifiche e tornare indetro?",
+                    buttons: [{
+                        text: "Si", onClick: function () {
+                            return "Si";
+                        }
+                    }, {
+                        text: "No", onClick: function () {
+                            return "No";
+                        }
+                    }]
+                });
+            confirmDialog.show().done(
+                dialogResult => {
+                    if (dialogResult === "Si") {
+                        this.router.navigate(["/app-dettaglio-procedimento"]);
+                    }
+                });
+        }
+        else {
+            this.router.navigate(["/app-dettaglio-procedimento"]);
+        }
         // CustomReuseStrategy.componentsReuseList.push("*");
-        this.router.navigate(["/app-dettaglio-procedimento"]);
+        // this.router.navigate(["/app-dettaglio-procedimento"]);
     }
 
     onReload(){
-
+        console.log("onReload")
+        this.buildAziendaTipoProcedimento(true);
     }
 
     onSave(){
@@ -272,7 +300,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     }
 
     onRestore(){
-
+        this.aziendaTipoProcedimento = Object.assign( {}, this.initialAziendaTipoProcedimento );
     }
 
     /**

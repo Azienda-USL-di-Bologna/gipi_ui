@@ -39,8 +39,8 @@ export class AppComponent implements OnInit {
         this.sidebarItems.push(new SidebarItem("Home", "home"));
         this.sidebarItems.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
         this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
-        this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi", this.sidebarItems2));
-        this.sidebarItems2.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
+        // this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi", this.sidebarItems2));
+        // this.sidebarItems2.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
         this.route = this.router.url;
 
         this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);

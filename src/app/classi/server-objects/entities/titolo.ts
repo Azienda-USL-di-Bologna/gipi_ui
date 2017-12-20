@@ -3,6 +3,7 @@ export class Titolo extends Entity {
     idTitolo: number;
     nomeTitolo: string;
     idAzienda: number;
+    classificazione: string;
 
     public static getOdataContextEntity(): any {
         return {
@@ -11,7 +12,8 @@ export class Titolo extends Entity {
             fieldTypes: {
                 idTitolo: "Int32",
                 nomeTitolo: "String",
-                idAzienda: "Int32"
+                idAzienda: "Int32",
+                classificazione: "String"
             }
         }
     }

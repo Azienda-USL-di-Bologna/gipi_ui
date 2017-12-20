@@ -5,8 +5,8 @@ import ODataStore from "devextreme/data/odata/store";
 import {OdataContextFactory} from "@bds/nt-angular-context";
 import { FunctionsImport } from "../../../environments/app.constants";
 import {HttpClient} from "@angular/common/http";
-import notify from 'devextreme/ui/notify';
-import { CUSTOM_RESOURCES_BASE_URL } from '../../../environments/app.constants';
+import notify from "devextreme/ui/notify";
+import { CUSTOM_RESOURCES_BASE_URL } from "../../../environments/app.constants";
 
 @Component({
   selector: "strutture-tree",
@@ -15,15 +15,15 @@ import { CUSTOM_RESOURCES_BASE_URL } from '../../../environments/app.constants';
 })
 export class StruttureTreeComponent implements OnInit {
 
+  private nodeSelectedFromContextMenu: any;
+  private nodeInvolved: Object = {};
+  private _nodesToCheckSelectedStatus: Object = {};
+  private _popupVisible: boolean ;
+  private odataContextDefinition;
   public datasource: DataSource;
   public datasourceOriginal: DataSource;
   public strutture: Struttura = new Struttura();
-  private odataContextDefinition;
   public contextMenuItems;
-  private nodeSelectedFromContextMenu: any;
-  private nodeInvolved: Object = {};
-  private _nodesToCheckSelectedStatus : Object = {};  
-  private _popupVisible:boolean ;
 
 
   @ViewChild("treeViewChild") treeViewChild: any;
@@ -35,9 +35,9 @@ export class StruttureTreeComponent implements OnInit {
   @Input("nodesToCheckSelectedStatus") nodesToCheckSelectedStatus: any;
   @Output("strutturaSelezionata") strutturaSelezionata = new EventEmitter<Object>();
   @Output("refreshAfterChange") refreshAfterChange = new EventEmitter <Object>();
-  
-  enterIntoChangeSelection : boolean = true;
-  
+
+  enterIntoChangeSelection: boolean = true;
+
   constructor(private http: HttpClient, private odataContextFactory: OdataContextFactory) {
 
     // costruzione menù contestuale sull'albero
@@ -51,31 +51,29 @@ export class StruttureTreeComponent implements OnInit {
     this._popupVisible = visibile;
   }
 
-  get popupVisible() : boolean { return this._popupVisible }
+  get popupVisible(): boolean { return this._popupVisible; }
 
   selectionChanged(e) {
-    //Devo controllare se la popup è visibile perchè, se lo è devo disabilitare momentaneamente questa parte di codice
-    //che non permette di cambiare lo stato del selected in quanto lo rimette come era prima. Questo perchè voglio
-    //vedere l'albero nella pagina sottostante aggiornarsi in real-time in base alle modifiche fatte nella popup. Quando
-    //la popup torna non visibile, allora la funzionalità seguente rientra in funzione.
-    if (this.readOnly) {  
+    // Devo controllare se la popup è visibile perchè, se lo è devo disabilitare momentaneamente questa parte di codice
+    // che non permette di cambiare lo stato del selected in quanto lo rimette come era prima. Questo perchè voglio
+    // vedere l'albero nella pagina sottostante aggiornarsi in real-time in base alle modifiche fatte nella popup. Quando
+    // la popup torna non visibile, allora la funzionalità seguente rientra in funzione.
+    if (this.readOnly) {
       if (!this._popupVisible) {
 
         if (this.enterIntoChangeSelection) {
-          
+
             this.enterIntoChangeSelection = !this.enterIntoChangeSelection;
               if (e.itemData.selected === false) {
                      this.treeViewChild.instance.selectItem(e.itemData.id);
               } else {
                     this.treeViewChild.instance.unselectItem(e.itemData.id);
-              }      
-          }
-          else { 
+              }
+          } else {
             this.enterIntoChangeSelection = !this.enterIntoChangeSelection;
           }
       }
-    }
-    else {
+    } else {
       // Se è già presente nell'array, lo rimuovo perchè vuol dire che ho annullato l'operazione fatta riportando il nodo allo stato originale.
       // Se entro nell'else, allora aggiungo il nodo con l'operazione corente al check.
       if (this.nodeInvolved[e.itemData.id])
@@ -92,7 +90,7 @@ export class StruttureTreeComponent implements OnInit {
         idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
         idAzienda: this.idAzienda
       }
-    }); 
+    });
   }
 
   /*Questo evento scatta quando clicchiamo sul nodo dell'albero per far aprire il menu contestuale
@@ -124,7 +122,7 @@ export class StruttureTreeComponent implements OnInit {
   }
 
   private getNestedChildren(inputArray, selectedNode) {
-    const result = []
+    const result = [];
 
     for (const i in inputArray) {
       if (inputArray[i].idStrutturaPadre === selectedNode) {
@@ -153,21 +151,20 @@ export class StruttureTreeComponent implements OnInit {
           this.showStatusOperation("Associazione non andata a buon fine", "error");
         }
         );
-    }
-    else { 
+    } else {
       this.refreshAfterChange.emit(this.nodeInvolved);
       this.nodeInvolved = {};
     }
   }
 
-  public setDataCancel() {  
+  public setDataCancel() {
     this.datasource.load();
     this.nodeInvolved = {};
     this.refreshAfterChange.emit(this.nodeInvolved);
   }
 
 public getClass() {
-    if(this.readOnly)
+    if (this.readOnly)
       return "tree-readonly dx-checkbox-icon";
     else
       return "tree-not-readonly dx-checkbox-icon";
@@ -181,8 +178,8 @@ public  selezionaStruttura(e) {
     this.strutturaSelezionata.emit(obj);
   }
 
-public showStatusOperation(message:string, type:string){
-  
+public showStatusOperation(message: string, type: string) {
+
     notify( {
       message: message,
       type: type,
@@ -197,4 +194,4 @@ public showStatusOperation(message:string, type:string){
 
 }
 
-export const NodeOperations  = {INSERT: "INSERT", DELETE: "DELETE"}
+export const NodeOperations  = {INSERT: "INSERT", DELETE: "DELETE"};

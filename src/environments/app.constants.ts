@@ -18,6 +18,7 @@ import { Fase } from "../app/classi/server-objects/entities/fase";
 import { FaseIter } from "../app/classi/server-objects/entities/fase-iter";
 import { ProcedimentoCache } from "../app/classi/server-objects/entities/procedimento-cache";
 import { DocumentoIter } from "app/classi/server-objects/entities/documento-iter";
+import { AvviaNuovoIter } from "app/classi/server-objects/functions-import/avvia-nuovo-iter";
 
 export const Entities: ServerObjectsDescriptor = {
     Azienda: {name: "Aziendas", class: Azienda},
@@ -40,7 +41,7 @@ export const Entities: ServerObjectsDescriptor = {
 };
 
 export const FunctionsImport: ServerObjectsDescriptor = {
-    GetStruttureByTipoProcedimento: {name: "GetStruttureByTipoProcedimento", class: GetStruttureByTipoProcedimento}
+    GetStruttureByTipoProcedimento: {name: "GetStruttureByTipoProcedimento", class: GetStruttureByTipoProcedimento},
 };
 
 // header http
@@ -69,3 +70,9 @@ export const odataTipiProcedimentoPath = "/TipoProcedimentos";
 export const odataCompanyPath = "/Aziendas";
 export const odataAziendeTipiProcPath = "/AziendaTipoProcedimentos";
 export const odataStrutturePath = "/Strutturas";
+
+// ======================= ENUM ========================================
+export const afferenzaStruttura = {
+    diretta: "diretta",
+    funzionale: "funzionale"
+}

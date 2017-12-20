@@ -1,20 +1,34 @@
 <h2 class="titolo-procedimento">Procedimento: {{nomeProcedimento}}</h2>
+
+<br>
+
 <dx-form
-[(formData)]="iter">
-  <dxi-item dataField="dataCreazione" editorType="dxDateBox" format="dd/mm/yyyy" [label]="{text: 'Data creazione iter'}" [editorOptions]="{ disabled: true }"></dxi-item>
-  <dxi-item dataField="dataAvvio" editorType="dxDateBox" [label]="{text: 'Data avvio iter'}" [editorOptions]="{ disabled: false }"></dxi-item>
-  <dxi-item dataField="oggetto" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
-  <dxi-item dataField="FK_id_responsabile_procedimento" editorType="dxLookup" [label]="{text: 'Responsabile procedimento'}"
-  [editorOptions]="{ 
-    disabled: false,
-    dataSource: dataSourceUtenti,
-    valueExpr: 'id',
-    displayExpr: 'descrizione',
-    searchEnabled: true,
-    placeholder: 'Seleziona il responsabile del procedimento..'
-  }">
-  </dxi-item> 
+  [(formData)]="iterParams">
+  <dxi-item itemType="group">
+    <dxi-item dataField="dataCreazioneIter" editorType="dxDateBox" format="dd/mm/yyyy" [label]="{text: 'Data creazione iter'}" [editorOptions]="{ disabled: true }"></dxi-item>
+    <dxi-item dataField="dataAvvioIter" editorType="dxDateBox" [label]="{text: 'Data avvio iter'}" [editorOptions]="{ disabled: false }"></dxi-item>
+    <dxi-item dataField="oggettoIter" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
+    <dxi-item dataField="idUtente" editorType="dxLookup" [label]="{text: 'Responsabile procedimento'}"
+      [editorOptions]="{
+        value: utenteConnesso,
+        dataSource: dataSourceUtenti,
+        valueExpr: 'id',
+        displayExpr: 'descrizione',
+        searchEnabled: true
+      }">
+    </dxi-item>
+    <!-- ColCount e colSpan sono chiaramente esagerati. Questo perché colCount=3 e poi i 3 item con colSpa=1 non funziona.  -->
+    <dxi-item itemType="group" [colCount]="3001" [label]="{text: 'Documento'}">
+      <dxi-item itemType="empty" [colSpan]="1"></dxi-item>
+      <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1000" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: false }"></dxi-item>
+      <dxi-item dataField="numeroDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: false }"></dxi-item>
+      <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: false}"></dxi-item> 
+    </dxi-item>
+  </dxi-item>
 </dx-form>
+
+<br>
+
 <div class="buttons">
     <dx-button
     text="Annulla">
