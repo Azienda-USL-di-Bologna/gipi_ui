@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Iter } from "app/classi/server-objects/entities/iter";
 import { OdataContextFactory } from "@bds/nt-angular-context";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
@@ -21,14 +21,16 @@ export class AvviaNuovoIterComponent {
   public nomeProcedimento: string;
   public utenteConnesso: object;
   
-  private odataContextDefinition: OdataContextDefinition;
-  
   @Input()
   set procedimentoSelezionato(procedimento: any) {
     this.nomeProcedimento = procedimento.nomeProcedimento;
     this.iterParams.idProcedimento = procedimento.idProcedimento;
     this.iterParams.idAzienda = procedimento.idAzienda;
   }
+
+  @Output() messageEvent = new EventEmitter<Object>();
+
+  private odataContextDefinition: OdataContextDefinition;
 
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -42,7 +44,15 @@ export class AvviaNuovoIterComponent {
       case "onClickProcedi":
         this.avviaIter();
       break;
+      case "onClickAnnulla":
+        this.closePopUp(false);
+      break;
     }
+  }
+
+  public closePopUp(avviato: boolean) {
+    console.log("sono nel close");
+    this.messageEvent.emit({visible: false, avviato: avviato});
   }
 
   private getInfoSessionStorage() {
@@ -86,6 +96,7 @@ export class AvviaNuovoIterComponent {
         res => {
           console.log("Apertura della pagina dell'iter appena creato");
           console.log(res);
+          this.closePopUp(true);
         },
         err => {
           this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");

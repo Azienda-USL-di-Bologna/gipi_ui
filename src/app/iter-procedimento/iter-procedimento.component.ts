@@ -1,22 +1,22 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextDefinition } from '@bds/nt-angular-context/odata-context-definition';
+import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
 import { Entities } from "../../environments/app.constants";
-import { CustomLoadingFilterParams } from '@bds/nt-angular-context/custom-loading-filter-params';
-import { OdataContextFactory } from '@bds/nt-angular-context/odata-context-factory';
+import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
+import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
 
-import { SequenzaDelleFasiComponent } from './sequenza-delle-fasi/sequenza-delle-fasi.component';
-import { Iter } from '../classi/server-objects/entities/iter';
-import { Utente } from '../classi/server-objects/entities/utente';
-import { Fase } from '../classi/server-objects/entities/fase';
-import { FaseIter } from '../classi/server-objects/entities/fase-iter';
-import { ProcedimentoCache } from '../classi/server-objects/entities/procedimento-cache';
-import { PassaggioDiFaseComponent } from './passaggio-di-fase/passaggio-di-fase.component';
+import { SequenzaDelleFasiComponent } from "./sequenza-delle-fasi/sequenza-delle-fasi.component";
+import { Iter } from "../classi/server-objects/entities/iter";
+import { Utente } from "../classi/server-objects/entities/utente";
+import { Fase } from "../classi/server-objects/entities/fase";
+import { FaseIter } from "../classi/server-objects/entities/fase-iter";
+import { ProcedimentoCache } from "../classi/server-objects/entities/procedimento-cache";
+import { PassaggioDiFaseComponent } from "./passaggio-di-fase/passaggio-di-fase.component";
 
 @Component({
-  selector: 'app-iter-procedimento',
-  templateUrl: './iter-procedimento.component.html',
-  styleUrls: ['./iter-procedimento.component.scss'],
+  selector: "app-iter-procedimento",
+  templateUrl: "./iter-procedimento.component.html",
+  styleUrls: ["./iter-procedimento.component.scss"],
   encapsulation: ViewEncapsulation.None
 })
 export class IterProcedimentoComponent implements OnInit {
@@ -24,15 +24,15 @@ export class IterProcedimentoComponent implements OnInit {
   @ViewChild(PassaggioDiFaseComponent) child;
 
   ngAfterViewInit() {
-    //this.passaggioDiFaseVisible = this.child.visibile;
+    // this.passaggioDiFaseVisible = this.child.visibile;
   }
 
   receiveMessage($event) {
     console.log("loggo il messaggio....");
     console.log($event);
-    this.passaggioDiFaseVisible = $event['visible'];
-    if ($event['proceduto']) {
-      var modificheNew: Object = { idIter: this.idIter, cambiato: !this.modifiche['cambiato'] };
+    this.passaggioDiFaseVisible = $event["visible"];
+    if ($event["proceduto"]) {
+      var modificheNew: Object = { idIter: this.idIter, cambiato: !this.modifiche["cambiato"] };
       this.modifiche = modificheNew;
     }
 
@@ -43,22 +43,22 @@ export class IterProcedimentoComponent implements OnInit {
   public procedimentoCache = new ProcedimentoCache;
   public dataSourceIter: DataSource;
   public durataPrevista: number;
-  public idIter: string = '6';
+  public idIter: string = "6";
   public modifiche: Object = { idIter: this.idIter, cambiato: false };
   public popupVisible: boolean = false;
   public passaggioDiFaseVisible: boolean = false;
   // Dati che verranno ricevuti dall'interfaccia chiamante
   public infoGeneriche: any = {
-    azienda: 'AOSP-BO',
-    struttura: 'UO DaTer',
-    tipoProcedimento: 'Tipologia A',
+    azienda: "AOSP-BO",
+    struttura: "UO DaTer",
+    tipoProcedimento: "Tipologia A",
     numeroIter: 6
   };
   public popupData: any = {
     visible: false,
-    title: 'titolo',
-    field: 'nome campo',
-    fieldValue: 'valore'
+    title: "titolo",
+    field: "nome campo",
+    fieldValue: "valore"
   };
 
   constructor(private odataContextFactory: OdataContextFactory) {
@@ -68,8 +68,8 @@ export class IterProcedimentoComponent implements OnInit {
 
     this.dataSourceIter = new DataSource({
       store: oataContextDefinitionTitolo.getContext()[Entities.Iter.name],
-      expand: ['idFase', 'idIterPrecedente', 'idResponsabileProcedimento', 'idResponsabileAdozioneProcedimentoFinale', 'procedimentoCache', 'procedimentoCache.idTitolarePotereSostitutivo'],
-      filter: [['id', '=', 6]]
+      expand: ["idFase", "idIterPrecedente", "idResponsabileProcedimento", "idResponsabileAdozioneProcedimentoFinale", "procedimentoCache", "procedimentoCache.idTitolarePotereSostitutivo"],
+      filter: [["id", "=", 6]]
     });
     this.dataSourceIter.load().then(res => {
       this.iter.build(res[0], Iter);
@@ -82,15 +82,15 @@ export class IterProcedimentoComponent implements OnInit {
   }
 
   updateNoteControInteressati() {
-    this.popupData.title = 'Note controinteressati';
-    this.popupData.field = 'noteControInteressati';
+    this.popupData.title = "Note controinteressati";
+    this.popupData.field = "noteControInteressati";
     this.popupData.fieldValue = this.iter.noteControinteressati;
     this.popupData.visible = true;
   }
 
   updateEsitoMotivazione() {
-    this.popupData.title = 'Esito motivazione';
-    this.popupData.field = 'esitoMotivazione';
+    this.popupData.title = "Esito motivazione";
+    this.popupData.field = "esitoMotivazione";
     this.popupData.fieldValue = this.iter.esitoMotivazione;
     this.popupData.visible = true;
   }
@@ -103,7 +103,7 @@ export class IterProcedimentoComponent implements OnInit {
     this.popupData.visible = true;*/
     
     this.passaggioDiFaseVisible = true;
-    this.popupData.title = 'Passaggio Di Fase';
+    this.popupData.title = "Passaggio Di Fase";
   }
 
 

@@ -78,7 +78,7 @@
       [showTitle]="true"
       [(visible)]="popupNuovoIterVisible">
       <div *dxTemplate="let data of 'content'">
-        <avvia-nuovo-iter  *ngFor="let obj of procedimentoDaPassare" [procedimentoSelezionato]="obj"></avvia-nuovo-iter>
+        <avvia-nuovo-iter  *ngFor="let obj of procedimentoDaPassare" [procedimentoSelezionato]="obj" (messageEvent)="receiveMessage($event)"></avvia-nuovo-iter>
       </div>
     </dx-popup>
 

@@ -4,6 +4,7 @@ import DataSource from "devextreme/data/data_source";
 import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
 import { Entities } from "environments/app.constants";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import {Router} from "@angular/router";
 
 @Component({
   selector: "procedimenti-attivi",
@@ -11,9 +12,6 @@ import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-de
   styleUrls: ["./procedimenti-attivi.component.scss"]
 })
 export class ProcedimentiAttiviComponent {
-
-  private odataContextDefinition: OdataContextDefinition;
-  private rigaSelezionata: any;
 
   @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
 
@@ -24,7 +22,10 @@ export class ProcedimentiAttiviComponent {
   public popupNuovoIterVisible: boolean = false;
   public procedimentoDaPassare: object;
 
-  constructor(private odataContextFactory: OdataContextFactory) {
+  private odataContextDefinition: OdataContextDefinition;
+  private rigaSelezionata: any;
+
+  constructor(private odataContextFactory: OdataContextFactory, public router: Router) {
     const now = new Date();
 
     this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -106,8 +107,13 @@ export class ProcedimentiAttiviComponent {
     });
   }
 
-  private apriDettaglio(row: any) {
-    this.gridContainer.instance.editRow(row.rowIndex);
+  public receiveMessage($event: any) {
+    console.log("sono nel recive");
+    this.popupNuovoIterVisible = $event.visible;
+    
+    if ($event.avviato){
+      this.router.navigate(["iter-procedimento"], {queryParams: {reset: true}});
+    }
   }
 
   public handleEvent(name: String, e: any) {
@@ -125,5 +131,9 @@ export class ProcedimentiAttiviComponent {
         }];
       break;
     }
+  }
+
+  private apriDettaglio(row: any) {
+    this.gridContainer.instance.editRow(row.rowIndex);
   }
 }
