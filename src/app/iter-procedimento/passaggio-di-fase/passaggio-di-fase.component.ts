@@ -6,11 +6,12 @@ import { log } from 'util';
 import { OdataContextFactory } from "@bds/nt-angular-context";
 import { DocumentoIter } from 'app/classi/server-objects/entities/documento-iter';
 import { Fase } from "app/classi/server-objects/entities/fase";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders} from "@angular/common/http";
 import { element } from "protractor";
 import { forEach } from "@angular/router/src/utils/collection";
 import { Subscription } from "rxjs/Subscription";
 import { Subscriber } from "rxjs/Subscriber";
+
 
 @Component({
   selector: 'app-passaggio-di-fase',
@@ -40,6 +41,8 @@ export class PassaggioDiFaseComponent implements OnInit {
    }
 
   ngOnInit() { 
+    // customizzazione per filtri sulla data INIZIO
+
     console.log("STO A LOGGAAAAAA!!!")
     console.log(this.iterParams)
     const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.iterParams.idIter)
@@ -55,6 +58,7 @@ export class PassaggioDiFaseComponent implements OnInit {
         //this.isNextFaseCloser = true;
       },
       err => {
+        this.sendMessage(false);
         this.showStatusOperation("Boh, che sarà successo", "error");
       }
     );
@@ -62,14 +66,14 @@ export class PassaggioDiFaseComponent implements OnInit {
 
   }
 
-  @Output() messageEvent = new EventEmitter<string>();
+  @Output() messageEvent = new EventEmitter<Object>();
   
   procedi() {
     console.log("PROCEDI");
     console.log("faccio roba...");
     console.log(this.iterParams);
-    
-    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", Object.assign({}, this.iterParams))
+  
+    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/stepOn",  this.iterParams, {headers: new HttpHeaders().set("content-type", "application/json")}) //Object.assign({},)
       .subscribe(
         res => {
           console.log("Mandato iterParams a Guido!");
@@ -77,20 +81,23 @@ export class PassaggioDiFaseComponent implements OnInit {
         },
         err => {
           this.showStatusOperation("Boh, che sarà successo", "error");
+        }, 
+        () => {
+          console.log("done");
+          this.sendMessage(true);
         }
       );
-    this.sendMessage();   
   }
 
   annulla(){
     console.log("ANNULLA");
     this.iterParams = undefined;
-    this.sendMessage();
+    this.sendMessage(false);
   }
 
-  sendMessage() {
+  sendMessage(proceduto: boolean) {
     this.visibile = false;
-    this.messageEvent.emit("false");
+    this.messageEvent.emit({visible:false, proceduto:proceduto});
   }
 
 }

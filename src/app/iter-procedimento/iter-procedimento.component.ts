@@ -30,7 +30,12 @@ export class IterProcedimentoComponent implements OnInit {
   receiveMessage($event) {
     console.log("loggo il messaggio....");
     console.log($event);
-    this.passaggioDiFaseVisible = false;
+    this.passaggioDiFaseVisible = $event['visible'];
+    if ($event['proceduto']) {
+      var modificheNew: Object = { idIter: this.idIter, cambiato: !this.modifiche['cambiato'] };
+      this.modifiche = modificheNew;
+    }
+
   }
 
   public iter: Iter = new Iter();
@@ -39,18 +44,21 @@ export class IterProcedimentoComponent implements OnInit {
   public dataSourceIter: DataSource;
   public durataPrevista: number;
   public idIter: string = '6';
+  public modifiche: Object = { idIter: this.idIter, cambiato: false };
   public popupVisible: boolean = false;
   public passaggioDiFaseVisible: boolean = false;
   // Dati che verranno ricevuti dall'interfaccia chiamante
-  public infoGeneriche: any = { azienda: 'AOSP-BO',
-                              struttura: 'UO DaTer',
-                              tipoProcedimento: 'Tipologia A',
-                              numeroIter: 6
+  public infoGeneriche: any = {
+    azienda: 'AOSP-BO',
+    struttura: 'UO DaTer',
+    tipoProcedimento: 'Tipologia A',
+    numeroIter: 6
   };
-  public popupData: any = { visible: false,
-                            title: 'titolo',
-                            field: 'nome campo',
-                            fieldValue: 'valore'
+  public popupData: any = {
+    visible: false,
+    title: 'titolo',
+    field: 'nome campo',
+    fieldValue: 'valore'
   };
 
   constructor(private odataContextFactory: OdataContextFactory) {
@@ -59,13 +67,13 @@ export class IterProcedimentoComponent implements OnInit {
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
 
     this.dataSourceIter = new DataSource({
-        store: oataContextDefinitionTitolo.getContext()[Entities.Iter.name],
-        expand: ['idFase', 'idIterPrecedente', 'idResponsabileProcedimento', 'idResponsabileAdozioneProcedimentoFinale', 'procedimentoCache', 'procedimentoCache.idTitolarePotereSostitutivo'],
-        filter: [['id', '=', 6]]
+      store: oataContextDefinitionTitolo.getContext()[Entities.Iter.name],
+      expand: ['idFase', 'idIterPrecedente', 'idResponsabileProcedimento', 'idResponsabileAdozioneProcedimentoFinale', 'procedimentoCache', 'procedimentoCache.idTitolarePotereSostitutivo'],
+      filter: [['id', '=', 6]]
     });
-    this.dataSourceIter.load().then(res =>{
+    this.dataSourceIter.load().then(res => {
       this.iter.build(res[0], Iter);
-      this.iter.dataChiusuraPrevista = new Date( this.iter.dataAvvio.getTime());
+      this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
       this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + this.iter.procedimentoCache.durataMassimaProcedimento);
     });
   }
@@ -73,14 +81,14 @@ export class IterProcedimentoComponent implements OnInit {
   ngOnInit() {
   }
 
-  updateNoteControInteressati(){
+  updateNoteControInteressati() {
     this.popupData.title = 'Note controinteressati';
     this.popupData.field = 'noteControInteressati';
     this.popupData.fieldValue = this.iter.noteControinteressati;
     this.popupData.visible = true;
   }
 
-  updateEsitoMotivazione(){
+  updateEsitoMotivazione() {
     this.popupData.title = 'Esito motivazione';
     this.popupData.field = 'esitoMotivazione';
     this.popupData.fieldValue = this.iter.esitoMotivazione;
@@ -93,9 +101,10 @@ export class IterProcedimentoComponent implements OnInit {
     this.popupData.field = 'esitoMotivazione';
     this.popupData.fieldValue = this.iter.esitoMotivazione;
     this.popupData.visible = true;*/
+    
     this.passaggioDiFaseVisible = true;
     this.popupData.title = 'Passaggio Di Fase';
   }
-  
+
 
 }

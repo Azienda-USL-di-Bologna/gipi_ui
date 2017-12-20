@@ -36,7 +36,7 @@ export const Entities: ServerObjectsDescriptor = {
     Evento: {name: "Eventos", class: Evento},
     EventoIter: {name: "EventoIters", class: EventoIter},
     ProcedimentoCache: {name: "ProcedimentoCaches", class: ProcedimentoCache},
-    DocumentoIter: {name: "DocumentiIters", class: DocumentoIter}
+    DocumentoIter: {name: "DocumentoIters", class: DocumentoIter}
 };
 
 export const FunctionsImport: ServerObjectsDescriptor = {

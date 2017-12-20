@@ -24,7 +24,7 @@
         <!-- I DATI    -->
         <div class="col">
             <dx-form itemType="group" [formData]="iterParams" [colCount]="12">
-                <dxi-item [colSpan]="12" editorType="dxDateBox" [label]="{text: 'Data Passaggio'}" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+                <dxi-item [colSpan]="12" dataField="dataPassaggio" editorType="dxDateBox" [label]="{text: 'Data Passaggio'}" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
                 <dxi-item [colSpan]="4" dataField="codiceRegistroDocumento" [editorOptions]="{ disabled: false }">
                     <dxo-label text="Reg."></dxo-label>
                 </dxi-item>
