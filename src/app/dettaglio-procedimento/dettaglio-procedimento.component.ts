@@ -33,7 +33,7 @@ export class DettaglioProcedimentoComponent implements OnInit {
                 private odataContexFactory: OdataContextFactory,
                 private globalContextService: GlobalContextService) {
 
-        this.backBtn = new ButtonAppearance("indietro", "back", true);
+        this.backBtn = new ButtonAppearance("indietro", "back", true, false);
 
         this.procedimento = service.selectedRow;
         this.odataContextDefinition = odataContexFactory.buildOdataContextEntitiesDefinition();
