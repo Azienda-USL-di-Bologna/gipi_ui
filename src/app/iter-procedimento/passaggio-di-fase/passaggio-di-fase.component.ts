@@ -55,7 +55,6 @@ export class PassaggioDiFaseComponent implements OnInit {
         this.faseAttuale = current.nomeFase;
         this.faseSuccessiva = next.nomeFase;    
         this.isNextFaseCloser = next.faseDiChiusura;
-        //this.isNextFaseCloser = true;
       },
       err => {
         this.sendMessage(false);
