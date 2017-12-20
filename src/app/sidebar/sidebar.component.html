@@ -1,8 +1,8 @@
 <nav class="main-menu">
   <ul class="components margine-sinistro">
-    <li *ngFor="let item of sidebarItems" >
-      <div *ngIf="!item.children; else submenuEntry ">
-        <a (click)="click($event, item)"><span [class.active]="clicked">{{ item.description }}</span></a>
+    <li *ngFor="let item of sidebarItems">
+      <div *ngIf="!item.children; else submenuEntry">
+        <a (click)="click($event, item)"><span [ngClass]="{active: isActive(item)}">{{ item.description }}</span></a>
       </div>
       <ng-template #submenuEntry>
         <div class="arrow-down">
