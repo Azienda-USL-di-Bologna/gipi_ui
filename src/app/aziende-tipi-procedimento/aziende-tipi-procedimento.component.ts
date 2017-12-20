@@ -13,6 +13,8 @@ import {custom} from "devextreme/ui/dialog";
 import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
 import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
 import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
+import {ButtonAppearance} from "../classi/client-objects/ButtonAppearance";
+import {CustomReuseStrategy} from "@bds/nt-angular-context/Routes/custom-reuse-strategy";
 
 
 @Component({
@@ -46,6 +48,11 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     public abilitaBottoneDisassocia: boolean;
     public nomeTitolo: string;
 
+    public backBtn: ButtonAppearance;
+    public saveBtn: ButtonAppearance;
+    public reloadBtn: ButtonAppearance;
+    public restoreBtn: ButtonAppearance;
+
     statusPage: string;
 
     testoHeaderTipoProcedimento = "testo tipo procedimento passato da Fay";
@@ -65,6 +72,11 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         this.minColWidth = 100;
         this.maxColWidth = 200;
         this.colCount = 1;
+
+        this.backBtn = new ButtonAppearance("indietro", "back", true);
+        this.saveBtn = new ButtonAppearance("salva", "save", true);
+        this.reloadBtn = new ButtonAppearance("refresh", "refresh", true);
+        this.restoreBtn = new ButtonAppearance("ripristina", "revert", true);
 
         this.odataContextEntitiesAziendaTipoProcedimento = this.odataContextFactory.buildOdataContextEntitiesDefinition();
         this.datasource = new DataSource({
@@ -246,6 +258,22 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         console.log("Value Titolo Changed: ", e);
     }
 
+    onBack(){
+        // CustomReuseStrategy.componentsReuseList.push("*");
+        this.router.navigate(["/app-dettaglio-procedimento"]);
+    }
+
+    onReload(){
+
+    }
+
+    onSave(){
+
+    }
+
+    onRestore(){
+
+    }
 
     /**
      * Legge i dati passatti dall'interfaccia precedente DettaglioProcedimentoComponent

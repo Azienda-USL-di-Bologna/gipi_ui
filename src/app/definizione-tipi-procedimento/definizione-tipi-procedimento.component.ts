@@ -34,22 +34,11 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     confirmDeleteMessage: "Stai per cancellare il tipo di procedimento: procedere?"
   };
 
-  public backBtn: ButtonAppearance;
-  public saveBtn: ButtonAppearance;
-  public reloadBtn: ButtonAppearance;
-  public restoreBtn: ButtonAppearance;
-
   constructor(private odataContexFactory: OdataContextFactory,
               private service: DefinizioneTipiProcedimentoService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private globalContextService: GlobalContextService) {
-
-    this.backBtn = new ButtonAppearance("indietro", "back", true);
-    this.saveBtn = new ButtonAppearance("salva", "save", true);
-    this.reloadBtn = new ButtonAppearance("refresh", "refresh", true);
-    this.restoreBtn = new ButtonAppearance("ripristina", "revert", true);
-
 
     // this.sharedData.setSharedObject({route: "definizione-tipi-procedimento"});
 
@@ -76,25 +65,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
   }
 
-  public manageCommand(e){
-    console.log("evento: ", e);
-  }
 
-  public onReload(){
-    console.log("event: onReload");
-  }
-
-  public onSave(){
-    console.log("event: onSave");
-  }
-
-  public onRestore(){
-    console.log("event: onRestore");
-  }
-
-  public onBack(){
-    console.log("event: onBack");
-  }
 
   ngOnInit() {
     // this.globalContext.setButtonBarVisible(false);
@@ -102,11 +73,6 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
   ngOnDestroy() {
     // console.log("destroy");
-  }
-
-  private loggaContesto(e: Object){
-    // console.log(e);
-
   }
 
   buildTipiProcedimento(res) {

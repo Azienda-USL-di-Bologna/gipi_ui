@@ -10,6 +10,8 @@ import {Azienda} from "../classi/server-objects/entities/azienda";
 import {Entities} from "../../environments/app.constants";
 import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
 import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
+import {CustomReuseStrategy} from "@bds/nt-angular-context/Routes/custom-reuse-strategy";
+import {ButtonAppearance} from "../classi/client-objects/ButtonAppearance";
 
 @Component({
     selector: "app-dettaglio-procedimento",
@@ -17,16 +19,22 @@ import {GlobalContextService} from "@bds/nt-angular-context/global-context.servi
     styleUrls: ["./dettaglio-procedimento.component.css"]
 })
 export class DettaglioProcedimentoComponent implements OnInit {
+
+    // aziende: Azienda[];
+    public procedimento: TipoProcedimento;
+    public aziende: Array<Azienda>;
+    public backBtn: ButtonAppearance;
+
     private aziendeDatasource: DataSource;
     private odataContextDefinition: OdataContextDefinition;
-    procedimento: TipoProcedimento;
-    // aziende: Azienda[];
-    aziende: Array<Azienda>;
 
     constructor(private service: DefinizioneTipiProcedimentoService,
                 private router: Router,
                 private odataContexFactory: OdataContextFactory,
                 private globalContextService: GlobalContextService) {
+
+        this.backBtn = new ButtonAppearance("indietro", "back", true);
+
         this.procedimento = service.selectedRow;
         this.odataContextDefinition = odataContexFactory.buildOdataContextEntitiesDefinition();
         this.aziendeDatasource = new DataSource({
@@ -46,6 +54,11 @@ export class DettaglioProcedimentoComponent implements OnInit {
                 this.procedimento.aziendeAssociate[azienda.id] = azienda;
             }
         }
+    }
+
+    onBack(){
+        CustomReuseStrategy.componentsReuseList.push("*");
+        this.router.navigate(["/definizione-tipi-procedimento"]);
     }
 
     // getAziendeAssociate() {

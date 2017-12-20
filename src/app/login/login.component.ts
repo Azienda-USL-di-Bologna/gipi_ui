@@ -54,7 +54,6 @@ export class LoginComponent implements OnInit {
 
   private setDataLogin(data: any){
       sessionStorage.setItem("token", data.token);
-      sessionStorage.setItem("userinfo", data.username);
       sessionStorage.setItem("loginMethod", "local");
 
       let userInfoMap: Object = data.userInfoMap;
