@@ -122,7 +122,6 @@
     [title]="popupData.title"
     [dragEnabled]="false"
     [closeOnOutsideClick]="true"
-    (onShowing)="onShowing($event)"
     [(visible)]="passaggioDiFaseVisible">
     <div *dxTemplate="let data of 'content'">
         <app-passaggio-di-fase [daPadre]="perFiglioPassaggioFase" (messageEvent)="receiveMessage($event)"></app-passaggio-di-fase>
