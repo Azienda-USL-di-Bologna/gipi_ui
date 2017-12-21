@@ -32,9 +32,12 @@ export class NavbarComponent implements OnInit {
                     if (queryParams) {
                         reset = queryParams.reset === "true";
                     }
+                    if (reset){
+                        this.visitedRoutes = [];
+                    }
                     const currentRoute: Route = this.router.config.find(e => e.path === path);
 
-                    if (currentRoute.data.breadcrumb){
+                    if (currentRoute.data.breadcrumb) {
                         // const currentBreadcrump: string = this.router.config.find(e => e.path === path).data.breadcrumb;
                         const index = this.visitedRoutes.findIndex(e => e.path === currentRoute.path);
                         if (index >= 0) {
@@ -48,11 +51,6 @@ export class NavbarComponent implements OnInit {
                             // CustomReuseStrategy.componentsReuseList.push("*");
                         }
                         // console.log("RouterConfig", this.router.config);
-                    }
-                    else{
-                        if (reset){
-                            this.visitedRoutes = [];
-                        }
                     }
                 }
             );
