@@ -50,9 +50,9 @@ export class AvviaNuovoIterComponent {
     }
   }
 
-  public closePopUp(avviato: boolean) {
+  public closePopUp(avviato: boolean, idIter?: number) {
     console.log("sono nel close");
-    this.messageEvent.emit({visible: false, avviato: avviato});
+    this.messageEvent.emit({visible: false, avviato: avviato, idIter: idIter});
   }
 
   private getInfoSessionStorage() {
@@ -96,7 +96,8 @@ export class AvviaNuovoIterComponent {
         res => {
           console.log("Apertura della pagina dell'iter appena creato");
           console.log(res);
-          this.closePopUp(true);
+          let idIter = +res["idIter"]; 
+          this.closePopUp(true, idIter);
         },
         err => {
           this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");

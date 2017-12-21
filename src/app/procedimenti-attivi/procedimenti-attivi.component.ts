@@ -22,6 +22,7 @@ export class ProcedimentiAttiviComponent {
   public popupNuovoIterVisible: boolean = false;
   public procedimentoDaPassare: Object;
   public iterAvviato: boolean = false;
+  public idIterAvviato: number;
 
   private odataContextDefinition: OdataContextDefinition;
   private rigaSelezionata: any;
@@ -110,13 +111,18 @@ export class ProcedimentiAttiviComponent {
 
   public receiveMessage($event: any) {
     this.iterAvviato = $event.avviato;
+    if (this.iterAvviato) {
+      this.idIterAvviato = $event.idIter;
+      console.log("ssssssssssssssssssss", this.idIterAvviato);
+    }
     this.popupNuovoIterVisible = $event.visible;   
   }
 
   public popupHidden() {
     if (this.iterAvviato){
       this.iterAvviato = false;
-      this.router.navigate(["iter-procedimento"], {queryParams: {reset: true, idIter: 7}});
+      console.log("ssssssssssssssssssss", this.idIterAvviato);
+      this.router.navigate(["iter-procedimento"], {queryParams: {idIter: this.idIterAvviato}});
     }
   }
 
