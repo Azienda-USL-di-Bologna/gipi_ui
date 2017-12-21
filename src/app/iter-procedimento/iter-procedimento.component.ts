@@ -13,6 +13,7 @@ import { ProcedimentoCache } from '../classi/server-objects/entities/procediment
 import { PassaggioDiFaseComponent } from './passaggio-di-fase/passaggio-di-fase.component';
 import { HttpClient } from "@angular/common/http";
 import notify from 'devextreme/ui/notify';
+import { ActivatedRoute, Params } from "@angular/router";
 
 
 @Component({
@@ -23,7 +24,7 @@ import notify from 'devextreme/ui/notify';
 })
 export class IterProcedimentoComponent implements OnInit {
 
-  @ViewChild(PassaggioDiFaseComponent) child;
+  //@ViewChild(PassaggioDiFaseComponent) child;
 
   ngAfterViewInit() {
     //this.passaggioDiFaseVisible = this.child.visibile;
@@ -32,14 +33,15 @@ export class IterProcedimentoComponent implements OnInit {
 
 
   public iter: Iter = new Iter();
-  public idIterArray: object;
+  public idIterArray: Object;
   public procedimentoCache = new ProcedimentoCache;
   public dataSourceIter: DataSource;
   public durataPrevista: number;
-  public idIter: string = '6';
+  public idIter: number = 6;
 
   public popupVisible: boolean = false;
   public passaggioDiFaseVisible: boolean = false;
+
   // Dati che verranno ricevuti dall'interfaccia chiamante
   public infoGeneriche: any = {
     azienda: 'AOSP-BO',
@@ -60,7 +62,8 @@ export class IterProcedimentoComponent implements OnInit {
   public perFiglioPassaggioFase: Object;
 
 
-  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient) {
+
+  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private activatedRoute: ActivatedRoute) {
     const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nomeTitolo");
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
@@ -68,12 +71,22 @@ export class IterProcedimentoComponent implements OnInit {
     this.dataSourceIter = new DataSource({
       store: oataContextDefinitionTitolo.getContext()[Entities.Iter.name],
       expand: ['idFase', 'idIterPrecedente', 'idResponsabileProcedimento', 'idResponsabileAdozioneProcedimentoFinale', 'procedimentoCache', 'procedimentoCache.idTitolarePotereSostitutivo'],
-      filter: [['id', '=', 6]]
+      filter: [['id', '=', this.idIter]]
     });
     this.buildIter();
   }
 
+
+
   ngOnInit() {
+    debugger;
+    this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
+      const idIter: string = queryParams['idIter'];
+      if (idIter) {
+        this.idIter = +idIter;
+      }
+      console.log(idIter);
+    });
   }
 
   buildIter() {

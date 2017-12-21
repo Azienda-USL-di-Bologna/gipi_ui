@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
-    private userInfoMap: object;
+    private userInfoMap: Object;
 
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService) {
         Date.prototype.toJSON = function () {
@@ -39,6 +39,7 @@ export class AppComponent implements OnInit {
         this.sidebarItems.push(new SidebarItem("Home", "home"));
         this.sidebarItems.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
         this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
+        this.sidebarItems.push(new SidebarItem("Test", "", this.sidebarItems2));
         // this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi", this.sidebarItems2));
         // this.sidebarItems2.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
         this.route = this.router.url;
