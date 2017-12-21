@@ -26,11 +26,9 @@ export class AppComponent implements OnInit {
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
     public sidebarIcon: string = "chevronright";
+    private userInfoMap: object;
 
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService) {
-        Date.prototype.toJSON = function () {
-            return moment(this).format();
-        }
         // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
         // if (this.userInfoMap) {
         //     this.username = this.userInfoMap["username"];
@@ -45,8 +43,6 @@ export class AppComponent implements OnInit {
         this.route = this.router.url;
 
         this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);
-
-
     }
 
     slide() {
