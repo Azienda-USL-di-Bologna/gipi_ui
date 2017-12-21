@@ -55,15 +55,22 @@ export class IterProcedimentoComponent implements OnInit {
     field: 'nome campo',
     fieldValue: 'valore'
   };
-  public perFigliParteDestra: Object = {
-    idIter: this.idIter,
-    ricarica: false  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore
-  };
+  public perFigliParteDestra: Object;
+
   public perFiglioPassaggioFase: Object;
 
 
 
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private activatedRoute: ActivatedRoute) {
+    this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
+      const idIter: string = queryParams['idIter'];
+      if (idIter) {
+        this.idIter = +idIter;
+      }
+      console.log(idIter);
+    });
+
+
     const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nomeTitolo");
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
@@ -74,19 +81,17 @@ export class IterProcedimentoComponent implements OnInit {
       filter: [['id', '=', this.idIter]]
     });
     this.buildIter();
+
+    this.perFigliParteDestra = {
+      idIter: this.idIter,
+      ricarica: false  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore
+    };
   }
 
 
 
   ngOnInit() {
-    debugger;
-    this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
-      const idIter: string = queryParams['idIter'];
-      if (idIter) {
-        this.idIter = +idIter;
-      }
-      console.log(idIter);
-    });
+
   }
 
   buildIter() {
