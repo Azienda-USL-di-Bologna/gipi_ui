@@ -17,12 +17,12 @@ export class NavbarComponent implements OnInit {
 
     ngOnInit() {
         this.router.events
-            .filter(event => event instanceof ResolveEnd)
+            .filter(event => (event instanceof ResolveEnd))
             .subscribe(
                 (next: ResolveEnd) => {
-                    // console.log("boh", next.url);
+                    console.log("boh", next.url);
                     let reset = false;
-                    let url = next.url;
+                    let url = next.state.url;
                     const pos: number = url.indexOf("?");
                     if (pos >= 0) {
                         url = url.substring(0, pos);
