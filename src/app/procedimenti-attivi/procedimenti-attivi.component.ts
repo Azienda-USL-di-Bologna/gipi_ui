@@ -20,7 +20,8 @@ export class ProcedimentiAttiviComponent {
   public dataSourceProcedimenti: DataSource;
   public popupButtons: any[];
   public popupNuovoIterVisible: boolean = false;
-  public procedimentoDaPassare: object;
+  public procedimentoDaPassare: Object;
+  public iterAvviato: boolean = false;
 
   private odataContextDefinition: OdataContextDefinition;
   private rigaSelezionata: any;
@@ -108,11 +109,14 @@ export class ProcedimentiAttiviComponent {
   }
 
   public receiveMessage($event: any) {
-    console.log("sono nel recive");
-    this.popupNuovoIterVisible = $event.visible;
-    
-    if ($event.avviato){
-      this.router.navigate(["iter-procedimento"], {queryParams: {reset: true}});
+    this.iterAvviato = $event.avviato;
+    this.popupNuovoIterVisible = $event.visible;   
+  }
+
+  public popupHidden() {
+    if (this.iterAvviato){
+      this.iterAvviato = false;
+      this.router.navigate(["iter-procedimento"], {queryParams: {reset: true, idIter: 7}});
     }
   }
 

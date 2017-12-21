@@ -76,9 +76,10 @@
       [minWidth]="500"
       [maxHeight]="450"
       [showTitle]="true"
-      [(visible)]="popupNuovoIterVisible">
+      [(visible)]="popupNuovoIterVisible"
+      (onHidden)="popupHidden()"
+      >
       <div *dxTemplate="let data of 'content'">
         <avvia-nuovo-iter  *ngFor="let obj of procedimentoDaPassare" [procedimentoSelezionato]="obj" (messageEvent)="receiveMessage($event)"></avvia-nuovo-iter>
       </div>
     </dx-popup>
-
