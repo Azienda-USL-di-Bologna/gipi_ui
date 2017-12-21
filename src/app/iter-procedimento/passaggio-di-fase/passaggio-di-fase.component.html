@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col fase">
             <h4>Fase attuale</h4>
-            <p>{{faseAttuale}}</p>
+            <p>{{currentFaseName}}</p>
         </div>
 
         <div class="col">
@@ -12,7 +12,7 @@
         
         <div class="col fase">
             <h4>Fase successiva</h4>
-            <p>{{faseSuccessiva}}</p>
+            <p>{{nextFaseName}}</p>
         </div>
     </div>  
 
@@ -35,8 +35,8 @@
                     <dxo-label text="Anno"></dxo-label>
                 </dxi-item>
                 <dxi-item [colSpan]="12" dataField="notePassaggio" [label]="{text: 'Note Passaggio'}" [editorOptions]="{ height:70,disabled: false}"></dxi-item>
-                <dxi-item [colSpan]="12" dataField="esito" [label]="{text: 'Esito'}" [editorOptions]="{ height:70,disabled: false }" [visible]="isNextFaseCloser"></dxi-item>
-                <dxi-item [colSpan]="12" dataField="motivazioneEsito" [label]="{text: 'Motivo Esito'}" [editorOptions]="{ height:70,disabled: false}" [visible]="isNextFaseCloser"></dxi-item>
+                <dxi-item [colSpan]="12" dataField="esito" [label]="{text: 'Esito'}" [editorOptions]="{ height:70,disabled: false }" [visible]="isNextFaseDiChiusura"></dxi-item>
+                <dxi-item [colSpan]="12" dataField="motivazioneEsito" [label]="{text: 'Motivo Esito'}" [editorOptions]="{ height:70,disabled: false}" [visible]="isNextFaseDiChiusura"></dxi-item>
             </dx-form>
         </div>
     </div> 
@@ -50,7 +50,7 @@
             <dx-button class="bottoni" text="Annulla" type="normal" (onClick)="annulla()"></dx-button>
         </div>
         <div class="col button-div">
-            <dx-button class="bottoni" text="Procedi" type="default" (onClick)="procedi()"></dx-button>
+            <dx-button class="bottoni" text="Procedi" type="default" (onClick)="showConfirm()"></dx-button>
         </div>
         <div class="col-3"></div>
     </div>    

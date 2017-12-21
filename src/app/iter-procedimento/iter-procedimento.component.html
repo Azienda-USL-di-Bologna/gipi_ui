@@ -4,7 +4,7 @@
         <h3><span class="header-font">Struttura:</span> <i>{{infoGeneriche.struttura}}</i></h3>
         <h3><span class="header-font">Tipo procedimento:</span> <i>{{infoGeneriche.tipoProcedimento}}</i></h3>
         <h3><span class="header-font">Iter N. </span> <i>{{infoGeneriche.numeroIter}}</i></h3>
-        <div><dx-button [text]="'Fase successiva'" (onClick)="passaggioDiFase()"></dx-button></div>
+        <div><dx-button [text]="'Procedi'" (onClick)="passaggioDiFase()"></dx-button></div>
         
         </div>
     
@@ -80,9 +80,9 @@
             </div>
                 
             <div class="col-xs-12 col-lg-6 contentRight">
-                <app-sequenza-delle-fasi [modifiche]="modifiche"></app-sequenza-delle-fasi>
-                <app-cronologia-eventi [modifiche]="modifiche"></app-cronologia-eventi>
-                <documenti-iter [modifiche]="modifiche"></documenti-iter>
+                <app-sequenza-delle-fasi [daPadre]="perFigliParteDestra"></app-sequenza-delle-fasi>
+                <app-cronologia-eventi [daPadre]="perFigliParteDestra"></app-cronologia-eventi>
+                <documenti-iter [daPadre]="perFigliParteDestra"></documenti-iter>
             </div>
         </div>
     
@@ -122,8 +122,9 @@
     [title]="popupData.title"
     [dragEnabled]="false"
     [closeOnOutsideClick]="true"
+    (onShowing)="onShowing($event)"
     [(visible)]="passaggioDiFaseVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-passaggio-di-fase [idIter]="idIter" (messageEvent)="receiveMessage($event)"></app-passaggio-di-fase>
+        <app-passaggio-di-fase [daPadre]="perFiglioPassaggioFase" (messageEvent)="receiveMessage($event)"></app-passaggio-di-fase>
     </div>
 </dx-popup>

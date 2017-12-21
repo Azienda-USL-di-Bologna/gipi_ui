@@ -21,7 +21,7 @@ export class SequenzaDelleFasiComponent implements OnInit {
 
   //qua devo prendermi poi il parametro dell'oggetto Iter che mi passa la videata
   //@Input("idIter") idIter: string;
-  @Input("modifiche") modifiche: Object;
+  @Input("daPadre") daPadre: Object;
 
 
 
@@ -46,7 +46,7 @@ export class SequenzaDelleFasiComponent implements OnInit {
     this.datasource = new DataSource({
       store: this.odataContextDefinition.getContext()[Entities.FaseIter.name],
       expand: ['idFase'],
-      filter: ['FK_id_iter', '=', parseInt(this.modifiche['idIter'])]
+      filter: ['FK_id_iter', '=', parseInt(this.daPadre['idIter'])]
       //sort: ['dataInizioFase']
     });
     this.datasource.sort({ getter: "dataInizioFase", desc: true });
@@ -54,7 +54,6 @@ export class SequenzaDelleFasiComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.datasource != undefined) {
-      //debugger;
       this.datasource.load();
     }
 

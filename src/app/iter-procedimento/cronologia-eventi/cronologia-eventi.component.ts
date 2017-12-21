@@ -16,7 +16,7 @@ export class CronologiaEventiComponent implements OnInit {
   private odataContextDefinition: OdataContextDefinition;
 
   //@Input("idIter") idIter: string;
-  @Input("modifiche") modifiche: Object;
+  @Input("daPadre") daPadre: Object;
 
   constructor(private odataContextFactory: OdataContextFactory) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -26,7 +26,7 @@ export class CronologiaEventiComponent implements OnInit {
     this.dataSourceEventoIter = new DataSource({
       store: this.odataContextDefinition.getContext()[Entities.EventoIter.name],
       expand: ["idEvento", "idIter", "idFaseIter.idFase", "autore"],
-      filter: ['FK_id_iter', '=', parseInt(this.modifiche['idIter'])]
+      filter: ['FK_id_iter', '=', parseInt(this.daPadre['idIter'])]
     })
   }
 

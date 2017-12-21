@@ -14,7 +14,7 @@ export class DocumentiIterComponent {
   private odataContextDefinition: OdataContextDefinition;
   public dataSourceDocumentiIter: DataSource;
 
-   @Input("modifiche") modifiche: Object;
+   @Input("daPadre") daPadre: Object;
   
   constructor(private odataContextFactory: OdataContextFactory) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -24,7 +24,7 @@ export class DocumentiIterComponent {
     this.dataSourceDocumentiIter = new DataSource({
       store: this.odataContextDefinition.getContext()[Entities.DocumentoIter.name],
       expand: ["eventoIterList/idEvento"],
-      filter: ['FK_id_iter', '=', parseInt(this.modifiche['idIter'])]
+      filter: ['FK_id_iter', '=', parseInt(this.daPadre['idIter'])]
     });
    }
 
