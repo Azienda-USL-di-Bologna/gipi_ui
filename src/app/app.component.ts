@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
+    public sidebarIcon: string = "chevronright";
     private userInfoMap: object;
 
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService) {
@@ -56,6 +57,7 @@ export class AppComponent implements OnInit {
         } else {
             sideBar.classList.add("active");
         }
+        this.sidebarIcon = (this.sidebarIcon === "chevronright" ? "chevronleft" : "chevronright");
     }
 
     screen(width) {
