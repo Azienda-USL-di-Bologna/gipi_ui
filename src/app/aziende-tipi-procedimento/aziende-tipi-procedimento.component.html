@@ -1,6 +1,16 @@
 <!--PER GESTIRE L'IMPAGINAZIONE DEGLI ELEMENTI, UTILIZZIAMO 2 RISOLUZIONI DI RIFERIMENTO: sm,lg. LE RISOLUZIONI VENGONO CALCOLATE ALL'INTERNO DEL .TS CORRISPONDENTE A QUESTA PAGINA HTML LA PROPRIETA' SCREEN SERVE PER nCARE IL CAMBIO DI LAYOUT AL CAMBIO
 DELLA RISOLUZIONE
 -->
+<app-buttons-bar
+        (onReloadButton)="onReload()"
+        (onSaveButton)= "onSave()"
+        (onBackButton) = "onBack()"
+        (onRestoreButton) = "onRestore()"
+        [backButton]="backBtn"
+        [saveButton]="saveBtn"
+        [reloadButton]="reloadBtn"
+        [restoreButton]="restoreBtn" >
+</app-buttons-bar>
 
    <div class="row">
        <div class="col-2"></div>
@@ -50,7 +60,7 @@ DELLA RISOLUZIONE
         <div class="col-3"></div>
     </div>
 
-    <div class="row">
+    <div class="row"  id="button-row-1">
         <div class="col-3"></div>
         <div class="col button-div">
             <dx-button class="padding-button" (onClick)="buttonVediAssociazioni(aziendaTipoProcedimento)"text="Vedi Associazioni" hint="Associazioni"></dx-button>
@@ -64,7 +74,7 @@ DELLA RISOLUZIONE
         <div class="col-3"></div>
     </div>
 
-    <div class="row">
+    <div class="row" id="button-row-2">
     <div class="col-3"></div>
     <div class="col button-div">
 

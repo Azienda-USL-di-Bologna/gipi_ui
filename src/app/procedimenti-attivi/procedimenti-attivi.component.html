@@ -1,4 +1,4 @@
-<div class="container-fluid">
+
     <h1 class="intestazione">Azienda: {{descrizioneAzienda}}</h1>
     <h3 class="intestazione">Procedimenti Attivi</h3>
     
@@ -54,12 +54,12 @@
           <dxi-item [label]="{visible: true, text:'Azienda'}" cssClass="item popup-title">{{descrizioneAzienda}}</dxi-item>
           <dxi-item dataField="idStruttura.nome" [template]="itemClear" [label]="{visible: true}" cssClass="item popup-title"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento" [template]="itemClear" [label]="{visible: true, text: 'Tipo Procedimento'}" cssClass="item popup-title"></dxi-item>
-    
+
           <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" [label]="{text:'Descrizione'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [label]="{text:'Modo apertura'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" [label]="{text:'Norma di riferimento'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nomeTitolo" [label]="{text:'Classificazione'}" [colSpan]="1" cssClass="item"></dxi-item>
-          <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [label]="{text:'Durata massim (gg)'}" [colSpan]="1" cssClass="item"></dxi-item>      
+          <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [label]="{text:'Durata massim (gg)'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" [label]="{text:'Durata massima sospensione (gg)'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="dataInizio" [label]="{text:'Valido dal'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="dataFine" [label]="{text:'Al'}" [colSpan]="1" cssClass="item"></dxi-item>
@@ -69,7 +69,7 @@
         </dxo-form>
       </dxo-editing>
     </dx-data-grid>
-    
+
     <dx-popup
       title="Avvia nuovo iter"
       [maxWidth]="800"
@@ -78,7 +78,7 @@
       [showTitle]="true"
       [(visible)]="popupNuovoIterVisible">
       <div *dxTemplate="let data of 'content'">
-        <avvia-nuovo-iter  *ngFor="let obj of procedimentoDaPassare" [procedimentoSelezionato]="obj"></avvia-nuovo-iter>
+        <avvia-nuovo-iter  *ngFor="let obj of procedimentoDaPassare" [procedimentoSelezionato]="obj" (messageEvent)="receiveMessage($event)"></avvia-nuovo-iter>
       </div>
     </dx-popup>
-</div>
+

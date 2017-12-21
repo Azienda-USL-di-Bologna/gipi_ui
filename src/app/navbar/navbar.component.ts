@@ -1,6 +1,7 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from "@angular/core";
-import {ActivatedRoute, NavigationEnd, ResolveEnd, Route, Router} from "@angular/router";
+import {Component, OnInit} from "@angular/core";
+import {ResolveEnd, Route, Router} from "@angular/router";
 import {CustomReuseStrategy} from "@bds/nt-angular-context/Routes/custom-reuse-strategy";
+import "rxjs/add/operator/filter";
 
 
 @Component({
@@ -11,9 +12,8 @@ import {CustomReuseStrategy} from "@bds/nt-angular-context/Routes/custom-reuse-s
 export class NavbarComponent implements OnInit {
 
     public visitedRoutes: Route[] = [];
-    @Input("switchResetBreadcrumps") switchResetBreadcrumps: number = 0;
 
-    constructor(private router: Router, private route: ActivatedRoute) { }
+    constructor(private router: Router) { }
 
     ngOnInit() {
         this.router.events
@@ -33,33 +33,32 @@ export class NavbarComponent implements OnInit {
                         reset = queryParams.reset === "true";
                     }
                     const currentRoute: Route = this.router.config.find(e => e.path === path);
-                    // const currentBreadcrump: string = this.router.config.find(e => e.path === path).data.breadcrumb;
-                    const index = this.visitedRoutes.findIndex(e => e.path === currentRoute.path);
-                    if (index >= 0) {
-                        this.visitedRoutes = this.visitedRoutes.slice(0, index + 1);
 
-                        if (!reset)
-                            CustomReuseStrategy.componentsReuseList.push("*");
+                    if (currentRoute.data.breadcrumb){
+                        // const currentBreadcrump: string = this.router.config.find(e => e.path === path).data.breadcrumb;
+                        const index = this.visitedRoutes.findIndex(e => e.path === currentRoute.path);
+                        if (index >= 0) {
+                            this.visitedRoutes = this.visitedRoutes.slice(0, index + 1);
+
+                            // if (!reset)
+                            //     CustomReuseStrategy.componentsReuseList.push("*");
+                        }
+                        else {
+                            this.visitedRoutes.push(currentRoute);
+                            // CustomReuseStrategy.componentsReuseList.push("*");
+                        }
+                        // console.log("RouterConfig", this.router.config);
                     }
-                    else {
-                        this.visitedRoutes.push(currentRoute);
-                        // CustomReuseStrategy.componentsReuseList.push("*");
+                    else{
+                        if (reset){
+                            this.visitedRoutes = [];
+                        }
                     }
-                    // console.log("RouterConfig", this.router.config);
                 }
             );
-
-        // this.route
-        //     .queryParams
-        //     .subscribe(params => {
-        //         // Defaults to 0 if no query param provided.
-        //         console.log(params);
-        //     });
     }
 
-    // ngOnChanges(changes: SimpleChanges) {
-    //     if (changes["switchResetBreadcrumps"]) {
-    //         this.visitedRoutes = [];
-    //     }
-    // }
+    onClick(){
+        CustomReuseStrategy.componentsReuseList.push("*");
+    }
 }

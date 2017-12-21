@@ -1,38 +1,71 @@
-import { Component, Input } from '@angular/core';
-import { Iter } from 'app/classi/server-objects/entities/iter';
-import { OdataContextFactory } from '@bds/nt-angular-context';
-import { OdataContextDefinition } from '@bds/nt-angular-context/odata-context-definition';
-import { CustomLoadingFilterParams } from '@bds/nt-angular-context/custom-loading-filter-params';
-import { Entities } from 'environments/app.constants';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Iter } from "app/classi/server-objects/entities/iter";
+import { OdataContextFactory } from "@bds/nt-angular-context";
+import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
+import { Entities, CUSTOM_RESOURCES_BASE_URL, afferenzaStruttura } from "environments/app.constants";
+import { HttpClient } from "@angular/common/http";
+import notify from "devextreme/ui/notify";
+import { forEach } from "@angular/router/src/utils/collection";
+import { HttpHeaders } from "@angular/common/http";
 
 @Component({
-  selector: 'avvia-nuovo-iter',
-  templateUrl: './avvia-nuovo-iter.component.html',
-  styleUrls: ['./avvia-nuovo-iter.component.scss']
+  selector: "avvia-nuovo-iter",
+  templateUrl: "./avvia-nuovo-iter.component.html",
+  styleUrls: ["./avvia-nuovo-iter.component.scss"]
 })
 export class AvviaNuovoIterComponent {
-  
-  private odataContextDefinition: OdataContextDefinition;
-  
-  public nomeProcedimento: string;
-  public iter: Iter = new Iter();
-  public dataSourceUtenti = {};
-  public utenteConnesso = "Ilithia"
 
+  public dataSourceUtenti: object;
+  public iterParams: IterParams = new IterParams();
+  public nomeProcedimento: string;
+  public utenteConnesso: object;
+  
   @Input()
   set procedimentoSelezionato(procedimento: any) {
-    this.nomeProcedimento = procedimento.nome;
-    //this.optionChanged();
+    this.nomeProcedimento = procedimento.nomeProcedimento;
+    this.iterParams.idProcedimento = procedimento.idProcedimento;
+    this.iterParams.idAzienda = procedimento.idAzienda;
   }
 
-  constructor(private odataContextFactory: OdataContextFactory) {
-    this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();   
-    this.iter.dataCreazione = new Date();
-    // console.log(JSON.parse(sessionStorage.getItem("userInfoMap")));
+  @Output() messageEvent = new EventEmitter<Object>();
+
+  private odataContextDefinition: OdataContextDefinition;
+
+  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient) {
+    this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    this.getInfoSessionStorage();
+    this.iterParams.dataCreazioneIter = new Date();
     this.buildDataSourceUtenti();
   }
 
-  buildDataSourceUtenti() {
+  public handleEvent(name: string, data: any) {
+    switch (name) {
+      case "onClickProcedi":
+        this.avviaIter();
+      break;
+      case "onClickAnnulla":
+        this.closePopUp(false);
+      break;
+    }
+  }
+
+  public closePopUp(avviato: boolean) {
+    console.log("sono nel close");
+    this.messageEvent.emit({visible: false, avviato: avviato});
+  }
+
+  private getInfoSessionStorage() {
+    this.utenteConnesso = JSON.parse(sessionStorage.getItem("userInfoMap")).idUtente;
+
+    for (let s of JSON.parse(sessionStorage.getItem("userInfoMap")).strutture) {
+      if (s.idAfferenzaStruttura === afferenzaStruttura.diretta) {
+        this.iterParams.idStrutturaUtente = s.id;
+      }
+    }
+  }
+
+  private buildDataSourceUtenti() {
     const customOdataContextDefinition: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("descrizione");
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
@@ -46,15 +79,54 @@ export class AvviaNuovoIterComponent {
     };
   }
 
-  avviaIter() {
-    console.log(this.iter);
+  private campiObbligatoriCompilati() {
+    if (this.iterParams.dataAvvioIter == null || this.iterParams.oggettoIter == null || this.iterParams.oggettoIter === "" || 
+    this.iterParams.numeroDocumento == null || this.iterParams.annoDocumento == null || this.iterParams.codiceRegistroDocumento == null || 
+    this.iterParams.codiceRegistroDocumento === "") {
+      this.showStatusOperation("Per avviare un nuovo iter tutti i campi sono obbligatori", "warning");
+      return false;
+    }
+    return true;
   }
 
-  public handleEvent(name: String, data: any) {
-    switch (name) {
-      case "onClickProcedi":
-        this.avviaIter();
-      break
+  private avviaIter() {
+    if (this.campiObbligatoriCompilati()) {
+      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", this.iterParams, {headers: new HttpHeaders().set("content-type", "application/json")}) // Object.assign({}, this.iterParams))
+      .subscribe(
+        res => {
+          console.log("Apertura della pagina dell'iter appena creato");
+          console.log(res);
+          this.closePopUp(true);
+        },
+        err => {
+          this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+        }
+      );
     }
   }
+
+  private showStatusOperation(message: string, type: string) {
+    notify({
+      message: message,
+      type: type,
+      displayTime: 2100,
+       position: {
+          my: "center", at: "center", of: window
+        },
+        width: "max-content"
+    });
+  }
+}
+
+class IterParams {
+  public idUtente: number;
+  public idStrutturaUtente: number;
+  public idProcedimento: number;
+  public idAzienda: number;
+  public oggettoIter: string;
+  public dataCreazioneIter: Date;
+  public dataAvvioIter: Date;
+  public codiceRegistroDocumento: string;
+  public numeroDocumento: number;
+  public annoDocumento: number;
 }

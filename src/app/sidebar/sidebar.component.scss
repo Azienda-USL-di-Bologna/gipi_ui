@@ -4,7 +4,7 @@
 
 .main-menu {
   background-color: #212121;
-  border-right:1px solid #e5e5e5;
+  border-right:2px solid #e5e5e5;
   height: 100%;
 }
 
@@ -28,6 +28,7 @@
   color:#999;
   font-family: arial;
   font-size: 18px;
+  cursor: pointer;
   text-decoration:none;
   -webkit-transform:translateZ(0) scale(1,1);
   -webkit-transition:all .1s linear;

@@ -13,7 +13,6 @@ import { LoginGuard } from "./login/guards/login.guard";
 import { ProcedimentiAttiviComponent } from "app/procedimenti-attivi/procedimenti-attivi.component";
 import { PopupStrutturaTipiProcedimentoComponent } from "app/popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component";
 import { IterProcedimentoComponent } from "app/iter-procedimento/iter-procedimento.component";
-import {TestLayoutComponent} from "./test-layout/test-layout.component";
 import { TestTreeComponent } from "./test/test-tree/test-tree.component";
 
 
@@ -36,8 +35,8 @@ export const rootRouterConfig: Routes = [
 
   // ho reindirizzato la pagina di atterraggio a definizione-tipi-procedimento
   { path: "", redirectTo: "home", pathMatch: "full" },
-  { path: "login", component: LoginComponent, canActivate: [NoLoginGuard], data: {breadcrumb: "Login"}},
-  { path: "home", component: HomeComponent, canActivate: [LoginGuard], data: {breadcrumb: "Home"}},
+  { path: "login", component: LoginComponent, canActivate: [NoLoginGuard], data: {}},
+  { path: "home", component: HomeComponent, canActivate: [LoginGuard], data: {}},
   { path: "definizione-tipi-procedimento", component: DefinizioneTipiProcedimentoComponent, canActivate: [LoginGuard], data: {breadcrumb: "Tipi Procedimento"}},
   { path: "app-dettaglio-procedimento", component: DettaglioProcedimentoComponent, canActivate: [LoginGuard], data: {breadcrumb: "Dettaglio Procedimento"}},
   { path: "aziende-tipi-procedimento", component: AziendeTipiProcedimentoComponent, canActivate: [LoginGuard], data: {breadcrumb: "Associazione Azienda"}},
@@ -46,7 +45,6 @@ export const rootRouterConfig: Routes = [
   { path: "procedimenti-attivi", component: ProcedimentiAttiviComponent, data: {breadcrumb: "Procedimenti Attivi"} },
   { path: "popup-struttura-tipi-procedimento", component: PopupStrutturaTipiProcedimentoComponent, data: {breadcrumb: "Associa"} },
   { path: "iter-procedimento", component: IterProcedimentoComponent, data: {breadcrumb: "Nuovo Iter"} },
-  { path: "test-layout", component: TestLayoutComponent},
   { path: "app-test-tree", component: TestTreeComponent }
 ];
 

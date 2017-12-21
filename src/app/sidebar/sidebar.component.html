@@ -1,13 +1,12 @@
 <nav class="main-menu">
   <ul class="components margine-sinistro">
-    <li *ngFor="let item of sidebarItems" >
-      <div *ngIf="!item.children; else submenuEntry ">
-        <!--<a routerLink="{{items.routerLink}}" (click)="prova($event)"><span [class.active]="clicked">{{ items.description }}</span></a>-->
-        <a (click)="prova($event, item)"><span [class.active]="clicked">{{ item.description }}</span></a>
+    <li *ngFor="let item of sidebarItems">
+      <div *ngIf="!item.children; else submenuEntry">
+        <a (click)="click($event, item)"><span [ngClass]="{active: isActive(item)}">{{ item.description }}</span></a>
       </div>
       <ng-template #submenuEntry>
         <div class="arrow-down">
-          <a href="#submenu" data-toggle="collapse" aria-expanded="false" class="espanso"> {{ item.description }} </a>
+          <a href="#submenu" data-toggle="collapse" aria-expanded="false"> {{ item.description }} </a>
         </div>
         <ul class="collapse margine-sinistro" id="submenu">
           <!--<li *ngFor="let childrens of items.children"></li>-->

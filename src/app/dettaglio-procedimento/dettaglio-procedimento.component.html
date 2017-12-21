@@ -1,4 +1,9 @@
-<div class="container-fluid">
+<div>
+    <app-buttons-bar
+            (onBackButton) = "onBack()"
+            [backButton]="backBtn">
+    </app-buttons-bar>
+
     <div class="row">
         <div class="col">
             <div style="margin-bottom: 8px; overflow: auto;">

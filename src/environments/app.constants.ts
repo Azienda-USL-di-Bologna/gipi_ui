@@ -40,7 +40,7 @@ export const Entities: ServerObjectsDescriptor = {
 };
 
 export const FunctionsImport: ServerObjectsDescriptor = {
-    GetStruttureByTipoProcedimento: {name: "GetStruttureByTipoProcedimento", class: GetStruttureByTipoProcedimento}
+    GetStruttureByTipoProcedimento: {name: "GetStruttureByTipoProcedimento", class: GetStruttureByTipoProcedimento},
 };
 
 // header http
@@ -69,3 +69,9 @@ export const odataTipiProcedimentoPath = "/TipoProcedimentos";
 export const odataCompanyPath = "/Aziendas";
 export const odataAziendeTipiProcPath = "/AziendaTipoProcedimentos";
 export const odataStrutturePath = "/Strutturas";
+
+// ======================= ENUM ========================================
+export const afferenzaStruttura = {
+    diretta: "diretta",
+    funzionale: "funzionale"
+}

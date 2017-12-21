@@ -30,53 +30,21 @@ export class ButtonsBarComponent implements OnInit {
 
 
   save() {
-    const pos: number = this.router.url.indexOf("?");
-    let baseUrl: string;
-    if (pos > 0) {
-      baseUrl = this.router.url.substring(null, pos);
-    } else {
-      baseUrl = this.router.url;
-    }
-    this.router.navigate([baseUrl], { queryParams: { save: true }});
     this.command.emit("save");
     this.onSaveButton.emit();
   }
 
   reload() {
-    const pos: number = this.router.url.indexOf("?");
-    let baseUrl: string;
-    if (pos > 0) {
-      baseUrl = this.router.url.substring(null, pos);
-    } else {
-      baseUrl = this.router.url;
-    }
-    this.router.navigate([baseUrl], { queryParams: { reload: true }});
     this.command.emit("reload");
     this.onReloadButton.emit();
   }
 
   back(){
-    const pos: number = this.router.url.indexOf("?");
-    let baseUrl: string;
-    if (pos > 0) {
-      baseUrl = this.router.url.substring(null, pos);
-    } else {
-      baseUrl = this.router.url;
-    }
-    this.router.navigate([baseUrl], { queryParams: { back: true }});
     this.command.emit("back");
     this.onBackButton.emit();
   }
 
   restore(){
-    const pos: number = this.router.url.indexOf("?");
-    let baseUrl: string;
-    if (pos > 0) {
-      baseUrl = this.router.url.substring(null, pos);
-    } else {
-      baseUrl = this.router.url;
-    }
-    this.router.navigate([baseUrl], { queryParams: { restore: true }});
     this.command.emit("restore");
     this.onRestoreButton.emit();
   }

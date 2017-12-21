@@ -3,18 +3,6 @@
 </div>
 -->
 
-<app-buttons-bar
-        (command)="manageCommand($event)"
-        (onReloadButton)="onReload()"
-        (onSaveButton)= "onSave()"
-        (onBackButton) = "onBack()"
-        (onRestoreButton) = "onRestore()"
-        [backButton]="backBtn"
-        [saveButton]="saveBtn"
-        [reloadButton]="reloadBtn"
-        [restoreButton]="restoreBtn" >
-</app-buttons-bar>
-
 <dx-data-grid  #grid
     id="gridContainer"
     [dataSource]="dataSource"
@@ -73,7 +61,7 @@
     <dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="true"></dxi-column>
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
     <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni"></dxi-column>
-    <div *dxTemplate="let d of 'buttonCellTemplate'" class="azioni">
+    <div *dxTemplate="let d of 'buttonCellTemplate'" class="azioni-tipi-procedimento">
         <a routerLink="/app-dettaglio-procedimento" routerLinkActive="active">
             <dx-button text="" hint="Vedi dettagli procedimento" icon='preferences' (onClick)="handleEvent('associaClicked', $event)" ></dx-button>
         </a>
