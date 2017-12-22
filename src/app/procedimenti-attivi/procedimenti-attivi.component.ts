@@ -18,8 +18,7 @@ export class ProcedimentiAttiviComponent {
   private rigaSelezionata: any;
   
   @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
-  public idAzienda: number = 5;
-  public descrizioneAzienda: string = "Azienda USL Parma";
+  public idAzienda: number;
   public dataSourceProcedimenti: DataSource;
   public popupButtons: any[];
   public popupNuovoIterVisible: boolean = false;
@@ -29,6 +28,7 @@ export class ProcedimentiAttiviComponent {
 
 
   constructor(private odataContextFactory: OdataContextFactory, public router: Router) {
+    this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).azienda.id;
     const now = new Date();
 
     this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
