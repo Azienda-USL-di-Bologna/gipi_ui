@@ -82,15 +82,17 @@ export class AppComponent implements OnInit, OnDestroy {
             this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
             this.username = this.userInfoMap["username"];
             this.ruolo = this.userInfoMap["ruolo"];
+            this.azienda = this.userInfoMap["azienda"]["nome"];
         }
 
         this.userInfoMap$ = this.globalContextService.getSubjectInnerSharedObject("userInfoMap");
         this.userInfoMap$.subscribe(
-            value => {
+            (value: any) => {
                 if (value) {
                     this.userInfoMap = value;
                     this.username = value["username"];
                     this.ruolo = value["ruolo"];
+                    this.azienda = value.azienda.nome;
                 }
 
             }

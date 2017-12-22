@@ -134,8 +134,7 @@ import {NavbarService} from "./navbar/navbar.service";
         ContextModule.forRoot(contextModuleConfig),
         SidebarModule.forRoot()
     ],
-    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard, NavbarService
-        ],
+    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard, NavbarService],
     bootstrap: [AppComponent],
     entryComponents: [AssociaComponent, ProcedimentoComponent]
 })

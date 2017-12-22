@@ -11,5 +11,5 @@ import {JwtInterceptor} from "./authentication-jwt/jwt.interceptor";
         defaultTimeZoneOffset: DEFAULT_TIMEZONE_OFFSET,
         defaultCurrency: DEFAULT_CURRENCY,
         tokenProvider: JwtInterceptor.getToken
-    }
+    };
 
