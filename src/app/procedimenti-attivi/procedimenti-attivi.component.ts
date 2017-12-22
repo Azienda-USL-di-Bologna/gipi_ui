@@ -13,20 +13,22 @@ import {Router} from "@angular/router";
 })
 export class ProcedimentiAttiviComponent {
 
+  
+  private odataContextDefinition: OdataContextDefinition;
+  private rigaSelezionata: any;
+  
   @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
-
-  public idAzienda: number = 5;
-  public descrizioneAzienda: string = "Azienda USL Parma";
+  public idAzienda: number;
   public dataSourceProcedimenti: DataSource;
   public popupButtons: any[];
   public popupNuovoIterVisible: boolean = false;
   public procedimentoDaPassare: Object;
   public iterAvviato: boolean = false;
+  public idIterAvviato: number;
 
-  private odataContextDefinition: OdataContextDefinition;
-  private rigaSelezionata: any;
 
   constructor(private odataContextFactory: OdataContextFactory, public router: Router) {
+    this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).azienda.id;
     const now = new Date();
 
     this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -51,6 +53,10 @@ export class ProcedimentiAttiviComponent {
 
     this.itemClear = this.itemClear.bind(this);
     this.setFormLook();
+  }
+  
+  private apriDettaglio(row: any) {
+    this.gridContainer.instance.editRow(row.rowIndex);
   }
 
   // Definisco l'aspetto della pagina
@@ -110,13 +116,18 @@ export class ProcedimentiAttiviComponent {
 
   public receiveMessage($event: any) {
     this.iterAvviato = $event.avviato;
+    if (this.iterAvviato) {
+      this.idIterAvviato = $event.idIter;
+      console.log("ssssssssssssssssssss", this.idIterAvviato);
+    }
     this.popupNuovoIterVisible = $event.visible;   
   }
 
   public popupHidden() {
     if (this.iterAvviato){
       this.iterAvviato = false;
-      this.router.navigate(["iter-procedimento"], {queryParams: {reset: true, idIter: 7}});
+      console.log("ssssssssssssssssssss", this.idIterAvviato);
+      this.router.navigate(["iter-procedimento"], {queryParams: {idIter: this.idIterAvviato}});
     }
   }
 
@@ -137,7 +148,5 @@ export class ProcedimentiAttiviComponent {
     }
   }
 
-  private apriDettaglio(row: any) {
-    this.gridContainer.instance.editRow(row.rowIndex);
-  }
+  
 }
