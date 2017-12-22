@@ -1,7 +1,10 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ResolveEnd, Route, Router} from "@angular/router";
 import {CustomReuseStrategy} from "@bds/nt-angular-context/Routes/custom-reuse-strategy";
 import "rxjs/add/operator/filter";
+import {Subscription} from "rxjs/Subscription";
+import {NavbarService} from "./navbar.service";
+import {Observable} from "rxjs/Observable";
 
 
 @Component({
@@ -11,49 +14,17 @@ import "rxjs/add/operator/filter";
 })
 export class NavbarComponent implements OnInit {
 
-    public visitedRoutes: Route[] = [];
+    public visitedRoutes: Route[];
+    private visitedRoutesFromService$: Observable<Route[]>;
 
-    constructor(private router: Router) { }
+    constructor(private navbarService: NavbarService){
+    }
 
     ngOnInit() {
-        this.router.events
-            .filter(event => (event instanceof ResolveEnd))
-            .subscribe(
-                (next: ResolveEnd) => {
-                    console.log("boh", next.url);
-                    let reset = false;
-                    let url = next.state.url;
-                    const pos: number = url.indexOf("?");
-                    if (pos >= 0) {
-                        url = url.substring(0, pos);
-                    }
-                    const path = url.substring(1);
-                    const queryParams: any = next.state.root.queryParams;
-                    if (queryParams) {
-                        reset = queryParams.reset === "true";
-                    }
-                    if (reset){
-                        this.visitedRoutes = [];
-                    }
-                    const currentRoute: Route = this.router.config.find(e => e.path === path);
-
-                    if (currentRoute.data.breadcrumb) {
-                        // const currentBreadcrump: string = this.router.config.find(e => e.path === path).data.breadcrumb;
-                        const index = this.visitedRoutes.findIndex(e => e.path === currentRoute.path);
-                        if (index >= 0) {
-                            this.visitedRoutes = this.visitedRoutes.slice(0, index + 1);
-
-                            // if (!reset)
-                            //     CustomReuseStrategy.componentsReuseList.push("*");
-                        }
-                        else {
-                            this.visitedRoutes.push(currentRoute);
-                            // CustomReuseStrategy.componentsReuseList.push("*");
-                        }
-                        // console.log("RouterConfig", this.router.config);
-                    }
-                }
-            );
+        this.visitedRoutesFromService$ = this.navbarService.visitedRoutes$;
+        this.visitedRoutesFromService$.subscribe(visitedRoutes => {
+            this.visitedRoutes = visitedRoutes;
+        });
     }
 
     onClick(){

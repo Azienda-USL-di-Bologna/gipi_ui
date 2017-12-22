@@ -69,6 +69,7 @@ import { TestTreeComponent } from "./test/test-tree/test-tree.component";
 import { NavbarComponent } from "./navbar/navbar.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
 import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/passaggio-di-fase.component";
+import {NavbarService} from "./navbar/navbar.service";
 
 
 @NgModule({
@@ -133,7 +134,7 @@ import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/pa
         ContextModule.forRoot(contextModuleConfig),
         SidebarModule.forRoot()
     ],
-    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard
+    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard, NavbarService
         ],
     bootstrap: [AppComponent],
     entryComponents: [AssociaComponent, ProcedimentoComponent]
