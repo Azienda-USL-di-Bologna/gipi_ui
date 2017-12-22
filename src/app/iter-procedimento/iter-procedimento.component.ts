@@ -1,36 +1,30 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextDefinition } from '@bds/nt-angular-context/odata-context-definition';
-import { CustomLoadingFilterParams } from '@bds/nt-angular-context/custom-loading-filter-params';
-import { OdataContextFactory } from '@bds/nt-angular-context/odata-context-factory';
-import { Entities, CUSTOM_RESOURCES_BASE_URL } from 'environments/app.constants';
-import { SequenzaDelleFasiComponent } from './sequenza-delle-fasi/sequenza-delle-fasi.component';
-import { Iter } from '../classi/server-objects/entities/iter';
-import { Utente } from '../classi/server-objects/entities/utente';
-import { Fase } from '../classi/server-objects/entities/fase';
-import { FaseIter } from '../classi/server-objects/entities/fase-iter';
-import { ProcedimentoCache } from '../classi/server-objects/entities/procedimento-cache';
-import { PassaggioDiFaseComponent } from './passaggio-di-fase/passaggio-di-fase.component';
+import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
+import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
+import { Entities, CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
+import { SequenzaDelleFasiComponent } from "./sequenza-delle-fasi/sequenza-delle-fasi.component";
+import { Iter } from "../classi/server-objects/entities/iter";
+import { Utente } from "../classi/server-objects/entities/utente";
+import { Fase } from "../classi/server-objects/entities/fase";
+import { FaseIter } from "../classi/server-objects/entities/fase-iter";
+import { ProcedimentoCache } from "../classi/server-objects/entities/procedimento-cache";
+import { PassaggioDiFaseComponent } from "./passaggio-di-fase/passaggio-di-fase.component";
 import { HttpClient } from "@angular/common/http";
-import notify from 'devextreme/ui/notify';
+import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
 
 
 @Component({
-  selector: 'app-iter-procedimento',
-  templateUrl: './iter-procedimento.component.html',
-  styleUrls: ['./iter-procedimento.component.scss'],
+  selector: "app-iter-procedimento",
+  templateUrl: "./iter-procedimento.component.html",
+  styleUrls: ["./iter-procedimento.component.scss"],
   encapsulation: ViewEncapsulation.None
 })
 export class IterProcedimentoComponent implements OnInit {
 
-  //@ViewChild(PassaggioDiFaseComponent) child;
-
-  ngAfterViewInit() {
-    //this.passaggioDiFaseVisible = this.child.visibile;
-  }
-
-
+  // @ViewChild(PassaggioDiFaseComponent) child;
 
   public iter: Iter = new Iter();
   public idIterArray: Object;
@@ -44,16 +38,16 @@ export class IterProcedimentoComponent implements OnInit {
 
   // Dati che verranno ricevuti dall'interfaccia chiamante
   public infoGeneriche: any = {
-    azienda: 'AOSP-BO',
-    struttura: 'UO DaTer',
-    tipoProcedimento: 'Tipologia A',
+    azienda: "AOSP-BO",
+    struttura: "UO DaTer",
+    tipoProcedimento: "Tipologia A",
     numeroIter: 6
   };
   public popupData: any = {
     visible: false,
-    title: 'titolo',
-    field: 'nome campo',
-    fieldValue: 'valore'
+    title: "titolo",
+    field: "nome campo",
+    fieldValue: "valore"
   };
   public perFigliParteDestra: Object;
 
@@ -77,8 +71,8 @@ export class IterProcedimentoComponent implements OnInit {
 
     this.dataSourceIter = new DataSource({
       store: oataContextDefinitionTitolo.getContext()[Entities.Iter.name],
-      expand: ['idFase', 'idIterPrecedente', 'idResponsabileProcedimento', 'idResponsabileAdozioneProcedimentoFinale', 'procedimentoCache', 'procedimentoCache.idTitolarePotereSostitutivo'],
-      filter: [['id', '=', this.idIter]]
+      expand: ["idFase", "idIterPrecedente", "idResponsabileProcedimento", "idResponsabileAdozioneProcedimentoFinale", "procedimentoCache", "procedimentoCache.idTitolarePotereSostitutivo"],
+      filter: [["id", "=", this.idIter]]
     });
     this.buildIter();
 
@@ -88,6 +82,9 @@ export class IterProcedimentoComponent implements OnInit {
     };
   }
 
+  ngAfterViewInit() {
+    // this.passaggioDiFaseVisible = this.child.visibile;
+  }
 
 
   ngOnInit() {
@@ -103,15 +100,15 @@ export class IterProcedimentoComponent implements OnInit {
   }
 
   updateNoteControInteressati() {
-    this.popupData.title = 'Note controinteressati';
-    this.popupData.field = 'noteControInteressati';
+    this.popupData.title = "Note controinteressati";
+    this.popupData.field = "noteControInteressati";
     this.popupData.fieldValue = this.iter.noteControinteressati;
     this.popupData.visible = true;
   }
 
   updateEsitoMotivazione() {
-    this.popupData.title = 'Esito motivazione';
-    this.popupData.field = 'esitoMotivazione';
+    this.popupData.title = "Esito motivazione";
+    this.popupData.field = "esitoMotivazione";
     this.popupData.fieldValue = this.iter.esitoMotivazione;
     this.popupData.visible = true;
   }
@@ -131,10 +128,10 @@ export class IterProcedimentoComponent implements OnInit {
     const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.idIter)
       .subscribe(
       res => {
-        //debugger;
+        // debugger;
         console.log(res)
-        var current = JSON.parse(res['currentFase']);
-        var next = JSON.parse(res['nextFase']);
+        var current = JSON.parse(res["currentFase"]);
+        var next = JSON.parse(res["nextFase"]);
 
         this.perFiglioPassaggioFase = {
 
@@ -144,21 +141,21 @@ export class IterProcedimentoComponent implements OnInit {
           isNextFaseDiChiusura: next.faseDiChiusura
         };
 
-        this.popupData.title = 'Passaggio Di Fase';
+        this.popupData.title = "Passaggio Di Fase";
         this.passaggioDiFaseVisible = true;
       },
       err => {
         notify("Non esiste la fase successiva", "error", 1000);
-        //debugger;
+        // debugger;
       });
   }
 
   receiveMessage($event) {
     console.log("loggo il messaggio....");
     console.log($event);
-    this.passaggioDiFaseVisible = $event['visible'];
-    if ($event['proceduto']) {
-      var perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra['ricarica'] };
+    this.passaggioDiFaseVisible = $event["visible"];
+    if ($event["proceduto"]) {
+      var perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"] };
       this.perFigliParteDestra = perFigliNew;
       this.buildIter();
       notify("Proceduto con successo", "success", 1000);

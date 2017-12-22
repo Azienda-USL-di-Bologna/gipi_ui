@@ -13,8 +13,11 @@ import {Router} from "@angular/router";
 })
 export class ProcedimentiAttiviComponent {
 
+  
+  private odataContextDefinition: OdataContextDefinition;
+  private rigaSelezionata: any;
+  
   @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
-
   public idAzienda: number = 5;
   public descrizioneAzienda: string = "Azienda USL Parma";
   public dataSourceProcedimenti: DataSource;
@@ -24,8 +27,6 @@ export class ProcedimentiAttiviComponent {
   public iterAvviato: boolean = false;
   public idIterAvviato: number;
 
-  private odataContextDefinition: OdataContextDefinition;
-  private rigaSelezionata: any;
 
   constructor(private odataContextFactory: OdataContextFactory, public router: Router) {
     const now = new Date();
@@ -52,6 +53,10 @@ export class ProcedimentiAttiviComponent {
 
     this.itemClear = this.itemClear.bind(this);
     this.setFormLook();
+  }
+  
+  private apriDettaglio(row: any) {
+    this.gridContainer.instance.editRow(row.rowIndex);
   }
 
   // Definisco l'aspetto della pagina
@@ -143,7 +148,5 @@ export class ProcedimentiAttiviComponent {
     }
   }
 
-  private apriDettaglio(row: any) {
-    this.gridContainer.instance.editRow(row.rowIndex);
-  }
+  
 }

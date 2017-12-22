@@ -16,6 +16,8 @@ import { HttpHeaders } from "@angular/common/http";
 })
 export class AvviaNuovoIterComponent {
 
+  private odataContextDefinition: OdataContextDefinition;
+
   public dataSourceUtenti: object;
   public iterParams: IterParams = new IterParams();
   public nomeProcedimento: string;
@@ -30,29 +32,11 @@ export class AvviaNuovoIterComponent {
 
   @Output() messageEvent = new EventEmitter<Object>();
 
-  private odataContextDefinition: OdataContextDefinition;
-
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.getInfoSessionStorage();
     this.iterParams.dataCreazioneIter = new Date();
     this.buildDataSourceUtenti();
-  }
-
-  public handleEvent(name: string, data: any) {
-    switch (name) {
-      case "onClickProcedi":
-        this.avviaIter();
-      break;
-      case "onClickAnnulla":
-        this.closePopUp(false);
-      break;
-    }
-  }
-
-  public closePopUp(avviato: boolean, idIter?: number) {
-    console.log("sono nel close");
-    this.messageEvent.emit({visible: false, avviato: avviato, idIter: idIter});
   }
 
   private getInfoSessionStorage() {
@@ -116,6 +100,22 @@ export class AvviaNuovoIterComponent {
         },
         width: "max-content"
     });
+  }
+
+  public handleEvent(name: string, data: any) {
+    switch (name) {
+      case "onClickProcedi":
+        this.avviaIter();
+      break;
+      case "onClickAnnulla":
+        this.closePopUp(false);
+      break;
+    }
+  }
+
+  public closePopUp(avviato: boolean, idIter?: number) {
+    console.log("sono nel close");
+    this.messageEvent.emit({visible: false, avviato: avviato, idIter: idIter});
   }
 }
 
