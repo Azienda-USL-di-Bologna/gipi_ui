@@ -49,6 +49,10 @@ export const HEADER_AUTH_TOKEN_NAME = "authorization";
 // ========================= Url =====================================
 // export const ODATA_BASE_URL: string = environment.odataStoreRootUrl;
 const hostname: string = window.location.hostname;
+console.log(hostname);
+console.log(window.location.host);
+console.log(window.location.protocol);
+console.log(window.location);
 export const ODATA_BASE_URL: string = window.location.protocol + "//" + hostname + (hostname === "localhost" ? ":10006" : ":443") + "/gipi/resources/odata.svc";
 export const CUSTOM_RESOURCES_BASE_URL: string = window.location.protocol + "//" + hostname + (hostname === "localhost" ? ":10006" : ":443") + "/gipi/resources/custom/";
 
