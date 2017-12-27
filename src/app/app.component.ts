@@ -36,6 +36,10 @@ export class AppComponent implements OnInit, OnDestroy {
         //     this.username = this.userInfoMap["username"];
         //     this.azienda = this.userInfoMap["azienda"];
         // }
+        console.log("hostname", window.location.hostname);
+        console.log("host", window.location.host);
+        console.log("protocol", window.location.protocol);
+        console.log("location", window.location);
         this.sidebarItems.push(new SidebarItem("Home", "home"));
         this.sidebarItems.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
         this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
