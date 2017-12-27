@@ -10,5 +10,6 @@ for e in $ENVS;do
   #ng build --aot false --bh /firma_semplice_ui/ --target=production --environment=${e} -op dist/dist${e}
   . /root/proxy.sh
   npm install
+  npm update
   node_modules/.bin/ng build --aot true --bh /gipi-ui/ --target=production --environment=${e} -op /var/www/html/gipi-ui
 done
