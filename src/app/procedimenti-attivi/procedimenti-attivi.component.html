@@ -14,7 +14,7 @@
       
       <dxi-column [minWidth]="250" dataField="idStruttura.nome" caption="Struttura" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="170" dataField="idAziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento" caption="Nome" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
-      <dxi-column [minWidth]="200" dataField="idAziendaTipoProcedimento.idTitolo.nomeTitolo" caption="Classificazione" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+      <dxi-column [minWidth]="200" dataField="idAziendaTipoProcedimento.idTitolo.nome" caption="Classificazione" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="150" dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" caption="Durata massima (gg)" [dataType]="'number'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="120" dataField="dataInizio" caption="Valido dal" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="200" dataField="idTitolarePotereSostitutivo.descrizione" caption="Tit. potere sostitutivo" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
@@ -55,7 +55,7 @@
           <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" [label]="{text:'Descrizione'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [label]="{text:'Modo apertura'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" [label]="{text:'Norma di riferimento'}" [colSpan]="1" cssClass="item"></dxi-item>
-          <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nomeTitolo" [label]="{text:'Classificazione'}" [colSpan]="1" cssClass="item"></dxi-item>
+          <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nome" [label]="{text:'Classificazione'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [label]="{text:'Durata massim (gg)'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" [label]="{text:'Durata massima sospensione (gg)'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="dataInizio" [label]="{text:'Valido dal'}" [colSpan]="1" cssClass="item"></dxi-item>

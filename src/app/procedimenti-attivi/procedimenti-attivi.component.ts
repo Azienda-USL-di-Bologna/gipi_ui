@@ -139,8 +139,8 @@ export class ProcedimentiAttiviComponent {
         this.popupNuovoIterVisible = true;
         this.procedimentoDaPassare = {
           idAzienda: this.idAzienda,
-          idProcedimento: e.row.data.idProcedimento,
-          nomeProcedimento: e.row.data.idAziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento
+          idProcedimento: e.row.data.id,
+          nomeProcedimento: e.row.data.idAziendaTipoProcedimento.idTipoProcedimento.nome
         };
       break;
     }

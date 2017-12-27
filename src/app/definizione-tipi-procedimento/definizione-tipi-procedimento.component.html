@@ -44,8 +44,8 @@
             [showTitle]="true">
         </dxo-popup>
         <dxo-form>
-            <dxi-item dataField="nomeTipoProcedimento"></dxi-item>
-            <dxi-item dataField="descrizioneTipoProcedimentoDefault"></dxi-item>
+            <dxi-item dataField="nome"></dxi-item>
+            <dxi-item dataField="descrizioneDefault"></dxi-item>
             <dxi-item dataField="modoApertura"></dxi-item>
             <dxi-item dataField="normaRiferimento"></dxi-item>
             <dxi-item dataField="dataInizioValidita"></dxi-item>
@@ -54,8 +54,8 @@
         </dxo-form>
     </dxo-editing> -->
 
-    <dxi-column dataField="idTipoProcedimento" [width]="100" caption="# Tipo"></dxi-column>
-    <dxi-column dataField="nomeTipoProcedimento"></dxi-column>
+    <dxi-column dataField="id" [width]="100" caption="# Tipo"></dxi-column>
+    <dxi-column dataField="nome"></dxi-column>
     <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva" [allowSorting]="true" [allowFiltering]="true"></dxi-column>
     <dxi-column dataField="dataInizioValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="true"></dxi-column>
     <dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowFiltering]="true"></dxi-column>
@@ -71,7 +71,7 @@
         <dx-button text="" hint="Elimina questo tipo procedimento" icon="./assets/images/eraser-512.png" (onClick)="handleEvent('deleteClicked', $event)"></dx-button>
     </div>
 
-    <dxi-column dataField="descrizioneTipoProcedimentoDefault" [visible]="false"></dxi-column>
+    <dxi-column dataField="descrizioneDefault" [visible]="false"></dxi-column>
     <dxi-column dataField="durataMassimaSospensione" [visible]="false"></dxi-column>
     <dxi-column dataField="normaRiferimento" [visible]="false"></dxi-column>
 </dx-data-grid>

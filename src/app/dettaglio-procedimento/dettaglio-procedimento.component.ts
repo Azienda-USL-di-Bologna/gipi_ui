@@ -50,7 +50,7 @@ export class DettaglioProcedimentoComponent implements OnInit {
     getAziendeAssociate() {
         this.procedimento.aziendeAssociate = new Array();
         for (const azienda of this.aziende) {
-            if (azienda.aziendaTipoProcedimentoList.find(item => item.FK_id_tipo_procedimento === this.procedimento.idTipoProcedimento)) {
+            if (azienda.aziendaTipoProcedimentoList.find(item => item.FK_id_tipo_procedimento === this.procedimento.id)) {
                 this.procedimento.aziendeAssociate[azienda.id] = azienda;
             }
         }

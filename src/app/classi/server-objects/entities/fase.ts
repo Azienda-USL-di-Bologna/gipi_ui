@@ -5,7 +5,7 @@ import { FaseIter } from "./fase-iter";
 
 export class Fase extends Entity {
   id: number;
-  nomeFase: string;
+  nome: string;
   ordinale: number;
   faseDiChiusura: boolean;
 //   iterList: Iter[];
@@ -17,7 +17,7 @@ export class Fase extends Entity {
       keyType: "Int32",
       fieldTypes: {
         id: "Int32",
-        nomeFase: "String",
+        nome: "String",
         ordinale: "Int32",
         faseDiChiusura: "Boolean"
       }

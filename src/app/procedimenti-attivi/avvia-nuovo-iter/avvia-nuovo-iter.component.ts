@@ -25,7 +25,7 @@ export class AvviaNuovoIterComponent {
   set procedimentoSelezionato(procedimento: any) {
     this.nomeProcedimento = procedimento.nomeProcedimento;
     this.iterParams = new IterParams();
-    this.iterParams.idProcedimento = procedimento.idProcedimento;
+    this.iterParams.idProcedimento = procedimento.id;
     this.iterParams.idAzienda = procedimento.idAzienda;
     this.iterParams.dataCreazioneIter = new Date();
   }

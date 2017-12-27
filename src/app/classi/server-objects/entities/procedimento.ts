@@ -6,7 +6,7 @@ import { OdataForeignKey } from "@bds/nt-angular-context/server-object";
 import { Entities } from "../../../../environments/app.constants";
 
 export class Procedimento extends Entity {
-  idProcedimento: number;
+  id: number;
   idTitolarePotereSostitutivo: Utente;
   FK_id_titolare_potere_sostitutivo: number;
   idAziendaTipoProcedimento: AziendaTipoProcedimento;
@@ -21,10 +21,10 @@ export class Procedimento extends Entity {
 
   public static getOdataContextEntity(): any {
     return {
-      key: "idProcedimento",
+      key: "id",
       keyType: "Int32",
       fieldTypes: {
-        idProcedimento: "Int32",
+        id: "Int32",
         idTitolarePotereSostitutivo: new OdataForeignKey(Entities.Utente, "id"),
         idAziendaTipoProcedimento: new OdataForeignKey(Entities.AziendaTipoProcedimento, "id"),
         idStruttura: new OdataForeignKey(Entities.Struttura, "id"),

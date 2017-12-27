@@ -91,7 +91,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.datasource = new DataSource({
       store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
       customQueryParams: {
-        idAziendaTipoProcedimento: this.dataFromAziendaTipiProcedimentoComponent.aziendaTipoProcedimento.idTipoProcedimento.idTipoProcedimento,
+        idAziendaTipoProcedimento: this.dataFromAziendaTipiProcedimentoComponent.aziendaTipoProcedimento.idTipoProcedimento.id,
         idAzienda: this.dataFromAziendaTipiProcedimentoComponent.aziendaTipoProcedimento.idAzienda.id
       }
     });
@@ -105,7 +105,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       if (flagSalva) {
         if (!(this.procedimento.dataFine < this.procedimento.dataInizio) || this.procedimento.dataFine === null) {
           this.dataSourceProcedimento.store()
-            .update(this.procedimento.idProcedimento, this.procedimento)
+            .update(this.procedimento.id, this.procedimento)
             .done(res => (this.caricaDettaglioProcedimento(true)));
           notify({
             message: "Salvataggio effettuato con successo",

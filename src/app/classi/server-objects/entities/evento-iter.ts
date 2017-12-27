@@ -18,7 +18,7 @@ export class EventoIter extends Entity {
   FK_id_documento_iter: number;
   dataOraEvento: Date;
   autore: string;
-  noteEventoIter: string;
+  note: string;
 
   public static getOdataContextEntity(): any {
     return {
@@ -32,7 +32,7 @@ export class EventoIter extends Entity {
         idDocumentoIter: new OdataForeignKey(Entities.DocumentoIter, "id"),
         dataOraEvento: "DateTime",
         autore: new OdataForeignKey(Entities.Utente, "id"),
-        noteEventoIter: "String"
+        note: "String"
       }
     };
   }

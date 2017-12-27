@@ -36,7 +36,7 @@
                         <!-- <dx-button text="Note controinteressati" type="default" (onClick)="updateNoteControInteressati()"></dx-button> -->
                     </dxi-item>
         
-                    <dxi-item [colSpan]="2" dataField="idFase.nomeFase" [editorOptions]="{ disabled: true }">
+                    <dxi-item [colSpan]="2" dataField="idFase.nome" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Fase corrente"></dxo-label>
                     </dxi-item>
         
@@ -65,7 +65,7 @@
                 </dxi-item>
         
                 <dxi-item itemType="group" caption="Dati di archivio">
-                    <dxi-item dataField="idIterPrecedente.numeroIter" [editorOptions]="{ disabled: true }">
+                    <dxi-item dataField="idIterPrecedente.numero" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Coll. precedente"></dxo-label>
                     </dxi-item>
                     <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }">

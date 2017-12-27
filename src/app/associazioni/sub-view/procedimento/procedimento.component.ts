@@ -18,7 +18,7 @@ export class ProcedimentoComponent implements OnInit {
 
   constructor() {
     this.procedimento = new TipoProcedimento();
-    this.procedimento.descrizioneTipoProcedimentoDefault = 'descrizione a caso';
+    this.procedimento.descrizioneDefault = 'descrizione a caso';
     this.procedimento.modoApertura = 'questo è il modo apertura';
     this.procedimento.normaRiferimento = 'norma 99/2a';
     this.procedimento.durataMassimaSospensione = '22';

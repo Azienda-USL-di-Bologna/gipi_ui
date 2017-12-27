@@ -6,7 +6,7 @@ import { Struttura } from "./struttura";
 import { Iter } from "./iter";
 
 export class ProcedimentoCache extends Entity {
-  idIter: number;
+  id: number;
   nomeTipoProcedimento: string;
   descrizioneTipoProcedimento: string;
   idStruttura: Struttura;
@@ -17,10 +17,10 @@ export class ProcedimentoCache extends Entity {
 
   public static getOdataContextEntity(): any {
     return {
-      key: "idIter",
+      key: "id",
       keyType: "Int32",
       fieldTypes: {
-        idIter: "Int32",
+        id: "Int32",
         nomeTipoProcedimento: "String",
         descrizioneTipoProcedimento: "String",
         idStruttura: new OdataForeignKey(Entities.Struttura, "id"),
