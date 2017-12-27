@@ -48,22 +48,14 @@ export const HEADER_AUTH_TOKEN_NAME = "authorization";
 
 // ========================= Url =====================================
 // export const ODATA_BASE_URL: string = environment.odataStoreRootUrl;
-export let ODATA_BASE_URL: string;
-export let CUSTOM_RESOURCES_BASE_URL: string;
-export let LOGIN_URL: string;
 const hostname: string = window.location.hostname;
-if (hostname === "localhost") {
-    ODATA_BASE_URL  = "http://localhost:10006/gipi/resources/odata.svc";
-    CUSTOM_RESOURCES_BASE_URL = "http://localhost:10006/gipi/resources/custom/";
-    LOGIN_URL = "http://localhost:10006/gipi/user/login/";
-}
-else {
-    ODATA_BASE_URL  = window.location.protocol + "//" + hostname + ":443" + "/gipi/resources/odata.svc";
-    CUSTOM_RESOURCES_BASE_URL  = window.location.protocol + "//" + hostname + ":443" + "/gipi/resources/custom/";
-    LOGIN_URL  = window.location.protocol + "//" + hostname + ":443" + "/gipi/user/login/";
-}
-// logout
+export const ODATA_BASE_URL: string = window.location.protocol + "//" + hostname + (hostname === "localhost" ? ":10006" : "443") + "/gipi/resources/odata.svc";
+export const CUSTOM_RESOURCES_BASE_URL: string = window.location.protocol + "//" + hostname + (hostname === "localhost" ? ":10006" : "443") + "/gipi/resources/custom/";
+
+// login
 export const LOGOUT_URL = "/logout";
+export const LOGIN_URL: string = window.location.protocol + "//" + hostname + (hostname === "localhost" ? ":10006" : "443") + "/gipi/user/login/";
+
 
 export const DEFAULT_TIMEZONE_OFFSET = 0;
 export const DEFAULT_CURRENCY = "EUR";
@@ -85,4 +77,4 @@ export const odataStrutturePath = "/Strutturas";
 export const afferenzaStruttura = {
     diretta: "diretta",
     funzionale: "funzionale"
-}
+};
