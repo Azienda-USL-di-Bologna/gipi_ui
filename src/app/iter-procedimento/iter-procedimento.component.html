@@ -1,9 +1,7 @@
 <div class="container-fluid">
         <div class="col header-font">
-        <h3><span class="header-font">Azienda:</span> <i>{{infoGeneriche.azienda}}</i></h3>
-        <h3><span class="header-font">Struttura:</span> <i>{{infoGeneriche.struttura}}</i></h3>
+        <h3><span class="header-font">Struttura procedente:</span> <i>{{infoGeneriche.struttura}}</i></h3>
         <h3><span class="header-font">Tipo procedimento:</span> <i>{{infoGeneriche.tipoProcedimento}}</i></h3>
-        <h3><span class="header-font">Iter N. </span> <i>{{infoGeneriche.numeroIter}}</i></h3>
         <div><dx-button [text]="'Procedi'" (onClick)="passaggioDiFase()"></dx-button></div>
         
         </div>
@@ -15,6 +13,8 @@
                 [colCount]="1"
                 [formData]="iter">
                 <dxi-item itemType="group" [colCount]="2">
+                    <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item>
+
                     <dxi-item [colSpan]="2" dataField="oggetto" [editorOptions]="{ disabled: true }"></dxi-item>
         
                     <dxi-item [colSpan]="2" dataField="idResponsabileProcedimento.nome" [editorOptions]="{ disabled: true }">

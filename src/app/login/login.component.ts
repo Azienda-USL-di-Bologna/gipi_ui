@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
 
       this.globalContextService.setSubjectInnerSharedObject("userInfoMap", userInfoMap);
 
-      this.router.navigate(["/home"]);
+      this.router.navigate(["/home"], {queryParams: {reset: true}});
   }
 
 }
