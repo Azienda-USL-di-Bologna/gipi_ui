@@ -20,7 +20,7 @@ export class ProcedimentiAttiviComponent {
   public dataSourceProcedimenti: DataSource;
   public popupButtons: any[];
   public popupNuovoIterVisible: boolean = false;
-  public procedimentoDaPassare: Object;
+  public procedimentoDaPassare: any;
   public iterAvviato: boolean = false;
   public idIterAvviato: number;
 
@@ -109,19 +109,17 @@ export class ProcedimentiAttiviComponent {
     });
   }
 
-  public receiveMessage($event: any) {
-    this.iterAvviato = $event.avviato;
+  public receiveMessage(event: any) {
+    this.iterAvviato = !!event.idIter;
     if (this.iterAvviato) {
-      this.idIterAvviato = $event.idIter;
-      console.log("ssssssssssssssssssss", this.idIterAvviato);
+      this.idIterAvviato = event.idIter;
     }
-    this.popupNuovoIterVisible = $event.visible;   
+    this.popupNuovoIterVisible = event.visible;   
   }
 
   public popupHidden() {
-    if (this.iterAvviato){
+    if (this.iterAvviato) {
       this.iterAvviato = false;
-      console.log("ssssssssssssssssssss", this.idIterAvviato);
       this.router.navigate(["iter-procedimento"], {queryParams: {idIter: this.idIterAvviato}});
     }
   }
@@ -134,11 +132,11 @@ export class ProcedimentiAttiviComponent {
       break;
       case "iterOnClick":
         this.popupNuovoIterVisible = true;
-        this.procedimentoDaPassare = [{
+        this.procedimentoDaPassare = {
           idAzienda: this.idAzienda,
           idProcedimento: e.row.data.idProcedimento,
           nomeProcedimento: e.row.data.idAziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento
-        }];
+        };
       break;
     }
   }

@@ -16,26 +16,27 @@ import { HttpHeaders } from "@angular/common/http";
 })
 export class AvviaNuovoIterComponent {
 
-  public dataSourceUtenti: object;
+  public dataSourceUtenti: any;
   public iterParams: IterParams = new IterParams();
   public nomeProcedimento: string;
-  public utenteConnesso: object;
+  public utenteConnesso: any;
   
   @Input()
   set procedimentoSelezionato(procedimento: any) {
     this.nomeProcedimento = procedimento.nomeProcedimento;
+    this.iterParams = new IterParams();
     this.iterParams.idProcedimento = procedimento.idProcedimento;
     this.iterParams.idAzienda = procedimento.idAzienda;
+    this.iterParams.dataCreazioneIter = new Date();
   }
 
-  @Output() messageEvent = new EventEmitter<Object>();
+  @Output("messageEvent") messageEvent = new EventEmitter<any>();
 
   private odataContextDefinition: OdataContextDefinition;
 
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.getInfoSessionStorage();
-    this.iterParams.dataCreazioneIter = new Date();
     this.buildDataSourceUtenti();
   }
 
@@ -45,14 +46,13 @@ export class AvviaNuovoIterComponent {
         this.avviaIter();
       break;
       case "onClickAnnulla":
-        this.closePopUp(false);
+        this.closePopUp();
       break;
     }
   }
 
-  public closePopUp(avviato: boolean, idIter?: number) {
-    console.log("sono nel close");
-    this.messageEvent.emit({visible: false, avviato: avviato, idIter: idIter});
+  public closePopUp(idIter?: number) {
+    this.messageEvent.emit({visible: false, idIter: idIter});
   }
 
   private getInfoSessionStorage() {
@@ -97,7 +97,7 @@ export class AvviaNuovoIterComponent {
           console.log("Apertura della pagina dell'iter appena creato");
           console.log(res);
           let idIter = +res["idIter"]; 
-          this.closePopUp(true, idIter);
+          this.closePopUp(idIter);
         },
         err => {
           this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");

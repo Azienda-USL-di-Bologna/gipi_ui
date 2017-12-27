@@ -32,17 +32,15 @@ export class PassaggioDiFaseComponent implements OnInit {
   public nextFaseName: string = "";
   public isNextFaseDiChiusura: boolean;
 
-  @Input("daPadre") daPadre: Object;
+  @Input("daPadre") daPadre: any;
 
 
 
   constructor(private http: HttpClient) {
   }
 
-  ngOnCha
 
   ngOnInit() {
-    debugger;
     this.iterParams.idIter = this.daPadre['idIter'];
     this.currentFaseName = this.daPadre['currentFaseName'];
     this.nextFaseName = this.daPadre['nextFaseName'];
@@ -76,7 +74,7 @@ export class PassaggioDiFaseComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    debugger;
+
     this.iterParams = new IterParams();
     this.iterParams.idIter = this.daPadre['idIter'];
     this.currentFaseName = this.daPadre['currentFaseName'];
@@ -132,6 +130,10 @@ export class PassaggioDiFaseComponent implements OnInit {
   sendMessage(proceduto: boolean) {
     this.visibile = false;
     this.messageEvent.emit({ visible: false, proceduto: proceduto });
+  }
+
+  onFormSubmit(event: Event){
+    debugger;
   }
 
 }
