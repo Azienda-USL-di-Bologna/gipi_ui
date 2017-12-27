@@ -4,10 +4,11 @@ import {CustomReuseStrategy} from "@bds/nt-angular-context/Routes/custom-reuse-s
 import {Router} from "@angular/router";
 import {Observable} from "rxjs/Observable";
 import { SidebarItem } from "./classi/client-objects/SidebarItem";
-import {GlobalContextService} from "@bds/nt-angular-context";
+import {GlobalContextService, OdataContextFactory} from "@bds/nt-angular-context";
 import {Ruolo} from "./classi/server-objects/entities/ruolo";
 import {Subscription} from "rxjs/Subscription";
 import {NavbarComponent} from "./navbar/navbar.component";
+import {ODATA_BASE_URL} from "../environments/app.constants";
 
 @Component({
     selector: "app-root",
@@ -30,12 +31,13 @@ export class AppComponent implements OnInit, OnDestroy {
     private userInfoMap: object;
     private subscriptions: Subscription[] = [];
 
-    constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService) {
+    constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
         // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
         // if (this.userInfoMap) {
         //     this.username = this.userInfoMap["username"];
         //     this.azienda = this.userInfoMap["azienda"];
         // }
+        this.odataContextFactory.setOdataBaseUrl(ODATA_BASE_URL);
         console.log("hostname", window.location.hostname);
         console.log("host", window.location.host);
         console.log("protocol", window.location.protocol);
