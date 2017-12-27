@@ -49,20 +49,22 @@ export const HEADER_AUTH_TOKEN_NAME = "authorization";
 // ========================= Url =====================================
 // export const ODATA_BASE_URL: string = environment.odataStoreRootUrl;
 const hostname: string = window.location.hostname;
-console.log(hostname);
+const port: string = hostname === "localhost" ? ":10006" : ":443";
+console.log("hostname", hostname);
+console.log("port", port);
 
-export const ODATA_BASE_URL: string = window.location.protocol + "//" + hostname + (hostname === "localhost" ? ":10006" : ":443") + "/gipi/resources/odata.svc";
-export const CUSTOM_RESOURCES_BASE_URL: string = window.location.protocol + "//" + hostname + (hostname === "localhost" ? ":10006" : ":443") + "/gipi/resources/custom/";
+export const ODATA_BASE_URL: string = window.location.protocol + "//" + hostname + port + "/gipi/resources/odata.svc";
+export const CUSTOM_RESOURCES_BASE_URL: string = window.location.protocol + "//" + hostname + port + "/gipi/resources/custom/";
 
 
 // login
 export const LOGOUT_URL = "/logout";
-export const LOGIN_URL: string = window.location.protocol + "//" + hostname + (hostname === "localhost" ? ":10006" : ":443") + "/gipi/user/login/";
+export const LOGIN_URL: string = window.location.protocol + "//" + hostname + port + "/gipi/user/login/";
 
 console.log("ODATA_BASE_URL", ODATA_BASE_URL);
-console.log("ODATA_BASE_URL", CUSTOM_RESOURCES_BASE_URL);
-console.log("ODATA_BASE_URL", LOGIN_URL);
-console.log("1", window.location.protocol + "//" + hostname + (hostname === "localhost" ? ":10006" : ":443") + "/gipi/resources/odata.svc");
+console.log("CUSTOM_RESOURCES_BASE_URL", CUSTOM_RESOURCES_BASE_URL);
+console.log("LOGIN_URL", LOGIN_URL);
+console.log("1", window.location.protocol + "//" + hostname + port + "/gipi/resources/odata.svc");
 console.log("2", window.location.protocol + "//" + hostname + "/gipi/resources/odata.svc");
 
 export const DEFAULT_TIMEZONE_OFFSET = 0;
