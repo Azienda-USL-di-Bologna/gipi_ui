@@ -13,7 +13,7 @@
       <dxo-search-panel [visible]="true" [width]="calcWidth(3)"placeholder="Cerca.." searchVisibleColumnsOnly="true"></dxo-search-panel>
       
       <dxi-column [minWidth]="250" dataField="idStruttura.nome" caption="Struttura" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
-      <dxi-column [width]="170" dataField="idAziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento" caption="Nome" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+      <dxi-column [width]="170" dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" caption="Nome" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [minWidth]="200" dataField="idAziendaTipoProcedimento.idTitolo.nome" caption="Classificazione" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="150" dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" caption="Durata massima (gg)" [dataType]="'number'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="120" dataField="dataInizio" caption="Valido dal" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
@@ -50,7 +50,7 @@
           #formgdm
           colCount="1">
           <dxi-item dataField="idStruttura.nome" [template]="itemClear" [label]="{visible: true}" cssClass="item popup-title"></dxi-item>
-          <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento" [template]="itemClear" [label]="{visible: true, text: 'Tipo Procedimento'}" cssClass="item popup-title"></dxi-item>
+          <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" [template]="itemClear" [label]="{visible: true, text: 'Tipo Procedimento'}" cssClass="item popup-title"></dxi-item>
 
           <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" [label]="{text:'Descrizione'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [label]="{text:'Modo apertura'}" [colSpan]="1" cssClass="item"></dxi-item>
