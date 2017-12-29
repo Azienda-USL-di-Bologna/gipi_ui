@@ -10,7 +10,7 @@ import {Azienda} from "../classi/server-objects/entities/azienda";
 import {Entities} from "../../environments/app.constants";
 import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
 import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
-import {CustomReuseStrategy} from "@bds/nt-angular-context/Routes/custom-reuse-strategy";
+import {CustomReuseStrategy} from "@bds/nt-angular-context/routes/custom-reuse-strategy";
 import {ButtonAppearance} from "../classi/client-objects/ButtonAppearance";
 
 @Component({

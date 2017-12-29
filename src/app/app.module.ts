@@ -66,10 +66,10 @@ import { CronologiaEventiComponent } from "./iter-procedimento/cronologia-eventi
 import { DocumentiIterComponent } from "./iter-procedimento/documenti-iter/documenti-iter.component";
 import { AvviaNuovoIterComponent } from "./procedimenti-attivi/avvia-nuovo-iter/avvia-nuovo-iter.component";
 import { TestTreeComponent } from "./test/test-tree/test-tree.component";
-import { NavbarComponent } from "./navbar/navbar.component";
+// import { NavbarComponent } from "@bds/nt-angular-context/templates/navbar/navbar.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
 import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/passaggio-di-fase.component";
-import {NavbarService} from "./navbar/navbar.service";
+// import {NavbarService} from "@bds/nt-angular-context/templates/navbar/navbar.service";
 
 
 @NgModule({
@@ -97,7 +97,7 @@ import {NavbarService} from "./navbar/navbar.service";
         DocumentiIterComponent,
         TestTreeComponent,
         AvviaNuovoIterComponent,
-        NavbarComponent,
+        // NavbarComponent,
         PassaggioDiFaseComponent,
         SidebarComponent
     ],
@@ -134,7 +134,9 @@ import {NavbarService} from "./navbar/navbar.service";
         ContextModule.forRoot(contextModuleConfig),
         SidebarModule.forRoot()
     ],
-    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard, NavbarService],
+    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard,
+        // NavbarService
+    ],
     bootstrap: [AppComponent],
     entryComponents: [AssociaComponent, ProcedimentoComponent]
 })

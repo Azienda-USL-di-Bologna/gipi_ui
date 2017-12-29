@@ -14,7 +14,7 @@ import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory
 import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
 import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
 import {ButtonAppearance} from "../classi/client-objects/ButtonAppearance";
-import {CustomReuseStrategy} from "@bds/nt-angular-context/Routes/custom-reuse-strategy";
+import {CustomReuseStrategy} from "@bds/nt-angular-context/routes/custom-reuse-strategy";
 
 
 @Component({

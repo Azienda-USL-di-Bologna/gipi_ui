@@ -1,13 +1,12 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Location} from "@angular/common";
-import {CustomReuseStrategy} from "@bds/nt-angular-context/Routes/custom-reuse-strategy";
+import {CustomReuseStrategy} from "@bds/nt-angular-context/routes/custom-reuse-strategy";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs/Observable";
 import { SidebarItem } from "./classi/client-objects/SidebarItem";
 import {GlobalContextService, OdataContextFactory} from "@bds/nt-angular-context";
 import {Ruolo} from "./classi/server-objects/entities/ruolo";
 import {Subscription} from "rxjs/Subscription";
-import {NavbarComponent} from "./navbar/navbar.component";
 import {ODATA_BASE_URL} from "../environments/app.constants";
 
 @Component({
@@ -17,6 +16,8 @@ import {ODATA_BASE_URL} from "../environments/app.constants";
 })
 export class AppComponent implements OnInit, OnDestroy {
 
+    private userInfoMap: object;
+    private subscriptions: Subscription[] = [];
     // buttonBar: Observable<boolean>;
 
     public username: string;
@@ -28,8 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
     public sidebarIcon: string = "chevronright";
-    private userInfoMap: object;
-    private subscriptions: Subscription[] = [];
+
 
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
         // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
