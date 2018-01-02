@@ -70,6 +70,7 @@ import { TestTreeComponent } from "./test/test-tree/test-tree.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
 import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/passaggio-di-fase.component";
 // import {NavbarService} from "@bds/nt-angular-context/templates/navbar/navbar.service";
+import { SospensioneIterComponent } from "./iter-procedimento/sospensione-iter/sospensione-iter.component";
 
 
 @NgModule({
@@ -99,7 +100,8 @@ import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/pa
         AvviaNuovoIterComponent,
         // NavbarComponent,
         PassaggioDiFaseComponent,
-        SidebarComponent
+        SidebarComponent,
+        SospensioneIterComponent
     ],
     imports: [
         BrowserModule,

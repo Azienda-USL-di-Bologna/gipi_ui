@@ -1,0 +1,15 @@
+<dx-form
+  [(formData)]="sospensioneParams">
+  <dxi-item itemType="group">
+    <!-- ColCount e colSpan sono chiaramente esagerati. Questo perché colCount=3 e poi i 3 item con colSpa=1 non funziona.  -->
+    <dxi-item itemType="group" [colCount]="3001" [label]="{text: 'Con Documento'}">
+      <dxi-item itemType="empty" [colSpan]="1"></dxi-item>
+      <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1000" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: false }"></dxi-item>
+      <dxi-item dataField="numeroDocumento" [colSpan]="1000" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: false }"></dxi-item>
+      <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: false}"></dxi-item> 
+    </dxi-item>
+    <dxi-item dataField="sospesoDal" editorType="dxDateBox" format="dd/mm/yyyy" [label]="{text: 'Data creazione iter'}" [editorOptions]="{ disabled: true }"></dxi-item>
+    <dxi-item dataField="sospesoAl" editorType="dxDateBox" [label]="{text: 'Data avvio iter'}" [editorOptions]="{ disabled: false }"></dxi-item>
+    <dxi-item dataField="note" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
+  </dxi-item>
+</dx-form>

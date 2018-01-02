@@ -35,6 +35,7 @@ export class IterProcedimentoComponent implements OnInit {
 
   public popupVisible: boolean = false;
   public passaggioDiFaseVisible: boolean = false;
+  public sospensioneIterVisible: boolean = false;
 
   // Dati che verranno ricevuti dall'interfaccia chiamante
   public infoGeneriche: any = {
@@ -57,7 +58,7 @@ export class IterProcedimentoComponent implements OnInit {
 
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private activatedRoute: ActivatedRoute) {
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
-      const idIter: string = queryParams['idIter'];
+      const idIter: string = queryParams["idIter"];
       if (idIter) {
         this.idIter = +idIter;
       }
@@ -129,12 +130,11 @@ export class IterProcedimentoComponent implements OnInit {
       .subscribe(
       res => {
         // debugger;
-        console.log(res)
-        var current = JSON.parse(res["currentFase"]);
-        var next = JSON.parse(res["nextFase"]);
+        // console.log(res)
+        let current = JSON.parse(res["currentFase"]);
+        let next = JSON.parse(res["nextFase"]);
 
         this.perFiglioPassaggioFase = {
-
           idIter: this.idIter,
           currentFaseName: current.nomeFase,
           nextFaseName: next.nomeFase,
@@ -150,12 +150,18 @@ export class IterProcedimentoComponent implements OnInit {
       });
   }
 
+  public sospensioneIter() {
+
+    this.popupData.title = "Gestione Sospensione";
+    this.sospensioneIterVisible = true;
+  }
+
   receiveMessage($event) {
-    console.log("loggo il messaggio....");
-    console.log($event);
+    // console.log("loggo il messaggio....");
+    // console.log($event);
     this.passaggioDiFaseVisible = $event["visible"];
     if ($event["proceduto"]) {
-      var perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"] };
+      let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"] };
       this.perFigliParteDestra = perFigliNew;
       this.buildIter();
       notify("Proceduto con successo", "success", 1000);
