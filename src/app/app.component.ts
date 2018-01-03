@@ -3,11 +3,11 @@ import {Location} from "@angular/common";
 import {CustomReuseStrategy} from "@bds/nt-angular-context/routes/custom-reuse-strategy";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs/Observable";
-import { SidebarItem } from "./classi/client-objects/SidebarItem";
 import {GlobalContextService, OdataContextFactory} from "@bds/nt-angular-context";
 import {Ruolo} from "./classi/server-objects/entities/ruolo";
 import {Subscription} from "rxjs/Subscription";
 import {ODATA_BASE_URL} from "../environments/app.constants";
+import {SidebarItem} from "@bds/nt-angular-context/templates/sidebar/sidebar.component";
 import { $ } from "protractor";
 
 @Component({
@@ -31,17 +31,6 @@ export class AppComponent implements OnInit, OnDestroy {
     public userInfoMap$: Observable<Object>;
     public sidebarIcon: string = "chevronright";
 
-
-    
-
-    @HostListener('window:keydown', ['$event'])
-    keyEvent(event: KeyboardEvent) {
-      console.log(event);
-      if(event.code=="F5"){
-        this.router.navigate([""]);
-      }
-    }
-
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
         // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
         // if (this.userInfoMap) {
@@ -62,6 +51,14 @@ export class AppComponent implements OnInit, OnDestroy {
         this.route = this.router.url;
 
         this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);
+    }
+
+    @HostListener("window:keydown", ["$event"])
+    keyEvent(event: KeyboardEvent) {
+        console.log(event);
+        if (event.code === "F5"){
+            this.router.navigate([""]);
+        }
     }
 
     slide() {
