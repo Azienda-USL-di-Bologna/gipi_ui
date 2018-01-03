@@ -4,6 +4,7 @@ import DataSource from "devextreme/data/data_source";
 import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
 import { Entities } from "environments/app.constants";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import {Router} from "@angular/router";
 
 @Component({
   selector: "procedimenti-attivi",
@@ -12,19 +13,22 @@ import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-de
 })
 export class ProcedimentiAttiviComponent {
 
-  @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
-
+  
   private odataContextDefinition: OdataContextDefinition;
   private rigaSelezionata: any;
-
-  public idAzienda: number = 5;
-  public descrizioneAzienda: string = "Azienda USL Parma";
+  
+  @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
+  public idAzienda: number;
   public dataSourceProcedimenti: DataSource;
   public popupButtons: any[];
   public popupNuovoIterVisible: boolean = false;
-  public procedimentoDaPassare: object;
+  public procedimentoDaPassare: any;
+  public iterAvviato: boolean = false;
+  public idIterAvviato: number;
 
-  constructor(private odataContextFactory: OdataContextFactory) {
+
+  constructor(private odataContextFactory: OdataContextFactory, public router: Router) {
+    this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).azienda.id;
     const now = new Date();
 
     this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -50,6 +54,10 @@ export class ProcedimentiAttiviComponent {
     this.itemClear = this.itemClear.bind(this);
     this.setFormLook();
   }
+  
+  private apriDettaglio(row: any) {
+    this.gridContainer.instance.editRow(row.rowIndex);
+  }
 
   // Definisco l'aspetto della pagina
   setFormLook() {
@@ -64,7 +72,7 @@ export class ProcedimentiAttiviComponent {
               this.gridContainer.instance.cancelEditData();
           }
       }
-    }]
+    }];
   }
 
   // Gestisco la toolbar di ricerca. La voglio centrale.
@@ -98,16 +106,27 @@ export class ProcedimentiAttiviComponent {
         if (this.dataType === "string" && !this.lookup && value) {
           return ["tolower(" + this.dataField + ")",
             selectedFilterOperation || "contains",
-            value.toLowerCase()]
+            value.toLowerCase()];
         } else {
           return defaultCalculateFilterExpression.apply(this, arguments);
         }
-      }
+      };
     });
   }
 
-  private apriDettaglio(row: any) {
-    this.gridContainer.instance.editRow(row.rowIndex);
+  public receiveMessage(event: any) {
+    this.iterAvviato = !!event.idIter;
+    if (this.iterAvviato) {
+      this.idIterAvviato = event.idIter;
+    }
+    this.popupNuovoIterVisible = event.visible;   
+  }
+
+  public popupHidden() {
+    if (this.iterAvviato) {
+      this.iterAvviato = false;
+      this.router.navigate(["iter-procedimento"], {queryParams: {idIter: this.idIterAvviato}});
+    }
   }
 
   public handleEvent(name: String, e: any) {
@@ -115,15 +134,17 @@ export class ProcedimentiAttiviComponent {
       case "infoOnClick":
         this.rigaSelezionata = e.row;
         this.apriDettaglio(e.row);
-      break
+      break;
       case "iterOnClick":
         this.popupNuovoIterVisible = true;
-        console.log(e);
-        this.procedimentoDaPassare = [{
-          id: e.row.data.idProcedimento,
-          nome: e.row.data.idAziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento
-        }];
-      break
+        this.procedimentoDaPassare = {
+          idAzienda: this.idAzienda,
+          idProcedimento: e.row.data.id,
+          nomeProcedimento: e.row.data.idAziendaTipoProcedimento.idTipoProcedimento.nome
+        };
+      break;
     }
   }
+
+  
 }

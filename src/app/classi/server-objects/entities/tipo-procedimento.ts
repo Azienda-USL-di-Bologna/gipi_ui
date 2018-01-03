@@ -2,9 +2,9 @@ import {Azienda} from '../../aziende';
 import {Entity} from '@bds/nt-angular-context/entity';
 
 export class TipoProcedimento extends Entity{
-    idTipoProcedimento: number;
-    nomeTipoProcedimento: string;
-    descrizioneTipoProcedimentoDefault: string;
+    id: number;
+    nome: string;
+    descrizioneDefault: string;
     modoApertura: string;
     normaRiferimento: string;
     dataInizioValidita: Date;
@@ -14,12 +14,12 @@ export class TipoProcedimento extends Entity{
 
     public static getOdataContextEntity(): any {
         return {
-            key: 'idTipoProcedimento',
+            key: 'id',
             keyType: 'Int32',
             fieldTypes: {
-                idTipoProcedimento: 'Int32',
-                nomeTipoProcedimento: 'String',
-                descrizioneTipoProcedimentoDefault: 'String',
+                id: 'Int32',
+                nome: 'String',
+                descrizioneDefault: 'String',
                 modoApertura: 'String',
                 normaRiferimento: 'String',
                 dataInizioValidita: 'DateTime',

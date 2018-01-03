@@ -15,36 +15,37 @@ import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
   styleUrls: ["./home.component.scss"]
 })
 export class HomeComponent implements OnInit {
-  private userInfoMap: Object;
   username: String;
   ruolo: Ruolo;
   azienda: Azienda;
   strutture: Struttura[];
   struttureDiSeguito = "";
+  private userInfoMap: Object;
+
 
   constructor(private sessionManager: SessionManager){
-    sessionManager.setExpireTokenOnIdle(300);
-    this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
-
-    this.username = this.userInfoMap["username"];
-    this.azienda = this.userInfoMap["azienda"];
-    this.strutture = this.userInfoMap["strutture"];
-    this.ruolo = this.userInfoMap["ruolo"];
-    console.log("loggo le strutture", this.strutture);
-
-    for (let i = 0; i < this.strutture.length; i++){
-      let st: any = this.strutture[i];
-      let mostra = st.idStruttura.nome + " (afferenza " + st.idAfferenzaStruttura.descrizione + ")";
-      if (this.struttureDiSeguito === ""){
-        this.struttureDiSeguito = mostra;
-      }
-      else{
-        this.struttureDiSeguito = this.struttureDiSeguito + ";\n" + mostra;
-      }
-    }
-
-    console.log("Loggalo lì ", this.struttureDiSeguito);
-    this.struttureDiSeguito = this.struttureDiSeguito === "" ? "Nessuna struttura associata" : this.struttureDiSeguito;
+    // sessionManager.setExpireTokenOnIdle(300);
+    // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
+    //
+    // this.username = this.userInfoMap["username"];
+    // this.azienda = this.userInfoMap["azienda"];
+    // this.strutture = this.userInfoMap["strutture"];
+    // this.ruolo = this.userInfoMap["ruolo"];
+    // // console.log("loggo le strutture", this.strutture);
+    //
+    // for (let i = 0; i < this.strutture.length; i++){
+    //   let st: any = this.strutture[i];
+    //   let mostra = st.idStruttura.nome + " (afferenza " + st.idAfferenzaStruttura.descrizione + ")";
+    //   if (this.struttureDiSeguito === ""){
+    //     this.struttureDiSeguito = mostra;
+    //   }
+    //   else{
+    //     this.struttureDiSeguito = this.struttureDiSeguito + ";\n" + mostra;
+    //   }
+    // }
+    //
+    // // console.log("Loggalo lì ", this.struttureDiSeguito);
+    // this.struttureDiSeguito = this.struttureDiSeguito === "" ? "Nessuna struttura associata" : this.struttureDiSeguito;
 
   }
   ngOnInit() {

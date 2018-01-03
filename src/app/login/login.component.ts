@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
           .subscribe(
               // Successful responses call the first callback.
               data => {
-                  this.setDataLogin(data);
+                  this.setDataLogin(data, "GET");
               });
   }
 
@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
     this.httpClient.post(LOGIN_URL, {username : form.value.username , "password": form.value.password })
         .subscribe(
             (data: any) => {
-                this.setDataLogin(data);
+                this.setDataLogin(data, "POST");
             },
             (err) => {
               console.log(err);
@@ -52,10 +52,16 @@ export class LoginComponent implements OnInit {
   }
 
 
-  private setDataLogin(data: any){
+  private setDataLogin(data: any, httpMethod: string){
       sessionStorage.setItem("token", data.token);
-      sessionStorage.setItem("userinfo", data.username);
-      sessionStorage.setItem("loginMethod", "local");
+
+      if (httpMethod === "GET"){
+          sessionStorage.setItem("loginMethod", "sso");
+      }
+      else {
+          sessionStorage.setItem("loginMethod", "local");
+      }
+
 
       let userInfoMap: Object = data.userInfoMap;
 
@@ -63,7 +69,7 @@ export class LoginComponent implements OnInit {
 
       this.globalContextService.setSubjectInnerSharedObject("userInfoMap", userInfoMap);
 
-      this.router.navigate(["/home"]);
+      this.router.navigate(["/home"], {queryParams: {reset: true}});
   }
 
 }

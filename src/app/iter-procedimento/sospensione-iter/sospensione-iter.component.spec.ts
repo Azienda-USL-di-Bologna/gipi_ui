@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TestLayoutComponent } from './test-layout.component';
+import { SospensioneIterComponent } from './sospensione-iter.component';
 
-describe('TestLayoutComponent', () => {
-  let component: TestLayoutComponent;
-  let fixture: ComponentFixture<TestLayoutComponent>;
+describe('SospensioneIterComponent', () => {
+  let component: SospensioneIterComponent;
+  let fixture: ComponentFixture<SospensioneIterComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TestLayoutComponent ]
+      declarations: [ SospensioneIterComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TestLayoutComponent);
+    fixture = TestBed.createComponent(SospensioneIterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

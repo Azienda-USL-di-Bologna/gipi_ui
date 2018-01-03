@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {Component, Input, OnInit} from "@angular/core";
 import { SidebarItem } from "../classi/client-objects/SidebarItem";
 import {Router} from "@angular/router";
 
@@ -9,26 +9,25 @@ import {Router} from "@angular/router";
 })
 export class SidebarComponent implements OnInit {
   @Input("sidebarItems") sidebarItems: Array<SidebarItem>;
-  @Output("resetBreadcrumbs") resetBreadcrumbs = new EventEmitter<boolean>();
 
-   public clicked = true;
 
-  constructor(private router: Router) {
+  constructor(public router: Router) {
 
   }
 
   ngOnInit() {
   }
 
-  selectItem(event) {
-    console.log("LOGGO: ", event);
+  public click(event, item: SidebarItem){
+    // console.log("evento: ", event);
+    this.router.navigate([item.routerLink], {queryParams: {reset: true}});
 
   }
 
-  public prova(event, item: SidebarItem){
-    console.log("evento: ", event);
-    this.resetBreadcrumbs.emit(true);
-    this.router.navigate([item.routerLink], {queryParams: {reset: true}});
-    // this.clicked = true;
+  public isActive(item: SidebarItem){
+      let paginaAttuale = this.router.url;
+      paginaAttuale = paginaAttuale.slice(1, -11);
+      // console.log("pagina: ", paginaAttuale);
+      return item.routerLink === paginaAttuale;
   }
 }

@@ -61,17 +61,16 @@ import { ProcedimentiAttiviComponent } from "./procedimenti-attivi/procedimenti-
 import { PopupStrutturaTipiProcedimentoComponent } from "./popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component";
 import { IterProcedimentoComponent } from "./iter-procedimento/iter-procedimento.component";
 import { SequenzaDelleFasiComponent } from "./iter-procedimento/sequenza-delle-fasi/sequenza-delle-fasi.component";
-import { TestLayoutComponent } from "./test-layout/test-layout.component";
-import {Service} from "./test-layout/service";
 import { ButtonsBarComponent } from "./buttons-bar/buttons-bar.component";
 import { CronologiaEventiComponent } from "./iter-procedimento/cronologia-eventi/cronologia-eventi.component";
 import { DocumentiIterComponent } from "./iter-procedimento/documenti-iter/documenti-iter.component";
 import { AvviaNuovoIterComponent } from "./procedimenti-attivi/avvia-nuovo-iter/avvia-nuovo-iter.component";
 import { TestTreeComponent } from "./test/test-tree/test-tree.component";
-import { NavbarComponent } from "./navbar/navbar.component";
+// import { NavbarComponent } from "@bds/nt-angular-context/templates/navbar/navbar.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
 import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/passaggio-di-fase.component";
-import {BreadcrumpsComponent} from "./breadcrumps/breadcrumps.component";
+// import {NavbarService} from "@bds/nt-angular-context/templates/navbar/navbar.service";
+import { SospensioneIterComponent } from "./iter-procedimento/sospensione-iter/sospensione-iter.component";
 import { ListaIterComponent } from './lista-iter/lista-iter.component';
 
 
@@ -96,16 +95,15 @@ import { ListaIterComponent } from './lista-iter/lista-iter.component';
         PopupStrutturaTipiProcedimentoComponent,
         IterProcedimentoComponent,
         SequenzaDelleFasiComponent,
-        TestLayoutComponent,
         ButtonsBarComponent,
         CronologiaEventiComponent,
         DocumentiIterComponent,
         TestTreeComponent,
         AvviaNuovoIterComponent,
-        NavbarComponent,
+        // NavbarComponent,
         PassaggioDiFaseComponent,
         SidebarComponent,
-        BreadcrumpsComponent,
+        SospensioneIterComponent
         ListaIterComponent
     ],
     imports: [
@@ -141,8 +139,9 @@ import { ListaIterComponent } from './lista-iter/lista-iter.component';
         ContextModule.forRoot(contextModuleConfig),
         SidebarModule.forRoot()
     ],
-    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard
-        ],
+    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard,
+        // NavbarService
+    ],
     bootstrap: [AppComponent],
     entryComponents: [AssociaComponent, ProcedimentoComponent]
 })

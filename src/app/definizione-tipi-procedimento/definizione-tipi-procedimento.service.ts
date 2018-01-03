@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { ODATA_BASE_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from '../../environments/app.constants';
-import { TipoProcedimento } from '../classi/server-objects/entities/tipo-procedimento';
-import DataSource from 'devextreme/data/data_source';
-import ODataStore from 'devextreme/data/odata/store';
-import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { Injectable } from "@angular/core";
+import { ODATA_BASE_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from "../../environments/app.constants";
+import { TipoProcedimento } from "../classi/server-objects/entities/tipo-procedimento";
+import DataSource from "devextreme/data/data_source";
+import ODataStore from "devextreme/data/odata/store";
+import { Http } from "@angular/http";
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/map";
 
 @Injectable()
 export class DefinizioneTipiProcedimentoService {
@@ -21,9 +21,9 @@ export class DefinizioneTipiProcedimentoService {
   getTipiProcedimentoSource() {
     return new DataSource({
       store: new ODataStore({
-        key: 'idAziendaTipoProcedimento',
+        key: "idAziendaTipoProcedimento",
         url: ODATA_BASE_URL + odataTipiProcedimentoPath,
-        //deserializeDates: true,
+        // deserializeDates: true,
 /*        fieldTypes: {
           id: 'Int32',
         
@@ -41,8 +41,8 @@ export class DefinizioneTipiProcedimentoService {
     });
   }
 
-  getAziendeAssociateRequest(idTipoProcedimento: string) : Observable<any>{
-    let url = ODATA_BASE_URL + odataAziendeTipiProcPath + '?$filter=FK_id_tipo_procedimento eq ' + idTipoProcedimento + '&$expand=idAzienda';
+  getAziendeAssociateRequest(idTipoProcedimento: string): Observable<any>{
+    let url = ODATA_BASE_URL + odataAziendeTipiProcPath + "?$filter=FK_id_tipo_procedimento eq " + idTipoProcedimento + "&$expand=idAzienda";
     return this.http.get(url).map(response => response.json().d.results );
   }
 

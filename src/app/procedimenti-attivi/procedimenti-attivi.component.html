@@ -1,5 +1,3 @@
-<div class="container-fluid">
-    <h1 class="intestazione">Azienda: {{descrizioneAzienda}}</h1>
     <h3 class="intestazione">Procedimenti Attivi</h3>
     
     <dx-data-grid  #gridContainer id="gridContainer"
@@ -15,8 +13,8 @@
       <dxo-search-panel [visible]="true" [width]="calcWidth(3)"placeholder="Cerca.." searchVisibleColumnsOnly="true"></dxo-search-panel>
       
       <dxi-column [minWidth]="250" dataField="idStruttura.nome" caption="Struttura" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
-      <dxi-column [width]="170" dataField="idAziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento" caption="Nome" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
-      <dxi-column [minWidth]="200" dataField="idAziendaTipoProcedimento.idTitolo.nomeTitolo" caption="Classificazione" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+      <dxi-column [width]="170" dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" caption="Nome" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+      <dxi-column [minWidth]="200" dataField="idAziendaTipoProcedimento.idTitolo.nome" caption="Classificazione" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="150" dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" caption="Durata massima (gg)" [dataType]="'number'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="120" dataField="dataInizio" caption="Valido dal" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="200" dataField="idTitolarePotereSostitutivo.descrizione" caption="Tit. potere sostitutivo" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
@@ -51,15 +49,14 @@
         <dxo-form
           #formgdm
           colCount="1">
-          <dxi-item [label]="{visible: true, text:'Azienda'}" cssClass="item popup-title">{{descrizioneAzienda}}</dxi-item>
           <dxi-item dataField="idStruttura.nome" [template]="itemClear" [label]="{visible: true}" cssClass="item popup-title"></dxi-item>
-          <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.nomeTipoProcedimento" [template]="itemClear" [label]="{visible: true, text: 'Tipo Procedimento'}" cssClass="item popup-title"></dxi-item>
-    
+          <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" [template]="itemClear" [label]="{visible: true, text: 'Tipo Procedimento'}" cssClass="item popup-title"></dxi-item>
+
           <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" [label]="{text:'Descrizione'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [label]="{text:'Modo apertura'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" [label]="{text:'Norma di riferimento'}" [colSpan]="1" cssClass="item"></dxi-item>
-          <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nomeTitolo" [label]="{text:'Classificazione'}" [colSpan]="1" cssClass="item"></dxi-item>
-          <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [label]="{text:'Durata massim (gg)'}" [colSpan]="1" cssClass="item"></dxi-item>      
+          <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nome" [label]="{text:'Classificazione'}" [colSpan]="1" cssClass="item"></dxi-item>
+          <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [label]="{text:'Durata massim (gg)'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" [label]="{text:'Durata massima sospensione (gg)'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="dataInizio" [label]="{text:'Valido dal'}" [colSpan]="1" cssClass="item"></dxi-item>
           <dxi-item dataField="dataFine" [label]="{text:'Al'}" [colSpan]="1" cssClass="item"></dxi-item>
@@ -69,16 +66,17 @@
         </dxo-form>
       </dxo-editing>
     </dx-data-grid>
-    
+
     <dx-popup
       title="Avvia nuovo iter"
       [maxWidth]="800"
       [minWidth]="500"
       [maxHeight]="450"
       [showTitle]="true"
-      [(visible)]="popupNuovoIterVisible">
+      [visible]="popupNuovoIterVisible"
+      (onHidden)="popupHidden()"
+      >
       <div *dxTemplate="let data of 'content'">
-        <avvia-nuovo-iter  *ngFor="let obj of procedimentoDaPassare" [procedimentoSelezionato]="obj"></avvia-nuovo-iter>
+        <avvia-nuovo-iter [procedimentoSelezionato]="procedimentoDaPassare" (messageEvent)="receiveMessage($event)"></avvia-nuovo-iter>
       </div>
     </dx-popup>
-</div>

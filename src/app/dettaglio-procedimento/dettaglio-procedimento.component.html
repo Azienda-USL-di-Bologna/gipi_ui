@@ -1,11 +1,16 @@
-<div class="container-fluid">
+<div>
+    <app-buttons-bar
+            (onBackButton) = "onBack()"
+            [backButton]="backBtn">
+    </app-buttons-bar>
+
     <div class="row">
         <div class="col">
             <div style="margin-bottom: 8px; overflow: auto;">
                 <div class="dx-field-label">Nome</div>
                 <!-- nome -->
                 <div class="dx-field-value">
-                    <dx-text-box [value]="procedimento.nomeTipoProcedimento" [disabled]="true">
+                    <dx-text-box [value]="procedimento.nome" [disabled]="true">
                     </dx-text-box>
                 </div>
                 <!-- end nome -->
@@ -15,7 +20,7 @@
                 <div class="dx-field-label">Descrizione</div>
                 <!-- descrizione -->
                 <div class="dx-field-value">
-                    <dx-text-area [height]="90" [(value)]="procedimento.descrizioneTipoProcedimentoDefault" [disabled]="true">
+                    <dx-text-area [height]="90" [(value)]="procedimento.descrizioneDefault" [disabled]="true">
                     </dx-text-area>
                 </div>
                 <!-- end descrizione -->

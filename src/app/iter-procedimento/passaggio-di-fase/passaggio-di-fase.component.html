@@ -1,58 +1,74 @@
-<div class="container-fluid">
-    <!-- Prima riga: fasi -->
-    <div class="row">
-        <div class="col fase">
-            <h4>Fase attuale</h4>
-            <p>{{faseAttuale}}</p>
+<form action="your-action" (submit)="onFormSubmit($event)">
+    <div class="container-fluid">
+        <!-- Prima riga: fasi -->
+        <div class="row">
+            <div class="col fase">
+                <h4>Fase attuale</h4>
+                <p>{{currentFaseName}}</p>
+            </div>
+
+            <div class="col">
+                <img class="freccia" src="../../../assets/images/right_arrow.png">
+            </div>
+
+            <div class="col fase">
+                <h4>Fase successiva</h4>
+                <p>{{nextFaseName}}</p>
+            </div>
         </div>
 
-        <div class="col">
-            <img  class="freccia" src="../../../assets/images/right_arrow.png">
-        </div>
-        
-        <div class="col fase">
-            <h4>Fase successiva</h4>
-            <p>{{faseSuccessiva}}</p>
-        </div>
-    </div>  
+        <br>
 
-    <br>
+        <!-- Seconda riga: dati passaggio fase -->
+        <div class="row">
 
-    <!-- Seconda riga: dati passaggio fase -->
-    <div class="row">
+            <!-- I DATI    -->
+            <div class="col">
 
-        <!-- I DATI    -->
-        <div class="col">
-            <dx-form itemType="group" [formData]="iterParams" [colCount]="12">
-                <dxi-item [colSpan]="12" dataField="dataPassaggio" editorType="dxDateBox" [label]="{text: 'Data Passaggio'}" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-                <dxi-item [colSpan]="4" dataField="codiceRegistroDocumento" [editorOptions]="{ disabled: false }">
-                    <dxo-label text="Reg."></dxo-label>
-                </dxi-item>
-                <dxi-item [colSpan]="5" dataField="numeroDocumento" [editorOptions]="{disabled: false }">
-                    <dxo-label text="Num"></dxo-label>
-                </dxi-item>
-                <dxi-item [colSpan]="3" dataField="annoDocumento" [editorOptions]="{disabled: false}">
-                    <dxo-label text="Anno"></dxo-label>
-                </dxi-item>
-                <dxi-item [colSpan]="12" dataField="notePassaggio" [label]="{text: 'Note Passaggio'}" [editorOptions]="{ height:70,disabled: false}"></dxi-item>
-                <dxi-item [colSpan]="12" dataField="esito" [label]="{text: 'Esito'}" [editorOptions]="{ height:70,disabled: false }" [visible]="isNextFaseCloser"></dxi-item>
-                <dxi-item [colSpan]="12" dataField="motivazioneEsito" [label]="{text: 'Motivo Esito'}" [editorOptions]="{ height:70,disabled: false}" [visible]="isNextFaseCloser"></dxi-item>
-            </dx-form>
+                <dx-form itemType="group" [formData]="iterParams" [colCount]="12" [showValidationSummary]="true" validationGroup="passaggioFase">
+                    <dxi-item [colSpan]="12" dataField="dataPassaggio" editorType="dxDateBox" [label]="{text: 'Data Passaggio'}" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }">
+                        <dxi-validation-rule type="required" message="La data di passaggio è obbligatoria">
+                        </dxi-validation-rule>
+                    </dxi-item>
+                    <dxi-item [colSpan]="4" dataField="codiceRegistroDocumento" [editorOptions]="{ disabled: false }">
+
+                        <dxo-label text="Reg."></dxo-label>
+                        <dxi-validation-rule type="required" message="Il registro è obbligatorio">
+                        </dxi-validation-rule>
+                    </dxi-item>
+                    <dxi-item [colSpan]="5" dataField="numeroDocumento" [editorOptions]="{disabled: false }">
+
+                        <dxo-label text="Num"></dxo-label>
+                        <dxi-validation-rule type="required" message="Il numero registro è obbligatorio">
+                        </dxi-validation-rule>
+                    </dxi-item>
+                    <dxi-item [colSpan]="3" dataField="annoDocumento" [editorOptions]="{disabled: false}">
+                        <dxo-label text="Anno"></dxo-label>
+                        <dxi-validation-rule type="required" message="L'anno registro è obbligatorio">
+                        </dxi-validation-rule>
+                    </dxi-item>
+                    <dxi-item [colSpan]="12" dataField="notePassaggio" [label]="{text: 'Note Passaggio'}" [editorOptions]="{ height:70,disabled: false}"></dxi-item>
+                    <dxi-item [colSpan]="12" dataField="esito" [label]="{text: 'Esito'}" [editorOptions]="{ height:70,disabled: false }" [visible]="isNextFaseDiChiusura"></dxi-item>
+                    <dxi-item [colSpan]="12" dataField="motivazioneEsito" [label]="{text: 'Motivo Esito'}" [editorOptions]="{ height:70,disabled: false}"
+                        [visible]="isNextFaseDiChiusura"></dxi-item>
+                </dx-form>
+
+            </div>
         </div>
-    </div> 
 
-    <br>
+        <br>
 
-    <!-- Terza riga: 'Salva o annulla' -->
-    <div class="row">
-        <div class="col-3"></div>
-        <div class="col button-div">
-            <dx-button class="bottoni" text="Annulla" type="normal" (onClick)="annulla()"></dx-button>
+        <!-- Terza riga: 'Salva o annulla' -->
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col button-div">
+                <dx-button class="bottoni" text="Annulla" type="normal" (onClick)="annulla()"></dx-button>
+            </div>
+            <div class="col button-div">
+                <dx-button class="bottoni" text="Procedi" type="default" (onClick)="showConfirm()" [useSubmitBehavior]="true" validationGroup="passaggioFase"></dx-button>
+            </div>
+            <div class="col-3"></div>
         </div>
-        <div class="col button-div">
-            <dx-button class="bottoni" text="Procedi" type="default" (onClick)="procedi()"></dx-button>
-        </div>
-        <div class="col-3"></div>
-    </div>    
-    
-</div>
+
+    </div>
+</form>

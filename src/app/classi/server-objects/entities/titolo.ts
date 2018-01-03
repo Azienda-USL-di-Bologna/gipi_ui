@@ -1,17 +1,20 @@
 import {Entity} from "@bds/nt-angular-context/entity";
 export class Titolo extends Entity {
-    idTitolo: number;
-    nomeTitolo: string;
+    id: number;
+    nome: string;
     idAzienda: number;
+    classificazione: string;
 
     public static getOdataContextEntity(): any {
         return {
-            key: "idTitolo",
+            key: "id",
             keyType: "Int32",
             fieldTypes: {
-                idTitolo: "Int32",
-                nomeTitolo: "String",
-                idAzienda: "Int32"
+                id: "Int32",
+                nome: "String",
+                idAzienda: "Int32",
+                classificazione: "String"
+
             }
         }
     }

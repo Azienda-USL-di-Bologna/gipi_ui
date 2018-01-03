@@ -33,8 +33,8 @@ export class AziendaTipoProcedimento extends Entity {
                 durataMassimaSospensione: "String",
                 obbligoEsitoConclusivo: "Boolean",
                 idAzienda: new OdataForeignKey(Entities.Azienda, "id"),
-                idTipoProcedimento: new OdataForeignKey(Entities.TipoProcedimento, "idTipoProcedimento"),
-                idTitolo: new OdataForeignKey(Entities.Titolo, "idTitolo")
+                idTipoProcedimento: new OdataForeignKey(Entities.TipoProcedimento, "id"),
+                idTitolo: new OdataForeignKey(Entities.Titolo, "id")
             }
         }
     }
