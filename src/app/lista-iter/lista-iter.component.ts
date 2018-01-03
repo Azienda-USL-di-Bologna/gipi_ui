@@ -3,6 +3,7 @@ import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
 import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
 import { Entities } from "environments/app.constants";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-lista-iter',
@@ -13,8 +14,13 @@ export class ListaIterComponent implements OnInit {
 
   public dataSource: DataSource;
   private odataContextDefinition: OdataContextDefinition;
+  public infoGeneriche: any = {
+    azienda: "AOSP-BO",
+    struttura: "UO DaTer",
+    procedimento: "Procedimento A"
+  };
 
-  constructor(private odataContextFactory: OdataContextFactory) {
+  constructor(private odataContextFactory: OdataContextFactory, private router: Router) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
   }
 
@@ -23,6 +29,11 @@ export class ListaIterComponent implements OnInit {
       store: this.odataContextDefinition.getContext()[Entities.Iter.name],
       expand: ["idResponsabileProcedimento"],
     })
+  }
+
+  vaiAlDettaglio(e){
+    console.log("Evento al click:",e)
+    this.router.navigate(['/iter-procedimento'], { queryParams: { idIter: e.data.id } });
   }
 
 }
