@@ -29,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
-    public sidebarIcon: string = "chevronright";
+
 
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
         // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
@@ -69,7 +69,6 @@ export class AppComponent implements OnInit, OnDestroy {
         } else {
             sideBar.classList.add("active");
         }
-        this.sidebarIcon = (this.sidebarIcon === "chevronright" ? "chevronleft" : "chevronright");
     }
 
     screen(width) {
