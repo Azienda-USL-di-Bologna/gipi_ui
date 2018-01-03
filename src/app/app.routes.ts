@@ -15,6 +15,7 @@ import { PopupStrutturaTipiProcedimentoComponent } from "app/popup-struttura-tip
 import { IterProcedimentoComponent } from "app/iter-procedimento/iter-procedimento.component";
 import {TestLayoutComponent} from "./test-layout/test-layout.component";
 import { TestTreeComponent } from "./test/test-tree/test-tree.component";
+import { ListaIterComponent } from "app/lista-iter/lista-iter.component";
 
 
 export const rootRouterConfig: Routes = [
@@ -47,6 +48,7 @@ export const rootRouterConfig: Routes = [
   { path: "popup-struttura-tipi-procedimento", component: PopupStrutturaTipiProcedimentoComponent, data: {breadcrumb: "Associa"} },
   { path: "iter-procedimento", component: IterProcedimentoComponent, data: {breadcrumb: "Nuovo Iter"} },
   { path: "test-layout", component: TestLayoutComponent},
-  { path: "app-test-tree", component: TestTreeComponent }
+  { path: "app-test-tree", component: TestTreeComponent },
+  { path: "app-lista-iter", component: ListaIterComponent }
 ];
 

@@ -72,6 +72,7 @@ import { NavbarComponent } from "./navbar/navbar.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
 import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/passaggio-di-fase.component";
 import {BreadcrumpsComponent} from "./breadcrumps/breadcrumps.component";
+import { ListaIterComponent } from './lista-iter/lista-iter.component';
 
 
 
@@ -104,7 +105,8 @@ import {BreadcrumpsComponent} from "./breadcrumps/breadcrumps.component";
         NavbarComponent,
         PassaggioDiFaseComponent,
         SidebarComponent,
-        BreadcrumpsComponent
+        BreadcrumpsComponent,
+        ListaIterComponent
     ],
     imports: [
         BrowserModule,

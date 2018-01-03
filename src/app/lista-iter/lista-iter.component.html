@@ -1,0 +1,12 @@
+<dx-data-grid
+  [dataSource] = "dataSource"
+  columnAutoWidth="true"
+  noDataText="Non ci sono dati da visualizzare"
+  hoverStateEnabled="true">
+    <dxi-column dataField="numero"></dxi-column>
+    <dxi-column dataField="oggetto"></dxi-column>
+    <dxi-column dataField="idResponsabileProcedimento.nome"></dxi-column>
+    <dxi-column dataField="stato"></dxi-column>
+    <dxi-column dataField="dataAvvio"></dxi-column>
+    <dxi-column dataField="dataChiusura"></dxi-column>
+</dx-data-grid>
