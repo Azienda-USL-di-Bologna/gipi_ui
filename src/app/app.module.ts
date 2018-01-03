@@ -103,7 +103,7 @@ import { ListaIterComponent } from './lista-iter/lista-iter.component';
         // NavbarComponent,
         PassaggioDiFaseComponent,
         SidebarComponent,
-        SospensioneIterComponent
+        SospensioneIterComponent,
         ListaIterComponent
     ],
     imports: [
