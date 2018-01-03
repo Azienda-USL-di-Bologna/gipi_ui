@@ -6,8 +6,6 @@ import "devextreme/data/odata/store";
 import "devextreme/data/odata/context";
 import { DefinizioneTipiProcedimentoService } from "./definizione-tipi-procedimento/definizione-tipi-procedimento.service";
 
-import { SidebarModule } from "ng-sidebar";
-
 import {
     DxDataGridModule,
     DxFormModule,
@@ -66,10 +64,7 @@ import { CronologiaEventiComponent } from "./iter-procedimento/cronologia-eventi
 import { DocumentiIterComponent } from "./iter-procedimento/documenti-iter/documenti-iter.component";
 import { AvviaNuovoIterComponent } from "./procedimenti-attivi/avvia-nuovo-iter/avvia-nuovo-iter.component";
 import { TestTreeComponent } from "./test/test-tree/test-tree.component";
-// import { NavbarComponent } from "@bds/nt-angular-context/templates/navbar/navbar.component";
-import { SidebarComponent } from "./sidebar/sidebar.component";
 import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/passaggio-di-fase.component";
-// import {NavbarService} from "@bds/nt-angular-context/templates/navbar/navbar.service";
 import { SospensioneIterComponent } from "./iter-procedimento/sospensione-iter/sospensione-iter.component";
 import { ListaIterComponent } from './lista-iter/lista-iter.component';
 
@@ -100,9 +95,7 @@ import { ListaIterComponent } from './lista-iter/lista-iter.component';
         DocumentiIterComponent,
         TestTreeComponent,
         AvviaNuovoIterComponent,
-        // NavbarComponent,
         PassaggioDiFaseComponent,
-        SidebarComponent,
         SospensioneIterComponent,
         ListaIterComponent
     ],
@@ -137,7 +130,6 @@ import { ListaIterComponent } from './lista-iter/lista-iter.component';
         DxToolbarModule,
         DxSwitchModule,
         ContextModule.forRoot(contextModuleConfig),
-        SidebarModule.forRoot()
     ],
     providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard,
         // NavbarService

@@ -16,10 +16,13 @@ import { HttpHeaders } from "@angular/common/http";
 })
 export class AvviaNuovoIterComponent {
 
+  private odataContextDefinition: OdataContextDefinition;
+
   public dataSourceUtenti: any;
   public iterParams: IterParams = new IterParams();
   public nomeProcedimento: string;
   public utenteConnesso: any;
+  public now: Date = new Date();
   
   @Input()
   set procedimentoSelezionato(procedimento: any) {
@@ -33,27 +36,11 @@ export class AvviaNuovoIterComponent {
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
 
-  private odataContextDefinition: OdataContextDefinition;
 
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.getInfoSessionStorage();
     this.buildDataSourceUtenti();
-  }
-
-  public handleEvent(name: string, data: any) {
-    switch (name) {
-      case "onClickProcedi":
-        this.avviaIter();
-      break;
-      case "onClickAnnulla":
-        this.closePopUp();
-      break;
-    }
-  }
-
-  public closePopUp(idIter?: number) {
-    this.messageEvent.emit({visible: false, idIter: idIter});
   }
 
   private getInfoSessionStorage() {
@@ -118,6 +105,22 @@ export class AvviaNuovoIterComponent {
         width: "max-content"
     });
   }
+
+  public handleEvent(name: string, data: any) {
+    switch (name) {
+      case "onClickProcedi":
+        this.avviaIter();
+      break;
+      case "onClickAnnulla":
+        this.closePopUp();
+      break;
+    }
+  }
+
+  public closePopUp(idIter?: number) {
+    this.messageEvent.emit({visible: false, idIter: idIter});
+  }
+
 }
 
 class IterParams {
