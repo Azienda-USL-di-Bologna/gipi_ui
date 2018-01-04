@@ -29,8 +29,6 @@ export class AppComponent implements OnInit, OnDestroy {
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
-
-
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
         // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
         // if (this.userInfoMap) {
@@ -53,12 +51,12 @@ export class AppComponent implements OnInit, OnDestroy {
         this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);
     }
 
-    @HostListener("window:keydown", ["$event"])
+
+    @HostListener('window:keydown', ['$event'])
     keyEvent(event: KeyboardEvent) {
-        console.log(event);
-        if (event.code === "F5"){
-            this.router.navigate([""]);
-        }
+      if(event.code=="F5"){
+        this.router.navigate([""]);
+      }
     }
 
     slide() {

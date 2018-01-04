@@ -6,7 +6,7 @@
             <dx-button [text]="'Procedi'" (onClick)="passaggioDiFase()"></dx-button>
         </div>
         <div>
-            <dx-button [text]="'Sospendi'" (onClick)="sospensioneIter()"></dx-button>
+            <dx-button [text]="nomeBottoneSospensione()" (onClick)="sospensioneIter()"></dx-button>
         </div>
     
     </div>
@@ -141,6 +141,6 @@
     [closeOnOutsideClick]="true"
     [(visible)]="sospensioneIterVisible">
     <div *dxTemplate="let data of 'content'">
-        <sospensione-iter [params]="paramsPerSospensione"></sospensione-iter>
+        <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter>
     </div>
 </dx-popup>
