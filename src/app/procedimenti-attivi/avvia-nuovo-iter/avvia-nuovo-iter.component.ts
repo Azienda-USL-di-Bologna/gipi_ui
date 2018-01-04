@@ -8,13 +8,14 @@ import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { forEach } from "@angular/router/src/utils/collection";
 import { HttpHeaders } from "@angular/common/http";
+import { OnInit } from "@angular/core/src/metadata/lifecycle_hooks";
 
 @Component({
   selector: "avvia-nuovo-iter",
   templateUrl: "./avvia-nuovo-iter.component.html",
   styleUrls: ["./avvia-nuovo-iter.component.scss"]
 })
-export class AvviaNuovoIterComponent {
+export class AvviaNuovoIterComponent implements OnInit {
 
   private odataContextDefinition: OdataContextDefinition;
 
@@ -39,7 +40,6 @@ export class AvviaNuovoIterComponent {
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.getInfoSessionStorage();
-    this.buildDataSourceUtenti();
   }
 
   private getInfoSessionStorage() {
@@ -61,6 +61,7 @@ export class AvviaNuovoIterComponent {
         loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
         customOdataContextDefinition.customLoading(loadOptions);
       }),
+      filter: [["idAzienda.id", "=", this.iterParams.idAzienda]],
       paginate: true,
       pageSize: 15
     };
@@ -103,6 +104,11 @@ export class AvviaNuovoIterComponent {
         },
         width: "max-content"
     });
+  }
+
+  ngOnInit() {
+    /* Chiamo qui questo metodo altrimenti non abbiamo l'idAzienda per filtrare*/
+    this.buildDataSourceUtenti();    
   }
 
   public handleEvent(name: string, data: any) {
