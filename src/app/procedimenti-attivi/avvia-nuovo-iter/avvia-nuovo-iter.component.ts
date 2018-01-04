@@ -26,7 +26,6 @@ export class AvviaNuovoIterComponent {
   
   @Input()
   set procedimentoSelezionato(procedimento: any) {
-    //debugger
     this.nomeProcedimento = procedimento.nomeProcedimento;
     this.iterParams = new IterParams();
     this.iterParams.idProcedimento = procedimento.idProcedimento;

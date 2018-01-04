@@ -54,7 +54,7 @@ export class IterProcedimentoComponent implements OnInit {
 
   public perFiglioPassaggioFase: Object;
 
-
+  public paramsPerSospensione;
 
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private activatedRoute: ActivatedRoute) {
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
@@ -77,10 +77,14 @@ export class IterProcedimentoComponent implements OnInit {
     });
     this.buildIter();
 
+    this.paramsPerSospensione = this.iter;
+
     this.perFigliParteDestra = {
       idIter: this.idIter,
       ricarica: false  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore
     };
+
+
   }
 
   ngAfterViewInit() {
@@ -97,6 +101,9 @@ export class IterProcedimentoComponent implements OnInit {
       this.iter.build(res[0], Iter);
       this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
       this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + this.iter.procedimentoCache.durataMassimaProcedimento);
+
+
+
     });
   }
 
@@ -151,7 +158,6 @@ export class IterProcedimentoComponent implements OnInit {
   }
 
   public sospensioneIter() {
-
     this.popupData.title = "Gestione Sospensione";
     this.sospensioneIterVisible = true;
   }
@@ -168,5 +174,20 @@ export class IterProcedimentoComponent implements OnInit {
     }
   }
 
+  receiveMessageFromSospensione($event) {
+    // console.log("loggo il messaggio....");
+    // console.log($event);
+    this.sospensioneIterVisible = $event["visible"];
+
+   
+  }
+
+  
+  nomeBottoneSospensione() {
+    if (this.iter.stato === "sospeso") 
+      return "Termina Sospensione";
+    else
+      return "Sospendi";
+  }
 
 }

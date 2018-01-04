@@ -8,8 +8,21 @@
       <dxi-item dataField="numeroDocumento" [colSpan]="1000" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: false }"></dxi-item>
       <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: false}"></dxi-item> 
     </dxi-item>
-    <dxi-item dataField="sospesoDal" editorType="dxDateBox" format="dd/mm/yyyy" [label]="{text: 'Data creazione iter'}" [editorOptions]="{ disabled: true }"></dxi-item>
-    <dxi-item dataField="sospesoAl" editorType="dxDateBox" [label]="{text: 'Data avvio iter'}" [editorOptions]="{ disabled: false }"></dxi-item>
+    <dxi-item dataField="sospesoDal" editorType="dxDateBox" format="dd/mm/yyyy" [label]="{text: 'Data sospensione'}" [editorOptions]="{ disabled: disabilitaSospesoDal() }"></dxi-item>
+    <dxi-item dataField="sospesoAl" editorType="dxDateBox" [label]="{text: 'Data fine sospensione'}" [editorOptions]="{ disabled: !disabilitaSospesoDal() }"></dxi-item>
     <dxi-item dataField="note" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
   </dxi-item>
 </dx-form>
+
+<br>
+
+<div class="buttons">
+    <dx-button
+    text="Annulla"
+    (onClick)="handleEvent('onClickAnnulla',$event)">
+  </dx-button>
+  <dx-button
+    [text]="testoSospensione"
+    (onClick)="handleEvent('onClickGestisciSospensione',$event)">
+  </dx-button>
+</div>
