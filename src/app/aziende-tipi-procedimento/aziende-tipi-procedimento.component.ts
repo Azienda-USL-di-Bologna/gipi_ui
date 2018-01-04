@@ -13,8 +13,7 @@ import {custom} from "devextreme/ui/dialog";
 import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
 import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
 import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
-import {ButtonAppearance} from "../classi/client-objects/ButtonAppearance";
-import {CustomReuseStrategy} from "@bds/nt-angular-context/routes/custom-reuse-strategy";
+import {ButtonAppearance} from "@bds/nt-angular-context/templates/buttons-bar/buttons-bar.component";
 
 
 @Component({
@@ -23,8 +22,12 @@ import {CustomReuseStrategy} from "@bds/nt-angular-context/routes/custom-reuse-s
     styleUrls: ["./aziende-tipi-procedimento.component.scss"]
 })
 export class AziendeTipiProcedimentoComponent implements OnInit {
-    @Input() tipoProcedimento: TipoProcedimento;
-    @ViewChild(DxFormComponent) myform: DxFormComponent;
+    private odataContextEntitiesAziendaTipoProcedimento: OdataContextDefinition;
+    private dataFromDettaglioProcedimentoComponent;
+    private datasource: DataSource;
+
+    @Input() public tipoProcedimento: TipoProcedimento;
+    @ViewChild(DxFormComponent) public myform: DxFormComponent;
 
     public nuovaAssociazione: boolean;
     public aziendaTipoProcedimento: AziendaTipoProcedimento = new AziendaTipoProcedimento();
@@ -53,14 +56,11 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     public reloadBtn: ButtonAppearance;
     public restoreBtn: ButtonAppearance;
 
-    statusPage: string;
+    public statusPage: string;
 
-    testoHeaderTipoProcedimento = "testo tipo procedimento passato da Fay";
-    testoHeaderAzienda = "Nome azienda passato da fay";
+    public testoHeaderTipoProcedimento = "testo tipo procedimento passato da Fay";
+    public testoHeaderAzienda = "Nome azienda passato da fay";
 
-    private odataContextEntitiesAziendaTipoProcedimento: OdataContextDefinition;
-    private dataFromDettaglioProcedimentoComponent;
-    private datasource: DataSource;
 
     constructor(private odataContextFactory: OdataContextFactory,
                 private router: Router,
@@ -111,6 +111,38 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
             this.dataSourceClassificazione.load();
         */
         // LE INFO NECESSARIE A POPOLARE QUESTI DUE HEADER VENGONO SCRITTE NELLO SharedData DALLA VIDEATA dettaglio-procedimento
+    }
+
+
+    /**
+     * Legge i dati passatti dall'interfaccia precedente DettaglioProcedimentoComponent
+     */
+    private setDataFromDettaglioProcedimentoComponent() {
+        this.dataFromDettaglioProcedimentoComponent = this.globalContextService.getInnerSharedObject("DettaglioProcedimentoComponent");
+
+        // this.dataFromDettaglioProcedimentoComponent = this.sharedData.getSharedObject()["DettaglioProcedimentoComponent"];
+    }
+
+    /**
+     * Dai dati letti dall'interfaccia precedente, estrae il campo "aziendaAssociata" che indica se si tratta di una nuova associazione
+     * e lo setta nella varibile di classe apposita "nuovaAssociazione"
+     */
+    private setNuovaAssociazione() {
+        this.nuovaAssociazione = !this.dataFromDettaglioProcedimentoComponent.aziendaAssociata;
+    }
+
+    private setFields(tipoProcedimentoDefault: TipoProcedimento) {
+        this.testoBottoneConferma = "Conferma";
+        this.abilitaBottoneAssocia = this.nuovaAssociazione;
+        this.abilitaBottoneDisassocia = !this.abilitaBottoneAssocia;
+
+        this.testoHeaderTipoProcedimento = this.aziendaTipoProcedimento.idTipoProcedimento.nome;
+        this.testoHeaderAzienda = this.aziendaTipoProcedimento.idAzienda.descrizione;
+        this.aziendaTipoProcedimento["modoApertura"] = tipoProcedimentoDefault.modoApertura;
+        this.aziendaTipoProcedimento["normaRiferimento"] = tipoProcedimentoDefault.normaRiferimento;
+        if (this.aziendaTipoProcedimento.idTitolo)
+            this.nomeTitolo = this.aziendaTipoProcedimento.idTitolo.nome;
+        //     this.aziendaTipoProcedimento["nomeTitolo"] = this.aziendaTipoProcedimento.idTitolo.nomeTitolo
     }
 
     ngOnInit() {
@@ -260,7 +292,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         console.log("Value Titolo Changed: ", e);
     }
 
-    onBack(){
+    public onBack(){
         if (this.datiModificati) {
             const confirmDialog = custom(
                 {
@@ -290,47 +322,15 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         // this.router.navigate(["/app-dettaglio-procedimento"]);
     }
 
-    onReload(){
-        console.log("onReload")
+    public onReload(){
+        console.log("onReload");
         this.buildAziendaTipoProcedimento(true);
     }
 
-    onSave(){
-
+    public onSave(){
     }
 
-    onRestore(){
+    public onRestore(){
         this.aziendaTipoProcedimento = Object.assign( {}, this.initialAziendaTipoProcedimento );
-    }
-
-    /**
-     * Legge i dati passatti dall'interfaccia precedente DettaglioProcedimentoComponent
-     */
-    private setDataFromDettaglioProcedimentoComponent() {
-        this.dataFromDettaglioProcedimentoComponent = this.globalContextService.getInnerSharedObject("DettaglioProcedimentoComponent");
-
-        // this.dataFromDettaglioProcedimentoComponent = this.sharedData.getSharedObject()["DettaglioProcedimentoComponent"];
-    }
-
-    /**
-     * Dai dati letti dall'interfaccia precedente, estrae il campo "aziendaAssociata" che indica se si tratta di una nuova associazione
-     * e lo setta nella varibile di classe apposita "nuovaAssociazione"
-     */
-    private setNuovaAssociazione() {
-        this.nuovaAssociazione = !this.dataFromDettaglioProcedimentoComponent.aziendaAssociata;
-    }
-
-    private setFields(tipoProcedimentoDefault: TipoProcedimento) {
-        this.testoBottoneConferma = "Conferma";
-        this.abilitaBottoneAssocia = this.nuovaAssociazione;
-        this.abilitaBottoneDisassocia = !this.abilitaBottoneAssocia;
-
-        this.testoHeaderTipoProcedimento = this.aziendaTipoProcedimento.idTipoProcedimento.nome;
-        this.testoHeaderAzienda = this.aziendaTipoProcedimento.idAzienda.descrizione;
-        this.aziendaTipoProcedimento["modoApertura"] = tipoProcedimentoDefault.modoApertura;
-        this.aziendaTipoProcedimento["normaRiferimento"] = tipoProcedimentoDefault.normaRiferimento;
-        if (this.aziendaTipoProcedimento.idTitolo)
-            this.nomeTitolo = this.aziendaTipoProcedimento.idTitolo.nome;
-        //     this.aziendaTipoProcedimento["nomeTitolo"] = this.aziendaTipoProcedimento.idTitolo.nomeTitolo
     }
 }

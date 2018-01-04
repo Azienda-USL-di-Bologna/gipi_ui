@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { DefinizioneTipiProcedimentoService } from "../definizione-tipi-procedimento/definizione-tipi-procedimento.service";
 import { TipoProcedimento } from "../classi/server-objects/entities/tipo-procedimento";
-// import {Azienda, AZIENDE} from '../classi/aziende';
 import "rxjs/add/operator/toPromise";
 import DataSource from "devextreme/data/data_source";
 import {OdataContextDefinition} from "@bds/nt-angular-context/odata-context-definition";
@@ -11,7 +10,7 @@ import {Entities} from "../../environments/app.constants";
 import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
 import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
 import {CustomReuseStrategy} from "@bds/nt-angular-context/routes/custom-reuse-strategy";
-import {ButtonAppearance} from "../classi/client-objects/ButtonAppearance";
+import {ButtonAppearance} from "@bds/nt-angular-context/templates/buttons-bar/buttons-bar.component";
 
 @Component({
     selector: "app-dettaglio-procedimento",
@@ -20,13 +19,12 @@ import {ButtonAppearance} from "../classi/client-objects/ButtonAppearance";
 })
 export class DettaglioProcedimentoComponent implements OnInit {
 
+    private aziendeDatasource: DataSource;
+    private odataContextDefinition: OdataContextDefinition;
     // aziende: Azienda[];
     public procedimento: TipoProcedimento;
     public aziende: Array<Azienda>;
     public backBtn: ButtonAppearance;
-
-    private aziendeDatasource: DataSource;
-    private odataContextDefinition: OdataContextDefinition;
 
     constructor(private service: DefinizioneTipiProcedimentoService,
                 private router: Router,

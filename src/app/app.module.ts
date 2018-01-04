@@ -59,14 +59,13 @@ import { ProcedimentiAttiviComponent } from "./procedimenti-attivi/procedimenti-
 import { PopupStrutturaTipiProcedimentoComponent } from "./popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component";
 import { IterProcedimentoComponent } from "./iter-procedimento/iter-procedimento.component";
 import { SequenzaDelleFasiComponent } from "./iter-procedimento/sequenza-delle-fasi/sequenza-delle-fasi.component";
-import { ButtonsBarComponent } from "./buttons-bar/buttons-bar.component";
 import { CronologiaEventiComponent } from "./iter-procedimento/cronologia-eventi/cronologia-eventi.component";
 import { DocumentiIterComponent } from "./iter-procedimento/documenti-iter/documenti-iter.component";
 import { AvviaNuovoIterComponent } from "./procedimenti-attivi/avvia-nuovo-iter/avvia-nuovo-iter.component";
 import { TestTreeComponent } from "./test/test-tree/test-tree.component";
 import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/passaggio-di-fase.component";
 import { SospensioneIterComponent } from "./iter-procedimento/sospensione-iter/sospensione-iter.component";
-import { ListaIterComponent } from './lista-iter/lista-iter.component';
+import { ListaIterComponent } from "./lista-iter/lista-iter.component";
 
 
 
@@ -90,7 +89,6 @@ import { ListaIterComponent } from './lista-iter/lista-iter.component';
         PopupStrutturaTipiProcedimentoComponent,
         IterProcedimentoComponent,
         SequenzaDelleFasiComponent,
-        ButtonsBarComponent,
         CronologiaEventiComponent,
         DocumentiIterComponent,
         TestTreeComponent,
