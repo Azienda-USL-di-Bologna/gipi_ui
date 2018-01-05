@@ -25,6 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public azienda: string;
     public ruolo: Ruolo;
     public route: string;
+    public classeSidebar: string = "sidebar-style";
 
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
@@ -61,12 +62,10 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     slide() {
-        let sideBar = document.getElementById("sidebar-id");
-
-        if (sideBar.classList.contains("active")) {
-            sideBar.classList.remove("active");
+        if (this.classeSidebar.indexOf("active") >= 0) {
+            this.classeSidebar = "sidebar-style";
         } else {
-            sideBar.classList.add("active");
+            this.classeSidebar = "sidebar-style active";
         }
     }
 
