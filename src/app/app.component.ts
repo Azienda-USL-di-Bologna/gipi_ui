@@ -10,6 +10,7 @@ import {Subscription} from "rxjs/Subscription";
 import {NavbarComponent} from "./navbar/navbar.component";
 import {ODATA_BASE_URL} from "../environments/app.constants";
 
+
 @Component({
     selector: "app-root",
     templateUrl: "./app.component.html",
@@ -24,11 +25,12 @@ export class AppComponent implements OnInit, OnDestroy {
     public ruolo: Ruolo;
     public route: string;
 
+    public classeSidebar: String = "sidebar-style";
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
     public sidebarIcon: string = "chevronright";
-    private userInfoMap: object;
+    private userInfoMap: any;
     private subscriptions: Subscription[] = [];
 
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
@@ -51,17 +53,27 @@ export class AppComponent implements OnInit, OnDestroy {
         this.route = this.router.url;
 
         this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);
+
+
+
     }
 
     slide() {
-        let sideBar = document.getElementById("sidebar-id");
+
+        if (this.classeSidebar.indexOf("active") >= 0 ) {
+            this.classeSidebar = "sidebar-style";
+        } else {
+            this.classeSidebar = "sidebar-style active"; 
+        }
+
+        /*let sideBar = document.getElementById("sidebar-id");
 
         if (sideBar.classList.contains("active")) {
             sideBar.classList.remove("active");
         } else {
             sideBar.classList.add("active");
         }
-        this.sidebarIcon = (this.sidebarIcon === "chevronright" ? "chevronleft" : "chevronright");
+        this.sidebarIcon = (this.sidebarIcon === "chevronright" ? "chevronleft" : "chevronright");*/
     }
 
     screen(width) {
