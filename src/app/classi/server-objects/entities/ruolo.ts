@@ -1,7 +1,10 @@
 import {Entity} from "@bds/nt-angular-context/entity";
 export class Ruolo extends Entity {
   id: number;
-  titolo: string;
+  nome: string;
+  nomeBreve: string;
+  mascherBit: number;
+  superaziendale: boolean;
 
   public static getOdataContextEntity(): any {
     return {
@@ -9,7 +12,10 @@ export class Ruolo extends Entity {
       keyType: "Int32",
       fieldTypes: {
         id: "Int32",
-        titolo: "String"
+        nome: "String",
+        nomeBreve: "String",
+        mascheraBit: "Int32",
+        superaziendale: "Boolean"
       }
     };
   }
