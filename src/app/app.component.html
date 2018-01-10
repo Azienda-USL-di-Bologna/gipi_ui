@@ -157,14 +157,14 @@
     </div>
     <div class="clContentBody">
         <div class="row">
-            <div id="sidebar-id" *ngIf="router.url !== '/login'" class="sidebar-style">
+            <div id="sidebar-id" *ngIf="router.url !== '/login'" class="{{classeSidebar}}">
                 <sidebar [sidebarItems]="sidebarItems"></sidebar>
             </div>
             <div class="col ovf-auto">
                 <div class="row" *ngIf="router.url !== '/login'">
                 <!--<div class="row">-->
                     <div>
-                        <dx-button id="sidebar-toggle-button" [icon]="sidebarIcon" type="default" (click)="slide()"></dx-button>
+                        <dx-button id="sidebar-toggle-button" icon="menu" type="default" (click)="slide()"></dx-button>
                     </div>
                     <div class="col">
                         <app-navbar id="navbar-id"></app-navbar>

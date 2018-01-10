@@ -43,17 +43,17 @@ font-stretch: expanded !important;
 
 
 
-/deep/ .dx-header-row{
+/* /deep/ .dx-header-row{
     background-color: #D8D8D8 !important;
     color: black !important;
-}
+} */
 
 /deep/ .dx-row.dx-data-row.dx-column-lines:nth-child(even) {
-    background-color: #EBEBEB !important;
+    background-color: "#002bff0d";
 }
 
 /deep/ .dx-row.dx-data-row.dx-column-lines:hover{
-    background-color: #FFC057 !important;
+    background-color: "#337ab78c" !important;
 }
 
 /*  --> questo metteva la testata gialla al popup per la modifica del tipo di procedimento

@@ -8,22 +8,25 @@ import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { forEach } from "@angular/router/src/utils/collection";
 import { HttpHeaders } from "@angular/common/http";
+import { OnInit } from "@angular/core/src/metadata/lifecycle_hooks";
 
 @Component({
   selector: "avvia-nuovo-iter",
   templateUrl: "./avvia-nuovo-iter.component.html",
   styleUrls: ["./avvia-nuovo-iter.component.scss"]
 })
-export class AvviaNuovoIterComponent {
+export class AvviaNuovoIterComponent implements OnInit {
+
+  private odataContextDefinition: OdataContextDefinition;
 
   public dataSourceUtenti: any;
   public iterParams: IterParams = new IterParams();
   public nomeProcedimento: string;
   public utenteConnesso: any;
+  public now: Date = new Date();
   
   @Input()
   set procedimentoSelezionato(procedimento: any) {
-    //debugger
     this.nomeProcedimento = procedimento.nomeProcedimento;
     this.iterParams = new IterParams();
     this.iterParams.idProcedimento = procedimento.idProcedimento;
@@ -33,27 +36,10 @@ export class AvviaNuovoIterComponent {
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
 
-  private odataContextDefinition: OdataContextDefinition;
 
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.getInfoSessionStorage();
-    this.buildDataSourceUtenti();
-  }
-
-  public handleEvent(name: string, data: any) {
-    switch (name) {
-      case "onClickProcedi":
-        this.avviaIter();
-      break;
-      case "onClickAnnulla":
-        this.closePopUp();
-      break;
-    }
-  }
-
-  public closePopUp(idIter?: number) {
-    this.messageEvent.emit({visible: false, idIter: idIter});
   }
 
   private getInfoSessionStorage() {
@@ -75,6 +61,7 @@ export class AvviaNuovoIterComponent {
         loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
         customOdataContextDefinition.customLoading(loadOptions);
       }),
+      filter: [["idAzienda.id", "=", this.iterParams.idAzienda]],
       paginate: true,
       pageSize: 15
     };
@@ -118,6 +105,27 @@ export class AvviaNuovoIterComponent {
         width: "max-content"
     });
   }
+
+  ngOnInit() {
+    /* Chiamo qui questo metodo altrimenti non abbiamo l'idAzienda per filtrare*/
+    this.buildDataSourceUtenti();    
+  }
+
+  public handleEvent(name: string, data: any) {
+    switch (name) {
+      case "onClickProcedi":
+        this.avviaIter();
+      break;
+      case "onClickAnnulla":
+        this.closePopUp();
+      break;
+    }
+  }
+
+  public closePopUp(idIter?: number) {
+    this.messageEvent.emit({visible: false, idIter: idIter});
+  }
+
 }
 
 class IterParams {

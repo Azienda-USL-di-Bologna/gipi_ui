@@ -1,15 +1,13 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild, } from "@angular/core";
+import {Component, Input, OnDestroy, OnInit, ViewChild,} from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { DxDataGridComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from "./definizione-tipi-procedimento.service";
-import { TipoProcedimento } from "../classi/server-objects/entities/tipo-procedimento";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
-import { Entities } from "../../environments/app.constants";
-import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
-import { ActivatedRoute, Router } from "@angular/router";
-import { GlobalContextService } from "@bds/nt-angular-context/global-context.service";
-import { Blocco } from "../buttons-bar/buttons-bar.component";
-import { ButtonAppearance } from "../classi/client-objects/ButtonAppearance";
+import {TipoProcedimento} from "../classi/server-objects/entities/tipo-procedimento";
+import {OdataContextDefinition} from "@bds/nt-angular-context/odata-context-definition";
+import {Entities} from "../../environments/app.constants";
+import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
+import {ActivatedRoute, Router} from "@angular/router";
+import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
 // import { UtilityFunctions } from '../utility-functions';
 
 
@@ -18,15 +16,16 @@ import { ButtonAppearance } from "../classi/client-objects/ButtonAppearance";
   templateUrl: "./definizione-tipi-procedimento.component.html",
   styleUrls: ["./definizione-tipi-procedimento.component.scss"]
 })
-export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
+export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
-  @ViewChild("definizione_tipi_procedimento") definizioneTipiProcedimento: DxDataGridComponent;
-  @Input("refreshButton") resfreshButton;
+  private odataContextDefinition: OdataContextDefinition;
+
+  @ViewChild("grid") public grid: DxDataGridComponent;
+  @Input ("refreshButton") public refreshButton;
 
   public dataSource: DataSource;
-  private odataContextDefinition: OdataContextDefinition;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
-  public texts: Object = {
+  public texts: Object= {
     editRow: "Modifica",
     deleteRow: "Elimina",
     saveRowChanges: "Salva",
@@ -35,10 +34,10 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
   };
 
   constructor(private odataContexFactory: OdataContextFactory,
-    private service: DefinizioneTipiProcedimentoService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private globalContextService: GlobalContextService) {
+              private service: DefinizioneTipiProcedimentoService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private globalContextService: GlobalContextService) {
 
     // this.sharedData.setSharedObject({route: "definizione-tipi-procedimento"});
 
@@ -46,16 +45,16 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
     this.dataSource = new DataSource({
       store: this.odataContextDefinition.getContext()[Entities.TipoProcedimento.name],
 
-// prove sulla data
+
 /*      map: function (item) {
         if (item.dataInizioValidita != null)
           item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
+        if (item.dataFineValidita != null)
+          item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);
 
-        console.log('item', item);
+        //console.log('item', item);
         return item;
       }*/
-
-      
     });
     this.dataSource.load().then(res => this.buildTipiProcedimento(res));
 
@@ -64,8 +63,6 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
     // console.log(this.dataSource);
 
   }
-
-
 
   ngOnInit() {
     // this.globalContext.setButtonBarVisible(false);
@@ -84,7 +81,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
   public handleEvent(name: String, event: any) {
     // console.log("EVENTO "+name, event);
-    switch (name) {
+    switch (name){
       // Questo evento scatta al cliccare di qualsiasi cella: se però siamo sulla 5 colonna e si è cliccato un pulsante viene gestito
       case "CellClick":
         this.cellClick(event);
@@ -95,7 +92,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
           // console.log(event.columnIndex);
 
-          switch (this.comando) {
+          switch (this.comando){
             case "edita":
               this.modificaRiga(event.row);
               break;
@@ -140,35 +137,35 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
 
   // cancello la riga passata come parametro
-  private cancellaRiga(row: any) {
+  private cancellaRiga(row: any){
     // prendo l'indice della riga selezionata e
     // console.log("FUNZIONE CANCELLARIGA");
     // console.log(row.rowIndex);
-    this.definizioneTipiProcedimento.instance.deleteRow(row.rowIndex);
+    this.grid.instance.deleteRow(row.rowIndex);
     this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
   }
 
   // modifico la riga passata come parametro
-  private modificaRiga(row: any) {
-    debugger;
+  private modificaRiga(row: any){
     // console.log("FUNZIONE MODIFICARIGA");
     // console.log(row.rowIndex);
-    this.definizioneTipiProcedimento.instance.editRow(row.rowIndex);
+    this.grid.instance.editRow(row.rowIndex);
     this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
   }
 
 
-  private cellClick(e: any) {
+  private cellClick(e: any){
     this.service.valorizzaSelectedRow(e.data);
 
   }
 
-  public onToolbarPreparing(e: any) {
+  public onToolbarPreparing(e: any){
     // console.log("onToolbarPreparing event!!!")
     let toolbarItems = e.toolbarOptions.items;
 
     toolbarItems.forEach(element => {
-      if (element.name === "addRowButton") {
+      if (element.name === "addRowButton")
+      {
         element.options.hint = "Aggiungi";
         element.options.text = "Aggiungi";
         element.options.showText = "always";
@@ -182,21 +179,19 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
   public onCellPrepared(e: any) {
 
     if (e.rowType === "data" && e.column.command === "edit") {
-      let isEditing = e.row.isEditing,
-        $links = e.cellElement.find(".dx-link");
+        let isEditing = e.row.isEditing,
+            $links = e.cellElement.find(".dx-link");
 
-      $links.text("");
-      $links.filter(".dx-link-edit").addClass("dx-icon-edit");
-      $links.filter(".dx-link-delete").addClass("dx-icon-trash");
+        $links.text("");
+        $links.filter(".dx-link-edit").addClass("dx-icon-edit");
+        $links.filter(".dx-link-delete").addClass("dx-icon-trash");
 
     }
   }
 
-  public filterOperationDescriptions: Object = {
-    "contains": "contiene", "notContains": "non contiene", "equal": "uguale", "notEqual": "diverso",
-    "startsWith": "comincia con", "endsWith": "finisce con", "between": "compreso tra", "greaterThan": "maggiore di",
-    "greaterThanOrEqual": "maggiore o uguale a", "lessThan": "minore di", "lessThanOrEqual": "minore o uguale a"
-  };
+  public filterOperationDescriptions: Object = {"contains": "contiene", "notContains": "non contiene", "equal": "uguale", "notEqual": "diverso",
+    "startsWith": "comincia con",  "endsWith": "finisce con", "between": "compreso tra", "greaterThan": "maggiore di",
+    "greaterThanOrEqual": "maggiore o uguale a", "lessThan": "minore di", "lessThanOrEqual": "minore o uguale a" };
 
 
   public calcolaSeAttiva(row: any) {

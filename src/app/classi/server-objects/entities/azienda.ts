@@ -9,6 +9,7 @@ export class Azienda extends Entity {
   descrizione: string;
   idAziendaGru: number;
   schemaGru: string;
+  parametri: string;
   strutturaList: Array<Struttura>;
   aziendaTipoProcedimentoList: Array<AziendaTipoProcedimento>;
 
@@ -23,7 +24,8 @@ export class Azienda extends Entity {
         codice: "String",
         descrizione: "String",
         idAziendaGru: "Int32",
-        schemaGru: "String"
+        schemaGru: "String",
+        parametri: "String"
       }
     }
   }

@@ -1,5 +1,5 @@
 import { Entity } from "@bds/nt-angular-context/entity";
-import { Entities}  from "../../../../environments/app.constants";
+import { Entities} from "../../../../environments/app.constants";
 import { OdataForeignKey } from "@bds/nt-angular-context/server-object";
 import { FaseIter } from "./fase-iter";
 import { Utente } from "./utente";

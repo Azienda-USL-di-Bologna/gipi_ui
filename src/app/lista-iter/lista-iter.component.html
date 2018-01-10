@@ -1,0 +1,36 @@
+<div class="container-fluid">
+  <div class="col header-font">
+      <h3><span >Azienda:</span> <i>{{infoGeneriche.azienda}}</i></h3>
+      <h3><span >Struttura:</span> <i>{{infoGeneriche.struttura}}</i></h3>
+      <h3><span >Procedimento:</span> <i>{{infoGeneriche.procedimento}}</i></h3>
+  </div>
+  <dx-data-grid
+      allowColumnResizing="true"
+      hoverStateEnabled="true" 
+      columnResizingMode="nextColumn" 
+      rowAlternationEnabled="true" 
+      wordWrapEnabled="true"
+      [dataSource] = "dataSource"
+      noDataText="Non ci sono dati da visualizzare">
+
+      <dxo-search-panel 
+        [visible]="true" 
+        [width]="240" 
+        placeholder="Search...">
+      </dxo-search-panel>
+
+        <dxi-column dataField="numero" [width]="100"></dxi-column>
+        <dxi-column dataField="oggetto" [minWidth]="200"></dxi-column>
+        <dxi-column dataField="idResponsabileProcedimento.nome" caption="Resp. procedimento" [minWidth]="200"></dxi-column>
+        <dxi-column dataField="stato"[width]="100"></dxi-column>
+        <dxi-column dataField="dataAvvio" caption="Aperto il" [width]="100"></dxi-column>
+        <dxi-column dataField="dataChiusura" caption="Chiuso il" [width]="100"></dxi-column>
+
+        <dxi-column caption="Apri" cellTemplate="buttonCellTemplate" [width]="60"></dxi-column>
+        <div *dxTemplate="let d of 'buttonCellTemplate'" class="azioni-tipi-procedimento">
+          <dx-button hint="Vedi dettaglio iter" icon="chevronnext" (onClick)="vaiAlDettaglio(d)"></dx-button>
+        </div>
+        <!-- <dxi-column caption="Apri" [width]="50"></dxi-column> -->
+  </dx-data-grid>
+</div>
+

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ButtonsBarComponent } from './buttons-bar.component';
+import { SospensioneIterComponent } from './sospensione-iter.component';
 
-describe('ButtonsBarComponent', () => {
-  let component: ButtonsBarComponent;
-  let fixture: ComponentFixture<ButtonsBarComponent>;
+describe('SospensioneIterComponent', () => {
+  let component: SospensioneIterComponent;
+  let fixture: ComponentFixture<SospensioneIterComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ButtonsBarComponent ]
+      declarations: [ SospensioneIterComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ButtonsBarComponent);
+    fixture = TestBed.createComponent(SospensioneIterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

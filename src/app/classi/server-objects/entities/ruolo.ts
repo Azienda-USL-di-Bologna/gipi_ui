@@ -11,7 +11,7 @@ export class Ruolo extends Entity {
         id: "Int32",
         titolo: "String"
       }
-    }
+    };
   }
 
   constructor(){

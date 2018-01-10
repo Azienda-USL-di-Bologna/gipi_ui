@@ -1,15 +1,14 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit, HostListener} from "@angular/core";
 import {Location} from "@angular/common";
-import {CustomReuseStrategy} from "@bds/nt-angular-context/Routes/custom-reuse-strategy";
+import {CustomReuseStrategy} from "@bds/nt-angular-context/routes/custom-reuse-strategy";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs/Observable";
-import { SidebarItem } from "./classi/client-objects/SidebarItem";
 import {GlobalContextService, OdataContextFactory} from "@bds/nt-angular-context";
 import {Ruolo} from "./classi/server-objects/entities/ruolo";
 import {Subscription} from "rxjs/Subscription";
-import {NavbarComponent} from "./navbar/navbar.component";
 import {ODATA_BASE_URL} from "../environments/app.constants";
-
+import {SidebarItem} from "@bds/nt-angular-context/templates/sidebar/sidebar.component";
+import { $ } from "protractor";
 
 @Component({
     selector: "app-root",
@@ -18,21 +17,19 @@ import {ODATA_BASE_URL} from "../environments/app.constants";
 })
 export class AppComponent implements OnInit, OnDestroy {
 
+    private userInfoMap: object;
+    private subscriptions: Subscription[] = [];
     // buttonBar: Observable<boolean>;
 
     public username: string;
     public azienda: string;
     public ruolo: Ruolo;
     public route: string;
+    public classeSidebar: string = "sidebar-style";
 
-    public classeSidebar: String = "sidebar-style";
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
-    public sidebarIcon: string = "chevronright";
-    private userInfoMap: any;
-    private subscriptions: Subscription[] = [];
-
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
         // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
         // if (this.userInfoMap) {
@@ -47,33 +44,29 @@ export class AppComponent implements OnInit, OnDestroy {
         this.sidebarItems.push(new SidebarItem("Home", "home"));
         this.sidebarItems.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
         this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
+        this.sidebarItems.push(new SidebarItem("Lista Iter", "app-lista-iter"));
         this.sidebarItems.push(new SidebarItem("Test", "", this.sidebarItems2));
         // this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi", this.sidebarItems2));
         // this.sidebarItems2.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
         this.route = this.router.url;
 
         this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);
+    }
 
 
-
+    @HostListener('window:keydown', ['$event'])
+    keyEvent(event: KeyboardEvent) {
+      if(event.code=="F5"){
+        this.router.navigate([""]);
+      }
     }
 
     slide() {
-
-        if (this.classeSidebar.indexOf("active") >= 0 ) {
+        if (this.classeSidebar.indexOf("active") >= 0) {
             this.classeSidebar = "sidebar-style";
         } else {
-            this.classeSidebar = "sidebar-style active"; 
+            this.classeSidebar = "sidebar-style active";
         }
-
-        /*let sideBar = document.getElementById("sidebar-id");
-
-        if (sideBar.classList.contains("active")) {
-            sideBar.classList.remove("active");
-        } else {
-            sideBar.classList.add("active");
-        }
-        this.sidebarIcon = (this.sidebarIcon === "chevronright" ? "chevronleft" : "chevronright");*/
     }
 
     screen(width) {
