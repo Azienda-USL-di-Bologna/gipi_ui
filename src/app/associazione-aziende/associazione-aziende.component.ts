@@ -13,11 +13,11 @@ import {CustomReuseStrategy} from "@bds/nt-angular-context/routes/custom-reuse-s
 import {ButtonAppearance} from "@bds/nt-angular-context/templates/buttons-bar/buttons-bar.component";
 
 @Component({
-    selector: "app-dettaglio-procedimento",
-    templateUrl: "./dettaglio-procedimento.component.html",
-    styleUrls: ["./dettaglio-procedimento.component.css"]
+    selector: "app-associazione-aziende",
+    templateUrl: "./associazione-aziende.component.html",
+    styleUrls: ["./associazione-aziende.component.css"]
 })
-export class DettaglioProcedimentoComponent implements OnInit {
+export class AssociazioneAziendeComponent implements OnInit {
 
     private aziendeDatasource: DataSource;
     private odataContextDefinition: OdataContextDefinition;
@@ -91,9 +91,9 @@ export class DettaglioProcedimentoComponent implements OnInit {
                     "azienda": azienda,
                     "aziendaAssociata": this.procedimento.aziendeAssociate[azienda.id] ? true : false,
                 };
-        this.globalContextService.setInnerSharedObject("DettaglioProcedimentoComponent", obj);
+        this.globalContextService.setInnerSharedObject("AssociazioneAziendeComponent", obj);
         // this.sharedData.setSharedObject(obj);
-        this.router.navigate(["/aziende-tipi-procedimento"]);
+        this.router.navigate(["/gestione-associazione-azienda"]);
     }
 
 }

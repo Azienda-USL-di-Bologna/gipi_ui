@@ -17,11 +17,11 @@ import {ButtonAppearance} from "@bds/nt-angular-context/templates/buttons-bar/bu
 
 
 @Component({
-    selector: "app-aziende-tipi-procedimento",
-    templateUrl: "./aziende-tipi-procedimento.component.html",
-    styleUrls: ["./aziende-tipi-procedimento.component.scss"]
+    selector: "app-gestione-associazione-azienda",
+    templateUrl: "./gestione-associazione-azienda.component.html",
+    styleUrls: ["./gestione-associazione-azienda.component.scss"]
 })
-export class AziendeTipiProcedimentoComponent implements OnInit {
+export class GestioneAssociazioneAziendaComponent implements OnInit {
     private odataContextEntitiesAziendaTipoProcedimento: OdataContextDefinition;
     private dataFromDettaglioProcedimentoComponent;
     private datasource: DataSource;

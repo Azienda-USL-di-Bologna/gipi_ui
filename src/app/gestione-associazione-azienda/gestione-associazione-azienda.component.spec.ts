@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AziendeTipiProcedimentoComponent } from './aziende-tipi-procedimento.component';
+import { GestioneAssociazioneAziendaComponent } from './gestione-associazione-azienda.component';
 
 describe('AziendeTipiProcedimentoComponent', () => {
-  let component: AziendeTipiProcedimentoComponent;
-  let fixture: ComponentFixture<AziendeTipiProcedimentoComponent>;
+  let component: GestioneAssociazioneAziendaComponent;
+  let fixture: ComponentFixture<GestioneAssociazioneAziendaComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AziendeTipiProcedimentoComponent ]
+      declarations: [ GestioneAssociazioneAziendaComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AziendeTipiProcedimentoComponent);
+    fixture = TestBed.createComponent(GestioneAssociazioneAziendaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

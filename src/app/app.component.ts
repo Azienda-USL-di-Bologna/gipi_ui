@@ -17,7 +17,7 @@ import { $ } from "protractor";
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-    private userInfoMap: object;
+    private userInfoMap: any;
     private subscriptions: Subscription[] = [];
     // buttonBar: Observable<boolean>;
 

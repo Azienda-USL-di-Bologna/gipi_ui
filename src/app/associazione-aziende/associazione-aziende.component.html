@@ -3,18 +3,11 @@
             (onBackButton) = "onBack()"
             [backButton]="backBtn">
     </app-buttons-bar>
-
+    <h4 style="text-align: center; margin-bottom: 30px;">Procedimento: <b>{{procedimento.nome}}</b></h4>
     <div class="row">
         <div class="col">
-            <div style="margin-bottom: 8px; overflow: auto;">
-                <div class="dx-field-label">Nome</div>
-                <!-- nome -->
-                <div class="dx-field-value">
-                    <dx-text-box [value]="procedimento.nome" [disabled]="true">
-                    </dx-text-box>
-                </div>
-                <!-- end nome -->
-            </div>
+            
+
 
             <div style="margin-bottom: 8px; overflow: auto;">
                 <div class="dx-field-label">Descrizione</div>
