@@ -85,6 +85,9 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
         odataContextDefinitionUtente.customLoading(loadOptions);
       }),
+      expand: [
+        "idPersona",
+      ],
       filter: [["idAzienda.id", "=", this.idAziendaFront]]
     });
 

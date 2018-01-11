@@ -42,7 +42,7 @@
         <dxi-item dataField="idTitolarePotereSostitutivo" [label]="{text: 'Titolare potere sostitutivo'}" editorType="dxLookup" [editorOptions]="{ 
             disabled: campiEditabiliDisabilitati,
             dataSource: dataSourceUtente, 
-            displayExpr: 'descrizione',
+            displayExpr: 'idPersona.descrizione',
             closeOnOutsideClick: true, 
             showPopupTitle: false, 
             showCancelButton: false,

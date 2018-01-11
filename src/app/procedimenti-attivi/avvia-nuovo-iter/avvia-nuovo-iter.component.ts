@@ -61,7 +61,10 @@ export class AvviaNuovoIterComponent implements OnInit {
         loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
         customOdataContextDefinition.customLoading(loadOptions);
       }),
-      filter: [["idAzienda.id", "=", this.iterParams.idAzienda]],
+      expand: [
+        "idPersona"
+      ],
+      filter: [["idAzienda.id", "=", this.iterParams.idAzienda], ["attivo", "=", true]],
       paginate: true,
       pageSize: 15
     };
@@ -78,6 +81,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   private avviaIter() {
+    console.log(this.iterParams);
     if (this.campiObbligatoriCompilati()) {
       const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", this.iterParams, {headers: new HttpHeaders().set("content-type", "application/json")}) // Object.assign({}, this.iterParams))
       .subscribe(
