@@ -22,7 +22,6 @@ export class Utente extends Entity {
   username: string;
   FK_id_azienda: number;
   idAzienda: Azienda;
-  FK_id_ruolo: number;
   bitRuoli: number;
 
   public static getOdataContextEntity(): any {
@@ -32,17 +31,13 @@ export class Utente extends Entity {
       fieldTypes: {
         id: 'Int32',
         username: 'String',
-        nome: 'String',
-        cognome: 'String',
         attivo: 'Boolean',
-        codiceFiscale: 'String',
         codiceStruttura: 'String',
         descrizione: 'String',
         dominio: 'String',
         email: 'String',
         fax: 'String',
         idInquadramento: 'Int32',
-        matricola: 'String',
         omonimia: 'Boolean',
         passwordHash: 'String',
         telefono: 'String',

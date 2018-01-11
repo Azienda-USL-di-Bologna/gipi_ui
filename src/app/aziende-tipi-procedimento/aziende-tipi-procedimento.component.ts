@@ -83,7 +83,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
             store: this.odataContextEntitiesAziendaTipoProcedimento.getContext()[Entities.AziendaTipoProcedimento.name]
                 .on("modifying", () => {console.log("modified"); })
                 .on("modified", () => {console.log("modified"); }),
-            expand: ["idAzienda", "id", "idTitolo"],
+            expand: ["idAzienda", "idTipoProcedimento", "idTitolo"],
             // filter: [['idTipoProcedimento.idTipoProcedimento', '=', this.sharedData.getSharedObject().procedimento.idAziendaTipoProcedimento], ['idAzienda.id', '=', this.sharedData.getSharedObject().azienda.id]],
         });
         this.setDataFromDettaglioProcedimentoComponent();
@@ -175,7 +175,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         else {
             this.restoreBtn.disabled = false;
             this.datasource.filter([
-                ["idTipoProcedimento.idTipoProcedimento", "=", tipoProcedimentoDefault.id],
+                ["idTipoProcedimento.id", "=", tipoProcedimentoDefault.id],
                 ["idAzienda.id", "=", azienda.id]]);
             this.datasource.load().then(res => {
                 // this.aziendaTipoProcedimento = res[0] as AziendaTipoProcedimento;
