@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild,} from "@angular/core";
+import {Component, Input, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { DxDataGridComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from "./definizione-tipi-procedimento.service";
@@ -20,7 +20,10 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
   private odataContextDefinition: OdataContextDefinition;
 
-  @ViewChild("grid") public grid: DxDataGridComponent;
+  // questa proprietà serve per capire che pulsante è stato cliccato
+  private comando: any;
+
+  @ViewChild("definizione_tipi_procedimento") public grid: DxDataGridComponent;
   @Input ("refreshButton") public refreshButton;
 
   public dataSource: DataSource;
@@ -32,6 +35,10 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     cancelRowChanges: "Annulla",
     confirmDeleteMessage: "Stai per cancellare il tipo di procedimento: procedere?"
   };
+
+  public filterOperationDescriptions: Object = {"contains": "contiene", "notContains": "non contiene", "equal": "uguale", "notEqual": "diverso",
+    "startsWith": "comincia con",  "endsWith": "finisce con", "between": "compreso tra", "greaterThan": "maggiore di",
+    "greaterThanOrEqual": "maggiore o uguale a", "lessThan": "minore di", "lessThanOrEqual": "minore o uguale a" };
 
   constructor(private odataContexFactory: OdataContextFactory,
               private service: DefinizioneTipiProcedimentoService,
@@ -64,20 +71,29 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
   }
 
-  ngOnInit() {
-    // this.globalContext.setButtonBarVisible(false);
+
+  // cancello la riga passata come parametro
+  private cancellaRiga(row: any) {
+    // prendo l'indice della riga selezionata e
+    // console.log("FUNZIONE CANCELLARIGA");
+    // console.log(row.rowIndex);
+    this.grid.instance.deleteRow(row.rowIndex);
+    this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
   }
 
-  ngOnDestroy() {
-    // console.log("destroy");
+  // modifico la riga passata come parametro
+  private modificaRiga(row: any) {
+    // console.log("FUNZIONE MODIFICARIGA");
+    // console.log(row.rowIndex);
+    this.grid.instance.editRow(row.rowIndex);
+    this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
   }
 
-  buildTipiProcedimento(res) {
-    this.tipiProcedimento = res;
-  }
 
-  // questa proprietà serve per capire che pulsante è stato cliccato
-  private comando: any;
+  private cellClick(e: any) {
+    this.service.valorizzaSelectedRow(e.data);
+
+  }
 
   public handleEvent(name: String, event: any) {
     // console.log("EVENTO "+name, event);
@@ -136,30 +152,20 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
   }
 
 
-  // cancello la riga passata come parametro
-  private cancellaRiga(row: any){
-    // prendo l'indice della riga selezionata e
-    // console.log("FUNZIONE CANCELLARIGA");
-    // console.log(row.rowIndex);
-    this.grid.instance.deleteRow(row.rowIndex);
-    this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
+
+  ngOnInit() {
+    // this.globalContext.setButtonBarVisible(false);
   }
 
-  // modifico la riga passata come parametro
-  private modificaRiga(row: any){
-    // console.log("FUNZIONE MODIFICARIGA");
-    // console.log(row.rowIndex);
-    this.grid.instance.editRow(row.rowIndex);
-    this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
+  ngOnDestroy() {
+    // console.log("destroy");
   }
 
-
-  private cellClick(e: any){
-    this.service.valorizzaSelectedRow(e.data);
-
+  buildTipiProcedimento(res) {
+    this.tipiProcedimento = res;
   }
 
-  public onToolbarPreparing(e: any){
+  public onToolbarPreparing(e: any) {
     // console.log("onToolbarPreparing event!!!")
     let toolbarItems = e.toolbarOptions.items;
 
@@ -189,9 +195,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     }
   }
 
-  public filterOperationDescriptions: Object = {"contains": "contiene", "notContains": "non contiene", "equal": "uguale", "notEqual": "diverso",
-    "startsWith": "comincia con",  "endsWith": "finisce con", "between": "compreso tra", "greaterThan": "maggiore di",
-    "greaterThanOrEqual": "maggiore o uguale a", "lessThan": "minore di", "lessThanOrEqual": "minore o uguale a" };
+  
 
 
   public calcolaSeAttiva(row: any) {
