@@ -25,6 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public azienda: string;
     public ruolo: Ruolo;
     public route: string;
+    public classeSidebar: string = "sidebar-style";
 
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
@@ -61,12 +62,10 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     slide() {
-        let sideBar = document.getElementById("sidebar-id");
-
-        if (sideBar.classList.contains("active")) {
-            sideBar.classList.remove("active");
+        if (this.classeSidebar.indexOf("active") >= 0) {
+            this.classeSidebar = "sidebar-style";
         } else {
-            sideBar.classList.add("active");
+            this.classeSidebar = "sidebar-style active";
         }
     }
 
@@ -93,8 +92,8 @@ export class AppComponent implements OnInit, OnDestroy {
         if (sessionStorage.getItem("userInfoMap")) {
             this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
             this.username = this.userInfoMap["username"];
-            this.ruolo = this.userInfoMap["ruolo"];
-            this.azienda = this.userInfoMap["azienda"]["nome"];
+            this.ruolo = this.userInfoMap["bit_ruoli"];
+            this.azienda = this.userInfoMap["aziende"]["nome"];
         }
 
         this.userInfoMap$ = this.globalContextService.getSubjectInnerSharedObject("userInfoMap");
@@ -103,8 +102,8 @@ export class AppComponent implements OnInit, OnDestroy {
                 if (value) {
                     this.userInfoMap = value;
                     this.username = value["username"];
-                    this.ruolo = value["ruolo"];
-                    this.azienda = value.azienda.nome;
+                    this.ruolo = value["bit_ruoli"];
+                    this.azienda = value.aziende.nome;
                 }
 
             }

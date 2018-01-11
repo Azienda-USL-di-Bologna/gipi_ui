@@ -157,7 +157,7 @@
     </div>
     <div class="clContentBody">
         <div class="row">
-            <div id="sidebar-id" *ngIf="router.url !== '/login'" class="sidebar-style">
+            <div id="sidebar-id" *ngIf="router.url !== '/login'" class="{{classeSidebar}}">
                 <sidebar [sidebarItems]="sidebarItems"></sidebar>
             </div>
             <div class="col ovf-auto">

@@ -8,8 +8,6 @@ import {Entities} from "../../environments/app.constants";
 import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
 import {ActivatedRoute, Router} from "@angular/router";
 import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
-import {Blocco} from "../buttons-bar/buttons-bar.component";
-import {ButtonAppearance} from "../classi/client-objects/ButtonAppearance";
 // import { UtilityFunctions } from '../utility-functions';
 
 
@@ -20,11 +18,12 @@ import {ButtonAppearance} from "../classi/client-objects/ButtonAppearance";
 })
 export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
-  @ViewChild("grid") grid: DxDataGridComponent;
-  @Input("refreshButton") resfreshButton;
+  private odataContextDefinition: OdataContextDefinition;
+
+  @ViewChild("grid") public grid: DxDataGridComponent;
+  @Input ("refreshButton") public refreshButton;
 
   public dataSource: DataSource;
-  private odataContextDefinition: OdataContextDefinition;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
   public texts: Object= {
     editRow: "Modifica",
@@ -64,8 +63,6 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     // console.log(this.dataSource);
 
   }
-
-
 
   ngOnInit() {
     // this.globalContext.setButtonBarVisible(false);
