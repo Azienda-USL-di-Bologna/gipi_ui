@@ -72,7 +72,12 @@ export class IterProcedimentoComponent implements OnInit {
 
     this.dataSourceIter = new DataSource({
       store: oataContextDefinitionTitolo.getContext()[Entities.Iter.name],
-      expand: ["idFaseCorrente", "idIterPrecedente", "idResponsabileProcedimento", "idResponsabileAdozioneProcedimentoFinale", "procedimentoCache", "procedimentoCache.idTitolarePotereSostitutivo"],
+      expand: [
+        "idFaseCorrente",
+        "idIterPrecedente", 
+        "idResponsabileProcedimento.idPersona", 
+        "idResponsabileAdozioneProcedimentoFinale.idPersona",
+        "procedimentoCache.idTitolarePotereSostitutivo.idPersona"],
       filter: [["id", "=", this.idIter]]
     });
     this.buildIter();

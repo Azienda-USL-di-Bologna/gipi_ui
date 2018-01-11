@@ -73,6 +73,6 @@ export class Iter extends Entity {
         idIterPrecedente: new OdataForeignKey(Entities.Iter, "id"),
         procedimentoCache: new OdataForeignKey(Entities.ProcedimentoCache, "id")
       }
-    }
+    };
   }
 }

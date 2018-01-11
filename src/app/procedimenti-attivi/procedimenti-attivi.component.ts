@@ -28,7 +28,7 @@ export class ProcedimentiAttiviComponent {
 
 
   constructor(private odataContextFactory: OdataContextFactory, public router: Router) {
-    this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).azienda.id;
+    this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).aziende.id;
     const now = new Date();
 
     this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
