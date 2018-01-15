@@ -39,7 +39,7 @@ export class ProcedimentiAttiviComponent {
         "idAziendaTipoProcedimento/idTipoProcedimento"
       ],
       filter: [
-        ["idAziendaTipoProcedimento.FK_id_azienda", "=", this.idAzienda],
+        ["idAziendaTipoProcedimento.idAzienda.id", "=", this.idAzienda],
         ["dataInizio", "<=", now],
         [
           ["dataFine", ">", now],

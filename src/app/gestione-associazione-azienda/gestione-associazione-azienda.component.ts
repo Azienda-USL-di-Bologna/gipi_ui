@@ -86,7 +86,7 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
             expand: ["idAzienda", "idTipoProcedimento", "idTitolo"],
             // filter: [['idTipoProcedimento.idTipoProcedimento', '=', this.sharedData.getSharedObject().procedimento.idAziendaTipoProcedimento], ['idAzienda.id', '=', this.sharedData.getSharedObject().azienda.id]],
         });
-        this.setDataFromDettaglioProcedimentoComponent();
+        this.setDataFromAssociazioneAziendeComponent();
         this.setNuovaAssociazione();
         this.buildAziendaTipoProcedimento(true);
 
@@ -117,8 +117,8 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
     /**
      * Legge i dati passatti dall'interfaccia precedente DettaglioProcedimentoComponent
      */
-    private setDataFromDettaglioProcedimentoComponent() {
-        this.dataFromDettaglioProcedimentoComponent = this.globalContextService.getInnerSharedObject("DettaglioProcedimentoComponent");
+    private setDataFromAssociazioneAziendeComponent() {
+        this.dataFromDettaglioProcedimentoComponent = this.globalContextService.getInnerSharedObject("AssociazioneAziendeComponent");
 
         // this.dataFromDettaglioProcedimentoComponent = this.sharedData.getSharedObject()["DettaglioProcedimentoComponent"];
     }
@@ -292,7 +292,7 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
         console.log("Value Titolo Changed: ", e);
     }
 
-    public onBack(){
+    public onBack() {
         if (this.datiModificati) {
             const confirmDialog = custom(
                 {
@@ -322,15 +322,15 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
         // this.router.navigate(["/app-dettaglio-procedimento"]);
     }
 
-    public onReload(){
+    public onReload() {
         console.log("onReload");
         this.buildAziendaTipoProcedimento(true);
     }
 
-    public onSave(){
+    public onSave() {
     }
 
-    public onRestore(){
+    public onRestore() {
         this.aziendaTipoProcedimento = Object.assign( {}, this.initialAziendaTipoProcedimento );
     }
 }
