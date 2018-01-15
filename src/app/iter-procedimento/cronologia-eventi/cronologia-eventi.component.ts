@@ -26,7 +26,7 @@ export class CronologiaEventiComponent implements OnInit {
     this.dataSourceEventoIter = new DataSource({
       store: this.odataContextDefinition.getContext()[Entities.EventoIter.name],
       expand: ["idEvento", "idIter", "idFaseIter.idFase", "autore"],
-      filter: ['FK_id_iter', '=', parseInt(this.daPadre['idIter'])]
+      filter: ['idIter.id', '=', parseInt(this.daPadre['idIter'])]
     })
   }
 
