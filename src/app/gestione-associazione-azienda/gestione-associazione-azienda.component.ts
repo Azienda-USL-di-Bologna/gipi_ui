@@ -217,12 +217,12 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
             confirmDialog.show().done(
                 dialogResult => {
                     if (dialogResult === "Si") {
-                        this.router.navigate(["/app-dettaglio-procedimento"]);
+                        this.router.navigate(["/associazione-aziende"]);
                     }
                 });
         }
         else {
-            this.router.navigate(["/app-dettaglio-procedimento"]);
+            this.router.navigate(["/associazione-aziende"]);
         }
         // Saving data
         // this.datasource.store().update(this.aziendaProcedimento.id, this.aziendaProcedimento);
@@ -283,7 +283,7 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
             headerAzienda: this.testoHeaderAzienda,
             headerTipoProcedimento: this.testoHeaderTipoProcedimento
         };
-        this.globalContextService.setInnerSharedObject("AziendeTipiProcedimentoComponent", obj);
+        this.globalContextService.setInnerSharedObject("GestioneAssociazioneAziendaComponent", obj);
         // this.sharedData.setSharedObject(obj);
         this.router.navigate(["/struttura-tipi-procedimento"]);
     }
@@ -311,12 +311,12 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
             confirmDialog.show().done(
                 dialogResult => {
                     if (dialogResult === "Si") {
-                        this.router.navigate(["/app-dettaglio-procedimento"]);
+                        this.router.navigate(["/associazione-aziende"]);
                     }
                 });
         }
         else {
-            this.router.navigate(["/app-dettaglio-procedimento"]);
+            this.router.navigate(["/associazione-aziende"]);
         }
         // CustomReuseStrategy.componentsReuseList.push("*");
         // this.router.navigate(["/app-dettaglio-procedimento"]);

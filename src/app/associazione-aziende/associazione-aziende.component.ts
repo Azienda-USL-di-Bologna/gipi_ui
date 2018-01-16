@@ -159,7 +159,7 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
                 break;
             case "disassocia":
                 console.log("disassocia clicked");
-                let aziendaTipoProcedimentoToRemove: AziendaTipoProcedimento = azienda.aziendaTipoProcedimentoList.find(item => item.FK_id_tipo_procedimento === this.procedimento.id);
+                let aziendaTipoProcedimentoToRemove: AziendaTipoProcedimento = azienda.aziendaTipoProcedimentoList.find(item => item.idTipoProcedimento.id === this.procedimento.id);
                 this.datasourceAziendaTipoProcedimento.store().remove(aziendaTipoProcedimentoToRemove.id).done(res => {
                     console.log("azienda rimossa con successo");
                     this.aziendeDatasource.load().then(res => { this.aziende = res; this.getAziendeAssociate(); });
