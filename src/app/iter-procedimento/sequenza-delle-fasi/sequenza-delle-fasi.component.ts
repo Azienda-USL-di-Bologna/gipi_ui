@@ -45,8 +45,8 @@ export class SequenzaDelleFasiComponent implements OnInit {
   ngOnInit() {
     this.datasource = new DataSource({
       store: this.odataContextDefinition.getContext()[Entities.FaseIter.name],
-      expand: ['idFase'],
-      filter: ['FK_id_iter', '=', parseInt(this.daPadre['idIter'])]
+      expand: ['idFase', 'idIter'],
+      filter: ['idIter.id', '=', parseInt(this.daPadre['idIter'])]
       //sort: ['dataInizioFase']
     });
     this.datasource.sort({ getter: "dataInizioFase", desc: true });

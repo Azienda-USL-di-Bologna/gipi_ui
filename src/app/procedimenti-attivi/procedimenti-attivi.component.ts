@@ -13,7 +13,6 @@ import {Router} from "@angular/router";
 })
 export class ProcedimentiAttiviComponent {
 
-  
   private odataContextDefinition: OdataContextDefinition;
   private rigaSelezionata: any;
   
@@ -25,7 +24,6 @@ export class ProcedimentiAttiviComponent {
   public procedimentoDaPassare: any;
   public iterAvviato: boolean = false;
   public idIterAvviato: number;
-
 
   constructor(private odataContextFactory: OdataContextFactory, public router: Router) {
     this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).aziende.id;
@@ -41,7 +39,7 @@ export class ProcedimentiAttiviComponent {
         "idAziendaTipoProcedimento/idTipoProcedimento"
       ],
       filter: [
-        ["idAziendaTipoProcedimento.FK_id_azienda", "=", this.idAzienda],
+        ["idAziendaTipoProcedimento.idAzienda.id", "=", this.idAzienda],
         ["dataInizio", "<=", now],
         [
           ["dataFine", ">", now],
@@ -123,6 +121,7 @@ export class ProcedimentiAttiviComponent {
   }
 
   public popupHidden() {
+    this.popupNuovoIterVisible = false; // Settaggio necessario in caso il popup venga chiuso tramite la X
     if (this.iterAvviato) {
       this.iterAvviato = false;
       this.router.navigate(["iter-procedimento"], {queryParams: {idIter: this.idIterAvviato}});
@@ -145,6 +144,4 @@ export class ProcedimentiAttiviComponent {
       break;
     }
   }
-
-  
 }
