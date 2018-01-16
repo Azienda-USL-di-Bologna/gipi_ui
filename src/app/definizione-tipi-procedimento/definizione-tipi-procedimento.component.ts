@@ -53,15 +53,19 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
       store: this.odataContextDefinition.getContext()[Entities.TipoProcedimento.name],
 
 
-/*      map: function (item) {
-        if (item.dataInizioValidita != null)
+      map: function (item) {
+        //debugger;
+
+
+
+/*        if (item.dataInizioValidita != null)
           item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
         if (item.dataFineValidita != null)
-          item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);
+          item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);*/
 
         //console.log('item', item);
         return item;
-      }*/
+      }
     });
     this.dataSource.load().then(res => this.buildTipiProcedimento(res));
 

@@ -8,8 +8,8 @@ import { GestioneAssociazioneAziendaComponent } from "./gestione-associazione-az
 import { AssociazioniComponent } from "./associazioni/associazioni.component";
 import { StrutturaTipiProcedimentoComponent } from "./struttura-tipi-procedimento/struttura-tipi-procedimento.component";
 import { LoginComponent } from "./login/login.component";
-import { NoLoginGuard } from "./login/guards/no-login.guard";
-import { LoginGuard } from "./login/guards/login.guard";
+import { NoLoginGuard } from "./authorization/guards/no-login.guard";
+import { LoginGuard } from "./authorization/guards/login.guard";
 import { ProcedimentiAttiviComponent } from "app/procedimenti-attivi/procedimenti-attivi.component";
 import { PopupStrutturaTipiProcedimentoComponent } from "app/popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component";
 import { IterProcedimentoComponent } from "app/iter-procedimento/iter-procedimento.component";

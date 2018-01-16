@@ -44,8 +44,8 @@ import { StrutturaTipiProcedimentoComponent } from "./struttura-tipi-procediment
 
 import {AuthenticationJwtModule} from "./authentication-jwt/authentication-jwt.module";
 import { LoginComponent } from "./login/login.component";
-import {NoLoginGuard} from "./login/guards/no-login.guard";
-import {LoginGuard} from "./login/guards/login.guard";
+import {NoLoginGuard} from "./authorization/guards/no-login.guard";
+import {LoginGuard} from "./authorization/guards/login.guard";
 
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";

@@ -118,7 +118,7 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
      * Legge i dati passatti dall'interfaccia precedente DettaglioProcedimentoComponent
      */
     private setDataFromDettaglioProcedimentoComponent() {
-        this.dataFromDettaglioProcedimentoComponent = this.globalContextService.getInnerSharedObject("DettaglioProcedimentoComponent");
+        this.dataFromDettaglioProcedimentoComponent = this.globalContextService.getInnerSharedObject("AssociazioneAziendeComponent");
 
         // this.dataFromDettaglioProcedimentoComponent = this.sharedData.getSharedObject()["DettaglioProcedimentoComponent"];
     }
