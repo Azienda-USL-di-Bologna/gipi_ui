@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import {LOGIN_URL} from "../../environments/app.constants";
 import {GlobalContextService} from "@bds/nt-angular-context";
+import {LoggedUser} from "../authorization/logged-user"
 
 @Component({
   selector: "app-login",
@@ -40,6 +41,7 @@ export class LoginComponent implements OnInit {
         .subscribe(
             (data: any) => {
                 this.setDataLogin(data, "POST");
+            
             },
             (err) => {
               console.log(err);
@@ -67,7 +69,9 @@ export class LoginComponent implements OnInit {
 
       sessionStorage.setItem("userInfoMap", JSON.stringify(userInfoMap));
 
-      this.globalContextService.setSubjectInnerSharedObject("userInfoMap", userInfoMap);
+      let loggedUser = new LoggedUser(userInfoMap);
+
+      this.globalContextService.setSubjectInnerSharedObject("loggedUser", loggedUser);
 
       this.router.navigate(["/home"], {queryParams: {reset: true}});
   }

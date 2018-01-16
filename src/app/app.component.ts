@@ -1,14 +1,15 @@
-import {Component, OnDestroy, OnInit, HostListener} from "@angular/core";
-import {Location} from "@angular/common";
-import {CustomReuseStrategy} from "@bds/nt-angular-context/routes/custom-reuse-strategy";
-import {Router} from "@angular/router";
-import {Observable} from "rxjs/Observable";
-import {GlobalContextService, OdataContextFactory} from "@bds/nt-angular-context";
-import {Ruolo} from "./classi/server-objects/entities/ruolo";
-import {Subscription} from "rxjs/Subscription";
-import {ODATA_BASE_URL} from "../environments/app.constants";
-import {SidebarItem} from "@bds/nt-angular-context/templates/sidebar/sidebar.component";
+import { Component, OnDestroy, OnInit, HostListener } from "@angular/core";
+import { Location } from "@angular/common";
+import { CustomReuseStrategy } from "@bds/nt-angular-context/routes/custom-reuse-strategy";
+import { Router } from "@angular/router";
+import { Observable } from "rxjs/Observable";
+import { GlobalContextService, OdataContextFactory } from "@bds/nt-angular-context";
+import { Ruolo } from "./classi/server-objects/entities/ruolo";
+import { Subscription } from "rxjs/Subscription";
+import { ODATA_BASE_URL } from "../environments/app.constants";
+import { SidebarItem } from "@bds/nt-angular-context/templates/sidebar/sidebar.component";
 import { $ } from "protractor";
+import { LoggedUser } from "./authorization/logged-user"
 
 @Component({
     selector: "app-root",
@@ -23,13 +24,19 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public username: string;
     public azienda: string;
-    public ruolo: Ruolo;
+
+    public ruolo: string = "";
+    public ruoli: string[];
+
     public route: string;
     public classeSidebar: string = "sidebar-style";
 
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
+    public loggedUser$: Observable<Object>;
+
+
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
         // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
         // if (this.userInfoMap) {
@@ -56,9 +63,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     @HostListener('window:keydown', ['$event'])
     keyEvent(event: KeyboardEvent) {
-      if(event.code=="F5"){
-        this.router.navigate([""]);
-      }
+        if (event.code == "F5") {
+            this.router.navigate([""]);
+        }
     }
 
     slide() {
@@ -70,7 +77,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     screen(width) {
-        return ( width < 700 ) ? "sm" : "lg";
+        return (width < 700) ? "sm" : "lg";
     }
 
 
@@ -80,21 +87,24 @@ export class AppComponent implements OnInit, OnDestroy {
          */
         this.subscriptions.push(
             (this.location.subscribe(
-            x => {
-                if (!!x.pop && x.type === "popstate") {
-                    console.log("pressed back or forward or changed location manually");
-                    // ogni volta che vado indietro o avanti indico di ricaricare dalla cache il componente nel quale si sta andando
-                    CustomReuseStrategy.componentsReuseList.push("*");
-                }
-            })
-        ) as Subscription);
+                x => {
+                    if (!!x.pop && x.type === "popstate") {
+                        console.log("pressed back or forward or changed location manually");
+                        // ogni volta che vado indietro o avanti indico di ricaricare dalla cache il componente nel quale si sta andando
+                        CustomReuseStrategy.componentsReuseList.push("*");
+                    }
+                })
+            ) as Subscription);
 
         if (sessionStorage.getItem("userInfoMap")) {
             this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
             this.username = this.userInfoMap["username"];
-            this.ruolo = this.userInfoMap["bit_ruoli"];
+            //this.ruolo = this.userInfoMap["bit_ruoli"];
             this.azienda = this.userInfoMap["aziende"]["nome"];
         }
+
+
+
 
         this.userInfoMap$ = this.globalContextService.getSubjectInnerSharedObject("userInfoMap");
         this.userInfoMap$.subscribe(
@@ -102,12 +112,29 @@ export class AppComponent implements OnInit, OnDestroy {
                 if (value) {
                     this.userInfoMap = value;
                     this.username = value["username"];
-                    this.ruolo = value["bit_ruoli"];
+                    //this.ruolo = value["bit_ruoli"];
                     this.azienda = value.aziende.nome;
                 }
 
             }
         );
+
+        this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
+        this.subscriptions.push(
+            this.loggedUser$.subscribe(
+                (loggedUser: LoggedUser) => {
+                    if (loggedUser) {
+                        this.ruoli = loggedUser.getRuoli();
+                        this.ruoli.forEach(element => {
+                            this.ruolo += element + " "
+                        });;
+                    }
+
+                }
+            )
+        );
+
+
     }
 
     ngOnDestroy() {

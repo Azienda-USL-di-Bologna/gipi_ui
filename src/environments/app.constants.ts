@@ -88,3 +88,13 @@ export const afferenzaStruttura = {
     diretta: "diretta",
     funzionale: "funzionale"
 };
+
+export enum Ruoli {US,MOBS,OBS,ADM,SUPERADM};
+
+export const BIT_RUOLI = {"US":1,"MOBS":2,"OBS":4,"ADM":8,"SUPERADM":16};
+
+
+
+
+
+

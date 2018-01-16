@@ -1,12 +1,10 @@
 <div>
-    <app-buttons-bar
-            (onBackButton) = "onBack()"
-            [backButton]="backBtn">
+    <app-buttons-bar (onBackButton)="onBack()" [backButton]="backBtn">
     </app-buttons-bar>
     <h4 style="text-align: center; margin-bottom: 30px;">Procedimento: <b>{{procedimento.nome}}</b></h4>
     <div class="row">
         <div class="col">
-            
+
 
 
             <div style="margin-bottom: 8px; overflow: auto;">
@@ -70,14 +68,51 @@
             </div>
         </div>
         <div class="col">
-            <h4 style="text-align: center; margin-bottom: 30px;">Aziende Associate</h4>
+
+            <!--            <h4 style="text-align: center; margin-bottom: 30px;">Aziende Associate</h4>
             <div style="margin-bottom: 8px; overflow: auto;" *ngFor="let azienda of aziende">
                 <dx-check-box [value]="procedimento.aziendeAssociate[azienda.id] ? true : false" [disabled]="true" #checkAssociata></dx-check-box>
                 <span style="margin-right: 16px;">{{azienda.descrizione}}</span>
                 <div style="float:right;">
-                    <dx-button [text]="checkAssociata.value ? 'Gestisci associazione' : 'Associa'" (onClick)="buttonClicked(azienda)" [type]="confirm"></dx-button>
+                    <div *ngIf="isSUPERADM">
+                        <dx-button *ngIf="checkAssociata.value" [text]="'Disassocia'" (onClick)="buttonClicked(azienda, 'disassocia')" [type]="confirm"></dx-button>
+                        <dx-button *ngIf="!checkAssociata.value" [text]="'Associa'" (onClick)="buttonClicked(azienda, 'associa')" [type]="confirm"></dx-button>
+                    </div>
+                    <div *ngIf="isADM">
+                        <dx-button *ngIf="checkAssociata.value" [text]="'Gestisci associazione'" (onClick)="buttonClicked(azienda, 'gestisciAssociazione')" [type]="confirm"></dx-button>   
+                    </div>
+                </div>
+            </div>-->
+
+
+
+            <h4 style="text-align: center; margin-bottom: 30px;">Aziende Associate</h4>
+            <div style="margin-bottom: 8px;" *ngFor="let azienda of aziende">
+                <div class="row">
+                    <div class="col">
+                        <dx-check-box [value]="procedimento.aziendeAssociate[azienda.id] ? true : false" [disabled]="true" #checkAssociata></dx-check-box>
+                        <span>{{azienda.descrizione}}</span>
+                    </div>
+
+
+                    <div class="col" align="right">
+                        <div *ngIf="(loggedUser$ | async).hasRole(SUPERADM)">
+                            <dx-button *ngIf="checkAssociata.value" [text]="'Disassocia'" (onClick)="buttonClicked(azienda, 'disassocia')" [type]="confirm"></dx-button>
+                            <dx-button *ngIf="!checkAssociata.value" [text]="'Associa'" (onClick)="buttonClicked(azienda, 'associa')" [type]="confirm"></dx-button>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div *ngIf="(loggedUser$ | async).hasRole(SUPERADM) || (loggedUser$ | async).hasRole(ADM)">
+                            <dx-button *ngIf="checkAssociata.value" [text]="'Gestisci associazione'" (onClick)="buttonClicked(azienda, 'gestisciAssociazione')"
+                                [type]="confirm"></dx-button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+
+
         </div>
     </div>
 </div>
