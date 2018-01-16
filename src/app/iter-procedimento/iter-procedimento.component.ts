@@ -14,6 +14,11 @@ import { PassaggioDiFaseComponent } from "./passaggio-di-fase/passaggio-di-fase.
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
+import {ButtonAppearance} from "@bds/nt-angular-context/templates/buttons-bar/buttons-bar.component";
+import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
+import { log } from "util";
+import * as moment from "moment";
+
 
 
 @Component({
@@ -22,7 +27,7 @@ import { ActivatedRoute, Params } from "@angular/router";
   styleUrls: ["./iter-procedimento.component.scss"],
   encapsulation: ViewEncapsulation.None
 })
-export class IterProcedimentoComponent implements OnInit {
+export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   // @ViewChild(PassaggioDiFaseComponent) child;
 
@@ -31,18 +36,25 @@ export class IterProcedimentoComponent implements OnInit {
   public procedimentoCache = new ProcedimentoCache;
   public dataSourceIter: DataSource;
   public durataPrevista: number;
-  public idIter: number = 6;
+  public idIter: number;
 
   public popupVisible: boolean = false;
   public passaggioDiFaseVisible: boolean = false;
   public sospensioneIterVisible: boolean = false;
+  public genericButtons: ButtonAppearance[];
+
+
+  // pulsanti custom aggiunti alla button bar
+  public procediButton: ButtonAppearance;
+  public sospendiButton: ButtonAppearance;
+
 
   // Dati che verranno ricevuti dall'interfaccia chiamante
   public infoGeneriche: any = {
     azienda: "AOSP-BO",
     struttura: "UO DaTer",
     tipoProcedimento: "Tipologia A",
-    numeroIter: 6
+    numeroIter: 109
   };
   public popupData: any = {
     visible: false,
@@ -54,17 +66,18 @@ export class IterProcedimentoComponent implements OnInit {
 
   public perFiglioPassaggioFase: Object;
 
-  public paramsPerSospensione;
+  public paramsPerSospensione: Object;
 
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private activatedRoute: ActivatedRoute) {
+    console.log("iter-procedimento-component (constructor)");
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
       const idIter: string = queryParams["idIter"];
       if (idIter) {
         this.idIter = +idIter;
       }
-      console.log(idIter);
     });
 
+    
 
     const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nomeTitolo");
@@ -80,15 +93,20 @@ export class IterProcedimentoComponent implements OnInit {
         "procedimentoCache.idTitolarePotereSostitutivo.idPersona"],
       filter: [["id", "=", this.idIter]]
     });
+    // this.generateCustomButtons();
     this.buildIter();
 
-    this.paramsPerSospensione = this.iter;
 
     this.perFigliParteDestra = {
       idIter: this.idIter,
       ricarica: false  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore
     };
 
+    this.paramsPerSospensione = {
+      iter: this.iter,
+      stato: this.iter.stato,
+      dataSospensione: this.iter.stato === "sospeso" ? this.getDataUltimaSospensione() :  null
+    };
 
   }
 
@@ -98,18 +116,44 @@ export class IterProcedimentoComponent implements OnInit {
 
 
   ngOnInit() {
+  }
 
+  isSospeso() {
+    if (this.iter.stato === "sospeso")
+      return true;
+    else
+      return false;
+  }
+
+  setNomeBottoneSospensione() {
+    this.sospendiButton.label = this.getNomeBottoneSospensione();
+  }
+  
+  getNomeBottoneSospensione() {
+    if (this.isSospeso()) 
+      return "Termina Sospensione";
+    else
+      return "Sospendi";
+  }
+
+  generateCustomButtons() {
+    this.genericButtons = new Array<ButtonAppearance>();
+    this.procediButton = new ButtonAppearance("Procedi", "", false, (this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura));
+    this.sospendiButton = new ButtonAppearance("Sospendi", "", false, this.iter.idFaseCorrente.faseDiChiusura);
+    this.genericButtons.push(this.procediButton, this.sospendiButton);
+    this.setNomeBottoneSospensione();
+    
   }
 
   buildIter() {
     this.dataSourceIter.load().then(res => {
       this.iter.build(res[0], Iter);
+      this.generateCustomButtons();
       this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
-      this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + this.iter.procedimentoCache.durataMassimaProcedimento);
-
-
-
+      this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + this.iter.procedimentoCache.durataMassimaProcedimento);    
     });
+    
+    
   }
 
   updateNoteControInteressati() {
@@ -126,23 +170,10 @@ export class IterProcedimentoComponent implements OnInit {
     this.popupData.visible = true;
   }
 
-  /*  onShowing(event:Event){
-      debugger;
-  
-  }*/
-
   public passaggioDiFase() {
-    /*this.idIterArray = [6];
-    this.popupData.title = 'Esito motivazione';
-    this.popupData.field = 'esitoMotivazione';
-    this.popupData.fieldValue = this.iter.esitoMotivazione;
-    this.popupData.visible = true;*/
-
     const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.idIter)
       .subscribe(
       res => {
-        // debugger;
-        // console.log(res)
         let current = JSON.parse(res["currentFase"]);
         let next = JSON.parse(res["nextFase"]);
 
@@ -158,18 +189,42 @@ export class IterProcedimentoComponent implements OnInit {
       },
       err => {
         notify("Non esiste la fase successiva", "error", 1000);
-        // debugger;
       });
   }
 
   public sospensioneIter() {
-    this.popupData.title = "Gestione Sospensione";
-    this.sospensioneIterVisible = true;
+    let dataDaPassare: Date;
+    if (this.iter.stato === "sospeso") {
+      const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.iter.id)
+      .subscribe(
+        res => {
+          let r: any = res;
+          dataDaPassare = new Date(r);
+          this.paramsPerSospensione = {
+            iter: this.iter,
+            stato: this.iter.stato,
+            dataSospensione: dataDaPassare
+          };
+          this.popupData.title = "Gestione Sospensione";
+          this.sospensioneIterVisible = true;
+        },
+        err => {
+          // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+        }
+      );
+    }
+    else {
+      this.paramsPerSospensione = {
+        iter: this.iter,
+        stato: this.iter.stato,
+        dataSospensione: null
+      };
+      this.popupData.title = "Gestione Sospensione";
+      this.sospensioneIterVisible = true;
+    }
   }
 
   receiveMessage($event) {
-    // console.log("loggo il messaggio....");
-    // console.log($event);
     this.passaggioDiFaseVisible = $event["visible"];
     if ($event["proceduto"]) {
       let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"] };
@@ -180,19 +235,58 @@ export class IterProcedimentoComponent implements OnInit {
   }
 
   receiveMessageFromSospensione($event) {
-    // console.log("loggo il messaggio....");
-    // console.log($event);
     this.sospensioneIterVisible = $event["visible"];
+    this.buildIter();
+    this.setNomeBottoneSospensione();
 
    
   }
 
-  
-  nomeBottoneSospensione() {
-    if (this.iter.stato === "sospeso") 
-      return "Termina Sospensione";
-    else
-      return "Sospendi";
+  onGenericButtonClick(buttonName: string) {
+    switch (buttonName){
+      case "Termina Sospensione":
+      case "Sospendi":
+        this.sospensioneIter();
+        break;
+
+      case "Procedi":
+        this.passaggioDiFase();
+      break;
+
+    }
+
   }
 
+  getDataUltimaSospensione() {
+    let date;
+      const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.iter.id)
+      .subscribe(
+        res => {
+          let r: any = res;
+          date = moment(r.dataSospensione);
+          return date;
+        },
+        err => {
+          // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+        }
+      );
+  }
+
+
+  isIterFinito() {
+    let b: boolean;
+    const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.iter.id)
+      .subscribe(
+      res => {
+        let next = JSON.parse(res["nextFase"]);
+        if (next != null)
+          b = false;
+        else
+          b = true;
+      },
+      err => {
+          b = true;
+      });
+      return b;
+  }
 }

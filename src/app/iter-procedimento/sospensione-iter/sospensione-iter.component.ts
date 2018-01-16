@@ -1,9 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from "@angular/core";
 import { Iter } from "app/classi/server-objects/entities/iter";
 import { EventoIter } from "app/classi/server-objects/entities/evento-iter";
 import { HttpClient } from "@angular/common/http";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { HttpHeaders } from "@angular/common/http";
+import { SimpleChange } from "@angular/core/src/change_detection/change_detection_util";
+import { debug } from "util";
+import * as moment from "moment";
+
 
 @Component({
   selector: "sospensione-iter",
@@ -11,52 +15,62 @@ import { HttpHeaders } from "@angular/common/http";
   styleUrls: ["./sospensione-iter.component.scss"]
 })
 export class SospensioneIterComponent implements OnInit {
-
-  @Input("params") params: Iter;
-  @Output() messageEvent = new EventEmitter<Object>();
-  public sospensioneParams: SospensioneParams = new SospensioneParams();
+  public sospensioneParams: SospensioneParams;
   public dataDalDisabilitata: boolean;
   public testoSospensione: string = "Sospendi";
+  public isSospeso: boolean = false; 
+  public daInput: any = {
+    iter: Iter,
+    stato: String,
+    dataSospensione: Date
 
-  constructor(private http: HttpClient) {
+  }; 
+  
+
+  @Input("params") 
+  set params(params: any) {
+    this.daInput = params;
+    if (params.stato === "sospeso")
+      this.isSospeso = true;
+    else
+      this.isSospeso = false;
+
+    this.inizializza();
+
   }
 
-  ngOnInit() {
-    this.sospensioneParams.idIter = this.params.id;
-    this.sospensioneParams.idUtente = JSON.parse(sessionStorage.getItem("userInfoMap")).idUtente;
-    console.log("loggo,loggo,loggo....   ", this.params);
-    if (this.params.stato === "sospeso") {
-      this.testoSospensione = "Termina Sospensione";
-      const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.params.id)
-      .subscribe(
-        res => {
-          console.log("Ecco la risposta:");
-          console.log(res);
-          let r: any = res;
-          console.log(r.dataSospensione);
-          console.log(Date.parse(r.dataSospensione));
-          // this.sospensioneParams.sospesoDal = Date(r.dataSospensione);
-          // this.closePopUp(idIter);
-        },
-        err => {
-          // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
-        }
-      );
-    }
-    else {}// nulla
+  @Output() messageEvent = new EventEmitter<Object>();
 
+  constructor(private http: HttpClient) {
+    console.log("*** sospensione-iter.component (constructor)");
+  }
+
+  ngOnChange(changes: SimpleChange) {
+    this.inizializza();
+  }
+
+
+  ngOnInit() {
+    this.inizializza();
+  }
+
+  inizializza() {
+    this.sospensioneParams = new SospensioneParams();
+    this.sospensioneParams.idIter = this.daInput.iter.id;
+    this.sospensioneParams.idUtente = JSON.parse(sessionStorage.getItem("userInfoMap")).idUtente;
+    this.sospensioneParams.sospesoDal = this.daInput.dataSospensione;
   }
 
   nomeBottone() {
-    if (this.params == null)
-      return "Sospendi";
+    if (this.daInput.stato === "sospeso")
+      return "Termina Sospensione";
     
     else
-      return "Termina Sospensione";
+      return "Sospendi";
   }
 
   disabilitaSospesoDal() {
-    if (this.params.stato === "sospeso")
+    if (this.daInput.stato === "sospeso")
       return true;
     else
       return false;
@@ -66,56 +80,22 @@ export class SospensioneIterComponent implements OnInit {
     this.messageEvent.emit({visible: false});
   }
 
-
-  lanciaSospensione() {
-    // controllare che l'iter non sia finito
-    console.log(this.sospensioneParams);
-    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/lanciaSospensione", this.sospensioneParams, {headers: new HttpHeaders().set("content-type", "application/json")})
-    .subscribe(
-      res => {
-        console.log("Ecco la risposta:");
-        console.log(res);
-        this.closePopUp();
-       
-      },
-      err => {
-        // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
-      }
-    );
-
-  }
-
-
-  terminaSospensione() {
-    // richiesta al server di terminare sospensione
-    console.log(this.sospensioneParams);
-    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/terminaSospensione", this.sospensioneParams, {headers: new HttpHeaders().set("content-type", "application/json")})
-    .subscribe(
-      res => {
-        console.log("Ecco la risposta:");
-        console.log(res);
-        this.closePopUp();
-       
-      },
-      err => {
-        // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
-      }
-    );
-  }
-
-
   gestisciSospensione() {
-    switch (this.params.stato){
-      case "sospeso":
-        this.terminaSospensione();
-      break;
-
-      // lo sospendiamo
-      default:
-        this.lanciaSospensione();
-      break;
-
+    if (this.sospensioneParams.valida(this.isSospeso)) {
+      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciSospensione", this.sospensioneParams, {headers: new HttpHeaders().set("content-type", "application/json")})
+      .subscribe(
+        res => {
+          let dataDiRitorno = +res["dataDiRitorno"];
+          this.closePopUp();
+         
+        },
+        err => {
+          return;
+        }
+      );
     }
+    else
+      console.log("Alcuni valori non sono stati definiti");
   }
 
   handleEvent(nome: string, event: any) {
@@ -125,9 +105,27 @@ export class SospensioneIterComponent implements OnInit {
       break;
 
       case "onClickGestisciSospensione":
-        this.gestisciSospensione();
+        if (this.sospensioneParams.valida(this.isSospeso))
+          this.gestisciSospensione();
+        else
+          console.log("onClickGestisciSospensione --> alcuni dati sono incompleti");
       break;
     }
+  }
+
+  getDataUltimaSospensione() {
+    let date;
+      const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.daInput.iter.id)
+      .subscribe(
+        res => {
+          let r: any = res;
+          date = moment(r.dataSospensione);
+          return date.format("DD-MM-YYYY");
+        },
+        err => {
+          // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+        }
+      );
   }
 
 }
@@ -141,4 +139,31 @@ class SospensioneParams {
   public sospesoDal: Date;
   public sospesoAl: Date;
   public note: string;
+
+  public valida(isSospeso: boolean) {
+    let validato: boolean;
+    if (this !== undefined && this.idIter != null && this.idIter.toString() !== ""
+      && this.idUtente.toString() !== "" && this.idUtente != null  
+      && this.codiceRegistroDocumento !== "" && this.codiceRegistroDocumento != null 
+      && this.numeroDocumento.toString() !== "" && this.numeroDocumento != null 
+      && this.annoDocumento.toString() !== "" && this.annoDocumento != null && this.annoDocumento.toString().length === 4) {
+        if (isSospeso) {
+          if (this.sospesoAl != null && this.sospesoAl.toString() !== "")
+            validato = true;
+          else 
+            validato = false;
+        }
+        else {
+          if (this.sospesoDal != null && this.sospesoDal.toString() !== "")
+            validato = true;
+          else 
+            validato = false;
+        }
+    }
+    else 
+      validato = false;
+
+    return validato;
+  }
+
 }

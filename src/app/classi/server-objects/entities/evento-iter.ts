@@ -5,6 +5,7 @@ import { FaseIter } from "./fase-iter";
 import { OdataForeignKey } from "@bds/nt-angular-context/server-object";
 import { Entities } from "../../../../environments/app.constants";
 import { DocumentoIter } from "app/classi/server-objects/entities/documento-iter";
+import { Utente } from "app/classi/server-objects/entities/utente";
 
 export class EventoIter extends Entity {
   id: number;
@@ -17,7 +18,8 @@ export class EventoIter extends Entity {
   idDocumentoIter: DocumentoIter;
   FK_id_documento_iter: number;
   dataOraEvento: Date;
-  autore: string;
+  autore: Utente;
+  FK_autore: number;
   note: string;
 
   public static getOdataContextEntity(): any {
