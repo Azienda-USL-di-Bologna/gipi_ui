@@ -49,7 +49,7 @@ export class SequenzaDelleFasiComponent implements OnInit {
       filter: ['idIter.id', '=', parseInt(this.daPadre['idIter'])]
       //sort: ['dataInizioFase']
     });
-    this.datasource.sort({ getter: "dataInizioFase", desc: true });
+    this.datasource.sort({ getter: "idFase", desc: true });
   }
 
   ngOnChanges(changes: SimpleChanges) {
