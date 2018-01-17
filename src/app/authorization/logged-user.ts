@@ -5,6 +5,7 @@ export class LoggedUser {
 
     private userInfoMap: Object;
     private _isMOBS: boolean;
+    private _username: string;
 
     /*    private isUS: boolean;
         private isMOBS: boolean;
@@ -14,6 +15,7 @@ export class LoggedUser {
 
     constructor(userInfoMap: Object) {
         this.userInfoMap = userInfoMap;
+        this._username=userInfoMap["username"];
 /*
         this.isUS;
         this.isMOBS;
@@ -36,7 +38,7 @@ export class LoggedUser {
         let arrayRuoli: string[]= new Array();
 
         for(let ruolo in Ruoli){
-            
+
             let maschera:number = BIT_RUOLI[Ruoli[ruolo]];
             if((bit_ruoli & maschera) > 0){
                 arrayRuoli.push(Ruoli[ruolo])
@@ -45,7 +47,9 @@ export class LoggedUser {
         return arrayRuoli;
     }
 
-
+    public get username(): string{
+        return this._username;
+    }
 
     public get isMOBS(): boolean{
         return this._isMOBS;

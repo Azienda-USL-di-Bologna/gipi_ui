@@ -120,7 +120,7 @@
         <div id="userProfile" class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="userDropdown" aria-haspopup="true">
                 <span class="glyphicon glyphicon-user"></span> 
-                <strong>{{username}}</strong><span> ({{azienda}})</span>
+                <strong>{{(loggedUser$|async).username}}</strong><span> ({{azienda}})</span>
                 <span class="glyphicon glyphicon-chevron-down"></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown" >
@@ -134,7 +134,7 @@
                             </div>
                             <div class="col-8">
                                 <p class="text-left"><strong>Informazioni Utente</strong></p>
-                                <p class="text-left small">Azienda: {{username}}</p>
+                                <p class="text-left small">Azienda: {{(loggedUser$|async).username}}</p>
 
                                 <p class="text-left small">Ruolo: {{ruolo}}</p>
                             </div>

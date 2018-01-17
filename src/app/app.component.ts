@@ -111,7 +111,8 @@ export class AppComponent implements OnInit, OnDestroy {
             (value: any) => {
                 if (value) {
                     this.userInfoMap = value;
-                    this.username = value["username"];
+                    debugger;
+                    //this.username = value["username"];
                     //this.ruolo = value["bit_ruoli"];
                     this.azienda = value.aziende.nome;
                 }
@@ -119,17 +120,20 @@ export class AppComponent implements OnInit, OnDestroy {
             }
         );
 
+        debugger;
+        this.ruolo = "";
+    
         this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
         this.subscriptions.push(
             this.loggedUser$.subscribe(
                 (loggedUser: LoggedUser) => {
                     if (loggedUser) {
                         this.ruoli = loggedUser.getRuoli();
+                        this.ruolo = "";
                         this.ruoli.forEach(element => {
                             this.ruolo += element + " "
                         });;
                     }
-
                 }
             )
         );
