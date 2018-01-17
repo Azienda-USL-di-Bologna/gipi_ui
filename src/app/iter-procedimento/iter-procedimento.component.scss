@@ -67,3 +67,7 @@ button{
 .sospensionePopup div.dx-popup-content{
     height: 100% !important;
 }
+/* Modifica la grandezza standard della scrollbar  */
+#gridContainer .dx-scrollable-scroll {
+    width: 15px;
+  }
