@@ -103,12 +103,11 @@
                     </div>
 
                     <div class="col">
-                        <div *ngIf="(loggedUser$ | async).hasRole(SUPERADM) || (loggedUser$ | async).hasRole(ADM)">
+                        <div *ngIf="((loggedUser$ | async).hasRole(SUPERADM) || (loggedUser$ | async).hasRole(ADM)) && (loggedUser$ | async).azienda==azienda.nome">
                             <dx-button *ngIf="checkAssociata.value" [text]="'Gestisci associazione'" (onClick)="buttonClicked(azienda, 'gestisciAssociazione')"
                                 [type]="confirm"></dx-button>
                         </div>
                     </div>
-
                 </div>
             </div>
 

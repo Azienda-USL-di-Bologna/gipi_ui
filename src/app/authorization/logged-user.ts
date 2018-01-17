@@ -6,6 +6,7 @@ export class LoggedUser {
     private userInfoMap: Object;
     private _isMOBS: boolean;
     private _username: string;
+    private _azienda: string;
 
     /*    private isUS: boolean;
         private isMOBS: boolean;
@@ -14,8 +15,12 @@ export class LoggedUser {
         private isSUPERADM: boolean;*/
 
     constructor(userInfoMap: Object) {
+
+        debugger;
         this.userInfoMap = userInfoMap;
         this._username=userInfoMap["username"];
+        this._azienda=userInfoMap["aziende"]["nome"];
+
 /*
         this.isUS;
         this.isMOBS;
@@ -26,6 +31,7 @@ export class LoggedUser {
     }
 
     public hasRole(ruolo: Ruoli): boolean {
+
 
         let bit_ruoli = this.userInfoMap["bit_ruoli"];
         let maschera:number = BIT_RUOLI[Ruoli[ruolo]];
@@ -51,6 +57,9 @@ export class LoggedUser {
         return this._username;
     }
 
+    public get azienda(): string{
+        return this._azienda;
+    }
     public get isMOBS(): boolean{
         return this._isMOBS;
     }

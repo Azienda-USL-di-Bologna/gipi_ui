@@ -100,6 +100,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
             this.username = this.userInfoMap["username"];
             //this.ruolo = this.userInfoMap["bit_ruoli"];
+            debugger;
             this.azienda = this.userInfoMap["aziende"]["nome"];
         }
 
