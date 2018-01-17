@@ -1,5 +1,5 @@
 <div >
-    <div class="middleDiv">
+    <div *ngIf="show" class="middleDiv">
         <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
             <div class="form-group">
                 <label for="inputUsername">Username</label>
