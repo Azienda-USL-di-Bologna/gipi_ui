@@ -17,7 +17,7 @@
       <dxi-column [minWidth]="200" dataField="idAziendaTipoProcedimento.idTitolo.nome" caption="Classificazione" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="150" dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" caption="Durata massima (gg)" [dataType]="'number'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="120" dataField="dataInizio" caption="Valido dal" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
-      <dxi-column [width]="200" dataField="idTitolarePotereSostitutivo.descrizione" caption="Tit. potere sostitutivo" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+      <dxi-column [width]="200" dataField="idTitolarePotereSostitutivo.idPersona.descrizione" caption="Tit. potere sostitutivo" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="100" caption="Dettagli" cellTemplate="buttonActions" alignment="center" cssClass="azioni"></dxi-column>
       <div *dxTemplate="let element of 'buttonActions'" class="buttons">
           <dx-button text="" hint="Vai al dettaglio" icon='info' (onClick)="handleEvent('infoOnClick', element)"></dx-button>

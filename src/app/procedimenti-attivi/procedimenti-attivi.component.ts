@@ -34,7 +34,7 @@ export class ProcedimentiAttiviComponent {
       store: this.odataContextDefinition.getContext()[Entities.Procedimento.name],
       expand: [
         "idStruttura",
-        "idTitolarePotereSostitutivo",
+        "idTitolarePotereSostitutivo/idPersona",
         "idAziendaTipoProcedimento/idTitolo",
         "idAziendaTipoProcedimento/idTipoProcedimento"
       ],
