@@ -10,7 +10,7 @@
     <dxi-item dataField="oggettoIter" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
     <dxi-item dataField="idUtente" editorType="dxLookup" [label]="{text: 'Responsabile procedimento'}"
       [editorOptions]="{
-        value: utenteConnesso,
+        value: loggedUser.idUtente,
         dataSource: dataSourceUtenti,
         valueExpr: 'id',
         displayExpr: 'idPersona.descrizione',

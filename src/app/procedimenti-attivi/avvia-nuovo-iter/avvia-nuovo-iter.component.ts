@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Iter } from "app/classi/server-objects/entities/iter";
+import { UtenteStruttura } from "app/classi/server-objects/entities/utente-struttura";
 import { OdataContextFactory } from "@bds/nt-angular-context";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
 import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
@@ -9,6 +10,8 @@ import notify from "devextreme/ui/notify";
 import { forEach } from "@angular/router/src/utils/collection";
 import { HttpHeaders } from "@angular/common/http";
 import { OnInit } from "@angular/core/src/metadata/lifecycle_hooks";
+import { LoggedUser } from "../../authorization/logged-user"
+import { GlobalContextService } from "@bds/nt-angular-context";
 
 @Component({
   selector: "avvia-nuovo-iter",
@@ -22,8 +25,9 @@ export class AvviaNuovoIterComponent implements OnInit {
   public dataSourceUtenti: any;
   public iterParams: IterParams = new IterParams();
   public nomeProcedimento: string;
-  public utenteConnesso: any;
   public now: Date = new Date();
+
+  private loggedUser: LoggedUser;
 
   @Input()
   set procedimentoSelezionato(procedimento: any) {
@@ -37,19 +41,31 @@ export class AvviaNuovoIterComponent implements OnInit {
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
 
 
-  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient) {
+  constructor(private odataContextFactory: OdataContextFactory, 
+              private http: HttpClient,
+              private globalContextService: GlobalContextService) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.getInfoSessionStorage();
   }
 
   private getInfoSessionStorage() {
-    this.utenteConnesso = JSON.parse(sessionStorage.getItem("userInfoMap")).idUtente;
+    this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
 
-    for (let s of JSON.parse(sessionStorage.getItem("userInfoMap")).strutture) {
+
+
+    this.loggedUser.strutture.forEach((s: UtenteStruttura) =>{
+          if (s.idAfferenzaStruttura.descrizione === afferenzaStruttura.diretta){
+          this.iterParams.idStrutturaUtente = s.idStruttura.id;
+        }
+    }) 
+    
+/*    for (let s of JSON.parse(sessionStorage.getItem("userInfoMap")).strutture) {
       if (s.idAfferenzaStruttura === afferenzaStruttura.diretta) {
         this.iterParams.idStrutturaUtente = s.id;
       }
-    }
+    }*/
+
+
   }
 
   private buildDataSourceUtenti() {

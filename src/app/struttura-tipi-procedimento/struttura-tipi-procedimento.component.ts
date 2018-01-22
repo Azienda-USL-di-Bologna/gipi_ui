@@ -220,7 +220,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   /* Legge i dati passatti dall'interfaccia precedente AziendeTipiProcedimentoComponent e setto le variabili */
   private setDataFromDettaglioProcedimentoComponent() {
-    this.dataFromAziendaTipiProcedimentoComponent = this.globalContextService.getInnerSharedObject("AziendeTipiProcedimentoComponent");
+    this.dataFromAziendaTipiProcedimentoComponent = this.globalContextService.getInnerSharedObject("GestioneAssociazioneAziendaComponent");
     const aziendaTipoProcedimento: AziendaTipoProcedimento = this.dataFromAziendaTipiProcedimentoComponent["aziendaTipoProcedimento"];
     this.idAziendaFront = aziendaTipoProcedimento.idAzienda.id;
     this.idAziendaTipoProcedimentoFront = aziendaTipoProcedimento.id;

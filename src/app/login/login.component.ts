@@ -5,6 +5,12 @@ import { HttpClient } from "@angular/common/http";
 import { LOGIN_URL } from "../../environments/app.constants";
 import { GlobalContextService } from "@bds/nt-angular-context";
 import { LoggedUser } from "../authorization/logged-user"
+import { CommonData } from "../authorization/common-data"
+import DataSource from "devextreme/data/data_source";
+import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
+import { Entities } from "../../environments/app.constants";
+import { Ruolo } from "../classi/server-objects/entities/ruolo";
 
 @Component({
     selector: "app-login",
@@ -14,8 +20,17 @@ import { LoggedUser } from "../authorization/logged-user"
 export class LoginComponent implements OnInit {
     errorMessage = "";
     public show: boolean = false;
+    private ruoliDataSource: DataSource;
+    private odataContextDefinition: OdataContextDefinition;
+    private ruoli: Ruolo[];
 
-    constructor(public httpClient: HttpClient, private router: Router, private globalContextService: GlobalContextService) { }
+
+    constructor(public httpClient: HttpClient,
+        private router: Router,
+        private globalContextService: GlobalContextService,
+        private odataContextFactory: OdataContextFactory) {
+
+    }
 
     ngOnInit() {
         this.httpClient.get<any>(LOGIN_URL)
@@ -27,6 +42,8 @@ export class LoginComponent implements OnInit {
             (err) => {
                 this.show = true;
             });
+
+
     }
 
     /* login(form: NgForm){
@@ -60,7 +77,6 @@ export class LoginComponent implements OnInit {
 
     private setDataLogin(data: any, httpMethod: string) {
         sessionStorage.setItem("token", data.token);
-        debugger;
         if (httpMethod === "GET") {
             sessionStorage.setItem("loginMethod", "sso");
         }
@@ -73,9 +89,9 @@ export class LoginComponent implements OnInit {
 
         //sessionStorage.setItem("userInfoMap", JSON.stringify(userInfoMap));
 
-        //let loggedUser = new LoggedUser(userInfoMap);
-
-        //this.globalContextService.setSubjectInnerSharedObject("loggedUser", loggedUser);
+        let loggedUser = new LoggedUser(data.userInfo);
+        this.globalContextService.setSubjectInnerSharedObject("loggedUser", loggedUser);
+        this.globalContextService.setInnerSharedObject("loggedUser", loggedUser);
 
         this.router.navigate(["/home"], { queryParams: { reset: true } });
     }

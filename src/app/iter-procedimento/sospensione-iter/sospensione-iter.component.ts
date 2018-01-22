@@ -7,6 +7,8 @@ import { HttpHeaders } from "@angular/common/http";
 import { SimpleChange } from "@angular/core/src/change_detection/change_detection_util";
 import { debug } from "util";
 import * as moment from "moment";
+import { LoggedUser } from "../../authorization/logged-user"
+import { GlobalContextService } from "@bds/nt-angular-context/global-context.service";
 
 
 @Component({
@@ -25,6 +27,7 @@ export class SospensioneIterComponent implements OnInit {
     dataSospensione: Date
 
   }; 
+  public loggedUser: LoggedUser;
   
 
   @Input("params") 
@@ -41,7 +44,7 @@ export class SospensioneIterComponent implements OnInit {
 
   @Output() messageEvent = new EventEmitter<Object>();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private globalContextService: GlobalContextService) {
     console.log("*** sospensione-iter.component (constructor)");
   }
 
@@ -55,9 +58,12 @@ export class SospensioneIterComponent implements OnInit {
   }
 
   inizializza() {
+
     this.sospensioneParams = new SospensioneParams();
     this.sospensioneParams.idIter = this.daInput.iter.id;
-    this.sospensioneParams.idUtente = JSON.parse(sessionStorage.getItem("userInfoMap")).idUtente;
+
+    this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
+    this.sospensioneParams.idUtente = this.loggedUser.idUtente;
     this.sospensioneParams.sospesoDal = this.daInput.dataSospensione;
   }
 

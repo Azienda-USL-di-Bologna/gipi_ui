@@ -121,9 +121,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="userDropdown" aria-haspopup="true">
                 <span class="glyphicon glyphicon-user"></span> 
 
-                <strong>GUIDO</strong><span>GUIDO</span>
-
-                <!--<strong>{{(loggedUser$|async).username}}</strong><span> ({{(loggedUser$|async).azienda}})</span>-->
+                <strong>{{(loggedUser$|async).username}}</strong><span> ({{((loggedUser$|async).aziendaLogin).nome}})</span>
                 
                 <span class="glyphicon glyphicon-chevron-down"></span>
             </a>
@@ -139,11 +137,8 @@
                             <div class="col-8">
                                 <p class="text-left"><strong>Informazioni Utente</strong></p>
 
-                                <!--<p class="text-left small">Azienda: {{(loggedUser$|async).azienda}}</p>-->
-                                <p class="text-left small">Azienda: GUIDO</p>
-
-                                <p class="text-left small">Ruolo: GUIDO</p>
-                                <!--<p class="text-left small">Ruolo: {{ruolo}}</p>-->
+                                <p class="text-left small">Azienda: {{((loggedUser$|async).aziendaLogin).nome}}</p>
+                                <p class="text-left small">Ruoli: {{ruolo}}</p>
                             </div>
                         </div>
                     </div>

@@ -69,20 +69,6 @@
         </div>
         <div class="col">
 
-            <!--            <h4 style="text-align: center; margin-bottom: 30px;">Aziende Associate</h4>
-            <div style="margin-bottom: 8px; overflow: auto;" *ngFor="let azienda of aziende">
-                <dx-check-box [value]="procedimento.aziendeAssociate[azienda.id] ? true : false" [disabled]="true" #checkAssociata></dx-check-box>
-                <span style="margin-right: 16px;">{{azienda.descrizione}}</span>
-                <div style="float:right;">
-                    <div *ngIf="isSUPERADM">
-                        <dx-button *ngIf="checkAssociata.value" [text]="'Disassocia'" (onClick)="buttonClicked(azienda, 'disassocia')" [type]="confirm"></dx-button>
-                        <dx-button *ngIf="!checkAssociata.value" [text]="'Associa'" (onClick)="buttonClicked(azienda, 'associa')" [type]="confirm"></dx-button>
-                    </div>
-                    <div *ngIf="isADM">
-                        <dx-button *ngIf="checkAssociata.value" [text]="'Gestisci associazione'" (onClick)="buttonClicked(azienda, 'gestisciAssociazione')" [type]="confirm"></dx-button>   
-                    </div>
-                </div>
-            </div>-->
 
 
 
@@ -94,16 +80,15 @@
                         <span>{{azienda.descrizione}}</span>
                     </div>
 
-
                     <div class="col" align="right">
-                        <div *ngIf="(loggedUser$ | async).hasRole(SUPERADM)">
+                        <div *ngIf="loggedUser.isCI">
                             <dx-button *ngIf="checkAssociata.value" [text]="'Disassocia'" (onClick)="buttonClicked(azienda, 'disassocia')" [type]="confirm"></dx-button>
                             <dx-button *ngIf="!checkAssociata.value" [text]="'Associa'" (onClick)="buttonClicked(azienda, 'associa')" [type]="confirm"></dx-button>
                         </div>
                     </div>
 
                     <div class="col">
-                        <div *ngIf="(loggedUser$ | async).hasRole(ADM) && (loggedUser$ | async).azienda==azienda.nome">
+                        <div *ngIf="loggedUser.isCA && loggedUser.aziendaLogin.nome == azienda.nome">
                             <dx-button *ngIf="checkAssociata.value" [text]="'Gestisci associazione'" (onClick)="buttonClicked(azienda, 'gestisciAssociazione')"
                                 [type]="confirm"></dx-button>
                         </div>

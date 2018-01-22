@@ -5,6 +5,8 @@ import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-facto
 import { Entities } from "environments/app.constants";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
 import {Router} from "@angular/router";
+import { LoggedUser } from "../authorization/logged-user";
+import { GlobalContextService } from "@bds/nt-angular-context";
 
 @Component({
   selector: "procedimenti-attivi",
@@ -25,8 +27,16 @@ export class ProcedimentiAttiviComponent {
   public iterAvviato: boolean = false;
   public idIterAvviato: number;
 
-  constructor(private odataContextFactory: OdataContextFactory, public router: Router) {
-    this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).aziende.id;
+  public loggedUser: LoggedUser;
+
+  constructor(private odataContextFactory: OdataContextFactory, 
+              public router: Router,
+              private globalContextService: GlobalContextService) {
+
+    this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
+    this.idAzienda = this.loggedUser.aziendaLogin.id;
+
+   // this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).aziende.id;
     const now = new Date();
 
     this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();

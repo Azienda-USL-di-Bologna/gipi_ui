@@ -26,7 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public azienda: string;
 
     public ruolo: string = "";
-    public ruoli: string[];
+    public ruoli: Ruolo[];
 
     public route: string;
     public classeSidebar: string = "sidebar-style";
@@ -35,6 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
     public loggedUser$: Observable<Object>;
+
 
 
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
@@ -58,6 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.route = this.router.url;
 
         this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);
+
     }
 
 
@@ -124,21 +126,25 @@ export class AppComponent implements OnInit, OnDestroy {
         );*/
 
 
-    
-/*        this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
+    this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
         this.subscriptions.push(
             this.loggedUser$.subscribe(
                 (loggedUser: LoggedUser) => {
                     if (loggedUser) {
-                        this.ruoli = loggedUser.getRuoli();
+                        this.ruoli = loggedUser.ruoli;
                         this.ruolo = "";
                         this.ruoli.forEach(element => {
-                            this.ruolo += element + " "
+                            this.ruolo += element.nomeBreve + " "
                         }); ;
                     }
                 }
             )
-        );*/
+        );
+
+
+        
+
+
 
 
     }
@@ -159,7 +165,6 @@ export class AppComponent implements OnInit, OnDestroy {
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("userInfoMap");
         sessionStorage.removeItem("loginMethod");
-        debugger;
         if (loginMethod !== "sso") {
             console.log(loginMethod);
             this.router.navigate(["/login"]);

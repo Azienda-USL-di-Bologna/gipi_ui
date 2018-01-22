@@ -66,6 +66,7 @@ import { TestTreeComponent } from "./test/test-tree/test-tree.component";
 import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/passaggio-di-fase.component";
 import { SospensioneIterComponent } from "./iter-procedimento/sospensione-iter/sospensione-iter.component";
 import { ListaIterComponent } from "./lista-iter/lista-iter.component";
+import { AfterLoginComponent } from './after-login/after-login.component';
 
 
 
@@ -95,7 +96,8 @@ import { ListaIterComponent } from "./lista-iter/lista-iter.component";
         AvviaNuovoIterComponent,
         PassaggioDiFaseComponent,
         SospensioneIterComponent,
-        ListaIterComponent
+        ListaIterComponent,
+        AfterLoginComponent
     ],
     imports: [
         BrowserModule,

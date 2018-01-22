@@ -36,10 +36,11 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
     public backBtn: ButtonAppearance;
 
 
-    public SUPERADM: number = Ruoli.SUPERADM;
-    public ADM: number = Ruoli.ADM;
+/*    public SUPERADM: number = Ruoli.SUPERADM;
+    public ADM: number = Ruoli.ADM;*/
 
-    public loggedUser$: Observable<LoggedUser>
+    //public loggedUser$: Observable<LoggedUser>
+    public loggedUser: LoggedUser;
 
     public subscriptions: Subscription[] = [];
 
@@ -69,8 +70,12 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        //let loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
-        this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
+
+        //this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
+
+        this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
+
+
 /*        this.subscriptions.push(
             this.loggedUser$.subscribe(
                 (loggedUser: LoggedUser) => {

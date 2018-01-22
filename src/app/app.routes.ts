@@ -8,6 +8,7 @@ import { GestioneAssociazioneAziendaComponent } from "./gestione-associazione-az
 import { AssociazioniComponent } from "./associazioni/associazioni.component";
 import { StrutturaTipiProcedimentoComponent } from "./struttura-tipi-procedimento/struttura-tipi-procedimento.component";
 import { LoginComponent } from "./login/login.component";
+import { AfterLoginComponent } from "./after-login/after-login.component";
 import { NoLoginGuard } from "./authorization/guards/no-login.guard";
 import { LoginGuard } from "./authorization/guards/login.guard";
 import { ProcedimentiAttiviComponent } from "app/procedimenti-attivi/procedimenti-attivi.component";
@@ -37,6 +38,7 @@ export const rootRouterConfig: Routes = [
   // ho reindirizzato la pagina di atterraggio a definizione-tipi-procedimento
   { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "login", component: LoginComponent, canActivate: [NoLoginGuard], data: {}},
+  { path: "after-login", component: AfterLoginComponent, canActivate: [LoginGuard], data: {}},
   { path: "home", component: HomeComponent, canActivate: [LoginGuard], data: {breadcrumb: "Home"}},
   { path: "definizione-tipi-procedimento", component: DefinizioneTipiProcedimentoComponent, canActivate: [LoginGuard], data: {breadcrumb: "Tipi Procedimento"}},
   { path: "associazione-aziende", component: AssociazioneAziendeComponent, canActivate: [LoginGuard], data: {breadcrumb: "Associazione alle Aziende"}},
