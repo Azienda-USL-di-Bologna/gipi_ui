@@ -41,7 +41,7 @@
                 </dxi-item>
     
                 <dxi-item [colSpan]="1">
-                    <button type="button" (click)="updateEsitoMotivazione()" >Note controinteressati</button>
+                    <button type="button" (click)="updateNoteControInteressati()" >Note controinteressati</button>
                     <!-- <dx-button text="Note controinteressati" type="default" (onClick)="updateNoteControInteressati()"></dx-button> -->
                 </dxi-item>
     
@@ -117,7 +117,7 @@
         [(value)]="popupData.fieldValue">
         </dx-text-area>
         <div class="wrapperPulsantiPopup">
-            <dx-button text="Annulla" type="normal"></dx-button>
+            <dx-button text="Annulla" type="normal" (click)="closePopupNote()"></dx-button>
             <dx-button text="Salva" (click)="updateIter()" type="default"></dx-button>
         </div> 
     </div>

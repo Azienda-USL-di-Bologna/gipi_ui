@@ -171,13 +171,29 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   updateIter(){
+    let doUpdate : boolean = false;
     if(this.popupData.field === "esitoMotivazione"){
-      this.iter.esitoMotivazione = this.popupData.fieldValue;
+      if(this.iter.esitoMotivazione !== this.popupData.fieldValue){
+        this.iter.esitoMotivazione = this.popupData.fieldValue;
+        doUpdate = true;
+      }
     }else{
-      this.iter.noteControinteressati = this.popupData.fieldValue;
+      if(this.iter.noteControinteressati !== this.popupData.fieldValue){
+        this.iter.noteControinteressati = this.popupData.fieldValue;
+        doUpdate = true;
+      }
     }
-    console.log('Here is the store:', this.dataSourceIter.store())
-    this.dataSourceIter.store().update(this.iter.id, this.iter);
+    if(doUpdate){
+      this.dataSourceIter.store().update(this.iter.id, this.iter);
+    }
+    this.closePopupNote();
+  }
+
+  closePopupNote() {
+    this.popupData.title = "";
+    this.popupData.field = "";
+    this.popupData.fieldValue = "";
+    this.popupData.visible = false;
   }
 
   public passaggioDiFase() {
