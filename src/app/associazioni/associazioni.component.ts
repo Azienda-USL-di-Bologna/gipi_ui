@@ -1,17 +1,17 @@
-import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactory, ComponentFactoryResolver, ComponentRef } from '@angular/core';
-import { ODATA_BASE_URL, odataStrutturePath } from '../../environments/app.constants';
-import { AssociaComponent } from './sub-view/associa/associa.component';
-import { ProcedimentoComponent } from './sub-view/procedimento/procedimento.component';
-import { AlberoStruttureComponent } from './sub-view/albero-strutture/albero-strutture.component';
-import { AssociaDirective } from './directives/associa.directive';
-import DataSource from 'devextreme/data/data_source';
-import ODataStore from 'devextreme/data/odata/store';
-import { Http } from '@angular/http';
+import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactory, ComponentFactoryResolver, ComponentRef } from "@angular/core";
+import { ODATA_BASE_URL, odataStrutturePath } from "../../environments/app.constants";
+import { AssociaComponent } from "./sub-view/associa/associa.component";
+import { ProcedimentoComponent } from "./sub-view/procedimento/procedimento.component";
+import { AlberoStruttureComponent } from "./sub-view/albero-strutture/albero-strutture.component";
+import { AssociaDirective } from "./directives/associa.directive";
+import DataSource from "devextreme/data/data_source";
+import ODataStore from "devextreme/data/odata/store";
+import { Http } from "@angular/http";
 
 @Component({
-  selector: 'app-associazioni',
-  templateUrl: './associazioni.component.html',
-  styleUrls: ['./associazioni.component.css']
+  selector: "app-associazioni",
+  templateUrl: "./associazioni.component.html",
+  styleUrls: ["./associazioni.component.scss"]
 })
 export class AssociazioniComponent implements OnInit {
 
@@ -25,11 +25,11 @@ export class AssociazioniComponent implements OnInit {
   // procedimentoRef : ComponentRef<any>;
 
   constructor(private resolver: ComponentFactoryResolver) {
-    this.products = products
+    this.products = products;
     this.getAlberoSource();
 
     // this.container.clear();
-    //const factory: ComponentFactory<AssociaComponent> = this.resolver.resolveComponentFactory(AssociaComponent);
+    // const factory: ComponentFactory<AssociaComponent> = this.resolver.resolveComponentFactory(AssociaComponent);
   }
 
   // ngAfterViewInit() {
@@ -60,15 +60,15 @@ export class AssociazioniComponent implements OnInit {
   getAlberoSource() {
     this.aziende = new DataSource({
       store: new ODataStore({
-        key: 'azienda',
+        key: "azienda",
         url: ODATA_BASE_URL + odataStrutturePath,
-        //deserializeDates: true,
+        // deserializeDates: true,
         /*fieldTypes: {
           id: 'Int32',
           idAfferenzaStruttura: { 'type': 'Date' }
         },*/
       }),
-      filter: [['attiva', '=', true]],
+      filter: [["attiva", "=", true]],
       // map: function (item) {
       //   if (item.dataInizioValidita != null)
       //     item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
@@ -80,7 +80,7 @@ export class AssociazioniComponent implements OnInit {
       // }
     });
     this.aziende.load().then(res => {
-      console.log('RES: ', res);
+      console.log("RES: ", res);
     });
   }
 
@@ -98,7 +98,7 @@ export class Product {
     image?: string;
 }
 
-var products: Product[] = [{
+let products: Product[] = [{
     id: "1",
     text: "Stores",
     expanded: true,

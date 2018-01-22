@@ -14,13 +14,13 @@ import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-facto
 import { GlobalContextService } from "@bds/nt-angular-context/global-context.service";
 import { CustomReuseStrategy } from "@bds/nt-angular-context/routes/custom-reuse-strategy";
 import { ButtonAppearance } from "@bds/nt-angular-context/templates/buttons-bar/buttons-bar.component";
-import { LoggedUser } from "../authorization/logged-user"
-import { Ruoli } from "../../environments/app.constants"
+import { LoggedUser } from "../authorization/logged-user";
+import { Ruoli } from "../../environments/app.constants";
 
 @Component({
     selector: "app-associazione-aziende",
     templateUrl: "./associazione-aziende.component.html",
-    styleUrls: ["./associazione-aziende.component.css"]
+    styleUrls: ["./associazione-aziende.component.scss"]
 })
 export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
 
@@ -39,7 +39,7 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
     public SUPERADM: number = Ruoli.SUPERADM;
     public ADM: number = Ruoli.ADM;
 
-    public loggedUser$: Observable<LoggedUser>
+    public loggedUser$: Observable<LoggedUser>;
 
     public subscriptions: Subscription[] = [];
 
@@ -69,7 +69,7 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        //let loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
+        // let loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
         this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
 /*        this.subscriptions.push(
             this.loggedUser$.subscribe(

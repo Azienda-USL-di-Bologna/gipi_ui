@@ -15,7 +15,7 @@ export class CronologiaEventiComponent implements OnInit {
   private odataContextDefinition: OdataContextDefinition;  
   public dataSourceEventoIter: DataSource;
 
-  //@Input("idIter") idIter: string;
+  // @Input("idIter") idIter: string;
   @Input("daPadre") daPadre: Object;
 
   constructor(private odataContextFactory: OdataContextFactory) {
@@ -26,12 +26,12 @@ export class CronologiaEventiComponent implements OnInit {
     this.dataSourceEventoIter = new DataSource({
       store: this.odataContextDefinition.getContext()[Entities.EventoIter.name],
       expand: ["idEvento", "idIter", "idFaseIter.idFase", "autore.idPersona"],
-      filter: ['idIter.id', '=', parseInt(this.daPadre['idIter'])]
+      filter: ["idIter.id", "=", parseInt(this.daPadre["idIter"])]
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.dataSourceEventoIter != undefined) {
+    if (this.dataSourceEventoIter !== undefined) {
       this.dataSourceEventoIter.load();
     }
   }

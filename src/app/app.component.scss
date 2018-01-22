@@ -1,4 +1,5 @@
-/deep/ .header-app-component{
+/** TEMPLATE GENERALE***/
+/deep/ .header-app-component {
    //width: 100%;
    //height: 100%;
    background-color: #eeffcc;
@@ -6,7 +7,7 @@
    //display: block;
  }
 
-/deep/  .content-app-component{
+/deep/ .content-app-component {
   //width: 100%;
   //height: 100%;
   background-color: #3fcc75;
@@ -14,18 +15,62 @@
 
 }
 
-/deep/ .test{
+/deep/ .test {
   height: 100%;
 }
 
+/deep/ .dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title {
+  background-color:  #FFC057 !important;
+}
 
-//.row-fluid div {
-//  height: 200px;
-//  -webkit-transition: width 0.3s ease, margin 0.3s ease, padding 0.3s ease;
-//  -moz-transition: width 0.3s ease, margin 0.3s ease, padding 0.3s ease;
-//  -o-transition: width 0.3s ease, margin 0.3s ease, padding 0.3s ease;
-//  transition: width 0.3s ease, margin 0.3s ease, padding 0.3s ease;
-//}
+
+/deep/ .dx-datagrid-text-content {
+  text-align: center !important;
+  font-weight: bold;
+  color: #696969;
+}
+
+/deep/ .dx-datagrid-action, .dx-datagrid-drag-action {
+  text-align: center !important;
+  font-weight: bold;
+}
+
+/*la barra del pulsante "Aggiungi" (toolbar)*/
+/deep/ .dx-datagrid-header-panel{
+  margin: 10px !important;
+}
+
+/* I bottoni della colonna azioni*/
+.app-azioni {
+  width: auto !important;
+  text-align: center !important;
+  display: flex;
+  justify-content: space-around;
+}
+
+
+/deep/ .dx-row > td {
+  vertical-align: middle !important;
+}
+
+/deep/ .dx-field-label {
+  white-space: initial;
+}
+
+/* SE VOGLIO COLORE RIGHE ALTERNATE ALTERNATO: **/
+
+// COLORE DELL'ALTERNANZA
+/*  .dx-row.dx-data-row.dx-column-lines:nth-child(even) {
+    background-color: "#002bff0d";
+}
+
+// COLORE CON HOVER
+ .dx-row.dx-data-row.dx-column-lines:hover{
+    background-color: "#337ab78c" !important;
+} */
+
+/*                      fine template                       */
+/************************************************************/
 
 .row-fluid .col-0 {
   width: 0%;
@@ -65,25 +110,25 @@
 
 /* Layout pagina
 */
-.pageWrapper{
+.pageWrapper {
   display: table;
   width:100%;
   height:100%
 }
-.clHeader{
+.clHeader {
   display: table-header-group;
   padding: 0 32px;
 }
-.clContentBody{
+.clContentBody {
   display: table-row-group;
 }
-.clContentBody > div{
+.clContentBody > div {
   height: 100%;
 }
-.row{
+.row {
   margin: 0;
 }
-.clFooter{
+.clFooter {
   position: absolute;
   bottom: 0;
 }
@@ -92,7 +137,7 @@
   width: 2.7rem;
   //padding: 4px;
 }
-.ovf-auto{
+.ovf-auto {
   overflow: auto;
 }
 
@@ -113,45 +158,11 @@
   margin-left: 0;
 }
 
-/* ---------------------------------------------------
-    MEDIAQUERIES
------------------------------------------------------ */
-//@media (max-width: 768px) {
-//  #sidebar {
-//    margin-left: -200px;
-//  }
-//  #sidebar.active {
-//    margin-left: 0;
-//  }
-//  #sidebarCollapse span {
-//    display: none;
-//  }
-//}
-
-.navbar-login
-{
-  width: 305px;
-  padding: 10px;
-  padding-bottom: 0px;
-}
-
-.navbar-login-session
-{
-  padding: 10px;
-  padding-bottom: 0px;
-  padding-top: 0px;
-}
-
-.icon-size
-{
+.icon-size {
   font-size: 87px;
 }
 
-#userProfile{
+#userProfile {
   float: right;
   margin-right: 32px;
 }
-
-// .menuPosition{
-//   transform: translate3d(-260px, 19px, 0px);
-// }
