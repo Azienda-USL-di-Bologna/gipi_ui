@@ -1,0 +1,277 @@
+import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
+import DataSource from "devextreme/data/data_source";
+import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
+import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
+import { Entities, CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
+import { SequenzaDelleFasiComponent } from "./sequenza-delle-fasi/sequenza-delle-fasi.component";
+import { Iter } from "../classi/server-objects/entities/iter";
+import { Utente } from "../classi/server-objects/entities/utente";
+import { Fase } from "../classi/server-objects/entities/fase";
+import { FaseIter } from "../classi/server-objects/entities/fase-iter";
+import { ProcedimentoCache } from "../classi/server-objects/entities/procedimento-cache";
+import { PassaggioDiFaseComponent } from "./passaggio-di-fase/passaggio-di-fase.component";
+import { HttpClient } from "@angular/common/http";
+import notify from "devextreme/ui/notify";
+import { ActivatedRoute, Params } from "@angular/router";
+import {ButtonAppearance} from "@bds/nt-angular-context/templates/buttons-bar/buttons-bar.component";
+import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
+import { log } from "util";
+
+
+
+@Component({
+  selector: "app-iter-procedimento",
+  templateUrl: "./iter-procedimento.component.html",
+  styleUrls: ["./iter-procedimento.component.scss"],
+  encapsulation: ViewEncapsulation.None
+})
+export class IterProcedimentoComponent implements OnInit, AfterViewInit {
+
+  // @ViewChild(PassaggioDiFaseComponent) child;
+
+  public iter: Iter = new Iter();
+  public idIterArray: Object;
+  public procedimentoCache = new ProcedimentoCache;
+  public dataSourceIter: DataSource;
+  public durataPrevista: number;
+  public idIter: number = 103;
+
+  public popupVisible: boolean = false;
+  public passaggioDiFaseVisible: boolean = false;
+  public sospensioneIterVisible: boolean = false;
+  public genericButtons: ButtonAppearance[];
+
+
+  // pulsanti custom aggiunti alla button bar
+  public procediButton: ButtonAppearance;
+  public sospendiButton: ButtonAppearance;
+
+
+  // Dati che verranno ricevuti dall'interfaccia chiamante
+  public infoGeneriche: any = {
+    azienda: "AOSP-BO",
+    struttura: "UO DaTer",
+    tipoProcedimento: "Tipologia A",
+    numeroIter: 103
+  };
+  public popupData: any = {
+    visible: false,
+    title: "titolo",
+    field: "nome campo",
+    fieldValue: "valore"
+  };
+  public perFigliParteDestra: Object;
+
+  public perFiglioPassaggioFase: Object;
+
+  public paramsPerSospensione;
+
+  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private activatedRoute: ActivatedRoute) {
+    console.log("*** iter-procedimento-component (constructor)");
+    this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
+      const idIter: string = queryParams["idIter"];
+      if (idIter) {
+        this.idIter = +idIter;
+      }
+      console.log(idIter);
+    });
+
+    
+
+    const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nomeTitolo");
+    customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
+
+    this.dataSourceIter = new DataSource({
+      store: oataContextDefinitionTitolo.getContext()[Entities.Iter.name],
+      expand: ["idFaseCorrente", "idIterPrecedente", "idResponsabileProcedimento", "idResponsabileAdozioneProcedimentoFinale", "procedimentoCache", "procedimentoCache.idTitolarePotereSostitutivo"],
+      filter: [["id", "=", this.idIter]]
+    });
+    this.generateCustomButtons();
+    this.buildIter();
+
+
+    this.perFigliParteDestra = {
+      idIter: this.idIter,
+      ricarica: false  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore
+    };
+
+    
+
+  }
+
+  ngAfterViewInit() {
+    // this.passaggioDiFaseVisible = this.child.visibile;
+  }
+
+
+  ngOnInit() {
+    console.log("***  ngOnInit");
+
+  }
+
+  isSospeso(){
+    console.log("ENTRATO IN IS SOSPESO");
+    if (this.iter.stato === "sospeso")
+      return true;
+    else
+      return false;
+  }
+
+  setNomeBottoneSospensione() {
+    console.log("setNomeBottoneSospensione()");
+    this.sospendiButton.label = this.getNomeBottoneSospensione();
+
+  }
+  
+  getNomeBottoneSospensione() {
+    console.log("getNomeBottoneSospensione()");
+    console.log("STATO ITER = ", this.iter.stato);
+    if (this.isSospeso()) 
+      return "Termina Sospensione";
+    else
+      return "Sospendi";
+  }
+
+  generateCustomButtons() {
+    console.log("generateCustomButtons");
+    this.genericButtons = new Array<ButtonAppearance>();
+    //                                                                sostituire l'ultimo false con this.isSospeso()
+    this.procediButton = new ButtonAppearance("Procedi", "", false, false);
+    //                                                                sostituire l'ultimo false con this.isIterFinito()
+    this.sospendiButton = new ButtonAppearance("Sospendi", "", false, false);
+    this.genericButtons.push(this.procediButton, this.sospendiButton);
+    this.setNomeBottoneSospensione();
+    
+  }
+
+  buildIter() {
+    console.log("buildIter");
+    this.dataSourceIter.load().then(res => {
+      console.log("dentro il buildIter loggo l'iter: ", this.iter);
+      this.iter.build(res[0], Iter);
+      this.generateCustomButtons();
+      this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
+      this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + this.iter.procedimentoCache.durataMassimaProcedimento);    
+    });
+    
+    
+  }
+
+  updateNoteControInteressati() {
+    this.popupData.title = "Note controinteressati";
+    this.popupData.field = "noteControInteressati";
+    this.popupData.fieldValue = this.iter.noteControinteressati;
+    this.popupData.visible = true;
+  }
+
+  updateEsitoMotivazione() {
+    this.popupData.title = "Esito motivazione";
+    this.popupData.field = "esitoMotivazione";
+    this.popupData.fieldValue = this.iter.esitoMotivazione;
+    this.popupData.visible = true;
+  }
+
+  /*  onShowing(event:Event){
+      debugger;
+  
+  }*/
+
+  public passaggioDiFase() {
+    /*this.idIterArray = [6];
+    this.popupData.title = 'Esito motivazione';
+    this.popupData.field = 'esitoMotivazione';
+    this.popupData.fieldValue = this.iter.esitoMotivazione;
+    this.popupData.visible = true;*/
+
+    const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.idIter)
+      .subscribe(
+      res => {
+        // debugger;
+        // console.log(res)
+        let current = JSON.parse(res["currentFase"]);
+        let next = JSON.parse(res["nextFase"]);
+
+        this.perFiglioPassaggioFase = {
+          idIter: this.idIter,
+          currentFaseName: current.nomeFase,
+          nextFaseName: next.nomeFase,
+          isNextFaseDiChiusura: next.faseDiChiusura
+        };
+
+        this.popupData.title = "Passaggio Di Fase";
+        this.passaggioDiFaseVisible = true;
+      },
+      err => {
+        notify("Non esiste la fase successiva", "error", 1000);
+        // debugger;
+      });
+  }
+
+  public sospensioneIter() {
+    this.popupData.title = "Gestione Sospensione";
+    this.sospensioneIterVisible = true;
+    this.paramsPerSospensione = this.iter;
+  }
+
+  receiveMessage($event) {
+    // console.log("loggo il messaggio....");
+    // console.log($event);
+    this.passaggioDiFaseVisible = $event["visible"];
+    if ($event["proceduto"]) {
+      let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"] };
+      this.perFigliParteDestra = perFigliNew;
+      this.buildIter();
+      notify("Proceduto con successo", "success", 1000);
+    }
+  }
+
+  receiveMessageFromSospensione($event) {
+    console.log("receiveMessageFromSospensione", $event);
+    this.sospensioneIterVisible = $event["visible"];
+    console.log("FACCIO IL BUILD");
+    this.buildIter();
+    this.setNomeBottoneSospensione();
+
+   
+  }
+
+  onGenericButtonClick(buttonName: string) {
+    console.log(buttonName);
+    switch (buttonName){
+      case "Termina Sospensione":
+      case "Sospendi":
+        this.sospensioneIter();
+        break;
+
+      case "Procedi":
+        this.passaggioDiFase();
+      break;
+
+    }
+
+  }
+
+
+  isIterFinito(){
+    console.log("****** ENTRATO NELL'ISFINITO ******");
+    console.log(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?Iter=" + this.iter);
+    let b: boolean;
+    const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.iter.id)
+      .subscribe(
+      res => {
+        // debugger;
+        // console.log(res)
+        let next = JSON.parse(res["nextFase"]);
+        if (next != null)
+          b = false;
+        else
+          b = true;
+      },
+      err => {
+          b = true;
+      });
+      return b;
+  }
+}
