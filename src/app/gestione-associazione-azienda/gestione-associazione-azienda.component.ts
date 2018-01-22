@@ -17,11 +17,11 @@ import {ButtonAppearance} from "@bds/nt-angular-context/templates/buttons-bar/bu
 
 
 @Component({
-    selector: "app-aziende-tipi-procedimento",
-    templateUrl: "./aziende-tipi-procedimento.component.html",
-    styleUrls: ["./aziende-tipi-procedimento.component.scss"]
+    selector: "app-gestione-associazione-azienda",
+    templateUrl: "./gestione-associazione-azienda.component.html",
+    styleUrls: ["./gestione-associazione-azienda.component.scss"]
 })
-export class AziendeTipiProcedimentoComponent implements OnInit {
+export class GestioneAssociazioneAziendaComponent implements OnInit {
     private odataContextEntitiesAziendaTipoProcedimento: OdataContextDefinition;
     private dataFromDettaglioProcedimentoComponent;
     private datasource: DataSource;
@@ -86,7 +86,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
             expand: ["idAzienda", "idTipoProcedimento", "idTitolo"],
             // filter: [['idTipoProcedimento.idTipoProcedimento', '=', this.sharedData.getSharedObject().procedimento.idAziendaTipoProcedimento], ['idAzienda.id', '=', this.sharedData.getSharedObject().azienda.id]],
         });
-        this.setDataFromDettaglioProcedimentoComponent();
+        this.setDataFromAssociazioneAziendeComponent();
         this.setNuovaAssociazione();
         this.buildAziendaTipoProcedimento(true);
 
@@ -117,8 +117,8 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
     /**
      * Legge i dati passatti dall'interfaccia precedente DettaglioProcedimentoComponent
      */
-    private setDataFromDettaglioProcedimentoComponent() {
-        this.dataFromDettaglioProcedimentoComponent = this.globalContextService.getInnerSharedObject("DettaglioProcedimentoComponent");
+    private setDataFromAssociazioneAziendeComponent() {
+        this.dataFromDettaglioProcedimentoComponent = this.globalContextService.getInnerSharedObject("AssociazioneAziendeComponent");
 
         // this.dataFromDettaglioProcedimentoComponent = this.sharedData.getSharedObject()["DettaglioProcedimentoComponent"];
     }
@@ -217,12 +217,12 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
             confirmDialog.show().done(
                 dialogResult => {
                     if (dialogResult === "Si") {
-                        this.router.navigate(["/app-dettaglio-procedimento"]);
+                        this.router.navigate(["/associazione-aziende"]);
                     }
                 });
         }
         else {
-            this.router.navigate(["/app-dettaglio-procedimento"]);
+            this.router.navigate(["/associazione-aziende"]);
         }
         // Saving data
         // this.datasource.store().update(this.aziendaProcedimento.id, this.aziendaProcedimento);
@@ -283,7 +283,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
             headerAzienda: this.testoHeaderAzienda,
             headerTipoProcedimento: this.testoHeaderTipoProcedimento
         };
-        this.globalContextService.setInnerSharedObject("AziendeTipiProcedimentoComponent", obj);
+        this.globalContextService.setInnerSharedObject("GestioneAssociazioneAziendaComponent", obj);
         // this.sharedData.setSharedObject(obj);
         this.router.navigate(["/struttura-tipi-procedimento"]);
     }
@@ -292,7 +292,7 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
         console.log("Value Titolo Changed: ", e);
     }
 
-    public onBack(){
+    public onBack() {
         if (this.datiModificati) {
             const confirmDialog = custom(
                 {
@@ -311,26 +311,26 @@ export class AziendeTipiProcedimentoComponent implements OnInit {
             confirmDialog.show().done(
                 dialogResult => {
                     if (dialogResult === "Si") {
-                        this.router.navigate(["/app-dettaglio-procedimento"]);
+                        this.router.navigate(["/associazione-aziende"]);
                     }
                 });
         }
         else {
-            this.router.navigate(["/app-dettaglio-procedimento"]);
+            this.router.navigate(["/associazione-aziende"]);
         }
         // CustomReuseStrategy.componentsReuseList.push("*");
         // this.router.navigate(["/app-dettaglio-procedimento"]);
     }
 
-    public onReload(){
+    public onReload() {
         console.log("onReload");
         this.buildAziendaTipoProcedimento(true);
     }
 
-    public onSave(){
+    public onSave() {
     }
 
-    public onRestore(){
+    public onRestore() {
         this.aziendaTipoProcedimento = Object.assign( {}, this.initialAziendaTipoProcedimento );
     }
 }

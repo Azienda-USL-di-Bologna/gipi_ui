@@ -33,9 +33,9 @@ import {rootRouterConfig} from "./app.routes";
 import {AppComponent} from "./app.component";
 import {HomeComponent} from "./home/home.component";
 import { DefinizioneTipiProcedimentoComponent } from "./definizione-tipi-procedimento/definizione-tipi-procedimento.component";
-import { DettaglioProcedimentoComponent } from "./dettaglio-procedimento/dettaglio-procedimento.component";
+import { AssociazioneAziendeComponent } from "./associazione-aziende/associazione-aziende.component";
 import { AssociazioniComponent } from "./associazioni/associazioni.component";
-import { AziendeTipiProcedimentoComponent } from "./aziende-tipi-procedimento/aziende-tipi-procedimento.component";
+import { GestioneAssociazioneAziendaComponent } from "./gestione-associazione-azienda/gestione-associazione-azienda.component";
 import { AssociaComponent } from "./associazioni/sub-view/associa/associa.component";
 import { ProcedimentoComponent } from "./associazioni/sub-view/procedimento/procedimento.component";
 import { AssociaDirective } from "./associazioni/directives/associa.directive";
@@ -44,8 +44,8 @@ import { StrutturaTipiProcedimentoComponent } from "./struttura-tipi-procediment
 
 import {AuthenticationJwtModule} from "./authentication-jwt/authentication-jwt.module";
 import { LoginComponent } from "./login/login.component";
-import {NoLoginGuard} from "./login/guards/no-login.guard";
-import {LoginGuard} from "./login/guards/login.guard";
+import {NoLoginGuard} from "./authorization/guards/no-login.guard";
+import {LoginGuard} from "./authorization/guards/login.guard";
 
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
@@ -74,8 +74,8 @@ import { ListaIterComponent } from "./lista-iter/lista-iter.component";
         AppComponent,
         HomeComponent,
         DefinizioneTipiProcedimentoComponent,
-        DettaglioProcedimentoComponent,
-        AziendeTipiProcedimentoComponent,
+        AssociazioneAziendeComponent,
+        GestioneAssociazioneAziendaComponent,
         AssociaComponent,
         ProcedimentoComponent,
         AssociaDirective,

@@ -3,9 +3,10 @@
 <dx-data-grid #fasiContent
         [dataSource]="datasource"
     >
+    <dxo-sorting ascendingText="Ordine crescente" descendingText="Orine discendente" clearText="Togli ordinamento"></dxo-sorting>
     <dxi-column class="fasiContentCol" dataField="idFase.nome" caption="Fase"></dxi-column>
-    <dxi-column class="fasiContentCol" dataField="dataInizioFase" caption="Data Inizio"></dxi-column>
-    <dxi-column class="fasiContentCol" dataField="dataFineFase" caption="Data Fine"></dxi-column>
+    <dxi-column class="fasiContentCol" dataField="dataInizioFase" format="dd/MM/yyyy" caption="Data Inizio"></dxi-column>
+    <dxi-column class="fasiContentCol" dataField="dataFineFase" format="dd/MM/yyyy" caption="Data Fine"></dxi-column>
 </dx-data-grid>
 <!---
 <dx-responsive-box #fasiContent>

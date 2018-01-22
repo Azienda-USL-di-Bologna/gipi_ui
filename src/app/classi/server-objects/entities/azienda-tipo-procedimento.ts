@@ -9,8 +9,8 @@ export class AziendaTipoProcedimento extends Entity {
     dataFine: Date;
     dataInizio: Date;
     descrizioneTipoProcedimento: string;
-    durataMassimaProcedimento: string;
-    durataMassimaSospensione: string;
+    durataMassimaProcedimento: number;
+    durataMassimaSospensione: number;
     obbligoEsitoConclusivo: boolean;
     FK_id_azienda: number;
     idAzienda: Azienda;
@@ -29,8 +29,8 @@ export class AziendaTipoProcedimento extends Entity {
                 descrizioneTipoProcedimento: "String",
                 dataFine: "DateTime",
                 dataInizio: "DateTime",
-                durataMassimaProcedimento: "String",
-                durataMassimaSospensione: "String",
+                durataMassimaProcedimento: "Int32",
+                durataMassimaSospensione: "Int32",
                 obbligoEsitoConclusivo: "Boolean",
                 idAzienda: new OdataForeignKey(Entities.Azienda, "id"),
                 idTipoProcedimento: new OdataForeignKey(Entities.TipoProcedimento, "id"),

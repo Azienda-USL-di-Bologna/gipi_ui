@@ -24,7 +24,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   public nomeProcedimento: string;
   public utenteConnesso: any;
   public now: Date = new Date();
-  
+
   @Input()
   set procedimentoSelezionato(procedimento: any) {
     this.nomeProcedimento = procedimento.nomeProcedimento;
@@ -71,9 +71,9 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   private campiObbligatoriCompilati() {
-    if (this.iterParams.dataAvvioIter == null || this.iterParams.oggettoIter == null || this.iterParams.oggettoIter === "" || 
-    this.iterParams.numeroDocumento == null || this.iterParams.annoDocumento == null || this.iterParams.codiceRegistroDocumento == null || 
-    this.iterParams.codiceRegistroDocumento === "") {
+    if (this.iterParams.dataAvvioIter == null || this.iterParams.oggettoIter == null || this.iterParams.oggettoIter === "" ||
+      this.iterParams.numeroDocumento == null || this.iterParams.annoDocumento == null || this.iterParams.codiceRegistroDocumento == null ||
+      this.iterParams.codiceRegistroDocumento === "") {
       this.showStatusOperation("Per avviare un nuovo iter tutti i campi sono obbligatori", "warning");
       return false;
     }
@@ -83,18 +83,18 @@ export class AvviaNuovoIterComponent implements OnInit {
   private avviaIter() {
     console.log(this.iterParams);
     if (this.campiObbligatoriCompilati()) {
-      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", this.iterParams, {headers: new HttpHeaders().set("content-type", "application/json")}) // Object.assign({}, this.iterParams))
-      .subscribe(
+      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({}, this.iterParams))
+        .subscribe(
         res => {
           console.log("Apertura della pagina dell'iter appena creato");
           console.log(res);
-          let idIter = +res["idIter"]; 
+          let idIter = +res["idIter"];
           this.closePopUp(idIter);
         },
         err => {
           this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
         }
-      );
+        );
     }
   }
 
@@ -103,31 +103,31 @@ export class AvviaNuovoIterComponent implements OnInit {
       message: message,
       type: type,
       displayTime: 2100,
-       position: {
-          my: "center", at: "center", of: window
-        },
-        width: "max-content"
+      position: {
+        my: "center", at: "center", of: window
+      },
+      width: "max-content"
     });
   }
 
   ngOnInit() {
     /* Chiamo qui questo metodo altrimenti non abbiamo l'idAzienda per filtrare*/
-    this.buildDataSourceUtenti();    
+    this.buildDataSourceUtenti();
   }
 
   public handleEvent(name: string, data: any) {
     switch (name) {
       case "onClickProcedi":
         this.avviaIter();
-      break;
+        break;
       case "onClickAnnulla":
         this.closePopUp();
-      break;
+        break;
     }
   }
 
   public closePopUp(idIter?: number) {
-    this.messageEvent.emit({visible: false, idIter: idIter});
+    this.messageEvent.emit({ visible: false, idIter: idIter });
   }
 
 }

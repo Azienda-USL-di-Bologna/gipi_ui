@@ -1,27 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
-import ODataStore from 'devextreme/data/odata/store';
-import { ODATA_BASE_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from '../../../../environments/app.constants';
-import { TipoProcedimento } from '../../../classi/server-objects/entities/tipo-procedimento';
-import { AziendaTipoProcedimento } from '../../../classi/server-objects/entities/azienda-tipo-procedimento';
+import { Component, OnInit } from "@angular/core";
+import DataSource from "devextreme/data/data_source";
+import ODataStore from "devextreme/data/odata/store";
+import { ODATA_BASE_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from "../../../../environments/app.constants";
+import { TipoProcedimento } from "../../../classi/server-objects/entities/tipo-procedimento";
+import { AziendaTipoProcedimento } from "../../../classi/server-objects/entities/azienda-tipo-procedimento";
 
 @Component({
-  selector: 'app-procedimento',
-  templateUrl: './procedimento.component.html',
-  styleUrls: ['./procedimento.component.css']
+  selector: "app-procedimento",
+  templateUrl: "./procedimento.component.html",
+  styleUrls: ["./procedimento.component.css"]
 })
 export class ProcedimentoComponent implements OnInit {
 
-  mode : string = 'VISUAL-MODE';
+  mode : string = "VISUAL-MODE";
   procedimento : TipoProcedimento;
   dataSource : DataSource;
 
   constructor() {
     this.procedimento = new TipoProcedimento();
-    this.procedimento.descrizioneDefault = 'descrizione a caso';
-    this.procedimento.modoApertura = 'questo è il modo apertura';
-    this.procedimento.normaRiferimento = 'norma 99/2a';
-    this.procedimento.durataMassimaSospensione = '22';
+    this.procedimento.descrizioneDefault = "descrizione a caso";
+    this.procedimento.modoApertura = "questo è il modo apertura";
+    this.procedimento.normaRiferimento = "norma 99/2a";
+    this.procedimento.durataMassimaSospensione = 22;
     this.procedimento.dataInizioValidita = new Date();
     this.procedimento.dataFineValidita = new Date();
   }
@@ -29,7 +29,7 @@ export class ProcedimentoComponent implements OnInit {
   getTipiProcedimentoSource() {
      this.dataSource = new DataSource({
       store: new ODataStore({
-        key: 'id',
+        key: "id",
         url: ODATA_BASE_URL + odataAziendeTipiProcPath,
         // deserializeDates: true,
         /*fieldTypes: {
@@ -55,8 +55,8 @@ export class ProcedimentoComponent implements OnInit {
         // console.log(aziendaTipoProcedimento);
         return item;
       },
-      expand: ['idAzienda', 'idAziendaTipoProcedimento', 'idTitolo'],
-      filter: [['idTipoProcedimento.idAziendaTipoProcedimento', '=', 1], ['idAzienda.id', '=', 2]],
+      expand: ["idAzienda", "idAziendaTipoProcedimento", "idTitolo"],
+      filter: [["idTipoProcedimento.idAziendaTipoProcedimento", "=", 1], ["idAzienda.id", "=", 2]],
     });
     this.dataSource.load().then(res => console.log(res));
     // console.log(this.dataSource);
@@ -66,17 +66,17 @@ export class ProcedimentoComponent implements OnInit {
     // let aziendaProcedimento : AziendaTipoProcedimento = new AziendaTipoProcedimento();
     // aziendaProcedimento.idAziendaTipoProcedimento = 3;
     // aziendaProcedimento.idAzienda = 7;
-    let dataStore :ODataStore = this.dataSource.store() as ODataStore;
+    let dataStore : ODataStore = this.dataSource.store() as ODataStore;
     dataStore.insert(procedimento);
   }
 
-  updateTipoProcedimento(key : number, procedimento : TipoProcedimento){
-    let dataStore :ODataStore = this.dataSource.store() as ODataStore;
+  updateTipoProcedimento(key : number, procedimento : TipoProcedimento) {
+    let dataStore : ODataStore = this.dataSource.store() as ODataStore;
     dataStore.update(key, procedimento);
   }
 
-  removeTipoProcedimento(key : number,){
-    let dataStore :ODataStore = this.dataSource.store() as ODataStore;
+  removeTipoProcedimento(key : number, ) {
+    let dataStore : ODataStore = this.dataSource.store() as ODataStore;
     dataStore.remove(key);
   }
 
@@ -90,9 +90,9 @@ export class ProcedimentoComponent implements OnInit {
   ngOnInit() {
   }
 
-  switchMode(){
+  switchMode() {
     // console.log('switch')
-    this.mode = 'EDIT-MODE';
+    this.mode = "EDIT-MODE";
   }
 
 }

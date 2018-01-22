@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild,} from "@angular/core";
+import {Component, Input, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { DxDataGridComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from "./definizione-tipi-procedimento.service";
@@ -20,7 +20,10 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
   private odataContextDefinition: OdataContextDefinition;
 
-  @ViewChild("grid") public grid: DxDataGridComponent;
+  // questa proprietà serve per capire che pulsante è stato cliccato
+  private comando: any;
+
+  @ViewChild("definizione_tipi_procedimento") public grid: DxDataGridComponent;
   @Input ("refreshButton") public refreshButton;
 
   public dataSource: DataSource;
@@ -32,6 +35,11 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     cancelRowChanges: "Annulla",
     confirmDeleteMessage: "Stai per cancellare il tipo di procedimento: procedere?"
   };
+  public popupButtons: any[];
+
+  public filterOperationDescriptions: Object = {"contains": "contiene", "notContains": "non contiene", "equal": "uguale", "notEqual": "diverso",
+    "startsWith": "comincia con",  "endsWith": "finisce con", "between": "compreso tra", "greaterThan": "maggiore di",
+    "greaterThanOrEqual": "maggiore o uguale a", "lessThan": "minore di", "lessThanOrEqual": "minore o uguale a" };
 
   constructor(private odataContexFactory: OdataContextFactory,
               private service: DefinizioneTipiProcedimentoService,
@@ -45,39 +53,69 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     this.dataSource = new DataSource({
       store: this.odataContextDefinition.getContext()[Entities.TipoProcedimento.name],
 
-
-/*      map: function (item) {
-        if (item.dataInizioValidita != null)
+      map: function (item) {
+/*        if (item.dataInizioValidita != null)
           item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
         if (item.dataFineValidita != null)
-          item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);
+          item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);*/
 
-        //console.log('item', item);
         return item;
-      }*/
+      }
     });
+
     this.dataSource.load().then(res => this.buildTipiProcedimento(res));
-
-
-    // debugger;
-    // console.log(this.dataSource);
-
+    this.setFormLook();
   }
 
-  ngOnInit() {
-    // this.globalContext.setButtonBarVisible(false);
+  private setFormLook() {
+    this.popupButtons = [{
+      toolbar: "bottom",
+      location: "center",
+      widget: "dxButton",
+      options: {
+          type: "normal",
+          text: "Chiudi",
+          onClick: () => {
+              this.grid.instance.cancelEditData();
+          }
+      }
+    },
+    {
+      toolbar: "bottom",
+      location: "center",
+      widget: "dxButton",
+      options: {
+          type: "normal",
+          text: "Salva",
+          onClick: () => {
+              this.grid.instance.saveEditData();
+          }
+      }
+    }];
   }
 
-  ngOnDestroy() {
-    // console.log("destroy");
+  // cancello la riga passata come parametro
+  private cancellaRiga(row: any) {
+    // prendo l'indice della riga selezionata e
+    // console.log("FUNZIONE CANCELLARIGA");
+    // console.log(row.rowIndex);
+    this.grid.instance.deleteRow(row.rowIndex);
+    this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
   }
 
-  buildTipiProcedimento(res) {
-    this.tipiProcedimento = res;
+  // modifico la riga passata come parametro
+  private modificaRiga(row: any) {
+    // console.log("FUNZIONE MODIFICARIGA");
+    // console.log(row.rowIndex);
+    this.grid.instance.editRow(row.rowIndex);
+    this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
   }
 
-  // questa proprietà serve per capire che pulsante è stato cliccato
-  private comando: any;
+
+  private cellClick(e: any) {
+    this.service.valorizzaSelectedRow(e.data);
+
+  }
 
   public handleEvent(name: String, event: any) {
     // console.log("EVENTO "+name, event);
@@ -129,6 +167,16 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
         this.comando = "cancella";  // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
         break;
 
+      case "onEditorPreparing":
+        if (event.dataField === "descrizioneDefault") {
+          event.editorName = "dxTextArea";
+          event.editorOptions.height = 70;
+        } else if (event.dataField === "modoApertura") {
+          event.editorName = "dxSelectBox";
+          event.editorOptions.items = ["Ufficio", "Istanza"];
+        }
+        break;
+
       default:
         break;
     }
@@ -136,30 +184,20 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
   }
 
 
-  // cancello la riga passata come parametro
-  private cancellaRiga(row: any){
-    // prendo l'indice della riga selezionata e
-    // console.log("FUNZIONE CANCELLARIGA");
-    // console.log(row.rowIndex);
-    this.grid.instance.deleteRow(row.rowIndex);
-    this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
+
+  ngOnInit() {
+    // this.globalContext.setButtonBarVisible(false);
   }
 
-  // modifico la riga passata come parametro
-  private modificaRiga(row: any){
-    // console.log("FUNZIONE MODIFICARIGA");
-    // console.log(row.rowIndex);
-    this.grid.instance.editRow(row.rowIndex);
-    this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
+  ngOnDestroy() {
+    // console.log("destroy");
   }
 
-
-  private cellClick(e: any){
-    this.service.valorizzaSelectedRow(e.data);
-
+  buildTipiProcedimento(res) {
+    this.tipiProcedimento = res;
   }
 
-  public onToolbarPreparing(e: any){
+  public onToolbarPreparing(e: any) {
     // console.log("onToolbarPreparing event!!!")
     let toolbarItems = e.toolbarOptions.items;
 
@@ -189,9 +227,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     }
   }
 
-  public filterOperationDescriptions: Object = {"contains": "contiene", "notContains": "non contiene", "equal": "uguale", "notEqual": "diverso",
-    "startsWith": "comincia con",  "endsWith": "finisce con", "between": "compreso tra", "greaterThan": "maggiore di",
-    "greaterThanOrEqual": "maggiore o uguale a", "lessThan": "minore di", "lessThanOrEqual": "minore o uguale a" };
+  
 
 
   public calcolaSeAttiva(row: any) {

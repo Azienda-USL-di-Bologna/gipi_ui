@@ -1,13 +1,17 @@
 <div class="container-fluid">
+    <app-buttons-bar 
+        (onGenericButtonClick)="onGenericButtonClick($event)"
+        [genericButtons]="genericButtons">
+    </app-buttons-bar>
     <div class="col header-font">
         <h3><span class="header-font">Struttura procedente:</span> <i>{{infoGeneriche.struttura}}</i></h3>
         <h3><span class="header-font">Tipo procedimento:</span> <i>{{infoGeneriche.tipoProcedimento}}</i></h3>
-        <div>
+        <!-- <div>
             <dx-button [text]="'Procedi'" (onClick)="passaggioDiFase()"></dx-button>
         </div>
         <div>
             <dx-button [text]="nomeBottoneSospensione()" (onClick)="sospensioneIter()"></dx-button>
-        </div>
+        </div> -->
     
     </div>
 
@@ -17,7 +21,7 @@
             id="form"
             [colCount]="1"
             [formData]="iter">
-            <dxi-item itemType="group" [colCount]="2">
+            <dxi-item itemType="group" [colCount]="2" caption="Dati generali">
                 <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item>
 
                 <dxi-item [colSpan]="2" dataField="oggetto" [editorOptions]="{ disabled: true }"></dxi-item>
@@ -134,6 +138,7 @@
 </dx-popup>
 
 <dx-popup
+    class="sospensionePopup"
     [width]="700"
     [showTitle]="true"
     [title]="popupData.title"
