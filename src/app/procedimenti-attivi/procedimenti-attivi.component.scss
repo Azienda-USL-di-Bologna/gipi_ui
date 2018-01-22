@@ -6,51 +6,42 @@
 
 
 /* Datagrid + + + + + + + + + + + + + + + + + */
-/deep/ #gridContainer {
+ #gridContainer {
   padding: 0 10px;
 }
 
 /* Ricerca generale */
-/deep/ .dx-texteditor-buttons-container .dx-clear-button-area .dx-icon.dx-icon-clear {
+ .dx-texteditor-buttons-container .dx-clear-button-area .dx-icon.dx-icon-clear {
   padding: 8px 0 !important;
   width: initial;
 }
 
 /* Centro verticalmente i dati delle righe */
-/deep/ .column {
+ .column {
   vertical-align: middle !important;
-}
-
-/* Intestazione delle colonne */
-/deep/ .dx-datagrid-action.dx-cell-focus-disabled {
-  color: #696969;
-}
-
-/deep/ .azioni {
-  color: #696969;
 }
 
 
 /* Popup + + + + + + + + + + + + + + + + + */
-/deep/ .item {
+ .item {
   padding: 0 15px;
 }
 
-/deep/ .popup-title {
+ .popup-title {
   font-size: 22px;
   justify-content: center;
 }
 
-/deep/ .popup-title .dx-field-item-label-text {
+ .popup-title .dx-field-item-label-text {
   font-size: 18px;
  /*  color: #696969; */
 }
 
-/deep/ .popup-title label span {
+ .popup-title label span {
   width: initial !important;
 }
 
-/deep/ .popup-title .dx-field-item-content.dx-field-item-content-location-right {
+ .popup-title .dx-field-item-content.dx-field-item-content-location-right {
   width: initial !important;
   flex: initial !important;
   flex-grow: initial !important;
@@ -58,15 +49,15 @@
 }
 
 @media screen and (max-width: 1280px) {
-  /deep/ #gridContainer {
+   #gridContainer {
     padding: 0;
   }
 
-  /deep/ .dx-widget, /deep/ .dx-box-item-content {
+   .dx-widget,  .dx-box-item-content {
     font-size: 12px !important;
   }
 
-  /deep/ .dx-datagrid .dx-row > td {
+   .dx-datagrid .dx-row > td {
     padding: 7px 3px;
   }
 }

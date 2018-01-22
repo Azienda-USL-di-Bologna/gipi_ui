@@ -21,16 +21,16 @@
             id="form"
             [colCount]="1"
             [formData]="iter">
-            <dxi-item itemType="group" [colCount]="2" caption="Dati generali">
+            <dxi-item itemType="group" [colCount]="2">
                 <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item>
 
                 <dxi-item [colSpan]="2" dataField="oggetto" [editorOptions]="{ disabled: true }"></dxi-item>
     
-                <dxi-item [colSpan]="2" dataField="idResponsabileProcedimento.idPersona.descrizione" [editorOptions]="{ disabled: true }">
+                <dxi-item [colSpan]="2" dataField="idResponsabileProcedimento.nome" [editorOptions]="{ disabled: true }">
                     <dxo-label text="Resp. procedimento"></dxo-label>
                 </dxi-item>
     
-                <dxi-item [colSpan]="2" dataField="procedimentoCache.idTitolarePotereSostitutivo.idPersona.descrizione" [editorOptions]="{ disabled: true }">
+                <dxi-item [colSpan]="2" dataField="procedimentoCache.idTitolarePotereSostitutivo.descrizione" [editorOptions]="{ disabled: true }">
                     <dxo-label text="Tit. potere sostitutivo"></dxo-label>
                 </dxi-item>
     
@@ -41,7 +41,7 @@
                 </dxi-item>
     
                 <dxi-item [colSpan]="1">
-                    <button type="button" (click)="updateNoteControInteressati()" >Note controinteressati</button>
+                    <button type="button" (click)="updateEsitoMotivazione()" >Note controinteressati</button>
                     <!-- <dx-button text="Note controinteressati" type="default" (onClick)="updateNoteControInteressati()"></dx-button> -->
                 </dxi-item>
     
@@ -117,8 +117,8 @@
         [(value)]="popupData.fieldValue">
         </dx-text-area>
         <div class="wrapperPulsantiPopup">
-            <dx-button text="Annulla" type="normal" (click)="closePopupNote()"></dx-button>
-            <dx-button text="Salva" (click)="updateIter()" type="default"></dx-button>
+            <dx-button text="Annulla" type="normal"></dx-button>
+            <dx-button text="Salva" type="default"></dx-button>
         </div> 
     </div>
 </dx-popup>
@@ -138,7 +138,6 @@
 </dx-popup>
 
 <dx-popup
-    class="sospensionePopup"
     [width]="700"
     [showTitle]="true"
     [title]="popupData.title"

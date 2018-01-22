@@ -29,7 +29,7 @@
     <dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true"></dxi-column>
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
     <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni"></dxi-column>
-    <div *dxTemplate="let d of 'buttonCellTemplate'" class="azioni-tipi-procedimento">
+    <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni">
         <a routerLink="/associazione-aziende" routerLinkActive="active">
             <dx-button text="" hint="Associazione alle Aziende" icon='preferences' (onClick)="handleEvent('associaClicked', $event)" ></dx-button>
         </a>

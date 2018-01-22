@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-albero-strutture',
-  templateUrl: './albero-strutture.component.html',
-  styleUrls: ['./albero-strutture.component.css']
+  selector: "app-albero-strutture",
+  templateUrl: "./albero-strutture.component.html",
+  styleUrls: ["./albero-strutture.component.scss"]
 })
 export class AlberoStruttureComponent implements OnInit {
 
@@ -29,7 +29,7 @@ export class Product {
     image?: string;
 }
 
-var products: Product[] = [{
+let products: Product[] = [{
     id: "1",
     text: "Stores",
     expanded: true,
