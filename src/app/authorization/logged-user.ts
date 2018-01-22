@@ -16,7 +16,7 @@ export class LoggedUser {
 
     constructor(userInfoMap: Object) {
 
-        debugger;
+        //debugger;
         this.userInfoMap = userInfoMap;
         this._username=userInfoMap["username"];
         this._azienda=userInfoMap["aziende"]["nome"];
@@ -46,21 +46,21 @@ export class LoggedUser {
         for(let ruolo in Ruoli){
 
             let maschera:number = BIT_RUOLI[Ruoli[ruolo]];
-            if((bit_ruoli & maschera) > 0){
+            if((bit_ruoli & maschera) > 0) {
                 arrayRuoli.push(Ruoli[ruolo])
             }
         }
         return arrayRuoli;
     }
 
-    public get username(): string{
+    public get username(): string {
         return this._username;
     }
 
-    public get azienda(): string{
+    public get azienda(): string {
         return this._azienda;
     }
-    public get isMOBS(): boolean{
+    public get isMOBS(): boolean {
         return this._isMOBS;
     }
 

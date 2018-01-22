@@ -99,8 +99,8 @@ export class AppComponent implements OnInit, OnDestroy {
         if (sessionStorage.getItem("userInfoMap")) {
             this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
             this.username = this.userInfoMap["username"];
-            //this.ruolo = this.userInfoMap["bit_ruoli"];
-            debugger;
+            // this.ruolo = this.userInfoMap["bit_ruoli"];
+            // debugger;
             this.azienda = this.userInfoMap["aziende"]["nome"];
         }
 
@@ -112,16 +112,16 @@ export class AppComponent implements OnInit, OnDestroy {
             (value: any) => {
                 if (value) {
                     this.userInfoMap = value;
-                    debugger;
-                    //this.username = value["username"];
-                    //this.ruolo = value["bit_ruoli"];
+                    // debugger;
+                    // this.username = value["username"];
+                    // this.ruolo = value["bit_ruoli"];
                     this.azienda = value.aziende.nome;
                 }
 
             }
         );
 
-        debugger;
+        // debugger;
         this.ruolo = "";
     
         this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
@@ -133,7 +133,7 @@ export class AppComponent implements OnInit, OnDestroy {
                         this.ruolo = "";
                         this.ruoli.forEach(element => {
                             this.ruolo += element + " "
-                        });;
+                        }); ;
                     }
                 }
             )

@@ -35,6 +35,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     cancelRowChanges: "Annulla",
     confirmDeleteMessage: "Stai per cancellare il tipo di procedimento: procedere?"
   };
+  public popupButtons: any[];
 
   public filterOperationDescriptions: Object = {"contains": "contiene", "notContains": "non contiene", "equal": "uguale", "notEqual": "diverso",
     "startsWith": "comincia con",  "endsWith": "finisce con", "between": "compreso tra", "greaterThan": "maggiore di",
@@ -52,29 +53,46 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     this.dataSource = new DataSource({
       store: this.odataContextDefinition.getContext()[Entities.TipoProcedimento.name],
 
-
       map: function (item) {
-        //debugger;
-
-
-
 /*        if (item.dataInizioValidita != null)
           item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
         if (item.dataFineValidita != null)
           item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);*/
 
-        //console.log('item', item);
         return item;
       }
     });
+
     this.dataSource.load().then(res => this.buildTipiProcedimento(res));
-
-
-    // debugger;
-    // console.log(this.dataSource);
-
+    this.setFormLook();
   }
 
+  private setFormLook() {
+    this.popupButtons = [{
+      toolbar: "bottom",
+      location: "center",
+      widget: "dxButton",
+      options: {
+          type: "normal",
+          text: "Chiudi",
+          onClick: () => {
+              this.grid.instance.cancelEditData();
+          }
+      }
+    },
+    {
+      toolbar: "bottom",
+      location: "center",
+      widget: "dxButton",
+      options: {
+          type: "normal",
+          text: "Salva",
+          onClick: () => {
+              this.grid.instance.saveEditData();
+          }
+      }
+    }];
+  }
 
   // cancello la riga passata come parametro
   private cancellaRiga(row: any) {
@@ -147,6 +165,16 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
       case "deleteClicked":
         // console.log("entrato in deleteClicked");
         this.comando = "cancella";  // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
+        break;
+
+      case "onEditorPreparing":
+        if (event.dataField === "descrizioneDefault") {
+          event.editorName = "dxTextArea";
+          event.editorOptions.height = 70;
+        } else if (event.dataField === "modoApertura") {
+          event.editorName = "dxSelectBox";
+          event.editorOptions.items = ["Ufficio", "Istanza"];
+        }
         break;
 
       default:
