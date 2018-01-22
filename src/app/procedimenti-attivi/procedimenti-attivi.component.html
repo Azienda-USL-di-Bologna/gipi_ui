@@ -10,7 +10,7 @@
       >
     
       <dxo-filter-row [visible]="true" showAllText=' '></dxo-filter-row>
-      <dxo-search-panel [visible]="true" [width]="calcWidth(3)"placeholder="Cerca.." searchVisibleColumnsOnly="true"></dxo-search-panel>
+      <dxo-search-panel [visible]="true" [width]="calcWidth(3)" placeholder="Cerca.." searchVisibleColumnsOnly="true"></dxo-search-panel>
       
       <dxi-column [minWidth]="250" dataField="idStruttura.nome" caption="Struttura" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="170" dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" caption="Nome" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
@@ -18,15 +18,15 @@
       <dxi-column [width]="150" dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" caption="Durata massima (gg)" [dataType]="'number'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="120" dataField="dataInizio" caption="Valido dal" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
       <dxi-column [width]="200" dataField="idTitolarePotereSostitutivo.idPersona.descrizione" caption="Tit. potere sostitutivo" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
-      <dxi-column [width]="100" caption="Dettagli" cellTemplate="buttonActions" alignment="center" cssClass="azioni"></dxi-column>
+      <dxi-column [width]="100" caption="Dettagli" cellTemplate="buttonActions" alignment="center" cssClass="app-azioni"></dxi-column>
       <div *dxTemplate="let element of 'buttonActions'" class="buttons">
           <dx-button text="" hint="Vai al dettaglio" icon='info' (onClick)="handleEvent('infoOnClick', element)"></dx-button>
       </div>
-      <dxi-column [width]="100" caption="Storico iter" cellTemplate="buttonStorico" alignment="center" cssClass="azioni"></dxi-column>
+      <dxi-column [width]="100" caption="Storico iter" cellTemplate="buttonStorico" alignment="center" cssClass="app-azioni"></dxi-column>
       <div *dxTemplate="let element of 'buttonStorico'" class="buttons">
         <dx-button text="" icon='event'></dx-button>
       </div>
-      <dxi-column [width]="100" caption="Nuovo iter" cellTemplate="buttonIter" alignment="center" cssClass="azioni"></dxi-column>
+      <dxi-column [width]="100" caption="Nuovo iter" cellTemplate="buttonIter" alignment="center" cssClass="app-azioni"></dxi-column>
       <div *dxTemplate="let element of 'buttonIter'" class="buttons">
         <dx-button text="" icon='repeat' (onClick)="handleEvent('iterOnClick', element)"></dx-button>
       </div>

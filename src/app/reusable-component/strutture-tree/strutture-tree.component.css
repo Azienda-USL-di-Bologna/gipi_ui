@@ -1,19 +1,19 @@
-/deep/ .tree-readonly .dx-checkbox-icon{
+ .tree-readonly .dx-checkbox-icon{
     cursor: default;
     background-color: lightgrey;
     
 }
 
-/deep/ .tree-not-readonly .dx-checkbox-icon{
+ .tree-not-readonly .dx-checkbox-icon{
     cursor: pointer;
     background-color: white; 
     
 }
 
-/deep/ .dx-treeview{
+ .dx-treeview{
     width: 100%;
 }
 
-/deep/ .dx-texteditor .dx-texteditor-empty .dx-textbox{
+ .dx-texteditor .dx-texteditor-empty .dx-textbox{
     width: 100%;
 }

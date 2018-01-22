@@ -8,13 +8,13 @@ import { AziendaTipoProcedimento } from "../../../classi/server-objects/entities
 @Component({
   selector: "app-procedimento",
   templateUrl: "./procedimento.component.html",
-  styleUrls: ["./procedimento.component.css"]
+  styleUrls: ["./procedimento.component.scss"]
 })
 export class ProcedimentoComponent implements OnInit {
 
-  mode : string = "VISUAL-MODE";
-  procedimento : TipoProcedimento;
-  dataSource : DataSource;
+  public mode: string = "VISUAL-MODE";
+  public procedimento: TipoProcedimento;
+  public dataSource: DataSource;
 
   constructor() {
     this.procedimento = new TipoProcedimento();
@@ -70,13 +70,13 @@ export class ProcedimentoComponent implements OnInit {
     dataStore.insert(procedimento);
   }
 
-  updateTipoProcedimento(key : number, procedimento : TipoProcedimento) {
-    let dataStore : ODataStore = this.dataSource.store() as ODataStore;
+  updateTipoProcedimento(key: number, procedimento : TipoProcedimento) {
+    let dataStore: ODataStore = this.dataSource.store() as ODataStore;
     dataStore.update(key, procedimento);
   }
 
-  removeTipoProcedimento(key : number, ) {
-    let dataStore : ODataStore = this.dataSource.store() as ODataStore;
+  removeTipoProcedimento(key: number, ) {
+    let dataStore: ODataStore = this.dataSource.store() as ODataStore;
     dataStore.remove(key);
   }
 
