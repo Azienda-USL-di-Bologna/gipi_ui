@@ -126,6 +126,16 @@ export class IterProcedimentoComponent implements OnInit {
     this.popupData.visible = true;
   }
 
+  updateIter(){
+    if(this.popupData.field === "esitoMotivazione"){
+      this.iter.esitoMotivazione = this.popupData.fieldValue;
+    }else{
+      this.iter.noteControinteressati = this.popupData.fieldValue;
+    }
+    console.log('Here is the store:', this.dataSourceIter.store())
+    this.dataSourceIter.store().update(this.iter.id, this.iter);
+  }
+
   /*  onShowing(event:Event){
       debugger;
   
