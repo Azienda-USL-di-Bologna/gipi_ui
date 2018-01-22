@@ -96,18 +96,21 @@ export class AppComponent implements OnInit, OnDestroy {
                 })
             ) as Subscription);
 
-        if (sessionStorage.getItem("userInfoMap")) {
+
+
+
+/*        if (sessionStorage.getItem("userInfoMap")) {
             this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
             this.username = this.userInfoMap["username"];
             // this.ruolo = this.userInfoMap["bit_ruoli"];
             // debugger;
             this.azienda = this.userInfoMap["aziende"]["nome"];
         }
+*/
 
 
 
-
-        this.userInfoMap$ = this.globalContextService.getSubjectInnerSharedObject("userInfoMap");
+/*        this.userInfoMap$ = this.globalContextService.getSubjectInnerSharedObject("userInfoMap");
         this.userInfoMap$.subscribe(
             (value: any) => {
                 if (value) {
@@ -117,14 +120,12 @@ export class AppComponent implements OnInit, OnDestroy {
                     // this.ruolo = value["bit_ruoli"];
                     this.azienda = value.aziende.nome;
                 }
-
             }
-        );
+        );*/
 
-        // debugger;
-        this.ruolo = "";
+
     
-        this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
+/*        this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
         this.subscriptions.push(
             this.loggedUser$.subscribe(
                 (loggedUser: LoggedUser) => {
@@ -137,7 +138,7 @@ export class AppComponent implements OnInit, OnDestroy {
                     }
                 }
             )
-        );
+        );*/
 
 
     }
@@ -158,8 +159,9 @@ export class AppComponent implements OnInit, OnDestroy {
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("userInfoMap");
         sessionStorage.removeItem("loginMethod");
-
+        debugger;
         if (loginMethod !== "sso") {
+            console.log(loginMethod);
             this.router.navigate(["/login"]);
         }
         else {

@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     login(form: NgForm) {
         this.errorMessage = "";
 
-        this.httpClient.post(LOGIN_URL, { username: form.value.username, "password": form.value.password })
+        this.httpClient.post(LOGIN_URL, { username: form.value.username, "password": form.value.password, "codiceAzienda": form.value.codiceAzienda })
             .subscribe(
             (data: any) => {
                 this.setDataLogin(data, "POST");
@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
 
     private setDataLogin(data: any, httpMethod: string) {
         sessionStorage.setItem("token", data.token);
-
+        debugger;
         if (httpMethod === "GET") {
             sessionStorage.setItem("loginMethod", "sso");
         }
@@ -69,13 +69,13 @@ export class LoginComponent implements OnInit {
         }
 
 
-        let userInfoMap: Object = data.userInfoMap;
+        //let userInfoMap: Object = data.userInfoMap;
 
-        sessionStorage.setItem("userInfoMap", JSON.stringify(userInfoMap));
+        //sessionStorage.setItem("userInfoMap", JSON.stringify(userInfoMap));
 
-        let loggedUser = new LoggedUser(userInfoMap);
+        //let loggedUser = new LoggedUser(userInfoMap);
 
-        this.globalContextService.setSubjectInnerSharedObject("loggedUser", loggedUser);
+        //this.globalContextService.setSubjectInnerSharedObject("loggedUser", loggedUser);
 
         this.router.navigate(["/home"], { queryParams: { reset: true } });
     }

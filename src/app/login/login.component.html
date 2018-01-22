@@ -9,6 +9,10 @@
                 <label for="inputPassword">Password</label>
                 <input type="password" name="password" id="password" class="form-control" id="inputPassword" placeholder="Password" ngModel>
             </div>
+            <div class="form-group">
+                <label for="inputCodiceAzienda">Codice azienda (es. 102, 105, 106..)</label>
+                <input type="text" name="codiceAzienda" id="codiceAzienda" class="form-control" id="inputCodiceAzienda" placeholder="Codice Azienda" ngModel>
+            </div>
             <button type="submit" class="btn btn-primary">Login</button>
           </form>
           <div>{{errorMessage}}</div>
