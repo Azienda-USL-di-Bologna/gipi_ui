@@ -60,12 +60,12 @@
 /* SE VOGLIO COLORE RIGHE ALTERNATE ALTERNATO: **/
 
 // COLORE DELL'ALTERNANZA
-/*  .dx-row.dx-data-row.dx-column-lines:nth-child(even) {
+/* /deep/ .dx-row.dx-data-row.dx-column-lines:nth-child(even) {
     background-color: "#002bff0d";
 }
 
 // COLORE CON HOVER
- .dx-row.dx-data-row.dx-column-lines:hover{
+ /deep/ .dx-row.dx-data-row.dx-column-lines:hover{
     background-color: "#337ab78c" !important;
 } */
 
@@ -218,4 +218,8 @@
   padding: 10px;
   padding-bottom: 0px;
   padding-top: 0px;
+}
+
+.btn {
+  color: white;
 }

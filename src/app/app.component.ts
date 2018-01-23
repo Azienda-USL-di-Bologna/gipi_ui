@@ -65,7 +65,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     @HostListener("window:keydown", ["$event"])
     keyEvent(event: KeyboardEvent) {
-        if (event.code == "F5") {
+        if (event.code === "F5") {
             this.router.navigate([""]);
         }
     }
@@ -134,8 +134,8 @@ export class AppComponent implements OnInit, OnDestroy {
                         this.ruoli = loggedUser.ruoli;
                         this.ruolo = "";
                         this.ruoli.forEach(element => {
-                            this.ruolo += element.nomeBreve + " "
-                        }); ;
+                            this.ruolo += element.nomeBreve + " ";
+                        });
                     }
                 }
             )
