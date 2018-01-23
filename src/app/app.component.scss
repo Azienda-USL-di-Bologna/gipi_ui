@@ -81,7 +81,7 @@
   padding: 7px 18px 8px;
 }
 
-/deep/ .button-azioni :hover {
+/deep/ .button-azioni:hover {
   background-color: #285f8f;
   border-color: #265a87;
 }
@@ -91,7 +91,7 @@
   border-color: #265a87;
 }
 
-
+// escludo quelli con icone
 /deep/ .dx-button-has-text:not(.dx-button-has-icon) {
   background-color: #337ab7;
   border-color: #2d6da3;
@@ -99,7 +99,7 @@
   border-radius: 4px;
 }
 
-/deep/ .dx-button-has-text:not(.dx-button-has-icon) :hover {
+/deep/ .dx-button-has-text:not(.dx-button-has-icon):hover {
   background-color: #285f8f;
   border-color: #265a87;
 }
