@@ -63,7 +63,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
 
-    @HostListener('window:keydown', ['$event'])
+    @HostListener("window:keydown", ["$event"])
     keyEvent(event: KeyboardEvent) {
         if (event.code == "F5") {
             this.router.navigate([""]);

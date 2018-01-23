@@ -41,11 +41,11 @@
 }
 
 /* I bottoni della colonna azioni*/
-.app-azioni {
+/deep/.app-azioni {
   width: auto !important;
   text-align: center !important;
-  display: flex;
-  justify-content: space-around;
+  display: flex !important;
+  justify-content: space-around !important;
 }
 
 
@@ -69,9 +69,47 @@
     background-color: "#337ab78c" !important;
 } */
 
+
+/deep/ .button-azioni {
+  background-color: #337ab7;
+  border-color: #2d6da3;
+  color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px transparent;
+  border-width: 1px;
+  border-style: solid;
+  padding: 7px 18px 8px;
+}
+
+/deep/ .button-azioni :hover {
+  background-color: #285f8f;
+  border-color: #265a87;
+}
+
+/deep/ .button-azioni :hover {
+  background-color: #285f8f;
+  border-color: #265a87;
+}
+
+
+/deep/ .dx-button-has-text:not(.dx-button-has-icon) {
+  background-color: #337ab7;
+  border-color: #2d6da3;
+  color: #fff;
+  border-radius: 4px;
+}
+
+/deep/ .dx-button-has-text:not(.dx-button-has-icon) :hover {
+  background-color: #285f8f;
+  border-color: #265a87;
+}
+
+
+
 /*                      fine template                       */
 /************************************************************/
 
+ 
 .row-fluid .col-0 {
   width: 0%;
   float:left;
@@ -165,4 +203,19 @@
 #userProfile {
   float: right;
   margin-right: 32px;
+}
+
+
+.navbar-login
+{
+  width: 305px;
+  padding: 10px;
+  padding-bottom: 0px;
+}
+
+.navbar-login-session
+{
+  padding: 10px;
+  padding-bottom: 0px;
+  padding-top: 0px;
 }
