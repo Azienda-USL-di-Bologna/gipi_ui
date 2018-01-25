@@ -53,11 +53,11 @@ export class AvviaNuovoIterComponent implements OnInit {
 
 
 
-    this.loggedUser.strutture.forEach((s: UtenteStruttura) =>{
-          if (s.idAfferenzaStruttura.descrizione === afferenzaStruttura.diretta){
+    this.loggedUser.strutture.forEach((s: UtenteStruttura) => {
+          if (s.idAfferenzaStruttura.descrizione === afferenzaStruttura.diretta) {
           this.iterParams.idStrutturaUtente = s.idStruttura.id;
         }
-    }) 
+    });
     
 /*    for (let s of JSON.parse(sessionStorage.getItem("userInfoMap")).strutture) {
       if (s.idAfferenzaStruttura === afferenzaStruttura.diretta) {

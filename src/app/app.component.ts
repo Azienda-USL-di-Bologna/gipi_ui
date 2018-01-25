@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, HostListener } from "@angular/core";
+import { Component, OnDestroy, OnInit, HostListener, Input } from "@angular/core";
 import { Location } from "@angular/common";
 import { CustomReuseStrategy } from "@bds/nt-angular-context/routes/custom-reuse-strategy";
 import { Router } from "@angular/router";
@@ -18,9 +18,7 @@ import { LoggedUser } from "./authorization/logged-user";
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-    private userInfoMap: any;
     private subscriptions: Subscription[] = [];
-    // buttonBar: Observable<boolean>;
 
     public username: string;
     public azienda: string;
@@ -36,30 +34,30 @@ export class AppComponent implements OnInit, OnDestroy {
     public userInfoMap$: Observable<Object>;
     public loggedUser$: Observable<Object>;
 
-
-
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
-        // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
-        // if (this.userInfoMap) {
-        //     this.username = this.userInfoMap["username"];
-        //     this.azienda = this.userInfoMap["azienda"];
-        // }
         this.odataContextFactory.setOdataBaseUrl(ODATA_BASE_URL);
         console.log("hostname", window.location.hostname);
         console.log("host", window.location.host);
         console.log("protocol", window.location.protocol);
         console.log("location", window.location);
-        this.sidebarItems.push(new SidebarItem("Home", "home"));
-        this.sidebarItems.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
-        this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
-        this.sidebarItems.push(new SidebarItem("Lista Iter", "app-lista-iter"));
-        this.sidebarItems.push(new SidebarItem("Test", "", this.sidebarItems2));
-        // this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi", this.sidebarItems2));
-        // this.sidebarItems2.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
+
         this.route = this.router.url;
 
         this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);
 
+    }
+
+    private buildSideBar(loggedUser: LoggedUser) {
+        this.sidebarItems = [];
+
+        this.sidebarItems.push(new SidebarItem("Home", "home"));
+        if (loggedUser.isCI) {
+            this.sidebarItems.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
+        }
+
+        this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
+        this.sidebarItems.push(new SidebarItem("Lista Iter", "app-lista-iter"));
+        this.sidebarItems.push(new SidebarItem("Test", "", this.sidebarItems2));
     }
 
     @HostListener("window:keydown", ["$event"])
@@ -97,35 +95,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 })
             ) as Subscription);
 
-
-
-
-/*        if (sessionStorage.getItem("userInfoMap")) {
-            this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
-            this.username = this.userInfoMap["username"];
-            // this.ruolo = this.userInfoMap["bit_ruoli"];
-            // debugger;
-            this.azienda = this.userInfoMap["aziende"]["nome"];
-        }
-*/
-
-
-
-/*        this.userInfoMap$ = this.globalContextService.getSubjectInnerSharedObject("userInfoMap");
-        this.userInfoMap$.subscribe(
-            (value: any) => {
-                if (value) {
-                    this.userInfoMap = value;
-                    // debugger;
-                    // this.username = value["username"];
-                    // this.ruolo = value["bit_ruoli"];
-                    this.azienda = value.aziende.nome;
-                }
-            }
-        );*/
-
-
-    this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
+        this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
         this.subscriptions.push(
             this.loggedUser$.subscribe(
                 (loggedUser: LoggedUser) => {
@@ -135,18 +105,14 @@ export class AppComponent implements OnInit, OnDestroy {
                         this.ruoli.forEach(element => {
                             this.ruolo += element.nomeBreve + " ";
                         });
+                        this.buildSideBar(loggedUser);
                     }
                 }
             )
         );
-
-
-        
-
-
-
-
     }
+
+
 
     ngOnDestroy() {
         console.log("onDestroy");
@@ -172,7 +138,4 @@ export class AppComponent implements OnInit, OnDestroy {
             window.location.href = "https://gdml.internal.ausl.bologna.it/Shibboleth.sso/Logout";
         }
     }
-
 }
-
-

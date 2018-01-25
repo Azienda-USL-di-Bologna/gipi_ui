@@ -18,18 +18,32 @@ import { Ruolo } from "../classi/server-objects/entities/ruolo";
     styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent implements OnInit {
-    errorMessage = "";
-    public show: boolean = false;
     private ruoliDataSource: DataSource;
     private odataContextDefinition: OdataContextDefinition;
     private ruoli: Ruolo[];
-
+    public errorMessage = "";
+    public show: boolean = false;
 
     constructor(public httpClient: HttpClient,
         private router: Router,
         private globalContextService: GlobalContextService,
         private odataContextFactory: OdataContextFactory) {
+    }
 
+    private setDataLogin(data: any, httpMethod: string) {
+        sessionStorage.setItem("token", data.token);
+
+        if (httpMethod === "GET") {
+            sessionStorage.setItem("loginMethod", "sso");
+        }
+        else {
+            sessionStorage.setItem("loginMethod", "local");
+        }
+
+        let loggedUser = new LoggedUser(data.userInfo);
+        this.globalContextService.setSubjectInnerSharedObject("loggedUser", loggedUser);
+        this.globalContextService.setInnerSharedObject("loggedUser", loggedUser);
+        sessionStorage.setItem("userInfo", JSON.stringify(data.userInfo));
     }
 
     ngOnInit() {
@@ -39,6 +53,7 @@ export class LoginComponent implements OnInit {
             // Successful responses call the first callback.
             data => {
                 this.setDataLogin(data, "GET");
+                this.router.navigate(["/home"], { queryParams: { reset: true } });
             },
             (err) => {
                 this.show = true;
@@ -47,15 +62,6 @@ export class LoginComponent implements OnInit {
 
     }
 
-    /* login(form: NgForm){
-  
-     if(form.value.email === 'admin@admin.com' && form.value.password === '123'){
-     localStorage.setItem("email", form.value.email);
-     this.router.navigate(['/dashboard']);
-     }
-  
-     }*/
-
     login(form: NgForm) {
         this.errorMessage = "";
 
@@ -63,7 +69,7 @@ export class LoginComponent implements OnInit {
             .subscribe(
             (data: any) => {
                 this.setDataLogin(data, "POST");
-
+                this.router.navigate(["/home"], { queryParams: { reset: true } });
             },
             (err) => {
                 console.log(err);
@@ -74,30 +80,4 @@ export class LoginComponent implements OnInit {
             }
             );
     }
-
-
-    private setDataLogin(data: any, httpMethod: string) {
-        sessionStorage.setItem("token", data.token);
-        if (httpMethod === "GET") {
-            sessionStorage.setItem("loginMethod", "sso");
-        }
-        else {
-            sessionStorage.setItem("loginMethod", "local");
-        }
-
-
-        // let userInfoMap: Object = data.userInfoMap;
-
-        // sessionStorage.setItem("userInfoMap", JSON.stringify(userInfoMap));
-
-        let loggedUser = new LoggedUser(data.userInfo);
-        this.globalContextService.setSubjectInnerSharedObject("loggedUser", loggedUser);
-        this.globalContextService.setInnerSharedObject("loggedUser", loggedUser);
-
-
-        sessionStorage.setItem("userInfo", JSON.stringify(data.userInfo));
-
-        this.router.navigate(["/home"], { queryParams: { reset: true } });
-    }
-
 }
