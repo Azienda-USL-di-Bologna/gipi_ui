@@ -9,7 +9,7 @@ import { Subscription } from "rxjs/Subscription";
 import { ODATA_BASE_URL } from "../environments/app.constants";
 import { SidebarItem } from "@bds/nt-angular-context/templates/sidebar/sidebar.component";
 import { $ } from "protractor";
-import { LoggedUser } from "./authorization/logged-user"
+import { LoggedUser } from "./authorization/logged-user";
 
 @Component({
     selector: "app-root",
@@ -62,11 +62,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     }
 
-
     @HostListener("window:keydown", ["$event"])
     keyEvent(event: KeyboardEvent) {
         if (event.code === "F5") {
-            this.router.navigate([""]);
+            this.router.navigate(["/home"]);
         }
     }
 
@@ -163,7 +162,7 @@ export class AppComponent implements OnInit, OnDestroy {
         const loginMethod = sessionStorage.getItem("loginMethod");
 
         sessionStorage.removeItem("token");
-        sessionStorage.removeItem("userInfoMap");
+        sessionStorage.removeItem("userInfo");
         sessionStorage.removeItem("loginMethod");
         if (loginMethod !== "sso") {
             console.log(loginMethod);

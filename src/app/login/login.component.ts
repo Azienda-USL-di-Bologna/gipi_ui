@@ -4,8 +4,8 @@ import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { LOGIN_URL } from "../../environments/app.constants";
 import { GlobalContextService } from "@bds/nt-angular-context";
-import { LoggedUser } from "../authorization/logged-user"
-import { CommonData } from "../authorization/common-data"
+import { LoggedUser } from "../authorization/logged-user";
+import { CommonData } from "../authorization/common-data";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
 import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
+
         this.httpClient.get<any>(LOGIN_URL)
             .subscribe(
             // Successful responses call the first callback.
@@ -85,13 +86,16 @@ export class LoginComponent implements OnInit {
         }
 
 
-        //let userInfoMap: Object = data.userInfoMap;
+        // let userInfoMap: Object = data.userInfoMap;
 
-        //sessionStorage.setItem("userInfoMap", JSON.stringify(userInfoMap));
+        // sessionStorage.setItem("userInfoMap", JSON.stringify(userInfoMap));
 
         let loggedUser = new LoggedUser(data.userInfo);
         this.globalContextService.setSubjectInnerSharedObject("loggedUser", loggedUser);
         this.globalContextService.setInnerSharedObject("loggedUser", loggedUser);
+
+
+        sessionStorage.setItem("userInfo", JSON.stringify(data.userInfo));
 
         this.router.navigate(["/home"], { queryParams: { reset: true } });
     }

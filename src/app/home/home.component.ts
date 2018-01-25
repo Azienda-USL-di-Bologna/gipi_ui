@@ -8,6 +8,8 @@ import { Ruolo } from "app/classi/server-objects/entities/ruolo";
 import { Azienda } from "app/classi/server-objects/entities/azienda";
 import { Struttura } from "app/classi/server-objects/entities/struttura";
 import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
+import { GlobalContextService } from "@bds/nt-angular-context";
+import { LoggedUser } from "../authorization/logged-user";
 
 @Component({
   selector: "app-home",
@@ -23,7 +25,15 @@ export class HomeComponent implements OnInit {
   private userInfoMap: Object;
 
 
-  constructor(private sessionManager: SessionManager){
+  constructor(private sessionManager: SessionManager,
+    private globalContextService: GlobalContextService) {
+
+      if (this.globalContextService.getInnerSharedObject("loggedUser") === undefined) {
+        let loggedUser = new LoggedUser(JSON.parse(sessionStorage.getItem("userInfo")));
+        this.globalContextService.setSubjectInnerSharedObject("loggedUser", loggedUser);
+        this.globalContextService.setInnerSharedObject("loggedUser", loggedUser);
+      }
+
     // sessionManager.setExpireTokenOnIdle(300);
     // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));
     //
@@ -49,6 +59,7 @@ export class HomeComponent implements OnInit {
 
   }
   ngOnInit() {
+
   }
 
 }
