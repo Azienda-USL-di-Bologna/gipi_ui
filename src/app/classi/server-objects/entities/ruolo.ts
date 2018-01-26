@@ -20,7 +20,7 @@ export class Ruolo extends Entity {
     };
   }
 
-  constructor(){
+  constructor() {
     super();
   }
 }

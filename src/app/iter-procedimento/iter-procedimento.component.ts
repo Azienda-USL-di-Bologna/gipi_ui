@@ -14,7 +14,7 @@ import { PassaggioDiFaseComponent } from "./passaggio-di-fase/passaggio-di-fase.
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
-import {ButtonAppearance} from "@bds/nt-angular-context/templates/buttons-bar/buttons-bar.component";
+import { ButtonAppearance } from "@bds/nt-angular-context/templates/buttons-bar/buttons-bar.component";
 import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
 import { log } from "util";
 import * as moment from "moment";
@@ -48,13 +48,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public procediButton: ButtonAppearance;
   public sospendiButton: ButtonAppearance;
 
-
+  public datiGenerali = "";
   // Dati che verranno ricevuti dall'interfaccia chiamante
   public infoGeneriche: any = {
-    azienda: "AOSP-BO",
-    struttura: "UO DaTer",
-    tipoProcedimento: "Tipologia A",
-    numeroIter: 109
+    azienda: "RENDERE DINAMICA",
+    struttura: "RENDERE DINAMICA",
+    tipoProcedimento: "RENDERE DINAMICA",
+    numeroIter: 109 // <-- rendere dinamico mi sa che in realtà lo è già cmq
   };
   public popupData: any = {
     visible: false,
@@ -77,8 +77,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       }
     });
 
-    
-
     const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nomeTitolo");
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
@@ -87,15 +85,15 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       store: oataContextDefinitionTitolo.getContext()[Entities.Iter.name],
       expand: [
         "idFaseCorrente",
-        "idIterPrecedente", 
-        "idResponsabileProcedimento.idPersona", 
+        "idIterPrecedente",
+        "idResponsabileProcedimento.idPersona",
         "idResponsabileAdozioneProcedimentoFinale.idPersona",
-        "procedimentoCache.idTitolarePotereSostitutivo.idPersona"],
+        "procedimentoCache.idTitolarePotereSostitutivo.idPersona"
+      ],
       filter: [["id", "=", this.idIter]]
     });
     // this.generateCustomButtons();
     this.buildIter();
-
 
     this.perFigliParteDestra = {
       idIter: this.idIter,
@@ -105,9 +103,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.paramsPerSospensione = {
       iter: this.iter,
       stato: this.iter.stato,
-      dataSospensione: this.iter.stato === "sospeso" ? this.getDataUltimaSospensione() :  null
+      dataSospensione: this.iter.stato === "sospeso" ? this.getDataUltimaSospensione() : null
     };
-
   }
 
   ngAfterViewInit() {
@@ -116,6 +113,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
+  }
+
+  public buildTitoloDatiGenerali() {
+    this.datiGenerali = "Iter n." + this.iter.id + "/" + this.iter.anno + " (" + this.iter.stato + ")";
   }
 
   isSospeso() {
@@ -128,9 +129,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   setNomeBottoneSospensione() {
     this.sospendiButton.label = this.getNomeBottoneSospensione();
   }
-  
+
   getNomeBottoneSospensione() {
-    if (this.isSospeso()) 
+    if (this.isSospeso())
       return "Termina Sospensione";
     else
       return "Sospendi";
@@ -142,7 +143,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.sospendiButton = new ButtonAppearance("Sospendi", "", false, this.iter.idFaseCorrente.faseDiChiusura);
     this.genericButtons.push(this.procediButton, this.sospendiButton);
     this.setNomeBottoneSospensione();
-    
   }
 
   buildIter() {
@@ -150,10 +150,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.iter.build(res[0], Iter);
       this.generateCustomButtons();
       this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
-      this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + this.iter.procedimentoCache.durataMassimaProcedimento);    
+      this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + this.iter.procedimentoCache.durataMassimaProcedimento);
+      this.buildTitoloDatiGenerali();
     });
-    
-    
   }
 
   updateNoteControInteressati() {
@@ -170,20 +169,20 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupData.visible = true;
   }
 
-  updateIter(){
-    let doUpdate : boolean = false;
-    if(this.popupData.field === "esitoMotivazione"){
-      if(this.iter.esitoMotivazione !== this.popupData.fieldValue){
+  updateIter() {
+    let doUpdate: boolean = false;
+    if (this.popupData.field === "esitoMotivazione") {
+      if (this.iter.esitoMotivazione !== this.popupData.fieldValue) {
         this.iter.esitoMotivazione = this.popupData.fieldValue;
         doUpdate = true;
       }
-    }else{
-      if(this.iter.noteControinteressati !== this.popupData.fieldValue){
+    } else {
+      if (this.iter.noteControinteressati !== this.popupData.fieldValue) {
         this.iter.noteControinteressati = this.popupData.fieldValue;
         doUpdate = true;
       }
     }
-    if(doUpdate){
+    if (doUpdate) {
       this.dataSourceIter.store().update(this.iter.id, this.iter);
     }
     this.closePopupNote();
@@ -222,7 +221,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     let dataDaPassare: Date;
     if (this.iter.stato === "sospeso") {
       const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.iter.id)
-      .subscribe(
+        .subscribe(
         res => {
           let r: any = res;
           dataDaPassare = new Date(r);
@@ -237,9 +236,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         err => {
           // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
         }
-      );
-    }
-    else {
+        );
+    } else {
       this.paramsPerSospensione = {
         iter: this.iter,
         stato: this.iter.stato,
@@ -265,11 +263,11 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.buildIter();
     this.setNomeBottoneSospensione();
 
-   
+
   }
 
   onGenericButtonClick(buttonName: string) {
-    switch (buttonName){
+    switch (buttonName) {
       case "Termina Sospensione":
       case "Sospendi":
         this.sospensioneIter();
@@ -277,27 +275,24 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
       case "Procedi":
         this.passaggioDiFase();
-      break;
-
+        break;
     }
-
   }
 
   getDataUltimaSospensione() {
     let date;
-      const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.iter.id)
+    const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.iter.id)
       .subscribe(
-        res => {
-          let r: any = res;
-          date = moment(r.dataSospensione);
-          return date;
-        },
-        err => {
-          // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
-        }
+      res => {
+        let r: any = res;
+        date = moment(r.dataSospensione);
+        return date;
+      },
+      err => {
+        // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+      }
       );
   }
-
 
   isIterFinito() {
     let b: boolean;
@@ -311,8 +306,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           b = true;
       },
       err => {
-          b = true;
+        b = true;
       });
-      return b;
+    return b;
   }
 }

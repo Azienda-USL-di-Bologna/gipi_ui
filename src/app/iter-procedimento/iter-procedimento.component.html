@@ -6,6 +6,7 @@
     <div class="col header-font">
         <h3><span class="header-font">Struttura procedente:</span> <i>{{infoGeneriche.struttura}}</i></h3>
         <h3><span class="header-font">Tipo procedimento:</span> <i>{{infoGeneriche.tipoProcedimento}}</i></h3>
+        
         <!-- <div>
             <dx-button [text]="'Procedi'" (onClick)="passaggioDiFase()"></dx-button>
         </div>
@@ -21,8 +22,8 @@
             id="form"
             [colCount]="1"
             [formData]="iter">
-            <dxi-item itemType="group" [colCount]="2" caption="Dati generali">
-                <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item itemType="group" [colCount]="2" [caption]="datiGenerali">
+                <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
                 <dxi-item [colSpan]="2" dataField="oggetto" [editorOptions]="{ disabled: true }"></dxi-item>
     
@@ -45,11 +46,11 @@
                     <!-- <dx-button text="Note controinteressati" type="default" (onClick)="updateNoteControInteressati()"></dx-button> -->
                 </dxi-item>
     
-                    <dxi-item [colSpan]="2" dataField="idFase.nome" [editorOptions]="{ disabled: true }">
+                <!-- <dxi-item [colSpan]="2" dataField="idFase.nome" [editorOptions]="{ disabled: true }">
                     <dxo-label text="Fase corrente"></dxo-label>
-                </dxi-item>
+                </dxi-item> -->
     
-                <dxi-item [colSpan]="2" dataField="stato" [editorOptions]="{ disabled: true }"></dxi-item>
+                <!-- <dxi-item [colSpan]="2" dataField="stato" [editorOptions]="{ disabled: true }"></dxi-item> -->
     
                 <dxi-item [colSpan]="1" dataField="esito" [editorOptions]="{ disabled: true }"></dxi-item>
     
@@ -83,7 +84,7 @@
                 <dxi-item dataField="idFascicolo" [editorOptions]="{ disabled: true }">
                     <dxo-label text="Fascicolo dell'iter"></dxo-label>
                 </dxi-item>
-                <dxi-item dataField="Classificazione" [editorOptions]="{ disabled: true }"></dxi-item>
+                <dxi-item dataField="nomeTitolo" [editorOptions]="{ disabled: true }"></dxi-item>
             </dxi-item>
             </dx-form>
         </div>

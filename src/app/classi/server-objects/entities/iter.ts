@@ -10,8 +10,8 @@ export class Iter extends Entity {
   id: number;
   idResponsabileProcedimento: Utente;
   FK_id_responsabile_procedimento: number;
-  numeroIter: number;
-  annoIter: number;
+  numero: number;
+  anno: number;
   oggetto: string;
   stato: string;
   dataCreazione: Date;
@@ -47,8 +47,8 @@ export class Iter extends Entity {
       fieldTypes: {
         id: "Int32",
         idResponsabileProcedimento: new OdataForeignKey(Entities.Utente, "id"),
-        numeroIter: "Int32",
-        annoIter: "Int32",
+        numero: "Int32",
+        anno: "Int32",
         oggetto: "String",
         stato: "String",
         dataCreazione: "DateTime",

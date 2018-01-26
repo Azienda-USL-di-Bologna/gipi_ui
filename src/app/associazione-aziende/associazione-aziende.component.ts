@@ -39,7 +39,7 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
 /*    public SUPERADM: number = Ruoli.SUPERADM;
     public ADM: number = Ruoli.ADM;*/
 
-    //public loggedUser$: Observable<LoggedUser>
+    // public loggedUser$: Observable<LoggedUser>
     public loggedUser: LoggedUser;
 
     public subscriptions: Subscription[] = [];
@@ -71,7 +71,7 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
 
-        //this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
+        // this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
 
         this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
 
@@ -157,6 +157,7 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
                 aziendaTipoProcedimentoToInsert.obbligoEsitoConclusivo = false;
                 aziendaTipoProcedimentoToInsert.idAzienda = azienda;
                 aziendaTipoProcedimentoToInsert.idTipoProcedimento = this.procedimento;
+                console.log(aziendaTipoProcedimentoToInsert);
                 this.datasourceAziendaTipoProcedimento.store().insert(aziendaTipoProcedimentoToInsert).done(res => {
                     console.log("azienda associata con successo");
                     this.aziendeDatasource.load().then(res => { this.aziende = res; this.getAziendeAssociate(); });

@@ -8,7 +8,7 @@
     <dxi-item dataField="dataCreazioneIter" editorType="dxDateBox" format="dd/mm/yyyy" [label]="{text: 'Data creazione iter'}" [editorOptions]="{ disabled: true }"></dxi-item>
     <dxi-item dataField="dataAvvioIter" editorType="dxDateBox" [label]="{text: 'Data avvio iter'}" [editorOptions]="{ disabled: false, max: now }"></dxi-item>
     <dxi-item dataField="oggettoIter" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
-    <dxi-item dataField="idUtente" editorType="dxLookup" [label]="{text: 'Responsabile procedimento'}"
+    <dxi-item dataField="idUtenteResponsabile" editorType="dxLookup" [label]="{text: 'Responsabile procedimento'}"
       [editorOptions]="{
         value: loggedUser.idUtente,
         dataSource: dataSourceUtenti,

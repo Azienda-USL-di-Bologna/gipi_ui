@@ -1,16 +1,16 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Iter } from "app/classi/server-objects/entities/iter";
-import { UtenteStruttura } from "app/classi/server-objects/entities/utente-struttura";
+// import { UtenteStruttura } from "app/classi/server-objects/entities/utente-struttura";
 import { OdataContextFactory } from "@bds/nt-angular-context";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
 import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
 import { Entities, CUSTOM_RESOURCES_BASE_URL, afferenzaStruttura } from "environments/app.constants";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
-import { forEach } from "@angular/router/src/utils/collection";
+// import { forEach } from "@angular/router/src/utils/collection";
 import { HttpHeaders } from "@angular/common/http";
 import { OnInit } from "@angular/core/src/metadata/lifecycle_hooks";
-import { LoggedUser } from "../../authorization/logged-user"
+import { LoggedUser } from "../../authorization/logged-user";
 import { GlobalContextService } from "@bds/nt-angular-context";
 
 @Component({
@@ -51,21 +51,14 @@ export class AvviaNuovoIterComponent implements OnInit {
   private getInfoSessionStorage() {
     this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
 
-
-
-    this.loggedUser.strutture.forEach((s: UtenteStruttura) => {
-          if (s.idAfferenzaStruttura.descrizione === afferenzaStruttura.diretta) {
-          this.iterParams.idStrutturaUtente = s.idStruttura.id;
-        }
-    });
     
-/*    for (let s of JSON.parse(sessionStorage.getItem("userInfoMap")).strutture) {
-      if (s.idAfferenzaStruttura === afferenzaStruttura.diretta) {
-        this.iterParams.idStrutturaUtente = s.id;
+    
+
+    /* this.loggedUser.strutture.forEach((s: UtenteStruttura) => {
+      if (s.idAfferenzaStruttura.descrizione === afferenzaStruttura.diretta) {
+        this.iterParams.idStrutturaUtente = s.idStruttura.id;
       }
-    }*/
-
-
+    }); */
   }
 
   private buildDataSourceUtenti() {
@@ -102,8 +95,6 @@ export class AvviaNuovoIterComponent implements OnInit {
       const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({}, this.iterParams))
         .subscribe(
         res => {
-          console.log("Apertura della pagina dell'iter appena creato");
-          console.log(res);
           let idIter = +res["idIter"];
           this.closePopUp(idIter);
         },
@@ -127,8 +118,9 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   ngOnInit() {
-    /* Chiamo qui questo metodo altrimenti non abbiamo l'idAzienda per filtrare*/
+    /* Chiamo qui questo metodo altrimenti non abbiamo l'idAzienda per filtrare */
     this.buildDataSourceUtenti();
+    this.iterParams.idUtenteLoggato = this.loggedUser.idUtente;
   }
 
   public handleEvent(name: string, data: any) {
@@ -149,14 +141,15 @@ export class AvviaNuovoIterComponent implements OnInit {
 }
 
 class IterParams {
-  public idUtente: number;
-  public idStrutturaUtente: number;
+  public idUtenteResponsabile: number;
+  public idUtenteLoggato: number;
+  /* public idStrutturaUtente: number; */
   public idProcedimento: number;
   public idAzienda: number;
   public oggettoIter: string;
   public dataCreazioneIter: Date;
   public dataAvvioIter: Date;
   public codiceRegistroDocumento: string;
-  public numeroDocumento: number;
+  public numeroDocumento: string;
   public annoDocumento: number;
 }
