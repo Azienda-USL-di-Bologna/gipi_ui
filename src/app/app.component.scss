@@ -1,28 +1,84 @@
-/** TEMPLATE GENERALE***/
-/deep/ .header-app-component {
-   //width: 100%;
-   //height: 100%;
-   background-color: #eeffcc;
-   //min-height: 1000px;
-   //display: block;
- }
+/*##########################################################*/
+/***                   TEMPLATE GENERALE                  ***/
 
-/deep/ .content-app-component {
+// l'header
+/deep/ .clHeader {
+  background-color:#e9ebee;
+}
+
+// il footer
+/deep/ .clFooter {
+  background-color:#e9ebee;
+}
+
+/deep/ .breadcrumb {
+  border-width: 0.5px;
+  border-style: solid;
+  //border-color: #337ab7;
+  border-color: #085779;
+}
+
+.ovf-auto {
+  background-color:#e9ebee;
+}
+
+/deep/ #outlet {
+  //background-color: white;
+  //padding-top: 10px;
+  border-radius: 0.2rem;
+}
+
+/deep/ #outlet > dx-data-grid {
+  background-color: white;
+  padding-top: 10px !important;
+}
+
+
+// ??? indagare
+/deep/ .header-app-component {
+  background-color: #eeffcc;
+}
+
+/* /deep/ .content-app-component {
   //width: 100%;
   //height: 100%;
   background-color: #3fcc75;
   //clear: both;
 
-}
+} */
 
-/deep/ .test {
+/* /deep/ .test {
   height: 100%;
+} */
+
+
+/**********************************/
+/** --> classi di DevExtreme <-- **/
+/**********************************/
+/deep/ .dx-row > td {
+  vertical-align: middle !important;
 }
 
-/deep/ .dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title {
+/deep/ .dx-field-label {
+  white-space: initial;
+}
+
+/deep/ .dx-toolbar:not(.dx-popup-title) {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/deep/ .dx-popup-title {
   background-color:  #FFC057 !important;
 }
 
+/* /deep/ .dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title {
+  background-color:  #FFC057 !important;
+} */
+
+/deep/ .dx-datagrid {
+  margin-top: 6px;
+}
 
 /deep/ .dx-datagrid-text-content {
   text-align: center !important;
@@ -40,21 +96,28 @@
   margin: 10px !important;
 }
 
-/* I bottoni della colonna azioni*/
-/deep/.app-azioni {
-  width: auto !important;
-  text-align: center !important;
-  display: flex !important;
-  justify-content: space-around !important;
+
+// escludo quelli con icone
+/deep/ .dx-button-has-text:not(.dx-button-has-icon) {
+  background-color: #337ab7;  
+  border-color: #2d6da3;
+  color: #fff;
+  border-radius: 4px;
 }
 
-
-/deep/ .dx-row > td {
-  vertical-align: middle !important;
+/deep/ .dx-button-has-text:not(.dx-button-has-icon):hover {
+  background-color: #285f8f;
+  border-color: #265a87;
 }
 
-/deep/ .dx-field-label {
-  white-space: initial;
+/deep/ .dx-data-row:hover {
+  background-color: #e9ebee;
+}
+
+// sfondo bianco ai form di iter-procedimento
+/deep/ .dx-form-group-content {
+  background-color: white;
+  padding: 5px;
 }
 
 /* SE VOGLIO COLORE RIGHE ALTERNATE ALTERNATO: **/
@@ -69,6 +132,16 @@
     background-color: "#337ab78c" !important;
 } */
 
+/****************************************/
+/* -->    classi personalizzate     <-- */
+/****************************************/
+/* I bottoni della colonna azioni*/
+/deep/ .app-azioni {
+  width: auto !important;
+  text-align: center !important;
+  display: flex !important;
+  justify-content: space-around !important;
+}
 
 /deep/ .button-azioni {
   background-color: #337ab7;
@@ -79,6 +152,7 @@
   border-width: 1px;
   border-style: solid;
   padding: 7px 18px 8px;
+  cursor: pointer;
 }
 
 /deep/ .button-azioni:hover {
@@ -91,23 +165,9 @@
   border-color: #265a87;
 }
 
-// escludo quelli con icone
-/deep/ .dx-button-has-text:not(.dx-button-has-icon) {
-  background-color: #337ab7;
-  border-color: #2d6da3;
-  color: #fff;
-  border-radius: 4px;
-}
-
-/deep/ .dx-button-has-text:not(.dx-button-has-icon):hover {
-  background-color: #285f8f;
-  border-color: #265a87;
-}
-
-
 
 /*                      fine template                       */
-/************************************************************/
+/*##########################################################*/
 
  
 .row-fluid .col-0 {
@@ -174,7 +234,14 @@
   height: 2.7rem;
   width: 2.7rem;
   //padding: 4px;
+  background-color: #993366;
+  border-color: #791c4a;
 }
+#sidebar-toggle-button:hover {
+  background-color: #791c4a;
+}
+
+
 .ovf-auto {
   overflow: auto;
 }

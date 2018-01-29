@@ -1,3 +1,5 @@
+<h3 class="intestazione" style="text-align: center">Tipi di procedimento</h3>
+
 <dx-data-grid #definizione_tipi_procedimento
     id="gridContainer"
     [dataSource]="dataSource"
@@ -22,13 +24,13 @@
 
     <dxo-filter-row [visible]="true" [operationDescriptions]="filterOperationDescriptions"></dxo-filter-row>
     
-    <dxi-column dataField="codice" caption="Codice" alignment="center" sortOrder="asc"></dxi-column>
+    <dxi-column dataField="codice" caption="Codice" alignment="center" sortOrder="asc" width="auto"></dxi-column>
     <dxi-column dataField="nome"></dxi-column>
-    <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva" [allowSorting]="true" alignment="center" [allowFiltering]="true"></dxi-column>
-    <dxi-column dataField="dataInizioValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true"></dxi-column>
-    <dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true"></dxi-column>
+    <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva" [allowSorting]="true" alignment="center" [allowFiltering]="true" width="auto"></dxi-column>
+    <dxi-column dataField="dataInizioValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true" width="auto"></dxi-column>
+    <dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true" width="auto"></dxi-column>
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
-    <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni"></dxi-column>
+    <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
     <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni">
         <a routerLink="/associazione-aziende" routerLinkActive="active">
             <dx-button text="" hint="Associazione alle Aziende" icon='preferences' (onClick)="handleEvent('associaClicked', $event)" ></dx-button>

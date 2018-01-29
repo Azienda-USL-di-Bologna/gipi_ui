@@ -168,18 +168,18 @@
                     <div>
                         <dx-button id="sidebar-toggle-button" icon="menu" type="default" (click)="slide()"></dx-button>
                     </div>
-                    <div class="col">
+                    <div class="col" style="padding-right: 0px">
                         <app-navbar id="navbar-id"></app-navbar>
                     </div>
 
                 </div>
-                <div>
+                <div id="outlet">
                     <router-outlet></router-outlet>
                 </div>
             </div>
         </div>
     </div>
-    <div>
+    <div class="clFooter">
         FOOTER
     </div>
 </div>
