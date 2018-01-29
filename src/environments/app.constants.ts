@@ -58,7 +58,7 @@ export const CUSTOM_RESOURCES_BASE_URL: string = window.location.protocol + "//"
 
 
 // login
-export const LOGOUT_URL = "/logout";
+export const LOGOUT_URL = window.location.protocol + "//" + hostname + port + "/Shibboleth.sso/Logout";
 export const LOGIN_URL: string = window.location.protocol + "//" + hostname + port + "/gipi/user/login/";
 
 console.log("ODATA_BASE_URL", ODATA_BASE_URL);

@@ -6,7 +6,7 @@ import { Observable } from "rxjs/Observable";
 import { GlobalContextService, OdataContextFactory } from "@bds/nt-angular-context";
 import { Ruolo } from "./classi/server-objects/entities/ruolo";
 import { Subscription } from "rxjs/Subscription";
-import { ODATA_BASE_URL } from "../environments/app.constants";
+import {LOGOUT_URL, ODATA_BASE_URL} from "../environments/app.constants";
 import { SidebarItem } from "@bds/nt-angular-context/templates/sidebar/sidebar.component";
 import { $ } from "protractor";
 import { LoggedUser } from "./authorization/logged-user";
@@ -135,7 +135,8 @@ export class AppComponent implements OnInit, OnDestroy {
             this.router.navigate(["/login"]);
         }
         else {
-            window.location.href = "https://gdml.internal.ausl.bologna.it/Shibboleth.sso/Logout";
+            // window.location.href = "https://gdml.internal.ausl.bologna.it/Shibboleth.sso/Logout";
+            window.location.href = LOGOUT_URL;
         }
     }
 }
