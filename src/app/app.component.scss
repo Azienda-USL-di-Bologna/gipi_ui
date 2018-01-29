@@ -156,6 +156,11 @@
   height: 36px;
   width: 36px;
   //padding: 4px;
+  background-color: #993366;
+  border-color: #791c4a;
+}
+#sidebar-toggle-button:hover {
+  background-color: #791c4a;
 }
 .ovf-auto {
   overflow: auto;
