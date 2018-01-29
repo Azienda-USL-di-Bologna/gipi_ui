@@ -22,6 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public username: string;
     public azienda: string;
+    public isUserLogged: boolean = false;
 
     public ruolo: string = "";
     public ruoli: Ruolo[];
@@ -140,6 +141,14 @@ export class AppComponent implements OnInit, OnDestroy {
         }
         else {
             window.location.href = "https://gdml.internal.ausl.bologna.it/Shibboleth.sso/Logout";
+        }
+    }
+
+    getContentBodyClasses(){
+        if(this.router.url === '/login'){
+            return 'col heightCPC';
+        }else{
+            return 'col';
         }
     }
 }

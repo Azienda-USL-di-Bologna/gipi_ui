@@ -54,7 +54,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="clContentBody col">
+                <div [ngClass]="getContentBodyClasses()"> <!-- class="clContentBody col" -->
                     <!-- <div class="col">  ovf-auto -->
                         <div class="row pl-3" *ngIf="router.url !== '/login'">
                             <!-- <div>

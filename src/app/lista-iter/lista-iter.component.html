@@ -1,10 +1,11 @@
-<div class="container-fluid">
+<div class="container-fluid ">
   <div class="col header-font">
       <h3><span >Azienda:</span> <i>{{infoGeneriche.azienda}}</i></h3>
       <h3><span >Struttura:</span> <i>{{infoGeneriche.struttura}}</i></h3>
       <h3><span >Procedimento:</span> <i>{{infoGeneriche.procedimento}}</i></h3>
   </div>
-  <dx-data-grid
+  <div class="whitePanel">
+      <dx-data-grid
       allowColumnResizing="true"
       hoverStateEnabled="true" 
       columnResizingMode="nextColumn" 
@@ -31,5 +32,6 @@
         </div>
         <!-- <dxi-column caption="Apri" [width]="50"></dxi-column> -->
   </dx-data-grid>
+  </div>  
 </div>
 
