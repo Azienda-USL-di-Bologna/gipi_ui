@@ -34,6 +34,42 @@
   background-color:  #FFC057 !important;
 }
 
+// BOTTONI
+// escludo quelli con icone
+/deep/ .dx-button-has-text:not(.dx-button-has-icon) {
+  background-color: #337ab7;  
+  border-color: #2d6da3;
+  color: #fff;
+  border-radius: 4px;
+}
+
+/deep/ .dx-button-has-text:not(.dx-button-has-icon):hover {
+  background-color: #285f8f;
+  border-color: #265a87;
+}
+
+/deep/ .button-azioni {
+  background-color: #337ab7;
+  border-color: #2d6da3;
+  color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px transparent;
+  border-width: 1px;
+  border-style: solid;
+  padding: 7px 18px 8px;
+  cursor: pointer;
+}
+
+/deep/ .button-azioni:hover {
+  background-color: #285f8f;
+  border-color: #265a87;
+}
+
+/deep/ .button-azioni :hover {
+  background-color: #285f8f;
+  border-color: #265a87;
+}
+
 
 /deep/ .dx-datagrid-text-content {
   text-align: center !important;
