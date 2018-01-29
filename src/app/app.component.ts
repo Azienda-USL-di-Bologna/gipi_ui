@@ -27,12 +27,14 @@ export class AppComponent implements OnInit, OnDestroy {
     public ruoli: Ruolo[];
 
     public route: string;
-    public classeSidebar: string = "sidebar-style";
+    public classeSidebar: string = "sidebar-style d-none";
+    public classeRightSide: string;
 
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
     public loggedUser$: Observable<Object>;
+
 
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
         this.odataContextFactory.setOdataBaseUrl(ODATA_BASE_URL);
@@ -69,9 +71,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     slide() {
         if (this.classeSidebar.indexOf("active") >= 0) {
-            this.classeSidebar = "sidebar-style";
+            this.classeSidebar = "col-2 sidebar-style d-none ";
+            this.classeRightSide = ""
         } else {
-            this.classeSidebar = "sidebar-style active";
+            this.classeSidebar = "col-2 sidebar-style d-block active";
+            this.classeRightSide = "offset-2 "
         }
     }
 
