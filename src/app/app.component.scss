@@ -19,11 +19,17 @@
   color: white;
 }
 
+.dropdown-menu .dropdown-menu-right .show {
+  box-shadow: 0 0 1px rgba(0,0,0,.15);
+  border: none;
+}
+
 /deep/ .navbar-login
 {
   width: 305px;
   padding: 10px;
   padding-bottom: 0px;
+  
 }
 
 /deep/ .test {
