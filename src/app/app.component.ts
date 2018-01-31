@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public sidebarItems: Array<SidebarItem> = [];
     public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
-    public loggedUser$: Observable<Object>;
+    public loggedUser$: Observable<LoggedUser>;
 
     constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
         this.odataContextFactory.setOdataBaseUrl(ODATA_BASE_URL);
