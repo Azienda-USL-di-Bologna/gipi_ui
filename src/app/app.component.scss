@@ -19,8 +19,8 @@
   color: white;
 }
 
-.dropdown-menu .dropdown-menu-right .show {
-  box-shadow: 0 0 1px rgba(0,0,0,.15);
+.dropdown-menu {
+  box-shadow: 0 0 3px rgba(0,0,0,.15);
   border: none;
 }
 
@@ -248,7 +248,7 @@
   margin-left: 0;
 }
 /* App Bar */
-.buttonWrapper{
+.centerVertivally{
   display: table-cell;
   vertical-align: middle;
 }
@@ -263,7 +263,7 @@
 
 #userProfile {
   float: right;
-  margin-right: 32px;
+  margin-right: 8px;
 }
 // /deep/ dx-data-grid > .dx-datagrid{
 //   box-shadow: 0 0 1px rgba(0,0,0,.15); 
@@ -284,4 +284,13 @@
   box-shadow: 0 0 1px rgba(0,0,0,.15); 
   padding: 15px; 
   background-color: #fff;
+}
+.floatRight{
+  float: right;
+}
+.logout{
+  cursor: pointer;
+}
+.dropdown-toggle::after{
+  border: none;
 }
