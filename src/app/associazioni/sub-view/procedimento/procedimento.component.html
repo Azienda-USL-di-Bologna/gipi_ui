@@ -1,0 +1,145 @@
+<dx-responsive-box>
+  <dxi-row [ratio]="1"></dxi-row>
+
+  <dxi-col [ratio]="1"></dxi-col>
+
+
+  <dxi-item>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="lg"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="md"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="sm"></dxi-location>
+    <dxi-location [row]="0" [col]="0" [colspan]="1" screen="xs"></dxi-location>
+    <div style="width: 100%; height: 100%;">
+
+      <div style="text-align: center; width: 100%; height: 100%;">
+        <div style="display: inline-block; text-align: initial; width:100%; max-width: 800px;">
+
+          <div style="text-align: right; margin-bottom: 30px">
+            <div style="display: inline-block; text-align: initial;">
+              <dx-button [type]="'normal'" icon="edit" (onClick)="switchMode()" [visible]="mode==='EDIT-MODE'?false:true"></dx-button>
+            </div>
+          </div>
+
+          <!-- descrizione -->
+          <!-- <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Descrizione</div>
+            <div class="dx-field-value">
+              <dx-text-box [value]="'boh'" [disabled]="true">
+              </dx-text-box>
+            </div>
+          </div> -->
+
+          <!-- modo apertura -->
+          <!-- <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Modo apertura</div>
+            <div class="dx-field-value">
+              <dx-text-box [value]="'boh'" [disabled]="true">
+              </dx-text-box>
+            </div>
+          </div> -->
+
+          <!-- norma di rifermineto -->
+          <!-- <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Norma di riferimento</div>
+            <div class="dx-field-value">
+              <dx-text-area [height]="90" [disabled]="true">
+              </dx-text-area>
+            </div>
+          </div> -->
+
+          <!-- Classificazione -->
+          <!-- <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Classificazione</div>
+            <div class="dx-field-value">
+              <dx-text-box [value]="'boh'" [disabled]="true">
+              </dx-text-box>
+            </div>
+          </div> -->
+
+          <!-- durata max sospensione -->
+          <!-- <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Durata massima sospensione (gg)</div>
+            <div class="dx-field-value">
+              <dx-text-box [value]="'boh'" [disabled]="true">
+              </dx-text-box>
+            </div>
+          </div> -->
+
+          <!-- valido dal -->
+          <!-- <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Valido dal</div>
+            <div class="dx-field-value">
+              <dx-date-box  type="date" [displayFormat]= "'dd/MM/yyyy'" >
+              </dx-date-box>
+            </div>
+          </div> -->
+
+          <!-- valido al -->
+          <!-- <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Valido al</div>
+            <div class="dx-field-value">
+              <dx-date-box  type="date" [displayFormat]= "'dd/MM/yyyy'" >
+              </dx-date-box>
+            </div>
+          </div> -->
+
+          <!-- Titolare potere esecutivo -->
+          <!-- <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Titolare potere esecutivo</div>
+            <div class="dx-field-value">
+              <dx-text-box [value]="'boh'" >
+              </dx-text-box>
+            </div>
+          </div> -->
+
+          <!-- Modalità informativa -->
+          <!-- <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Modalità informativa</div>
+            <div class="dx-field-value">
+              <dx-text-box [value]="'boh'">
+              </dx-text-box>
+            </div>
+          </div> -->
+
+          <!-- Atti da allegare -->
+          <!-- <div style="margin-bottom: 8px; overflow: auto;">
+            <div class="dx-field-label">Atti da allegare</div>
+            <div class="dx-field-value">
+              <dx-text-area [height]="90" >
+              </dx-text-area>
+            </div>
+          </div> -->
+
+          <!-- <div style="text-align: right; margin-top: 60px">
+            <div style="display: inline-block; text-align: initial;">
+              <dx-button [text]="'Annulla'" [type]="'normal'" (onClick)="annulla()" [visible]="mode==='EDIT-MODE'?true:false"></dx-button>
+              <dx-button [text]="'Salva'" [type]="'normal'" (onClick)="salva()" [visible]="mode==='EDIT-MODE'?true:false"></dx-button>
+            </div>
+          </div> -->
+
+          <dx-form id="form"
+              [colCount]="1"
+              [formData]="procedimento">
+              <dxi-item dataField="descrizioneTipoProcedimentoDefault" editorType="dxTextArea" [editorOptions]="{ disabled: true }"></dxi-item>
+              <dxi-item dataField="modoApertura" [editorOptions]="{ disabled: true }"></dxi-item>
+              <dxi-item dataField="normaRiferimento" [editorOptions]="{ disabled: true }"></dxi-item>
+              <dxi-item dataField="durataMassimaSospensione" [editorOptions]="{ disabled: true }"></dxi-item>
+              <dxi-item dataField="dataInizioValidita" editorType="dxDateBox" [editorOptions]="{ disabled: mode==='EDIT-MODE'?false:true }"></dxi-item>
+              <dxi-item dataField="dataFineValidita" editorType="dxDateBox" [editorOptions]="{ disabled: mode==='EDIT-MODE'?false:true }"></dxi-item>
+          </dx-form>
+
+          <div style="text-align: right; margin-top: 60px">
+            <div style="display: inline-block; text-align: initial;">
+              <dx-button [text]="'Gestisci associazioni'" [type]="'normal'" (onClick)="openAlberoStrutture()" [visible]="mode==='EDIT-MODE'?false:true"></dx-button>
+              <dx-button [text]="'Annulla'" [type]="'normal'" (onClick)="annulla()" [visible]="mode==='EDIT-MODE'?true:false"></dx-button>
+              <dx-button [text]="'Salva'" [type]="'normal'" (onClick)="getTipiProcedimentoSource()" [visible]="mode==='EDIT-MODE'?true:false"></dx-button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </dxi-item>
+</dx-responsive-box>

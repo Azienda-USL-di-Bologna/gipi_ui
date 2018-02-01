@@ -1,0 +1,19 @@
+ .tree-readonly .dx-checkbox-icon{
+    cursor: default;
+    background-color: lightgrey;
+    
+}
+
+ .tree-not-readonly .dx-checkbox-icon{
+    cursor: pointer;
+    background-color: white; 
+    
+}
+
+ .dx-treeview{
+    width: 100%;
+}
+
+ .dx-texteditor .dx-texteditor-empty .dx-textbox{
+    width: 100%;
+}

@@ -1,0 +1,35 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col center-text">
+      <h5>
+        <span class="header-font">Tipo procedimento:</span>
+        <i>{{testoHeaderTipoProcedimento}}</i>
+      </h5>
+      <h5>
+        <span class="header-font">Azienda:</span>
+        <i>{{testoHeaderAzienda}}</i>
+      </h5>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <strutture-tree #treeView [idAzienda]="idAzienda" [idAziendaTipoProcedimento]="idAziendaTipoProcedimento" [readOnly]="readOnly"
+        [enableCheckRecursively]="enableCheckRecursively" (refreshAfterChange)="refresh($event)">
+      </strutture-tree>
+    </div>
+  </div>
+
+
+  <!-- QUI COSTRUISCO I PULSANTI, FACCIO IN MODO DI METTERNE 2 ALLINEATI -->
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-3">
+        <dx-button class="padding-button" [width]="160" (onClick)="sendDataCancel()" text="Annulla"></dx-button>
+    </div>
+    <div class="col-3">
+        <dx-button class="padding-button" [width]="160" (onClick)="sendDataConfirm()" text="Salva"></dx-button>
+    </div>
+    <div class="col"></div>
+  </div>
+</div>

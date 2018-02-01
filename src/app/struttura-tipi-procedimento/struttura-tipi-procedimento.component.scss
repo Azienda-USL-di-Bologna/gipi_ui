@@ -1,0 +1,85 @@
+.fullpage {
+    width: 100%;
+    height: 100%;
+}
+
+.padding-button {
+    margin-top: 5px;
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-bottom: 5px;
+}
+
+.padding-top{
+    margin-top:10px;
+}
+
+.allinea-a-sinistra{
+    margin-left: 0px;
+}
+
+.center-div {
+    margin-top: 2%;
+    margin-left: 5%;
+    margin-right: 5%;
+    height: 100%;
+}
+
+//.status-page {
+//    width: 100%;
+//    height: 2px;
+//}
+
+.insert-status {
+    background-color: #3fcc75;
+}
+
+.modify-status {
+    background-color: #fcdc7b;
+}
+
+.delete-status {
+    background-color: #f47c92;
+}
+
+.header-font{
+   font-weight: bold;
+}
+
+.center-text{
+    text-align: center;
+}
+
+.no-procedimento {
+    padding-top: 20%;
+    text-align: center;
+    color: #444;
+    font-size: 35px;
+    line-height: 44px;
+    letter-spacing: -2px;
+    font-weight: bold
+}
+
+ .demo-container, #page {
+    height: 100%;
+    min-height: 300px;
+}
+
+ #page .header {
+    /*background-color: rgba(243, 158, 108, 0.80);*/
+    text-align: center;
+}
+
+ .item {
+    height: 100%;
+}
+
+ #page p {
+    font-size: 20px;
+    padding-top: 10px;
+    text-align: center;
+}
+
+ .dx-popup-content{
+    padding:0px;
+}

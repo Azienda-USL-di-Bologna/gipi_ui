@@ -1,0 +1,31 @@
+<span class="first-letf-title">Sequenza delle fasi</span>
+
+<dx-data-grid #fasiContent
+        [dataSource]="datasource"
+    >
+    <dxo-sorting ascendingText="Ordine crescente" descendingText="Orine discendente" clearText="Togli ordinamento"></dxo-sorting>
+    <dxi-column class="fasiContentCol" dataField="idFase.nome" caption="Fase"></dxi-column>
+    <dxi-column class="fasiContentCol" dataField="dataInizioFase" format="dd/MM/yyyy" caption="Data Inizio"></dxi-column>
+    <dxi-column class="fasiContentCol" dataField="dataFineFase" format="dd/MM/yyyy" caption="Data Fine"></dxi-column>
+</dx-data-grid>
+
+<!---
+<dx-responsive-box #fasiContent>
+    <dxi-row [ratio]="1"></dxi-row>
+    <dxi-col [ratio]="1"></dxi-col>
+    <dxi-col [ratio]="1"></dxi-col>
+    <dxi-col [ratio]="1"></dxi-col>
+
+    <dx-item>
+        <dx-location [row]="0" [col]="0">FASE</dx-location>
+    </dx-item>
+    <dx-item>
+        <dx-location [row]="0" [col]="1">DATA_IN</dx-location>
+    </dx-item>
+    <dx-item>
+            <dx-location [row]="0" [col]="2">DATA_FIN</dx-location>
+    </dx-item>
+
+
+</dx-responsive-box>
+-->

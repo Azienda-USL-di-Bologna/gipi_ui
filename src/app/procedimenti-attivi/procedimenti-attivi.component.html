@@ -1,0 +1,85 @@
+<div class="whitePanel">
+  <h3 class="intestazione">Procedimenti Attivi</h3>
+  
+  <dx-data-grid  #gridContainer id="gridContainer"
+    [dataSource]="dataSourceProcedimenti"
+    [customizeColumns]="customizeColumns"
+    columnResizingMode="nextColumn"
+    hoverStateEnabled="checkBoxState"
+    noDataText="Non ci sono procedimenti attivi"
+    (onToolbarPreparing)="onToolbarPreparing($event)"
+    >
+    <dxo-paging [pageSize]="10"></dxo-paging>
+  
+    <dxo-filter-row [visible]="true" showAllText=' '></dxo-filter-row>
+    <dxo-search-panel [visible]="true" [width]="calcWidth(3)" placeholder="Cerca.." searchVisibleColumnsOnly="true"></dxo-search-panel>
+    
+    <dxi-column [minWidth]="250" dataField="idStruttura.nome" caption="Struttura" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+    <dxi-column [width]="170" dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" caption="Nome" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+    <dxi-column [minWidth]="200" dataField="idAziendaTipoProcedimento.idTitolo.nome" caption="Classificazione" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+    <dxi-column [width]="150" dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" caption="Durata massima (gg)" [dataType]="'number'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+    <dxi-column [width]="120" dataField="dataInizio" caption="Valido dal" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+    <dxi-column [width]="200" dataField="idTitolarePotereSostitutivo.idPersona.descrizione" caption="Tit. potere sostitutivo" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+    <dxi-column [width]="100" caption="Dettagli" cellTemplate="buttonActions" alignment="center" ></dxi-column>
+    <div *dxTemplate="let element of 'buttonActions'" cssClass="app-azioni">
+        <dx-button text="" hint="Vai al dettaglio" icon='info' (onClick)="handleEvent('infoOnClick', element)"></dx-button>
+    </div>
+    <dxi-column [width]="100" caption="Storico iter" cellTemplate="buttonStorico" alignment="center" ></dxi-column>
+    <div *dxTemplate="let element of 'buttonStorico'" cssClass="app-azioni">
+      <dx-button text="" icon='event'></dx-button>
+    </div>
+    <dxi-column [width]="100" caption="Nuovo iter" cellTemplate="buttonIter" alignment="center" ></dxi-column>
+    <div *dxTemplate="let element of 'buttonIter'" cssClass="app-azioni">
+      <dx-button text="" icon='repeat' (onClick)="handleEvent('iterOnClick', element)"></dx-button>
+    </div>
+    <dxi-column dataField="idAziendaTipoProcedimento.durataMassimaSospensione" [dataType]="'number'" [allowEditing]="false" [visible]="false"></dxi-column>  
+    <dxi-column dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" [dataType]="'string'" [allowEditing]="false" [visible]="false"></dxi-column>  
+    <dxi-column dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [dataType]="'string'" [allowEditing]="false" [visible]="false"></dxi-column>
+    <dxi-column dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" [dataType]="'string'" [allowEditing]="false" [visible]="false"></dxi-column>
+    <dxi-column dataField="dataFine" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowEditing]="false" [visible]="false"></dxi-column>
+    <dxi-column dataField="modalitaInfo" [dataType]="'string'" [allowEditing]="false" [visible]="false"></dxi-column>
+    <dxi-column dataField="descrizioneAtti" [dataType]="'string'" [allowEditing]="false" [visible]="false"></dxi-column>
+  
+    <dxo-editing
+      mode="popup">
+      <dxo-popup
+        [maxWidth]="800"
+        [minWidth]="500"
+        [maxHeight]="700"
+        [toolbarItems]="popupButtons">
+      </dxo-popup>
+      <dxo-form
+        #formgdm
+        colCount="1">
+        <dxi-item dataField="idStruttura.nome" [template]="itemClear" [label]="{visible: true}" cssClass="item popup-title"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" [template]="itemClear" [label]="{visible: true, text: 'Tipo Procedimento'}" cssClass="item popup-title"></dxi-item>
+
+        <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" [label]="{text:'Descrizione'}" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [label]="{text:'Modo apertura'}" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" [label]="{text:'Norma di riferimento'}" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nome" [label]="{text:'Classificazione'}" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [label]="{text:'Durata massim (gg)'}" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" [label]="{text:'Durata massima sospensione (gg)'}" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="dataInizio" [label]="{text:'Valido dal'}" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="dataFine" [label]="{text:'Al'}" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="idTitolarePotereSostitutivo.descrizione" [label]="{text:'Titolare Potere Sostitutivo'}" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="modalitaInfo" [label]="{text:'Modalità informativa'}" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="descrizioneAtti" [label]="{text:'Atti da allegare'}" [colSpan]="1" cssClass="item"></dxi-item>
+      </dxo-form>
+    </dxo-editing>
+  </dx-data-grid>
+
+  <dx-popup
+    title="Avvia nuovo iter"
+    [maxWidth]="800"
+    [minWidth]="500"
+    [height]="600"
+    [showTitle]="true"
+    [visible]="popupNuovoIterVisible"
+    (onHidden)="popupHidden()">
+    <div *dxTemplate="let data of 'content'">
+      <avvia-nuovo-iter [procedimentoSelezionato]="procedimentoDaPassare" (messageEvent)="receiveMessage($event)"></avvia-nuovo-iter>
+    </div>
+  </dx-popup>
+</div>
+    
