@@ -90,9 +90,15 @@
         </div>
             
         <div class="col-xs-12 col-lg-6 contentRight">
-            <app-sequenza-delle-fasi [daPadre]="perFigliParteDestra"></app-sequenza-delle-fasi>
-            <app-cronologia-eventi [daPadre]="perFigliParteDestra"></app-cronologia-eventi>
-            <documenti-iter [daPadre]="perFigliParteDestra"></documenti-iter>
+            <div class="whitePanel mb-3">
+                <app-sequenza-delle-fasi [daPadre]="perFigliParteDestra"></app-sequenza-delle-fasi>     
+            </div>
+            <div class="whitePanel mb-3">
+                <app-cronologia-eventi [daPadre]="perFigliParteDestra"></app-cronologia-eventi>     
+            </div>
+            <div class="whitePanel">
+                <documenti-iter [daPadre]="perFigliParteDestra"></documenti-iter>   
+            </div>  
         </div>
     </div>
 

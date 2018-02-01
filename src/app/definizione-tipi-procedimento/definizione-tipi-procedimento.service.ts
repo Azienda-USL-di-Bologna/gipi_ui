@@ -14,7 +14,7 @@ export class DefinizioneTipiProcedimentoService {
 
   constructor(private http: Http) { }
 
-  valorizzaSelectedRow(riga: TipoProcedimento){
+  valorizzaSelectedRow(riga: TipoProcedimento) {
     this.selectedRow = riga;
   }
 
@@ -41,7 +41,7 @@ export class DefinizioneTipiProcedimentoService {
     });
   }
 
-  getAziendeAssociateRequest(idTipoProcedimento: string): Observable<any>{
+  getAziendeAssociateRequest(idTipoProcedimento: string): Observable<any> {
     let url = ODATA_BASE_URL + odataAziendeTipiProcPath + "?$filter=FK_id_tipo_procedimento eq " + idTipoProcedimento + "&$expand=idAzienda";
     return this.http.get(url).map(response => response.json().d.results );
   }
