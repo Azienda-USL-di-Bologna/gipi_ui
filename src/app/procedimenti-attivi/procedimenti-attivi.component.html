@@ -9,6 +9,7 @@
     noDataText="Non ci sono procedimenti attivi"
     (onToolbarPreparing)="onToolbarPreparing($event)"
     >
+    <dxo-paging [pageSize]="10"></dxo-paging>
   
     <dxo-filter-row [visible]="true" showAllText=' '></dxo-filter-row>
     <dxo-search-panel [visible]="true" [width]="calcWidth(3)" placeholder="Cerca.." searchVisibleColumnsOnly="true"></dxo-search-panel>
