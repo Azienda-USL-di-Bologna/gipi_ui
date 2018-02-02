@@ -70,12 +70,8 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-
         // this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
-
         this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
-
-
 /*        this.subscriptions.push(
             this.loggedUser$.subscribe(
                 (loggedUser: LoggedUser) => {

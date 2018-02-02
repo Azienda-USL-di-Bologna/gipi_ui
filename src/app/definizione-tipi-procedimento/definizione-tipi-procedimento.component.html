@@ -27,8 +27,8 @@
     <dxi-column dataField="codice" caption="Codice" alignment="center" sortOrder="asc" width="auto"></dxi-column>
     <dxi-column dataField="nome"></dxi-column>
     <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva" [allowSorting]="true" alignment="center" [allowFiltering]="true" width="auto"></dxi-column>
-    <dxi-column dataField="dataInizioValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true" width="auto"></dxi-column>
-    <dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true" width="auto"></dxi-column>
+    <dxi-column dataField="dataInizioValidita" caption="Data Inizio Validità" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true"></dxi-column>
+    <dxi-column dataField="dataFineValidita" caption="Data Fine Validità" caption="Codice" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true"></dxi-column>
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
     <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
     <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni">

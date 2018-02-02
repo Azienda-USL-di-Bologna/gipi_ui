@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public classeRightSide: string;
 
     public sidebarItems: Array<SidebarItem> = [];
-    public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
+    // public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
     public loggedUser$: Observable<LoggedUser>;
 
@@ -60,7 +60,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
         this.sidebarItems.push(new SidebarItem("Lista Iter", "app-lista-iter"));
-        this.sidebarItems.push(new SidebarItem("Test", "", this.sidebarItems2));
+        // this.sidebarItems.push(new SidebarItem("Test", "", this.sidebarItems2));
     }
 
     @HostListener("window:keydown", ["$event"])
