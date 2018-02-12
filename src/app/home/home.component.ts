@@ -39,12 +39,12 @@ export class HomeComponent implements OnInit {
     //
     // this.username = this.userInfoMap["username"];
     // this.azienda = this.userInfoMap["azienda"];
-    // this.strutture = this.userInfoMap["strutture"];
+    // this.struttureAfferenzaDiretta = this.userInfoMap["struttureAfferenzaDiretta"];
     // this.ruolo = this.userInfoMap["ruolo"];
-    // // console.log("loggo le strutture", this.strutture);
+    // // console.log("loggo le struttureAfferenzaDiretta", this.struttureAfferenzaDiretta);
     //
-    // for (let i = 0; i < this.strutture.length; i++){
-    //   let st: any = this.strutture[i];
+    // for (let i = 0; i < this.struttureAfferenzaDiretta.length; i++){
+    //   let st: any = this.struttureAfferenzaDiretta[i];
     //   let mostra = st.idStruttura.nome + " (afferenza " + st.idAfferenzaStruttura.descrizione + ")";
     //   if (this.struttureDiSeguito === ""){
     //     this.struttureDiSeguito = mostra;

@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit {
         }
 
         let loggedUser = new LoggedUser(data.userInfo);
+        // scrittura in due modi del dato: normale su varialibe di sessione che come observable
         this.globalContextService.setSubjectInnerSharedObject("loggedUser", loggedUser);
         this.globalContextService.setInnerSharedObject("loggedUser", loggedUser);
         sessionStorage.setItem("userInfo", JSON.stringify(data.userInfo));
@@ -53,7 +54,17 @@ export class LoginComponent implements OnInit {
             // Successful responses call the first callback.
             data => {
                 this.setDataLogin(data, "GET");
-                this.router.navigate(["/home"], { queryParams: { reset: true } });
+
+                let redirectTo: string = sessionStorage.getItem("redirectTo");
+                if (redirectTo) {
+                    console.log("redirectTo", redirectTo);
+                    sessionStorage.removeItem("redirectTo");
+                    this.router.navigateByUrl(redirectTo);
+                }
+                else {
+                    console.log("RedirectToHome");
+                    this.router.navigate(["/home"], {queryParams: {reset: true}});
+                }
             },
             (err) => {
                 this.show = true;
@@ -65,11 +76,22 @@ export class LoginComponent implements OnInit {
     login(form: NgForm) {
         this.errorMessage = "";
 
+
+
         this.httpClient.post(LOGIN_URL, { username: form.value.username, "password": form.value.password, "codiceAzienda": form.value.codiceAzienda })
             .subscribe(
             (data: any) => {
                 this.setDataLogin(data, "POST");
-                this.router.navigate(["/home"], { queryParams: { reset: true } });
+                let redirectTo: string = sessionStorage.getItem("redirectTo");
+                if (redirectTo) {
+                    console.log("redirectTo", redirectTo);
+                    sessionStorage.removeItem("redirectTo");
+                    this.router.navigateByUrl(redirectTo);
+                }
+                else {
+                    console.log("RedirectToHome");
+                    this.router.navigate(["/home"], {queryParams: {reset: true}});
+                }
             },
             (err) => {
                 console.log(err);

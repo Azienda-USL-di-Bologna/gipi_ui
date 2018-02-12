@@ -66,7 +66,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.setDataFromDettaglioProcedimentoComponent();
     this.strutturaSelezionata = new Struttura();
     // COSTRUZIONE MENU CONTESTUALE SULL'ALBERO
-    this.contextMenuItems = [{ text: "Espandi a strutture figlie" }];
+    this.contextMenuItems = [{ text: "Espandi a struttureAfferenzaDiretta figlie" }];
 
     //   this.datasource = new DataSource({
     //     store: this.odataContextDefinition.getContext()[Entities.Struttura],

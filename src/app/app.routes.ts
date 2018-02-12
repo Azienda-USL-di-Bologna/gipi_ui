@@ -38,7 +38,7 @@ export const rootRouterConfig: Routes = [
   // ho reindirizzato la pagina di atterraggio a definizione-tipi-procedimento
   { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "login", component: LoginComponent, canActivate: [NoLoginGuard], data: {}},
-  { path: "after-login", component: AfterLoginComponent, canActivate: [LoginGuard], data: {}},
+  // { path: "after-login", component: AfterLoginComponent, canActivate: [LoginGuard], data: {}},
   { path: "home", component: HomeComponent, canActivate: [LoginGuard], data: {breadcrumb: "Home"}},
   { path: "definizione-tipi-procedimento", component: DefinizioneTipiProcedimentoComponent, canActivate: [LoginGuard], data: {breadcrumb: "Tipi Procedimento"}},
   { path: "associazione-aziende", component: AssociazioneAziendeComponent, canActivate: [LoginGuard], data: {breadcrumb: "Associazione alle Aziende"}},
