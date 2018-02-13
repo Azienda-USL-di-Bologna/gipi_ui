@@ -16,6 +16,7 @@ import { PopupStrutturaTipiProcedimentoComponent } from "app/popup-struttura-tip
 import { IterProcedimentoComponent } from "app/iter-procedimento/iter-procedimento.component";
 import { TestTreeComponent } from "./test/test-tree/test-tree.component";
 import { ListaIterComponent } from "app/lista-iter/lista-iter.component";
+import { AvviaNuovoIterDaDocumentoComponent } from "app/procedimenti-attivi/avvia-nuovo-iter-da-documento/avvia-nuovo-iter-da-documento.component";
 
 
 export const rootRouterConfig: Routes = [
@@ -30,11 +31,6 @@ export const rootRouterConfig: Routes = [
   //     { path: 'aziende-tipi-procedimento', component: AziendeTipiProcedimentoComponent, canActivate: [LoginGuard], data: {breadcrumb: "Associazione Azienda"}}
   //   ]
   // },
-
-
-
-
-
   // ho reindirizzato la pagina di atterraggio a definizione-tipi-procedimento
   { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "login", component: LoginComponent, canActivate: [NoLoginGuard], data: {}},
@@ -49,6 +45,7 @@ export const rootRouterConfig: Routes = [
   { path: "popup-struttura-tipi-procedimento", component: PopupStrutturaTipiProcedimentoComponent, data: {breadcrumb: "Associa"} },
   { path: "iter-procedimento", component: IterProcedimentoComponent, data: {breadcrumb: "Nuovo Iter"} },
   { path: "app-test-tree", component: TestTreeComponent },
-  { path: "app-lista-iter", component: ListaIterComponent, data: {breadcrumb: "Lista Iter"}}
+  { path: "app-lista-iter", component: ListaIterComponent, data: {breadcrumb: "Lista Iter"}},
+  { path: "avvia-nuovo-iter-da-documento", component: AvviaNuovoIterDaDocumentoComponent }
 ];
 

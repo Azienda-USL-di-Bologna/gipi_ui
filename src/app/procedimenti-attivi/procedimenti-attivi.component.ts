@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, Input, Output, EventEmitter } from "@angular/core";
 import { DxDataGridComponent, DxFormComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
@@ -7,6 +7,8 @@ import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-de
 import {Router} from "@angular/router";
 import { LoggedUser } from "../authorization/logged-user";
 import { GlobalContextService } from "@bds/nt-angular-context";
+import { UtilityFunctions } from "app/utility-functions";
+import { forEach } from "@angular/router/src/utils/collection";
 
 @Component({
   selector: "procedimenti-attivi",
@@ -17,6 +19,7 @@ export class ProcedimentiAttiviComponent {
 
   private odataContextDefinition: OdataContextDefinition;
   private rigaSelezionata: any;
+  private utility: UtilityFunctions = new UtilityFunctions();
   
   @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
   public idAzienda: number;
@@ -26,6 +29,19 @@ export class ProcedimentiAttiviComponent {
   public procedimentoDaPassare: any;
   public iterAvviato: boolean = false;
   public idIterAvviato: number;
+  public daDocumento: boolean = false;
+  public enableSelection: string = "none";
+  public colonnaVisibile: boolean = true;
+  public showTitle: boolean = true ;
+
+  @Input()
+  set avviaIterDaDocumento(daDocumento: any) {
+    this.daDocumento = daDocumento;
+    this.setDataAvviaIterDaDocumento();
+    this.setFormLookAvviaIterDaDocumento();
+  }
+
+  @Output("messageEvent") messageEvent = new EventEmitter<any>();
 
   public loggedUser: LoggedUser;
 
@@ -60,7 +76,29 @@ export class ProcedimentiAttiviComponent {
     });
 
     this.itemClear = this.itemClear.bind(this);
-    this.setFormLook();
+    this.setFormLookBase();
+  }
+
+  private setDataAvviaIterDaDocumento() {
+    // Devo aggiungere il filtro sulle strutture dell'utente
+    // Prima mi creo l'array con gli id struttura
+    let idStrutture: any = [];
+    this.loggedUser.struttureAfferenzaDiretta.forEach(function(struttura) {
+      idStrutture.push(struttura.id);
+    });
+    this.loggedUser.struttureAfferenzaFunzionale.forEach(function(struttura) {
+      idStrutture.push(struttura.id);
+    });
+    // Ora mi creo l'array-filtro e filtro
+    this.dataSourceProcedimenti.filter(this.utility.buildMultipleFilterForArray("idStruttura.id", idStrutture));
+    
+    console.log(this.loggedUser);
+  }
+
+  private setFormLookAvviaIterDaDocumento() {
+    this.enableSelection = "single";
+    this.colonnaVisibile = false;
+    this.showTitle = false;
   }
   
   private apriDettaglio(row: any) {
@@ -68,7 +106,7 @@ export class ProcedimentiAttiviComponent {
   }
 
   // Definisco l'aspetto della pagina
-  setFormLook() {
+  private setFormLookBase() {
     this.popupButtons = [{
       toolbar: "bottom",
       location: "center",
@@ -82,6 +120,8 @@ export class ProcedimentiAttiviComponent {
       }
     }];
   }
+
+  
 
   // Gestisco la toolbar di ricerca. La voglio centrale.
   onToolbarPreparing(e) {
@@ -147,10 +187,14 @@ export class ProcedimentiAttiviComponent {
       case "iterOnClick":
         this.popupNuovoIterVisible = true;
         this.procedimentoDaPassare = {
-          idAzienda: this.idAzienda,
+          /* idAzienda: this.idAzienda,
           idProcedimento: e.row.data.id,
-          nomeProcedimento: e.row.data.idAziendaTipoProcedimento.idTipoProcedimento.nome
+          nomeProcedimento: e.row.data.idAziendaTipoProcedimento.idTipoProcedimento.nome */
+          procedimento: e.row.data
         };
+      break;
+      case "onSelectionChanged":
+        this.messageEvent.emit({ row: e});
       break;
     }
   }

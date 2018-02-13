@@ -26,16 +26,36 @@ export class AvviaNuovoIterComponent implements OnInit {
   public iterParams: IterParams = new IterParams();
   public nomeProcedimento: string;
   public now: Date = new Date();
+  public dataMassimaConclusione: Date;
+  public procedimentoMax: number;
 
   public loggedUser: LoggedUser;
 
+
   @Input()
   set procedimentoSelezionato(procedimento: any) {
-    this.nomeProcedimento = procedimento.nomeProcedimento;
     this.iterParams = new IterParams();
-    this.iterParams.idProcedimento = procedimento.idProcedimento;
-    this.iterParams.idAzienda = procedimento.idAzienda;
     this.iterParams.dataCreazioneIter = new Date();
+    this.buildProcedimento(procedimento);
+  }
+
+  @Input()
+  set procedimentoSelezionatoDaDocumento(procedimento: any) {
+    this.buildProcedimento(procedimento);
+  }
+
+  @Input()
+  set documentoSelezionato(doc: any) {
+    console.log("Documento ricevuto");
+    console.log(doc);
+    this.iterParams = new IterParams();
+    this.iterParams.codiceRegistroDocumento = doc.registro;
+    this.iterParams.numeroDocumento = doc.numero;
+    this.iterParams.annoDocumento = doc.anno;
+    this.iterParams.oggettoIter = doc.oggetto;
+    this.iterParams.dataAvvioIter = new Date(doc.dataRegistrazione);
+    this.iterParams.dataCreazioneIter = new Date();
+    this.iterParams.promotoreIter = doc.promotore;
   }
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
@@ -50,16 +70,22 @@ export class AvviaNuovoIterComponent implements OnInit {
 
   private getInfoSessionStorage() {
     this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
-
-    
-    
-
-    /* this.loggedUser.strutture.forEach((s: UtenteStruttura) => {
-      if (s.idAfferenzaStruttura.descrizione === afferenzaStruttura.diretta) {
-        this.iterParams.idStrutturaUtente = s.idStruttura.id;
-      }
-    }); */
   }
+
+  private buildProcedimento(procedimento: any) {
+    console.log(procedimento);
+    if (procedimento != null) {
+      this.nomeProcedimento = procedimento.procedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome
+        + " (" + procedimento.procedimento.idStruttura.nome + ")";
+      this.iterParams.idProcedimento = procedimento.procedimento.id;
+      this.iterParams.idAzienda = procedimento.procedimento.idAziendaTipoProcedimento.idAzienda.id;
+      // this.dataMassimaConclusione = new Date();
+      this.procedimentoMax = procedimento.procedimento.idAziendaTipoProcedimento.durataMassimaProcedimento;
+      // this.dataMassimaConclusione.setDate(this.iterParams.dataAvvioIter.getDate() + procedimento.procedimento.idAziendaTipoProcedimento.durataMassimaProcedimento);
+    }
+  }
+
+  
 
   private buildDataSourceUtenti() {
     const customOdataContextDefinition: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -138,6 +164,15 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.messageEvent.emit({ visible: false, idIter: idIter });
   }
 
+  public setDataMax(): Date {
+    debugger;
+    if (this.procedimentoMax != null && this.iterParams.dataAvvioIter !== undefined) {
+      this.dataMassimaConclusione = new Date();
+      this.dataMassimaConclusione.setDate(this.iterParams.dataAvvioIter.getDate() + this.procedimentoMax);
+    }
+    return this.dataMassimaConclusione;
+  }
+
 }
 
 class IterParams {
@@ -152,4 +187,5 @@ class IterParams {
   public codiceRegistroDocumento: string;
   public numeroDocumento: string;
   public annoDocumento: number;
+  public promotoreIter: string;
 }

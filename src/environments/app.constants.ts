@@ -18,6 +18,7 @@ import { Fase } from "../app/classi/server-objects/entities/fase";
 import { FaseIter } from "../app/classi/server-objects/entities/fase-iter";
 import { ProcedimentoCache } from "../app/classi/server-objects/entities/procedimento-cache";
 import { DocumentoIter } from "app/classi/server-objects/entities/documento-iter";
+import { GetIterUtente } from "app/classi/server-objects/functions-import/get-iter-utente";
 
 export const Entities: ServerObjectsDescriptor = {
     Azienda: {name: "Aziendas", class: Azienda},
@@ -41,6 +42,7 @@ export const Entities: ServerObjectsDescriptor = {
 
 export const FunctionsImport: ServerObjectsDescriptor = {
     GetStruttureByTipoProcedimento: {name: "GetStruttureByTipoProcedimento", class: GetStruttureByTipoProcedimento},
+    GetIterUtente: {name: "GetIterUtente", class: GetIterUtente}
 };
 
 // header http
@@ -91,7 +93,7 @@ export const afferenzaStruttura = {
 
 export enum Ruoli {UG,MOS,OS,CA,CI,AS,SD};
 
-export const BIT_RUOLI = {"US":1,"MOBS":2,"OBS":4,"ADM":8,"SUPERADM":16};
+export const BIT_RUOLI = {"US":1, "MOBS": 2, "OBS": 4, "ADM": 8, "SUPERADM": 16};
 
 
 
