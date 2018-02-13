@@ -14,8 +14,8 @@ import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-facto
 import { GlobalContextService } from "@bds/nt-angular-context/global-context.service";
 import { CustomReuseStrategy } from "@bds/nt-angular-context/routes/custom-reuse-strategy";
 import { ButtonAppearance } from "@bds/nt-angular-context/templates/buttons-bar/buttons-bar.component";
-import { LoggedUser } from "../authorization/logged-user"
-import { Ruoli } from "../../environments/app.constants"
+import { LoggedUser } from "../authorization/logged-user";
+import { Ruoli } from "../../environments/app.constants";
 
 @Component({
     selector: "app-associazione-aziende",
@@ -70,12 +70,8 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-
         // this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
-
         this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
-
-
 /*        this.subscriptions.push(
             this.loggedUser$.subscribe(
                 (loggedUser: LoggedUser) => {
@@ -89,7 +85,7 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.subscriptions.forEach(
             (subscrition: Subscription) => {
-                subscrition.unsubscribe()
+                subscrition.unsubscribe();
             }
         );
     }

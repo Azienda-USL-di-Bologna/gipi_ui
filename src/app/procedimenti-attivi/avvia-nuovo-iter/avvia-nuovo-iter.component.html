@@ -1,4 +1,4 @@
-<h2 class="titolo-procedimento">Procedimento: {{nomeProcedimento}}</h2>
+<h2 *ngIf="nomeProcedimento != null" class="titolo-procedimento">Procedimento: {{nomeProcedimento}}</h2>
 
 <br>
 
@@ -7,6 +7,9 @@
   <dxi-item itemType="group">
     <dxi-item dataField="dataCreazioneIter" editorType="dxDateBox" format="dd/mm/yyyy" [label]="{text: 'Data creazione iter'}" [editorOptions]="{ disabled: true }"></dxi-item>
     <dxi-item dataField="dataAvvioIter" editorType="dxDateBox" [label]="{text: 'Data avvio iter'}" [editorOptions]="{ disabled: false, max: now }"></dxi-item>
+    <dxi-item dataField="dataMassimaConclusione" editorType="dxDateBox" [label]="{text: 'Data massima conclusione'}" 
+      [editorOptions]="{ disabled: true, 
+        value: setDataMax() }"></dxi-item>
     <dxi-item dataField="oggettoIter" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
     <dxi-item dataField="idUtenteResponsabile" editorType="dxLookup" [label]="{text: 'Responsabile procedimento'}"
       [editorOptions]="{
@@ -24,6 +27,7 @@
       <dxi-item dataField="numeroDocumento" [colSpan]="1000" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: false }"></dxi-item>
       <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: false}"></dxi-item> 
     </dxi-item>
+    <dxi-item dataField="promotoreIter" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
   </dxi-item>
 </dx-form>
 

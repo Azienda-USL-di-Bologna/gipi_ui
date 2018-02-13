@@ -41,7 +41,7 @@ export class StruttureTreeComponent implements OnInit {
   constructor(private http: HttpClient, private odataContextFactory: OdataContextFactory) {
 
     // costruzione menù contestuale sull'albero
-    this.contextMenuItems = [{ text: "Espandi a strutture figlie" }];
+    this.contextMenuItems = [{ text: "Espandi a struttureAfferenzaDiretta figlie" }];
 
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }

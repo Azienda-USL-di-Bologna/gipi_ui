@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, HostListener, Input } from "@angular/core";
 import { Location } from "@angular/common";
 import { CustomReuseStrategy } from "@bds/nt-angular-context/routes/custom-reuse-strategy";
-import { Router } from "@angular/router";
+import {NavigationEnd, NavigationStart, Router} from "@angular/router";
 import { Observable } from "rxjs/Observable";
 import { GlobalContextService, OdataContextFactory } from "@bds/nt-angular-context";
 import { Ruolo } from "./classi/server-objects/entities/ruolo";
@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public classeRightSide: string;
 
     public sidebarItems: Array<SidebarItem> = [];
-    public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
+    // public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
     public loggedUser$: Observable<LoggedUser>;
 
@@ -45,6 +45,13 @@ export class AppComponent implements OnInit, OnDestroy {
         console.log("location", window.location);
 
         this.route = this.router.url;
+        this.router.events
+            .filter((event) => (event instanceof NavigationStart) || (event instanceof NavigationEnd))
+            .subscribe(
+                (next) => {
+                    let reset = false;
+                }
+            );
 
         this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);
 
@@ -60,7 +67,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
         this.sidebarItems.push(new SidebarItem("Lista Iter", "app-lista-iter"));
-        this.sidebarItems.push(new SidebarItem("Test", "", this.sidebarItems2));
+        // this.sidebarItems.push(new SidebarItem("Test", "", this.sidebarItems2));
     }
 
     @HostListener("window:keydown", ["$event"])
@@ -107,6 +114,7 @@ export class AppComponent implements OnInit, OnDestroy {
                     if (loggedUser) {
                         this.ruoli = loggedUser.ruoli;
                         this.ruolo = "";
+                        this.azienda = loggedUser.aziendaLogin.nome;
                         this.ruoli.forEach(element => {
                             this.ruolo += element.nomeBreve + " ";
                         });

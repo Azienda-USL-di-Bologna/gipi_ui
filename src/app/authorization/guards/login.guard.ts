@@ -5,21 +5,20 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class LoginGuard implements CanActivate {
 
-  constructor(private router: Router){}
+  constructor(private router: Router) {}
 
   canActivate(
       next: ActivatedRouteSnapshot,
       state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-
-
-    if(sessionStorage.getItem("token") === null){
-
-      
+    if (sessionStorage.getItem("token") === null) {
+      if (!state.url.startsWith("/login")) {
+        sessionStorage.setItem("redirectTo", state.url);
+      }
       this.router.navigate(["/login"]);
       return false;
     }
-    else{
+    else {
       return true;
     }
   }

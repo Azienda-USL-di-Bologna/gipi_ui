@@ -16,6 +16,7 @@ import { PopupStrutturaTipiProcedimentoComponent } from "app/popup-struttura-tip
 import { IterProcedimentoComponent } from "app/iter-procedimento/iter-procedimento.component";
 import { TestTreeComponent } from "./test/test-tree/test-tree.component";
 import { ListaIterComponent } from "app/lista-iter/lista-iter.component";
+import { AvviaNuovoIterDaDocumentoComponent } from "app/procedimenti-attivi/avvia-nuovo-iter-da-documento/avvia-nuovo-iter-da-documento.component";
 import { CambioDiStatoComponent } from "app/cambio-di-stato/cambio-di-stato.component";
 
 
@@ -31,15 +32,10 @@ export const rootRouterConfig: Routes = [
   //     { path: 'aziende-tipi-procedimento', component: AziendeTipiProcedimentoComponent, canActivate: [LoginGuard], data: {breadcrumb: "Associazione Azienda"}}
   //   ]
   // },
-
-
-
-
-
   // ho reindirizzato la pagina di atterraggio a definizione-tipi-procedimento
   { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "login", component: LoginComponent, canActivate: [NoLoginGuard], data: {}},
-  { path: "after-login", component: AfterLoginComponent, canActivate: [LoginGuard], data: {}},
+  // { path: "after-login", component: AfterLoginComponent, canActivate: [LoginGuard], data: {}},
   { path: "home", component: HomeComponent, canActivate: [LoginGuard], data: {breadcrumb: "Home"}},
   { path: "definizione-tipi-procedimento", component: DefinizioneTipiProcedimentoComponent, canActivate: [LoginGuard], data: {breadcrumb: "Tipi Procedimento"}},
   { path: "associazione-aziende", component: AssociazioneAziendeComponent, canActivate: [LoginGuard], data: {breadcrumb: "Associazione alle Aziende"}},
@@ -51,6 +47,7 @@ export const rootRouterConfig: Routes = [
   { path: "iter-procedimento", component: IterProcedimentoComponent, data: {breadcrumb: "Nuovo Iter"} },
   { path: "app-test-tree", component: TestTreeComponent },
   { path: "app-lista-iter", component: ListaIterComponent, data: {breadcrumb: "Lista Iter"}},
+  { path: "avvia-nuovo-iter-da-documento", component: AvviaNuovoIterDaDocumentoComponent },
   { path: "app-cambio-di-stato", component: CambioDiStatoComponent, data: {breadcrumb: "Cambio di stato"}}
 ];
 

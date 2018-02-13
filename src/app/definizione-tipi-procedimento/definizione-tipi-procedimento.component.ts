@@ -52,15 +52,14 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     this.odataContextDefinition = odataContexFactory.buildOdataContextEntitiesDefinition();
     this.dataSource = new DataSource({
       store: this.odataContextDefinition.getContext()[Entities.TipoProcedimento.name],
-
-      map: function (item) {
-/*        if (item.dataInizioValidita != null)
+/*       map: function (item) {
+       if (item.dataInizioValidita != null)
           item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
         if (item.dataFineValidita != null)
-          item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);*/
+          item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);
 
         return item;
-      }
+      } */
     });
 
     this.dataSource.load().then(res => this.buildTipiProcedimento(res));
@@ -97,16 +96,12 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
   // cancello la riga passata come parametro
   private cancellaRiga(row: any) {
     // prendo l'indice della riga selezionata e
-    // console.log("FUNZIONE CANCELLARIGA");
-    // console.log(row.rowIndex);
     this.grid.instance.deleteRow(row.rowIndex);
     this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
   }
 
   // modifico la riga passata come parametro
   private modificaRiga(row: any) {
-    // console.log("FUNZIONE MODIFICARIGA");
-    // console.log(row.rowIndex);
     this.grid.instance.editRow(row.rowIndex);
     this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
   }
@@ -180,10 +175,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
       default:
         break;
     }
-
   }
-
-
 
   ngOnInit() {
     // this.globalContext.setButtonBarVisible(false);
@@ -208,10 +200,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
         element.options.text = "Aggiungi";
         element.options.showText = "always";
       }
-
-
     });
-
   }
 
   public onCellPrepared(e: any) {
@@ -219,16 +208,11 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     if (e.rowType === "data" && e.column.command === "edit") {
         let isEditing = e.row.isEditing,
             $links = e.cellElement.find(".dx-link");
-
         $links.text("");
         $links.filter(".dx-link-edit").addClass("dx-icon-edit");
         $links.filter(".dx-link-delete").addClass("dx-icon-trash");
-
     }
   }
-
-  
-
 
   public calcolaSeAttiva(row: any) {
     // console.log(coso);
@@ -237,10 +221,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     // var utilityFunctions = new UtilityFunctions();
 
     let attivo: String;
-
-
     let daAttivare: boolean;
-
     let now = new Date();
     let today = now.getTime();
 
@@ -272,8 +253,5 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     attivo = daAttivare ? "Sì" : "No";
 
     return attivo;
-
   }
-
-
 }
