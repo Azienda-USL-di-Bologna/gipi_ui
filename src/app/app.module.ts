@@ -67,6 +67,9 @@ import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/pa
 import { SospensioneIterComponent } from "./iter-procedimento/sospensione-iter/sospensione-iter.component";
 import { ListaIterComponent } from "./lista-iter/lista-iter.component";
 import { AfterLoginComponent } from "./after-login/after-login.component";
+import { CambioDiStatoComponent } from './cambio-di-stato/cambio-di-stato.component';
+import { ListaIterConPermessiComponent } from './cambio-di-stato/lista-iter-con-permessi/lista-iter-con-permessi.component';
+import { CambioDiStatoBoxComponent } from './cambio-di-stato-box/cambio-di-stato-box.component';
 
 
 @NgModule({
@@ -97,6 +100,9 @@ import { AfterLoginComponent } from "./after-login/after-login.component";
         SospensioneIterComponent,
         ListaIterComponent,
         AfterLoginComponent,
+        CambioDiStatoComponent,
+        ListaIterConPermessiComponent,
+        CambioDiStatoBoxComponent,
     ],
     imports: [
         BrowserModule,

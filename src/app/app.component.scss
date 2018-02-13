@@ -273,7 +273,14 @@
 /deep/ .dx-datagrid-header-panel{
   border-bottom: none;
 }
-/deep/ dx-form > div > div > div > .dx-box-item{
+// /deep/ dx-form > div > div > div > .dx-box-item{
+//   box-shadow: 0 0 1px rgba(0,0,0,.15); 
+//   padding: 15px; 
+//   background-color: #fff; 
+//   border-radius: 2px;
+//   margin-bottom: 8px;
+// }
+/deep/ dx-form .dx-form-group{
   box-shadow: 0 0 1px rgba(0,0,0,.15); 
   padding: 15px; 
   background-color: #fff; 
