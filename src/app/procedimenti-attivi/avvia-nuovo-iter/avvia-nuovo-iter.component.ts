@@ -165,7 +165,6 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   public setDataMax(): Date {
-    debugger;
     if (this.procedimentoMax != null && this.iterParams.dataAvvioIter !== undefined) {
       this.dataMassimaConclusione = new Date();
       this.dataMassimaConclusione.setDate(this.iterParams.dataAvvioIter.getDate() + this.procedimentoMax);

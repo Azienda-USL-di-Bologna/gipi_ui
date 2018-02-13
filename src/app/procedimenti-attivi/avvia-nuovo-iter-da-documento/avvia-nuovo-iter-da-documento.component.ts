@@ -11,14 +11,16 @@ import { IterParams } from "app/iter-procedimento/passaggio-di-fase/passaggio-di
 })
 export class AvviaNuovoIterDaDocumentoComponent {
   public idAzienda: number;
-  public doc: object = {
+  public doc: any; 
+  
+  /* = {
     registro: "PG",
     numero: "66",
     anno: 2018,
     oggetto: "bell'oggetto, lo faccio corto, ma non è corto, soprattutto se lo spiego",
     dataRegistrazione: new Date(),
     promotore: "GSLFNSSTICA io sono il proponentre siiii"
-  };
+  }; */
 
   public procedimentoDaPassare: object;
   public loggedUser: LoggedUser;
