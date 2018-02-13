@@ -1,0 +1,33 @@
+<div>
+  <div class="whitePanel">
+      <dx-data-grid
+      allowColumnResizing="true"
+      hoverStateEnabled="true" 
+      columnResizingMode="nextColumn" 
+      wordWrapEnabled="true"
+      items = "listaItems"
+      (onSelectionChanged)="selectedRowChanged($event)"
+      noDataText="Non ci sono dati da visualizzare">
+      <dxo-selection mode="single"></dxo-selection>
+      <dxo-paging [pageSize]="10"></dxo-paging>
+      <!-- <dxo-search-panel 
+        [visible]="true" 
+        [width]="240" 
+        placeholder="Cerca.." >
+      </dxo-search-panel> -->
+
+        <!-- <dxi-column dataField="procedimento" [width]="100"></dxi-column> -->
+        <dxi-column dataField="stato"[width]="100"></dxi-column>
+        <!-- <dxi-column dataField="classificazione"[width]="150"></dxi-column> -->
+        <dxi-column dataField="oggetto" [minWidth]="200"></dxi-column>
+        <dxi-column dataField="dataAvvio" caption="Aperto il" [width]="100"></dxi-column>
+        <dxi-column dataField="idResponsabileProcedimento.idPersona.descrizione" caption="Responsabile procedimento" [minWidth]="200"></dxi-column>
+  </dx-data-grid>
+  </div> 
+  <dx-button
+  text="Salva"
+  (click)="handleClick()"
+  >
+</dx-button> 
+</div>
+
