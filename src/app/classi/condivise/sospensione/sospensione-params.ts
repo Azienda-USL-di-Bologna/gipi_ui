@@ -4,8 +4,6 @@ export class SospensioneParams {
     public codiceRegistroDocumento: string;
     public numeroDocumento: string;
     public annoDocumento: number;
-    public sospesoDal: Date;
-    public sospesoAl: Date;
     public note: string;
     public statoCorrente: string;
     public statoProssimo: string;

@@ -2,27 +2,14 @@
   <dx-form
   [(formData)]="_sospensioneParams"
   validationGroup="sospensioneParams"
+  [showValidationSummary]="true"
   class="col-6 d-inline-block text-left">
     <dxi-item itemType="group">
-      <!-- ColCount e colSpan sono chiaramente esagerati. Questo perché colCount=3 e poi i 3 item con colSpa=1 non funziona.  -->
-      <!-- <dxi-item itemType="group" [colCount]="3001" [label]="{text: 'Con Documento'}">
-        <dxi-item itemType="empty" [colSpan]="1"></dxi-item>
-        <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1000" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: false }">
-          <dxi-validation-rule type="required" message="I dati del registro del documento di sospensione sono obbligatori"></dxi-validation-rule>
-        </dxi-item>
-        <dxi-item dataField="numeroDocumento" [colSpan]="1000" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: false }">
-          <dxi-validation-rule type="required" message="I dati del numero del documento di sospensione sono obbligatori"></dxi-validation-rule>
-        </dxi-item>
-        <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: false}">
-          <dxi-validation-rule type="required" message="I dati dell'anno del documento di sospensione sono obbligatori"></dxi-validation-rule>
-        </dxi-item> 
-      </dxi-item> -->
-      
-      <dxi-item dataField="statoCorrente" [label]="{text: 'Stato corrente'}" [editorOptions]="{ disabled: true }">    
+      <dxi-item dataField="statoCorrente" [label]="{text: 'Stato corrente'}" [editorOptions]="{ disabled: true }">
+          <dxi-validation-rule type="required" message="Occorre prima selezionare un Iter dalla lista soprastante"></dxi-validation-rule>    
       </dxi-item>
       <dxi-item dataField="statoProssimo" editorType="dxLookup" [editorOptions]="{ 
-        items: statiIter, 
-        value: statiIter[0], 
+        items: statiIter,  
         selectionMode: 'single',
         showPopupTitle: false,
         showCancelButton: false,
@@ -36,11 +23,12 @@
       <dxi-item dataField="note" editorType="dxTextArea" [label]="{text: 'Note'}" [editorOptions]="{ disabled: false }"></dxi-item>
     </dxi-item>
   </dx-form>
+
   <br/>  
   <div class="buttons col-6 text-right d-inline-block">
     <dx-button text="Annulla" [type]="'normal'">
     </dx-button>
-    <dx-button text="Salva" [useSubmitBehavior]="true" validationGroup="sospensioneParams" (click)="handleSubmit()">
+    <dx-button text="Salva" [useSubmitBehavior]="true" validationGroup="sospensioneParams" (click)="handleSubmit($event)">
     </dx-button>
   </div>
 </div>

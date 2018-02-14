@@ -3,7 +3,7 @@ import DataSource from "devextreme/data/data_source";
 import CustomStore from "devextreme/data/custom_store";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
 import { GlobalContextService, OdataContextFactory } from "@bds/nt-angular-context";
-import { Entities, CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
+import { Entities, CUSTOM_RESOURCES_BASE_URL, FunctionsImport } from "environments/app.constants";
 import { HttpClient } from "@angular/common/http";
 import { Subscription } from "rxjs/Subscription";
 import { Observable } from "rxjs/Observable";
@@ -20,143 +20,89 @@ export class ListaIterConPermessiComponent implements OnInit {
   public dataSource: DataSource;
   public customStore: CustomStore;
   public listaItems: any;
+  public doc: object = { // Da rivedere in base ai parametri in entrata
+    registro: "PG",
+    numero: "66",
+    anno: 2018,
+    oggetto: "bell'oggetto, lo faccio corto, ma non è corto, soprattutto se lo spiego",
+    dataRegistrazione: new Date(),
+    promotore: "GSLFNSSTICA io sono il proponentre siiii"
+  };
 
   private subscriptions: Subscription[] = [];
   public loggedUser$: Observable<LoggedUser>;
-  public userInfo: LoggedUser;
+  public _userInfo : UserInfo;
 
 
-  @Input() cfUtente : string;
+  @Input() set userInfo(value: UserInfo){
+    this._userInfo = value;
+  }
   @Output() selectedRow : EventEmitter<any> = new EventEmitter();
 
-  constructor(private odataContextFactory: OdataContextFactory, 
-    private http: HttpClient,
-    private globalContextService: GlobalContextService) {
-    this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private globalContextService: GlobalContextService) {
+    console.log("USER INFO LISTA CONSTRACTOR:", this._userInfo)
+    this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }
 
   ngOnInit() {
-    // this.dataSource = new DataSource({
-    //   store: this.odataContextDefinition.getContext()[Entities.Iter.name],
-    //   expand: ["idResponsabileProcedimento.idPersona"],
-    // });
-///////////////////////////////
-    // const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?cf=" + this.cfUtente) // qui manca l'azienda
-    // .subscribe(
-    // res => {
-    //   let current = JSON.parse(res["currentFase"]);
-    //   let next = JSON.parse(res["nextFase"]);
-
-    //   this.perFiglioPassaggioFase = {
-    //     idIter: this.idIter,
-    //     currentFaseName: current.nomeFase,
-    //     nextFaseName: next.nomeFase,
-    //     isNextFaseDiChiusura: next.faseDiChiusura
-    //   };
-
-    //   this.popupData.title = "Passaggio Di Fase";
-    //   this.passaggioDiFaseVisible = true;
-    // },
-    // err => {
-    //   notify("Non esiste la fase successiva", "error", 1000);
-    // });
-    /////////////////////////////////////////////
-    // this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
-    // this.subscriptions.push(
-    //     this.loggedUser$.subscribe(
-    //         (loggedUser: LoggedUser) => {
-    //             if (loggedUser) {
-    //                 this.userInfo = loggedUser;
-    //             }
-    //         }
-    //     )
-    // );
-
-    // this.customStore = new CustomStore({
-    //   load: function() {
-    //     var that = this;
-    //     return this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?cf=" + this.cfUtente) // environment.base_url + environment.resource_path + '?' + stringToSearch + params
-    //     .subscribe(
-    //       res => {
-    //         console.log('Response Res:', res);
-    //       },
-    //       err => {
-    //         console.log('Rerror Err:', err);
-    //       });
-    // }});
-    // this.dataSource = new DataSource({
-    //   store: this.customStore
-    // });
-    
+    console.log("USER INFO LISTA ONINIT:", this._userInfo)
+    // this.recuperaUserInfo();
+    this.dataSource = new DataSource({
+      store: this.odataContextDefinition.getContext()[FunctionsImport.GetIterUtente.name],
+      customQueryParams: {
+        cf: this._userInfo.cf,
+        idAzienda: this._userInfo.idAzienda
+        // cf: "GSLFNC89A05G224Y", // this._userInfo.cf
+        // idAzienda: 2  // this._userInfo.idAzienda
+      },
+      expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona"]
+    });
+    this.dataSource.load();
+    // this.handleClick();
 }
 
   selectedRowChanged(e){
-    this.selectedRow.emit(e.selectedRowsData[0].id);
+    this.selectedRow.emit(e.selectedRowsData[0]);
     console.log('SELECTED:', e.selectedRowsData[0].id);
   }
 
-  handleClick(){
-    this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
-    this.subscriptions.push(
-        this.loggedUser$.subscribe(
-            (loggedUser: LoggedUser) => {
-                if (loggedUser) {
-                    this.userInfo = loggedUser;
-                    console.log("INFOUSER: ", this.userInfo)
-                }
-            }
-        )
-    );
-    
-    // let that = this;
-    // this.customStore = new CustomStore({
-    //   load: function(loadOptions: any) {
-    //     // let that = this;
-    //     return that.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getIterUtente?cf=" + "GSLFNC89A05G224Y" + "&idAzienda=" + "2") // environment.base_url + environment.resource_path + '?' + stringToSearch + params
-    //     .subscribe(
-    //       res => {
-    //         console.log('Response Res:', res);
-    //         return {
-    //           data: res,
-    //           totalCount: (res as Array<any>).length
-    //         };
-    //       },
-    //       err => {
-    //         console.log('Rerror Err:', err);
-    //       });
-    // }});
-    // this.dataSource = new DataSource({
-    //   store: this.customStore
-    // });
-///////////////////////////////////////
-    // this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getIterUtente?cf=" + "GSLFNC89A05G224Y" + "&idAzienda=" + "2") // environment.base_url + environment.resource_path + '?' + stringToSearch + params
-    // .subscribe(
-    //   res => {
-    //     that.dataSource = new DataSource({
-    //       store: new CustomStore({
-    //         load: function() {
-    //           return {data: res,
-    //           totalCount: (res as Array<any>).length}
-    //         }
-    //       })
-    //     });
-    //     console.log('Response Res:', res);
-    //     // console.log("CUSTOM STORE:", this.customStore);
-    //     console.log("DATASOURCE: ", this.dataSource)
-    //   },
-    //   err => {
-    //     console.log('Rerror Err:', err);
-    //   });
-    /////////////////////////////////////////////////
-    this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getIterUtente?cf=" + "GSLFNC89A05G224Y" + "&idAzienda=" + "2") // environment.base_url + environment.resource_path + '?' + stringToSearch + params
-    .subscribe(
-      res => {
-        this.listaItems = res;
-        console.log("ITEMS: ", this.listaItems)
-      },
-      err => {
-        console.log('Rerror Err:', err);
-      });
-  }
+  // handleClick(){
+  //   console.log("Demtro")
+  //   this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
+  //   this.subscriptions.push(
+  //       this.loggedUser$.subscribe(
+  //           (loggedUser: LoggedUser) => {
+  //               if (loggedUser) {
+  //                   this.userInfo = loggedUser;
+  //                   console.log("INFOUSER: ", this.userInfo)
+  //               }
+  //           }
+  //       )
+  //   );
+  // }
 
+  // recuperaUserInfo(){
+  //   this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
+  //   this.subscriptions.push(
+  //       this.loggedUser$.subscribe(
+  //           (loggedUser: LoggedUser) => {
+  //               if (loggedUser) {
+  //                 this._userInfo = {
+  //                   idUtente: 294711, // loggedUser.idUtente
+  //                   idAzienda:  "2", //loggedUser.aziendaLogin.codice
+  //                   cf: "GSLFNC89A05G224Y"
+  //                 }
+  //                 console.log("user info appena messo", this._userInfo)
+  //               }
+  //           }
+  //       )
+  //   );
+  // }
+
+}
+
+interface UserInfo{
+  idUtente: number;
+  cf: string;
+  idAzienda: number;
 }
