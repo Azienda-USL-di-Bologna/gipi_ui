@@ -78,14 +78,12 @@ export class AvviaNuovoIterComponent implements OnInit {
       this.nomeProcedimento = procedimento.procedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome
         + " (" + procedimento.procedimento.idStruttura.nome + ")";
       this.iterParams.idProcedimento = procedimento.procedimento.id;
-      this.iterParams.idAzienda = procedimento.procedimento.idAziendaTipoProcedimento.idAzienda.id;
+      // this.iterParams.idAzienda = procedimento.procedimento.idAziendaTipoProcedimento.idAzienda.id;
       // this.dataMassimaConclusione = new Date();
       this.procedimentoMax = procedimento.procedimento.idAziendaTipoProcedimento.durataMassimaProcedimento;
       // this.dataMassimaConclusione.setDate(this.iterParams.dataAvvioIter.getDate() + procedimento.procedimento.idAziendaTipoProcedimento.durataMassimaProcedimento);
     }
   }
-
-  
 
   private buildDataSourceUtenti() {
     const customOdataContextDefinition: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -99,7 +97,7 @@ export class AvviaNuovoIterComponent implements OnInit {
       expand: [
         "idPersona"
       ],
-      filter: [["idAzienda.id", "=", this.iterParams.idAzienda], ["attivo", "=", true]],
+      filter: [["idAzienda.id", "=", this.loggedUser.aziendaLogin.id], ["attivo", "=", true]],
       paginate: true,
       pageSize: 15
     };
@@ -165,7 +163,6 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   public setDataMax(): Date {
-    debugger;
     if (this.procedimentoMax != null && this.iterParams.dataAvvioIter !== undefined) {
       this.dataMassimaConclusione = new Date();
       this.dataMassimaConclusione.setDate(this.iterParams.dataAvvioIter.getDate() + this.procedimentoMax);
@@ -180,7 +177,7 @@ class IterParams {
   public idUtenteLoggato: number;
   /* public idStrutturaUtente: number; */
   public idProcedimento: number;
-  public idAzienda: number;
+  // public idAzienda: number;
   public oggettoIter: string;
   public dataCreazioneIter: Date;
   public dataAvvioIter: Date;

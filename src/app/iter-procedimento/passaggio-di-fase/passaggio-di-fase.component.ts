@@ -133,7 +133,7 @@ export class PassaggioDiFaseComponent implements OnInit {
     this.messageEvent.emit({ visible: false, proceduto: proceduto });
   }
 
-  onFormSubmit(event: Event){
+  onFormSubmit(event: Event) {
     
   }
 

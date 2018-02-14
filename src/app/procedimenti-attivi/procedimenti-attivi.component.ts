@@ -83,12 +83,18 @@ export class ProcedimentiAttiviComponent {
     // Devo aggiungere il filtro sulle strutture dell'utente
     // Prima mi creo l'array con gli id struttura
     let idStrutture: any = [];
-    this.loggedUser.struttureAfferenzaDiretta.forEach(function(struttura) {
-      idStrutture.push(struttura.id);
+    console.log(this.loggedUser);
+    this.loggedUser.struttureAfferenzaDiretta.forEach(function(struttura: any) {
+      console.log(struttura);
+
+      idStrutture.push(struttura.ID);
     });
-    this.loggedUser.struttureAfferenzaFunzionale.forEach(function(struttura) {
-      idStrutture.push(struttura.id);
-    });
+    if (this.loggedUser.struttureAfferenzaFunzionale != null) {
+      this.loggedUser.struttureAfferenzaFunzionale.forEach(function(struttura: any) {
+        idStrutture.push(struttura.ID);
+      });
+    }
+    console.log(this.utility.buildMultipleFilterForArray("idStruttura.id", idStrutture));
     // Ora mi creo l'array-filtro e filtro
     this.dataSourceProcedimenti.filter(this.utility.buildMultipleFilterForArray("idStruttura.id", idStrutture));
     

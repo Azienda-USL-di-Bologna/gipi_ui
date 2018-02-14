@@ -47,7 +47,8 @@ export const rootRouterConfig: Routes = [
   { path: "iter-procedimento", component: IterProcedimentoComponent, data: {breadcrumb: "Nuovo Iter"} },
   { path: "app-test-tree", component: TestTreeComponent },
   { path: "app-lista-iter", component: ListaIterComponent, data: {breadcrumb: "Lista Iter"}},
-  { path: "avvia-nuovo-iter-da-documento", component: AvviaNuovoIterDaDocumentoComponent },
+  { path: "avvia-nuovo-iter-da-documento", component: AvviaNuovoIterDaDocumentoComponent, canActivate: [LoginGuard], data: {breadcrumb: "Nuovo Iter"} }
+  { path: "app-cambio-di-stato", canActivate: [LoginGuard], component: CambioDiStatoComponent, data: {breadcrumb: "Cambio di stato"}
   { path: "app-cambio-di-stato", canActivate: [LoginGuard], component: CambioDiStatoComponent, data: {breadcrumb: "Cambio di stato"}}
 ];
 
