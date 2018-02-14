@@ -5,11 +5,10 @@
 <dx-form
   [(formData)]="iterParams">
   <dxi-item itemType="group">
-    <dxi-item dataField="dataCreazioneIter" editorType="dxDateBox" format="dd/mm/yyyy" [label]="{text: 'Data creazione iter'}" [editorOptions]="{ disabled: true }"></dxi-item>
-    <dxi-item dataField="dataAvvioIter" editorType="dxDateBox" [label]="{text: 'Data avvio iter'}" [editorOptions]="{ disabled: false, max: now }"></dxi-item>
-    <dxi-item dataField="dataMassimaConclusione" editorType="dxDateBox" [label]="{text: 'Data massima conclusione'}" 
-      [editorOptions]="{ disabled: true, 
-        value: setDataMax() }"></dxi-item>
+    <dxi-item dataField="dataCreazioneIter" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data creazione iter'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+    <dxi-item dataField="dataAvvioIter" editorType="dxDateBox" format="dd/mm/yyyy" [label]="{text: 'Data avvio iter'}" [editorOptions]="{ disabled: false, max: now, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+    <dxi-item dataField="dataMassimaConclusione" editorType="dxDateBox" format="dd/mm/yyyy" [label]="{text: 'Data massima conclusione'}" 
+      [editorOptions]="{ disabled: true, value: setDataMax(), displayFormat: 'dd/MM/yyyy' }"></dxi-item>
     <dxi-item dataField="oggettoIter" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
     <dxi-item dataField="idUtenteResponsabile" editorType="dxLookup" [label]="{text: 'Responsabile procedimento'}"
       [editorOptions]="{
@@ -23,9 +22,9 @@
     <!-- ColCount e colSpan sono chiaramente esagerati. Questo perché colCount=3 e poi i 3 item con colSpa=1 non funziona.  -->
     <dxi-item itemType="group" [colCount]="3001" [label]="{text: 'Documento'}">
       <dxi-item itemType="empty" [colSpan]="1"></dxi-item>
-      <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1000" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: false }"></dxi-item>
-      <dxi-item dataField="numeroDocumento" [colSpan]="1000" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: false }"></dxi-item>
-      <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: false}"></dxi-item> 
+      <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1000" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: avviaIterDaDocumento }"></dxi-item>
+      <dxi-item dataField="numeroDocumento" [colSpan]="1000" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento }"></dxi-item>
+      <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento}"></dxi-item> 
     </dxi-item>
     <dxi-item dataField="promotoreIter" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
   </dxi-item>
