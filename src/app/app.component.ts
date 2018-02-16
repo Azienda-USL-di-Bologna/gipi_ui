@@ -8,8 +8,8 @@ import { Ruolo } from "./classi/server-objects/entities/ruolo";
 import { Subscription } from "rxjs/Subscription";
 import {LOGOUT_URL, ODATA_BASE_URL} from "../environments/app.constants";
 import { SidebarItem } from "@bds/nt-angular-context/templates/sidebar/sidebar.component";
-import { $ } from "protractor";
 import { LoggedUser } from "./authorization/logged-user";
+import * as $ from 'jquery';
 
 @Component({
     selector: "app-root",
@@ -151,6 +151,13 @@ export class AppComponent implements OnInit, OnDestroy {
             // window.location.href = "https://gdml.internal.ausl.bologna.it/Shibboleth.sso/Logout";
             window.location.href = LOGOUT_URL;
         }
+    }
+
+    onProfileBtnClick(e) {
+        var btn = $(e.currentTarget);
+        btn.toggleClass('focus');
+        btn.blur();
+        $('#userDropdown').toggleClass('show');
     }
 
     getContentBodyClasses(){

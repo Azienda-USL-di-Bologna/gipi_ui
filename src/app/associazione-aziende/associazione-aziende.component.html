@@ -11,7 +11,7 @@
                 <div class="dx-field-label">Descrizione</div>
                 <!-- descrizione -->
                 <div class="dx-field-value">
-                    <dx-text-area [height]="90" [(value)]="procedimento.descrizioneDefault" [disabled]="true">
+                    <dx-text-area [height]="90" [(value)]="procedimento.descrizioneDefault" [readOnly]="true" focusStateEnabled="false">
                     </dx-text-area>
                 </div>
                 <!-- end descrizione -->
@@ -21,7 +21,7 @@
                 <div class="dx-field-label">Modo apertura</div>
                 <!-- modo apertura -->
                 <div class="dx-field-value">
-                    <dx-text-box [value]="procedimento.modoApertura" [disabled]="true">
+                    <dx-text-box [value]="procedimento.modoApertura" [readOnly]="true" focusStateEnabled="false">
                     </dx-text-box>
                 </div>
                 <!-- end mod apertura -->
@@ -31,7 +31,7 @@
                 <div class="dx-field-label">Norma di riferimento</div>
                 <!-- norma di rifermineto -->
                 <div class="dx-field-value">
-                    <dx-text-area [height]="90" [(value)]="procedimento.normaRiferimento" [disabled]="true">
+                    <dx-text-area [height]="90" [(value)]="procedimento.normaRiferimento" [readOnly]="true" focusStateEnabled="false">
                     </dx-text-area>
                 </div>
                 <!-- end norma di rifermineto -->
@@ -41,7 +41,7 @@
                 <div class="dx-field-label">Valido dal</div>
                 <!-- valido dal -->
                 <div class="dx-field-value">
-                    <dx-date-box type="date" [displayFormat]="'dd/MM/yyyy'" [disabled]="true" [value]="procedimento.dataInizioValidita">
+                    <dx-date-box type="date" [displayFormat]="'dd/MM/yyyy'" [readOnly]="true"  [value]="procedimento.dataInizioValidita">
                     </dx-date-box>
                 </div>
                 <!-- end valido dal -->
@@ -51,7 +51,7 @@
                 <div class="dx-field-label">Valido al</div>
                 <!-- valido al -->
                 <div class="dx-field-value">
-                    <dx-date-box type="date" [displayFormat]="'dd/MM/yyyy'" [disabled]="true" [value]="procedimento.dataFineValidita">
+                    <dx-date-box type="date" [displayFormat]="'dd/MM/yyyy'" [readOnly]="true"  [value]="procedimento.dataFineValidita">
                     </dx-date-box>
                 </div>
                 <!-- end valido al -->
@@ -61,7 +61,7 @@
                 <div class="dx-field-label">Durata massima sospensione (gg)</div>
                 <!-- durata max sospensione -->
                 <div class="dx-field-value">
-                    <dx-text-box [value]="procedimento.durataMassimaSospensione" [disabled]="true">
+                    <dx-text-box [value]="procedimento.durataMassimaSospensione" [readOnly]="true"  focusStateEnabled="false">
                     </dx-text-box>
                 </div>
                 <!-- end durata max sospensione -->
@@ -76,7 +76,7 @@
             <div style="margin-bottom: 8px;" *ngFor="let azienda of aziende">
                 <div class="row">
                     <div class="col">
-                        <dx-check-box [value]="procedimento.aziendeAssociate[azienda.id] ? true : false" [disabled]="true" #checkAssociata></dx-check-box>
+                        <dx-check-box [value]="procedimento.aziendeAssociate[azienda.id] ? true : false" [readOnly]="true" #checkAssociata></dx-check-box>
                         <span>{{azienda.descrizione}}</span>
                     </div>
 

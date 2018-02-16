@@ -32,9 +32,8 @@
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
     <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
     <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni">
-        <a routerLink="/associazione-aziende" routerLinkActive="active">
-            <dx-button text="" hint="Associazione alle Aziende" icon='preferences' (onClick)="handleEvent('associaClicked', $event)" ></dx-button>
-        </a>
+
+        <dx-button text="" hint="Associazione alle Aziende" icon='preferences' (onClick)="handleEvent('associaClicked', $event)" ></dx-button>
         <dx-button text="" hint="Modifica dettagli tipo procedimento" icon='edit' (onClick)="handleEvent('editClicked', $event)"></dx-button>
     </div>
     <dxi-column dataField="descrizioneDefault" [visible]="false"></dxi-column>
@@ -64,7 +63,7 @@
         <dxo-form colCount="2">
             <dxi-item dataField="codice" [colSpan]="2"></dxi-item>
             <dxi-item dataField="nome" [colSpan]="2"></dxi-item>
-            <dxi-item dataField="descrizioneDefault" [colSpan]="2"></dxi-item>
+            <dxi-item dataField="descrizioneDefault" editorType="dxTextArea" [editorOptions]="{ height: 70 }" [colSpan]="2"></dxi-item>
             <dxi-item dataField="modoApertura" [colSpan]="2"></dxi-item>
             <dxi-item dataField="normaRiferimento" [colSpan]="2"></dxi-item>
             <dxi-item dataField="dataInizioValidita" [colSpan]="1"></dxi-item>
