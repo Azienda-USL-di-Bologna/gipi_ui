@@ -21,7 +21,8 @@ import { GlobalContextService } from "@bds/nt-angular-context";
 export class AvviaNuovoIterComponent implements OnInit {
 
   private odataContextDefinition: OdataContextDefinition;
-
+  
+  public avviaIterDaDocumento: boolean;
   public dataSourceUtenti: any;
   public iterParams: IterParams = new IterParams();
   public nomeProcedimento: string;
@@ -37,11 +38,13 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams = new IterParams();
     this.iterParams.dataCreazioneIter = new Date();
     this.buildProcedimento(procedimento);
+    this.avviaIterDaDocumento = false;
   }
 
   @Input()
   set procedimentoSelezionatoDaDocumento(procedimento: any) {
     this.buildProcedimento(procedimento);
+    this.avviaIterDaDocumento = true;
   }
 
   @Input()
@@ -104,6 +107,11 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   private campiObbligatoriCompilati() {
+    if (this.iterParams.idProcedimento == null) {
+      this.showStatusOperation("Per avviare un nuovo iter devi selezionare un procedimento", "warning");
+      return false;
+    }
+
     if (this.iterParams.dataAvvioIter == null || this.iterParams.oggettoIter == null || this.iterParams.oggettoIter === "" ||
       this.iterParams.numeroDocumento == null || this.iterParams.annoDocumento == null || this.iterParams.codiceRegistroDocumento == null ||
       this.iterParams.codiceRegistroDocumento === "") {
@@ -118,13 +126,17 @@ export class AvviaNuovoIterComponent implements OnInit {
     if (this.campiObbligatoriCompilati()) {
       const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({}, this.iterParams))
         .subscribe(
-        res => {
-          let idIter = +res["idIter"];
-          this.closePopUp(idIter);
-        },
-        err => {
-          this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
-        }
+          res => {
+            if (this.avviaIterDaDocumento) {
+              this.showStatusOperation("Nuovo Iter avviato", "success");
+            } else {
+              let idIter = +res["idIter"];
+              this.closePopUp(idIter);
+            }
+          },
+          err => {
+            this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+          }
         );
     }
   }
@@ -169,7 +181,6 @@ export class AvviaNuovoIterComponent implements OnInit {
     }
     return this.dataMassimaConclusione;
   }
-
 }
 
 class IterParams {

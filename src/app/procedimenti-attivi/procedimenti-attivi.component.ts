@@ -94,7 +94,6 @@ export class ProcedimentiAttiviComponent {
         idStrutture.push(struttura.ID);
       });
     }
-    console.log(this.utility.buildMultipleFilterForArray("idStruttura.id", idStrutture));
     // Ora mi creo l'array-filtro e filtro
     this.dataSourceProcedimenti.filter(this.utility.buildMultipleFilterForArray("idStruttura.id", idStrutture));
     
