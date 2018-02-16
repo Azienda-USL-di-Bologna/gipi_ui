@@ -1,9 +1,23 @@
-<div class="whitePanel customForm">
+<div>
   <dx-form
   [(formData)]="_sospensioneParams"
   validationGroup="sospensioneParams"
   [showValidationSummary]="true"
-  class="col-6 d-inline-block text-left">
+  >
+
+  <!-- <dxi-item itemType="group" [colCount]="3001" [label]="{text: 'Documento'}">
+    <dxi-item itemType="empty" [colSpan]="1"></dxi-item>
+    <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1000" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: docFieldDisabled }">
+      <dxi-validation-rule type="required" message="Il registro del documento è obbligatorio"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item dataField="numeroDocumento" [colSpan]="1000" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: docFieldDisabled }">
+      <dxi-validation-rule type="required" message="Il numero del documento è obbligatorio"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'Anno', showColon: true}" [editorOptions]="{disabled: docFieldDisabled }">
+      <dxi-validation-rule type="required" message="L'anno del documento è obbligatorio"></dxi-validation-rule>
+    </dxi-item> 
+  </dxi-item>   -->
+
     <dxi-item itemType="group">
       <dxi-item dataField="statoCorrente" [label]="{text: 'Stato corrente'}" [editorOptions]="{ disabled: true }">
           <dxi-validation-rule type="required" message="Occorre prima selezionare un Iter dalla lista soprastante"></dxi-validation-rule>    
@@ -25,7 +39,7 @@
   </dx-form>
 
   <br/>  
-  <div class="buttons col-6 text-right d-inline-block">
+  <div class="buttons text-right">
     <dx-button text="Annulla" [type]="'normal'">
     </dx-button>
     <dx-button text="Salva" [useSubmitBehavior]="true" validationGroup="sospensioneParams" (click)="handleSubmit($event)">

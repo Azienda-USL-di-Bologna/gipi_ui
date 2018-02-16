@@ -15,13 +15,14 @@ import notify from "devextreme/ui/notify";
   templateUrl: './cambio-di-stato-box.component.html',
   styleUrls: ['./cambio-di-stato-box.component.scss']
 })
-export class CambioDiStatoBoxComponent {
+export class CambioDiStatoBoxComponent implements OnInit{
 
   public _sospensioneParams : SospensioneParams;
   public statiIter: string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
   public statiIterService: string[] = new Array();
   public prova : DataSource;
   public _userInfo: UserInfo;
+  public docFieldDisabled: boolean;
 
   @Input() set userInfo(value: UserInfo){
     this._userInfo = value;
@@ -36,6 +37,12 @@ export class CambioDiStatoBoxComponent {
     this.statiIterService[this.statiIter[0]] = "iter_in_corso";
     this.statiIterService[this.statiIter[1]] = "apertura_sospensione";
     this.statiIterService[this.statiIter[2]] = "chiusura_iter";
+  }
+
+  ngOnInit() {
+    if(this._sospensioneParams.codiceRegistroDocumento){
+      this.docFieldDisabled = true;
+    }
   }
 
    handleSubmit(e){

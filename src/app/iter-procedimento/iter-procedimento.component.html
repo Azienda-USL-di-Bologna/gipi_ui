@@ -156,6 +156,7 @@
     [closeOnOutsideClick]="true"
     [(visible)]="sospensioneIterVisible">
     <div *dxTemplate="let data of 'content'">
-        <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter>
+        <app-cambio-di-stato-box [sospensioneParams]="paramsPerSospensione"></app-cambio-di-stato-box>
+        <!-- <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter> -->
     </div>
 </dx-popup>

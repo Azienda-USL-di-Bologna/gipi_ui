@@ -7,6 +7,7 @@ import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-p
 import { ActivatedRoute, Params } from "@angular/router";
 import { Observable } from "rxjs/Observable";
 import { Subscription } from "rxjs/Subscription";
+import { Iter } from "../classi/server-objects/entities/iter";
 
 @Component({
   selector: 'app-cambio-di-stato',
@@ -18,11 +19,18 @@ export class CambioDiStatoComponent implements OnInit {
   public sospensioneParams : SospensioneParams;
   public infoDocumento: InfoDocumento;
   public userInfo: UserInfo;
+  public selectedIter: string = "Selezionare un iter dalla tabella";
 
   public loggedUser$: Observable<LoggedUser>;
   private subscriptions: Subscription[] = [];
 
   constructor( private activatedRoute: ActivatedRoute, private globalContextService: GlobalContextService) { 
+    if(!this.userInfo){
+      this.recuperaUserInfo();
+    }
+   }
+
+  ngOnInit() {
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
       this.infoDocumento = {
         registro: queryParams["registro"],
@@ -32,27 +40,10 @@ export class CambioDiStatoComponent implements OnInit {
         dataRegistrazione: queryParams["dataRegistrazione"]
       }
     });
-    if(!this.userInfo){
-      this.recuperaUserInfo();
-    }
-    console.log("user info constructo", this.userInfo);
-    
-   }
-
-  inizializza() {
-      this.sospensioneParams = new SospensioneParams();
-      
-      // this.sospensioneParams.idIter = 113; //this.daInput.iter.id
-  
-      // this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
-      // this.sospensioneParams.idUtente = this.loggedUser.idUtente;
-      // this.sospensioneParams.dataCambioDiStato = new Date(); //this.daInput.dataSospensione
-      // this.sospensioneParams.note = "bla bla bla"
-  }
-
-  ngOnInit() {
-    this.inizializza();
-    this.recuperaUserInfo();
+    this.sospensioneParams = new SospensioneParams();
+    this.sospensioneParams.annoDocumento = this.infoDocumento.anno;
+    this.sospensioneParams.numeroDocumento = this.infoDocumento.numero;
+    this.sospensioneParams.codiceRegistroDocumento = this.infoDocumento.registro;
   }
 
   recuperaUserInfo(){
@@ -66,7 +57,6 @@ export class CambioDiStatoComponent implements OnInit {
                     idAzienda:  loggedUser.aziendaLogin.id,
                     cf: "GSLFNC89A05G224Y"
                   }
-                  console.log("user info appena messo", this.userInfo)
                 }
             }
         )
@@ -74,15 +64,10 @@ export class CambioDiStatoComponent implements OnInit {
   }
 
   selectedRowChanged(e){
-    
-    console.log("emitted event recived", e)
-    this.sospensioneParams = new SospensioneParams();
+    console.log("Iter: ", e)
+    this.selectedIter = "Iter selezionato: " + e.numero + "/" + e.anno;
     this.sospensioneParams.idIter = e.id;
     this.sospensioneParams.statoCorrente = e.stato;
-    this.sospensioneParams.annoDocumento = this.infoDocumento.anno;
-    this.sospensioneParams.numeroDocumento = this.infoDocumento.numero;
-    this.sospensioneParams.codiceRegistroDocumento = this.infoDocumento.registro;
-    // this.sospensioneParams.numeroDocumento = e.
   }
 
 }

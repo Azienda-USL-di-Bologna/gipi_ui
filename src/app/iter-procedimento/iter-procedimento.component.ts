@@ -18,6 +18,7 @@ import { ButtonAppearance } from "@bds/nt-angular-context/templates/buttons-bar/
 import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
 import { log } from "util";
 import * as moment from "moment";
+import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stato-box.component";
 
 
 
