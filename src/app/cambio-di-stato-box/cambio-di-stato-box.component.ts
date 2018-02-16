@@ -20,9 +20,10 @@ export class CambioDiStatoBoxComponent implements OnInit{
   public _sospensioneParams : SospensioneParams;
   public statiIter: string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
   public statiIterService: string[] = new Array();
-  public prova : DataSource;
   public _userInfo: UserInfo;
-  public docFieldDisabled: boolean;
+  // public docFieldDisabled: boolean;
+  public showPopupRiassunto: boolean = false;
+  public showPopupAnnullamento : boolean = false
 
   @Input() set userInfo(value: UserInfo){
     this._userInfo = value;
@@ -40,9 +41,9 @@ export class CambioDiStatoBoxComponent implements OnInit{
   }
 
   ngOnInit() {
-    if(this._sospensioneParams.codiceRegistroDocumento){
-      this.docFieldDisabled = true;
-    }
+    // if(this._sospensioneParams.codiceRegistroDocumento){
+    //   this.docFieldDisabled = true;
+    // }
   }
 
    handleSubmit(e){
@@ -72,6 +73,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
           },
           width: "max-content"
         });
+        this.showPopupRiassunto = true;
       },
       err => {
         notify({
@@ -86,6 +88,15 @@ export class CambioDiStatoBoxComponent implements OnInit{
       }
     );
    }
+
+  handleClose(){
+    window.close();
+  }
+
+  handleAnnulla(){
+    this.showPopupAnnullamento = !this.showPopupAnnullamento;
+  }
+
 }
 
 interface ShippedParams {
