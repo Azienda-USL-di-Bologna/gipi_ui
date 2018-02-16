@@ -24,7 +24,7 @@
     <div class="col-3">
       <dx-button class="padding-button allinea-a-sinistra" (onClick)="showPopup()" text="Associa a strutture" hint="Associa a strutture"></dx-button>
       <strutture-tree #treeView [idAzienda]=idAziendaFront [nodesToCheckSelectedStatus]="nodeInvolved" [popupVisible]="popupVisible"
-        [idAziendaTipoProcedimento]=idAziendaTipoProcedimentoFront [readOnly]="true" [enableCheckRecursively]="false" (strutturaSelezionata)="selezionaStruttura($event)"></strutture-tree>
+        [idAziendaTipoProcedimento]=idAziendaTipoProcedimentoFront [readOnly]="true" focusStateEnabled="false" [enableCheckRecursively]="false" (strutturaSelezionata)="selezionaStruttura($event)"></strutture-tree>
     </div>
 
     <div class="col-8" id="center-div">

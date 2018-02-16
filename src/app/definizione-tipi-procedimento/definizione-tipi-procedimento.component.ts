@@ -148,6 +148,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
       case "associaClicked":
         // console.log("entrato in associaClicked");
+        this.router.navigate(['/associazione-aziende']);
         this.comando = null;
         break;
 
@@ -163,10 +164,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
         break;
 
       case "onEditorPreparing":
-        if (event.dataField === "descrizioneDefault") {
-          event.editorName = "dxTextArea";
-          event.editorOptions.height = 70;
-        } else if (event.dataField === "modoApertura") {
+        if (event.dataField === "modoApertura") {
           event.editorName = "dxSelectBox";
           event.editorOptions.items = ["Ufficio", "Istanza"];
         }
