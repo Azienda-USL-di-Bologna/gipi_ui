@@ -15,9 +15,6 @@
 
 }
 
-.btn {
-  color: white;
-}
 
 .dropdown-menu {
   box-shadow: 0 0 3px rgba(0,0,0,.15);
@@ -63,7 +60,7 @@
   border-width: 1px;
   border-style: solid;
   padding: 7px 18px 8px;
-  cursor: pointer;
+  // cursor: pointer;
 }
 
 /deep/ .button-azioni:hover {
@@ -191,9 +188,14 @@
 //   left: 0;
 //   right: 0;
 // }
+
 .clFooter {
-  display: table-footer-group
-}
+  //  display: table-footer-group
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
 #sidebar-toggle-button {
   height: 36px;
   width: 36px;
@@ -219,11 +221,11 @@
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
-.sidebar-style {
+/deep/ .sidebar-style {
   top: 0;
   left: 0;
   height: 100%;
-  z-index: 999;
+  z-index: 999 !important;
   transition: all 0.3s;
   position: fixed;
   padding: 0 5px 0 0;
@@ -231,7 +233,8 @@
 /deep/ .sidebar-style .main-menu{
   background-color: rgba(32, 50, 68, 0.9803921568627451) !important;
   border: none !important;
-  box-shadow: 0 0 5px rgba(0,0,0,.7); 
+  box-shadow: 0 0 5px rgba(0,0,0,.7);
+  min-width: 160px;
 }
 /deep/ .sidebar-style .main-menu li{
   color: rgba(255,255,255,.87) !important;
@@ -295,9 +298,28 @@
 .floatRight{
   float: right;
 }
-.logout{
-  cursor: pointer;
-}
+//.logout{
+//  cursor: pointer;
+//}
 .dropdown-toggle::after{
   border: none;
+}
+
+.btn, .toggle, .logout {
+  cursor: pointer;
+}
+
+#userDropdownToggle {
+  width: 36px;
+  height: 36px;
+}
+
+#userDropdown {
+  left: -250px;
+  top: 40px;
+}
+
+.image-btn {
+  background-image: attr(data-btn-bgimage);
+
 }

@@ -42,7 +42,7 @@
                 </dxi-item>
     
                 <dxi-item [colSpan]="1">
-                    <button class="button-azioni" type="button" (click)="updateNoteControInteressati()" >Note</button>
+                    <button class="btn button-azioni" type="button" (click)="updateNoteControInteressati()" >Note</button>
                     <!-- <dx-button text="Note controinteressati" type="default" (onClick)="updateNoteControInteressati()"></dx-button> -->
                 </dxi-item>
     
@@ -55,7 +55,7 @@
                 <dxi-item [colSpan]="1" dataField="esito" cssClass="fix-bug-dx" [editorOptions]="{ disabled: true }"></dxi-item>
     
                 <dxi-item [colSpan]="1">
-                    <button class="button-azioni" type="button" (click)="updateEsitoMotivazione()" >Motivazione</button>
+                    <button class="btn button-azioni" type="button" (click)="updateEsitoMotivazione()" >Motivazione</button>
                     <!-- <dx-button text="Motivazione" type="default" (onClick)="updateEsitoMotivazione()"></dx-button> -->
                 </dxi-item>
             </dxi-item>
@@ -156,6 +156,7 @@
     [closeOnOutsideClick]="true"
     [(visible)]="sospensioneIterVisible">
     <div *dxTemplate="let data of 'content'">
-        <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter>
+        <app-cambio-di-stato-box [sospensioneParams]="paramsPerSospensione"></app-cambio-di-stato-box>
+        <!-- <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter> -->
     </div>
 </dx-popup>

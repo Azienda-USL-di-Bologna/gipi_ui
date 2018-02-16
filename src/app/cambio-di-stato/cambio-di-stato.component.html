@@ -1,8 +1,13 @@
-<div class="container">
-  <div class="mb-3">
-      <app-lista-iter-con-permessi (selectedRow)="selectedRowChanged($event)" [userInfo]="userInfo"></app-lista-iter-con-permessi>
-  </div>
-  <div class="mb-3">
-      <app-cambio-di-stato-box [sospensioneParams]="sospensioneParams" [userInfo]="userInfo"></app-cambio-di-stato-box>
-  </div>
+<div class="container whitePanel">
+    <h2 class="text-center mb-3">PG {{sospensioneParams.numeroDocumento}}/{{sospensioneParams.annoDocumento}}</h2>
+    <div class="mb-3">
+        <app-lista-iter-con-permessi (selectedRow)="selectedRowChanged($event)" [userInfo]="userInfo"></app-lista-iter-con-permessi>
+    </div>
+    <hr class="m-4"/>
+    <h3 class="mb-3 text-center">{{selectedIter}}</h3>
+    <div class="mb-3 text-center">
+        <div class="d-inline-block col col-lg-8">
+            <app-cambio-di-stato-box [sospensioneParams]="sospensioneParams" [userInfo]="userInfo"></app-cambio-di-stato-box>
+        </div>
+    </div>
 </div>

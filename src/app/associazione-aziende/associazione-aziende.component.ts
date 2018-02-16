@@ -82,6 +82,10 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
         );*/
     }
 
+    onEditorFocus(e) {
+        
+    }
+
     ngOnDestroy() {
         this.subscriptions.forEach(
             (subscrition: Subscription) => {

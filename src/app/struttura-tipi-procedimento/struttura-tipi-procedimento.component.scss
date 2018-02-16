@@ -83,3 +83,7 @@
  .dx-popup-content{
     padding:0px;
 }
+
+/deep/ .tree-readonly .dx-checkbox-checked .dx-checkbox-icon, .tree-readonly span {
+    color: lightslategrey !important;
+}
