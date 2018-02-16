@@ -148,7 +148,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
       case "associaClicked":
         // console.log("entrato in associaClicked");
-        this.router.navigate(['/associazione-aziende']);
+        this.router.navigate(["/associazione-aziende"]);
         this.comando = null;
         break;
 

@@ -5,6 +5,8 @@ import { LoggedUser } from "../authorization/logged-user";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
 import DataSource from "devextreme/data/data_source";
 import { Entities } from "environments/app.constants";
+import { DxDataGridComponent } from "devextreme-angular";
+import { TipoProcedimento } from "../classi/server-objects/entities/tipo-procedimento";
 
 @Component({
   selector: "tipi-procedimento-aziendali",
@@ -14,9 +16,12 @@ import { Entities } from "environments/app.constants";
 export class TipiProcedimentoAziendaliComponent implements OnInit {
   private odataContextDefinition: OdataContextDefinition;
   public dataSourceProcedimenti: DataSource;
+  public popupVisible: boolean = false;
   public loggedUser: LoggedUser;
   public idAzienda: number;
   public descAzienda: string;
+  public procedimentoDaPassare: TipoProcedimento;
+  public grid: DxDataGridComponent;
 
   constructor(private odataContextFactory: OdataContextFactory, 
     public router: Router,
@@ -42,5 +47,20 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
     
   }
 
+
+  handleEvent(event: any) {
+    // console.log("EVENTO LOGGING: ...  ", event.data);
+    // console.log("EVENTO LOGGING: INDEX->  ", event.row);
+    // this.grid.instance.editRow(event.row.rowIndex);
+    // this.popupVisible = true;
+    this.procedimentoDaPassare = event.data;
+    console.log(this.procedimentoDaPassare);
+
+  }
   
+  openPopup() {
+    console.log("onpopup");
+    console.log("popupVisible? ", this.popupVisible);
+    this.popupVisible = true;
+  }
 }

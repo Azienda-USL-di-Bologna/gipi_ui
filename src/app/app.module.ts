@@ -46,6 +46,7 @@ import {AuthenticationJwtModule} from "./authentication-jwt/authentication-jwt.m
 import { LoginComponent } from "./login/login.component";
 import {NoLoginGuard} from "./authorization/guards/no-login.guard";
 import {LoginGuard} from "./authorization/guards/login.guard";
+import {RoleGuard} from "./authorization/guards/role.guard";
 
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
@@ -67,11 +68,12 @@ import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/pa
 import { SospensioneIterComponent } from "./iter-procedimento/sospensione-iter/sospensione-iter.component";
 import { ListaIterComponent } from "./lista-iter/lista-iter.component";
 import { AfterLoginComponent } from "./after-login/after-login.component";
-import { AvviaNuovoIterDaDocumentoComponent } from './procedimenti-attivi/avvia-nuovo-iter-da-documento/avvia-nuovo-iter-da-documento.component';
-import { ListaIterConPermessiComponent } from './cambio-di-stato/lista-iter-con-permessi/lista-iter-con-permessi.component';
-import { CambioDiStatoBoxComponent } from './cambio-di-stato-box/cambio-di-stato-box.component';
-import { CambioDiStatoComponent } from './cambio-di-stato/cambio-di-stato.component';
-import { TipiProcedimentoAziendaliComponent } from './tipi-procedimento-aziendali/tipi-procedimento-aziendali.component';
+import { AvviaNuovoIterDaDocumentoComponent } from "./procedimenti-attivi/avvia-nuovo-iter-da-documento/avvia-nuovo-iter-da-documento.component";
+import { ListaIterConPermessiComponent } from "./cambio-di-stato/lista-iter-con-permessi/lista-iter-con-permessi.component";
+import { CambioDiStatoBoxComponent } from "./cambio-di-stato-box/cambio-di-stato-box.component";
+import { CambioDiStatoComponent } from "./cambio-di-stato/cambio-di-stato.component";
+import { TipiProcedimentoAziendaliComponent } from "./tipi-procedimento-aziendali/tipi-procedimento-aziendali.component";
+import { DettaglioTipoProcedimentoComponent } from "./tipi-procedimento-aziendali/dettaglio-tipo-procedimento/dettaglio-tipo-procedimento.component";
 
 
 
@@ -107,7 +109,8 @@ import { TipiProcedimentoAziendaliComponent } from './tipi-procedimento-aziendal
         ListaIterConPermessiComponent,
         CambioDiStatoBoxComponent,
         CambioDiStatoComponent,
-        TipiProcedimentoAziendaliComponent
+        TipiProcedimentoAziendaliComponent,
+        DettaglioTipoProcedimentoComponent
     ],
     imports: [
         BrowserModule,
@@ -141,7 +144,7 @@ import { TipiProcedimentoAziendaliComponent } from './tipi-procedimento-aziendal
         DxSwitchModule,
         ContextModule.forRoot(contextModuleConfig),
     ],
-    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard,
+    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard, RoleGuard,
         // NavbarService
     ],
     bootstrap: [AppComponent],

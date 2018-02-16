@@ -1,79 +1,40 @@
 <h3 class="intestazione" style="text-align: center">Tipi procedimento aziendali di {{descAzienda}}</h3>
 
-<div class="whitePanel">
-  <dx-data-grid  #gridContainer id="gridContainer"
-    style="align-content: center"
-    [dataSource]="dataSourceProcedimenti"
-    [customizeColumns]="customizeColumns"
-    columnResizingMode="nextColumn"
-    hoverStateEnabled="checkBoxState"
-    noDataText="Non ci sono procedimenti attivi">
+<div class="col-10 offset-1 whitePanel">
 
-  <dxo-paging [pageSize]="10"></dxo-paging>
+     <dx-data-grid
+      style="align-content: center"
+      [dataSource]="dataSourceProcedimenti"
+      [customizeColumns]="customizeColumns"
+      columnResizingMode="nextColumn"
+      hoverStateEnabled="checkBoxState"
+      noDataText="Non ci sono procedimenti attivi"
+      (onCellClick)="handleEvent($event)"    >
   
-  <!-- Qui cominciano i dati -->
-  <dxi-column dataField="nome" caption="Tipo Procedimento" ></dxi-column>
-  <!-- <dxi-column dataField="descrizioneDefault" caption="Descrizione"></dxi-column> -->
-  <dxi-column dataField="dataInizioValidita" caption="Valido dal" alignment="center" [dataType]="'date'" [format]="'dd/MM/yyyy'"></dxi-column>
-  <dxi-column dataField="durataMassimaIter" caption="Durata massima dell'iter (gg)" alignment="center"  [dataType]="'date'" [format]="'dd/MM/yyyy'"></dxi-column>
-  <dxi-column dataField="durataMassimaSospensione" caption="Durata massima della sospensione (gg)" alignment="center" [dataType]="'date'" [format]="'dd/MM/yyyy'"></dxi-column>
-  <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
-  <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni" width="auto">
-      <dx-button text="" hint="Modifica dettagli tipo procedimento" icon='edit' (onClick)="handleEvent('editClicked', $event)"></dx-button>
-  </div>
-
-
+      <dxo-paging [pageSize]="10"></dxo-paging>
+      
+      <!-- Qui cominciano i dati -->
+      <dxi-column dataField="nome" caption="Tipo Procedimento" ></dxi-column>
+      <!-- <dxi-column dataField="descrizioneDefault" caption="Descrizione"></dxi-column> -->
+      <dxi-column dataField="dataInizioValidita" caption="Valido dal" alignment="center" [dataType]="'date'" [format]="'dd/MM/yyyy'"></dxi-column>
+      <dxi-column dataField="durataMassimaIter" caption="Durata massima dell'iter (gg)" alignment="center"  [dataType]="'date'" [format]="'dd/MM/yyyy'"></dxi-column>
+      <dxi-column dataField="durataMassimaSospensione" caption="Durata massima della sospensione (gg)" alignment="center" [dataType]="'date'" [format]="'dd/MM/yyyy'"></dxi-column>
+      <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
+      <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni" width="auto">
+          <dx-button text="" hint="Modifica dettagli tipo procedimento" icon='edit' (click)="openPopup()"></dx-button>
+      </div>
+    </dx-data-grid>
   
-  <!-- 
 
-    Tipo di procedimento
-    Azienda
-    Descrizione aziendale del tipo di procedimento (default descrizione da tipo procedimento, modificabile)
-    Durata massima in gg iter (default da tipo procedimento, modificabile)
-    Durata massima in gg sospensione (default da tipo procedimento, modificabile)
-    Classificazione (collegamento al titolario, a un ramo a qualsiasi livello)
-    Riferimenti a regolamenti/procedure interni - testo libero
-    Obbligatorio esito conclusivo e motivazione (s/n) (default da tipo procedimento, modificabile)
-    Data inizio validità
-    Data fine validità
-    GG di preavviso scadenza termini
-
-   -->
-  </dx-data-grid>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  <dx-popup
+    title="Dettaglio tipo procedimento"
+    [maxWidth]="800"
+    [minWidth]="500"
+    [height]="600"
+    [showTitle]="true"
+    [visible]="popupVisible">
+    <div *dxTemplate="let data of 'content'">
+      <dettaglio-tipo-procedimento (procedimento)="procedimentoDaPassare"></dettaglio-tipo-procedimento>
+    </div>
+ </dx-popup>
 </div>

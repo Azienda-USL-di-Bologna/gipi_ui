@@ -19,6 +19,8 @@ import { ListaIterComponent } from "app/lista-iter/lista-iter.component";
 import { AvviaNuovoIterDaDocumentoComponent } from "app/procedimenti-attivi/avvia-nuovo-iter-da-documento/avvia-nuovo-iter-da-documento.component";
 import { CambioDiStatoComponent } from "app/cambio-di-stato/cambio-di-stato.component";
 import { TipiProcedimentoAziendaliComponent } from "./tipi-procedimento-aziendali/tipi-procedimento-aziendali.component";
+import { DettaglioTipoProcedimentoComponent } from "./tipi-procedimento-aziendali/dettaglio-tipo-procedimento/dettaglio-tipo-procedimento.component";
+import { RoleGuard } from "./authorization/guards/role.guard";
 
 
 export const rootRouterConfig: Routes = [
@@ -50,6 +52,7 @@ export const rootRouterConfig: Routes = [
   { path: "app-lista-iter", component: ListaIterComponent, data: {breadcrumb: "Lista Iter"}},
   { path: "avvia-nuovo-iter-da-documento", component: AvviaNuovoIterDaDocumentoComponent, canActivate: [LoginGuard], data: {breadcrumb: "Nuovo Iter"} },
   { path: "app-cambio-di-stato", canActivate: [LoginGuard], component: CambioDiStatoComponent, data: {breadcrumb: "Cambio di stato"}},
-  { path: "tipi-procedimento-aziendali", canActivate: [LoginGuard], component: TipiProcedimentoAziendaliComponent, data: {breadcrumb: "Tipi di Procedimento Aziendali"}}
+  { path: "tipi-procedimento-aziendali", canActivate: [LoginGuard, RoleGuard], component: TipiProcedimentoAziendaliComponent, data: {breadcrumb: "Tipi di Procedimento Aziendali", ruoliConcessi: ["CA"]}},
+  { path: "dettaglio-tipo-procedimento", canActivate: [LoginGuard], component: DettaglioTipoProcedimentoComponent, data: {breadcrumb: "Dettaglio Tipo Procedimento"}}
 ];
 
