@@ -18,6 +18,7 @@ import { TestTreeComponent } from "./test/test-tree/test-tree.component";
 import { ListaIterComponent } from "app/lista-iter/lista-iter.component";
 import { AvviaNuovoIterDaDocumentoComponent } from "app/procedimenti-attivi/avvia-nuovo-iter-da-documento/avvia-nuovo-iter-da-documento.component";
 import { CambioDiStatoComponent } from "app/cambio-di-stato/cambio-di-stato.component";
+import { TipiProcedimentoAziendaliComponent } from "./tipi-procedimento-aziendali/tipi-procedimento-aziendali.component";
 
 
 export const rootRouterConfig: Routes = [
@@ -48,6 +49,7 @@ export const rootRouterConfig: Routes = [
   { path: "app-test-tree", component: TestTreeComponent },
   { path: "app-lista-iter", component: ListaIterComponent, data: {breadcrumb: "Lista Iter"}},
   { path: "avvia-nuovo-iter-da-documento", component: AvviaNuovoIterDaDocumentoComponent, canActivate: [LoginGuard], data: {breadcrumb: "Nuovo Iter"} },
-  { path: "app-cambio-di-stato", canActivate: [LoginGuard], component: CambioDiStatoComponent, data: {breadcrumb: "Cambio di stato"}}
+  { path: "app-cambio-di-stato", canActivate: [LoginGuard], component: CambioDiStatoComponent, data: {breadcrumb: "Cambio di stato"}},
+  { path: "tipi-procedimento-aziendali", canActivate: [LoginGuard], component: TipiProcedimentoAziendaliComponent, data: {breadcrumb: "Tipi di Procedimento Aziendali"}}
 ];
 
