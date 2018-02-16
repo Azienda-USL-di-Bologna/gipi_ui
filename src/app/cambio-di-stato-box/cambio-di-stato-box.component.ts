@@ -93,7 +93,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
     window.close();
   }
 
-  handleAnnulla(){
+  handleAnnulla(e){
     this.showPopupAnnullamento = !this.showPopupAnnullamento;
   }
 
