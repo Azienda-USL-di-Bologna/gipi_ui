@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { GlobalContextService } from "@bds/nt-angular-context";
 import { CommonData } from "../authorization/common-data"
@@ -9,9 +9,9 @@ import { Entities } from "../../environments/app.constants";
 import { Ruolo } from "../classi/server-objects/entities/ruolo";
 
 @Component({
-  selector: 'after-login',
-  templateUrl: './after-login.component.html',
-  styleUrls: ['./after-login.component.scss']
+  selector: "after-login",
+  templateUrl: "./after-login.component.html",
+  styleUrls: ["./after-login.component.scss"]
 })
 export class AfterLoginComponent implements OnInit {
 

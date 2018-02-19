@@ -17,7 +17,7 @@ import { Iter } from "../classi/server-objects/entities/iter";
 export class CambioDiStatoComponent implements OnInit {
 
   public sospensioneParams : SospensioneParams;
-  public infoDocumento: InfoDocumento;
+  // public infoDocumento: InfoDocumento;
   public userInfo: UserInfo;
   public selectedIter: string = "Selezionare un iter dalla tabella";
 
@@ -31,19 +31,27 @@ export class CambioDiStatoComponent implements OnInit {
    }
 
   ngOnInit() {
+    // this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
+    //   this.infoDocumento = {
+    //     registro: queryParams["registro"],
+    //     numero: queryParams["numero"],
+    //     anno: queryParams["anno"],
+    //     oggetto: queryParams["oggetto"],
+    //     dataRegistrazione: queryParams["dataRegistrazione"]
+    //   }
+    // });
+
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
-      this.infoDocumento = {
-        registro: queryParams["registro"],
-        numero: queryParams["numero"],
-        anno: queryParams["anno"],
-        oggetto: queryParams["oggetto"],
-        dataRegistrazione: queryParams["dataRegistrazione"]
-      }
+      this.sospensioneParams = new SospensioneParams();
+      this.sospensioneParams.annoDocumento = queryParams["anno"];
+      this.sospensioneParams.numeroDocumento = queryParams["numero"];
+      this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
+      this.sospensioneParams.dataRegistrazioneDocumento = queryParams["dataRegistrazione"];
     });
-    this.sospensioneParams = new SospensioneParams();
-    this.sospensioneParams.annoDocumento = this.infoDocumento.anno;
-    this.sospensioneParams.numeroDocumento = this.infoDocumento.numero;
-    this.sospensioneParams.codiceRegistroDocumento = this.infoDocumento.registro;
+    // this.sospensioneParams = new SospensioneParams();
+    // this.sospensioneParams.annoDocumento = this.infoDocumento.anno;
+    // this.sospensioneParams.numeroDocumento = this.infoDocumento.numero;
+    // this.sospensioneParams.codiceRegistroDocumento = this.infoDocumento.registro;
   }
 
   recuperaUserInfo(){
@@ -66,19 +74,21 @@ export class CambioDiStatoComponent implements OnInit {
   selectedRowChanged(e){
     console.log("Iter: ", e)
     this.selectedIter = "Iter selezionato: " + e.numero + "/" + e.anno;
+    this.sospensioneParams.numeroIter = e.numero;
+    this.sospensioneParams.annoIter = e.anno;
     this.sospensioneParams.idIter = e.id;
     this.sospensioneParams.statoCorrente = e.stato;
   }
 
 }
 
-interface InfoDocumento{
-  registro: string,
-  numero: string,
-  anno: number,
-  oggetto: string,
-  dataRegistrazione: Date,
-}
+// interface InfoDocumento{
+//   registro: string,
+//   numero: string,
+//   anno: number,
+//   oggetto: string,
+//   dataRegistrazione: Date,
+// }
 
 interface UserInfo{
   idUtente: number;
