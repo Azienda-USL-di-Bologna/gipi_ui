@@ -1,0 +1,37 @@
+<div class="conainer fluid">
+  <dx-form
+  [(formData)]="proc">
+    <dxi-item itemType="group"> 
+      <dxi-item dataField="nome" [label]="{text: 'Tipo procedimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item dataField="azienda" [label]="{text: 'Azienda'}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item dataField="descrizioneDefault" [label]="{text: 'Descrizione'}" editorType="dxTextArea" [editorOptions]="{ disabled: false, height: 150 }" ></dxi-item>
+    </dxi-item>
+
+    <dxi-item itemType="group" [colCount]="6">
+      <dxi-item dataField="durataMassimaIter" [colSpan]="3" [label]="{text: 'Durata massima dell\'iter'}" [editorOptions]="{ disabled: false}"></dxi-item>
+      <dxi-item dataField="durataMassimaSospensione" [colSpan]="3" [label]="{text: 'Durata massima di sospensione'}" [editorOptions]="{ disabled: false}"></dxi-item>
+    </dxi-item> 
+
+    <dxi-item itemType="group">
+      <dxi-item dataField="dataInizioValidita" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+    </dxi-item>
+
+  </dx-form>
+</div>
+
+
+  <!-- 
+
+    Tipo di procedimento
+    Azienda
+    Descrizione aziendale del tipo di procedimento (default descrizione da tipo procedimento, modificabile)
+    Durata massima in gg iter (default da tipo procedimento, modificabile)
+    Durata massima in gg sospensione (default da tipo procedimento, modificabile)
+    Classificazione (collegamento al titolario, a un ramo a qualsiasi livello)
+    Riferimenti a regolamenti/procedure interni - testo libero
+    Obbligatorio esito conclusivo e motivazione (s/n) (default da tipo procedimento, modificabile)
+    Data inizio validità
+    Data fine validità
+    GG di preavviso scadenza termini
+
+   -->

@@ -37,10 +37,6 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
   };
   public popupButtons: any[];
 
-  public filterOperationDescriptions: Object = {"contains": "contiene", "notContains": "non contiene", "equal": "uguale", "notEqual": "diverso",
-    "startsWith": "comincia con",  "endsWith": "finisce con", "between": "compreso tra", "greaterThan": "maggiore di",
-    "greaterThanOrEqual": "maggiore o uguale a", "lessThan": "minore di", "lessThanOrEqual": "minore o uguale a" };
-
   constructor(private odataContexFactory: OdataContextFactory,
               private service: DefinizioneTipiProcedimentoService,
               private router: Router,
@@ -148,7 +144,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
       case "associaClicked":
         // console.log("entrato in associaClicked");
-        this.router.navigate(['/associazione-aziende']);
+        this.router.navigate(["/associazione-aziende"]);
         this.comando = null;
         break;
 
