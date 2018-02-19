@@ -29,14 +29,4 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
     console.log("ngOnInit = DettaglioTipoProcedimento");
     // console.log("ngOnInit this.proc ---> ", this.proc);
   }
-
-  handleEvent() {
-    this.close();
-  }
-
-  close() {
-    console.log("ENTRATO NEL CLOSE");
-    this.messageEvent.emit({visible: false});
-  }
-
 }
