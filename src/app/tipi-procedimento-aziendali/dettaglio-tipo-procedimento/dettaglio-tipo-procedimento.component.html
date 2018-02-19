@@ -1,7 +1,35 @@
+<div class="conainer fluid">
+  <dx-form
+  [(formData)]="proc">
+    <dxi-item itemType="group"> 
+      <dxi-item dataField="nome" [label]="{text: 'Tipo procedimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item dataField="azienda" [label]="{text: 'Azienda'}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item dataField="descrizioneDefault" [label]="{text: 'Descrizione'}" editorType="dxTextArea" [editorOptions]="{ disabled: false, height: 150 }" ></dxi-item>
+    </dxi-item>
 
+    <dxi-item itemType="group" [colCount]="6">
+      <dxi-item dataField="durataMassimaIter" [colSpan]="3" [label]="{text: 'Durata massima dell\'iter'}" [editorOptions]="{ disabled: false}"></dxi-item>
+      <dxi-item dataField="durataMassimaSospensione" [colSpan]="3" [label]="{text: 'Durata massima di sospensione'}" [editorOptions]="{ disabled: false}"></dxi-item>
+    </dxi-item> 
 
+    <dxi-item itemType="group">
+      <dxi-item dataField="dataInizioValidita" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+    </dxi-item>
 
-  
+  </dx-form>
+</div>
+
+<div class="buttons">
+    <dx-button
+    text="Annulla"
+    (onClick)="handleEvent('onClickAnnulla',$event)">
+  </dx-button>
+  <dx-button
+    text="Salva"
+    (onClick)="handleEvent('onClickSalva',$event)">
+  </dx-button>
+</div>
+
   <!-- 
 
     Tipo di procedimento

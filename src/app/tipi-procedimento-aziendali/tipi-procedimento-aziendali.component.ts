@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, EventEmitter } from "@angular/core";
 import { GlobalContextService, OdataContextFactory } from "@bds/nt-angular-context";
 import { Router } from "@angular/router";
 import { LoggedUser } from "../authorization/logged-user";
@@ -48,19 +48,26 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   }
 
 
+  public receiveMessage(event: any) {
+    console.log("RECEIVE MESSAGE: ", event);
+    // this.popupVisible = event.visible;
+  }
+
   handleEvent(event: any) {
+    console.log("HANDLEEVENT");
     // console.log("EVENTO LOGGING: ...  ", event.data);
     // console.log("EVENTO LOGGING: INDEX->  ", event.row);
     // this.grid.instance.editRow(event.row.rowIndex);
     // this.popupVisible = true;
     this.procedimentoDaPassare = event.data;
     console.log(this.procedimentoDaPassare);
+    this.popupVisible = true;
 
   }
   
   openPopup() {
-    console.log("onpopup");
+    console.log("OPENPOPUP");
     console.log("popupVisible? ", this.popupVisible);
-    this.popupVisible = true;
+    // this.popupVisible = true;
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { TipoProcedimento } from "../../classi/server-objects/entities/tipo-procedimento";
 import { Procedimento } from "../../classi/server-objects/entities/procedimento";
 
@@ -10,20 +10,33 @@ import { Procedimento } from "../../classi/server-objects/entities/procedimento"
 export class DettaglioTipoProcedimentoComponent implements OnInit {
   public proc: Procedimento;
 
+  // tslint:disable-next-line:no-input-rename
   @Input()
   set procedimento(procedimento: Procedimento) {
-    console.log("SOno nell'@Input");
+    console.log("Sono nell'@Input");
+    console.log("INPUT PROCEDIMENTO", procedimento);
     this.proc = procedimento;
   }
 
+  @Output("messageEvent") messageEvent = new EventEmitter<any>();
+
   constructor() {
     console.log("constructor = DettaglioTipoProcedimento");
-    console.log("this.procedimento ---> ", this.procedimento);
-    console.log("this.proc ---> ", this.proc);
+    // console.log("constructor this.proc ---> ", this.proc);
    }
 
   ngOnInit() {
-    
+    console.log("ngOnInit = DettaglioTipoProcedimento");
+    // console.log("ngOnInit this.proc ---> ", this.proc);
+  }
+
+  handleEvent() {
+    this.close();
+  }
+
+  close() {
+    console.log("ENTRATO NEL CLOSE");
+    this.messageEvent.emit({visible: false});
   }
 
 }
