@@ -8,7 +8,8 @@
     hoverStateEnabled="checkBoxState"
     noDataText="Non ci sono procedimenti attivi"
     (onToolbarPreparing)="onToolbarPreparing($event)"
-    (onSelectionChanged)="handleEvent('onSelectionChanged', $event)">
+    (onSelectionChanged)="handleEvent('onSelectionChanged', $event)"
+    wordWrapEnabled="true">
     
     <dxo-paging [pageSize]="10"></dxo-paging>
   
