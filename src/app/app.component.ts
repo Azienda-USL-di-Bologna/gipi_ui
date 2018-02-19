@@ -10,6 +10,7 @@ import {LOGOUT_URL, ODATA_BASE_URL} from "../environments/app.constants";
 import { SidebarItem } from "@bds/nt-angular-context/templates/sidebar/sidebar.component";
 import { LoggedUser } from "./authorization/logged-user";
 import * as $ from 'jquery';
+import * as deLocalization from 'devextreme/localization';
 
 @Component({
     selector: "app-root",
@@ -52,9 +53,26 @@ export class AppComponent implements OnInit, OnDestroy {
                     let reset = false;
                 }
             );
-
+        
         this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);
 
+        this.buildLocalization();
+    }
+
+    private buildLocalization()
+    {
+        deLocalization.locale('it');
+
+        $.getJSON('/assets/localization/it.json').then(function (data) {
+            deLocalization.loadMessages(data);
+        }).fail(function () {
+            console.log('It language not found, fallback to en');
+            deLocalization.locale('en');
+            });
+        
+        
+        
+    //  deLocalization.date.getD
     }
 
     private buildSideBar(loggedUser: LoggedUser) {
