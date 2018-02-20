@@ -11,26 +11,25 @@
       <dxi-item dataField="durataMassimaIter" [colSpan]="6" [label]="{text: 'Durata massima dell\'iter'}" [editorOptions]="{ disabled: false}"></dxi-item>
       <dxi-item dataField="durataMassimaSospensione" [colSpan]="6" [label]="{text: 'Durata massima di sospensione'}" [editorOptions]="{ disabled: false}"></dxi-item>
     </dxi-item> 
-
+    
     <dxi-item itemType="group">
-      <dxi-item dataField="idTitolo.nome" [label]="{text: 'Titolo'}" editorType="dxLookup" [editorOptions]="{ 
+      <dxi-item dataField="idTitolo" [label]="{text: 'Titolo'}" editorType="dxLookup" [editorOptions]="{ 
         disabled: false,
         dataSource: dataSourceTitoli,
-        displayExpr: 'idTitolo.nome',
-        closeOnOutsideClick: true, 
-        showPopupTitle: false, 
+        displayExpr: 'nome',
+        closeOnOutsideClick: true,
+        showPopupTitle: false,
         showCancelButton: false,
         searchPlaceholder: 'Cerca...',
-        valueExpr: 'id',
-        searchEnabled: true
+        valueExpr: 'this'
       }"></dxi-item>
       <dxi-item dataField="idTipoProcedimento.normaRiferimento" [label]="{text: 'Codice Tipo Procedimento'}" [editorOptions]="{ disabled: true}"></dxi-item>
     </dxi-item>
-
+    
     <dxi-item itemType="group" [colCount]="12">
-      <dxi-item dataField="dataInizio" [colSpan]="5"  editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-      <dxi-item dataField="dataFine" [colSpan]="5"  editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-      <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="2"  editorType="dxCheckBox" [label]="{text: 'Obbligo esito conclusivo'}" [editorOptions]="{ disabled: false}"></dxi-item>
+      <dxi-item dataField="dataInizio" [colSpan]="4" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita', location:'top'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+      <dxi-item dataField="dataFine" [colSpan]="4" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data fine validita', location:'top'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+      <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="4"  editorType="dxCheckBox" [label]="{text: 'Obbligo esito conclusivo', location:'top'}" [editorOptions]="{ disabled: false}"></dxi-item>
     </dxi-item>
 
 
@@ -38,8 +37,24 @@
       <dxi-item dataField="idTipoProcedimento.codice" [colSpan]="6"  [label]="{text: 'Codice Tipo Procedimento'}" [editorOptions]="{ disabled: true}"></dxi-item>
       <dxi-item dataField="idTipoProcedimento.modoApertura" [colSpan]="6" [label]="{text: 'Modo do apertura'}" [editorOptions]="{ disabled: true}"></dxi-item>
     </dxi-item>
-    
 
+    <dxi-item itemType="group" [colCount]="12">
+      <dxi-item [colSpan]="4"></dxi-item>
+      <dxi-item [colSpan]="4" style="align-content: center">
+          <div class="col-10 offset-1" style="align-content: center">
+              <dx-button
+              text="Annulla"
+              (onClick)="close()">
+            </dx-button>
+            <dx-button
+              text="Salva"
+              (onClick)="save()">
+            </dx-button>
+          </div>
+      </dxi-item>
+      <dxi-item [colSpan]="4"></dxi-item>
+    </dxi-item>
+    
   </dx-form>
 </div>
 

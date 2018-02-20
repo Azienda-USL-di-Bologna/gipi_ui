@@ -6,6 +6,8 @@ import DataSource from "devextreme/data/data_source";
 import { OdataContextFactory, GlobalContextService } from "@bds/nt-angular-context";
 import { Entities } from "environments/app.constants";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import { LoggedUser } from "app/authorization/logged-user";
+import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
 
 @Component({
   selector: "dettaglio-tipo-procedimento",
@@ -14,9 +16,8 @@ import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-de
 })
 export class DettaglioTipoProcedimentoComponent implements OnInit {
   public proc: AziendaTipoProcedimento;
-  public odataContextDefinition: OdataContextDefinition;
   public dataSourceTitoli: DataSource;
-  public idAzienda: number;
+  public loggedUser: LoggedUser;
 
   // tslint:disable-next-line:no-input-rename
   @Input()
@@ -29,18 +30,22 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
   @Output() messageEvent: EventEmitter<any>= new EventEmitter();
 
   constructor(odataContextFactory: OdataContextFactory, globalContextService: GlobalContextService) {
-    console.log("constructor = DettaglioTipoProcedimento");
-    this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
-    this.idAzienda = globalContextService.getInnerSharedObject("loggedUser._aziendaLogin.id")
-    console.log("LOGGAMENTO", globalContextService.getInnerSharedObject("loggedUser"));
+    const odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
+    this.loggedUser = globalContextService.getInnerSharedObject("loggedUser")
+    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nome");
+    customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
     this.dataSourceTitoli = new DataSource({
-      store: this.odataContextDefinition.getContext()[Entities.Titolo.name],
+      store: odataContextDefinition.getContext()[Entities.Titolo.name].on("loading", (loadOptions) => {
+        loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
+        odataContextDefinition.customLoading(loadOptions);
+    }),
+      filter: [["idAzienda", "=", this.loggedUser.aziendaLogin.id]]
     });
  
    }
 
   ngOnInit() {
-    console.log("ngOnInit = DettaglioTipoProcedimento");
+    console.log("ngOnInit = DettaglioTipoProcedimento", this.proc);
     // console.log("ngOnInit this.proc ---> ", this.proc);
     
   }
