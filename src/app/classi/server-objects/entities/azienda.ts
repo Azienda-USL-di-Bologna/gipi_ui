@@ -27,6 +27,6 @@ export class Azienda extends Entity {
         schemaGru: "String",
         parametri: "String"
       }
-    }
+    };
   }
 }

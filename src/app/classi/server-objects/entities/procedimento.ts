@@ -20,6 +20,7 @@ export class Procedimento extends Entity {
   ufficio: string;
   modalitaInfo: string;
   descrizioneAtti: string;
+  strumenti: string;
   idResponsabileAdozioneAttoFinale: Utente;
   FK_id_responsabile_adozione_atto_finale: number;
   idStrutturaResponsabileAdozioneAttoFinale: Struttura;
@@ -40,6 +41,7 @@ export class Procedimento extends Entity {
         ufficio: "String",
         modalitaInfo: "String",
         descrizioneAtti: "String",
+        strumenti: "String",
         idResponsabileAdozioneAttoFinale: new OdataForeignKey(Entities.Utente, "id"),
         idStrutturaResponsabileAdozioneAttoFinale: new OdataForeignKey(Entities.Struttura, "id")
       }

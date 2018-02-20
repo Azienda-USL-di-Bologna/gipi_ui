@@ -21,6 +21,6 @@ export class UtenteStruttura extends Entity {
         idStruttura: new OdataForeignKey(Entities.Struttura, "id"),
         idUtente: new OdataForeignKey(Entities.Utente, "id")
       }
-    }
+    };
   }
 }

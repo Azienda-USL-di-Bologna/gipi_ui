@@ -14,6 +14,10 @@
     margin-top:10px;
 }
 
+.padding-bottom {
+    margin-bottom: 15px;
+}
+
 .allinea-a-sinistra{
     margin-left: 0px;
 }
@@ -86,4 +90,22 @@
 
 /deep/ .tree-readonly .dx-checkbox-checked .dx-checkbox-icon, .tree-readonly span {
     color: lightslategrey !important;
+}
+
+/deep/ .label-wrap > label {
+    max-width: 300px;
+}
+
+/deep/ .label-wrap .dx-field-item-label-text {
+    max-width: 300px;
+    white-space: normal;
+    display: inline-block;
+}
+
+/deep/ .dx-layout-manager .dx-label-h-align.dx-flex-layout:not(.dx-field-item-label-align) {
+    align-items: initial;
+}
+
+#bottoneModifica {
+    width: 100%;
 }

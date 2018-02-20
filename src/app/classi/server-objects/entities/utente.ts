@@ -44,6 +44,6 @@ export class Utente extends Entity {
         bitRuoli: "Int32",
         idAzienda: new OdataForeignKey(Entities.Azienda, "id")
       }
-    }
+    };
   }
 }

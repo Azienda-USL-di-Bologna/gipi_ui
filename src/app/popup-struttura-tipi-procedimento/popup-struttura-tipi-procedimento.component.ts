@@ -17,12 +17,13 @@ import {  GlobalContextService } from "@bds/nt-angular-context/global-context.se
 })
 export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
 
-  public datasource: DataSource;
-  public strutture: Struttura = new Struttura();
-  private odataContextDefinition;
-  public contextMenuItems;
   private nodeSelectedFromContextMenu: any;
   private initialState: any;
+  private odataContextDefinition;
+
+  public datasource: DataSource;
+  public strutture: Struttura = new Struttura();
+  public contextMenuItems;
   public testoHeaderTipoProcedimento: string;
   public testoHeaderAzienda: string;
   public idAzienda: number;
