@@ -7,6 +7,7 @@ import DataSource from "devextreme/data/data_source";
 import { Entities } from "environments/app.constants";
 import { DxDataGridComponent } from "devextreme-angular";
 import { TipoProcedimento } from "../classi/server-objects/entities/tipo-procedimento";
+import { AziendaTipoProcedimento } from "../classi/server-objects/entities/azienda-tipo-procedimento";
 
 @Component({
   selector: "tipi-procedimento-aziendali",
@@ -21,7 +22,9 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   public idAzienda: number;
   public descAzienda: string;
   public procedimentoDaPassare: TipoProcedimento;
+  public aziendaTipoProcedimento: AziendaTipoProcedimento;
   public grid: DxDataGridComponent;
+  public screenWidth: number = screen.width;
 
   constructor(private odataContextFactory: OdataContextFactory, 
     public router: Router,
@@ -31,11 +34,14 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
       this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
       this.descAzienda = this.loggedUser.aziendaLogin.descrizione;
       this.idAzienda = this.loggedUser.aziendaLogin.id;
+      console.log("LOGGO ID AZIENDA", this.idAzienda);
 
 
       this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
       this.dataSourceProcedimenti = new DataSource({
-        store: this.odataContextDefinition.getContext()[Entities.TipoProcedimento.name],
+        store: this.odataContextDefinition.getContext()[Entities.AziendaTipoProcedimento.name],
+        expand: ["idAzienda", "idTipoProcedimento", "idTitolo"],
+        filter: [["idAzienda.id", "=", this.idAzienda]]
         
       });
      console.log("LOGGO DATASOURCE", this.dataSourceProcedimenti);
@@ -48,26 +54,23 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   }
 
 
-  public receiveMessage(event: any) {
-    console.log("RECEIVE MESSAGE: ", event);
-    // this.popupVisible = event.visible;
+  receiveMessage(event: any) {
+    this.popupVisible = event.visible;
   }
 
-  handleEvent(event: any) {
-    console.log("HANDLEEVENT");
-    // console.log("EVENTO LOGGING: ...  ", event.data);
-    // console.log("EVENTO LOGGING: INDEX->  ", event.row);
-    // this.grid.instance.editRow(event.row.rowIndex);
-    // this.popupVisible = true;
-    this.procedimentoDaPassare = event.data;
-    console.log(this.procedimentoDaPassare);
-    this.popupVisible = true;
+  public handleEvent(event: any) {
+    console.log("HANDLEEVENT", event);
+    if(event.columnIndex === 4){
+      this.procedimentoDaPassare = event.data;
+      console.log(this.procedimentoDaPassare);
+      this.popupVisible = true;
+    }
 
   }
   
-  openPopup() {
-    console.log("OPENPOPUP");
+ /*  public openPopup(event: Event) {
+    console.log("OPENPOPUP", event);
     console.log("popupVisible? ", this.popupVisible);
     // this.popupVisible = true;
-  }
+  } */
 }

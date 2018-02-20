@@ -39,6 +39,6 @@ export class Struttura extends Entity {
         idStrutturaPadre: new OdataForeignKey(Entities.Struttura, "id"),
         idStrutturaSegreteria: new OdataForeignKey(Entities.Struttura, "id"),
       }
-    }
+    };
   }
 }

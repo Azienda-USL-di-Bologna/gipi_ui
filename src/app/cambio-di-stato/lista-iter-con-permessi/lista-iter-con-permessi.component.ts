@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import CustomStore from "devextreme/data/custom_store";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
@@ -10,9 +10,9 @@ import { Observable } from "rxjs/Observable";
 import { LoggedUser } from "../../authorization/logged-user";
 
 @Component({
-  selector: 'app-lista-iter-con-permessi',
-  templateUrl: './lista-iter-con-permessi.component.html',
-  styleUrls: ['./lista-iter-con-permessi.component.scss']
+  selector: "app-lista-iter-con-permessi",
+  templateUrl: "./lista-iter-con-permessi.component.html",
+  styleUrls: ["./lista-iter-con-permessi.component.scss"]
 })
 export class ListaIterConPermessiComponent implements OnInit {
 
@@ -63,7 +63,7 @@ export class ListaIterConPermessiComponent implements OnInit {
 
   selectedRowChanged(e){
     this.selectedRow.emit(e.selectedRowsData[0]);
-    console.log('SELECTED:', e.selectedRowsData[0].id);
+    console.log("SELECTED:", e.selectedRowsData[0].id);
   }
 
   // handleClick(){

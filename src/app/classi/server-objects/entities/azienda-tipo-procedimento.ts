@@ -36,6 +36,6 @@ export class AziendaTipoProcedimento extends Entity {
                 idTipoProcedimento: new OdataForeignKey(Entities.TipoProcedimento, "id"),
                 idTitolo: new OdataForeignKey(Entities.Titolo, "id")
             }
-        }
+        };
     }
 }
