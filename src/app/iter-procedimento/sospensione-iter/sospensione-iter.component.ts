@@ -1,14 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from "@angular/core";
-import { Iter } from "app/classi/server-objects/entities/iter";
-import { EventoIter } from "app/classi/server-objects/entities/evento-iter";
+import { Iter, bUtente } from "@bds/nt-entities";
 import { HttpClient } from "@angular/common/http";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { HttpHeaders } from "@angular/common/http";
 import { SimpleChange } from "@angular/core/src/change_detection/change_detection_util";
-import { debug } from "util";
 import * as moment from "moment";
-import { LoggedUser } from "../../authorization/logged-user"
-import { GlobalContextService } from "@bds/nt-angular-context/global-context.service";
+import { LoggedUser } from "@bds/nt-login";
+import { GlobalContextService } from "@bds/nt-context";
 
 
 @Component({
@@ -63,7 +61,7 @@ export class SospensioneIterComponent implements OnInit {
     this.sospensioneParams.idIter = this.daInput.iter.id;
 
     this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
-    this.sospensioneParams.idUtente = this.loggedUser.idUtente;
+    this.sospensioneParams.idUtente = this.loggedUser.getField(bUtente.id);
     this.sospensioneParams.sospesoDal = this.daInput.dataSospensione;
   }
 

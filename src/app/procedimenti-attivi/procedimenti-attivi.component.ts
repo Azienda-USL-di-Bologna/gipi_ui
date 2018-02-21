@@ -1,14 +1,12 @@
 import { Component, ViewChild, Input, Output, EventEmitter } from "@angular/core";
-import { DxDataGridComponent, DxFormComponent } from "devextreme-angular";
+import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
-import { Entities } from "environments/app.constants";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import { OdataContextFactory, OdataContextDefinition } from "@bds/nt-context";
 import {Router} from "@angular/router";
-import { LoggedUser } from "../authorization/logged-user";
-import { GlobalContextService } from "@bds/nt-angular-context";
+import { LoggedUser } from "@bds/nt-login";
+import { GlobalContextService } from "@bds/nt-context";
 import { UtilityFunctions } from "app/utility-functions";
-import { forEach } from "@angular/router/src/utils/collection";
+import {bAzienda, bStruttura, bUtente, Procedimento} from "@bds/nt-entities";
 
 @Component({
   selector: "procedimenti-attivi",
@@ -50,14 +48,14 @@ export class ProcedimentiAttiviComponent {
               private globalContextService: GlobalContextService) {
 
     this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
-    this.idAzienda = this.loggedUser.aziendaLogin.id;
+    this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
 
    // this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).aziende.id;
     const now = new Date();
 
     this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
     this.dataSourceProcedimenti = new DataSource({
-      store: this.odataContextDefinition.getContext()[Entities.Procedimento.name],
+      store: this.odataContextDefinition.getContext()[new Procedimento().getName()],
       expand: [
         "idStruttura",
         "idTitolarePotereSostitutivo/idPersona",
@@ -84,14 +82,13 @@ export class ProcedimentiAttiviComponent {
     // Prima mi creo l'array con gli id struttura
     let idStrutture: any = [];
     console.log(this.loggedUser);
-    this.loggedUser.struttureAfferenzaDiretta.forEach(function(struttura: any) {
+    this.loggedUser.getField(bUtente.struttureAfferenzaDiretta).forEach(function(struttura: any) {
       console.log(struttura);
-
-      idStrutture.push(struttura.ID);
+      idStrutture.push(struttura[bStruttura.id]);
     });
-    if (this.loggedUser.struttureAfferenzaFunzionale != null) {
-      this.loggedUser.struttureAfferenzaFunzionale.forEach(function(struttura: any) {
-        idStrutture.push(struttura.ID);
+    if (this.loggedUser.getField(bUtente.struttureAfferenzaFunzionale) != null) {
+      this.loggedUser.getField(bUtente.struttureAfferenzaFunzionale).forEach(function(struttura: any) {
+        idStrutture.push(struttura[bStruttura.id]);
       });
     }
     // Ora mi creo l'array-filtro e filtro

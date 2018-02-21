@@ -1,11 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { TipoProcedimento } from "../../classi/server-objects/entities/tipo-procedimento";
-import { Procedimento } from "../../classi/server-objects/entities/procedimento";
-import { AziendaTipoProcedimento } from "app/classi/server-objects/entities/azienda-tipo-procedimento";
+import {AziendaTipoProcedimento, Titolo} from "@bds/nt-entities";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextFactory, GlobalContextService } from "@bds/nt-angular-context";
-import { Entities } from "environments/app.constants";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import { OdataContextFactory, GlobalContextService, OdataContextDefinition } from "@bds/nt-context";
 
 @Component({
   selector: "dettaglio-tipo-procedimento",
@@ -34,7 +30,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
     this.idAzienda = globalContextService.getInnerSharedObject("loggedUser._aziendaLogin.id")
     console.log("LOGGAMENTO", globalContextService.getInnerSharedObject("loggedUser"));
     this.dataSourceTitoli = new DataSource({
-      store: this.odataContextDefinition.getContext()[Entities.Titolo.name],
+      store: this.odataContextDefinition.getContext()[new Titolo().getName()],
     });
  
    }

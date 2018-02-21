@@ -1,13 +1,12 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import CustomStore from "devextreme/data/custom_store";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
-import { GlobalContextService, OdataContextFactory } from "@bds/nt-angular-context";
-import { Entities, CUSTOM_RESOURCES_BASE_URL, FunctionsImport } from "environments/app.constants";
+import { GlobalContextService, OdataContextFactory, OdataContextDefinition } from "@bds/nt-context";
 import { HttpClient } from "@angular/common/http";
 import { Subscription } from "rxjs/Subscription";
 import { Observable } from "rxjs/Observable";
-import { LoggedUser } from "../../authorization/logged-user";
+import { LoggedUser } from "@bds/nt-login";
+import { GetIterUtente } from "@bds/nt-entities";
 
 @Component({
   selector: "app-lista-iter-con-permessi",
@@ -16,6 +15,7 @@ import { LoggedUser } from "../../authorization/logged-user";
 })
 export class ListaIterConPermessiComponent implements OnInit {
 
+  private subscriptions: Subscription[] = [];
   private odataContextDefinition: OdataContextDefinition;
   public dataSource: DataSource;
   public customStore: CustomStore;
@@ -29,26 +29,25 @@ export class ListaIterConPermessiComponent implements OnInit {
     promotore: "GSLFNSSTICA io sono il proponentre siiii"
   };
 
-  private subscriptions: Subscription[] = [];
   public loggedUser$: Observable<LoggedUser>;
-  public _userInfo : UserInfo;
+  public _userInfo: UserInfo;
 
 
-  @Input() set userInfo(value: UserInfo){
+  @Input() set userInfo(value: UserInfo) {
     this._userInfo = value;
   }
-  @Output() selectedRow : EventEmitter<any> = new EventEmitter();
+  @Output() selectedRow: EventEmitter<any> = new EventEmitter();
 
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private globalContextService: GlobalContextService) {
-    console.log("USER INFO LISTA CONSTRACTOR:", this._userInfo)
+    console.log("USER INFO LISTA CONSTRACTOR:", this._userInfo);
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }
 
   ngOnInit() {
-    console.log("USER INFO LISTA ONINIT:", this._userInfo)
+    console.log("USER INFO LISTA ONINIT:", this._userInfo);
     // this.recuperaUserInfo();
     this.dataSource = new DataSource({
-      store: this.odataContextDefinition.getContext()[FunctionsImport.GetIterUtente.name],
+      store: this.odataContextDefinition.getContext()[new GetIterUtente().getName()],
       customQueryParams: {
         cf: this._userInfo.cf,
         idAzienda: this._userInfo.idAzienda
@@ -61,7 +60,7 @@ export class ListaIterConPermessiComponent implements OnInit {
     // this.handleClick();
 }
 
-  selectedRowChanged(e){
+  selectedRowChanged(e) {
     this.selectedRow.emit(e.selectedRowsData[0]);
     console.log("SELECTED:", e.selectedRowsData[0].id);
   }

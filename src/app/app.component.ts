@@ -1,16 +1,17 @@
 import { Component, OnDestroy, OnInit, HostListener, Input } from "@angular/core";
 import { Location } from "@angular/common";
-import { CustomReuseStrategy } from "@bds/nt-angular-context/routes/custom-reuse-strategy";
+import { CustomReuseStrategy } from "@bds/nt-context/routes/custom-reuse-strategy";
 import {NavigationEnd, NavigationStart, Router} from "@angular/router";
 import { Observable } from "rxjs/Observable";
-import { GlobalContextService, OdataContextFactory } from "@bds/nt-angular-context";
-import { Ruolo } from "./classi/server-objects/entities/ruolo";
+import {GlobalContextService, OdataContextFactory, OdataForeignKey} from "@bds/nt-context";
+import { Ruolo, bUtente, bAzienda, bRuolo } from "@bds/nt-entities";
 import { Subscription } from "rxjs/Subscription";
 import {LOGOUT_URL, ODATA_BASE_URL} from "../environments/app.constants";
-import { SidebarItem } from "@bds/nt-angular-context/templates/sidebar/sidebar.component";
-import { LoggedUser } from "./authorization/logged-user";
-import * as $ from 'jquery';
-import * as deLocalization from 'devextreme/localization';
+import { SidebarItem } from "@bds/nt-context";
+ import { LoggedUser } from "@bds/nt-login";
+import * as $ from "jquery";
+import * as deLocalization from "devextreme/localization";
+
 
 @Component({
     selector: "app-root",
@@ -61,13 +62,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
     private buildLocalization()
     {
-        deLocalization.locale('it');
+        deLocalization.locale("it");
 
-        $.getJSON('/assets/localization/it.json').then(function (data) {
+        $.getJSON("/assets/localization/it.json").then(function (data) {
             deLocalization.loadMessages(data);
         }).fail(function () {
-            console.log('It language not found, fallback to en');
-            deLocalization.locale('en');
+            console.log("It language not found, fallback to en");
+            deLocalization.locale("en");
             });
         
         
@@ -79,7 +80,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.sidebarItems = [];
 
         this.sidebarItems.push(new SidebarItem("Home", "home"));
-        if (loggedUser.isCI) {
+        if (loggedUser.isCI()) {
             this.sidebarItems.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
         }
 
@@ -98,10 +99,10 @@ export class AppComponent implements OnInit, OnDestroy {
     slide() {
         if (this.classeSidebar.indexOf("active") >= 0) {
             this.classeSidebar = "col-2 sidebar-style d-none ";
-            this.classeRightSide = ""
+            this.classeRightSide = "";
         } else {
             this.classeSidebar = "col-2 sidebar-style d-block active";
-            this.classeRightSide = "offset-2 "
+            this.classeRightSide = "offset-2 ";
         }
     }
 
@@ -111,6 +112,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     ngOnInit() {
+
         /** sottoscrivendosi a questo evento è possibile intercettare la pressione di indietro o aventi del browser
          * purtroppo non c'è modo di differenziarli
          */
@@ -130,11 +132,11 @@ export class AppComponent implements OnInit, OnDestroy {
             this.loggedUser$.subscribe(
                 (loggedUser: LoggedUser) => {
                     if (loggedUser) {
-                        this.ruoli = loggedUser.ruoli;
+                        this.ruoli = loggedUser.getField(bUtente.ruoli);
                         this.ruolo = "";
-                        this.azienda = loggedUser.aziendaLogin.nome;
+                        this.azienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.nome];
                         this.ruoli.forEach(element => {
-                            this.ruolo += element.nomeBreve + " ";
+                            this.ruolo += element[bRuolo.nomeBreve] + " ";
                         });
                         this.buildSideBar(loggedUser);
                     }
@@ -172,17 +174,17 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     onProfileBtnClick(e) {
-        var btn = $(e.currentTarget);
-        btn.toggleClass('focus');
+        let btn = $(e.currentTarget);
+        btn.toggleClass("focus");
         btn.blur();
-        $('#userDropdown').toggleClass('show');
+        $("#userDropdown").toggleClass("show");
     }
 
-    getContentBodyClasses(){
-        if(this.router.url === '/login'){
-            return 'col heightCPC';
-        }else{
-            return 'col';
+    getContentBodyClasses() {
+        if (this.router.url === "/login") {
+            return "col heightCPC";
+        }else {
+            return "col";
         }
     }
 }

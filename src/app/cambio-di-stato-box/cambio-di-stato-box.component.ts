@@ -1,38 +1,31 @@
-import { Component, OnInit, Input } from '@angular/core';
-import DataSource from "devextreme/data/data_source";
-import CustomStore from 'devextreme/data/custom_store';
-import ArrayStore from 'devextreme/data/array_store';
-import { LoggedUser } from "../authorization/logged-user"
-import { GlobalContextService } from "@bds/nt-angular-context/global-context.service";
+import { Component, OnInit, Input } from "@angular/core";
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
 
 @Component({
-  selector: 'app-cambio-di-stato-box',
-  templateUrl: './cambio-di-stato-box.component.html',
-  styleUrls: ['./cambio-di-stato-box.component.scss']
+  selector: "app-cambio-di-stato-box",
+  templateUrl: "./cambio-di-stato-box.component.html",
+  styleUrls: ["./cambio-di-stato-box.component.scss"]
 })
 export class CambioDiStatoBoxComponent implements OnInit{
 
-  public _sospensioneParams : SospensioneParams;
+  public _sospensioneParams: SospensioneParams;
   public statiIter: string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
   public statiIterService: string[] = new Array();
   public _userInfo: UserInfo;
-  // public docFieldDisabled: boolean;
   public showPopupRiassunto: boolean = false;
-  public showPopupAnnullamento : boolean = false
+  public showPopupAnnullamento: boolean = false;
 
-  @Input() set userInfo(value: UserInfo){
+  @Input() set userInfo(value: UserInfo) {
     this._userInfo = value;
   }
   @Input()
-  set sospensioneParams(value : SospensioneParams){
-    console.log('New value:', value)
+  set sospensioneParams(value: SospensioneParams) {
+    console.log("New value:", value);
     this._sospensioneParams = value;
-  };
+  }
 
   constructor(private http: HttpClient) { 
     this.statiIterService[this.statiIter[0]] = "iter_in_corso";
@@ -46,9 +39,9 @@ export class CambioDiStatoBoxComponent implements OnInit{
     // }
   }
 
-   handleSubmit(e){
+   handleSubmit(e) {
     e.preventDefault();
-    if(!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.statoCorrente){return}
+    if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.statoCorrente) {return; }
 
     let shippedParams: ShippedParams = {
       idIter : this._sospensioneParams.idIter,
@@ -59,7 +52,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
       note: this._sospensioneParams.note,
       stato: this.statiIterService[this._sospensioneParams.statoProssimo],
       dataEvento: this._sospensioneParams.dataCambioDiStato,
-    }
+    };
 
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
     .subscribe(
@@ -89,11 +82,11 @@ export class CambioDiStatoBoxComponent implements OnInit{
     );
    }
 
-  handleClose(){
+  handleClose() {
     window.close();
   }
 
-  handleAnnulla(e){
+  handleAnnulla(e) {
     this.showPopupAnnullamento = !this.showPopupAnnullamento;
   }
 
@@ -111,11 +104,11 @@ interface ShippedParams {
 }
 
 interface InfoDocumento{
-  registro: string,
-  numero: string,
-  anno: number,
-  oggetto: string,
-  dataRegistrazione: Date,
+  registro: string;
+  numero: string;
+  anno: number;
+  oggetto: string;
+  dataRegistrazione: Date;
 }
 
 interface UserInfo{

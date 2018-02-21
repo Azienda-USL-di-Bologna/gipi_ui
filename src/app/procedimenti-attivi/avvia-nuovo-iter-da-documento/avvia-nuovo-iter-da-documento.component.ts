@@ -1,8 +1,9 @@
 import { Component } from "@angular/core";
-import { GlobalContextService } from "@bds/nt-angular-context";
-import { LoggedUser } from "app/authorization/logged-user";
+import { GlobalContextService } from "@bds/nt-context";
+import { LoggedUser } from "@bds/nt-login";
 import { ActivatedRoute, Params } from "@angular/router";
 import { IterParams } from "app/iter-procedimento/passaggio-di-fase/passaggio-di-fase.component";
+import {bAzienda, bUtente} from "@bds/nt-entities";
 
 @Component({
   selector: "avvia-nuovo-iter-da-documento",
@@ -29,7 +30,7 @@ export class AvviaNuovoIterDaDocumentoComponent {
     console.log("avvia-nuovo-iter-da-documento (constructor)");
 
     this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
-    this.idAzienda = this.loggedUser.aziendaLogin.id;
+    this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
 
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
       this.doc = {

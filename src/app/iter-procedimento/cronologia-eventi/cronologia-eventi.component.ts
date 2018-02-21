@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, SimpleChanges } from "@angular/core";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
-import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
-import { Entities } from "environments/app.constants";
+import { OdataContextDefinition } from "@bds/nt-context";
+import { OdataContextFactory } from "@bds/nt-context";
+import {EventoIter} from "@bds/nt-entities";
 
 @Component({
   selector: "app-cronologia-eventi",
@@ -24,7 +24,7 @@ export class CronologiaEventiComponent implements OnInit {
 
   ngOnInit() {
     this.dataSourceEventoIter = new DataSource({
-      store: this.odataContextDefinition.getContext()[Entities.EventoIter.name],
+      store: this.odataContextDefinition.getContext()[new EventoIter().getName()],
       expand: ["idEvento", "idIter", "idFaseIter.idFase", "autore.idPersona"],
       filter: ["idIter.id", "=", parseInt(this.daPadre["idIter"])]
     });

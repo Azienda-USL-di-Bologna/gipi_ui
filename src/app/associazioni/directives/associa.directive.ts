@@ -1,7 +1,7 @@
-import { Directive, ViewContainerRef } from '@angular/core';
+import { Directive, ViewContainerRef } from "@angular/core";
 
 @Directive({
-  selector: '[associa-host]'
+  selector: "[associa-host]"
 })
 export class AssociaDirective {
 
