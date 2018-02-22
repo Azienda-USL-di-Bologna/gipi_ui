@@ -188,7 +188,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
           console.log("Operation", nodesInvolved[key]);
           const node = nodes.find(item =>
-            item.id === key
+            item.id == parseInt(key)
           );
           
            if (nodesInvolved[key] === NodeOperations.INSERT) {
