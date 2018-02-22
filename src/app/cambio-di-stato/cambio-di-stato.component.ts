@@ -3,10 +3,10 @@ import { LoggedUser } from "../authorization/logged-user"
 import { GlobalContextService } from "@bds/nt-angular-context/global-context.service";
 import { ListaIterConPermessiComponent } from "./lista-iter-con-permessi/lista-iter-con-permessi.component";
 import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stato-box.component";
+import { PassaggioDiFaseComponent } from "../iter-procedimento/passaggio-di-fase/passaggio-di-fase.component"
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { ActivatedRoute, Params } from "@angular/router";
-import { Observable } from "rxjs/Observable";
-import { Subscription } from "rxjs/Subscription";
+import { Observable, Subscription } from "rxjs";
 import { Iter } from "../classi/server-objects/entities/iter";
 
 @Component({
@@ -17,12 +17,17 @@ import { Iter } from "../classi/server-objects/entities/iter";
 export class CambioDiStatoComponent implements OnInit {
 
   public sospensioneParams : SospensioneParams;
-  // public infoDocumento: InfoDocumento;
   public userInfo: UserInfo;
   public selectedIter: string = "Selezionare un iter dalla tabella";
 
   public loggedUser$: Observable<LoggedUser>;
   private subscriptions: Subscription[] = [];
+
+  public showPopupAnnullamento : boolean = false;
+  public messaggioAnnullamento : string;
+  public lookupItems: string[] = ["Cambio di stato", "Passaggio di fase"];
+  public lookupValue: string= "";
+
 
   constructor( private activatedRoute: ActivatedRoute, private globalContextService: GlobalContextService) { 
     if(!this.userInfo){
@@ -31,27 +36,14 @@ export class CambioDiStatoComponent implements OnInit {
    }
 
   ngOnInit() {
-    // this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
-    //   this.infoDocumento = {
-    //     registro: queryParams["registro"],
-    //     numero: queryParams["numero"],
-    //     anno: queryParams["anno"],
-    //     oggetto: queryParams["oggetto"],
-    //     dataRegistrazione: queryParams["dataRegistrazione"]
-    //   }
-    // });
-
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
       this.sospensioneParams = new SospensioneParams();
       this.sospensioneParams.annoDocumento = queryParams["anno"];
+
       this.sospensioneParams.numeroDocumento = queryParams["numero"];
       this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
       this.sospensioneParams.dataRegistrazioneDocumento = queryParams["dataRegistrazione"];
     });
-    // this.sospensioneParams = new SospensioneParams();
-    // this.sospensioneParams.annoDocumento = this.infoDocumento.anno;
-    // this.sospensioneParams.numeroDocumento = this.infoDocumento.numero;
-    // this.sospensioneParams.codiceRegistroDocumento = this.infoDocumento.registro;
   }
 
   recuperaUserInfo(){
@@ -80,15 +72,11 @@ export class CambioDiStatoComponent implements OnInit {
     this.sospensioneParams.statoCorrente = e.stato;
   }
 
-}
+  lookupValueChanged(e){
+    this.lookupValue = e.value;
+  }
 
-// interface InfoDocumento{
-//   registro: string,
-//   numero: string,
-//   anno: number,
-//   oggetto: string,
-//   dataRegistrazione: Date,
-// }
+}
 
 interface UserInfo{
   idUtente: number;

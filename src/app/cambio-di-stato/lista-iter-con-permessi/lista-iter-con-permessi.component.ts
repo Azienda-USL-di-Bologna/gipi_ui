@@ -58,46 +58,13 @@ export class ListaIterConPermessiComponent implements OnInit {
       expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona"]
     });
     this.dataSource.load();
-    // this.handleClick();
 }
 
   selectedRowChanged(e){
-    this.selectedRow.emit(e.selectedRowsData[0]);
     console.log('SELECTED:', e.selectedRowsData[0].id);
+    this.selectedRow.emit(e.selectedRowsData[0]);
+    
   }
-
-  // handleClick(){
-  //   console.log("Demtro")
-  //   this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
-  //   this.subscriptions.push(
-  //       this.loggedUser$.subscribe(
-  //           (loggedUser: LoggedUser) => {
-  //               if (loggedUser) {
-  //                   this.userInfo = loggedUser;
-  //                   console.log("INFOUSER: ", this.userInfo)
-  //               }
-  //           }
-  //       )
-  //   );
-  // }
-
-  // recuperaUserInfo(){
-  //   this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
-  //   this.subscriptions.push(
-  //       this.loggedUser$.subscribe(
-  //           (loggedUser: LoggedUser) => {
-  //               if (loggedUser) {
-  //                 this._userInfo = {
-  //                   idUtente: 294711, // loggedUser.idUtente
-  //                   idAzienda:  "2", //loggedUser.aziendaLogin.codice
-  //                   cf: "GSLFNC89A05G224Y"
-  //                 }
-  //                 console.log("user info appena messo", this._userInfo)
-  //               }
-  //           }
-  //       )
-  //   );
-  // }
 
 }
 

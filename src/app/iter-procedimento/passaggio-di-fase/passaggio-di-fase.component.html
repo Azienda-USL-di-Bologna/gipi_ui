@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col fase">
                 <h4>Fase attuale</h4>
-                <p>{{currentFaseName}}</p>
+                <p>{{passaggioFaseParams ? passaggioFaseParams.currentFaseName : ""}}</p>
             </div>
 
             <div class="col">
@@ -13,7 +13,7 @@
 
             <div class="col fase">
                 <h4>Fase successiva</h4>
-                <p>{{nextFaseName}}</p>
+                <p>{{passaggioFaseParams ? passaggioFaseParams.nextFaseName : ""}}</p>
             </div>
         </div>
 
@@ -62,7 +62,7 @@
         <div class="row">
             <div class="col-3"></div>
             <div class="col button-div">
-                <dx-button class="bottoni" text="Annulla" type="normal" (onClick)="annulla()"></dx-button>
+                <dx-button class="bottoni" text="Annulla" type="normal" (onClick)="handleAnnulla($event)"></dx-button>
             </div>
             <div class="col button-div">
                 <dx-button class="bottoni" text="Procedi" type="default" (onClick)="showConfirm()" [useSubmitBehavior]="true" validationGroup="passaggioFase"></dx-button>
@@ -72,3 +72,22 @@
 
     </div>
 </form>
+
+
+<dx-popup
+class="popup"
+[width]="700"
+[height]="200"
+[showTitle]="true"
+[title]="'Avviso'"
+[dragEnabled]="false"
+[closeOnOutsideClick]="false"
+[(visible)]="showPopupAnnullamento">
+  <div *dxTemplate="let data of 'content'">
+      <h3>Annullando le modifiche apportate non verranno salvate. Procedere comunque?</h3> 
+      <div class="text-right mt-4">
+          <dx-button class="d-inline-block" text="NO" (click)="handleAnnulla($event)"></dx-button>
+          <dx-button class="d-inline-block" text="SI" (click)="handleClose($event)"></dx-button>
+      </div>
+  </div>
+</dx-popup>

@@ -1,17 +1,17 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from "@angular/core";
 import { Iter } from "app/classi/server-objects/entities/iter";
+import { Fase } from "app/classi/server-objects/entities/fase";
+import { DocumentoIter } from "app/classi/server-objects/entities/documento-iter";
 import DataSource from "devextreme/data/data_source";
 import { Entities, CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { log } from "util";
 import { OdataContextFactory } from "@bds/nt-angular-context";
-import { DocumentoIter } from "app/classi/server-objects/entities/documento-iter";
-import { Fase } from "app/classi/server-objects/entities/fase";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { element } from "protractor";
 import { forEach } from "@angular/router/src/utils/collection";
-import { Subscription } from "rxjs/Subscription";
-import { Subscriber } from "rxjs/Subscriber";
+import { Subscription, Subscriber } from "rxjs";
 import { confirm } from "devextreme/ui/dialog";
+import notify from "devextreme/ui/notify";
 
 
 @Component({
@@ -29,85 +29,62 @@ export class PassaggioDiFaseComponent implements OnInit {
   public currentFaseName: string = "";
   public nextFaseName: string = "";
   public isNextFaseDiChiusura: boolean;
+  public passaggioFaseParams: PassaggioFaseParams;
+  public showPopupAnnullamento : boolean = false;
+  public messaggioAnnullamento : string;
 
-  @Input("daPadre") daPadre: any;
-
-  @Output() messageEvent = new EventEmitter<Object>();
-
-
-  constructor(private http: HttpClient) {
+  @Input() set idIter(value: number){
+    this.iterParams.idIter = value;
+    const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.iterParams.idIter)
+    .subscribe(
+    res => {
+      this.passaggioFaseParams = {
+        currentFaseName : JSON.parse(res["currentFase"]).nomeFase,
+        nextFaseName : JSON.parse(res["nextFase"]).nomeFase,
+        isNextFaseDiChiusura : JSON.parse(res["nextFase"]).faseDiChiusura
+      }
+    },
+    err => {
+      notify("Non esiste la fase successiva", "error", 1000);
+    });
   }
+
+  @Input("isOpenedAsPopup") isOpenedAsPopup?: boolean;
+  @Output() out = new EventEmitter<any>();
+
+
+  constructor(private http: HttpClient) {}
 
   showStatusOperation(arg0: any, arg1: any): any {
     throw new Error("Method not implemented.");
   }
   
-  ngOnInit() {
-    this.iterParams.idIter = this.daPadre["idIter"];
-    this.currentFaseName = this.daPadre["currentFaseName"];
-    this.nextFaseName = this.daPadre["nextFaseName"];
-    this.isNextFaseDiChiusura = this.daPadre["isNextFaseDiChiusura"];
-
- 
-
-
-    // customizzazione per filtri sulla data INIZIO
-
-    /*    console.log("STO A LOGGAAAAAA!!!")
-        console.log(this.iterParams)
-        const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.iterParams.idIter)
-        .subscribe(
-          res => {
-            console.log(res);
-            let o: any = res;
-            var current = JSON.parse(o.currentFase);
-            var next = JSON.parse(o.nextFase);
-            this.faseAttuale = current.nomeFase;
-            this.faseSuccessiva = next.nomeFase;    
-            this.isNextFaseCloser = next.faseDiChiusura;
-          },
-          err => {
-            this.sendMessage(false);
-            this.showStatusOperation("Boh, che sarà successo", "error");
-          }
-        );
-    
-    */
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-
-    this.iterParams = new IterParams();
-    this.iterParams.idIter = this.daPadre["idIter"];
-    this.currentFaseName = this.daPadre["currentFaseName"];
-    this.nextFaseName = this.daPadre["nextFaseName"];
-    this.isNextFaseDiChiusura = this.daPadre["isNextFaseDiChiusura"];
-  }
-
-  /*  onShowing(event:Event){
-      debugger;
-      this.iterParams.idIter = this.daPadre['idIter'];
-      this.currentFaseName = this.daPadre['currentFaseName'];
-      this.nextFaseName = this.daPadre['nextFaseName'];
-      this.isNextFaseDiChiusura = this.daPadre['isNextFaseDiChiusura'];
-  }*/
-
-
+  ngOnInit() { }
 
   procedi() {
-    console.log("PROCEDI");
-    console.log(this.iterParams);
+    if(!this.isOpenedAsPopup){
+      if(!this.iterParams.idIter){
+        notify({
+          message: "Selezionare un iter per poter procedere!",
+          type: "warning",
+          displayTime: 2100,
+          position: {
+            my: "center", at: "center", of: window
+          },
+          width: "max-content"
+        });
+        return;
+      }
+    }
 
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/stepOn", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({},)
       .subscribe(
       res => {
-        console.log("Mandato iterParams a Guido!");
-        console.log(res);
-        this.sendMessage(true);
+        this.out.emit({ visible: false, proceduto: true });
       },
       err => {
         this.showStatusOperation("Boh, che sarà successo", "error");
-        this.sendMessage(false);
+        this.out.emit({ visible: false, proceduto: false });
       });
   }
 
@@ -122,21 +99,31 @@ export class PassaggioDiFaseComponent implements OnInit {
 
 
 
-  annulla() {
-    console.log("ANNULLA");
-    this.iterParams = undefined;
-    this.sendMessage(false);
+  handleAnnulla(e){
+      this.showPopupAnnullamento = !this.showPopupAnnullamento;
+  }
+
+  handleClose(){
+    if(!this.isOpenedAsPopup){
+      window.close();
+    }else{
+      this.showPopupAnnullamento = !this.showPopupAnnullamento;
+      this.out.emit({ visible: false, proceduto: false });
+    }
   }
 
   sendMessage(proceduto: boolean) {
     this.visibile = false;
-    this.messageEvent.emit({ visible: false, proceduto: proceduto });
   }
 
-  onFormSubmit(event: Event) {
-    
-  }
+  onFormSubmit(event: Event) {}
 
+}
+
+interface PassaggioFaseParams{
+  currentFaseName: string;
+  nextFaseName: string;
+  isNextFaseDiChiusura: boolean;
 }
 
 export class IterParams {

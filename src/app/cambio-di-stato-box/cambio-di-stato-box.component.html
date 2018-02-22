@@ -5,7 +5,7 @@
   [showValidationSummary]="true"
   >
 
-  <!-- <dxi-item itemType="group" [colCount]="3001" [label]="{text: 'Documento'}">
+  <dxi-item *ngIf="isOpenedAsPopup" itemType="group" [colCount]="3001" [label]="{text: 'Documento'}">
     <dxi-item itemType="empty" [colSpan]="1"></dxi-item>
     <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1000" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: docFieldDisabled }">
       <dxi-validation-rule type="required" message="Il registro del documento è obbligatorio"></dxi-validation-rule>
@@ -16,7 +16,7 @@
     <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'Anno', showColon: true}" [editorOptions]="{disabled: docFieldDisabled }">
       <dxi-validation-rule type="required" message="L'anno del documento è obbligatorio"></dxi-validation-rule>
     </dxi-item> 
-  </dxi-item>   -->
+  </dxi-item>  
 
     <dxi-item itemType="group">
       <dxi-item dataField="statoCorrente" [label]="{text: 'Stato corrente'}" [editorOptions]="{ disabled: true }">
@@ -89,7 +89,7 @@
         <dxi-item dataField="note" editorType="dxTextArea"></dxi-item>
       </dx-form>
       <div class="text-right">
-          <dx-button class="d-inline-block" text="Chiudi" (click)="handleClose($event)"></dx-button>
+          <dx-button class="d-inline-block" text="Chiudi" (click)="handleRiassunto($event)"></dx-button>
       </div>
       
   </div>
@@ -105,10 +105,10 @@ class="popup"
 [closeOnOutsideClick]="false"
 [(visible)]="showPopupAnnullamento">
   <div *dxTemplate="let data of 'content'">
-      <h3>Procedendo con l'annullamento delle modifiche verrà chiusa la finestra e si ritornerà all'interfaccia di origine.</h3> 
+      <h3>Annullando le modifiche apportate non verranno salvate. Procedere comunque?</h3> 
       <div class="text-right mt-4">
-          <dx-button class="d-inline-block" text="Annulla" (click)="handleAnnulla($event)"></dx-button>
-          <dx-button class="d-inline-block" text="Chiudi" (click)="handleClose($event)"></dx-button>
+          <dx-button class="d-inline-block" text="No" (click)="handleAnnulla($event)"></dx-button>
+          <dx-button class="d-inline-block" text="Si" (click)="handleClose($event)"></dx-button>
       </div>
   </div>
 </dx-popup>

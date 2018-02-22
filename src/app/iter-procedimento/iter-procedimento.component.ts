@@ -11,6 +11,7 @@ import { Fase } from "../classi/server-objects/entities/fase";
 import { FaseIter } from "../classi/server-objects/entities/fase-iter";
 import { ProcedimentoCache } from "../classi/server-objects/entities/procedimento-cache";
 import { PassaggioDiFaseComponent } from "./passaggio-di-fase/passaggio-di-fase.component";
+import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
@@ -19,6 +20,9 @@ import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
 import { log } from "util";
 import * as moment from "moment";
 import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stato-box.component";
+import { LoggedUser } from "../authorization/logged-user";
+import { Observable, Subscription } from "rxjs";
+import { GlobalContextService } from "@bds/nt-angular-context/global-context.service";
 
 
 
@@ -68,8 +72,17 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public perFiglioPassaggioFase: Object;
 
   public paramsPerSospensione: Object;
+  public sospensioneParams: SospensioneParams = new SospensioneParams();
+  public loggedUser$: Observable<LoggedUser>;
+  private subscriptions: Subscription[] = [];
+  public userInfo: UserInfo;
 
-  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private odataContextFactory: OdataContextFactory, 
+    private http: HttpClient, private activatedRoute: ActivatedRoute,  
+    private globalContextService: GlobalContextService
+  ) {
+
     console.log("iter-procedimento-component (constructor)");
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
       const idIter: string = queryParams["idIter"];
@@ -100,6 +113,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       idIter: this.idIter,
       ricarica: false  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore
     };
+    this.recuperaUserInfo();
+    
 
     this.paramsPerSospensione = {
       iter: this.iter,
@@ -112,6 +127,22 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     // this.passaggioDiFaseVisible = this.child.visibile;
   }
 
+  recuperaUserInfo(){
+    this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
+    this.subscriptions.push(
+        this.loggedUser$.subscribe(
+            (loggedUser: LoggedUser) => {
+                if (loggedUser) {
+                  this.userInfo = {
+                    idUtente: loggedUser.idUtente,
+                    idAzienda:  loggedUser.aziendaLogin.id,
+                    cf: "GSLFNC89A05G224Y"
+                  }
+                }
+            }
+        )
+    );
+  }
 
   ngOnInit() {
   }
@@ -219,34 +250,42 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public sospensioneIter() {
-    let dataDaPassare: Date;
-    if (this.iter.stato === "sospeso") {
-      const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.iter.id)
-        .subscribe(
-        res => {
-          let r: any = res;
-          dataDaPassare = new Date(r);
-          this.paramsPerSospensione = {
-            iter: this.iter,
-            stato: this.iter.stato,
-            dataSospensione: dataDaPassare
-          };
-          this.popupData.title = "Gestione Sospensione";
-          this.sospensioneIterVisible = true;
-        },
-        err => {
-          // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
-        }
-        );
-    } else {
-      this.paramsPerSospensione = {
-        iter: this.iter,
-        stato: this.iter.stato,
-        dataSospensione: null
-      };
-      this.popupData.title = "Gestione Sospensione";
-      this.sospensioneIterVisible = true;
-    }
+    // let dataDaPassare: Date;
+    // if (this.iter.stato === "sospeso") {
+    //   const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.iter.id)
+    //     .subscribe(
+    //     res => {
+    //       let r: any = res;
+    //       dataDaPassare = new Date(r);
+    //       this.paramsPerSospensione = {
+    //         iter: this.iter,
+    //         stato: this.iter.stato,
+    //         dataSospensione: dataDaPassare
+    //       };
+    //       this.popupData.title = "Gestione Sospensione";
+    //       this.sospensioneIterVisible = true;
+    //     },
+    //     err => {
+    //       // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+    //     }
+    //     );
+    // } else {
+    //   this.paramsPerSospensione = {
+    //     iter: this.iter,
+    //     stato: this.iter.stato,
+    //     dataSospensione: null
+    //   };
+    //   this.popupData.title = "Gestione Sospensione";
+    //   this.sospensioneIterVisible = true;
+    // }
+    console.log("Sent UserInfo: ", this.userInfo);
+    this.sospensioneParams.idIter = this.idIter;
+    this.sospensioneParams.numeroIter = this.iter.numero;
+    this.sospensioneParams.annoIter = this.iter.anno;
+    this.sospensioneParams.statoCorrente =  this.iter.stato;
+    this.sospensioneParams.statoCorrente = this.iter.stato;
+    this.popupData.title = "Cambia stato iter";
+    this.sospensioneIterVisible = true;
   }
 
   receiveMessage($event) {
@@ -262,7 +301,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   receiveMessageFromSospensione($event) {
     this.sospensioneIterVisible = $event["visible"];
     this.buildIter();
-    this.setNomeBottoneSospensione();
+    // this.setNomeBottoneSospensione();
 
 
   }
@@ -311,4 +350,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       });
     return b;
   }
+}
+
+interface UserInfo{
+  idUtente: number;
+  cf: string;
+  idAzienda: number;
 }

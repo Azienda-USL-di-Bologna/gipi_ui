@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import DataSource from "devextreme/data/data_source";
 import CustomStore from 'devextreme/data/custom_store';
 import ArrayStore from 'devextreme/data/array_store';
@@ -21,18 +21,19 @@ export class CambioDiStatoBoxComponent implements OnInit{
   public statiIter: string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
   public statiIterService: string[] = new Array();
   public _userInfo: UserInfo;
-  // public docFieldDisabled: boolean;
   public showPopupRiassunto: boolean = false;
-  public showPopupAnnullamento : boolean = false
+  public showPopupAnnullamento : boolean = false;
+
+  @Output() out = new EventEmitter<any>();
 
   @Input() set userInfo(value: UserInfo){
     this._userInfo = value;
   }
   @Input()
   set sospensioneParams(value : SospensioneParams){
-    console.log('New value:', value)
     this._sospensioneParams = value;
   };
+  @Input("isOpenedAsPopup") isOpenedAsPopup?: boolean;
 
   constructor(private http: HttpClient) { 
     this.statiIterService[this.statiIter[0]] = "iter_in_corso";
@@ -40,11 +41,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
     this.statiIterService[this.statiIter[2]] = "chiusura_iter";
   }
 
-  ngOnInit() {
-    // if(this._sospensioneParams.codiceRegistroDocumento){
-    //   this.docFieldDisabled = true;
-    // }
-  }
+  ngOnInit() {}
 
    handleSubmit(e){
     e.preventDefault();
@@ -90,11 +87,25 @@ export class CambioDiStatoBoxComponent implements OnInit{
    }
 
   handleClose(){
-    window.close();
+    if(!this.isOpenedAsPopup){
+      window.close();
+    }else{
+      this.showPopupAnnullamento = !this.showPopupAnnullamento;
+      this.out.emit({ visible: false });
+    }
   }
 
   handleAnnulla(e){
     this.showPopupAnnullamento = !this.showPopupAnnullamento;
+  }
+
+  handleRiassunto(){
+    this.showPopupRiassunto = !this.showPopupRiassunto;
+    if(!this.isOpenedAsPopup){
+      window.close();
+    }else{
+      this.out.emit({ visible: false });
+    }
   }
 
 }
@@ -108,14 +119,6 @@ interface ShippedParams {
   note: string;
   stato: string;
   dataEvento: Date;
-}
-
-interface InfoDocumento{
-  registro: string,
-  numero: string,
-  anno: number,
-  oggetto: string,
-  dataRegistrazione: Date,
 }
 
 interface UserInfo{
