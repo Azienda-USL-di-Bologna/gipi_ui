@@ -1,17 +1,15 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Iter } from "app/classi/server-objects/entities/iter";
-// import { UtenteStruttura } from "app/classi/server-objects/entities/utente-struttura";
-import { OdataContextFactory } from "@bds/nt-angular-context";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
-import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
-import { Entities, CUSTOM_RESOURCES_BASE_URL, afferenzaStruttura } from "environments/app.constants";
+import { Utente, bUtente, bAzienda } from "@bds/nt-entities";
+import { OdataContextFactory } from "@bds/nt-context";
+import { OdataContextDefinition } from "@bds/nt-context";
+import { CustomLoadingFilterParams } from "@bds/nt-context";
+import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
-// import { forEach } from "@angular/router/src/utils/collection";
 import { HttpHeaders } from "@angular/common/http";
 import { OnInit } from "@angular/core/src/metadata/lifecycle_hooks";
-import { LoggedUser } from "../../authorization/logged-user";
-import { GlobalContextService } from "@bds/nt-angular-context";
+import { LoggedUser } from "@bds/nt-login";
+import { GlobalContextService } from "@bds/nt-context";
 
 @Component({
   selector: "avvia-nuovo-iter",
@@ -93,14 +91,14 @@ export class AvviaNuovoIterComponent implements OnInit {
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("descrizione");
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
     this.dataSourceUtenti = {
-      store: customOdataContextDefinition.getContext()[Entities.Utente.name].on("loading", (loadOptions) => {
+      store: customOdataContextDefinition.getContext()[new Utente().getName()].on("loading", (loadOptions) => {
         loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
         customOdataContextDefinition.customLoading(loadOptions);
       }),
       expand: [
         "idPersona"
       ],
-      filter: [["idAzienda.id", "=", this.loggedUser.aziendaLogin.id], ["attivo", "=", true]],
+      filter: ["idAzienda.id", "=", this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id], ["attivo", "=", true]],
       paginate: true,
       pageSize: 15
     };
@@ -156,7 +154,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   ngOnInit() {
     /* Chiamo qui questo metodo altrimenti non abbiamo l'idAzienda per filtrare */
     this.buildDataSourceUtenti();
-    this.iterParams.idUtenteLoggato = this.loggedUser.idUtente;
+    this.iterParams.idUtenteLoggato = this.loggedUser.getField(bUtente.id);
   }
 
   public handleEvent(name: string, data: any) {

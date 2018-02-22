@@ -1,11 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { TipoProcedimento } from "../../classi/server-objects/entities/tipo-procedimento";
-import { Procedimento } from "../../classi/server-objects/entities/procedimento";
-import { AziendaTipoProcedimento } from "app/classi/server-objects/entities/azienda-tipo-procedimento";
+import {AziendaTipoProcedimento, Titolo} from "@bds/nt-entities";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextFactory, GlobalContextService } from "@bds/nt-angular-context";
-import { Entities, CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import { OdataContextFactory, GlobalContextService, OdataContextDefinition } from "@bds/nt-context";
 import { LoggedUser } from "app/authorization/logged-user";
 import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
 import { HttpHeaders } from "@angular/common/http";
@@ -42,7 +38,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nome");
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
     this.dataSourceTitoli = new DataSource({
-      store: odataContextDefinition.getContext()[Entities.Titolo.name].on("loading", (loadOptions) => {
+      store: this.odataContextDefinition.getContext()[new Titolo().getName()],
         loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
         odataContextDefinition.customLoading(loadOptions);
     }),

@@ -2,13 +2,9 @@ import {Component, Input, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { DxDataGridComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from "./definizione-tipi-procedimento.service";
-import {TipoProcedimento} from "../classi/server-objects/entities/tipo-procedimento";
-import {OdataContextDefinition} from "@bds/nt-angular-context/odata-context-definition";
-import {Entities} from "../../environments/app.constants";
-import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
+import {TipoProcedimento} from "@bds/nt-entities";
+import {OdataContextDefinition, GlobalContextService, OdataContextFactory} from "@bds/nt-context";
 import {ActivatedRoute, Router} from "@angular/router";
-import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
-// import { UtilityFunctions } from '../utility-functions';
 
 
 @Component({
@@ -47,7 +43,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
     this.odataContextDefinition = odataContexFactory.buildOdataContextEntitiesDefinition();
     this.dataSource = new DataSource({
-      store: this.odataContextDefinition.getContext()[Entities.TipoProcedimento.name],
+      store: this.odataContextDefinition.getContext()[new TipoProcedimento().getName()],
 /*       map: function (item) {
        if (item.dataInizioValidita != null)
           item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);

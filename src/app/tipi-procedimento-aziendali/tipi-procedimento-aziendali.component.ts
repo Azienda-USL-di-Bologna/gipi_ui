@@ -1,13 +1,10 @@
 import { Component, OnInit, EventEmitter } from "@angular/core";
-import { GlobalContextService, OdataContextFactory } from "@bds/nt-angular-context";
+import { GlobalContextService, OdataContextFactory, OdataContextDefinition} from "@bds/nt-context";
 import { Router, ActivatedRoute } from "@angular/router";
-import { LoggedUser } from "../authorization/logged-user";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import { LoggedUser } from "@bds/nt-login";
 import DataSource from "devextreme/data/data_source";
-import { Entities } from "environments/app.constants";
 import { DxDataGridComponent } from "devextreme-angular";
-import { TipoProcedimento } from "../classi/server-objects/entities/tipo-procedimento";
-import { AziendaTipoProcedimento } from "../classi/server-objects/entities/azienda-tipo-procedimento";
+import { TipoProcedimento, AziendaTipoProcedimento, bUtente, bAzienda } from "@bds/nt-entities";
 
 @Component({
   selector: "tipi-procedimento-aziendali",
@@ -32,14 +29,14 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
     private globalContextService: GlobalContextService) {
 
       this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
-      this.descAzienda = this.loggedUser.aziendaLogin.descrizione;
-      this.idAzienda = this.loggedUser.aziendaLogin.id;
+      this.descAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.descrizione];
+      this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
       console.log("LOGGO ID AZIENDA", this.idAzienda);
 
 
       this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
       this.dataSourceProcedimenti = new DataSource({
-        store: this.odataContextDefinition.getContext()[Entities.AziendaTipoProcedimento.name],
+        store: this.odataContextDefinition.getContext()[new TipoProcedimento().getName()],    
         expand: ["idAzienda", "idTipoProcedimento", "idTitolo"],
         filter: [["idAzienda.id", "=", this.idAzienda]]
         
@@ -60,7 +57,7 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   }
 
   public handleEvent(event: any) {
-    if(event.columnIndex === 4){
+    if (event.columnIndex === 4) {
       this.procedimentoDaPassare = event.data;
       console.log("THIS.ROUTE", this.route);
       console.log("handleEvent tipiProcAz: procedimentoDaPassare", this.procedimentoDaPassare);

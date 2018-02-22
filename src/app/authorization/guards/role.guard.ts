@@ -1,8 +1,10 @@
 import { Injectable } from "@angular/core";
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, Data } from "@angular/router";
 import { Observable } from "rxjs/Observable";
-import { GlobalContextService } from "@bds/nt-angular-context";
-import { LoggedUser } from "../logged-user";
+import { GlobalContextService } from "@bds/nt-context";
+import { LoggedUser } from "@bds/nt-login";
+import { bUtente, bRuolo } from "@bds/nt-entities";
+
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -20,12 +22,12 @@ export class RoleGuard implements CanActivate {
         
         // confronto il nomeBreve dei ruoli dell'utente con i ruoli concessi passati nel parametro ruoliConcessi: se fanno match, restituisco true
         this.ruoliConcessi = next.data.ruoliConcessi;
-        let ruoliUtente = this.loggedUser.ruoli;
+        let ruoliUtente = this.loggedUser.getField(bUtente.ruoli);
        
         for (let i = 0; i < this.ruoliConcessi.length; i++) {
             const rc = this.ruoliConcessi[i];
             for (let j = 0; j < ruoliUtente.length; j++) {
-                const ru = ruoliUtente[j].nomeBreve;
+                const ru = ruoliUtente[j][bRuolo.nomeBreve];
                 if (ru === rc) {
                     return true;
                 }                

@@ -1,9 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
-import {Struttura} from "../../classi/server-objects/entities/struttura";
+import {GetStruttureByTipoProcedimento, Struttura} from "@bds/nt-entities";
 import DataSource from "devextreme/data/data_source";
-import ODataStore from "devextreme/data/odata/store";
-import {OdataContextFactory} from "@bds/nt-angular-context";
-import { FunctionsImport } from "../../../environments/app.constants";
+import {OdataContextFactory} from "@bds/nt-context";
 import {HttpClient} from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { CUSTOM_RESOURCES_BASE_URL } from "../../../environments/app.constants";
@@ -85,7 +83,7 @@ export class StruttureTreeComponent implements OnInit {
 
   ngOnInit() {
     this.datasource = new DataSource({
-      store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
+      store: this.odataContextDefinition.getContext()[new GetStruttureByTipoProcedimento().getName()],
       customQueryParams: {
         idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
         idAzienda: this.idAzienda
