@@ -10,30 +10,32 @@
     (onToolbarPreparing)="onToolbarPreparing($event)"
     (onSelectionChanged)="handleEvent('onSelectionChanged', $event)"
     wordWrapEnabled="true">
+    allowColumnResizing="true"
+    columnResizingMode="nextColumn">
     
     <dxo-paging [pageSize]="10"></dxo-paging>
   
     <dxo-filter-row [visible]="true" showAllText=' '></dxo-filter-row>
-    <dxo-search-panel [visible]="true" [width]="calcWidth(3)" placeholder="Cerca.." searchVisibleColumnsOnly="true"></dxo-search-panel>
+    <dxo-search-panel *ngIf="!daDocumento" [visible]="true" [width]="calcWidth(3)" placeholder="Cerca.." searchVisibleColumnsOnly="true"></dxo-search-panel>
 
     <!-- nome: [width]="170" --><!-- tit: [width]="200" -->
     <dxo-selection [mode]="enableSelection" [allowSelectAll]="false"></dxo-selection>
 
-    <dxi-column [minWidth]="250" dataField="idStruttura.nome" caption="Struttura" [dataType]="'string'" [allowEditing]="false" alignment="left" cssClass="column"></dxi-column>
-    <dxi-column dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" caption="Nome" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
-    <dxi-column [minWidth]="200" dataField="idAziendaTipoProcedimento.idTitolo.nome" [visible]="colonnaVisibile" caption="Classificazione" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
-    <dxi-column [width]="150" dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [visible]="colonnaVisibile" caption="Durata massima (gg)" [dataType]="'number'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
-    <dxi-column [width]="120" dataField="dataInizio" [visible]="colonnaVisibile" caption="Valido dal" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
-    <dxi-column dataField="idTitolarePotereSostitutivo.idPersona.descrizione" caption="Tit. potere sostitutivo" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
-    <dxi-column [width]="100" caption="Dettagli" cellTemplate="buttonActions" alignment="center" [visible]="colonnaVisibile"></dxi-column>
+    <dxi-column [minWidth]="200" dataField="idStruttura.nome" caption="Struttura" [dataType]="'string'" [allowEditing]="false" alignment="left" cssClass="column"></dxi-column>
+    <dxi-column [minWidth]="100" dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" caption="Nome" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+    <dxi-column [minWidth]="150" dataField="idAziendaTipoProcedimento.idTitolo.nome" [visible]="colonnaVisibile" caption="Classificazione" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+    <dxi-column [width]="100" dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [visible]="colonnaVisibile" caption="Durata massima (gg)" [dataType]="'number'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+    <dxi-column [width]="95" dataField="dataInizio" [visible]="colonnaVisibile" caption="Valido dal" [dataType]="'date'" [format]="'dd/MM/yyyy'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+    <dxi-column [minWidth]="100" dataField="idTitolarePotereSostitutivo.idPersona.descrizione" caption="Titolare potere sostitutivo" [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"></dxi-column>
+    <dxi-column [width]="80" caption="Dettagli" cellTemplate="buttonActions" alignment="center" [visible]="colonnaVisibile"></dxi-column>
     <div *dxTemplate="let element of 'buttonActions'" cssClass="app-azioni">
         <dx-button text="" hint="Vai al dettaglio" icon='info' (onClick)="handleEvent('infoOnClick', element)"></dx-button>
     </div>
-    <dxi-column [width]="100" caption="Storico iter" cellTemplate="buttonStorico" alignment="center" [visible]="colonnaVisibile"></dxi-column>
+    <dxi-column [width]="80" caption="Storico iter" cellTemplate="buttonStorico" alignment="center" [visible]="colonnaVisibile"></dxi-column>
     <div *dxTemplate="let element of 'buttonStorico'" cssClass="app-azioni">
       <dx-button text="" icon='event'></dx-button>
     </div>
-    <dxi-column [width]="100" caption="Nuovo iter" cellTemplate="buttonIter" alignment="center" [visible]="colonnaVisibile"></dxi-column>
+    <dxi-column [width]="80" caption="Nuovo iter" cellTemplate="buttonIter" alignment="center" [visible]="colonnaVisibile"></dxi-column>
     <div *dxTemplate="let element of 'buttonIter'" cssClass="app-azioni">
       <dx-button text="" icon='repeat' (onClick)="handleEvent('iterOnClick', element)"></dx-button>
     </div>
@@ -73,18 +75,18 @@
       </dxo-form>
     </dxo-editing>
   </dx-data-grid>
-
-  <dx-popup
-    title="Avvia nuovo iter"
-    [maxWidth]="800"
-    [minWidth]="500"
-    [height]="600"
-    [showTitle]="true"
-    [visible]="popupNuovoIterVisible"
-    (onHidden)="popupHidden()">
-    <div *dxTemplate="let data of 'content'">
-      <avvia-nuovo-iter [procedimentoSelezionato]="procedimentoDaPassare" (messageEvent)="receiveMessage($event)"></avvia-nuovo-iter>
-    </div>
-  </dx-popup>
 </div>
-    
+  
+<dx-popup
+  title="Avvia nuovo iter"
+  [showTitle]="true"
+  [visible]="popupNuovoIterVisible"
+  (onHidden)="popupHidden()"
+  class="popup-nuovo-iter">
+  <div *dxTemplate="let data of 'content'">
+    <avvia-nuovo-iter [procedimentoSelezionato]="procedimentoDaPassare" (messageEvent)="receiveMessage($event)"></avvia-nuovo-iter>
+  </div>
+</dx-popup>
+  
+  <!--     [maxWidth]="800"
+      [minWidth]="500" -->

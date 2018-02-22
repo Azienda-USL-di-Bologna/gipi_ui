@@ -1,15 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import {DEFAULT_INTERRUPTSOURCES, Idle} from "@ng-idle/core";
-import {Keepalive} from "@ng-idle/keepalive";
-import {Router} from "@angular/router";
-import {SessionManager} from "../login/session-manager";
-import { log } from "util";
-import { Ruolo } from "app/classi/server-objects/entities/ruolo";
-import { Azienda } from "app/classi/server-objects/entities/azienda";
-import { Struttura } from "app/classi/server-objects/entities/struttura";
-import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
-import { GlobalContextService } from "@bds/nt-angular-context";
-import { LoggedUser } from "../authorization/logged-user";
+import {SessionManager, LoggedUser} from "@bds/nt-login";
+import { GlobalContextService } from "@bds/nt-context";
 
 @Component({
   selector: "app-home",
@@ -17,22 +8,14 @@ import { LoggedUser } from "../authorization/logged-user";
   styleUrls: ["./home.component.scss"]
 })
 export class HomeComponent implements OnInit {
-  username: String;
-  ruolo: Ruolo;
-  azienda: Azienda;
-  strutture: Struttura[];
-  struttureDiSeguito = "";
-  private userInfoMap: Object;
 
+  constructor(private sessionManager: SessionManager) {
 
-  constructor(private sessionManager: SessionManager,
-    private globalContextService: GlobalContextService) {
-
-      if (this.globalContextService.getInnerSharedObject("loggedUser") === undefined) {
-        let loggedUser = new LoggedUser(JSON.parse(sessionStorage.getItem("userInfo")));
-        this.globalContextService.setSubjectInnerSharedObject("loggedUser", loggedUser);
-        this.globalContextService.setInnerSharedObject("loggedUser", loggedUser);
-      }
+      // if (this.globalContextService.getInnerSharedObject("loggedUser") === undefined) {
+      //   let loggedUser = new LoggedUser(JSON.parse(sessionStorage.getItem("userInfo")));
+      //   this.globalContextService.setSubjectInnerSharedObject("loggedUser", loggedUser);
+      //   this.globalContextService.setInnerSharedObject("loggedUser", loggedUser);
+      // }
 
     // sessionManager.setExpireTokenOnIdle(300);
     // this.userInfoMap = JSON.parse(sessionStorage.getItem("userInfoMap"));

@@ -1,23 +1,16 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
-import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
-import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
-import { Entities, CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
-import { SequenzaDelleFasiComponent } from "./sequenza-delle-fasi/sequenza-delle-fasi.component";
-import { Iter } from "../classi/server-objects/entities/iter";
-import { Utente } from "../classi/server-objects/entities/utente";
-import { Fase } from "../classi/server-objects/entities/fase";
-import { FaseIter } from "../classi/server-objects/entities/fase-iter";
-import { ProcedimentoCache } from "../classi/server-objects/entities/procedimento-cache";
-import { PassaggioDiFaseComponent } from "./passaggio-di-fase/passaggio-di-fase.component";
+import { OdataContextDefinition } from "@bds/nt-context";
+import { CustomLoadingFilterParams } from "@bds/nt-context";
+import { OdataContextFactory } from "@bds/nt-context";
+import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
+import { Iter, Utente, Fase, FaseIter, ProcedimentoCache } from "@bds/nt-entities";
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
-import { ButtonAppearance } from "@bds/nt-angular-context/templates/buttons-bar/buttons-bar.component";
+import { ButtonAppearance } from "@bds/nt-context/templates/buttons-bar/buttons-bar.component";
 import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
-import { log } from "util";
 import * as moment from "moment";
 import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stato-box.component";
 import { LoggedUser } from "../authorization/logged-user";
@@ -96,7 +89,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
 
     this.dataSourceIter = new DataSource({
-      store: oataContextDefinitionTitolo.getContext()[Entities.Iter.name],
+      store: oataContextDefinitionTitolo.getContext()[new Iter().getName()],
       expand: [
         "idFaseCorrente",
         "idIterPrecedente",
@@ -179,7 +172,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   buildIter() {
     this.dataSourceIter.load().then(res => {
-      this.iter.build(res[0], Iter);
+      // this.iter.build(res[0], Iter);
+      this.iter.build(res[0]);
       this.generateCustomButtons();
       this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
       this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + this.iter.procedimentoCache.durataMassimaProcedimento);

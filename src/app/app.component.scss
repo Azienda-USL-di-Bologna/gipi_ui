@@ -107,6 +107,10 @@
   white-space: initial;
 }
 
+/deep/ .fix-bug-dx .dx-field-item-label-content {
+  width: initial !important;
+}
+
 /* SE VOGLIO COLORE RIGHE ALTERNATE ALTERNATO: **/
 
 // COLORE DELL'ALTERNANZA

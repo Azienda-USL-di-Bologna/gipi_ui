@@ -1,17 +1,15 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Iter } from "app/classi/server-objects/entities/iter";
-// import { UtenteStruttura } from "app/classi/server-objects/entities/utente-struttura";
-import { OdataContextFactory } from "@bds/nt-angular-context";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
-import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
-import { Entities, CUSTOM_RESOURCES_BASE_URL, afferenzaStruttura } from "environments/app.constants";
+import { Utente, bUtente, bAzienda, Procedimento } from "@bds/nt-entities";
+import { OdataContextFactory } from "@bds/nt-context";
+import { OdataContextDefinition } from "@bds/nt-context";
+import { CustomLoadingFilterParams } from "@bds/nt-context";
+import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
-// import { forEach } from "@angular/router/src/utils/collection";
 import { HttpHeaders } from "@angular/common/http";
 import { OnInit } from "@angular/core/src/metadata/lifecycle_hooks";
-import { LoggedUser } from "../../authorization/logged-user";
-import { GlobalContextService } from "@bds/nt-angular-context";
+import { LoggedUser } from "@bds/nt-login";
+import { GlobalContextService } from "@bds/nt-context";
 
 @Component({
   selector: "avvia-nuovo-iter",
@@ -26,12 +24,8 @@ export class AvviaNuovoIterComponent implements OnInit {
   public dataSourceUtenti: any;
   public iterParams: IterParams = new IterParams();
   public nomeProcedimento: string;
-  public now: Date = new Date();
   public dataMassimaConclusione: Date;
-  public procedimentoMax: number;
-
   public loggedUser: LoggedUser;
-
 
   @Input()
   set procedimentoSelezionato(procedimento: any) {
@@ -81,10 +75,8 @@ export class AvviaNuovoIterComponent implements OnInit {
       this.nomeProcedimento = procedimento.procedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome
         + " (" + procedimento.procedimento.idStruttura.nome + ")";
       this.iterParams.idProcedimento = procedimento.procedimento.id;
-      // this.iterParams.idAzienda = procedimento.procedimento.idAziendaTipoProcedimento.idAzienda.id;
-      // this.dataMassimaConclusione = new Date();
-      this.procedimentoMax = procedimento.procedimento.idAziendaTipoProcedimento.durataMassimaProcedimento;
-      // this.dataMassimaConclusione.setDate(this.iterParams.dataAvvioIter.getDate() + procedimento.procedimento.idAziendaTipoProcedimento.durataMassimaProcedimento);
+
+      this.iterParams.procedimento = procedimento.procedimento;
     }
   }
 
@@ -93,14 +85,17 @@ export class AvviaNuovoIterComponent implements OnInit {
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("descrizione");
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
     this.dataSourceUtenti = {
-      store: customOdataContextDefinition.getContext()[Entities.Utente.name].on("loading", (loadOptions) => {
+      store: customOdataContextDefinition.getContext()[new Utente().getName()].on("loading", (loadOptions) => {
         loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
         customOdataContextDefinition.customLoading(loadOptions);
       }),
       expand: [
         "idPersona"
       ],
-      filter: [["idAzienda.id", "=", this.loggedUser.aziendaLogin.id], ["attivo", "=", true]],
+      filter: ["idAzienda.id", "=", this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id], ["attivo", "=", true]],
+        // ["idAzienda.id", "=", this.loggedUser.aziendaLogin.id],
+        // ["attivo", "=", true]
+      // ],
       paginate: true,
       pageSize: 15
     };
@@ -122,7 +117,6 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   private avviaIter() {
-    console.log(this.iterParams);
     if (this.campiObbligatoriCompilati()) {
       const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({}, this.iterParams))
         .subscribe(
@@ -156,7 +150,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   ngOnInit() {
     /* Chiamo qui questo metodo altrimenti non abbiamo l'idAzienda per filtrare */
     this.buildDataSourceUtenti();
-    this.iterParams.idUtenteLoggato = this.loggedUser.idUtente;
+    this.iterParams.idUtenteLoggato = this.loggedUser.getField(bUtente.id);
   }
 
   public handleEvent(name: string, data: any) {
@@ -175,9 +169,9 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   public setDataMax(): Date {
-    if (this.procedimentoMax != null && this.iterParams.dataAvvioIter !== undefined) {
+    if (this.iterParams.procedimento != null && this.iterParams.dataAvvioIter !== undefined) {
       this.dataMassimaConclusione = new Date();
-      this.dataMassimaConclusione.setDate(this.iterParams.dataAvvioIter.getDate() + this.procedimentoMax);
+      this.dataMassimaConclusione.setDate(this.iterParams.dataAvvioIter.getDate() + this.iterParams.procedimento.idAziendaTipoProcedimento.durataMassimaProcedimento);
     }
     return this.dataMassimaConclusione;
   }
@@ -186,9 +180,7 @@ export class AvviaNuovoIterComponent implements OnInit {
 class IterParams {
   public idUtenteResponsabile: number;
   public idUtenteLoggato: number;
-  /* public idStrutturaUtente: number; */
   public idProcedimento: number;
-  // public idAzienda: number;
   public oggettoIter: string;
   public dataCreazioneIter: Date;
   public dataAvvioIter: Date;
@@ -196,4 +188,5 @@ class IterParams {
   public numeroDocumento: string;
   public annoDocumento: number;
   public promotoreIter: string;
+  public procedimento: Procedimento;
 }

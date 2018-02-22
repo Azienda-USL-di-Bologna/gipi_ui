@@ -1,19 +1,16 @@
 import {Component, OnInit, ViewChild, AfterViewInit, Input} from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { Router } from "@angular/router";
-import {AziendaTipoProcedimento} from "../classi/server-objects/entities/azienda-tipo-procedimento";
+import {AziendaTipoProcedimento, TipoProcedimento, Azienda, Titolo} from "@bds/nt-entities";
 import {DxFormComponent} from "devextreme-angular";
-import {TipoProcedimento} from "../classi/server-objects/entities/tipo-procedimento";
-import {OdataContextDefinition} from "@bds/nt-angular-context/odata-context-definition";
-import {Azienda} from "../classi/server-objects/entities/azienda";
+import {OdataContextDefinition} from "@bds/nt-context";
 import notify from "devextreme/ui/notify";
-import {Entities} from "../../environments/app.constants";
-import {Entity} from "@bds/nt-angular-context/entity";
+import {Entity} from "@bds/nt-context";
 import {custom} from "devextreme/ui/dialog";
-import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
-import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
-import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
-import {ButtonAppearance} from "@bds/nt-angular-context/templates/buttons-bar/buttons-bar.component";
+import {OdataContextFactory} from "@bds/nt-context";
+import { CustomLoadingFilterParams } from "@bds/nt-context";
+import {GlobalContextService} from "@bds/nt-context";
+import {ButtonAppearance} from "@bds/nt-context/templates/buttons-bar/buttons-bar.component";
 
 
 @Component({
@@ -80,7 +77,7 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
 
         this.odataContextEntitiesAziendaTipoProcedimento = this.odataContextFactory.buildOdataContextEntitiesDefinition();
         this.datasource = new DataSource({
-            store: this.odataContextEntitiesAziendaTipoProcedimento.getContext()[Entities.AziendaTipoProcedimento.name]
+            store: this.odataContextEntitiesAziendaTipoProcedimento.getContext()[new AziendaTipoProcedimento().getName()]
                 .on("modifying", () => {console.log("modified"); })
                 .on("modified", () => {console.log("modified"); }),
             expand: ["idAzienda", "idTipoProcedimento", "idTitolo"],
@@ -95,7 +92,7 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
         customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
 
         this.dataSourceClassificazione = new DataSource({
-            store: oataContextDefinitionTitolo.getContext()[Entities.Titolo.name].on("loading", (loadOptions) => {
+            store: oataContextDefinitionTitolo.getContext()[new Titolo().getName()].on("loading", (loadOptions) => {
                 loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
                 oataContextDefinitionTitolo.customLoading(loadOptions);
             }),
@@ -179,7 +176,8 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
                 ["idAzienda.id", "=", azienda.id]]);
             this.datasource.load().then(res => {
                 // this.aziendaTipoProcedimento = res[0] as AziendaTipoProcedimento;
-                this.aziendaTipoProcedimento.build(res[0], AziendaTipoProcedimento);
+                // this.aziendaTipoProcedimento.build(res[0], AziendaTipoProcedimento);
+                this.aziendaTipoProcedimento.build(res[0]);
                 this.setFields(tipoProcedimentoDefault);
                 if (setInitialValues) {
                     this.setInitialValues();

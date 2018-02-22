@@ -1,18 +1,17 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from "@angular/core";
+import { Fase } from "@bds/nt-entities";
 import { Iter } from "app/classi/server-objects/entities/iter";
-import { Fase } from "app/classi/server-objects/entities/fase";
 import { DocumentoIter } from "app/classi/server-objects/entities/documento-iter";
 import DataSource from "devextreme/data/data_source";
 import { Entities, CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { log } from "util";
 import { OdataContextFactory } from "@bds/nt-angular-context";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { element } from "protractor";
-import { forEach } from "@angular/router/src/utils/collection";
 import { Subscription, Subscriber } from "rxjs";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 
+import { confirm } from "devextreme/ui/dialog";
 
 @Component({
   selector: "app-passaggio-di-fase",

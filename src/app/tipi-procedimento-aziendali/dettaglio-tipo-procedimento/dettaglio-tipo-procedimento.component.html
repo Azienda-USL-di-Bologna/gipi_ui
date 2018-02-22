@@ -2,22 +2,47 @@
   <dx-form
   [(formData)]="proc">
     <dxi-item itemType="group"> 
-      <dxi-item dataField="nome" [label]="{text: 'Tipo procedimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
-      <dxi-item dataField="azienda" [label]="{text: 'Azienda'}" [editorOptions]="{ disabled: true }"></dxi-item>
-      <dxi-item dataField="descrizioneDefault" [label]="{text: 'Descrizione'}" editorType="dxTextArea" [editorOptions]="{ disabled: false, height: 150 }" ></dxi-item>
+      <dxi-item dataField="idTipoProcedimento.nome" [label]="{text: 'Tipo procedimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item dataField="idAzienda.descrizione" [label]="{text: 'Azienda'}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item dataField="descrizioneTipoProcedimento" [label]="{text: 'Descrizione'}" editorType="dxTextArea" [editorOptions]="{ disabled: false, height: 150 }" ></dxi-item>
     </dxi-item>
 
-    <dxi-item itemType="group" [colCount]="6">
-      <dxi-item dataField="durataMassimaIter" [colSpan]="3" [label]="{text: 'Durata massima dell\'iter'}" [editorOptions]="{ disabled: false}"></dxi-item>
-      <dxi-item dataField="durataMassimaSospensione" [colSpan]="3" [label]="{text: 'Durata massima di sospensione'}" [editorOptions]="{ disabled: false}"></dxi-item>
+    <dxi-item itemType="group" [colCount]="12">
+      <dxi-item dataField="durataMassimaIter" [colSpan]="6" [label]="{text: 'Durata massima dell\'iter'}" [editorOptions]="{ disabled: false}"></dxi-item>
+      <dxi-item dataField="durataMassimaSospensione" [colSpan]="6" [label]="{text: 'Durata massima di sospensione'}" [editorOptions]="{ disabled: false}"></dxi-item>
     </dxi-item> 
 
     <dxi-item itemType="group">
-      <dxi-item dataField="dataInizioValidita" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+      <dxi-item dataField="idTitolo.nome" [label]="{text: 'Titolo'}" editorType="dxLookup" [editorOptions]="{ 
+        disabled: false,
+        dataSource: dataSourceTitoli,
+        displayExpr: 'idTitolo.nome',
+        closeOnOutsideClick: true, 
+        showPopupTitle: false, 
+        showCancelButton: false,
+        searchPlaceholder: 'Cerca...',
+        valueExpr: 'id',
+        searchEnabled: true
+      }"></dxi-item>
+      <dxi-item dataField="idTipoProcedimento.normaRiferimento" [label]="{text: 'Codice Tipo Procedimento'}" [editorOptions]="{ disabled: true}"></dxi-item>
     </dxi-item>
+
+    <dxi-item itemType="group" [colCount]="6">
+      <dxi-item dataField="dataInizio" [colSpan]="1"  editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+      <dxi-item dataField="dataFine" [colSpan]="1"  editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+      <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="1"  editorType="dxCheckBox" [label]="{text: 'Obbligo esito conclusivo'}" [editorOptions]="{ disabled: false}"></dxi-item>
+    </dxi-item>
+
+
+    <dxi-item itemType="group" [colCount]="12">
+      <dxi-item dataField="idTipoProcedimento.codice" [colSpan]="6"  [label]="{text: 'Codice Tipo Procedimento'}" [editorOptions]="{ disabled: true}"></dxi-item>
+      <dxi-item dataField="idTipoProcedimento.modoApertura" [colSpan]="6" [label]="{text: 'Modo do apertura'}" [editorOptions]="{ disabled: true}"></dxi-item>
+    </dxi-item>
+    
 
   </dx-form>
 </div>
+
 
 
   <!-- 
@@ -33,5 +58,21 @@
     Data inizio validità
     Data fine validità
     GG di preavviso scadenza termini
+      Codice procedimento
+      Nome del tipo di procedimento
+      Norma di riferimento – testo libero
+      Modo di apertura
 
    -->
+
+<!-- BOTTONI DA SISTEMARE -->
+<!-- <div class="col-10 offset-1" style="align-content: center">
+    <dx-button
+    text="Annulla"
+    (onClick)="close()">
+  </dx-button>
+  <dx-button
+    text="Salva"
+    (onClick)="save()">
+  </dx-button>
+</div> -->

@@ -1,20 +1,18 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { Router } from "@angular/router";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
-import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
-import ODataStore from "devextreme/data/odata/store";
-import { Struttura } from "../classi/server-objects/entities/struttura";
-import { FunctionsImport, Entities } from "../../environments/app.constants";
-import { OdataContextEntitiesDefinition } from "@bds/nt-angular-context/odata-context-entities-definition";
-import { AziendaTipoProcedimento } from "app/classi/server-objects/entities/azienda-tipo-procedimento";
-import { Procedimento } from "app/classi/server-objects/entities/procedimento";
-import { Entity } from "@bds/nt-angular-context/entity";
+import { OdataContextDefinition } from "@bds/nt-context";
+import { OdataContextFactory } from "@bds/nt-context";
+import {
+    Struttura, AziendaTipoProcedimento, Procedimento, Utente,
+    GetStruttureByTipoProcedimento
+} from "@bds/nt-entities";
+import { OdataContextEntitiesDefinition } from "@bds/nt-context";
+import { Entity } from "@bds/nt-context";
 import notify from "devextreme/ui/notify";
-import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
-import { forEach } from "@angular/router/src/utils/collection";
+import { CustomLoadingFilterParams } from "@bds/nt-context";
 import { NodeOperations } from "../reusable-component/strutture-tree/strutture-tree.component";
-import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
+import {GlobalContextService} from "@bds/nt-context";
 
 @Component({
   selector: "app-struttura-tipi-procedimento",
@@ -22,8 +20,13 @@ import {GlobalContextService} from "@bds/nt-angular-context/global-context.servi
   styleUrls: ["./struttura-tipi-procedimento.component.scss"]
 })
 export class StrutturaTipiProcedimentoComponent implements OnInit {
-  @ViewChild("treeView") treeView: any;
 
+  private odataContextDefinition;
+  private dataSourceProcedimento: DataSource;
+  private strutturaSelezionata: Struttura;
+  private dataFromAziendaTipiProcedimentoComponent;
+
+  @ViewChild("treeView") treeView: any;
 
   public datasource: DataSource;
   public strutture: Struttura = new Struttura();
@@ -51,14 +54,6 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public popupVisible = false;
 
-  private odataContextDefinition;
-  private nodeSelectedFromContextMenu: any;
-  private initialState: any;
-  private dataSourceProcedimento: DataSource;
-  private strutturaSelezionata: Struttura;
-  private dataFromAziendaTipiProcedimentoComponent;
-
-
   constructor(private odataContextFactory: OdataContextFactory,
               private globalContextService: GlobalContextService,
               private router: Router) {
@@ -81,7 +76,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
 
     this.dataSourceUtente = new DataSource({
-      store: odataContextDefinitionUtente.getContext()[Entities.Utente.name].on("loading", (loadOptions) => {
+      store: odataContextDefinitionUtente.getContext()[new Utente().getName()].on("loading", (loadOptions) => {
         loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
         odataContextDefinitionUtente.customLoading(loadOptions);
       }),
@@ -92,7 +87,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     });
 
     this.datasource = new DataSource({
-      store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
+      store: this.odataContextDefinition.getContext()[new GetStruttureByTipoProcedimento().getName()],
       customQueryParams: {
         idAziendaTipoProcedimento: this.dataFromAziendaTipiProcedimentoComponent.aziendaTipoProcedimento.idTipoProcedimento.id,
         idAzienda: this.dataFromAziendaTipiProcedimentoComponent.aziendaTipoProcedimento.idAzienda.id
@@ -193,7 +188,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
           console.log("Operation", nodesInvolved[key]);
           const node = nodes.find(item =>
-            item.id === key
+            item.id == parseInt(key)
           );
           
            if (nodesInvolved[key] === NodeOperations.INSERT) {
@@ -231,7 +226,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     const aziendaTipoProcedimento: AziendaTipoProcedimento = this.dataFromAziendaTipiProcedimentoComponent["aziendaTipoProcedimento"];
     if (!this.dataSourceProcedimento) {
       this.dataSourceProcedimento = new DataSource({
-        store: odataContextDefinitionProcedimento.getContext()[Entities.Procedimento.name],
+        store: odataContextDefinitionProcedimento.getContext()[new Procedimento().getName()],
         requireTotalCount: true,
         expand: ["idAziendaTipoProcedimento", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento", "idAziendaTipoProcedimento.idTitolo"],
         filter: [["idAziendaTipoProcedimento.id", "=", aziendaTipoProcedimento.id], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]
@@ -241,7 +236,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     }
     this.dataSourceProcedimento.load().then(res => {
       res.length ? this.formVisible = true : this.formVisible = false;  /* Se non ho risultato nascondo il form */
-      this.procedimento.build(res[0], Procedimento);
+      // this.procedimento.build(res[0], Procedimento);
+      this.procedimento.build(res[0]);
       if (setInitialValue) {
         this.setInitialValues();
       }

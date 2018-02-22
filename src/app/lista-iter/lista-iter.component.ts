@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
-import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
-import { Entities } from "environments/app.constants";
+import { OdataContextDefinition } from "@bds/nt-context";
+import { OdataContextFactory } from "@bds/nt-context";
 import { Router } from "@angular/router";
+import {Iter} from "@bds/nt-entities";
 
 @Component({
   selector: "app-lista-iter",
@@ -26,7 +26,7 @@ export class ListaIterComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource = new DataSource({
-      store: this.odataContextDefinition.getContext()[Entities.Iter.name],
+      store: this.odataContextDefinition.getContext()[new Iter().getName()],
       expand: ["idResponsabileProcedimento.idPersona"],
     });
   }

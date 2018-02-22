@@ -81,14 +81,14 @@
                     </div>
 
                     <div class="col" align="right">
-                        <div *ngIf="loggedUser.isCI">
+                        <div *ngIf="loggedUser.isCI()">
                             <dx-button *ngIf="checkAssociata.value" [text]="'Disassocia'" (onClick)="buttonClicked(azienda, 'disassocia')" [type]="confirm"></dx-button>
                             <dx-button *ngIf="!checkAssociata.value" [text]="'Associa'" (onClick)="buttonClicked(azienda, 'associa')" [type]="confirm"></dx-button>
                         </div>
                     </div>
 
                     <div class="col">
-                        <div *ngIf="loggedUser.isCA && loggedUser.aziendaLogin.nome == azienda.nome">
+                        <div *ngIf="loggedUser.isCA() && idAziendaUtente == azienda.id">
                             <dx-button *ngIf="checkAssociata.value" [text]="'Gestisci associazione'" (onClick)="buttonClicked(azienda, 'gestisciAssociazione')"
                                 [type]="confirm"></dx-button>
                         </div>

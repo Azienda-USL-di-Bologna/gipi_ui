@@ -1,44 +1,65 @@
-<h2 *ngIf="nomeProcedimento != null" class="titolo-procedimento">Procedimento: {{nomeProcedimento}}</h2>
+<dx-scroll-view>
+  <h4 *ngIf="nomeProcedimento != null" class="titolo-procedimento">Procedimento: {{nomeProcedimento}}</h4>
 
-<br>
+  <br>
 
-<dx-form
-  [(formData)]="iterParams">
-  <dxi-item itemType="group">
-    <dxi-item dataField="dataCreazioneIter" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data creazione iter'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-    <dxi-item dataField="dataAvvioIter" editorType="dxDateBox" format="dd/mm/yyyy" [label]="{text: 'Data avvio iter'}" [editorOptions]="{ disabled: false, max: now, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-    <dxi-item dataField="dataMassimaConclusione" editorType="dxDateBox" format="dd/mm/yyyy" [label]="{text: 'Data massima conclusione'}" 
-      [editorOptions]="{ disabled: true, value: setDataMax(), displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-    <dxi-item dataField="oggettoIter" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
-    <dxi-item dataField="idUtenteResponsabile" editorType="dxLookup" [label]="{text: 'Responsabile procedimento'}"
-      [editorOptions]="{
-        value: loggedUser.idUtente,
-        dataSource: dataSourceUtenti,
-        valueExpr: 'id',
-        displayExpr: 'idPersona.descrizione',
-        searchEnabled: true
-      }">
-    </dxi-item>
-    <!-- ColCount e colSpan sono chiaramente esagerati. Questo perché colCount=3 e poi i 3 item con colSpa=1 non funziona.  -->
-    <dxi-item itemType="group" [colCount]="3001" [label]="{text: 'Documento'}">
-      <dxi-item itemType="empty" [colSpan]="1"></dxi-item>
-      <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1000" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: avviaIterDaDocumento }"></dxi-item>
-      <dxi-item dataField="numeroDocumento" [colSpan]="1000" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento }"></dxi-item>
-      <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento}"></dxi-item> 
-    </dxi-item>
-    <dxi-item dataField="promotoreIter" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
-  </dxi-item>
-</dx-form>
+  <div class="whitePanel">
+    <dx-form
+      [(formData)]="iterParams"
+      scrollingEnabled="true"
+      colCount="6">
+        <dxi-item dataField="dataCreazioneIter" 
+          [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data creazione'}" 
+          [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"
+          cssClass="label-wrap-date">
+        </dxi-item>
+        <dxi-item dataField="dataAvvioIter" 
+          [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data avvio'}" 
+          [editorOptions]="{ disabled: false, max: now, displayFormat: 'dd/MM/yyyy' }"
+          cssClass="label-wrap-date">
+        </dxi-item>
+        <dxi-item dataField="dataMassimaConclusione" 
+          [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data massima conclusione'}" 
+          [editorOptions]="{ disabled: true, value: setDataMax(), displayFormat: 'dd/MM/yyyy' }"
+          cssClass="label-wrap-date no-baseline">
+        </dxi-item>
+         <dxi-item itemType="group" [colCount]="3" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Documento'}">
+          <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: avviaIterDaDocumento }"></dxi-item>
+          <dxi-item dataField="numeroDocumento" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento }"></dxi-item>
+          <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento}"></dxi-item> 
+        </dxi-item>
+        <dxi-item dataField="idUtenteResponsabile" [colSpan]="6" cssClass="label-wrap no-baseline" editorType="dxLookup" 
+          [label]="{text: 'Responsabile procedimento amministrativo'}"
+          [editorOptions]="{
+            value: loggedUser.idUtente,
+            dataSource: dataSourceUtenti,
+            valueExpr: 'id',
+            displayExpr: 'idPersona.descrizione',
+            searchEnabled: true
+          }">
+        </dxi-item>
+        <dxi-item dataField="promotoreIter" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
+        <dxi-item dataField="oggettoIter" [colSpan]="6" cssClass="label-wrap" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
+      
+      
+        <dxi-item dataField="procedimento.idResponsabileAdozioneAttoFinale.idPersona.descrizione" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Responsabile adozione atto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="procedimento.idStrutturaResponsabileAdozioneAttoFinale.nome" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Struttura del responsabile adozione atto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="procedimento.idTitolarePotereSostitutivo.idPersona.descrizione" [colSpan]="3" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="procedimento.idStrutturaTitolarePotereSostitutivo.nome" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Struttura del titolare potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
 
-<br>
+    </dx-form>
+  </div>
 
-<div class="buttons">
+  <br>
+
+  <div class="buttons">
     <dx-button
-    text="Annulla"
-    (onClick)="handleEvent('onClickAnnulla',$event)">
-  </dx-button>
-  <dx-button
-    text="Avvia"
-    (onClick)="handleEvent('onClickProcedi',$event)">
-  </dx-button>
-</div>
+      text="Annulla"
+      (onClick)="handleEvent('onClickAnnulla',$event)">
+    </dx-button>
+    <dx-button
+      text="Avvia"
+      (onClick)="handleEvent('onClickProcedi',$event)">
+    </dx-button>
+  </div>
+</dx-scroll-view>

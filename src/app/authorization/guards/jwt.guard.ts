@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from "@angular/core";
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from "@angular/router";
+import { Observable } from "rxjs/Observable";
 
 @Injectable()
 export class JwtGuard implements CanActivate {
@@ -14,13 +14,13 @@ export class JwtGuard implements CanActivate {
   constructor(private router: Router) { }
 
   canActivate() {
-    if (localStorage.getItem('currentUser')) {
+    if (localStorage.getItem("currentUser")) {
         // logged in so return true
         return true;
     }
 
     // not logged in so redirect to login page
-    this.router.navigate(['/login']);
+    this.router.navigate(["/login"]);
     return false;
 }
   

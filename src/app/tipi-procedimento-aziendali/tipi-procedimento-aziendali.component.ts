@@ -1,12 +1,10 @@
 import { Component, OnInit, EventEmitter } from "@angular/core";
-import { GlobalContextService, OdataContextFactory } from "@bds/nt-angular-context";
+import { GlobalContextService, OdataContextFactory, OdataContextDefinition} from "@bds/nt-context";
 import { Router } from "@angular/router";
-import { LoggedUser } from "../authorization/logged-user";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
+import { LoggedUser } from "@bds/nt-login";
 import DataSource from "devextreme/data/data_source";
-import { Entities } from "environments/app.constants";
 import { DxDataGridComponent } from "devextreme-angular";
-import { TipoProcedimento } from "../classi/server-objects/entities/tipo-procedimento";
+import { TipoProcedimento, AziendaTipoProcedimento, bUtente, bAzienda } from "@bds/nt-entities";
 
 @Component({
   selector: "tipi-procedimento-aziendali",
@@ -21,7 +19,9 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   public idAzienda: number;
   public descAzienda: string;
   public procedimentoDaPassare: TipoProcedimento;
+  public aziendaTipoProcedimento: AziendaTipoProcedimento;
   public grid: DxDataGridComponent;
+  public screenWidth: number = screen.width;
 
   constructor(private odataContextFactory: OdataContextFactory, 
     public router: Router,
@@ -29,13 +29,16 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
 
       const now = new Date();
       this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
-      this.descAzienda = this.loggedUser.aziendaLogin.descrizione;
-      this.idAzienda = this.loggedUser.aziendaLogin.id;
+      this.descAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.descrizione];
+      this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
+      console.log("LOGGO ID AZIENDA", this.idAzienda);
 
 
       this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
       this.dataSourceProcedimenti = new DataSource({
-        store: this.odataContextDefinition.getContext()[Entities.TipoProcedimento.name],
+        store: this.odataContextDefinition.getContext()[new TipoProcedimento().getName()],    
+        expand: ["idAzienda", "idTipoProcedimento", "idTitolo"],
+        filter: [["idAzienda.id", "=", this.idAzienda]]
         
       });
      console.log("LOGGO DATASOURCE", this.dataSourceProcedimenti);
@@ -48,26 +51,23 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   }
 
 
-  public receiveMessage(event: any) {
-    console.log("RECEIVE MESSAGE: ", event);
-    // this.popupVisible = event.visible;
+  receiveMessage(event: any) {
+    this.popupVisible = event.visible;
   }
 
-  handleEvent(event: any) {
-    console.log("HANDLEEVENT");
-    // console.log("EVENTO LOGGING: ...  ", event.data);
-    // console.log("EVENTO LOGGING: INDEX->  ", event.row);
-    // this.grid.instance.editRow(event.row.rowIndex);
-    // this.popupVisible = true;
-    this.procedimentoDaPassare = event.data;
-    console.log(this.procedimentoDaPassare);
-    this.popupVisible = true;
+  public handleEvent(event: any) {
+    console.log("HANDLEEVENT", event);
+    if (event.columnIndex === 4) {
+      this.procedimentoDaPassare = event.data;
+      console.log(this.procedimentoDaPassare);
+      this.popupVisible = true;
+    }
 
   }
   
-  openPopup() {
-    console.log("OPENPOPUP");
+ /*  public openPopup(event: Event) {
+    console.log("OPENPOPUP", event);
     console.log("popupVisible? ", this.popupVisible);
     // this.popupVisible = true;
-  }
+  } */
 }

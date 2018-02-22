@@ -1,21 +1,20 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
-import {Struttura} from "../../classi/server-objects/entities/struttura";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import ODataStore from "devextreme/data/odata/store";
-import {OdataContextFactory} from "@bds/nt-angular-context";
-import { FunctionsImport } from "../../../environments/app.constants";
+import {OdataContextFactory} from "@bds/nt-context";
 import {HttpClient} from "@angular/common/http";
-import notify from 'devextreme/ui/notify';
+import {GetStruttureByTipoProcedimento} from "@bds/nt-entities";
+
 
 @Component({
-  selector: 'app-test-tree',
-  templateUrl: './test-tree.component.html',
-  styleUrls: ['./test-tree.component.scss']
+  selector: "app-test-tree",
+  templateUrl: "./test-tree.component.html",
+  styleUrls: ["./test-tree.component.scss"]
 })
 export class TestTreeComponent implements OnInit {
 
-  public datasource: DataSource;
   private odataContextDefinition;
+  public datasource: DataSource;
+  
   @ViewChild("treeViewChild") treeViewChild: any;
 
   constructor(private http: HttpClient, private odataContextFactory: OdataContextFactory) {
@@ -27,7 +26,7 @@ export class TestTreeComponent implements OnInit {
   ngOnInit() {
     
     this.datasource = new DataSource({
-      store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
+      store: this.odataContextDefinition.getContext()[new GetStruttureByTipoProcedimento().getName()],
       customQueryParams: {
         idAziendaTipoProcedimento: 33,
         idAzienda: 5
@@ -43,4 +42,4 @@ export class TestTreeComponent implements OnInit {
 
 } 
     
-export const NodeOperations  = {INSERT: "INSERT", DELETE: "DELETE"}
+export const NodeOperations  = {INSERT: "INSERT", DELETE: "DELETE"};

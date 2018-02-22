@@ -2,8 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import ODataStore from "devextreme/data/odata/store";
 import { ODATA_BASE_URL, odataTipiProcedimentoPath, odataAziendeTipiProcPath } from "../../../../environments/app.constants";
-import { TipoProcedimento } from "../../../classi/server-objects/entities/tipo-procedimento";
-import { AziendaTipoProcedimento } from "../../../classi/server-objects/entities/azienda-tipo-procedimento";
+import { TipoProcedimento, AziendaTipoProcedimento } from "@bds/nt-entities";
 
 @Component({
   selector: "app-procedimento",
@@ -62,7 +61,7 @@ export class ProcedimentoComponent implements OnInit {
     // console.log(this.dataSource);
   }
 
-  insertTipoProcedimento(procedimento : TipoProcedimento) {
+  insertTipoProcedimento(procedimento: TipoProcedimento) {
     // let aziendaProcedimento : AziendaTipoProcedimento = new AziendaTipoProcedimento();
     // aziendaProcedimento.idAziendaTipoProcedimento = 3;
     // aziendaProcedimento.idAzienda = 7;

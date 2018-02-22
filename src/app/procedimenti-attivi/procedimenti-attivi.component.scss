@@ -6,8 +6,8 @@
 
 
 /* Datagrid + + + + + + + + + + + + + + + + + */
-/*  #gridContainer {
-  padding: 0 10px;
+/* /deep/ #gridContainer .dx-datagrid-content > .dx-datagrid-table.dx-datagrid-table-fixed {
+  width: initial !important;
 } */
 
 /* Ricerca generale */
@@ -46,6 +46,10 @@
   flex: initial !important;
   flex-grow: initial !important;
   flex-basis: initial !important;
+}
+
+.popup-nuovo-iter div.dx-popup-content {
+    height: 100% !important;
 }
 
 @media screen and (max-width: 1280px) {

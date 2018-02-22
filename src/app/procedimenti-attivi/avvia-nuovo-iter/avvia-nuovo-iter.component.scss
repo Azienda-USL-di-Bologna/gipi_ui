@@ -7,3 +7,32 @@
   justify-content: space-around;
   margin: 3pt 0;
 }
+
+/* /deep/ .dx-field-item-label-content{
+  max-width: 130px;
+  white-space: normal;
+} */
+
+/deep/ .label-wrap > label {
+  width: 200px;
+}
+
+/deep/ .label-wrap .dx-field-item-label-text {
+  max-width: 200px;
+  white-space: normal;
+  display: inline-block;
+}
+
+/deep/ .label-wrap-date > label {
+  max-width: 110px;
+}
+
+/deep/ .label-wrap-date .dx-field-item-label-text {
+  max-width: 110px;
+  white-space: normal;
+  display: inline-block;
+}
+
+/deep/ .no-baseline {
+  align-items: initial !important;
+}

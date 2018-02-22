@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import CustomStore from 'devextreme/data/custom_store';
 import ArrayStore from 'devextreme/data/array_store';
@@ -11,28 +11,28 @@ import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
 
 @Component({
-  selector: 'app-cambio-di-stato-box',
-  templateUrl: './cambio-di-stato-box.component.html',
-  styleUrls: ['./cambio-di-stato-box.component.scss']
+  selector: "app-cambio-di-stato-box",
+  templateUrl: "./cambio-di-stato-box.component.html",
+  styleUrls: ["./cambio-di-stato-box.component.scss"]
 })
 export class CambioDiStatoBoxComponent implements OnInit{
 
-  public _sospensioneParams : SospensioneParams;
+  public _sospensioneParams: SospensioneParams;
   public statiIter: string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
   public statiIterService: string[] = new Array();
   public _userInfo: UserInfo;
   public showPopupRiassunto: boolean = false;
-  public showPopupAnnullamento : boolean = false;
+  public showPopupAnnullamento: boolean = false;
 
   @Output() out = new EventEmitter<any>();
 
-  @Input() set userInfo(value: UserInfo){
+  @Input() set userInfo(value: UserInfo) {
     this._userInfo = value;
   }
   @Input()
-  set sospensioneParams(value : SospensioneParams){
+  set sospensioneParams(value: SospensioneParams) {
     this._sospensioneParams = value;
-  };
+  }
   @Input("isOpenedAsPopup") isOpenedAsPopup?: boolean;
 
   constructor(private http: HttpClient) { 
@@ -43,9 +43,9 @@ export class CambioDiStatoBoxComponent implements OnInit{
 
   ngOnInit() {}
 
-   handleSubmit(e){
+   handleSubmit(e) {
     e.preventDefault();
-    if(!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.statoCorrente){return}
+    if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.statoCorrente) {return; }
 
     let shippedParams: ShippedParams = {
       idIter : this._sospensioneParams.idIter,
@@ -56,7 +56,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
       note: this._sospensioneParams.note,
       stato: this.statiIterService[this._sospensioneParams.statoProssimo],
       dataEvento: this._sospensioneParams.dataCambioDiStato,
-    }
+    };
 
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
     .subscribe(
@@ -86,7 +86,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
     );
    }
 
-  handleClose(){
+  handleClose() {
     if(!this.isOpenedAsPopup){
       window.close();
     }else{
@@ -95,7 +95,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
     }
   }
 
-  handleAnnulla(e){
+  handleAnnulla(e) {
     this.showPopupAnnullamento = !this.showPopupAnnullamento;
   }
 
