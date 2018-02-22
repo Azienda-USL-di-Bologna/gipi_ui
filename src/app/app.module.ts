@@ -24,7 +24,11 @@ import {
     DxContextMenuModule,
     DxLookupModule,
     DxValidatorModule,
-    DxValidationSummaryModule, DxSlideOutModule, DxToolbarModule, DxSwitchModule
+    DxValidationSummaryModule, 
+    DxSlideOutModule, 
+    DxToolbarModule, 
+    DxSwitchModule,
+    DxScrollViewModule
 } from "devextreme-angular";
 
 import {RouterModule} from "@angular/router";
@@ -139,6 +143,7 @@ import {LoginModule} from "@bds/nt-login";
         DxSlideOutModule,
         DxToolbarModule,
         DxSwitchModule,
+        DxScrollViewModule,
         ContextModule.forRoot(contextModuleConfig),
         LoginModule.forRoot(loginModuleConfig),
         EntitiesModule.forRoot(null)

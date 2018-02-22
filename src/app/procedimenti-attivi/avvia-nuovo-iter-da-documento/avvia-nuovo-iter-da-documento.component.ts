@@ -13,16 +13,6 @@ import {bAzienda, bUtente} from "@bds/nt-entities";
 export class AvviaNuovoIterDaDocumentoComponent {
   public idAzienda: number;
   public doc: any; 
-  
-  /* = {
-    registro: "PG",
-    numero: "66",
-    anno: 2018,
-    oggetto: "bell'oggetto, lo faccio corto, ma non è corto, soprattutto se lo spiego",
-    dataRegistrazione: new Date(),
-    promotore: "GSLFNSSTICA io sono il proponentre siiii"
-  }; */
-
   public procedimentoDaPassare: object;
   public loggedUser: LoggedUser;
 
@@ -37,24 +27,16 @@ export class AvviaNuovoIterDaDocumentoComponent {
         registro: queryParams["registro"],
         numero: queryParams["numero"],
         anno: queryParams["anno"],
-        oggetto: queryParams["oggetto"],
+        oggetto: decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " ")),
         dataRegistrazione: queryParams["dataRegistrazione"],
-        promotore: queryParams["promotore"]
+        promotore: decodeURIComponent(queryParams["promotore"].replace(/\+/g, " "))
       };
-      console.log(this.doc);
     });
   }
 
   public receiveMessage(event: any) {
-    console.log(event);
     this.procedimentoDaPassare = {
-      /* idAzienda: this.idAzienda,
-      idProcedimento: event.row.selectedRowsData[0].id,
-      nomeProcedimento: event.row.selectedRowsData[0].idAziendaTipoProcedimento.idTipoProcedimento.nome
-        + " (" + event.row.selectedRowsData[0].idStruttura.nome + ")", */
       procedimento: event.row.selectedRowsData[0]
     };
   }
-
-
 }

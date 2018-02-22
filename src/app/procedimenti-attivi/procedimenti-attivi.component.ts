@@ -59,8 +59,12 @@ export class ProcedimentiAttiviComponent {
       expand: [
         "idStruttura",
         "idTitolarePotereSostitutivo/idPersona",
+        "idStrutturaTitolarePotereSostitutivo",
         "idAziendaTipoProcedimento/idTitolo",
-        "idAziendaTipoProcedimento/idTipoProcedimento"
+        "idAziendaTipoProcedimento/idTipoProcedimento",
+        "idResponsabileAdozioneAttoFinale/idPersona",
+        "idStrutturaResponsabileAdozioneAttoFinale"
+
       ],
       filter: [
         ["idAziendaTipoProcedimento.idAzienda.id", "=", this.idAzienda],
@@ -122,8 +126,6 @@ export class ProcedimentiAttiviComponent {
       }
     }];
   }
-
-  
 
   // Gestisco la toolbar di ricerca. La voglio centrale.
   onToolbarPreparing(e) {
@@ -189,9 +191,6 @@ export class ProcedimentiAttiviComponent {
       case "iterOnClick":
         this.popupNuovoIterVisible = true;
         this.procedimentoDaPassare = {
-          /* idAzienda: this.idAzienda,
-          idProcedimento: e.row.data.id,
-          nomeProcedimento: e.row.data.idAziendaTipoProcedimento.idTipoProcedimento.nome */
           procedimento: e.row.data
         };
       break;
