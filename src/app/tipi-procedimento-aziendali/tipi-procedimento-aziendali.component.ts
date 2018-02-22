@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter } from "@angular/core";
 import { GlobalContextService, OdataContextFactory } from "@bds/nt-angular-context";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { LoggedUser } from "../authorization/logged-user";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
 import DataSource from "devextreme/data/data_source";
@@ -21,16 +21,16 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   public loggedUser: LoggedUser;
   public idAzienda: number;
   public descAzienda: string;
-  public procedimentoDaPassare: TipoProcedimento;
+  public procedimentoDaPassare: AziendaTipoProcedimento;
   public aziendaTipoProcedimento: AziendaTipoProcedimento;
   public grid: DxDataGridComponent;
   public screenWidth: number = screen.width;
 
   constructor(private odataContextFactory: OdataContextFactory, 
     public router: Router,
+    public route: ActivatedRoute,
     private globalContextService: GlobalContextService) {
 
-      const now = new Date();
       this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
       this.descAzienda = this.loggedUser.aziendaLogin.descrizione;
       this.idAzienda = this.loggedUser.aziendaLogin.id;
@@ -44,25 +44,26 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
         filter: [["idAzienda.id", "=", this.idAzienda]]
         
       });
+      
      console.log("LOGGO DATASOURCE", this.dataSourceProcedimenti);
 
     }
 
 
   ngOnInit() {
-    
   }
 
 
   receiveMessage(event: any) {
+    console.log("RECEIVE MESSAGE: ", event)
     this.popupVisible = event.visible;
   }
 
   public handleEvent(event: any) {
-    console.log("HANDLEEVENT", event);
     if(event.columnIndex === 4){
       this.procedimentoDaPassare = event.data;
-      console.log(this.procedimentoDaPassare);
+      console.log("THIS.ROUTE", this.route);
+      console.log("handleEvent tipiProcAz: procedimentoDaPassare", this.procedimentoDaPassare);
       this.popupVisible = true;
     }
 

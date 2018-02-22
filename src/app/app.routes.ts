@@ -36,7 +36,6 @@ export const rootRouterConfig: Routes = [
   //   ]
   // },
   // ho reindirizzato la pagina di atterraggio a definizione-tipi-procedimento
-  { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "login", component: LoginComponent, canActivate: [NoLoginGuard], data: {}},
   // { path: "after-login", component: AfterLoginComponent, canActivate: [LoginGuard], data: {}},
   { path: "home", component: HomeComponent, canActivate: [LoginGuard], data: {breadcrumb: "Home"}},
@@ -52,7 +51,8 @@ export const rootRouterConfig: Routes = [
   { path: "app-lista-iter", component: ListaIterComponent, data: {breadcrumb: "Lista Iter"}},
   { path: "avvia-nuovo-iter-da-documento", component: AvviaNuovoIterDaDocumentoComponent, canActivate: [LoginGuard], data: {breadcrumb: "Nuovo Iter"} },
   { path: "app-cambio-di-stato", canActivate: [LoginGuard], component: CambioDiStatoComponent, data: {breadcrumb: "Cambio di stato"}},
-  { path: "tipi-procedimento-aziendali", canActivate: [LoginGuard, RoleGuard], component: TipiProcedimentoAziendaliComponent, data: {breadcrumb: "Tipi di Procedimento Aziendali", ruoliConcessi: ["CA"]}},
-  { path: "dettaglio-tipo-procedimento", canActivate: [LoginGuard], component: DettaglioTipoProcedimentoComponent, data: {breadcrumb: "Dettaglio Tipo Procedimento"}}
+  { path: "tipi-procedimento-aziendali", component: TipiProcedimentoAziendaliComponent, canActivate: [LoginGuard, RoleGuard], data: {breadcrumb: "Tipi di Procedimento Aziendali", ruoliConcessi: ["CA"]}},
+  { path: "dettaglio-tipo-procedimento/:id", component: DettaglioTipoProcedimentoComponent, canActivate: [LoginGuard], data: {breadcrumb: "Dettaglio Tipo Procedimento"}},
+  { path: "", redirectTo: "home", pathMatch: "full" },
 ];
 

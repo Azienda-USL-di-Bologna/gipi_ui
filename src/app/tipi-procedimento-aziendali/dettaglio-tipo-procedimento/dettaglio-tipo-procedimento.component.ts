@@ -4,10 +4,14 @@ import { Procedimento } from "../../classi/server-objects/entities/procedimento"
 import { AziendaTipoProcedimento } from "app/classi/server-objects/entities/azienda-tipo-procedimento";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextFactory, GlobalContextService } from "@bds/nt-angular-context";
-import { Entities } from "environments/app.constants";
+import { Entities, CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
 import { LoggedUser } from "app/authorization/logged-user";
 import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
+import { HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
+import notify from "devextreme/ui/notify";
+import { Titolo } from "../../classi/server-objects/entities/titolo";
 
 @Component({
   selector: "dettaglio-tipo-procedimento",
@@ -15,21 +19,24 @@ import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loadin
   styleUrls: ["./dettaglio-tipo-procedimento.component.scss"]
 })
 export class DettaglioTipoProcedimentoComponent implements OnInit {
-  public proc: AziendaTipoProcedimento;
+  public proc: AziendaTipoProcedimento = new AziendaTipoProcedimento();
+  public proc2: AziendaTipoProcedimento;
   public dataSourceTitoli: DataSource;
+  public dataSourceAziendaTipoProcedimento: DataSource;
   public loggedUser: LoggedUser;
+  private params: UpdateAziendaTipoProcedimentoParams;
 
   // tslint:disable-next-line:no-input-rename
   @Input()
   set procedimento(procedimento: AziendaTipoProcedimento) {
     console.log("Sono nell'@Input");
     console.log("INPUT PROCEDIMENTO", procedimento);
-    this.proc = procedimento;
+    this.proc2 = procedimento;
   }
 
   @Output() messageEvent: EventEmitter<any>= new EventEmitter();
 
-  constructor(odataContextFactory: OdataContextFactory, globalContextService: GlobalContextService) {
+  constructor(private odataContextFactory: OdataContextFactory, private globalContextService: GlobalContextService, private http: HttpClient) {
     const odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
     this.loggedUser = globalContextService.getInnerSharedObject("loggedUser")
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nome");
@@ -41,23 +48,86 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
     }),
       filter: [["idAzienda", "=", this.loggedUser.aziendaLogin.id]]
     });
- 
+
+/*     this.dataSourceAziendaTipoProcedimento = new DataSource({
+      store: this.proc
+    });
+
+    console.log("CONSOLE.LOG di this.dataSourceAziendaTipoProcedimento", this.dataSourceAziendaTipoProcedimento) */
    }
 
   ngOnInit() {
-    console.log("ngOnInit = DettaglioTipoProcedimento", this.proc);
+    console.log("ngOnInit = DettaglioTipoProcedimento", this.proc2);
     // console.log("ngOnInit this.proc ---> ", this.proc);
-    
-  }
+    const odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    this.dataSourceAziendaTipoProcedimento = new DataSource({
+      store: odataContextDefinition.getContext()[Entities.AziendaTipoProcedimento.name],
+      filter: ["id", "=", this.proc2.id],
+      expand: ["idTitolo", "idTipoProcedimento", "idAzienda"]
 
+    });
+    this.dataSourceAziendaTipoProcedimento.load().then((res) => { this.proc.build(res[0], AziendaTipoProcedimento); console.log("QUESTO E' IL BUILD", this.proc);  });
+    console.log("Loggo se mi ha caricato", this.dataSourceAziendaTipoProcedimento);
+
+  }
 
   public close() {
     console.log("CLOSE");
-    this.messageEvent.emit({visible: false});
+    this.messageEvent.emit({visible: false, tipoProcedimentoAziendale: this.proc});
   }
 
   public save() {
     // codice codice codice
-    this.close();
+
+    this.dataSourceAziendaTipoProcedimento.store().update(this.proc.id, this.proc);
+/* 
+  
+    let updateAziendaTipoProcedimentoParams = new UpdateAziendaTipoProcedimentoParams();
+
+    updateAziendaTipoProcedimentoParams.aziendaTipoProcedimento = this.proc;
+    updateAziendaTipoProcedimentoParams.titolo = this.proc.idTitolo;
+    updateAziendaTipoProcedimentoParams.tipoProcedimento = this.proc.idTipoProcedimento;
+    updateAziendaTipoProcedimentoParams.messaggio = "Vediamo se funziona"
+
+    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "aziendaTipoProcedimento/updateAziendaTipoProcedimento",
+      {proc: updateAziendaTipoProcedimentoParams}, {headers: new HttpHeaders().set("content-type", "application/json")})
+      .subscribe(
+        res => {
+          console.log("----> RES",res);
+          notify({
+            message: "Salvataggio effettuato con successo!",
+            type: "success",
+            displayTime: 2100,
+            position: {
+              my: "center", at: "center", of: window
+            },
+            width: "max-content"
+          });
+          console.log("SALVATO")
+          this.close();
+        },
+        error => {
+          console.log("CHE CAZZZO SUCCEDE?????");
+          notify({
+            message: "Errore durante il salvataggio!",
+            type: "error",
+            displayTime: 2100,
+            position: {
+              my: "center", at: "center", of: window
+          },
+          width: "max-content"
+          });
+        }
+      )
+
+     */
   }
+}
+
+class UpdateAziendaTipoProcedimentoParams {
+  public aziendaTipoProcedimento: AziendaTipoProcedimento;
+  public tipoProcedimento: TipoProcedimento;
+  public titolo: Titolo;
+  public messaggio: string;
+  
 }
