@@ -244,6 +244,10 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     });
   }
 
+  public fieldDataChanged(){
+    
+  }
+
 }
 
 
