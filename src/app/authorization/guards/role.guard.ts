@@ -4,6 +4,7 @@ import { Observable } from "rxjs/Observable";
 import { GlobalContextService } from "@bds/nt-context";
 import { LoggedUser } from "@bds/nt-login";
 import { bUtente, bRuolo } from "@bds/nt-entities";
+import { Subscription } from "rxjs/Subscription";
 
 
 @Injectable()
@@ -14,6 +15,7 @@ export class RoleGuard implements CanActivate {
 
     constructor(private router: Router, private globalContextService: GlobalContextService) {
         this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser"); 
+        console.log("ROLEGUARD --> this.loggedUser = ", this.loggedUser);
     }
 
     canActivate(

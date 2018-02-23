@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter } from "@angular/core";
 import { GlobalContextService, OdataContextFactory, OdataContextDefinition} from "@bds/nt-context";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { LoggedUser } from "@bds/nt-login";
 import DataSource from "devextreme/data/data_source";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -18,56 +18,56 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   public loggedUser: LoggedUser;
   public idAzienda: number;
   public descAzienda: string;
-  public procedimentoDaPassare: TipoProcedimento;
-  public aziendaTipoProcedimento: AziendaTipoProcedimento;
-  public grid: DxDataGridComponent;
+  public procedimentoDaPassare: AziendaTipoProcedimento;
   public screenWidth: number = screen.width;
 
   constructor(private odataContextFactory: OdataContextFactory, 
     public router: Router,
+    public route: ActivatedRoute,
     private globalContextService: GlobalContextService) {
 
-      const now = new Date();
+      console.log("tipi-procedimento-aziendali CONSTRUCTOR");
       this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
       this.descAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.descrizione];
       this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
-      console.log("LOGGO ID AZIENDA", this.idAzienda);
-
-
       this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
-      this.dataSourceProcedimenti = new DataSource({
-        store: this.odataContextDefinition.getContext()[new TipoProcedimento().getName()],    
-        expand: ["idAzienda", "idTipoProcedimento", "idTitolo"],
-        filter: [["idAzienda.id", "=", this.idAzienda]]
-        
-      });
-     console.log("LOGGO DATASOURCE", this.dataSourceProcedimenti);
 
+      this.caricaDataSource();      
     }
 
 
   ngOnInit() {
-    
+    console.log("tipi-procedimento-aziendali ON INIT");
   }
 
 
-  receiveMessage(event: any) {
+  receiveMessage(event: any, reloadPadre: boolean) {
+    console.log("RECEIVE MESSAGE: ", event)
     this.popupVisible = event.visible;
+    let toReload: boolean = reloadPadre ? true : false;
+    if(toReload)
+      this.caricaDataSource();
+    // this.procedimentoDaPassare = null;
   }
 
   public handleEvent(event: any) {
-    console.log("HANDLEEVENT", event);
+    console.log("tipi-procedimento-aziendali handleEvent");
     if (event.columnIndex === 4) {
       this.procedimentoDaPassare = event.data;
-      console.log(this.procedimentoDaPassare);
+      console.log("THIS.ROUTE", this.route);
+      console.log("handleEvent tipiProcAz: procedimentoDaPassare", this.procedimentoDaPassare.id);
       this.popupVisible = true;
+      this.caricaDataSource();
     }
-
   }
-  
- /*  public openPopup(event: Event) {
-    console.log("OPENPOPUP", event);
-    console.log("popupVisible? ", this.popupVisible);
-    // this.popupVisible = true;
-  } */
+
+  public caricaDataSource() {
+    console.log("tipi-procedimento-aziendali CARICADATASOURCE");
+    this.dataSourceProcedimenti = new DataSource({
+      store: this.odataContextDefinition.getContext()[new AziendaTipoProcedimento().getName()],    
+      expand: ["idAzienda", "idTipoProcedimento", "idTitolo"],
+      filter: [["idAzienda.id", "=", this.idAzienda]]
+      
+    });
+  }
 }

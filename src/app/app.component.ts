@@ -83,6 +83,9 @@ export class AppComponent implements OnInit, OnDestroy {
         if (loggedUser.isCI()) {
             this.sidebarItems.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
         }
+        if(loggedUser.isCA()){
+            this.sidebarItems.push(new SidebarItem("Tipi Procedimento Aziendale", "tipi-procedimento-aziendali"));
+        }
 
         this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
         this.sidebarItems.push(new SidebarItem("Lista Iter", "app-lista-iter"));

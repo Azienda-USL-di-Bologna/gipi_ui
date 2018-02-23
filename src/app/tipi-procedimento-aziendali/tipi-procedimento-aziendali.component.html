@@ -2,7 +2,7 @@
 
 <div class="col-10 offset-1 whitePanel">
 
-     <dx-data-grid
+     <dx-data-grid #tipi_procedimento_aziendale
       style="align-content: center"
       [dataSource]="dataSourceProcedimenti"
       columnResizingMode="nextColumn"
@@ -16,7 +16,7 @@
       <dxi-column dataField="idTipoProcedimento.nome" caption="Tipo Procedimento" ></dxi-column>
       <!-- <dxi-column dataField="descrizioneDefault" caption="Descrizione"></dxi-column> -->
       <dxi-column dataField="dataInizio" caption="Valido dal" alignment="center" [dataType]="'date'" [format]="'dd/MM/yyyy'"></dxi-column>
-      <dxi-column dataField="dataInizio" caption="Durata massima del (gg)" alignment="center" ></dxi-column>
+      <dxi-column dataField="durataMassimaProcedimento" caption="Durata massima iter (gg)" alignment="center" ></dxi-column>
       <dxi-column dataField="durataMassimaSospensione" caption="Durata massima della sospensione (gg)" alignment="center"></dxi-column>
       <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
       <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni" width="auto">
@@ -27,12 +27,13 @@
 
   <dx-popup
     title="Dettaglio tipo procedimento"
-    [maxWidth]="screenWidth/2"
+    (onHiding) = "caricaDataSource()"
+    [maxWidth]="screenWidth*2/3"
     [showTitle]="true"
     [closeOnOutsideClick]="true"
     [(visible)]="popupVisible">
-    <div *dxTemplate="let data of 'content'">
-      <dettaglio-tipo-procedimento [procedimento]="procedimentoDaPassare" (messageEvent)="receiveMessage($event)"></dettaglio-tipo-procedimento>
+    <div *dxTemplate="let data of 'content'" style="overflow-y: scroll">
+      <dettaglio-tipo-procedimento [procedimento]="procedimentoDaPassare.id" (messageEvent)="receiveMessage($event)"></dettaglio-tipo-procedimento>
     </div>
  </dx-popup>
 </div>

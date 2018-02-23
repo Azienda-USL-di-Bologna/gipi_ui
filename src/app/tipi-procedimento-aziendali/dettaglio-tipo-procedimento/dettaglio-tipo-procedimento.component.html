@@ -8,29 +8,29 @@
     </dxi-item>
 
     <dxi-item itemType="group" [colCount]="12">
-      <dxi-item dataField="durataMassimaIter" [colSpan]="6" [label]="{text: 'Durata massima dell\'iter'}" [editorOptions]="{ disabled: false}"></dxi-item>
-      <dxi-item dataField="durataMassimaSospensione" [colSpan]="6" [label]="{text: 'Durata massima di sospensione'}" [editorOptions]="{ disabled: false}"></dxi-item>
+      <dxi-item dataField="durataMassimaProcedimento" [colSpan]="6" editorType="dxNumberBox" [label]="{text: 'Durata massima dell\'iter'}" [editorOptions]="{ disabled: false}"></dxi-item>
+      <dxi-item dataField="durataMassimaSospensione" [colSpan]="6" editorType="dxNumberBox" [label]="{text: 'Durata massima di sospensione'}" [editorOptions]="{ disabled: false}"></dxi-item>
     </dxi-item> 
-
+    
     <dxi-item itemType="group">
-      <dxi-item dataField="idTitolo.nome" [label]="{text: 'Titolo'}" editorType="dxLookup" [editorOptions]="{ 
+      <dxi-item dataField="idTitolo" [label]="{text: 'Titolo'}" editorType="dxLookup" [editorOptions]="{ 
         disabled: false,
         dataSource: dataSourceTitoli,
-        displayExpr: 'idTitolo.nome',
-        closeOnOutsideClick: true, 
-        showPopupTitle: false, 
+        displayExpr: 'nome',
+        closeOnOutsideClick: true,
+        showPopupTitle: false,
         showCancelButton: false,
         searchPlaceholder: 'Cerca...',
-        valueExpr: 'id',
-        searchEnabled: true
+        valueExpr: 'this'
       }"></dxi-item>
       <dxi-item dataField="idTipoProcedimento.normaRiferimento" [label]="{text: 'Codice Tipo Procedimento'}" [editorOptions]="{ disabled: true}"></dxi-item>
     </dxi-item>
-
-    <dxi-item itemType="group" [colCount]="6">
-      <dxi-item dataField="dataInizio" [colSpan]="1"  editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-      <dxi-item dataField="dataFine" [colSpan]="1"  editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-      <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="1"  editorType="dxCheckBox" [label]="{text: 'Obbligo esito conclusivo'}" [editorOptions]="{ disabled: false}"></dxi-item>
+    
+    <dxi-item itemType="group" [colCount]="12">
+      <dxi-item dataField="dataInizio" [colSpan]="3" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita', location:'top'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+      <dxi-item dataField="dataFine" [colSpan]="3" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data fine validita', location:'top'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+      <dxi-item dataField="giorniPreavvisoScadenzaTermini" [colSpan]="3" editorType="dxNumberBox" [label]="{text: 'Preavviso scadenza termini (gg)', location:'top'}" [editorOptions]="{ disabled: false}"></dxi-item>
+      <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="3"  editorType="dxCheckBox" [label]="{text: 'Obbligo esito conclusivo', location:'top'}" [editorOptions]="{ disabled: false}"></dxi-item>
     </dxi-item>
 
 
@@ -38,41 +38,32 @@
       <dxi-item dataField="idTipoProcedimento.codice" [colSpan]="6"  [label]="{text: 'Codice Tipo Procedimento'}" [editorOptions]="{ disabled: true}"></dxi-item>
       <dxi-item dataField="idTipoProcedimento.modoApertura" [colSpan]="6" [label]="{text: 'Modo do apertura'}" [editorOptions]="{ disabled: true}"></dxi-item>
     </dxi-item>
-    
 
+    
+<!--     <dxi-item itemType="group" [colCount]="12">
+      <dxi-item [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" style="align-content: center">
+          <dx-button text="Annulla" (onClick)="close()"></dx-button>
+          <dx-button text="Salva" (onClick)="save()"></dx-button>
+        </dxi-item>
+      <dxi-item [colSpan]="4"></dxi-item>
+    </dxi-item> -->
+    
   </dx-form>
+
+  <div class="container" style="align-content: center">
+    <div class="row">
+      <div class="col-4"></div>
+      <div class="col-4" style="align-content: center">
+        <div class="row" style="align-content: center">
+          <div class="col-sm" style="align-content: center"><dx-button text="Annulla" (onClick)="close()" style="align-content: center"></dx-button></div>
+          <div class="col-sm" style="align-content: center"></div>
+          <div class="col-sm" style="align-content: center"><dx-button text="Salva" (onClick)="save()" style="align-content: center"></dx-button></div>
+        </div>
+      </div>
+      <div class="col-4"></div>
+    </div>
+  </div>
+
 </div>
 
-
-
-  <!-- 
-
-    Tipo di procedimento
-    Azienda
-    Descrizione aziendale del tipo di procedimento (default descrizione da tipo procedimento, modificabile)
-    Durata massima in gg iter (default da tipo procedimento, modificabile)
-    Durata massima in gg sospensione (default da tipo procedimento, modificabile)
-    Classificazione (collegamento al titolario, a un ramo a qualsiasi livello)
-    Riferimenti a regolamenti/procedure interni - testo libero
-    Obbligatorio esito conclusivo e motivazione (s/n) (default da tipo procedimento, modificabile)
-    Data inizio validità
-    Data fine validità
-    GG di preavviso scadenza termini
-      Codice procedimento
-      Nome del tipo di procedimento
-      Norma di riferimento – testo libero
-      Modo di apertura
-
-   -->
-
-<!-- BOTTONI DA SISTEMARE -->
-<!-- <div class="col-10 offset-1" style="align-content: center">
-    <dx-button
-    text="Annulla"
-    (onClick)="close()">
-  </dx-button>
-  <dx-button
-    text="Salva"
-    (onClick)="save()">
-  </dx-button>
-</div> -->
