@@ -13,6 +13,10 @@ import {  GlobalContextService } from "@bds/nt-context";
 })
 export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
 
+  private nodeSelectedFromContextMenu: any;
+  private initialState: any;
+  private odataContextDefinition;
+
   public datasource: DataSource;
   public strutture: Struttura = new Struttura();
   public testoHeaderTipoProcedimento: string;

@@ -3,3 +3,24 @@ dataStructure="plain" parentIdExpr="idStrutturaPadre" [searchValue]="ciao"
 showCheckBoxesMode="normal" [selectNodesRecursive]= "false"></dx-tree-view>
 
 <dx-button [text]="Culo" [type]="normal" (onClick)="click($event)"></dx-button> -->
+
+<h1>App Works!</h1>
+<div align="center">
+    <form>
+        <div style="width: 600px">
+            <dx-form [formData]="paramsDaPassare">
+                <dxi-item dataField="idIter"></dxi-item>
+                <dxi-item dataField="cfResponsabileProcedimento"></dxi-item>
+                <dxi-item dataField="numeroDocumento"></dxi-item>
+                <dxi-item dataField="annoDocumento"></dxi-item>
+                <dxi-item dataField="codiceRegistroDocumento"></dxi-item>
+                <dxi-item dataField="annoIter"></dxi-item>
+                <dxi-item dataField="nomeProcedimento"></dxi-item>
+            </dx-form>
+            <div align="center">
+                <dx-button [useSubmitBehavior]="true" (click)="avviaIter($event, $event)" text="Avvia Iter"></dx-button>
+            </div>
+        </div>
+    </form>
+</div>
+
