@@ -1,10 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { LoggedUser } from "@bds/nt-login";
 import { GlobalContextService } from "@bds/nt-context";
+import { PassaggioDiFaseComponent } from "../iter-procedimento/passaggio-di-fase/passaggio-di-fase.component"
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { ActivatedRoute, Params } from "@angular/router";
-import { Observable } from "rxjs/Observable";
-import { Subscription } from "rxjs/Subscription";
+import { Observable, Subscription } from "rxjs";
 import { bUtente, bAzienda } from "@bds/nt-entities";
 
 @Component({
@@ -22,6 +22,12 @@ export class CambioDiStatoComponent implements OnInit {
 
   public loggedUser$: Observable<LoggedUser>;
 
+  public showPopupAnnullamento : boolean = false;
+  public messaggioAnnullamento : string;
+  public lookupItems: string[] = ["Cambio di stato", "Passaggio di fase"];
+  public lookupValue: string= "";
+
+
   constructor( private activatedRoute: ActivatedRoute, private globalContextService: GlobalContextService) { 
     if (!this.userInfo) {
       this.recuperaUserInfo();
@@ -29,27 +35,14 @@ export class CambioDiStatoComponent implements OnInit {
    }
 
   ngOnInit() {
-    // this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
-    //   this.infoDocumento = {
-    //     registro: queryParams["registro"],
-    //     numero: queryParams["numero"],
-    //     anno: queryParams["anno"],
-    //     oggetto: queryParams["oggetto"],
-    //     dataRegistrazione: queryParams["dataRegistrazione"]
-    //   }
-    // });
-
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
       this.sospensioneParams = new SospensioneParams();
       this.sospensioneParams.annoDocumento = queryParams["anno"];
+
       this.sospensioneParams.numeroDocumento = queryParams["numero"];
       this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
       this.sospensioneParams.dataRegistrazioneDocumento = queryParams["dataRegistrazione"];
     });
-    // this.sospensioneParams = new SospensioneParams();
-    // this.sospensioneParams.annoDocumento = this.infoDocumento.anno;
-    // this.sospensioneParams.numeroDocumento = this.infoDocumento.numero;
-    // this.sospensioneParams.codiceRegistroDocumento = this.infoDocumento.registro;
   }
 
   recuperaUserInfo() {
@@ -78,15 +71,11 @@ export class CambioDiStatoComponent implements OnInit {
     this.sospensioneParams.statoCorrente = e.stato;
   }
 
-}
+  lookupValueChanged(e){
+    this.lookupValue = e.value;
+  }
 
-// interface InfoDocumento{
-//   registro: string,
-//   numero: string,
-//   anno: number,
-//   oggetto: string,
-//   dataRegistrazione: Date,
-// }
+}
 
 interface UserInfo{
   idUtente: number;

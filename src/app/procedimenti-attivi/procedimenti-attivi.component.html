@@ -4,11 +4,12 @@
   <dx-data-grid  #gridContainer id="gridContainer"
     [dataSource]="dataSourceProcedimenti"
     [customizeColumns]="customizeColumns"
+    columnResizingMode="nextColumn"
     hoverStateEnabled="checkBoxState"
     noDataText="Non ci sono procedimenti attivi"
     (onToolbarPreparing)="onToolbarPreparing($event)"
     (onSelectionChanged)="handleEvent('onSelectionChanged', $event)"
-    wordWrapEnabled="true"
+    wordWrapEnabled="true">
     allowColumnResizing="true"
     columnResizingMode="nextColumn">
     

@@ -1,7 +1,12 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import DataSource from "devextreme/data/data_source";
+import CustomStore from 'devextreme/data/custom_store';
+import ArrayStore from 'devextreme/data/array_store';
+import { GlobalContextService } from "@bds/nt-context";
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
 
 @Component({
@@ -18,14 +23,16 @@ export class CambioDiStatoBoxComponent implements OnInit{
   public showPopupRiassunto: boolean = false;
   public showPopupAnnullamento: boolean = false;
 
+  @Output() out = new EventEmitter<any>();
+
   @Input() set userInfo(value: UserInfo) {
     this._userInfo = value;
   }
   @Input()
   set sospensioneParams(value: SospensioneParams) {
-    console.log("New value:", value);
     this._sospensioneParams = value;
   }
+  @Input("isOpenedAsPopup") isOpenedAsPopup?: boolean;
 
   constructor(private http: HttpClient) { 
     this.statiIterService[this.statiIter[0]] = "iter_in_corso";
@@ -33,11 +40,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
     this.statiIterService[this.statiIter[2]] = "chiusura_iter";
   }
 
-  ngOnInit() {
-    // if(this._sospensioneParams.codiceRegistroDocumento){
-    //   this.docFieldDisabled = true;
-    // }
-  }
+  ngOnInit() {}
 
    handleSubmit(e) {
     e.preventDefault();
@@ -83,11 +86,25 @@ export class CambioDiStatoBoxComponent implements OnInit{
    }
 
   handleClose() {
-    window.close();
+    if(!this.isOpenedAsPopup){
+      window.close();
+    }else{
+      this.showPopupAnnullamento = !this.showPopupAnnullamento;
+      this.out.emit({ visible: false });
+    }
   }
 
   handleAnnulla(e) {
     this.showPopupAnnullamento = !this.showPopupAnnullamento;
+  }
+
+  handleRiassunto(){
+    this.showPopupRiassunto = !this.showPopupRiassunto;
+    if(!this.isOpenedAsPopup){
+      window.close();
+    }else{
+      this.out.emit({ visible: false });
+    }
   }
 
 }
@@ -101,14 +118,6 @@ interface ShippedParams {
   note: string;
   stato: string;
   dataEvento: Date;
-}
-
-interface InfoDocumento{
-  registro: string;
-  numero: string;
-  anno: number;
-  oggetto: string;
-  dataRegistrazione: Date;
 }
 
 interface UserInfo{

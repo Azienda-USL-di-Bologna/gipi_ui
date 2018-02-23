@@ -1,17 +1,17 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextDefinition } from "@bds/nt-context";
-import { CustomLoadingFilterParams } from "@bds/nt-context";
-import { OdataContextFactory } from "@bds/nt-context";
+import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
-import { Iter, Utente, Fase, FaseIter, ProcedimentoCache } from "@bds/nt-entities";
+import { Iter, Utente, Fase, FaseIter, ProcedimentoCache, bUtente, bAzienda } from "@bds/nt-entities";
+import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
-import { ButtonAppearance } from "@bds/nt-context/templates/buttons-bar/buttons-bar.component";
 import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
 import * as moment from "moment";
 import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stato-box.component";
+import { LoggedUser } from "@bds/nt-login";
+import { Observable, Subscription } from "rxjs";
 
 
 
@@ -61,8 +61,17 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public perFiglioPassaggioFase: Object;
 
   public paramsPerSospensione: Object;
+  public sospensioneParams: SospensioneParams = new SospensioneParams();
+  public loggedUser$: Observable<LoggedUser>;
+  private subscriptions: Subscription[] = [];
+  public userInfo: UserInfo;
 
-  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private odataContextFactory: OdataContextFactory, 
+    private http: HttpClient, private activatedRoute: ActivatedRoute,  
+    private globalContextService: GlobalContextService
+  ) {
+
     console.log("iter-procedimento-component (constructor)");
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
       const idIter: string = queryParams["idIter"];
@@ -93,6 +102,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       idIter: this.idIter,
       ricarica: false  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore
     };
+    this.recuperaUserInfo();
+    
 
     this.paramsPerSospensione = {
       iter: this.iter,
@@ -105,6 +116,22 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     // this.passaggioDiFaseVisible = this.child.visibile;
   }
 
+  recuperaUserInfo(){
+    this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
+    this.subscriptions.push(
+        this.loggedUser$.subscribe(
+            (loggedUser: LoggedUser) => {
+                if (loggedUser) {
+                  this.userInfo = {
+                    idUtente: loggedUser.getField(bUtente.id),
+                    idAzienda:  loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id],
+                    cf: "GSLFNC89A05G224Y"
+                  }
+                }
+            }
+        )
+    );
+  }
 
   ngOnInit() {
   }
@@ -213,34 +240,42 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public sospensioneIter() {
-    let dataDaPassare: Date;
-    if (this.iter.stato === "sospeso") {
-      const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.iter.id)
-        .subscribe(
-        res => {
-          let r: any = res;
-          dataDaPassare = new Date(r);
-          this.paramsPerSospensione = {
-            iter: this.iter,
-            stato: this.iter.stato,
-            dataSospensione: dataDaPassare
-          };
-          this.popupData.title = "Gestione Sospensione";
-          this.sospensioneIterVisible = true;
-        },
-        err => {
-          // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
-        }
-        );
-    } else {
-      this.paramsPerSospensione = {
-        iter: this.iter,
-        stato: this.iter.stato,
-        dataSospensione: null
-      };
-      this.popupData.title = "Gestione Sospensione";
-      this.sospensioneIterVisible = true;
-    }
+    // let dataDaPassare: Date;
+    // if (this.iter.stato === "sospeso") {
+    //   const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.iter.id)
+    //     .subscribe(
+    //     res => {
+    //       let r: any = res;
+    //       dataDaPassare = new Date(r);
+    //       this.paramsPerSospensione = {
+    //         iter: this.iter,
+    //         stato: this.iter.stato,
+    //         dataSospensione: dataDaPassare
+    //       };
+    //       this.popupData.title = "Gestione Sospensione";
+    //       this.sospensioneIterVisible = true;
+    //     },
+    //     err => {
+    //       // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+    //     }
+    //     );
+    // } else {
+    //   this.paramsPerSospensione = {
+    //     iter: this.iter,
+    //     stato: this.iter.stato,
+    //     dataSospensione: null
+    //   };
+    //   this.popupData.title = "Gestione Sospensione";
+    //   this.sospensioneIterVisible = true;
+    // }
+    console.log("Sent UserInfo: ", this.userInfo);
+    this.sospensioneParams.idIter = this.idIter;
+    this.sospensioneParams.numeroIter = this.iter.numero;
+    this.sospensioneParams.annoIter = this.iter.anno;
+    this.sospensioneParams.statoCorrente =  this.iter.stato;
+    this.sospensioneParams.statoCorrente = this.iter.stato;
+    this.popupData.title = "Cambia stato iter";
+    this.sospensioneIterVisible = true;
   }
 
   receiveMessage($event) {
@@ -256,7 +291,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   receiveMessageFromSospensione($event) {
     this.sospensioneIterVisible = $event["visible"];
     this.buildIter();
-    this.setNomeBottoneSospensione();
+    // this.setNomeBottoneSospensione();
 
 
   }
@@ -305,4 +340,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       });
     return b;
   }
+}
+
+interface UserInfo{
+  idUtente: number;
+  cf: string;
+  idAzienda: number;
 }
