@@ -8,7 +8,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 
 @Component({
-  selector: "app-definizione-tipi-procedimento",
+  selector: "definizione-tipi-procedimento",
   templateUrl: "./definizione-tipi-procedimento.component.html",
   styleUrls: ["./definizione-tipi-procedimento.component.scss"]
 })
