@@ -56,7 +56,7 @@ export class ListaIterConPermessiComponent implements OnInit {
       },
       expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona"]
     });
-    this.dataSource.load().then(res =>{console.log("LISTA RES: ", res)});
+    this.dataSource.load().then(res => { console.log("LISTA RES: ", res); });
 }
 
   selectedRowChanged(e) {
