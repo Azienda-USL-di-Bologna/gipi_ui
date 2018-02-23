@@ -3,13 +3,13 @@
   [(formData)]="proc">
     <dxi-item itemType="group"> 
       <dxi-item dataField="idTipoProcedimento.nome" [label]="{text: 'Tipo procedimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
-      <!-- <dxi-item dataField="idAzienda.descrizione" [label]="{text: 'Azienda'}" [editorOptions]="{ disabled: true }"></dxi-item> -->
+      <dxi-item dataField="idAzienda.descrizione" [label]="{text: 'Azienda'}" [editorOptions]="{ disabled: true }"></dxi-item>
       <dxi-item dataField="descrizioneTipoProcedimento" [label]="{text: 'Descrizione'}" editorType="dxTextArea" [editorOptions]="{ disabled: false, height: 150 }" ></dxi-item>
     </dxi-item>
 
     <dxi-item itemType="group" [colCount]="12">
-      <dxi-item dataField="durataMassimaIter" [colSpan]="6" [label]="{text: 'Durata massima dell\'iter'}" [editorOptions]="{ disabled: false}"></dxi-item>
-      <dxi-item dataField="durataMassimaSospensione" [colSpan]="6" [label]="{text: 'Durata massima di sospensione'}" [editorOptions]="{ disabled: false}"></dxi-item>
+      <dxi-item dataField="durataMassimaProcedimento" [colSpan]="6" editorType="dxNumberBox" [label]="{text: 'Durata massima dell\'iter'}" [editorOptions]="{ disabled: false}"></dxi-item>
+      <dxi-item dataField="durataMassimaSospensione" [colSpan]="6" editorType="dxNumberBox" [label]="{text: 'Durata massima di sospensione'}" [editorOptions]="{ disabled: false}"></dxi-item>
     </dxi-item> 
     
     <dxi-item itemType="group">
@@ -23,19 +23,20 @@
         searchPlaceholder: 'Cerca...',
         valueExpr: 'this'
       }"></dxi-item>
-      <!-- <dxi-item dataField="idTipoProcedimento.normaRiferimento" [label]="{text: 'Codice Tipo Procedimento'}" [editorOptions]="{ disabled: true}"></dxi-item> -->
+      <dxi-item dataField="idTipoProcedimento.normaRiferimento" [label]="{text: 'Codice Tipo Procedimento'}" [editorOptions]="{ disabled: true}"></dxi-item>
     </dxi-item>
     
     <dxi-item itemType="group" [colCount]="12">
-      <dxi-item dataField="dataInizio" [colSpan]="4" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita', location:'top'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-      <dxi-item dataField="dataFine" [colSpan]="4" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data fine validita', location:'top'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-      <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="4"  editorType="dxCheckBox" [label]="{text: 'Obbligo esito conclusivo', location:'top'}" [editorOptions]="{ disabled: false}"></dxi-item>
+      <dxi-item dataField="dataInizio" [colSpan]="3" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita', location:'top'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+      <dxi-item dataField="dataFine" [colSpan]="3" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data fine validita', location:'top'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+      <dxi-item dataField="giorniPreavvisoScadenzaTermini" [colSpan]="3" editorType="dxNumberBox" [label]="{text: 'Giorni Preavviso scadenza termini'}" [editorOptions]="{ disabled: false}"></dxi-item>
+      <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="3"  editorType="dxCheckBox" [label]="{text: 'Obbligo esito conclusivo', location:'top'}" [editorOptions]="{ disabled: false}"></dxi-item>
     </dxi-item>
 
 
     <dxi-item itemType="group" [colCount]="12">
-      <!-- <dxi-item dataField="idTipoProcedimento.codice" [colSpan]="6"  [label]="{text: 'Codice Tipo Procedimento'}" [editorOptions]="{ disabled: true}"></dxi-item>
-      <dxi-item dataField="idTipoProcedimento.modoApertura" [colSpan]="6" [label]="{text: 'Modo do apertura'}" [editorOptions]="{ disabled: true}"></dxi-item> -->
+      <dxi-item dataField="idTipoProcedimento.codice" [colSpan]="6"  [label]="{text: 'Codice Tipo Procedimento'}" [editorOptions]="{ disabled: true}"></dxi-item>
+      <dxi-item dataField="idTipoProcedimento.modoApertura" [colSpan]="6" [label]="{text: 'Modo do apertura'}" [editorOptions]="{ disabled: true}"></dxi-item>
     </dxi-item>
 
     

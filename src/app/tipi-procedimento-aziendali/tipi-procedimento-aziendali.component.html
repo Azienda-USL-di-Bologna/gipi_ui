@@ -27,12 +27,13 @@
 
   <dx-popup
     title="Dettaglio tipo procedimento"
+    (onHiding) = "caricaDataSource()"
     [maxWidth]="screenWidth/2"
     [showTitle]="true"
     [closeOnOutsideClick]="true"
     [(visible)]="popupVisible">
     <div *dxTemplate="let data of 'content'" style="overflow-y: scroll">
-      <dettaglio-tipo-procedimento [procedimento]="procedimentoDaPassare" (messageEvent)="receiveMessage($event)"></dettaglio-tipo-procedimento>
+      <dettaglio-tipo-procedimento [procedimento]="procedimentoDaPassare.id" (messageEvent)="receiveMessage($event)"></dettaglio-tipo-procedimento>
     </div>
  </dx-popup>
 </div>
