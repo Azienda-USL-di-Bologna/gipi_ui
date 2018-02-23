@@ -102,7 +102,7 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
 
     onBack() {
         CustomReuseStrategy.componentsReuseList.push("*");
-        this.router.navigate(["/associazione-aziende"]);
+        this.router.navigate(["/definizione-tipi-procedimento"]);
     }
 
     // getAziendeAssociate() {
