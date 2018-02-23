@@ -24,66 +24,61 @@
     </div>
 
     <div class="col-8" id="center-div">
-      <dx-form id="form" #myform [(formData)]="procedimento" [visible]="formVisible" (onFieldDataChanged)="caricaStruttureAfferenza($event)">
+      <dx-form id="form" #myform [(formData)]="procedimento" [visible]="formVisible"> 
+      
         <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" editorType="dxTextArea" cssClass="label-wrap" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" cssClass="label-wrap" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" cssClass="label-wrap" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nome" cssClass="label-wrap" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
-        <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" cssClass="label-wrap" [label]="{text: 'Durata massima sospensione'}" [editorOptions]="{ disabled: true }"></dxi-item>
-        <dxi-item dataField="idResponsabileAdozioneAttoFinale" cssClass="label-wrap" [label]="{text: 'Responsabile dell\'adozione dell\'atto finale'}" editorType="dxLookup" [editorOptions]="{ 
-          disabled: campiEditabiliDisabilitati,
-          dataSource: dataSourceResponsabile, 
-          displayExpr: 'idPersona.descrizione',
-          closeOnOutsideClick: true, 
-          showPopupTitle: false, 
-          showCancelButton: false,
-          placeholder: 'Seleziona una voce...', 
-          searchPlaceholder: 'Cerca...',
-          valueExpr: 'this'
-        }"></dxi-item>
-      <dxi-item dataField="idStrutturaResponsabileAdozioneAttoFinale" cssClass="label-wrap" [label]="{text: 'Struttura di afferenza del responsabile dell\’adozione dell\’atto finale'}" editorType="dxLookup" 
-        [editorOptions]="{
-          disabled: campiEditabiliDisabilitati,
-          dataSource: dataSourceStruttureResponsabile,
-          displayExpr: strutturaNomeDescrizione,
-          closeOnOutsideClick: true, 
-          showPopupTitle: false, 
-          showCancelButton: false,
-          placeholder: 'Seleziona una voce...', 
-          searchPlaceholder: 'Cerca...',
-          valueExpr: 'this'
-        }"></dxi-item>
-        <dxi-item dataField="idTitolarePotereSostitutivo" cssClass="label-wrap" [label]="{text: 'Titolare potere sostitutivo'}" editorType="dxLookup" [editorOptions]="{ 
-            disabled: campiEditabiliDisabilitati,
-            dataSource: dataSourceTitolare, 
-            displayExpr: 'idPersona.descrizione',
-            closeOnOutsideClick: true, 
-            showPopupTitle: false, 
-            showCancelButton: false,
-            placeholder: 'Seleziona una voce...', 
-            searchPlaceholder: 'Cerca...',
-            valueExpr: 'this'
-          }"></dxi-item>
-        <dxi-item dataField="idStrutturaTitolarePotereSostitutivo" cssClass="label-wrap" [label]="{text: 'Struttura di afferenza del titolare potere sostitutivo'}" editorType="dxLookup" 
-          [editorOptions]="{
-            disabled: campiEditabiliDisabilitati,
-            dataSource: dataSourceStruttureTitolare,
-            displayExpr: strutturaNomeDescrizione,
-            closeOnOutsideClick: true, 
-            showPopupTitle: false, 
-            showCancelButton: false,
-            placeholder: 'Seleziona una voce...', 
-            searchPlaceholder: 'Cerca...',
-            valueExpr: 'this'
-          }"></dxi-item>
-        <dxi-item dataField="strumenti" cssClass="label-wrap" [label]="{text: 'Strumenti di tutela amministrativa e giurisdizionale riconosciuti dalla Legge'}" [editorOptions]="{ disabled: campiEditabiliDisabilitati }"></dxi-item>
-        <dxi-item dataField="modalitaInfo" cssClass="label-wrap" [label]="{text: 'Modalità informativa'}" [editorOptions]="{ disabled: campiEditabiliDisabilitati }"></dxi-item>
-        <dxi-item dataField="descrizioneAtti" cssClass="label-wrap" [label]="{text: 'Atti da allegare'}" editorType="dxTextArea" [editorOptions]="{ height:70, disabled: campiEditabiliDisabilitati }"></dxi-item>
-        
+        <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" cssClass="label-wrap" [label]="{text: 'Durata massima sospensione'}" [editorOptions]="{ disabled: true }"></dxi-item>    
+    
+        <dxi-item [template]="'responsabile'" cssClass="label-wrap" [label]="{text: 'Responsabile dell\'adozione dell\'atto finale'}" ></dxi-item>
+          <div *dxTemplate="let data of 'responsabile'">
+            <dx-lookup [dataSource]="dataSourceResponsabile"
+              showPopupTitle="false"
+              closeOnOutsideClick="true"
+              placeholder= "Seleziona..."
+              searchPlaceholder= "Cerca..."
+              [disabled]="campiEditabiliDisabilitati"
+              displayExpr="nomeVisualizzato"
+              searchExpr="idUtente.idPersona.descrizione"
+              [value]="defaultResponsabile"
+              (onOpened)="reloadResponsabile()"
+              (onItemClick)="setResponsabilePlusStruttura($event)">
+            </dx-lookup>
+          </div>
 
-        <dxi-item dataField="dataInizio" cssClass="label-wrap" [label]="{text: 'Data inizio validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: campiEditabiliDisabilitati, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-        <dxi-item dataField="dataFine" cssClass="label-wrap" [label]="{text: 'Data fine validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: campiEditabiliDisabilitati, displayFormat: 'dd/MM/yyyy', 
-                  min: procedimento.dataInizio, dateOutOfRangeMessage: 'Il valore è fuori dall\'intervallo'}"></dxi-item> 
+          <dxi-item [template]="'titolare'" cssClass="label-wrap" [label]="{text: 'Titolare potere sostitutivo'}"></dxi-item>
+        
+          <div *dxTemplate="let data of 'titolare'" class="dx-field-item-content dx-field-item-content-location-right">
+            <dx-lookup [dataSource]="dataSourceTitolare"
+              showPopupTitle="false"
+              closeOnOutsideClick="true"
+              placeholder= "Seleziona..."
+              searchPlaceholder= "Cerca..."
+              [disabled]="campiEditabiliDisabilitati"
+              displayExpr="nomeVisualizzato"
+              searchExpr="idUtente.idPersona.descrizione"
+              [value]="defaultTitolare"
+              (onOpened)="reloadTitolare()"
+              (onItemClick)="setTitolarePlusStruttura($event)">
+            </dx-lookup>
+          </div>
+
+          <dxi-item dataField="ufficio" cssClass="label-wrap" [label]="{text: 'Ufficio'}" [editorOptions]="{ disabled: campiEditabiliDisabilitati }"></dxi-item>
+          <dxi-item dataField="strumenti" cssClass="label-wrap" [label]="{text: 'Strumenti di tutela amministrativa e giurisdizionale riconosciuti dalla Legge'}" [editorOptions]="{ disabled: campiEditabiliDisabilitati }"></dxi-item>
+          <dxi-item dataField="modalitaInfo" cssClass="label-wrap" [label]="{text: 'Modalità informativa stato iter'}" [editorOptions]="{ disabled: campiEditabiliDisabilitati }"></dxi-item>
+          <dxi-item dataField="descrizioneAtti" cssClass="label-wrap" [label]="{text: 'Descrizione atti e documenti da allegare all\'istanza'}" editorType="dxTextArea" [editorOptions]="{ height:70, disabled: campiEditabiliDisabilitati }"></dxi-item>
+          <dxi-item dataField="dataInizio" cssClass="label-wrap" [label]="{text: 'Data inizio validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: campiEditabiliDisabilitati, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+          <dxi-item dataField="dataFine" cssClass="label-wrap" [label]="{text: 'Data fine validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: campiEditabiliDisabilitati, displayFormat: 'dd/MM/yyyy', 
+                  min: procedimento.dataInizio, dateOutOfRangeMessage: 'Il valore è fuori dall\'intervallo'}"></dxi-item>
+          <dxi-item [template]="'bottoneUno'"></dxi-item>
+        <div *dxTemplate="let data of 'bottoneUno'">
+            <dx-button class="buttons-form margine-sinistro custom-sm-col" [visible]=formVisible (onClick)="bottoneSalvaProcedimento(true)" text="{{ testoBottone }}"
+            hint="Salva i campi"></dx-button>
+           
+            <dx-button class="buttons-form" [visible]=formVisible (onClick)="bottoneAnnulla()" text="Annulla" hint="Annulla le modifiche"></dx-button>
+          </div>
       </dx-form>
       <span *ngIf="!formVisible">
         <h2 class="no-procedimento">Nessun procedimento associato alla struttura</h2>
@@ -92,7 +87,7 @@
     <div class="col"></div>
   </div>
 
-  <div class="row item padding-bottom">
+ <!--  <div class="row item padding-bottom">
     <div class="col"></div>
     <div class="col-2" id="responsive-box-buttons">
       <dx-button class="padding-top" [visible]=formVisible (onClick)="bottoneSalvaProcedimento(true)" text="{{ testoBottone }}"
@@ -102,7 +97,7 @@
       <dx-button class="padding-top" [visible]=formVisible (onClick)="bottoneAnnulla()" text="Annulla" hint="Annulla le modifiche"></dx-button>
     </div>
     <div class="col"></div>
-  </div>
+  </div> -->
 </div>
 
 

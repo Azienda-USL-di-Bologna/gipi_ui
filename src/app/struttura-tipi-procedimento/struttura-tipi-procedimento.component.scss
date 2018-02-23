@@ -4,7 +4,6 @@
 }
 
 .padding-button {
-    margin-top: 5px;
     margin-left: 15%;
     margin-right: 15%;
     margin-bottom: 5px;
@@ -16,6 +15,29 @@
 
 .padding-bottom {
     margin-bottom: 15px;
+}
+
+.margine-sinistro {
+    margin-left: 25%;
+}
+
+.buttons-form {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    margin-right: 15%;
+    width: 120px;
+}
+
+@media (max-width: 1090px) {
+    .custom-sm-col {
+      margin-left: 10%;
+    }
+}
+
+@media (max-width: 960px) {
+    .custom-sm-col {
+      margin-left: 5%;
+    }
 }
 
 .allinea-a-sinistra{

@@ -15,6 +15,7 @@ import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loadin
 import { forEach } from "@angular/router/src/utils/collection";
 import { NodeOperations } from "../reusable-component/strutture-tree/strutture-tree.component";
 import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
+import { UtenteStruttura } from "../classi/server-objects/entities/utente-struttura";
 
 @Component({
   selector: "app-struttura-tipi-procedimento",
@@ -27,7 +28,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   private initialState: any;
   private dataSourceProcedimento: DataSource;
   private strutturaSelezionata: Struttura;
-  private odataContextDefinitionStruttureTitolare;
+  private odataContextDefinitionTitolare;
+  private odataContextDefinitionResponsabile;
 
   @ViewChild("treeView") treeView: any;
 
@@ -37,10 +39,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public nodeInvolved: Object = {};
 
+  public dataSourceResponsabile: DataSource;        // Datasource Utente per il Responsabile dell’adozione dell’atto finale  
   public dataSourceTitolare: DataSource;            // Datasource Utente per il Titolare Postere Sostitutivo
-  public dataSourceStruttureTitolare: DataSource;   // Datasource per la lookup delle strutture di afferenza del titolare potere sostitutivo
-  public dataSourceResponsabile: DataSource;            // Datasource Utente per il Responsabile dell’adozione dell’atto finale
-  public dataSourceStruttureResponsabile: DataSource;   // Datasource per la lookup delle strutture di afferenza del titolare potere sostitutivo
 
   public procedimento: Procedimento = new Procedimento();
   public initialProcedimento: Procedimento;
@@ -57,9 +57,15 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   public idAziendaFront;
   public idAziendaTipoProcedimentoFront;
 
+  public defaultResponsabile: UtenteStruttura;
+  public defaultTitolare: UtenteStruttura;
+
   public formVisible = false;
   public popupVisible = false;
-
+  public colCountByScreen = {
+    md: 2,
+    sm: 1
+};
   public dataFromAziendaTipiProcedimentoComponent;
   
 
@@ -72,41 +78,12 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     // COSTRUZIONE MENU CONTESTUALE SULL'ALBERO
     this.contextMenuItems = [{ text: "Espandi a struttureAfferenzaDiretta figlie" }];
 
-    //   this.datasource = new DataSource({
-    //     store: this.odataContextDefinition.getContext()[Entities.Struttura],
-    //     filter: ['FK_id_azienda', '=', 5], //Il valore numerico è l'id dell'azienda, aperto RM per renderlo parametrizzabile
-    //   });
-    //  }
-
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
-    this.odataContextDefinitionStruttureTitolare = this.odataContextFactory.buildOdataContextEntitiesDefinition();
-
-    const odataContextDefinitionUtente: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    this.odataContextDefinitionTitolare = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    this.odataContextDefinitionResponsabile = this.odataContextFactory.buildOdataContextEntitiesDefinition();
    
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("descrizione");
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
-
-    this.dataSourceTitolare = new DataSource({
-      store: odataContextDefinitionUtente.getContext()[Entities.Utente.name].on("loading", (loadOptions) => {
-        loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
-        odataContextDefinitionUtente.customLoading(loadOptions);
-      }),
-      expand: [
-        "idPersona"
-      ],
-      filter: [["idAzienda.id", "=", this.idAziendaFront]]
-    });
-
-    this.dataSourceResponsabile = new DataSource({
-      store: odataContextDefinitionUtente.getContext()[Entities.Utente.name].on("loading", (loadOptions) => {
-        loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
-        odataContextDefinitionUtente.customLoading(loadOptions);
-      }),
-      expand: [
-        "idPersona"
-      ],
-      filter: [["idAzienda.id", "=", this.idAziendaFront]]
-    });
 
     this.datasource = new DataSource({
       store: this.odataContextDefinition.getContext()[FunctionsImport.GetStruttureByTipoProcedimento.name],
@@ -137,7 +114,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       this.dataSourceProcedimento = new DataSource({
         store: odataContextDefinitionProcedimento.getContext()[Entities.Procedimento.name],
         requireTotalCount: true,
-        expand: ["idAziendaTipoProcedimento", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento", "idAziendaTipoProcedimento.idTitolo"],
+        expand: ["idAziendaTipoProcedimento", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento", "idAziendaTipoProcedimento.idTitolo", 
+                "idStrutturaTitolarePotereSostitutivo", "idStrutturaResponsabileAdozioneAttoFinale", "idResponsabileAdozioneAttoFinale"],
         filter: [["idAziendaTipoProcedimento.id", "=", aziendaTipoProcedimento.id], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]
       });
     } else {
@@ -146,6 +124,40 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.dataSourceProcedimento.load().then(res => {
       res.length ? this.formVisible = true : this.formVisible = false;  /* Se non ho risultato nascondo il form */
       this.procedimento.build(res[0], Procedimento);
+
+      let idUtente = res[0].idResponsabileAdozioneAttoFinale ? res[0].idResponsabileAdozioneAttoFinale.id : null;
+      let idStruttura = res[0].idStrutturaResponsabileAdozioneAttoFinale ? res[0].idStrutturaResponsabileAdozioneAttoFinale.id : null;
+
+      if (!this.dataSourceResponsabile) {
+        this.dataSourceResponsabile = this.creaDataSourceUtente(this.odataContextDefinitionResponsabile, idUtente, idStruttura, "responsabile");
+      } else if (idUtente && idStruttura) {
+        this.dataSourceResponsabile.filter( [["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and", 
+        ["idStruttura.id", "=", idStruttura] ]);
+        this.dataSourceResponsabile.load().then(result => {
+          console.log("RESULT = ", result);
+            this.defaultResponsabile = result[0];
+        });
+        // this.dato =  this.dataSourceResponsabile.items().filter(x => x.idUtente.id === idResp && x.idStruttura.id === idStruttResp)[0];
+      } else {
+        this.defaultResponsabile = undefined;
+      }
+
+      idUtente = res[0].idTitolarePotereSostitutivo ? res[0].idTitolarePotereSostitutivo.id : null;
+      idStruttura = res[0].idStrutturaTitolarePotereSostitutivo ? res[0].idStrutturaTitolarePotereSostitutivo.id : null;
+
+      if (!this.dataSourceTitolare) {
+        this.dataSourceTitolare = this.creaDataSourceUtente(this.odataContextDefinitionTitolare, idUtente, idStruttura, "titolare");
+      } else if (idUtente && idStruttura) {
+        this.dataSourceTitolare.filter( [["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and", 
+        ["idStruttura.id", "=", idStruttura] ]);
+        this.dataSourceTitolare.load().then(result => {
+          console.log("RESULT = ", result);
+            this.defaultTitolare = result[0];
+        });
+      } else  {
+        this.defaultTitolare = undefined;
+      }    
+
       if (setInitialValue) {
         this.setInitialValues();
       }
@@ -157,7 +169,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       this.testoBottone = "Salva";
       this.cambiaStatoForm();
     } else {
-      if (flagSalva) {
+      if (flagSalva) {   
         if (!(this.procedimento.dataFine < this.procedimento.dataInizio) || this.procedimento.dataFine === null) {
           this.dataSourceProcedimento.store()
             .update(this.procedimento.id, this.procedimento)
@@ -165,12 +177,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
           notify({
             message: "Salvataggio effettuato con successo",
             type: "success",
-            displayTime: 1200,
-            position: {
-              my: "bottom",
-              at: "top",
-              of: "#responsive-box-buttons"
-            }
+            displayTime: 1200
           });
           this.testoBottone = "Modifica";
           this.cambiaStatoForm();
@@ -178,12 +185,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
           notify({
             message: "Correggere l'intervallo di validità",
             type: "error",
-            displayTime: 1200,
-            position: {
-              my: "bottom",
-              at: "top",
-              of: "#responsive-box-buttons"
-            }
+            displayTime: 1200
           });
         }
       }
@@ -262,54 +264,58 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   screen(width) {
-    return (width < 700) ? "sm" : "lg";
+    return (width <= 1200) ? "sm" : "md";
   }
-
-  caricaStruttureAfferenza(event: any) {
-    if (event.dataField === "idTitolarePotereSostitutivo" && event.value !== undefined ) {
-      // this.procedimento.FK_id_struttura_titolare_potere_sostitutivo = null;
-      if (!this.dataSourceStruttureTitolare) {
-        this.dataSourceStruttureTitolare = new DataSource({
-          store: this.odataContextDefinitionStruttureTitolare.getContext()[Entities.UtenteStruttura.name],
-          expand: [
-            "idStruttura", "idAfferenzaStruttura"
-          ],
-          filter: [["idUtente.id", "=", event.value.id]],
-          sort: [ "idAfferenzaStruttura" ]
-        });
-      } else {
-        this.dataSourceStruttureTitolare.filter(["idUtente.id", "=", event.value.id]);
-        this.dataSourceStruttureTitolare.sort("idAfferenzaStruttura");
-      }
-      this.dataSourceStruttureTitolare.load();
-    } else if (event.dataField === "idResponsabileAdozioneAttoFinale" && event.value !== undefined ) {
-      if (!this.dataSourceStruttureResponsabile) {
-        this.dataSourceStruttureResponsabile = new DataSource({
-          store: this.odataContextDefinitionStruttureTitolare.getContext()[Entities.UtenteStruttura.name],
-          expand: [
-            "idStruttura", "idAfferenzaStruttura"
-          ],
-          filter: [["idUtente.id", "=", event.value.id]],
-          sort: [ "idAfferenzaStruttura" ]
-        });
-      } else {
-        this.dataSourceStruttureResponsabile.filter(["idUtente.id", "=", event.value.id]);
-        this.dataSourceStruttureResponsabile.sort("idAfferenzaStruttura");
-      }
-      this.dataSourceStruttureResponsabile.load();
-    }
-   
-  }
-
-  public strutturaNomeDescrizione(data) {
-    return data && data.idStruttura !== undefined ? 
-      data.idStruttura.nome + " (" + data.idAfferenzaStruttura.descrizione.charAt(0).toUpperCase() +
-      data.idAfferenzaStruttura.descrizione.substr(1).toLowerCase() + ")" 
-      : null;
-  }
-
   
+  creaDataSourceUtente(context: OdataContextDefinition, idUtente: number, idStruttura: number, chiamante: string): DataSource {
+    const dataSource = new DataSource({
+      store: context.getContext()[Entities.UtenteStruttura.name],
+      expand: [
+        "idUtente", "idStruttura", "idAfferenzaStruttura", "idUtente.idPersona", "idUtente.idAzienda"
+      ],
+      filter: [["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and", 
+                ["idStruttura.id", "=", idStruttura] ],
+      map: (item) => {
+        if (item) {
+          if (item.idStruttura && item.idAfferenzaStruttura) {
+            item.nomeVisualizzato = item.idUtente.idPersona.descrizione + " (" + item.idStruttura.nome + ")";
+          }
+          return item;
+        }
+      },
+      sort: ["idUtente.idPersona.descrizione"],
+      searchExpr: function(dataItem) {
+        return dataItem.idUtente.idPersona.descrizione;
+    }
+    });
+    dataSource.load().then(res => {
+      chiamante === "responsabile" ? this.defaultResponsabile = res[0] : this.defaultTitolare = res[0];
+    });
+    return dataSource;
+  }
+
+  setResponsabilePlusStruttura(event: any) {
+    console.log("EVENT SETRESP = ", event);
+    this.procedimento.idResponsabileAdozioneAttoFinale = event.itemData.idUtente;
+    this.procedimento.idStrutturaResponsabileAdozioneAttoFinale = event.itemData.idStruttura;
+    console.log("PROCEDIMENTO RESP = ", event);
+  }
+
+  setTitolarePlusStruttura(event: any) {
+    console.log("EVENT SETTITO = ", event);
+    this.procedimento.idTitolarePotereSostitutivo = event.itemData.idUtente;
+    this.procedimento.idStrutturaTitolarePotereSostitutivo = event.itemData.idStruttura;
+    console.log("PROCEDIMENTO TITO = ", this.procedimento);
+  }
+
+  reloadResponsabile() {
+    this.dataSourceResponsabile.filter(null);
+    this.dataSourceResponsabile.load();
+  }
+
+  reloadTitolare() {
+    this.dataSourceTitolare.filter(null);
+    this.dataSourceTitolare.load();
+  }
 
 }
-
-
