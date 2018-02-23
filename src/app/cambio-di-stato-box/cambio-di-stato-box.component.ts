@@ -1,9 +1,8 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import CustomStore from 'devextreme/data/custom_store';
 import ArrayStore from 'devextreme/data/array_store';
-import { LoggedUser } from "../authorization/logged-user"
-import { GlobalContextService } from "@bds/nt-angular-context/global-context.service";
+import { GlobalContextService } from "@bds/nt-context";
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { HttpClient, HttpHeaders } from "@angular/common/http";

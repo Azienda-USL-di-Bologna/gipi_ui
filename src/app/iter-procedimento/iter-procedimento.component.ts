@@ -1,21 +1,17 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextDefinition } from "@bds/nt-context";
-import { CustomLoadingFilterParams } from "@bds/nt-context";
-import { OdataContextFactory } from "@bds/nt-context";
+import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
-import { Iter, Utente, Fase, FaseIter, ProcedimentoCache } from "@bds/nt-entities";
+import { Iter, Utente, Fase, FaseIter, ProcedimentoCache, bUtente, bAzienda } from "@bds/nt-entities";
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
-import { ButtonAppearance } from "@bds/nt-context/templates/buttons-bar/buttons-bar.component";
 import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
 import * as moment from "moment";
 import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stato-box.component";
-import { LoggedUser } from "../authorization/logged-user";
+import { LoggedUser } from "@bds/nt-login";
 import { Observable, Subscription } from "rxjs";
-import { GlobalContextService } from "@bds/nt-angular-context/global-context.service";
 
 
 
@@ -127,8 +123,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
             (loggedUser: LoggedUser) => {
                 if (loggedUser) {
                   this.userInfo = {
-                    idUtente: loggedUser.idUtente,
-                    idAzienda:  loggedUser.aziendaLogin.id,
+                    idUtente: loggedUser.getField(bUtente.id),
+                    idAzienda:  loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id],
                     cf: "GSLFNC89A05G224Y"
                   }
                 }
