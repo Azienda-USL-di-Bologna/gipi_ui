@@ -21,7 +21,7 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12 col-lg-6 contentLeft">
+        <div class="col-lg-6 col-md-12 contentLeft">
             <dx-form id="form" [colCount]="1" [formData]="iter">
                 <dxi-item itemType="group" [colCount]="6" [caption]="datiGenerali">
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
@@ -60,7 +60,7 @@
                     </dxi-item>
                 </dxi-item>
 
-                <dxi-item itemType="group" caption="Dati temporali">
+                <dxi-item itemType="group" [colCount]="1" caption="Dati temporali">
                     <dxi-item dataField="dataAvvio" editorType="dxDateBox" [editorOptions]="{ disabled: true }"></dxi-item>
 
                     <dxi-item dataField="dataChiusuraPrevista" editorType="dxDateBox" [editorOptions]="{ disabled: true }">
@@ -89,7 +89,7 @@
             </dx-form>
         </div>
 
-        <div class="col-xs-12 col-lg-6 contentRight">
+        <div class="col-lg-6 col-md-12 contentRight">
             <div class="whitePanel mb-3 fixHeight">
                 <app-sequenza-delle-fasi [daPadre]="perFigliParteDestra"></app-sequenza-delle-fasi>
             </div>
