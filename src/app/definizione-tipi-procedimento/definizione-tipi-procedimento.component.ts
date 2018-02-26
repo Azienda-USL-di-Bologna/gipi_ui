@@ -160,6 +160,10 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
           event.editorName = "dxSelectBox";
           event.editorOptions.items = ["Ufficio", "Istanza"];
         }
+
+        if (event.dataField === "descrizioneDefault") {
+          event.editorName = "dxTextArea";
+        }
         break;
 
       default:
