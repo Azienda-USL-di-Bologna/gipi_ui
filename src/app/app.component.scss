@@ -26,7 +26,7 @@
   width: 305px;
   padding: 10px;
   padding-bottom: 0px;
-  
+
 }
 
 /deep/ .test {
@@ -40,7 +40,7 @@
 // BOTTONI
 // escludo quelli con icone
 /deep/ .dx-button-has-text:not(.dx-button-has-icon) {
-  background-color: #337ab7;  
+  background-color: #337ab7;
   border-color: #2d6da3;
   color: #fff;
   border-radius: 4px;
@@ -197,7 +197,7 @@
   //  display: table-footer-group
     position: fixed;
     left: 0;
-    bottom: 0;
+    bottom: 15px;
     width: 100%;
   }
 #sidebar-toggle-button {
@@ -273,30 +273,30 @@
   margin-right: 8px;
 }
 // /deep/ dx-data-grid > .dx-datagrid{
-//   box-shadow: 0 0 1px rgba(0,0,0,.15); 
-//   background-color: #fff; 
+//   box-shadow: 0 0 1px rgba(0,0,0,.15);
+//   background-color: #fff;
 //   border-radius: 2px;
 // }
 /deep/ .dx-datagrid-header-panel{
   border-bottom: none;
 }
 // /deep/ dx-form > div > div > div > .dx-box-item{
-//   box-shadow: 0 0 1px rgba(0,0,0,.15); 
-//   padding: 15px; 
-//   background-color: #fff; 
+//   box-shadow: 0 0 1px rgba(0,0,0,.15);
+//   padding: 15px;
+//   background-color: #fff;
 //   border-radius: 2px;
 //   margin-bottom: 8px;
 // }
 /deep/ dx-form .dx-form-group{
-  box-shadow: 0 0 1px rgba(0,0,0,.15); 
-  padding: 15px; 
-  background-color: #fff; 
+  box-shadow: 0 0 1px rgba(0,0,0,.15);
+  padding: 15px;
+  background-color: #fff;
   border-radius: 2px;
   margin-bottom: 8px;
 }
 /deep/ .whitePanel{
-  box-shadow: 0 0 1px rgba(0,0,0,.15); 
-  padding: 15px; 
+  box-shadow: 0 0 1px rgba(0,0,0,.15);
+  padding: 15px;
   background-color: #fff;
 }
 .floatRight{
