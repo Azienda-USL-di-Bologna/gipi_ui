@@ -65,6 +65,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public loggedUser$: Observable<LoggedUser>;
   private subscriptions: Subscription[] = [];
   public userInfo: UserInfo;
+  public iodaPermission: boolean;
 
   constructor(
     private odataContextFactory: OdataContextFactory, 
@@ -340,6 +341,11 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       });
     return b;
   }
+
+  public calculateIodaPermission() {
+
+  }
+
 }
 
 interface UserInfo{
