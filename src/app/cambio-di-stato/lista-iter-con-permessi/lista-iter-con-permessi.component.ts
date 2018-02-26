@@ -39,7 +39,7 @@ export class ListaIterConPermessiComponent implements OnInit {
   @Output() selectedRow: EventEmitter<any> = new EventEmitter();
 
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private globalContextService: GlobalContextService) {
-    console.log("USER INFO LISTA CONSTRACTOR:", this._userInfo);
+    // console.log("USER INFO LISTA CONSTRACTOR:", this._userInfo);
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }
 
@@ -60,7 +60,7 @@ export class ListaIterConPermessiComponent implements OnInit {
 }
 
   selectedRowChanged(e) {
-    console.log("SELECTED:", e.selectedRowsData[0].id);
+    // console.log("SELECTED:", e.selectedRowsData[0].id);
     this.selectedRow.emit(e.selectedRowsData[0]);
     
   }
