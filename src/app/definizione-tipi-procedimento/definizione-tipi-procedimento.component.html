@@ -28,7 +28,7 @@
     <dxi-column dataField="nome"></dxi-column>
     <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva" [allowSorting]="true" alignment="center" [allowFiltering]="true" width="auto"></dxi-column>
     <dxi-column dataField="dataInizioValidita" caption="Data Inizio Validità" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true"></dxi-column>
-    <dxi-column dataField="dataFineValidita" caption="Data Fine Validità" caption="Codice" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true"></dxi-column>
+    <dxi-column dataField="dataFineValidita" caption="Data Fine Validità" caption="Data Fine Validità" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true"></dxi-column>
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
     <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
     <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni">
@@ -67,7 +67,7 @@
             <dxi-item dataField="modoApertura" [colSpan]="2"></dxi-item>
             <dxi-item dataField="normaRiferimento" [colSpan]="2"></dxi-item>
             <dxi-item dataField="dataInizioValidita" [colSpan]="1"></dxi-item>
-            <dxi-item dataField="dataFineValidita" [colSpan]="1"></dxi-item>
+            <dxi-item dataField="dataFineValidita"  [colSpan]="1"></dxi-item>
             <dxi-item dataField="durataMassimaIter" [colSpan]="1"></dxi-item>
             <dxi-item dataField="durataMassimaSospensione" [colSpan]="1"></dxi-item>
             <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="1"></dxi-item>

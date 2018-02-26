@@ -163,6 +163,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
         if (event.dataField === "descrizioneDefault") {
           event.editorName = "dxTextArea";
+          event.editorOptions.height = "70px";
         }
         break;
 
