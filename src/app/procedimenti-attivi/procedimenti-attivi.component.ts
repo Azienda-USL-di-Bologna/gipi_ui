@@ -2,11 +2,11 @@ import { Component, ViewChild, Input, Output, EventEmitter } from "@angular/core
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextFactory, OdataContextDefinition } from "@bds/nt-context";
-import {Router} from "@angular/router";
+import { Router } from "@angular/router";
 import { LoggedUser } from "@bds/nt-login";
 import { GlobalContextService } from "@bds/nt-context";
 import { UtilityFunctions } from "app/utility-functions";
-import {bAzienda, bStruttura, bUtente, Procedimento} from "@bds/nt-entities";
+import { bAzienda, bStruttura, bUtente, Procedimento } from "@bds/nt-entities";
 
 @Component({
   selector: "procedimenti-attivi",
@@ -18,7 +18,7 @@ export class ProcedimentiAttiviComponent {
   private odataContextDefinition: OdataContextDefinition;
   private rigaSelezionata: any;
   private utility: UtilityFunctions = new UtilityFunctions();
-  
+
   @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
   public idAzienda: number;
   public dataSourceProcedimenti: DataSource;
@@ -30,7 +30,7 @@ export class ProcedimentiAttiviComponent {
   public daDocumento: boolean = false;
   public enableSelection: string = "none";
   public colonnaVisibile: boolean = true;
-  public showTitle: boolean = true ;
+  public showTitle: boolean = true;
 
   @Input()
   set avviaIterDaDocumento(daDocumento: any) {
@@ -43,14 +43,15 @@ export class ProcedimentiAttiviComponent {
 
   public loggedUser: LoggedUser;
 
-  constructor(private odataContextFactory: OdataContextFactory, 
-              public router: Router,
-              private globalContextService: GlobalContextService) {
+  constructor(private odataContextFactory: OdataContextFactory,
+    public router: Router,
+    private globalContextService: GlobalContextService) {
+
 
     this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
     this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
 
-   // this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).aziende.id;
+    // this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).aziende.id;
     const now = new Date();
 
     this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -74,7 +75,13 @@ export class ProcedimentiAttiviComponent {
           "or",
           ["dataFine", "=", null]
         ]
-      ]
+      ],
+      map: (item) => {
+        console.log(item);
+        item.idAziendaTipoProcedimento.idTitolo.nome += ' [' + item.idAziendaTipoProcedimento.idTitolo.classificazione + ']';
+
+        return item;
+      }
     });
 
     this.itemClear = this.itemClear.bind(this);
@@ -86,18 +93,18 @@ export class ProcedimentiAttiviComponent {
     // Prima mi creo l'array con gli id struttura
     let idStrutture: any = [];
     console.log(this.loggedUser);
-    this.loggedUser.getField(bUtente.struttureAfferenzaDiretta).forEach(function(struttura: any) {
+    this.loggedUser.getField(bUtente.struttureAfferenzaDiretta).forEach(function (struttura: any) {
       console.log(struttura);
       idStrutture.push(struttura[bStruttura.id]);
     });
     if (this.loggedUser.getField(bUtente.struttureAfferenzaFunzionale) != null) {
-      this.loggedUser.getField(bUtente.struttureAfferenzaFunzionale).forEach(function(struttura: any) {
+      this.loggedUser.getField(bUtente.struttureAfferenzaFunzionale).forEach(function (struttura: any) {
         idStrutture.push(struttura[bStruttura.id]);
       });
     }
     // Ora mi creo l'array-filtro e filtro
     this.dataSourceProcedimenti.filter(this.utility.buildMultipleFilterForArray("idStruttura.id", idStrutture));
-    
+
     console.log(this.loggedUser);
   }
 
@@ -106,7 +113,7 @@ export class ProcedimentiAttiviComponent {
     this.colonnaVisibile = false;
     this.showTitle = false;
   }
-  
+
   private apriDettaglio(row: any) {
     this.gridContainer.instance.editRow(row.rowIndex);
   }
@@ -118,11 +125,11 @@ export class ProcedimentiAttiviComponent {
       location: "center",
       widget: "dxButton",
       options: {
-          type: "normal",
-          text: "Chiudi",
-          onClick: () => {
-              this.gridContainer.instance.cancelEditData();
-          }
+        type: "normal",
+        text: "Chiudi",
+        onClick: () => {
+          this.gridContainer.instance.cancelEditData();
+        }
       }
     }];
   }
@@ -154,11 +161,11 @@ export class ProcedimentiAttiviComponent {
   customizeColumns(columns: any) {
     columns.forEach(column => {
       const defaultCalculateFilterExpression = column.calculateFilterExpression;
-      column.calculateFilterExpression = function(value, selectedFilterOperation) {
+      column.calculateFilterExpression = function (value, selectedFilterOperation) {
         if (this.dataType === "string" && !this.lookup && value) {
           return ["tolower(" + this.dataField + ")",
-            selectedFilterOperation || "contains",
-            value.toLowerCase()];
+          selectedFilterOperation || "contains",
+          value.toLowerCase()];
         } else {
           return defaultCalculateFilterExpression.apply(this, arguments);
         }
@@ -171,14 +178,14 @@ export class ProcedimentiAttiviComponent {
     if (this.iterAvviato) {
       this.idIterAvviato = event.idIter;
     }
-    this.popupNuovoIterVisible = event.visible;   
+    this.popupNuovoIterVisible = event.visible;
   }
 
   public popupHidden() {
     this.popupNuovoIterVisible = false; // Settaggio necessario in caso il popup venga chiuso tramite la X
     if (this.iterAvviato) {
       this.iterAvviato = false;
-      this.router.navigate(["iter-procedimento"], {queryParams: {idIter: this.idIterAvviato}});
+      this.router.navigate(["iter-procedimento"], { queryParams: { idIter: this.idIterAvviato } });
     }
   }
 
@@ -187,16 +194,16 @@ export class ProcedimentiAttiviComponent {
       case "infoOnClick":
         this.rigaSelezionata = e.row;
         this.apriDettaglio(e.row);
-      break;
+        break;
       case "iterOnClick":
         this.popupNuovoIterVisible = true;
         this.procedimentoDaPassare = {
           procedimento: e.row.data
         };
-      break;
+        break;
       case "onSelectionChanged":
-        this.messageEvent.emit({ row: e});
-      break;
+        this.messageEvent.emit({ row: e });
+        break;
     }
   }
 }
