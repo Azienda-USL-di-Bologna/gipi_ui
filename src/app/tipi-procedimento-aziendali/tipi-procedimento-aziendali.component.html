@@ -25,14 +25,15 @@
     </dx-data-grid>
   
 
-  <dx-popup
+  <dx-popup id="popupDettaglioTipoProcedimento"
+    style="background-color: #f1f1f3;"
     title="Dettaglio tipo procedimento"
     (onHiding) = "caricaDataSource()"
     [maxWidth]="screenWidth*2/3"
     [showTitle]="true"
     [closeOnOutsideClick]="true"
     [(visible)]="popupVisible">
-    <div *dxTemplate="let data of 'content'" style="overflow-y: scroll">
+    <div *dxTemplate="let data of 'content'" style="overflow-y: scroll; background-color: #f1f1f3;">
       <dettaglio-tipo-procedimento [procedimento]="procedimentoDaPassare.id" (messageEvent)="receiveMessage($event)"></dettaglio-tipo-procedimento>
     </div>
  </dx-popup>

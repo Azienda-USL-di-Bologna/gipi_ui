@@ -26,6 +26,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   public nomeProcedimento: string;
   public dataMassimaConclusione: Date;
   public loggedUser: LoggedUser;
+  public now: Date = new Date();
 
   @Input()
   set procedimentoSelezionato(procedimento: any) {

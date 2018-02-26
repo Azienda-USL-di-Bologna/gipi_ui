@@ -39,7 +39,7 @@ export class StruttureTreeComponent implements OnInit {
   constructor(private http: HttpClient, private odataContextFactory: OdataContextFactory) {
 
     // costruzione menù contestuale sull'albero
-    this.contextMenuItems = [{ text: "Espandi a struttureAfferenzaDiretta figlie" }];
+    this.contextMenuItems = [{ text: "Seleziona tutte le strutture figlie" }, { text: "Deseleziona tutte le strutture figlie" }];
 
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }
@@ -100,32 +100,43 @@ export class StruttureTreeComponent implements OnInit {
 
   // Questo scatta quando clicchiamo sulla voce del menu contestuale "Espandi..."
   contextualItemClick(e) {
-
+    
+    switch (e.itemIndex)
+    {
+      case 0:
+        this.setSelectedNodeRecursively(this.nodeSelectedFromContextMenu, true);
+        break;
+        
+      case 1:
+        this.setSelectedNodeRecursively(this.nodeSelectedFromContextMenu, false);  
+        break;  
+    }
     // this.treeView.selectNodesRecursive = true;
-    this.treeViewChild.instance.selectItem(this.nodeSelectedFromContextMenu.id);
     // this.treeView.selectNodesRecursive = false;
 
-    this.nodeSelectedFromContextMenu.selected = true;
-    this.setSelectedNodeRecursively(this.nodeSelectedFromContextMenu);
     // console.log('VAL: ' + this.nodeSelectedFromContextMenu.id);
   }
 
-  private setSelectedNodeRecursively(node: any): void {
+  private setSelectedNodeRecursively(node: any, select: boolean): void {
     // this.node.item
-    const res = this.getNestedChildren(this.datasource.items(), node.id);
+    const res = this.getNestedChildren(this.datasource.items(), node.id, select);
 
     res.forEach(function (element) {
-      element.selected = true;
+      element.selected = select;
     });
   }
 
-  private getNestedChildren(inputArray, selectedNode) {
+  private getNestedChildren(inputArray, selectedNode, select: boolean) {
     const result = [];
 
     for (const i in inputArray) {
       if (inputArray[i].idStrutturaPadre === selectedNode) {
-        this.getNestedChildren(inputArray, inputArray[i].id);
-        this.treeViewChild.instance.selectItem(inputArray[i].id);
+        this.getNestedChildren(inputArray, inputArray[i].id, select);
+
+        if (select)
+          this.treeViewChild.instance.selectItem(inputArray[i].id);
+        else
+          this.treeViewChild.instance.unselectItem(inputArray[i].id);
         result.push(inputArray[i]);
       }
     }
