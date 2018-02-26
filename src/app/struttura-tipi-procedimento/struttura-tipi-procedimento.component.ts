@@ -1,19 +1,16 @@
 import { Component, Input, OnInit, ViewChild, SimpleChange, OnChanges, SimpleChanges } from "@angular/core";
+import { Location } from "@angular/common";
 import DataSource from "devextreme/data/data_source";
-import { Router } from "@angular/router";
-import { OdataContextDefinition } from "@bds/nt-context";
-import { OdataContextFactory } from "@bds/nt-context";
+import { Router, ActivatedRoute, Params } from "@angular/router";
+import { 
+    OdataContextDefinition, OdataContextFactory, OdataContextEntitiesDefinition, 
+    Entity, CustomLoadingFilterParams, GlobalContextService } from "@bds/nt-context";
 import {
     Struttura, AziendaTipoProcedimento, Procedimento, Utente,
-    GetStruttureByTipoProcedimento
+    GetStruttureByTipoProcedimento, UtenteStruttura
 } from "@bds/nt-entities";
-import { OdataContextEntitiesDefinition } from "@bds/nt-context";
-import { Entity } from "@bds/nt-context";
 import notify from "devextreme/ui/notify";
-import { CustomLoadingFilterParams } from "@bds/nt-context";
 import { NodeOperations } from "../reusable-component/strutture-tree/strutture-tree.component";
-import {GlobalContextService} from "@bds/nt-context";
-import { UtenteStruttura } from "../classi/server-objects/entities/utente-struttura";
 
 @Component({
   selector: "app-struttura-tipi-procedimento",
@@ -22,16 +19,14 @@ import { UtenteStruttura } from "../classi/server-objects/entities/utente-strutt
 })
 export class StrutturaTipiProcedimentoComponent implements OnInit {
   private odataContextDefinition;
+  private odataContextDefinitionAzienda;
   private nodeSelectedFromContextMenu: any;
   private initialState: any;
   private dataSourceProcedimento: DataSource;
+  private datasourceAziendaTipiProcedimento: DataSource;
   private strutturaSelezionata: Struttura;
   private odataContextDefinitionTitolare;
   private odataContextDefinitionResponsabile;
-
-  private dataSourceProcedimento: DataSource;
-  private strutturaSelezionata: Struttura;
-  private dataFromAziendaTipiProcedimentoComponent;
 
   @ViewChild("treeView") treeView: any;
 
@@ -51,13 +46,13 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   public campiEditabiliDisabilitati = true;
   public testoBottone = "Modifica";
 
-  public headerTipoProcedimento;
-  public headerAzienda;
+  public headerTipoProcedimento: string;
   public headerStruttura;
 
   /* Variabili passate all'albero */
-  public idAziendaFront;
-  public idAziendaTipoProcedimentoFront;
+  public idAziendaFront: number;
+  public idAziendaTipoProcedimentoFront: number;
+  public aziendaTipiProcedimentoData: any;
 
   public defaultResponsabile: UtenteStruttura;
   public defaultTitolare: UtenteStruttura;
@@ -68,13 +63,19 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     md: 2,
     sm: 1
 };
-  public dataFromAziendaTipiProcedimentoComponent;
+  public dataFromAziendaTipiProcedimentoComponent: AziendaTipoProcedimento = new AziendaTipoProcedimento();
   
   constructor(private odataContextFactory: OdataContextFactory,
               private globalContextService: GlobalContextService,
-              private router: Router) {
+              private router: Router, private activatedRoute: ActivatedRoute,
+              private _location: Location) {
 
-    this.setDataFromDettaglioProcedimentoComponent();
+    this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
+      this.idAziendaFront = +queryParams["azienda"];
+      this.idAziendaTipoProcedimentoFront = +queryParams["aziendaTipoProcedimento"];
+      this.headerTipoProcedimento = queryParams["tipoProcedimento"];
+    });
+
     this.strutturaSelezionata = new Struttura();
     // COSTRUZIONE MENU CONTESTUALE SULL'ALBERO
     this.contextMenuItems = [{ text: "Espandi a struttureAfferenzaDiretta figlie" }];
@@ -86,13 +87,6 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("descrizione");
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
 
-    this.datasource = new DataSource({
-      store: this.odataContextDefinition.getContext()[new GetStruttureByTipoProcedimento().getName()],
-      customQueryParams: {
-        idAziendaTipoProcedimento: this.dataFromAziendaTipiProcedimentoComponent.aziendaTipoProcedimento.idTipoProcedimento.id,
-        idAzienda: this.dataFromAziendaTipiProcedimentoComponent.aziendaTipoProcedimento.idAzienda.id
-      }
-    });
   }
 
   private cambiaStatoForm() {
@@ -100,31 +94,23 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.campiEditabiliDisabilitati = !this.campiEditabiliDisabilitati;
   }
 
-  /* Legge i dati passatti dall'interfaccia precedente AziendeTipiProcedimentoComponent e setto le variabili */
-  private setDataFromDettaglioProcedimentoComponent() {
-    this.dataFromAziendaTipiProcedimentoComponent = this.globalContextService.getInnerSharedObject("GestioneAssociazioneAziendaComponent");
-    const aziendaTipoProcedimento: AziendaTipoProcedimento = this.dataFromAziendaTipiProcedimentoComponent["aziendaTipoProcedimento"];
-    this.idAziendaFront = aziendaTipoProcedimento.idAzienda.id;
-    this.idAziendaTipoProcedimentoFront = aziendaTipoProcedimento.id;
-  }
-
   private caricaDettaglioProcedimento(setInitialValue: boolean) {
     const odataContextDefinitionProcedimento: OdataContextEntitiesDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     const aziendaTipoProcedimento: AziendaTipoProcedimento = this.dataFromAziendaTipiProcedimentoComponent["aziendaTipoProcedimento"];
     if (!this.dataSourceProcedimento) {
       this.dataSourceProcedimento = new DataSource({
-        store: odataContextDefinitionProcedimento.getContext()[Entities.Procedimento.name],
+        store: odataContextDefinitionProcedimento.getContext()[new Procedimento().getName()],
         requireTotalCount: true,
         expand: ["idAziendaTipoProcedimento", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento", "idAziendaTipoProcedimento.idTitolo", 
                 "idStrutturaTitolarePotereSostitutivo", "idStrutturaResponsabileAdozioneAttoFinale", "idResponsabileAdozioneAttoFinale"],
-        filter: [["idAziendaTipoProcedimento.id", "=", aziendaTipoProcedimento.id], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]
+        filter: [["idAziendaTipoProcedimento.id", "=", this.idAziendaTipoProcedimentoFront], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]
       });
     } else {
-      this.dataSourceProcedimento.filter([["idAziendaTipoProcedimento.id", "=", aziendaTipoProcedimento.id], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]);
+      this.dataSourceProcedimento.filter([["idAziendaTipoProcedimento.id", "=", this.idAziendaTipoProcedimentoFront], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]);
     }
     this.dataSourceProcedimento.load().then(res => {
       res.length ? this.formVisible = true : this.formVisible = false;  /* Se non ho risultato nascondo il form */
-      this.procedimento.build(res[0], Procedimento);
+      this.procedimento.build(res[0]);
 
       let idUtente = res[0].idResponsabileAdozioneAttoFinale ? res[0].idResponsabileAdozioneAttoFinale.id : null;
       let idStruttura = res[0].idStrutturaResponsabileAdozioneAttoFinale ? res[0].idStrutturaResponsabileAdozioneAttoFinale.id : null;
@@ -220,10 +206,13 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     }
   }
 
-  /* Leggo qui dallo SharedData gli header perché vengono caricati prima del constructor */
+  /* Setto qui i dati che verranno passati al componente dell'albero e alla popup */
   ngOnInit() {
-    this.headerTipoProcedimento = this.dataFromAziendaTipiProcedimentoComponent.headerTipoProcedimento;
-    this.headerAzienda = this.dataFromAziendaTipiProcedimentoComponent.headerAzienda;
+    this.aziendaTipiProcedimentoData = {
+      idAzienda: this.idAziendaFront,
+      idAziendaTipoProcedimento: this.idAziendaTipoProcedimentoFront,
+      headerTipoProcedimento: this.headerTipoProcedimento
+    };
     this.headerStruttura = "Seleziona una struttura...";
   }
 
@@ -248,7 +237,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
           console.log("Operation", nodesInvolved[key]);
           const node = nodes.find(item =>
-            item.id == parseInt(key)
+            item.id === parseInt(key)
           );
           
            if (nodesInvolved[key] === NodeOperations.INSERT) {
@@ -270,7 +259,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   
   creaDataSourceUtente(context: OdataContextDefinition, idUtente: number, idStruttura: number, chiamante: string): DataSource {
     const dataSource = new DataSource({
-      store: context.getContext()[Entities.UtenteStruttura.name],
+      store: context.getContext()[new UtenteStruttura().getName()],
       expand: [
         "idUtente", "idStruttura", "idAfferenzaStruttura", "idUtente.idPersona", "idUtente.idAzienda"
       ],
@@ -279,7 +268,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       map: (item) => {
         if (item) {
           if (item.idStruttura && item.idAfferenzaStruttura) {
-            item.nomeVisualizzato = item.idUtente.idPersona.descrizione + " (" + item.idStruttura.nome + ")";
+            item.nomeVisualizzato = item.idUtente.idPersona.descrizione + " (" + item.idStruttura.nome + " - " + 
+            item.idAfferenzaStruttura.descrizione + ")";
           }
           return item;
         }
@@ -296,17 +286,17 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   setResponsabilePlusStruttura(event: any) {
-    console.log("EVENT SETRESP = ", event);
+    // console.log("EVENT SETRESP = ", event);
     this.procedimento.idResponsabileAdozioneAttoFinale = event.itemData.idUtente;
     this.procedimento.idStrutturaResponsabileAdozioneAttoFinale = event.itemData.idStruttura;
-    console.log("PROCEDIMENTO RESP = ", event);
+    // console.log("PROCEDIMENTO RESP = ", event);
   }
 
   setTitolarePlusStruttura(event: any) {
-    console.log("EVENT SETTITO = ", event);
+    // console.log("EVENT SETTITO = ", event);
     this.procedimento.idTitolarePotereSostitutivo = event.itemData.idUtente;
     this.procedimento.idStrutturaTitolarePotereSostitutivo = event.itemData.idStruttura;
-    console.log("PROCEDIMENTO TITO = ", this.procedimento);
+    // console.log("PROCEDIMENTO TITO = ", this.procedimento);
   }
 
   reloadResponsabile() {
@@ -317,6 +307,10 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   reloadTitolare() {
     this.dataSourceTitolare.filter(null);
     this.dataSourceTitolare.load();
+  }
+
+  goBack() {
+    this._location.back();
   }
 
 }

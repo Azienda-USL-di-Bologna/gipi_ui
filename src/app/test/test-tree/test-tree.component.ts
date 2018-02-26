@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import {OdataContextFactory} from "@bds/nt-context";
-import { FunctionsImport } from "../../../environments/app.constants";
+import {GlobalContextService, OdataContextFactory, OdataContextDefinition} from "@bds/nt-context";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {GetStruttureByTipoProcedimento} from "@bds/nt-entities";
 
@@ -13,7 +12,7 @@ import {GetStruttureByTipoProcedimento} from "@bds/nt-entities";
 })
 export class TestTreeComponent implements OnInit {
 
-  private odataContextDefinition;
+  private odataContextDefinition: OdataContextDefinition;
   public paramsDaPassare = new ParamsAvviaIter();
   public datasource: DataSource;
   @ViewChild("treeViewChild") treeViewChild: any;
@@ -44,7 +43,7 @@ export class TestTreeComponent implements OnInit {
       console.log(this.paramsDaPassare);
       this.paramsDaPassare.numeroDocumento = this.padLeft(this.paramsDaPassare.numeroDocumento, "0", 7);
       console.log(this.paramsDaPassare.numeroDocumento);
-      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "tests/testWebApi", this.paramsDaPassare, {headers: new HttpHeaders().set("content-type", "application/json")}) // Object.assign({}, this.iterParams))
+      const req = this.http.post("tests/testWebApi", this.paramsDaPassare, {headers: new HttpHeaders().set("content-type", "application/json")}) // Object.assign({}, this.iterParams))
           .subscribe(
               res => {
                   console.log("RES = ", res);

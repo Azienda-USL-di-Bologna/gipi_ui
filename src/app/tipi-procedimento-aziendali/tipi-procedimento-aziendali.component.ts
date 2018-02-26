@@ -42,23 +42,31 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
 
 
   receiveMessage(event: any, reloadPadre: boolean) {
-    console.log("RECEIVE MESSAGE: ", event)
+    console.log("RECEIVE MESSAGE: ", event);
     this.popupVisible = event.visible;
     let toReload: boolean = reloadPadre ? true : false;
-    if(toReload)
+    if (toReload)
       this.caricaDataSource();
     // this.procedimentoDaPassare = null;
   }
 
-  public handleEvent(event: any) {
-    console.log("tipi-procedimento-aziendali handleEvent");
-    if (event.columnIndex === 4) {
-      this.procedimentoDaPassare = event.data;
+  public modificaDettagli(event: any, rigaDatagrid: any) {
+    console.log("tipi-procedimento-aziendali handleEvent", event);
+    if (rigaDatagrid.columnIndex === 4) {
+      this.procedimentoDaPassare = rigaDatagrid.data;
       console.log("THIS.ROUTE", this.route);
       console.log("handleEvent tipiProcAz: procedimentoDaPassare", this.procedimentoDaPassare.id);
       this.popupVisible = true;
       this.caricaDataSource();
     }
+  }
+
+  associaOrganigramma(rigaDatagrid: any) {    
+    this.router.navigate(["/struttura-tipi-procedimento"], {queryParams: {
+      aziendaTipoProcedimento: rigaDatagrid.data.id,
+      azienda: rigaDatagrid.data.idAzienda.id,
+      tipoProcedimento: rigaDatagrid.data.idTipoProcedimento.nome
+    }});
   }
 
   public caricaDataSource() {
@@ -69,5 +77,5 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
       filter: [["idAzienda.id", "=", this.idAzienda]]
       
     });
-  }
+  }  
 }

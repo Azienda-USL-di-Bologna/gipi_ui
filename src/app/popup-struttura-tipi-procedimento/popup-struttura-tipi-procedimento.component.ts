@@ -20,7 +20,7 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
   public datasource: DataSource;
   public strutture: Struttura = new Struttura();
   public testoHeaderTipoProcedimento: string;
-  //public testoHeaderAzienda: string;
+  // public testoHeaderAzienda: string;
   public idAzienda: number;
   public idAziendaTipoProcedimento: number;
 
@@ -35,9 +35,9 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
 
   ngOnInit() {
 
-    this.idAzienda = this.aziendaTipoProcedimentoObj.aziendaTipoProcedimento.idAzienda.id;
-    this.idAziendaTipoProcedimento = this.aziendaTipoProcedimentoObj.aziendaTipoProcedimento.id;
-    //this.testoHeaderAzienda = this.aziendaTipoProcedimentoObj.aziendaTipoProcedimento.idAzienda.descrizione;
+    this.idAzienda = this.aziendaTipoProcedimentoObj.idAzienda;
+    this.idAziendaTipoProcedimento = this.aziendaTipoProcedimentoObj.idAziendaTipoProcedimento;
+    // this.testoHeaderAzienda = this.aziendaTipoProcedimentoObj.aziendaTipoProcedimento.idAzienda.descrizione;
     this.testoHeaderTipoProcedimento = this.aziendaTipoProcedimentoObj.headerTipoProcedimento;
   }
 
