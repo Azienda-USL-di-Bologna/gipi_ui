@@ -1,6 +1,13 @@
  .tree-readonly .dx-checkbox-icon {
-     cursor: default;
      background-color: lightgrey;
+ }
+
+ /deep/ .tree-readonly .dx-checkbox-container {
+    cursor: default !important;
+ }
+
+ /deep/ .tree-readonly .dx-checkbox-icon {
+     border-color: #ddd !important;
  }
 
  /deep/ .tree-readonly span {
