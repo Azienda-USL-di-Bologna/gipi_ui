@@ -8,7 +8,7 @@ import { Ruolo, bUtente, bAzienda, bRuolo } from "@bds/nt-entities";
 import { Subscription } from "rxjs/Subscription";
 import {LOGOUT_URL, ODATA_BASE_URL} from "../environments/app.constants";
 import { SidebarItem } from "@bds/nt-context";
- import { LoggedUser } from "@bds/nt-login";
+import { LoggedUser } from "@bds/nt-login";
 import * as $ from "jquery";
 import * as deLocalization from "devextreme/localization";
 
@@ -50,30 +50,29 @@ export class AppComponent implements OnInit, OnDestroy {
         this.router.events
             .filter((event) => (event instanceof NavigationStart) || (event instanceof NavigationEnd))
             .subscribe(
-                (next) => {
-                    let reset = false;
-                }
+            (next) => {
+                let reset = false;
+            }
             );
-        
+
         this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);
 
         this.buildLocalization();
     }
 
-    private buildLocalization()
-    {
+    private buildLocalization() {
         deLocalization.locale("it");
 
-        $.getJSON("/assets/localization/it.json").then(function (data) {
+        $.getJSON("assets/localization/it.json").then(function(data) {
             deLocalization.loadMessages(data);
-        }).fail(function () {
+        }).fail(function() {
             console.log("It language not found, fallback to en");
             deLocalization.locale("en");
-            });
-        
-        
-        
-    //  deLocalization.date.getD
+        });
+
+
+
+        //  deLocalization.date.getD
     }
 
     private buildSideBar(loggedUser: LoggedUser) {
@@ -83,7 +82,7 @@ export class AppComponent implements OnInit, OnDestroy {
         if (loggedUser.isCI()) {
             this.sidebarItems.push(new SidebarItem("Definizione Tipi Procedimento", "definizione-tipi-procedimento"));
         }
-        if(loggedUser.isCA()){
+        if (loggedUser.isCA()) {
             this.sidebarItems.push(new SidebarItem("Tipi Procedimento Aziendale", "tipi-procedimento-aziendali"));
         }
 
@@ -186,7 +185,7 @@ export class AppComponent implements OnInit, OnDestroy {
     getContentBodyClasses() {
         if (this.router.url === "/login") {
             return "col heightCPC";
-        }else {
+        } else {
             return "col";
         }
     }

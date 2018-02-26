@@ -49,7 +49,7 @@ export const rootRouterConfig: Routes = [
   { path: "struttura-tipi-procedimento", component: StrutturaTipiProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Strutture Associate", ruoliConcessi: ["CA"]}},
   { path: "procedimenti-attivi", component: ProcedimentiAttiviComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Procedimenti Attivi"} },
   { path: "popup-struttura-tipi-procedimento", component: PopupStrutturaTipiProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Associa"} },
-  { path: "iter-procedimento", component: IterProcedimentoComponent, data: {breadcrumb: "Nuovo Iter"} },
+  { path: "iter-procedimento", component: IterProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Nuovo Iter"} },
   { path: "app-test-tree", component: TestTreeComponent },
   { path: "app-lista-iter", component: ListaIterComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Lista Iter"}},
   { path: "avvia-nuovo-iter-da-documento", component: AvviaNuovoIterDaDocumentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Nuovo Iter"} },

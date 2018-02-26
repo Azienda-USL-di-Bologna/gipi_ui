@@ -1,19 +1,28 @@
- .tree-readonly .dx-checkbox-icon{
-    cursor: default;
-    background-color: lightgrey;
-    
-}
+ .tree-readonly .dx-checkbox-icon {
+     background-color: lightgrey;
+ }
 
- .tree-not-readonly .dx-checkbox-icon{
-    cursor: pointer;
-    background-color: white; 
-    
-}
+ /deep/ .tree-readonly .dx-checkbox-container {
+    cursor: default !important;
+ }
 
- .dx-treeview{
-    width: 100%;
-}
+ /deep/ .tree-readonly .dx-checkbox-icon {
+     border-color: #ddd !important;
+ }
 
- .dx-texteditor .dx-texteditor-empty .dx-textbox{
-    width: 100%;
-}
+ /deep/ .tree-readonly span {
+     color: grey !important;
+ }
+
+ .tree-not-readonly .dx-checkbox-icon {
+     cursor: pointer;
+     background-color: white;
+ }
+
+ .dx-treeview {
+     width: 100%;
+ }
+
+ .dx-texteditor .dx-texteditor-empty .dx-textbox {
+     width: 100%;
+ }

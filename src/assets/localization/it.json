@@ -92,7 +92,7 @@
         "dxDataGrid-noDataText": "Vuoto",
         "dxDataGrid-searchPanelPlaceholder": "Cerca...",
         "dxDataGrid-filterRowShowAllText": "(Tutti)",
-        "dxDataGrid-filterRowResetOperationText": "Reset",
+        "dxDataGrid-filterRowResetOperationText": "Cancella",
         "dxDataGrid-filterRowOperationEquals": "Uguale",
         "dxDataGrid-filterRowOperationNotEquals": "Diverso",
         "dxDataGrid-filterRowOperationLess": "Minore di",

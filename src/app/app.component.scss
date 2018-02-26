@@ -15,6 +15,11 @@
 
 }
 
+// questo è per il grigio del back-ground delle popup
+/deep/ .dx-popup-normal {
+  background-color: #f1f1f3 !important;
+}
+
 
 .dropdown-menu {
   box-shadow: 0 0 3px rgba(0,0,0,.15);
@@ -26,21 +31,27 @@
   width: 305px;
   padding: 10px;
   padding-bottom: 0px;
-  
+
 }
 
 /deep/ .test {
   height: 100%;
 }
 
-// /deep/ .dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title {
-//   background-color:  #FFC057 !important;
-// }
+/deep/ .dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title {
+  // background-color:  #FFC057 !important;
+  background-color:  #993366 !important;
+  color: white;
+}
 
+/* /deep/ .dx-popup-content {
+  background-color: #f1f1f3 !important;
+}
+ */
 // BOTTONI
 // escludo quelli con icone
 /deep/ .dx-button-has-text:not(.dx-button-has-icon) {
-  background-color: #337ab7;  
+  background-color: #337ab7;
   border-color: #2d6da3;
   color: #fff;
   border-radius: 4px;
@@ -197,7 +208,7 @@
   //  display: table-footer-group
     position: fixed;
     left: 0;
-    bottom: 0;
+    bottom: 15px;
     width: 100%;
   }
 #sidebar-toggle-button {
@@ -273,17 +284,17 @@
   margin-right: 8px;
 }
 // /deep/ dx-data-grid > .dx-datagrid{
-//   box-shadow: 0 0 1px rgba(0,0,0,.15); 
-//   background-color: #fff; 
+//   box-shadow: 0 0 1px rgba(0,0,0,.15);
+//   background-color: #fff;
 //   border-radius: 2px;
 // }
 /deep/ .dx-datagrid-header-panel{
   border-bottom: none;
 }
 // /deep/ dx-form > div > div > div > .dx-box-item{
-//   box-shadow: 0 0 1px rgba(0,0,0,.15); 
-//   padding: 15px; 
-//   background-color: #fff; 
+//   box-shadow: 0 0 1px rgba(0,0,0,.15);
+//   padding: 15px;
+//   background-color: #fff;
 //   border-radius: 2px;
 //   margin-bottom: 8px;
 // }
@@ -295,8 +306,8 @@
 //   margin-bottom: 8px;
 // }
 /deep/ .whitePanel{
-  box-shadow: 0 0 1px rgba(0,0,0,.15); 
-  padding: 15px; 
+  box-shadow: 0 0 1px rgba(0,0,0,.15);
+  padding: 15px;
   background-color: #fff;
 }
 .floatRight{
