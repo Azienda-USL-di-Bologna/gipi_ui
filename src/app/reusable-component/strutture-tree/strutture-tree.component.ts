@@ -104,11 +104,17 @@ export class StruttureTreeComponent implements OnInit {
     switch (e.itemIndex)
     {
       case 0:
+        this.nodeSelectedFromContextMenu.selected = true;  
+        this.treeViewChild.instance.selectItem(this.nodeSelectedFromContextMenu);
         this.setSelectedNodeRecursively(this.nodeSelectedFromContextMenu, true);
+        this.treeViewChild.instance.expandItem(this.nodeSelectedFromContextMenu);
         break;
         
       case 1:
+      this.nodeSelectedFromContextMenu.selected = false;
+      this.treeViewChild.instance.unselectItem(this.nodeSelectedFromContextMenu);
         this.setSelectedNodeRecursively(this.nodeSelectedFromContextMenu, false);  
+        this.treeViewChild.instance.expandItem(this.nodeSelectedFromContextMenu);
         break;  
     }
     // this.treeView.selectNodesRecursive = true;
