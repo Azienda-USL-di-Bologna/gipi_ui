@@ -48,7 +48,13 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
         loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
         this.odataContextDefinition.customLoading(loadOptions);
       }),
-        filter: ["idAzienda", "=", this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id]]
+      filter: ["idAzienda", "=", this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id]],
+      map: (item) => {
+        if(item){
+          item.titAndClass = item.nome + ' [' + item.classificazione + ']';
+        }
+        return item;
+      }
     });
 
   }
@@ -97,8 +103,16 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
     // this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.dataSourceAziendaTipoProcedimento = new DataSource({
       store: this.odataContextDefinition.getContext()[new AziendaTipoProcedimento().getName()].on("loading", console.log("STO CARICNDO I DATIIIIII!!!!!!!!!!!")),
+      expand: ["idTitolo", "idTipoProcedimento", "idAzienda"],
       filter: ["id", "=", this.idProcedimentoInput],
-      expand: ["idTitolo", "idTipoProcedimento", "idAzienda"]
+      map: (item) => {
+        console.log("MI MAPPO GLI ITEM");
+        if(item.idTitolo){
+          item.titAndClass = item.idTitolo.nome + ' [' + item.idTitolo.classificazione + ']' ;
+          console.log(item.titAndClass);
+        }
+        return item;
+      }
 
     });
     this.dataSourceAziendaTipoProcedimento.load().then((res) => { 
