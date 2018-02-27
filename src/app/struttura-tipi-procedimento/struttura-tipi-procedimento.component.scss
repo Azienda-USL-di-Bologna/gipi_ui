@@ -4,7 +4,6 @@
 }
 
 .padding-button {
-    margin-top: 5px;
     margin-left: 15%;
     margin-right: 15%;
     margin-bottom: 5px;
@@ -12,6 +11,33 @@
 
 .padding-top{
     margin-top:10px;
+}
+
+.padding-bottom {
+    margin-bottom: 15px;
+}
+
+.margine-sinistro {
+    margin-left: 25%;
+}
+
+.buttons-form {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    margin-right: 15%;
+    width: 120px;
+}
+
+@media (max-width: 1090px) {
+    .custom-sm-col {
+      margin-left: 10%;
+    }
+}
+
+@media (max-width: 960px) {
+    .custom-sm-col {
+      margin-left: 5%;
+    }
 }
 
 .allinea-a-sinistra{
@@ -86,4 +112,22 @@
 
 /deep/ .tree-readonly .dx-checkbox-checked .dx-checkbox-icon, .tree-readonly span {
     color: lightslategrey !important;
+}
+
+/deep/ .label-wrap > label {
+    max-width: 300px;
+}
+
+/deep/ .label-wrap .dx-field-item-label-text {
+    max-width: 300px;
+    white-space: normal;
+    display: inline-block;
+}
+
+/deep/ .dx-layout-manager .dx-label-h-align.dx-flex-layout:not(.dx-field-item-label-align) {
+    align-items: initial;
+}
+
+#bottoneModifica {
+    width: 100%;
 }

@@ -38,6 +38,7 @@ export const rootRouterConfig: Routes = [
   // },
   // ho reindirizzato la pagina di atterraggio a definizione-tipi-procedimento
   { path: "", redirectTo: "home", pathMatch: "full" },
+  { path: "test", component: TestTreeComponent, canActivate: [NoLoginGuard] },
   { path: "login", component: LoginComponent, canActivate: [NoLoginGuard], data: {}},
   // { path: "after-login", component: AfterLoginComponent, canActivate: [LoginGuard], data: {}},
   { path: "home", component: HomeComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Home"}},
@@ -45,7 +46,7 @@ export const rootRouterConfig: Routes = [
   { path: "associazione-aziende", component: AssociazioneAziendeComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Associazione alle Aziende"}},
   { path: "gestione-associazione-aziende", component: GestioneAssociazioneAziendaComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Gestione Associazione"}},
   { path: "associazioni", component: AssociazioniComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Associazioni"}},
-  { path: "struttura-tipi-procedimento", component: StrutturaTipiProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Strutture Associate"}},
+  { path: "struttura-tipi-procedimento", component: StrutturaTipiProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Strutture Associate", ruoliConcessi: ["CA"]}},
   { path: "procedimenti-attivi", component: ProcedimentiAttiviComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Procedimenti Attivi"} },
   { path: "popup-struttura-tipi-procedimento", component: PopupStrutturaTipiProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Associa"} },
   { path: "iter-procedimento", component: IterProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Nuovo Iter"} },
