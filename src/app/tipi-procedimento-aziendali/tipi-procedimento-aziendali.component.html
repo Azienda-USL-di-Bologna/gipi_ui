@@ -29,12 +29,13 @@
     style="background-color: #f1f1f3;"
     title="Dettaglio tipo procedimento"
     (onHiding) = "caricaDataSource()"
-    [maxWidth]="screenWidth*2/3"
+    [maxWidth]="getWidth()*2/3"
+    [width]="'auto'"
     [height]="'auto'"
     [showTitle]="true"
     [closeOnOutsideClick]="true"
     [(visible)]="popupVisible">
-    <div *dxTemplate="let data of 'content'" style="overflow-y: auto; background-color: #f1f1f3;">
+    <div *dxTemplate="let data of 'content'" style="overflow: auto; background-color: #f1f1f3;">
       <dettaglio-tipo-procedimento [procedimento]="procedimentoDaPassare.id" (messageEvent)="receiveMessage($event)"></dettaglio-tipo-procedimento>
     </div>
  </dx-popup>
