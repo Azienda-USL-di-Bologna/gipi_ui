@@ -46,7 +46,7 @@ export class ProcedimentiAttiviComponent {
   constructor(private odataContextFactory: OdataContextFactory,
     public router: Router,
     private globalContextService: GlobalContextService) {
-
+    console.log("procedimenti-attivi (constructor)");
 
     this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
     this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
@@ -75,13 +75,13 @@ export class ProcedimentiAttiviComponent {
           "or",
           ["dataFine", "=", null]
         ]
-      ],
+      ]/* ,
       map: (item) => {
         console.log(item);
-        item.idAziendaTipoProcedimento.idTitolo.nome += ' [' + item.idAziendaTipoProcedimento.idTitolo.classificazione + ']';
-
+        // item.idAziendaTipoProcedimento.idTitolo.nome += " [" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "]";
+        item.descrizioneTitolo =  item.idAziendaTipoProcedimento.idTitolo.nome + " [" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "]";
         return item;
-      }
+      } */
     });
 
     this.itemClear = this.itemClear.bind(this);
@@ -92,9 +92,7 @@ export class ProcedimentiAttiviComponent {
     // Devo aggiungere il filtro sulle strutture dell'utente
     // Prima mi creo l'array con gli id struttura
     let idStrutture: any = [];
-    console.log(this.loggedUser);
     this.loggedUser.getField(bUtente.struttureAfferenzaDiretta).forEach(function (struttura: any) {
-      console.log(struttura);
       idStrutture.push(struttura[bStruttura.id]);
     });
     if (this.loggedUser.getField(bUtente.struttureAfferenzaFunzionale) != null) {
@@ -103,9 +101,10 @@ export class ProcedimentiAttiviComponent {
       });
     }
     // Ora mi creo l'array-filtro e filtro
-    this.dataSourceProcedimenti.filter(this.utility.buildMultipleFilterForArray("idStruttura.id", idStrutture));
-
-    console.log(this.loggedUser);
+    this.dataSourceProcedimenti.filter(
+      [this.utility.buildMultipleFilterForArray("idStruttura.id", idStrutture)]
+        .concat(this.dataSourceProcedimenti.filter())
+      );
   }
 
   private setFormLookAvviaIterDaDocumento() {
@@ -171,6 +170,10 @@ export class ProcedimentiAttiviComponent {
         }
       };
     });
+  }
+
+  public descrizioneTitolo(item: any): string {
+    return item.idAziendaTipoProcedimento.idTitolo.nome + " [" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "]";
   }
 
   public receiveMessage(event: any) {

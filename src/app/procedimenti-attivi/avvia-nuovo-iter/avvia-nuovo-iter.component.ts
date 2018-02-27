@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Utente, bUtente, bAzienda, Procedimento } from "@bds/nt-entities";
+import { Utente, bUtente, bAzienda, Procedimento, GetUtentiGerarchiaStruttura } from "@bds/nt-entities";
 import { OdataContextFactory } from "@bds/nt-context";
 import { OdataContextDefinition } from "@bds/nt-context";
 import { CustomLoadingFilterParams } from "@bds/nt-context";
@@ -10,6 +10,8 @@ import { HttpHeaders } from "@angular/common/http";
 import { OnInit } from "@angular/core/src/metadata/lifecycle_hooks";
 import { LoggedUser } from "@bds/nt-login";
 import { GlobalContextService } from "@bds/nt-context";
+import { confirm, custom } from "devextreme/ui/dialog";
+import DataSource from "devextreme/data/data_source";
 
 @Component({
   selector: "avvia-nuovo-iter",
@@ -18,15 +20,18 @@ import { GlobalContextService } from "@bds/nt-context";
 })
 export class AvviaNuovoIterComponent implements OnInit {
 
-  private odataContextDefinition: OdataContextDefinition;
+  private odataContextDefinitionFunctionImport: OdataContextDefinition;
+  private descrizioneUtenteResponsabile: string;
   
   public avviaIterDaDocumento: boolean;
-  public dataSourceUtenti: any;
+  public dataSourceUtenti: DataSource;
   public iterParams: IterParams = new IterParams();
   public nomeProcedimento: string;
   public dataMassimaConclusione: Date;
   public loggedUser: LoggedUser;
   public now: Date = new Date();
+  public searchString: string = "";
+  public idUtenteDefault: number;
 
   @Input()
   set procedimentoSelezionato(procedimento: any) {
@@ -44,8 +49,6 @@ export class AvviaNuovoIterComponent implements OnInit {
 
   @Input()
   set documentoSelezionato(doc: any) {
-    console.log("Documento ricevuto");
-    console.log(doc);
     this.iterParams = new IterParams();
     this.iterParams.codiceRegistroDocumento = doc.registro;
     this.iterParams.numeroDocumento = doc.numero;
@@ -58,51 +61,65 @@ export class AvviaNuovoIterComponent implements OnInit {
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
 
-
   constructor(private odataContextFactory: OdataContextFactory, 
               private http: HttpClient,
               private globalContextService: GlobalContextService) {
-    this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    this.odataContextDefinitionFunctionImport = this.odataContextFactory.buildOdataFunctionsImportDefinition();
     this.getInfoSessionStorage();
+    this.setUtenteResponsabile = this.setUtenteResponsabile.bind(this);
+    // this.avviaIter = this.avviaIter.bind(this);
   }
 
-  private getInfoSessionStorage() {
+  private getInfoSessionStorage(): void {
     this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
   }
 
-  private buildProcedimento(procedimento: any) {
-    console.log(procedimento);
+  private buildProcedimento(procedimento: any): void {
     if (procedimento != null) {
       this.nomeProcedimento = procedimento.procedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome
         + " (" + procedimento.procedimento.idStruttura.nome + ")";
       this.iterParams.idProcedimento = procedimento.procedimento.id;
-
       this.iterParams.procedimento = procedimento.procedimento;
+      this.buildDataSourceUtenti(procedimento.procedimento.idStruttura.id);
     }
   }
 
-  private buildDataSourceUtenti() {
-    const customOdataContextDefinition: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
-    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("descrizione");
-    customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
-    this.dataSourceUtenti = {
-      store: customOdataContextDefinition.getContext()[new Utente().getName()].on("loading", (loadOptions) => {
-        loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
-        customOdataContextDefinition.customLoading(loadOptions);
+  private buildDataSourceUtenti(idStruttura: number): void {
+    this.dataSourceUtenti = new DataSource({
+      store: this.odataContextDefinitionFunctionImport.getContext()[new GetUtentiGerarchiaStruttura().getName()]
+      .on("loading", (loadOptions) => {
+        if (loadOptions.filter && loadOptions.filter[0]) {
+          loadOptions.customQueryParams.searchString = loadOptions.filter[0][2];
+        } else {
+          loadOptions.customQueryParams.searchString = "";
+        }
       }),
+      customQueryParams: {
+        idStruttura: idStruttura,
+        searchString: this.searchString
+      },
       expand: [
-        "idPersona"
-      ],
-      filter: ["idAzienda.id", "=", this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id], ["attivo", "=", true]],
-        // ["idAzienda.id", "=", this.loggedUser.aziendaLogin.id],
-        // ["attivo", "=", true]
-      // ],
-      paginate: true,
-      pageSize: 15
-    };
+        "idUtente/idPersona",
+        "idStruttura",
+        "idAfferenzaStruttura"
+      ]
+    });
+    
+    this.dataSourceUtenti.load().then(res => {
+      for (let e of res) {
+        if (e.idUtente.id === this.iterParams.idUtenteLoggato && e.idStruttura.id === this.iterParams.procedimento.idStruttura.id) {
+          this.idUtenteDefault = e.id;
+          this.iterParams.idUtenteResponsabile = this.iterParams.idUtenteLoggato;
+          this.descrizioneUtenteResponsabile = e.idUtente.idPersona.descrizione 
+            + " (" + e.idStruttura.nome
+            + " - " + e.idAfferenzaStruttura.descrizione + ")";
+          break;
+        }
+      }
+    });
   }
 
-  private campiObbligatoriCompilati() {
+  private campiObbligatoriCompilati(): boolean {
     if (this.iterParams.idProcedimento == null) {
       this.showStatusOperation("Per avviare un nuovo iter devi selezionare un procedimento", "warning");
       return false;
@@ -117,26 +134,43 @@ export class AvviaNuovoIterComponent implements OnInit {
     return true;
   }
 
-  private avviaIter() {
-    if (this.campiObbligatoriCompilati()) {
-      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({}, this.iterParams))
-        .subscribe(
-          res => {
-            if (this.avviaIterDaDocumento) {
-              this.showStatusOperation("Nuovo Iter avviato", "success");
-            } else {
-              let idIter = +res["idIter"];
-              this.closePopUp(idIter);
-            }
-          },
-          err => {
-            this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+  private avviaIter(): void {
+    console.log("SONO UQA", this.iterParams);
+    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({}, this.iterParams))
+      .subscribe(
+        res => {
+          if (this.avviaIterDaDocumento) {
+            console.log("successo");
+            // this.askConfirmAndExecute("Iter avviato con successo", this.buildMessaggioRiepilogativo(res), window.close);
+            custom({
+              title: "Iter avviato con successo", 
+              message: this.buildMessaggioRiepilogativo(res), 
+              buttons: [{
+                toolbar: "bottom",
+                location: "center",
+                widget: "dxButton",
+                options: {
+                  type: "normal",
+                  text: "Chiudi",
+                  onClick: () => {
+                    console.log("dovrei chiudre la finestra qui");
+                    window.close();
+                  }
+                }
+              }]
+            }).show();
+          } else {
+            let idIter = +res["idIter"];
+            this.closePopUp(idIter);
           }
-        );
-    }
+        },
+        err => {
+          this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+        }
+      );
   }
 
-  private showStatusOperation(message: string, type: string) {
+  private showStatusOperation(message: string, type: string): void {
     notify({
       message: message,
       type: type,
@@ -148,21 +182,45 @@ export class AvviaNuovoIterComponent implements OnInit {
     });
   }
 
+  private buildMessaggioRiepilogativo(res: any): string {
+    debugger;
+    return "<b>E' stato creato l'iter numero:</b> " + res["idIter"]
+      + "<br><b>Tramite il documento:</b> " + this.iterParams.codiceRegistroDocumento + " " + this.iterParams.numeroDocumento + "/" + this.iterParams.annoDocumento
+      + "<br><b>Responsabilie procedimento amministrativo:</b> " + this.descrizioneUtenteResponsabile
+      + "<br><b>Data avvio iter:</b> " + this.iterParams.dataAvvioIter.getDate()
+      + "<br><b>Data massima conclusione:</b> " + this.dataMassimaConclusione.getDate()
+      + "<br><b>Promotore:</b> " + this.iterParams.promotoreIter
+      + "<br><b>Oggetto:</b> " + this.iterParams.oggettoIter;
+  }
+
   ngOnInit() {
-    /* Chiamo qui questo metodo altrimenti non abbiamo l'idAzienda per filtrare */
-    this.buildDataSourceUtenti();
     this.iterParams.idUtenteLoggato = this.loggedUser.getField(bUtente.id);
   }
 
-  public handleEvent(name: string, data: any) {
+  public handleEvent(name: string, data: any): void {
     switch (name) {
       case "onClickProcedi":
-        this.avviaIter();
+        if (this.campiObbligatoriCompilati()) {
+          console.log("qui ho il respo?", this.descrizioneUtenteResponsabile);
+          this.askConfirmAndExecute("Avvio iter", "Stai avviando un nuovo iter, confermi?", this.avviaIter.bind(this));
+        }
         break;
       case "onClickAnnulla":
-        this.closePopUp();
+        if (this.avviaIterDaDocumento) {
+          this.askConfirmAndExecute("Chiudi", "Stai annullando l'avvio dell'iter, confermi?", window.close);
+        } else {
+          this.closePopUp();
+        }
         break;
     }
+  }
+
+  public askConfirmAndExecute(title: string, text: string, exe: any): void {
+    confirm(text, title).then(dialogResult => {
+      if (dialogResult) {
+        exe();
+      }
+    });
   }
 
   public closePopUp(idIter?: number) {
@@ -176,10 +234,24 @@ export class AvviaNuovoIterComponent implements OnInit {
     }
     return this.dataMassimaConclusione;
   }
+
+  public getDescrizioneUtente(item): string {
+    return this.descrizioneUtenteResponsabile = item ? item.idUtente.idPersona.descrizione 
+      + " (" + item.idStruttura.nome
+      + " - " + item.idAfferenzaStruttura.descrizione + ")" : null;
+  }
+
+  public setUtenteResponsabile(item: any): void {
+    this.iterParams.idUtenteResponsabile = item ? item.itemData.idUtente.id : null;
+    this.descrizioneUtenteResponsabile = item ? item.idUtente.idPersona.descrizione 
+      + " (" + item.idStruttura.nome
+      + " - " + item.idAfferenzaStruttura.descrizione + ")" : null;
+  }
 }
 
 class IterParams {
   public idUtenteResponsabile: number;
+  public idUtenteStrutturaResponsabile: number;
   public idUtenteLoggato: number;
   public idProcedimento: number;
   public oggettoIter: string;

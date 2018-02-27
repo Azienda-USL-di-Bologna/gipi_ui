@@ -22,7 +22,8 @@
 
     <dxi-column [minWidth]="150" dataField="idAziendaTipoProcedimento.idTitolo.nome" [visible]="colonnaVisibile" caption="Classificazione"
       [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column" [filterOperations]="['reset', 'contains']"
-      [selectedFilterOperation]="'contains'"></dxi-column>
+      [selectedFilterOperation]="'contains'"
+      [calculateDisplayValue]="descrizioneTitolo"></dxi-column>
       
     <dxi-column [width]="100" dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [visible]="colonnaVisibile" caption="Durata massima (gg)"
       [dataType]="'number'" [allowEditing]="false" alignment="center" cssClass="column" [filterOperations]="['reset', 'contains']"
