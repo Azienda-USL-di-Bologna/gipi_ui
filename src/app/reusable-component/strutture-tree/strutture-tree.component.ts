@@ -22,6 +22,7 @@ export class StruttureTreeComponent implements OnInit {
   public datasourceOriginal: DataSource;
   public strutture: Struttura = new Struttura();
   public contextMenuItems;
+  public showContextMenu: boolean = false;
 
 
   @ViewChild("treeViewChild") treeViewChild: any;
@@ -95,7 +96,13 @@ export class StruttureTreeComponent implements OnInit {
    in questo momento ci salviamo il nodo cliccato */
   openContextMenu(e) {
     this.nodeSelectedFromContextMenu = e.itemData;
+    this.showContextMenu = true;
+    
     // this.abilitaRicorsione = true;
+  }
+
+  onTreeViewClick(e) {
+    console.log(e);
   }
 
   // Questo scatta quando clicchiamo sulla voce del menu contestuale "Espandi..."
