@@ -21,7 +21,6 @@ import DataSource from "devextreme/data/data_source";
 export class AvviaNuovoIterComponent implements OnInit {
 
   private odataContextDefinitionFunctionImport: OdataContextDefinition;
-  private descrizioneUtenteResponsabile: string;
   
   public avviaIterDaDocumento: boolean;
   public dataSourceUtenti: DataSource;
@@ -32,6 +31,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   public now: Date = new Date();
   public searchString: string = "";
   public idUtenteDefault: number;
+  public descrizioneUtenteResponsabile: string;
 
   @Input()
   set procedimentoSelezionato(procedimento: any) {
@@ -61,9 +61,8 @@ export class AvviaNuovoIterComponent implements OnInit {
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
 
-  constructor(private odataContextFactory: OdataContextFactory, 
-              private http: HttpClient,
-              private globalContextService: GlobalContextService) {
+  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private globalContextService: GlobalContextService) {
+    console.log("avvia-nuovo-iter (constructor)");
     this.odataContextDefinitionFunctionImport = this.odataContextFactory.buildOdataFunctionsImportDefinition();
     this.getInfoSessionStorage();
     this.setUtenteResponsabile = this.setUtenteResponsabile.bind(this);
@@ -96,7 +95,7 @@ export class AvviaNuovoIterComponent implements OnInit {
       }),
       customQueryParams: {
         idStruttura: idStruttura,
-        searchString: this.searchString
+        searchString: this.searchString ? this.searchString : ""
       },
       expand: [
         "idUtente/idPersona",
@@ -135,30 +134,11 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   private avviaIter(): void {
-    console.log("SONO UQA", this.iterParams);
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({}, this.iterParams))
       .subscribe(
         res => {
           if (this.avviaIterDaDocumento) {
-            console.log("successo");
-            // this.askConfirmAndExecute("Iter avviato con successo", this.buildMessaggioRiepilogativo(res), window.close);
-            custom({
-              title: "Iter avviato con successo", 
-              message: this.buildMessaggioRiepilogativo(res), 
-              buttons: [{
-                toolbar: "bottom",
-                location: "center",
-                widget: "dxButton",
-                options: {
-                  type: "normal",
-                  text: "Chiudi",
-                  onClick: () => {
-                    console.log("dovrei chiudre la finestra qui");
-                    window.close();
-                  }
-                }
-              }]
-            }).show();
+            this.riepilogaAndChiudi(res);
           } else {
             let idIter = +res["idIter"];
             this.closePopUp(idIter);
@@ -182,13 +162,52 @@ export class AvviaNuovoIterComponent implements OnInit {
     });
   }
 
+  private formatDateToString(date: Date): string {
+    let dd = date.getDate(); 
+    let mm = date.getMonth() + 1; 
+    let yyyy = date.getFullYear();
+    let dds, mms;
+    if (dd < 10) dds = "0" + dd;
+    if (mm < 10) mms = "0" + mm; 
+    return dds + "/" + mms + "/" + yyyy;
+  }
+
+  private riepilogaAndChiudi(res): void {
+    let text = "Torna a";
+    switch (this.iterParams.codiceRegistroDocumento) {
+      case "PG": 
+        text += " Pico";
+        break;
+      case "DETE":
+        text += " Dete";
+        break;
+      case "DELI":
+        text += " Deli";
+        break;
+      default:
+        text += "lla Home";
+        break;
+    }
+    custom({
+      title: "Iter avviato con successo", 
+      message: this.buildMessaggioRiepilogativo(res), 
+      buttons: [{
+        type: "success",
+        text: text,
+        icon: "back",
+        onClick: () => {
+          window.close();
+        }
+      }]
+    }).show();
+  }
+
   private buildMessaggioRiepilogativo(res: any): string {
-    debugger;
     return "<b>E' stato creato l'iter numero:</b> " + res["idIter"]
       + "<br><b>Tramite il documento:</b> " + this.iterParams.codiceRegistroDocumento + " " + this.iterParams.numeroDocumento + "/" + this.iterParams.annoDocumento
       + "<br><b>Responsabilie procedimento amministrativo:</b> " + this.descrizioneUtenteResponsabile
-      + "<br><b>Data avvio iter:</b> " + this.iterParams.dataAvvioIter.getDate()
-      + "<br><b>Data massima conclusione:</b> " + this.dataMassimaConclusione.getDate()
+      + "<br><b>Data avvio iter:</b> " + this.formatDateToString(this.iterParams.dataAvvioIter)
+      + "<br><b>Data massima conclusione:</b> " + this.formatDateToString(this.dataMassimaConclusione)
       + "<br><b>Promotore:</b> " + this.iterParams.promotoreIter
       + "<br><b>Oggetto:</b> " + this.iterParams.oggettoIter;
   }
@@ -201,7 +220,6 @@ export class AvviaNuovoIterComponent implements OnInit {
     switch (name) {
       case "onClickProcedi":
         if (this.campiObbligatoriCompilati()) {
-          console.log("qui ho il respo?", this.descrizioneUtenteResponsabile);
           this.askConfirmAndExecute("Avvio iter", "Stai avviando un nuovo iter, confermi?", this.avviaIter.bind(this));
         }
         break;
@@ -235,17 +253,18 @@ export class AvviaNuovoIterComponent implements OnInit {
     return this.dataMassimaConclusione;
   }
 
-  public getDescrizioneUtente(item): string {
-    return this.descrizioneUtenteResponsabile = item ? item.idUtente.idPersona.descrizione 
-      + " (" + item.idStruttura.nome
-      + " - " + item.idAfferenzaStruttura.descrizione + ")" : null;
+  public getDescrizioneUtente(item: any): string {
+    return item ? item.idUtente.idPersona.descrizione 
+        + " (" + item.idStruttura.nome
+        + " - " + item.idAfferenzaStruttura.descrizione + ")" : null;
   }
 
   public setUtenteResponsabile(item: any): void {
     this.iterParams.idUtenteResponsabile = item ? item.itemData.idUtente.id : null;
-    this.descrizioneUtenteResponsabile = item ? item.idUtente.idPersona.descrizione 
-      + " (" + item.idStruttura.nome
-      + " - " + item.idAfferenzaStruttura.descrizione + ")" : null;
+    this.idUtenteDefault = item ? item.itemData.id : null;
+    this.descrizioneUtenteResponsabile = item ? item.itemData.idUtente.idPersona.descrizione 
+      + " (" + item.itemData.idStruttura.nome
+      + " - " + item.itemData.idAfferenzaStruttura.descrizione + ")" : null;
   }
 }
 

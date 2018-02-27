@@ -36,3 +36,8 @@
 /deep/ .no-baseline {
   align-items: initial !important;
 }
+
+/deep/ .lookup-wrap .dx-field-item-content.dx-field-item-content-location-right {
+  width: 0px!important;
+  overflow: auto;
+}

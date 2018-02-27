@@ -28,7 +28,7 @@
           <dxi-item dataField="numeroDocumento" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento }"></dxi-item>
           <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento}"></dxi-item> 
         </dxi-item>
-        <dxi-item  #lookup dataField="idUtenteStrutturaResponsabile" [colSpan]="6" cssClass="label-wrap no-baseline" editorType="dxLookup" 
+        <dxi-item  #lookup dataField="idUtenteStrutturaResponsabile" [colSpan]="6" cssClass="label-wrap no-baseline lookup-wrap" editorType="dxLookup" 
           [label]="{text: 'Responsabile procedimento amministrativo'}"
           [editorOptions]="{
             value: idUtenteDefault,
@@ -36,7 +36,8 @@
             displayExpr: getDescrizioneUtente,
             searchEnabled: true,
             valueExpr: 'id',
-            onItemClick: setUtenteResponsabile
+            onItemClick: setUtenteResponsabile,
+            hint: descrizioneUtenteResponsabile
           }">
         </dxi-item>
         <dxi-item dataField="promotoreIter" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
