@@ -9,7 +9,7 @@ import { CUSTOM_RESOURCES_BASE_URL } from "../../../environments/app.constants";
 @Component({
   selector: "strutture-tree",
   templateUrl: "./strutture-tree.component.html",
-  styleUrls: ["./strutture-tree.component.css"]
+  styleUrls: ["./strutture-tree.component.scss"]
 })
 export class StruttureTreeComponent implements OnInit {
 
