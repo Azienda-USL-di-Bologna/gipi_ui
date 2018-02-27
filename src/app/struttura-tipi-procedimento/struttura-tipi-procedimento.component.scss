@@ -44,11 +44,12 @@
     margin-left: 0px;
 }
 
-.center-div {
-    margin-top: 2%;
+#center-div {
+    margin-bottom: 3%;
+    /* margin-top: 2%;
     margin-left: 5%;
     margin-right: 5%;
-    height: 100%;
+    height: 100%; */
 }
 
 //.status-page {
@@ -130,4 +131,9 @@
 
 #bottoneModifica {
     width: 100%;
+}
+
+/deep/ .lookup-wrap .dx-field-item-content.dx-field-item-content-location-right {
+    width: 0px!important;
+    overflow: auto;
 }
