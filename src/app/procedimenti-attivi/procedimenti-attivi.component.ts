@@ -173,7 +173,7 @@ export class ProcedimentiAttiviComponent {
   }
 
   public descrizioneTitolo(item: any): string {
-    return item.idAziendaTipoProcedimento.idTitolo.nome + " [" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "]";
+    return "[" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + item.idAziendaTipoProcedimento.idTitolo.nome;
   }
 
   public receiveMessage(event: any) {

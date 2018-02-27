@@ -16,6 +16,11 @@
   width: initial;
 }
 
+/deep/ .dx-icon-clear {
+  padding-left: 0px !important;
+  margin-left: -10px !important;
+}
+
 /* Centro verticalmente i dati delle righe */
  .column {
   vertical-align: middle !important;
