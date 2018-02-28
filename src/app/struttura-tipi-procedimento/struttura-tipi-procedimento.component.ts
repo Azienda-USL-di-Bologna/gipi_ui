@@ -184,7 +184,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     });
   }
   setInitialValues() {
-    this.initialProcedimento = ServerObject.cloneObject(this.procedimento);
+    this.initialProcedimento = Entity.cloneObject(this.procedimento);
 
     console.log("PROCEDIMENTO", this.procedimento);
     console.log("INITIAL_PROCEDIMENTO", this.initialProcedimento);
@@ -198,7 +198,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public bottoneSalvaProcedimento() {
 
-    let differenze: string[] = ServerObject.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
+    let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
     let differenzeStr: string = "";
     if (differenze.length > 0) {
       differenze.forEach(element => differenzeStr += element + ", ");
@@ -235,7 +235,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public bottoneAnnulla() {
 
-    let differenze: string[] = ServerObject.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
+    let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
     console.log("DIFFERENZE", differenze);
     // c'è qualche differenza, ricaricare i dati tramite chiamata http per tornare alla situazione di partenza
     // potrebbe bastare che mi riassegni il valore iniziale del procedimento ma non funziona coi dati delle lookup
