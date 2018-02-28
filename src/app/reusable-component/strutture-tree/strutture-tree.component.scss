@@ -7,8 +7,9 @@
     background-color: lightgrey !important;
 }
 
-/deep/ .tree-readonly .dx-state-selected .dx-treeview-item-content span {
-    font-weight: bold;
+
+/deep/ .tree-readonly .dx-treeview-node[aria-selected="true"] > .dx-treeview-item > .dx-treeview-item-content > span {
+    font-weight: bold !important;
 }
 
 

@@ -40,7 +40,7 @@ export class StruttureTreeComponent implements OnInit {
   constructor(private http: HttpClient, private odataContextFactory: OdataContextFactory) {
 
     // costruzione menù contestuale sull'albero
-    this.contextMenuItems = [{ text: "Seleziona tutte le strutture figlie" }, { text: "Deseleziona tutte le strutture figlie" }];
+    this.contextMenuItems = [{ text: "Seleziona con tutte le strutture figlie" }, { text: "Deseleziona con tutte le strutture figlie" }];
 
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }
