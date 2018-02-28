@@ -72,7 +72,7 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
 
         this.backBtn = new ButtonAppearance("indietro", "back", true, false);
         this.saveBtn = new ButtonAppearance("salva", "save", true, false);
-        this.reloadBtn = new ButtonAppearance("refresh", "refresh", true, false);
+        this.reloadBtn = new ButtonAppearance("aggiorna", "refresh", true, false);
         this.restoreBtn = new ButtonAppearance("ripristina", "revert", true, false);
 
         this.odataContextEntitiesAziendaTipoProcedimento = this.odataContextFactory.buildOdataContextEntitiesDefinition();

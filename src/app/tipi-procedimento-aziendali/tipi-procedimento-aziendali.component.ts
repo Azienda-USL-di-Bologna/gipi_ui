@@ -20,6 +20,7 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   public descAzienda: string;
   public procedimentoDaPassare: AziendaTipoProcedimento;
   public screenWidth: number = screen.width;
+  public hasPermissionOnFascicolo: boolean;
 
   constructor(private odataContextFactory: OdataContextFactory, 
     public router: Router,
@@ -78,4 +79,12 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
       
     });
   }  
+
+  public getWidth(){
+    return window.screen.width;
+  }
+
+  public getHeight(){
+    return window.screen.height;
+  }
 }

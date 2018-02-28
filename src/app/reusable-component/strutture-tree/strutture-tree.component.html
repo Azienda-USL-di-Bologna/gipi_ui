@@ -4,6 +4,7 @@
   <dx-tree-view #treeViewChild id="simple-treeview" [dataSource]="datasource" [height]="440" keyExpr="id" displayExpr="nome"
                 dataStructure="plain" parentIdExpr="idStrutturaPadre" [searchValue]="textBox.value"
                 showCheckBoxesMode="normal" [selectNodesRecursive]= "enableCheckRecursively"
+                (onClick)="onTreeViewClick($event)"
                 (onItemContextMenu)="openContextMenu($event)" (onItemSelectionChanged)="selectionChanged($event)"
                 (onItemClick)="selezionaStruttura($event)" 
   [class]="getClass()"></dx-tree-view>
@@ -12,6 +13,6 @@
 <dx-context-menu *ngIf="!readOnly"
         [dataSource]="contextMenuItems"
         [width]="200"
-        target="#simple-treeview"
+        target=".dx-treeview-item"
         (onItemClick)="contextualItemClick($event)">
 </dx-context-menu>

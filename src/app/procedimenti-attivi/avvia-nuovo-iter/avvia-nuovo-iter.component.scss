@@ -5,7 +5,7 @@
 .buttons {
   display: flex;
   justify-content: space-around;
-  margin: 3pt 0;
+  margin: 3pt 0 30px 0;
 }
 
 /* /deep/ .dx-field-item-label-content{
@@ -35,4 +35,9 @@
 
 /deep/ .no-baseline {
   align-items: initial !important;
+}
+
+/deep/ .lookup-wrap .dx-field-item-content.dx-field-item-content-location-right {
+  width: 0px!important;
+  overflow: auto;
 }

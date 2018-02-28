@@ -62,7 +62,9 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   public colCountByScreen = {
     md: 2,
     sm: 1
-};
+  };
+  public testoTooltipResponsabile: String;
+  public testoTooltipTitolare: String;
   public dataFromAziendaTipiProcedimentoComponent: AziendaTipoProcedimento = new AziendaTipoProcedimento();
   
   constructor(private odataContextFactory: OdataContextFactory,
@@ -97,13 +99,19 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   private caricaDettaglioProcedimento(setInitialValue: boolean) {
     const odataContextDefinitionProcedimento: OdataContextEntitiesDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     const aziendaTipoProcedimento: AziendaTipoProcedimento = this.dataFromAziendaTipiProcedimentoComponent["aziendaTipoProcedimento"];
+    this.defaultResponsabile = undefined;
+    this.defaultTitolare = undefined;
     if (!this.dataSourceProcedimento) {
       this.dataSourceProcedimento = new DataSource({
         store: odataContextDefinitionProcedimento.getContext()[new Procedimento().getName()],
         requireTotalCount: true,
         expand: ["idAziendaTipoProcedimento", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento", "idAziendaTipoProcedimento.idTitolo", 
                 "idStrutturaTitolarePotereSostitutivo", "idStrutturaResponsabileAdozioneAttoFinale", "idResponsabileAdozioneAttoFinale"],
-        filter: [["idAziendaTipoProcedimento.id", "=", this.idAziendaTipoProcedimentoFront], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]
+        filter: [["idAziendaTipoProcedimento.id", "=", this.idAziendaTipoProcedimentoFront], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]],
+        map: (item) => {
+          item.idAziendaTipoProcedimento.idTitolo.nome = "[" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + item.idAziendaTipoProcedimento.idTitolo.nome;
+          return item;
+        }
       });
     } else {
       this.dataSourceProcedimento.filter([["idAziendaTipoProcedimento.id", "=", this.idAziendaTipoProcedimentoFront], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]);
@@ -121,12 +129,14 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         this.dataSourceResponsabile.filter( [["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and", 
         ["idStruttura.id", "=", idStruttura] ]);
         this.dataSourceResponsabile.load().then(result => {
-          console.log("RESULT = ", result);
+          // console.log("RESULT = ", result);
             this.defaultResponsabile = result[0];
+            this.testoTooltipResponsabile = result[0].nomeVisualizzato;
         });
         // this.dato =  this.dataSourceResponsabile.items().filter(x => x.idUtente.id === idResp && x.idStruttura.id === idStruttResp)[0];
       } else {
         this.defaultResponsabile = undefined;
+        this.testoTooltipResponsabile = null;
       }
 
       idUtente = res[0].idTitolarePotereSostitutivo ? res[0].idTitolarePotereSostitutivo.id : null;
@@ -138,11 +148,13 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         this.dataSourceTitolare.filter( [["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and", 
         ["idStruttura.id", "=", idStruttura] ]);
         this.dataSourceTitolare.load().then(result => {
-          console.log("RESULT = ", result);
+          // console.log("RESULT = ", result);
             this.defaultTitolare = result[0];
+            this.testoTooltipTitolare = result[0].nomeVisualizzato;
         });
       } else  {
         this.defaultTitolare = undefined;
+        this.testoTooltipResponsabile = null;
       }    
 
       if (setInitialValue) {
@@ -280,7 +292,13 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     }
     });
     dataSource.load().then(res => {
-      chiamante === "responsabile" ? this.defaultResponsabile = res[0] : this.defaultTitolare = res[0];
+      if (chiamante === "responsabile") {
+        this.defaultResponsabile = res[0];
+        this.testoTooltipResponsabile = res[0].nomeVisualizzato;
+      } else {
+        this.defaultTitolare = res[0];
+        this.testoTooltipTitolare = res[0].nomeVisualizzato;
+      }  
     });
     return dataSource;
   }
@@ -289,6 +307,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     // console.log("EVENT SETRESP = ", event);
     this.procedimento.idResponsabileAdozioneAttoFinale = event.itemData.idUtente;
     this.procedimento.idStrutturaResponsabileAdozioneAttoFinale = event.itemData.idStruttura;
+    this.testoTooltipResponsabile = event.itemData.nomeVisualizzato;
     // console.log("PROCEDIMENTO RESP = ", event);
   }
 
@@ -296,6 +315,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     // console.log("EVENT SETTITO = ", event);
     this.procedimento.idTitolarePotereSostitutivo = event.itemData.idUtente;
     this.procedimento.idStrutturaTitolarePotereSostitutivo = event.itemData.idStruttura;
+    this.testoTooltipTitolare = event.itemData.nomeVisualizzato;
     // console.log("PROCEDIMENTO TITO = ", this.procedimento);
   }
 
