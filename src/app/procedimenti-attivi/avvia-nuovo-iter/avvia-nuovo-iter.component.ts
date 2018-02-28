@@ -66,6 +66,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.odataContextDefinitionFunctionImport = this.odataContextFactory.buildOdataFunctionsImportDefinition();
     this.getInfoSessionStorage();
     this.setUtenteResponsabile = this.setUtenteResponsabile.bind(this);
+    this.reloadResponsabile = this.reloadResponsabile.bind(this);
   }
 
   private getInfoSessionStorage(): void {
@@ -89,6 +90,8 @@ export class AvviaNuovoIterComponent implements OnInit {
         console.log("on loading");
         if (loadOptions.filter && loadOptions.filter[0]) {
           loadOptions.customQueryParams.searchString = loadOptions.filter[0][2] /* ? loadOptions.filter[0][2] : "" */;
+          console.log(loadOptions.filter);
+          loadOptions.filter = [];
         } else {
           loadOptions.customQueryParams.searchString = "";
         }
@@ -266,6 +269,11 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.descrizioneUtenteResponsabile = item ? item.itemData.idUtente.idPersona.descrizione 
       + " (" + item.itemData.idStruttura.nome
       + " - " + item.itemData.idAfferenzaStruttura.descrizione + ")" : null;
+  }
+
+  public reloadResponsabile(): void {
+    this.dataSourceUtenti.filter(null);
+    this.dataSourceUtenti.load();
   }
 }
 

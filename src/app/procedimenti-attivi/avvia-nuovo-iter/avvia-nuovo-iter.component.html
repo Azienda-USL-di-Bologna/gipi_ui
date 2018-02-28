@@ -40,12 +40,12 @@
             hint: descrizioneUtenteResponsabile,
             cancelButtonText: 'Chiudi',
             pageLoadingText: 'Caricamento..',
-            pullRefreshEnabled: true,
             placeholder: 'Seleziona..',
             noDataText: 'Nessun dato disponibile',
             closeOnOutsideClick: true,
             searchPlaceholder: 'Cerca',
-            showPopupTitle: false
+            showPopupTitle: false,
+            onOpened: reloadResponsabile
           }">
         </dxi-item>
         <dxi-item dataField="promotoreIter" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
