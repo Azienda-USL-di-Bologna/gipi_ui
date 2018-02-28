@@ -22,9 +22,8 @@
 
     <dxi-column [minWidth]="150" dataField="idAziendaTipoProcedimento.idTitolo.nome" [visible]="colonnaVisibile" caption="Classificazione"
       [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column" [filterOperations]="['reset', 'contains']"
-      [selectedFilterOperation]="'contains'"
-      [calculateDisplayValue]="descrizioneTitolo"></dxi-column>
-      
+      [selectedFilterOperation]="'contains'" [calculateDisplayValue]="descrizioneTitolo"></dxi-column>
+
     <dxi-column [width]="100" dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [visible]="colonnaVisibile" caption="Durata massima (gg)"
       [dataType]="'number'" [allowEditing]="false" alignment="center" cssClass="column" [filterOperations]="['reset', 'contains']"
       [selectedFilterOperation]="'contains'"></dxi-column>
@@ -34,7 +33,8 @@
     <dxi-column [minWidth]="100" dataField="idTitolarePotereSostitutivo.idPersona.descrizione" caption="Titolare potere sostitutivo"
       [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column" [filterOperations]="['reset', 'contains']"
       [selectedFilterOperation]="'contains'"></dxi-column>
-    <dxi-column [width]="80" caption="Dettagli" cellTemplate="buttonActions" alignment="center" [visible]="colonnaVisibile" [filterOperations]="['reset', 'contains']" [selectedFilterOperation]="'contains'"></dxi-column>
+    <dxi-column [width]="80" caption="Dettagli" cellTemplate="buttonActions" alignment="center" [visible]="colonnaVisibile" [filterOperations]="['reset', 'contains']"
+      [selectedFilterOperation]="'contains'"></dxi-column>
 
     <div *dxTemplate="let element of 'buttonActions'" cssClass="app-azioni">
       <dx-button text="" hint="Vai al dettaglio" icon='info' (onClick)="handleEvent('infoOnClick', element)"></dx-button>
@@ -59,30 +59,32 @@
     <dxi-column dataField="descrizioneAtti" [dataType]="'string'" [allowEditing]="false" [visible]="false"></dxi-column>
 
     <dxo-editing mode="popup">
-      <dxo-popup [maxWidth]="800" [minWidth]="500" [maxHeight]="700" [toolbarItems]="popupButtons">
+      <dxo-popup [maxWidth]="800" [minWidth]="500" [maxHeight]="700" [toolbarItems]="popupButtons"
+      title="Modifica Tipo Procedimento"
+      [showTitle]="true">
       </dxo-popup>
       <dxo-form #formgdm colCount="1">
-        <dxi-item dataField="idStruttura.nome" [template]="itemClear" [label]="{visible: true}" cssClass="item popup-title"></dxi-item>
-        <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" [template]="itemClear" [label]="{visible: true, text: 'Tipo Procedimento'}"
+        <dxi-item dataField="idStruttura.nome"  [disabled]="true" [template]="itemClear" [label]="{visible: true}" cssClass="item popup-title"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome"  [disabled]="true" [template]="itemClear" [label]="{visible: true, text: 'Tipo Procedimento'}"
           cssClass="item popup-title"></dxi-item>
 
-        <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" [label]="{text:'Descrizione'}" [colSpan]="1"
+        <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento"  [disabled]="true" [label]="{text:'Descrizione'}" [colSpan]="1"
           cssClass="item"></dxi-item>
-        <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [label]="{text:'Modo apertura'}" [colSpan]="1"
+        <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura"  [disabled]="true" [label]="{text:'Modo apertura'}" [colSpan]="1"
           cssClass="item"></dxi-item>
-        <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" [label]="{text:'Norma di riferimento'}"
+        <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento"  [disabled]="true" [label]="{text:'Norma di riferimento'}"
           [colSpan]="1" cssClass="item"></dxi-item>
-        <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nome" [label]="{text:'Classificazione'}" [colSpan]="1" cssClass="item"></dxi-item>
-        <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [label]="{text:'Durata massim (gg)'}" [colSpan]="1"
+        <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nome"  [disabled]="true" [label]="{text:'Classificazione'}" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaProcedimento"  [disabled]="true" [label]="{text:'Durata massim (gg)'}" [colSpan]="1"
           cssClass="item"></dxi-item>
-        <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" [label]="{text:'Durata massima sospensione (gg)'}"
+        <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione"  [disabled]="true" [label]="{text:'Durata massima sospensione (gg)'}"
           [colSpan]="1" cssClass="item"></dxi-item>
-        <dxi-item dataField="dataInizio" [label]="{text:'Valido dal'}" [colSpan]="1" cssClass="item"></dxi-item>
-        <dxi-item dataField="dataFine" [label]="{text:'Al'}" [colSpan]="1" cssClass="item"></dxi-item>
-        <dxi-item dataField="idTitolarePotereSostitutivo.descrizione" [label]="{text:'Titolare Potere Sostitutivo'}" [colSpan]="1"
+        <dxi-item dataField="dataInizio" [label]="{text:'Valido dal'}"  [disabled]="true" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="dataFine" [label]="{text:'Al'}"  [disabled]="true" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="idTitolarePotereSostitutivo.descrizione"  [disabled]="true" [label]="{text:'Titolare Potere Sostitutivo'}" [colSpan]="1"
           cssClass="item"></dxi-item>
-        <dxi-item dataField="modalitaInfo" [label]="{text:'Modalità informativa'}" [colSpan]="1" cssClass="item"></dxi-item>
-        <dxi-item dataField="descrizioneAtti" [label]="{text:'Atti da allegare'}" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="modalitaInfo"  [disabled]="true" [label]="{text:'Modalità informativa'}" [colSpan]="1" cssClass="item"></dxi-item>
+        <dxi-item dataField="descrizioneAtti"  [disabled]="true" [label]="{text:'Atti da allegare'}" [colSpan]="1" cssClass="item"></dxi-item>
       </dxo-form>
     </dxo-editing>
   </dx-data-grid>

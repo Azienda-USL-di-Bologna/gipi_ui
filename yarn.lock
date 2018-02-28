@@ -169,7 +169,7 @@
   dependencies:
     moment "~2"
 
-"@bds/nt-entities@^1.0.4":
+"@bds/nt-entities@latest":
   version "1.0.4"
   resolved "http://gdml.internal.ausl.bologna.it:4873/@bds%2fnt-entities/-/nt-entities-1.0.4.tgz#15785dd09d1139e54fcb3d47ca91363efd36d582"
 
