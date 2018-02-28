@@ -61,15 +61,15 @@
             [toolbarItems]="popupButtons">
         </dxo-popup>
         <dxo-form colCount="2">
-            <dxi-item dataField="codice" [colSpan]="2"></dxi-item>
+            <dxi-item dataField="codice"  [editorOptions]="{maskType: 'd' }" [colSpan]="2"></dxi-item>
             <dxi-item dataField="nome" [colSpan]="2"></dxi-item>
             <dxi-item dataField="descrizioneDefault" [colSpan]="2"></dxi-item>
             <dxi-item dataField="modoApertura" [colSpan]="2"></dxi-item>
             <dxi-item dataField="normaRiferimento" [colSpan]="2"></dxi-item>
             <dxi-item dataField="dataInizioValidita" [colSpan]="1"></dxi-item>
             <dxi-item dataField="dataFineValidita"  [colSpan]="1"></dxi-item>
-            <dxi-item dataField="durataMassimaIter" [colSpan]="1"></dxi-item>
-            <dxi-item dataField="durataMassimaSospensione" [colSpan]="1"></dxi-item>
+            <dxi-item dataField="durataMassimaIter" [editorOptions]="{maskType: 'd' }" [colSpan]="1"></dxi-item>
+            <dxi-item dataField="durataMassimaSospensione" [editorOptions]="{maskType: 'd' }" [colSpan]="1"></dxi-item>
             <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="1"></dxi-item>
             <dxi-item dataField="pubblicazioneRegistroAccessi" [colSpan]="1"></dxi-item>
         </dxo-form>
