@@ -112,7 +112,7 @@ import {LoginModule} from "@bds/nt-login";
         CambioDiStatoBoxComponent,
         CambioDiStatoComponent,
         TipiProcedimentoAziendaliComponent,
-        DettaglioTipoProcedimentoComponent
+        DettaglioTipoProcedimentoComponent,
     ],
     imports: [
         BrowserModule,

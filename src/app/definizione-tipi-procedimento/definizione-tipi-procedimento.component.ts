@@ -209,6 +209,10 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     }
   }
 
+  public calculateDecimal(e: any) {
+    console.log(e); 
+  }
+
   public calcolaSeAttiva(row: any) {
     // console.log(coso);
     // debugger;
