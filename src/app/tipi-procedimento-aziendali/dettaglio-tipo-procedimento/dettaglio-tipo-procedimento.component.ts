@@ -51,7 +51,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
       filter: ["idAzienda", "=", this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id]],
       map: (item) => {
         if(item){
-          item.titAndClass = '[' + item.classificazione + ']' + item.nome;
+          item.titAndClass = '[' + item.classificazione + '] ' + item.nome;
         }
         return item;
       }
