@@ -66,7 +66,6 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.odataContextDefinitionFunctionImport = this.odataContextFactory.buildOdataFunctionsImportDefinition();
     this.getInfoSessionStorage();
     this.setUtenteResponsabile = this.setUtenteResponsabile.bind(this);
-    // this.avviaIter = this.avviaIter.bind(this);
   }
 
   private getInfoSessionStorage(): void {
@@ -87,8 +86,9 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.dataSourceUtenti = new DataSource({
       store: this.odataContextDefinitionFunctionImport.getContext()[new GetUtentiGerarchiaStruttura().getName()]
       .on("loading", (loadOptions) => {
+        console.log("on loading");
         if (loadOptions.filter && loadOptions.filter[0]) {
-          loadOptions.customQueryParams.searchString = loadOptions.filter[0][2];
+          loadOptions.customQueryParams.searchString = loadOptions.filter[0][2] /* ? loadOptions.filter[0][2] : "" */;
         } else {
           loadOptions.customQueryParams.searchString = "";
         }
@@ -103,8 +103,9 @@ export class AvviaNuovoIterComponent implements OnInit {
         "idAfferenzaStruttura"
       ]
     });
-    
+
     this.dataSourceUtenti.load().then(res => {
+      console.log("after load");
       for (let e of res) {
         if (e.idUtente.id === this.iterParams.idUtenteLoggato && e.idStruttura.id === this.iterParams.procedimento.idStruttura.id) {
           this.idUtenteDefault = e.id;
@@ -241,7 +242,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     });
   }
 
-  public closePopUp(idIter?: number) {
+  public closePopUp(idIter?: number): void {
     this.messageEvent.emit({ visible: false, idIter: idIter });
   }
 
