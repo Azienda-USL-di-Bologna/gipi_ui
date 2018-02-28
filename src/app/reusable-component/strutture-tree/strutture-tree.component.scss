@@ -1,0 +1,30 @@
+/deep/ .tree-readonly .dx-checkbox-container {
+   cursor: default !important;
+}
+
+/deep/ .tree-readonly .dx-checkbox-icon {
+    border-color: #ddd !important;
+    background-color: lightgrey !important;
+}
+
+/deep/ .tree-readonly .dx-state-selected .dx-treeview-item-content span {
+    font-weight: bold;
+}
+
+
+/deep/ .tree-readonly span {
+    color: grey !important;
+}
+
+.tree-not-readonly .dx-checkbox-icon {
+    cursor: pointer;
+    background-color: white;
+}
+
+.dx-treeview {
+    width: 100%;
+}
+
+.dx-texteditor .dx-texteditor-empty .dx-textbox {
+    width: 100%;
+}

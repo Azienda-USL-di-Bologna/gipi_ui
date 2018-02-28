@@ -23,20 +23,20 @@
       <strutture-tree #treeView [idAzienda]=idAziendaFront [nodesToCheckSelectedStatus]="nodeInvolved" [popupVisible]="popupVisible"
         [idAziendaTipoProcedimento]=idAziendaTipoProcedimentoFront [readOnly]="true" focusStateEnabled="false" [enableCheckRecursively]="false" (strutturaSelezionata)="selezionaStruttura($event)"></strutture-tree>
     </div>
-
     <div class="col-8" id="center-div">
       <dx-form id="form" #myform [(formData)]="procedimento" [visible]="formVisible"> 
-      
         <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" editorType="dxTextArea" cssClass="label-wrap" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" cssClass="label-wrap" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" cssClass="label-wrap" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nome" cssClass="label-wrap" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" cssClass="label-wrap" [label]="{text: 'Durata massima sospensione'}" [editorOptions]="{ disabled: true }"></dxi-item>    
-    
-        <dxi-item [template]="'responsabile'" cssClass="label-wrap" [label]="{text: 'Responsabile dell\'adozione dell\'atto finale'}" ></dxi-item>
+        <dxi-item [template]="'responsabile'" cssClass="label-wrap lookup-wrap" [label]="{text: 'Responsabile dell\'adozione dell\'atto finale'}" ></dxi-item>
           <div *dxTemplate="let data of 'responsabile'">
             <dx-lookup [dataSource]="dataSourceResponsabile"
               [showPopupTitle]="false"
+              [showClearButton]="true"
+              clearButtonText="Pulisci"
+              cancelButtonText="Cancella"
               closeOnOutsideClick="true"
               placeholder= "Seleziona..."
               searchPlaceholder= "Cerca..."
@@ -44,16 +44,18 @@
               displayExpr="nomeVisualizzato"
               searchExpr="idUtente.idPersona.descrizione"
               [value]="defaultResponsabile"
-              (onOpened)="reloadResponsabile()"
-              (onItemClick)="setResponsabilePlusStruttura($event)">
+              (onOpened)="reloadResponsabile($event)"
+              (onItemClick)="setResponsabilePlusStruttura($event)"
+              [hint]="testoTooltipResponsabile">
             </dx-lookup>
           </div>
-
-          <dxi-item [template]="'titolare'" cssClass="label-wrap" [label]="{text: 'Titolare potere sostitutivo'}"></dxi-item>
-        
-          <div *dxTemplate="let data of 'titolare'" class="dx-field-item-content dx-field-item-content-location-right">
+          <dxi-item [template]="'titolare'" cssClass="label-wrap lookup-wrap" [label]="{text: 'Titolare potere sostitutivo'}"></dxi-item>
+          <div *dxTemplate="let data of 'titolare'">
             <dx-lookup [dataSource]="dataSourceTitolare"
               [showPopupTitle]="false"
+              [showClearButton]="true"
+              clearButtonText="Pulisci"
+              cancelButtonText="Cancella"
               closeOnOutsideClick="true"
               placeholder= "Seleziona..."
               searchPlaceholder= "Cerca..."
@@ -62,10 +64,10 @@
               searchExpr="idUtente.idPersona.descrizione"
               [value]="defaultTitolare"
               (onOpened)="reloadTitolare()"
-              (onItemClick)="setTitolarePlusStruttura($event)">
+              (onItemClick)="setTitolarePlusStruttura($event)"
+              [hint]="testoTooltipTitolare">
             </dx-lookup>
           </div>
-
           <dxi-item dataField="ufficio" cssClass="label-wrap" [label]="{text: 'Ufficio'}" [editorOptions]="{ disabled: campiEditabiliDisabilitati }"></dxi-item>
           <dxi-item dataField="strumenti" cssClass="label-wrap" [label]="{text: 'Strumenti di tutela amministrativa e giurisdizionale riconosciuti dalla Legge'}" [editorOptions]="{ disabled: campiEditabiliDisabilitati }"></dxi-item>
           <dxi-item dataField="modalitaInfo" cssClass="label-wrap" [label]="{text: 'Modalità informativa stato iter'}" [editorOptions]="{ disabled: campiEditabiliDisabilitati }"></dxi-item>
@@ -77,12 +79,11 @@
           </div>
           <dxi-item [template]="'bottoneUno'"></dxi-item>
         <div *dxTemplate="let data of 'bottoneUno'">
-            <dx-button class="buttons-form margine-sinistro custom-sm-col" [visible]=formVisible (onClick)="bottoneSalvaProcedimento(true)" text="{{ testoBottone }}"
-            hint="Salva i campi"></dx-button>
-           
-            <dx-button class="buttons-form" [visible]=formVisible (onClick)="bottoneAnnulla()" text="Annulla" hint="Annulla le modifiche"></dx-button>
-          </div>
+           </div>
       </dx-form>
+      <dx-button class="buttons-form margine-sinistro custom-sm-col" [visible]=formVisible (onClick)="bottoneSalvaProcedimento(true)" text="{{ testoBottone }}"
+      hint="Salva i campi"></dx-button>
+      <dx-button class="buttons-form" [visible]=formVisible (onClick)="bottoneAnnulla()" text="Annulla" hint="Annulla le modifiche"></dx-button>
       <span *ngIf="!formVisible">
         <h2 class="no-procedimento">Nessun procedimento associato alla struttura</h2>
       </span>
