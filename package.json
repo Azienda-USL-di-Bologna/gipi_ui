@@ -23,7 +23,7 @@
     "@angular/router": "^4.0.0",
     "@bds/nt-context": "latest",
     "@bds/nt-entities": "latest",
-    "@bds/nt-login": "latest",
+    "@bds/nt-login": "^1.0.2",
     "@ng-idle/core": "2.0.0-beta.12",
     "@ng-idle/keepalive": "2.0.0-beta.12",
     "ajv": "^6.0.0",

@@ -20,6 +20,10 @@ export const LOGOUT_URL = window.location.protocol + "//" + hostname + port + LO
 export const LOGIN_RELATIVE_URL: string = "/gipi/user/login/";
 export const LOGIN_URL: string = window.location.protocol + "//" + hostname + port + LOGIN_RELATIVE_URL;
 
+export const LOGIN_ROUTE: string = "/login";
+export const HOME_ROUTE: string = "/home";
+
+
 
 console.log("ODATA_BASE_URL", ODATA_BASE_URL);
 console.log("CUSTOM_RESOURCES_BASE_URL", CUSTOM_RESOURCES_BASE_URL);

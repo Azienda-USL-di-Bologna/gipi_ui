@@ -37,7 +37,15 @@
             searchEnabled: true,
             valueExpr: 'id',
             onItemClick: setUtenteResponsabile,
-            hint: descrizioneUtenteResponsabile
+            hint: descrizioneUtenteResponsabile,
+            cancelButtonText: 'Chiudi',
+            pageLoadingText: 'Caricamento..',
+            placeholder: 'Seleziona..',
+            noDataText: 'Nessun dato disponibile',
+            closeOnOutsideClick: true,
+            searchPlaceholder: 'Cerca',
+            showPopupTitle: false,
+            onOpened: reloadResponsabile
           }">
         </dxi-item>
         <dxi-item dataField="promotoreIter" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
