@@ -16,7 +16,7 @@
 }
 
 // questo è per il grigio del back-ground delle popup
-/deep/ .dx-popup-normal {
+/deep/ .dx-popup-normal, /deep/ .dx-popup-content {
   background-color: #f1f1f3 !important;
 }
 

@@ -90,7 +90,12 @@
   </dx-data-grid>
 </div>
 
-<dx-popup title="Avvia nuovo iter" [showTitle]="true" [visible]="popupNuovoIterVisible" (onHidden)="popupHidden()" class="popup-nuovo-iter">
+<dx-popup title="Avvia nuovo iter" 
+  [showTitle]="true" 
+  [visible]="popupNuovoIterVisible" 
+  (onHidden)="popupHidden()"
+  [height]="'auto'"
+  class="popup-nuovo-iter">
   <div *dxTemplate="let data of 'content'">
     <avvia-nuovo-iter [procedimentoSelezionato]="procedimentoDaPassare" (messageEvent)="receiveMessage($event)"></avvia-nuovo-iter>
   </div>
