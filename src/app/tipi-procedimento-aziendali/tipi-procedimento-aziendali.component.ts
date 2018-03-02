@@ -43,8 +43,9 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
 
   receiveMessage(event: any, reloadPadre: boolean) {
     console.log("RECEIVE MESSAGE: ", event);
+    console.log("receive da padre = ", event.reloadPadre)
     this.popupVisible = event.visible;
-    let toReload: boolean = reloadPadre ? true : false;
+    let toReload: boolean = event.reloadPadre ? true : false;
     if (toReload)
       this.caricaDataSource();
     // this.procedimentoDaPassare = null;
@@ -57,7 +58,7 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
       console.log("THIS.ROUTE", this.route);
       console.log("handleEvent tipiProcAz: procedimentoDaPassare", this.procedimentoDaPassare.id);
       this.popupVisible = true;
-      this.caricaDataSource();
+      //this.caricaDataSource();
     }
   }
 
