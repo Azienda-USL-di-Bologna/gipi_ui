@@ -148,8 +148,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       if (!this.dataSourceResponsabile) {
         this.dataSourceResponsabile = this.creaDataSourceUtente(this.odataContextDefinitionResponsabile, idUtente, idStruttura, "responsabile");
       } else if (idUtente && idStruttura) {
-        this.dataSourceResponsabile.filter([["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and",
-        ["idStruttura.id", "=", idStruttura]]);
+        this.dataSourceResponsabile.filter([["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and", ["idUtente.attivo", "=", true], "and",
+        ["idStruttura.id", "=", idStruttura], "and", ["idStruttura.attiva", "=", true]]);
         this.dataSourceResponsabile.load().then(result => {
           // console.log("RESULT = ", result);
           this.defaultResponsabile = result[0];
@@ -169,8 +169,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       if (!this.dataSourceTitolare) {
         this.dataSourceTitolare = this.creaDataSourceUtente(this.odataContextDefinitionTitolare, idUtente, idStruttura, "titolare");
       } else if (idUtente && idStruttura) {
-        this.dataSourceTitolare.filter([["idStruttura.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and",
-        ["idStruttura.id", "=", idStruttura]]);
+        this.dataSourceTitolare.filter([["idStruttura.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and", ["idUtente.attivo", "=", true],
+        "and", ["idStruttura.id", "=", idStruttura], "and", ["idStruttura.attiva", "=", true]]);
         this.dataSourceTitolare.load().then(result => {
           console.log("SUCCESSO_CARICAMENTO_TITOLARE");
           // console.log("RESULT = ", result);
@@ -305,13 +305,18 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   creaDataSourceUtente(context: OdataContextDefinition, idUtente: number, idStruttura: number, chiamante: string): DataSource {
+    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("idUtente.idPersona.descrizione");
+    customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
     const dataSource = new DataSource({
-      store: context.getContext()[new UtenteStruttura().getName()],
+      store: context.getContext()[new UtenteStruttura().getName()].on("loading", (loadOptions) => {
+        loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
+        this.odataContextDefinition.customLoading(loadOptions);
+      }),
       expand: [
         "idUtente", "idStruttura", "idAfferenzaStruttura", "idUtente.idPersona", "idUtente.idAzienda"
       ],
-      filter: [["idStruttura.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and",
-      ["idStruttura.id", "=", idStruttura]],
+      filter: [["idStruttura.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and", ["idUtente.attivo", "=", true], "and",
+      ["idStruttura.id", "=", idStruttura], "and", ["idStruttura.attiva", "=", true]],
       map: (item) => {
         if (item) {
           if (item.idStruttura && item.idAfferenzaStruttura) {
@@ -356,12 +361,12 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   reloadResponsabile() {
-    this.dataSourceResponsabile.filter([["idStruttura.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.idAzienda.id", "=", this.idAziendaFront]]);
+    this.dataSourceResponsabile.filter([["idStruttura.idAzienda.id", "=", this.idAziendaFront], "and", ["idStruttura.attiva", "=", true], "and", ["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.attivo", "=", true]]);
     this.dataSourceResponsabile.load();
   }
 
   reloadTitolare() {
-    this.dataSourceTitolare.filter([["idStruttura.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.idAzienda.id", "=", this.idAziendaFront]]);
+    this.dataSourceTitolare.filter([["idStruttura.idAzienda.id", "=", this.idAziendaFront], "and", ["idStruttura.attiva", "=", true], "and", ["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.attivo", "=", true]]);
     this.dataSourceTitolare.load();
   }
 
