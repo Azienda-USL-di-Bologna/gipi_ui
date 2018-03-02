@@ -15,6 +15,12 @@
 
 /deep/ .label-wrap > label {
   width: 200px;
+  display: inline-block !important;
+}
+
+/deep/ .label-wrap .dx-field-item-content.dx-field-item-content-location-right {
+  width: initial !important;
+  display: inline-block;
 }
 
 /deep/ .label-wrap .dx-field-item-label-text {
@@ -37,7 +43,19 @@
   align-items: initial !important;
 }
 
+/deep/ .no-baseline > label {
+  vertical-align: bottom !important;
+}
+
 /deep/ .lookup-wrap .dx-field-item-content.dx-field-item-content-location-right {
   width: 0px!important;
   overflow: auto;
+}
+
+/deep/ .form-avvia-iter div div div div div div div:first-child div {
+  justify-content: space-around !important;
+}
+
+/deep/ .form-avvia-iter div div div div div div div:first-child div .dx-item.dx-box-item {
+  flex: initial !important;
 }
