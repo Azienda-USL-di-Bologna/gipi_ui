@@ -92,8 +92,30 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
   public save() {
     console.log("dettaglio-tipo-procedimento CARICADATASOURCE");
     this.dataSourceAziendaTipoProcedimento.store().update(this.proc.id, this.proc).then( 
-      res => {this.close(true);},
-      err => { console.log("ERRORE!!!! ORRRORE!!!!"); notify("Non esiste la fase successiva", "error", 1000);}
+      res => {
+        notify({
+          message: "Salvataggio effettuato con successo!",
+          type: "success",
+          displayTime: 2100,
+          position: {
+            my: "center", at: "center", of: window
+          },
+          width: "max-content"
+        });
+        this.close(true);
+      },
+      err => {
+        console.log("--> ERR", err);
+        notify({
+          message: "Problemi nel salvataggio del detteglio. Se il problema persiste contattare BabelCare",
+          type: "error",
+          displayTime: 2100,
+          position: {
+            my: "center", at: "center", of: window
+          },
+          width: "max-content"
+        });
+      }
     );
   }
 

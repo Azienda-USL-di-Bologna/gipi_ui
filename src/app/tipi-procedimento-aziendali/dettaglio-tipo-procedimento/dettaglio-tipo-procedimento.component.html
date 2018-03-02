@@ -23,6 +23,7 @@
       <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [editorOptions]="{ 
         disabled: false,
         dataSource: dataSourceTitoli,
+        searchExpr: ['classificazione', 'nome'],
         displayExpr: 'titAndClass',
         closeOnOutsideClick: true,
         showPopupTitle: false,
