@@ -1,18 +1,18 @@
-#testata{
+/* #testata{
     padding: 10px;
     display: block !important;
     background-color:  #FFC057 !important;
     font-size: 40px !important;
-}
+} */
 
-.td-home {
+/* .td-home {
     padding: 10em; 
     padding-left: 50em
-}
+} */
+/* 
+$primaryColor: #eeffcc; */
 
-$primaryColor: #eeffcc;
-
-@media screen and (min-width: 1880px) {
+/* @media screen and (min-width: 1880px) {
     .dx-responsive-box{
        size: 80% !important;
    }
@@ -24,7 +24,10 @@ $primaryColor: #eeffcc;
    }
 }
 
+ */
 
 
 
-
+.title-home h1 {
+    text-align: center;
+}
