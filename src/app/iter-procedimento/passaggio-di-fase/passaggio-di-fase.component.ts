@@ -75,11 +75,19 @@ export class PassaggioDiFaseComponent implements OnInit {
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/stepOn", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({},)
       .subscribe(
       res => {
-        this.out.emit({ visible: false, proceduto: true });
+        if(!this.isOpenedAsPopup){
+          notify("Proceduto con successo", "success", 1000);
+        }else{
+          this.out.emit({ visible: false, proceduto: true });
+        }
       },
       err => {
-        this.showStatusOperation("Boh, che sarà successo", "error");
-        this.out.emit({ visible: false, proceduto: false });
+        if(!this.isOpenedAsPopup){
+          notify("Si è verificato un errore durante il procedi", "error", 1000);
+          console.log("Errore:", err);
+        }else{
+          this.out.emit({ visible: false, proceduto: false });
+        }
       });
   }
 
