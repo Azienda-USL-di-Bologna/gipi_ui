@@ -110,9 +110,9 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.dataSourceUtenti.load().then(res => {
       console.log("after load");
       for (let e of res) {
-        if (e.idUtente.id === this.iterParams.idUtenteLoggato && e.idStruttura.id === this.iterParams.procedimento.idStruttura.id) {
+        if (e.idUtente.id === this.loggedUser.getField(bUtente.id) && e.idStruttura.id === this.iterParams.procedimento.idStruttura.id) {
           this.idUtenteDefault = e.id;
-          this.iterParams.idUtenteResponsabile = this.iterParams.idUtenteLoggato;
+          this.iterParams.idUtenteResponsabile = this.loggedUser.getField(bUtente.id);
           this.descrizioneUtenteResponsabile = e.idUtente.idPersona.descrizione 
             + " (" + e.idStruttura.nome
             + " - " + e.idAfferenzaStruttura.descrizione + ")";
@@ -217,7 +217,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.iterParams.idUtenteLoggato = this.loggedUser.getField(bUtente.id);
+    
   }
 
   public handleEvent(name: string, data: any): void {
@@ -280,7 +280,6 @@ export class AvviaNuovoIterComponent implements OnInit {
 class IterParams {
   public idUtenteResponsabile: number;
   public idUtenteStrutturaResponsabile: number;
-  public idUtenteLoggato: number;
   public idProcedimento: number;
   public oggettoIter: string;
   public dataCreazioneIter: Date;
