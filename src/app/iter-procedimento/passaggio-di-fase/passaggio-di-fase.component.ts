@@ -8,6 +8,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Subscription, Subscriber } from "rxjs";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
+import { ActivatedRoute, Params } from "@angular/router";
 
 @Component({
   selector: "app-passaggio-di-fase",
@@ -48,13 +49,19 @@ export class PassaggioDiFaseComponent implements OnInit {
   @Output() out = new EventEmitter<any>();
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private activatedRoute: ActivatedRoute) {}
 
   showStatusOperation(arg0: any, arg1: any): any {
     throw new Error("Method not implemented.");
   }
   
-  ngOnInit() { }
+  ngOnInit() {
+    this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
+      this.iterParams.codiceRegistroDocumento = queryParams["registro"];
+      this.iterParams.numeroDocumento = queryParams["numero"];
+      this.iterParams.annoDocumento = queryParams["anno"];
+    });
+  }
 
   procedi() {
     if(!this.isOpenedAsPopup){
@@ -120,6 +127,8 @@ export class PassaggioDiFaseComponent implements OnInit {
   }
 
   onFormSubmit(event: Event) {}
+
+
 
 }
 
