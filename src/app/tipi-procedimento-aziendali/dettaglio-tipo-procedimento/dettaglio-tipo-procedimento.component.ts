@@ -114,7 +114,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
       err => {
         console.log("--> ERR", err);
         notify({
-          message: "Problemi nel salvataggio del detteglio. Se il problema persiste contattare BabelCare",
+          message: "Problemi nel salvataggio del dettaglio. Se il problema persiste contattare BabelCare.",
           type: "error",
           displayTime: 2100,
           position: {
