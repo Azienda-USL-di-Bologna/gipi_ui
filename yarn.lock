@@ -163,19 +163,19 @@
   dependencies:
     tsickle "^0.21.0"
 
-"@bds/nt-context@^1.0.40":
+"@bds/nt-context@latest":
   version "1.0.40"
   resolved "http://gdml.internal.ausl.bologna.it:4873/@bds%2fnt-context/-/nt-context-1.0.40.tgz#40f442dcdcfe320f627610139460c8c76e84de34"
   dependencies:
     moment "~2"
 
-"@bds/nt-entities@0.0.2":
-  version "0.0.2"
-  resolved "http://gdml.internal.ausl.bologna.it:4873/@bds%2fnt-entities/-/nt-entities-0.0.2.tgz#4b61ab4f037e790d853281ccc6520a2e31eb0ca9"
+"@bds/nt-entities@latest":
+  version "1.0.4"
+  resolved "http://gdml.internal.ausl.bologna.it:4873/@bds%2fnt-entities/-/nt-entities-1.0.4.tgz#15785dd09d1139e54fcb3d47ca91363efd36d582"
 
-"@bds/nt-login@0.0.2":
-  version "0.0.2"
-  resolved "http://gdml.internal.ausl.bologna.it:4873/@bds%2fnt-login/-/nt-login-0.0.2.tgz#48a39db4e26468541f64da1de1e2fc12b0538b1f"
+"@bds/nt-login@latest":
+  version "1.0.2"
+  resolved "http://gdml.internal.ausl.bologna.it:4873/@bds%2fnt-login/-/nt-login-1.0.2.tgz#a9dbf8a342f99ecf1d9a20e0a7411a575743dabb"
   dependencies:
     angular2-moment "^1.8.0"
 

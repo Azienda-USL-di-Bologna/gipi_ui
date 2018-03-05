@@ -9,7 +9,7 @@ import { CUSTOM_RESOURCES_BASE_URL } from "../../../environments/app.constants";
 @Component({
   selector: "strutture-tree",
   templateUrl: "./strutture-tree.component.html",
-  styleUrls: ["./strutture-tree.component.css"]
+  styleUrls: ["./strutture-tree.component.scss"]
 })
 export class StruttureTreeComponent implements OnInit {
 
@@ -22,6 +22,7 @@ export class StruttureTreeComponent implements OnInit {
   public datasourceOriginal: DataSource;
   public strutture: Struttura = new Struttura();
   public contextMenuItems;
+  public showContextMenu: boolean = false;
 
 
   @ViewChild("treeViewChild") treeViewChild: any;
@@ -39,7 +40,7 @@ export class StruttureTreeComponent implements OnInit {
   constructor(private http: HttpClient, private odataContextFactory: OdataContextFactory) {
 
     // costruzione menù contestuale sull'albero
-    this.contextMenuItems = [{ text: "Seleziona tutte le strutture figlie" }, { text: "Deseleziona tutte le strutture figlie" }];
+    this.contextMenuItems = [{ text: "Seleziona con tutte le strutture figlie" }, { text: "Deseleziona con tutte le strutture figlie" }];
 
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }
@@ -95,7 +96,13 @@ export class StruttureTreeComponent implements OnInit {
    in questo momento ci salviamo il nodo cliccato */
   openContextMenu(e) {
     this.nodeSelectedFromContextMenu = e.itemData;
+    this.showContextMenu = true;
+    
     // this.abilitaRicorsione = true;
+  }
+
+  onTreeViewClick(e) {
+    console.log(e);
   }
 
   // Questo scatta quando clicchiamo sulla voce del menu contestuale "Espandi..."
@@ -104,11 +111,17 @@ export class StruttureTreeComponent implements OnInit {
     switch (e.itemIndex)
     {
       case 0:
+        this.nodeSelectedFromContextMenu.selected = true;  
+        this.treeViewChild.instance.selectItem(this.nodeSelectedFromContextMenu);
         this.setSelectedNodeRecursively(this.nodeSelectedFromContextMenu, true);
+        this.treeViewChild.instance.expandItem(this.nodeSelectedFromContextMenu);
         break;
         
       case 1:
+      this.nodeSelectedFromContextMenu.selected = false;
+      this.treeViewChild.instance.unselectItem(this.nodeSelectedFromContextMenu);
         this.setSelectedNodeRecursively(this.nodeSelectedFromContextMenu, false);  
+        this.treeViewChild.instance.expandItem(this.nodeSelectedFromContextMenu);
         break;  
     }
     // this.treeView.selectNodesRecursive = true;

@@ -115,6 +115,17 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
 
+
+        // sad but necessary :c
+        var $this = this;
+        window.addEventListener('click', function(e){   
+            if (!document.getElementById("userDropdown").contains(<Node>e.target) && !document.getElementById("userDropdownToggle").contains(<Node>e.target)
+                && $("#userDropdown").hasClass('show')) {
+                $this.onProfileBtnClick(e);
+            }
+        });
+        
+
         /** sottoscrivendosi a questo evento è possibile intercettare la pressione di indietro o aventi del browser
          * purtroppo non c'è modo di differenziarli
          */
@@ -176,7 +187,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     onProfileBtnClick(e) {
-        let btn = $(e.currentTarget);
+        let btn = $("#userDropdownToggle");
         btn.toggleClass("focus");
         btn.blur();
         $("#userDropdown").toggleClass("show");

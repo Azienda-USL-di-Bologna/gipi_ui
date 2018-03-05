@@ -3,52 +3,58 @@
 
   <br>
 
-  <div class="whitePanel">
-    <dx-form
-      [(formData)]="iterParams"
-      scrollingEnabled="true"
-      colCount="6">
-        <dxi-item dataField="dataCreazioneIter" 
-          [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data creazione'}" 
-          [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"
-          cssClass="label-wrap-date">
-        </dxi-item>
-        <dxi-item dataField="dataAvvioIter" 
-          [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data avvio'}" 
-          [editorOptions]="{ disabled: false, max: now, displayFormat: 'dd/MM/yyyy' }"
-          cssClass="label-wrap-date">
-        </dxi-item>
-        <dxi-item dataField="dataMassimaConclusione" 
-          [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data massima conclusione'}" 
-          [editorOptions]="{ disabled: true, value: setDataMax(), displayFormat: 'dd/MM/yyyy' }"
-          cssClass="label-wrap-date no-baseline">
-        </dxi-item>
-         <dxi-item itemType="group" [colCount]="3" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Documento'}">
-          <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: avviaIterDaDocumento }"></dxi-item>
-          <dxi-item dataField="numeroDocumento" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento }"></dxi-item>
-          <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento}"></dxi-item> 
-        </dxi-item>
-        <dxi-item dataField="idUtenteResponsabile" [colSpan]="6" cssClass="label-wrap no-baseline" editorType="dxLookup" 
-          [label]="{text: 'Responsabile procedimento amministrativo'}"
-          [editorOptions]="{
-            value: null,
-            dataSource: dataSourceUtenti,
-            valueExpr: 'id',
-            displayExpr: 'idPersona.descrizione',
-            searchEnabled: true
-          }">
-        </dxi-item>
-        <dxi-item dataField="promotoreIter" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
-        <dxi-item dataField="oggettoIter" [colSpan]="6" cssClass="label-wrap" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
-      
-      
-        <dxi-item dataField="procedimento.idResponsabileAdozioneAttoFinale.idPersona.descrizione" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Responsabile adozione atto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
-        <dxi-item dataField="procedimento.idStrutturaResponsabileAdozioneAttoFinale.nome" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Struttura del responsabile adozione atto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
-        <dxi-item dataField="procedimento.idTitolarePotereSostitutivo.idPersona.descrizione" [colSpan]="3" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
-        <dxi-item dataField="procedimento.idStrutturaTitolarePotereSostitutivo.nome" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Struttura del titolare potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
-
-    </dx-form>
-  </div>
+  <dx-form
+    [(formData)]="iterParams"
+    scrollingEnabled="true"
+    colCount="6"
+    class="form-avvia-iter">
+    <dxi-item dataField="dataCreazioneIter" 
+      [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data creazione'}" 
+      [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"
+      cssClass="label-wrap-date">
+    </dxi-item>
+    <dxi-item dataField="dataAvvioIter" 
+      [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data avvio'}" 
+      [editorOptions]="{ disabled: false, max: now, displayFormat: 'dd/MM/yyyy' }"
+      cssClass="label-wrap-date">
+    </dxi-item>
+    <dxi-item dataField="dataMassimaConclusione" 
+      [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data massima conclusione'}" 
+      [editorOptions]="{ disabled: true, value: setDataMax(), displayFormat: 'dd/MM/yyyy' }"
+      cssClass="label-wrap-date no-baseline">
+    </dxi-item>
+    <dxi-item itemType="group" [colCount]="3" [colSpan]="6" cssClass="label-wrap no-baseline" [label]="{text: 'Documento'}">
+      <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: avviaIterDaDocumento }"></dxi-item>
+      <dxi-item dataField="numeroDocumento" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento }"></dxi-item>
+      <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento}"></dxi-item> 
+    </dxi-item>
+    <dxi-item  #lookup dataField="idUtenteStrutturaResponsabile" [colSpan]="6" cssClass="label-wrap no-baseline lookup-wrap" editorType="dxLookup" 
+      [label]="{text: 'Responsabile procedimento amministrativo'}"
+      [editorOptions]="{
+        value: idUtenteDefault,
+        dataSource: dataSourceUtenti,
+        displayExpr: getDescrizioneUtente,
+        searchEnabled: true,
+        valueExpr: 'id',
+        onItemClick: setUtenteResponsabile,
+        hint: descrizioneUtenteResponsabile,
+        cancelButtonText: 'Chiudi',
+        pageLoadingText: 'Caricamento..',
+        placeholder: 'Seleziona..',
+        noDataText: 'Nessun dato disponibile',
+        closeOnOutsideClick: true,
+        searchPlaceholder: 'Cerca',
+        showPopupTitle: false,
+        onOpened: reloadResponsabile
+      }">
+    </dxi-item>
+    <dxi-item dataField="promotoreIter" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
+    <dxi-item dataField="oggettoIter" [colSpan]="6" cssClass="label-wrap" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
+    <dxi-item dataField="procedimento.idResponsabileAdozioneAttoFinale.idPersona.descrizione" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Responsabile adozione atto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
+    <dxi-item dataField="procedimento.idStrutturaResponsabileAdozioneAttoFinale.nome" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Struttura del responsabile adozione atto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
+    <dxi-item dataField="procedimento.idTitolarePotereSostitutivo.idPersona.descrizione" [colSpan]="3" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
+    <dxi-item dataField="procedimento.idStrutturaTitolarePotereSostitutivo.nome" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Struttura del titolare potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
+  </dx-form>
 
   <br>
 

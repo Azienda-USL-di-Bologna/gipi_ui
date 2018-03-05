@@ -1,6 +1,6 @@
 <div class="container-fluid ">
   <div class="col header-font">
-      <h3><span >Azienda:</span> <i>{{infoGeneriche.azienda}}</i></h3>
+      <!--<h3><span >Azienda:</span> <i>{{infoGeneriche.azienda}}</i></h3>-->
       <h3><span >Struttura:</span> <i>{{infoGeneriche.struttura}}</i></h3>
       <h3><span >Procedimento:</span> <i>{{infoGeneriche.procedimento}}</i></h3>
   </div>
@@ -12,6 +12,8 @@
       wordWrapEnabled="true"
       [dataSource] = "dataSource"
       noDataText="Non ci sono dati da visualizzare">
+      
+    <dxo-filter-row [visible]="true" ></dxo-filter-row>
       <dxo-paging [pageSize]="10"></dxo-paging>
       <dxo-search-panel 
         [visible]="true" 

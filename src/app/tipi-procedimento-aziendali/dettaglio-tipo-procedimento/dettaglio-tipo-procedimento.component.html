@@ -2,8 +2,8 @@
   <dx-form
   [(formData)]="proc" >
     <dxi-item itemType="group" [colCount]="12">
-      <dxi-item dataField="idTipoProcedimento.nome" [colSpan]="6"  [label]="{text: 'Tipo procedimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
       <dxi-item dataField="idAzienda.descrizione" [colSpan]="6"  [label]="{text: 'Azienda'}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item dataField="idTipoProcedimento.nome" [colSpan]="6"  [label]="{text: 'Tipo procedimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
     </dxi-item>
     <dxi-item itemType="group" [colCount]="12">
       <dxi-item dataField="idTipoProcedimento.codice" [colSpan]="6"  [label]="{text: 'Codice Tipo Procedimento'}" [editorOptions]="{ disabled: true}"></dxi-item>
@@ -23,6 +23,7 @@
       <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [editorOptions]="{ 
         disabled: false,
         dataSource: dataSourceTitoli,
+        searchExpr: ['nome', 'classificazione'],
         displayExpr: 'titAndClass',
         closeOnOutsideClick: true,
         showPopupTitle: false,
@@ -53,7 +54,7 @@
   </dx-form>
 
   <div class="container" style="align-content: center">
-    <div  class="row"></div>
+    <div  class="row" style="height: 25px;"></div>
     <div class="row">
       <div class="col-4"></div>
       <div class="col-4" style="align-content: center">

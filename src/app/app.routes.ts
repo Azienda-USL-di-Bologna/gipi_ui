@@ -9,8 +9,7 @@ import { AssociazioniComponent } from "./associazioni/associazioni.component";
 import { StrutturaTipiProcedimentoComponent } from "./struttura-tipi-procedimento/struttura-tipi-procedimento.component";
 import { LoginComponent } from "@bds/nt-login";
 // import { AfterLoginComponent } from "./after-login/after-login.component";
-import { NoLoginGuard } from "./authorization/guards/no-login.guard";
-import { LoginGuard } from "./authorization/guards/login.guard";
+import { LoginGuard, NoLoginGuard } from "@bds/nt-login";
 import { RefreshLoggedUserGuard } from "@bds/nt-login";
 import { ProcedimentiAttiviComponent } from "app/procedimenti-attivi/procedimenti-attivi.component";
 import { PopupStrutturaTipiProcedimentoComponent } from "app/popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component";
@@ -38,6 +37,7 @@ export const rootRouterConfig: Routes = [
   // },
   // ho reindirizzato la pagina di atterraggio a definizione-tipi-procedimento
   { path: "", redirectTo: "home", pathMatch: "full" },
+  { path: "test", component: TestTreeComponent, canActivate: [NoLoginGuard] },
   { path: "login", component: LoginComponent, canActivate: [NoLoginGuard], data: {}},
   // { path: "after-login", component: AfterLoginComponent, canActivate: [LoginGuard], data: {}},
   { path: "home", component: HomeComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Home"}},
@@ -45,10 +45,10 @@ export const rootRouterConfig: Routes = [
   { path: "associazione-aziende", component: AssociazioneAziendeComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Associazione alle Aziende"}},
   { path: "gestione-associazione-aziende", component: GestioneAssociazioneAziendaComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Gestione Associazione"}},
   { path: "associazioni", component: AssociazioniComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Associazioni"}},
-  { path: "struttura-tipi-procedimento", component: StrutturaTipiProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Strutture Associate"}},
+  { path: "struttura-tipi-procedimento", component: StrutturaTipiProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Strutture Associate", ruoliConcessi: ["CA"]}},
   { path: "procedimenti-attivi", component: ProcedimentiAttiviComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Procedimenti Attivi"} },
   { path: "popup-struttura-tipi-procedimento", component: PopupStrutturaTipiProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Associa"} },
-  { path: "iter-procedimento", component: IterProcedimentoComponent, data: {breadcrumb: "Nuovo Iter"} },
+  { path: "iter-procedimento", component: IterProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Nuovo Iter"} },
   { path: "app-test-tree", component: TestTreeComponent },
   { path: "app-lista-iter", component: ListaIterComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Lista Iter"}},
   { path: "avvia-nuovo-iter-da-documento", component: AvviaNuovoIterDaDocumentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Nuovo Iter"} },

@@ -12,6 +12,7 @@ import * as moment from "moment";
 import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stato-box.component";
 import { LoggedUser } from "@bds/nt-login";
 import { Observable, Subscription } from "rxjs";
+import { HttpHeaders } from "@angular/common/http";
 
 
 
@@ -65,6 +66,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public loggedUser$: Observable<LoggedUser>;
   private subscriptions: Subscription[] = [];
   public userInfo: UserInfo;
+  public iodaPermission: boolean;
+  public hasPermissionOnFascicolo: boolean = true;
 
   constructor(
     private odataContextFactory: OdataContextFactory, 
@@ -134,6 +137,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+
+
   }
 
   public buildTitoloDatiGenerali() {
@@ -158,12 +163,24 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       return "Sospendi";
   }
 
+
+  hoPermessi() {
+    this.calculateIodaPermission();
+
+    console.log("Ma allora questi permessi ce li ho???? --> ", this.hasPermissionOnFascicolo);
+    return this.hasPermissionOnFascicolo;
+    }
+
   generateCustomButtons() {
     this.genericButtons = new Array<ButtonAppearance>();
-    this.procediButton = new ButtonAppearance("Procedi", "", false, (this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura));
-    this.sospendiButton = new ButtonAppearance("Sospendi", "", false, this.iter.idFaseCorrente.faseDiChiusura);
+
+    let disabilita: boolean = !this.hoPermessi();
+
+    this.procediButton = new ButtonAppearance("Procedi", "", false, ((this.isSospeso() || disabilita ) || this.iter.idFaseCorrente.faseDiChiusura));
+    this.sospendiButton = new ButtonAppearance("Sospendi", "", false, (this.iter.idFaseCorrente.faseDiChiusura || disabilita) );
     this.genericButtons.push(this.procediButton, this.sospendiButton);
     this.setNomeBottoneSospensione();
+    
   }
 
   buildIter() {
@@ -340,6 +357,30 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       });
     return b;
   }
+
+  public calculateIodaPermission() {
+    if(this.iter.idFascicolo){
+      console.log("CALCULATEIODAPERMISSION")
+      console.log("PATH --> ", CUSTOM_RESOURCES_BASE_URL + "iter/hasPermissionOnFascicolo");
+      let data = new Map<String, Object>();
+      console.log("LOG DATA", data)
+      data.set("numerazioneGerarchica", this.iter.idFascicolo);
+      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/hasPermissionOnFascicolo", this.iter.idFascicolo, {headers: new HttpHeaders().set("content-type", "application/json")})
+      .subscribe(
+        res => {
+          console.log("RES!!! -> ", res);
+          this.hasPermissionOnFascicolo = res["hasPermission"];
+          console.log("hasPerm -> ", this.hasPermissionOnFascicolo);
+          return this.hasPermissionOnFascicolo;
+        },
+        err => {
+          console.log("AHI, erroraccio! -> ", err);
+          // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+        }
+      );
+    }
+  }
+
 }
 
 interface UserInfo{

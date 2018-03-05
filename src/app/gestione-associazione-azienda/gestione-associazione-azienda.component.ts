@@ -72,7 +72,7 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
 
         this.backBtn = new ButtonAppearance("indietro", "back", true, false);
         this.saveBtn = new ButtonAppearance("salva", "save", true, false);
-        this.reloadBtn = new ButtonAppearance("refresh", "refresh", true, false);
+        this.reloadBtn = new ButtonAppearance("aggiorna", "refresh", true, false);
         this.restoreBtn = new ButtonAppearance("ripristina", "revert", true, false);
 
         this.odataContextEntitiesAziendaTipoProcedimento = this.odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -269,21 +269,10 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
     }
 
     public buttonVediAssociazioni(azienda) {
-        // const obj = {
-        //     AziendeTipiProcedimentoComponent: {
-        //         aziendaTipoProcedimento: azienda
-        //     },
-        //     headerAzienda: this.testoHeaderAzienda,
-        //     headerTipoProcedimento: this.testoHeaderTipoProcedimento
-        // };
-        const obj = {
-            aziendaTipoProcedimento: azienda,
-            headerAzienda: this.testoHeaderAzienda,
-            headerTipoProcedimento: this.testoHeaderTipoProcedimento
-        };
-        this.globalContextService.setInnerSharedObject("GestioneAssociazioneAziendaComponent", obj);
-        // this.sharedData.setSharedObject(obj);
-        this.router.navigate(["/struttura-tipi-procedimento"]);
+        this.router.navigate(["/struttura-tipi-procedimento"], {queryParams: {
+            aziendaTipoProcedimento: this.aziendaTipoProcedimento.id,
+            azienda: this.aziendaTipoProcedimento.idAzienda.id,
+            tipoProcedimento: this.aziendaTipoProcedimento.idTipoProcedimento.nome}});
     }
 
     public valueTitoloChanged(e) {

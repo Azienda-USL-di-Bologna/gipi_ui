@@ -46,15 +46,15 @@ import { AssociaDirective } from "./associazioni/directives/associa.directive";
 import { AlberoStruttureComponent } from "./associazioni/sub-view/albero-strutture/albero-strutture.component";
 import { StrutturaTipiProcedimentoComponent } from "./struttura-tipi-procedimento/struttura-tipi-procedimento.component";
 
-import {NoLoginGuard} from "./authorization/guards/no-login.guard";
-import {LoginGuard} from "./authorization/guards/login.guard";
+// import {NoLoginGuard} from "./authorization/guards/no-login.guard";
+// import {LoginGuard} from "./authorization/guards/login.guard";
 import {RoleGuard} from "./authorization/guards/role.guard";
 
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import {MomentModule} from "angular2-moment";
 import {NgIdleKeepaliveModule} from "@ng-idle/keepalive";
-import {ContextModule} from "@bds/nt-context/context.module";
+import {ContextModule} from "@bds/nt-context";
 import {contextModuleConfig, loginModuleConfig} from "./config/module-configurations";
 import { StruttureTreeComponent } from "./reusable-component/strutture-tree/strutture-tree.component";
 import { ProcedimentiAttiviComponent } from "./procedimenti-attivi/procedimenti-attivi.component";
@@ -112,7 +112,7 @@ import {LoginModule} from "@bds/nt-login";
         CambioDiStatoBoxComponent,
         CambioDiStatoComponent,
         TipiProcedimentoAziendaliComponent,
-        DettaglioTipoProcedimentoComponent
+        DettaglioTipoProcedimentoComponent,
     ],
     imports: [
         BrowserModule,
@@ -148,7 +148,7 @@ import {LoginModule} from "@bds/nt-login";
         LoginModule.forRoot(loginModuleConfig),
         EntitiesModule.forRoot(null)
     ],
-    providers: [DefinizioneTipiProcedimentoService, LoginGuard, NoLoginGuard, RoleGuard,
+    providers: [DefinizioneTipiProcedimentoService, RoleGuard,
         // NavbarService
     ],
     bootstrap: [AppComponent],

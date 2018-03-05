@@ -7,8 +7,7 @@
       [dataSource]="dataSourceProcedimenti"
       columnResizingMode="nextColumn"
       hoverStateEnabled="checkBoxState"
-      noDataText="Non ci sono procedimenti attivi"
-      (onCellClick)="handleEvent($event)"    >
+      noDataText="Non ci sono procedimenti attivi">
   
       <dxo-paging [pageSize]="10"></dxo-paging>
       
@@ -20,20 +19,24 @@
       <dxi-column dataField="durataMassimaSospensione" caption="Durata massima della sospensione (gg)" alignment="center"></dxi-column>
       <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
       <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni" width="auto">
-          <dx-button text="" hint="Modifica dettagli tipo procedimento" icon='edit'></dx-button>
+          <dx-button id="modifica" text="" hint="Modifica dettagli tipo procedimento" icon='edit' (onClick)="modificaDettagli($event, d)"></dx-button>
+          <dx-button id="associa" text="" hint="Associa con Organigramma" icon='preferences' (onClick)="associaOrganigramma(d)"></dx-button>
       </div>
     </dx-data-grid>
   
 
-  <dx-popup id="popupDettaglioTipoProcedimento"
-    style="background-color: #f1f1f3;"
+  <dx-popup *ngIf="popupVisible"
+    id="popupDettaglioTipoProcedimento"
+    style="overflow: auto;"
     title="Dettaglio tipo procedimento"
     (onHiding) = "caricaDataSource()"
-    [maxWidth]="screenWidth*2/3"
+    [maxWidth]="getWidth()*2/3"
+    [maxWidth]="getHeight()*2/3"
+    [height]="'auto'"
     [showTitle]="true"
     [closeOnOutsideClick]="true"
     [(visible)]="popupVisible">
-    <div *dxTemplate="let data of 'content'" style="overflow-y: scroll; background-color: #f1f1f3;">
+    <div *dxTemplate="let data of 'content'">
       <dettaglio-tipo-procedimento [procedimento]="procedimentoDaPassare.id" (messageEvent)="receiveMessage($event)"></dettaglio-tipo-procedimento>
     </div>
  </dx-popup>

@@ -16,8 +16,15 @@
 }
 
 // questo è per il grigio del back-ground delle popup
-/deep/ .dx-popup-normal {
+/deep/ .dx-popup-normal, /deep/ .dx-popup-content {
   background-color: #f1f1f3 !important;
+}
+
+/deep/.dx-icon.dx-icon-close{
+  color: white !important;
+}
+/deep/.dx-icon.dx-icon-close:hover{
+  color:black !important;
 }
 
 
@@ -206,7 +213,7 @@
 
 .clFooter {
   //  display: table-footer-group
-    position: fixed;
+    position: auto;
     left: 0;
     bottom: 15px;
     width: 100%;
@@ -298,13 +305,13 @@
 //   border-radius: 2px;
 //   margin-bottom: 8px;
 // }
-/deep/ dx-form .dx-form-group{
-  box-shadow: 0 0 1px rgba(0,0,0,.15);
-  padding: 15px;
-  background-color: #fff;
-  border-radius: 2px;
-  margin-bottom: 8px;
-}
+// /deep/ dx-form .dx-form-group{
+//   box-shadow: 0 0 1px rgba(0,0,0,.15); 
+//   padding: 15px; 
+//   background-color: #fff; 
+//   border-radius: 2px;
+//   margin-bottom: 8px;
+// }
 /deep/ .whitePanel{
   box-shadow: 0 0 1px rgba(0,0,0,.15);
   padding: 15px;
