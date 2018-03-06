@@ -5,6 +5,7 @@ import {
 import {ModuleConfig, JwtInterceptor} from "@bds/nt-login";
 import {ContextModuleConfig} from "@bds/nt-context";
 import {getEntitiesConfiguration, getFunctionsImportConfiguration} from "./server-objects-configuration";
+import {odataStoreErrorHandler} from "../classi/error-handling/error-handlers";
 
 console.log("dentro module", ODATA_BASE_URL);
     export const contextModuleConfig: ContextModuleConfig =  {
@@ -14,7 +15,8 @@ console.log("dentro module", ODATA_BASE_URL);
         functionsImport: getFunctionsImportConfiguration,
         defaultTimeZoneOffset: DEFAULT_TIMEZONE_OFFSET,
         defaultCurrency: DEFAULT_CURRENCY,
-        tokenProvider: JwtInterceptor.getToken
+        tokenProvider: JwtInterceptor.getToken,
+        errorHandler: odataStoreErrorHandler
     };
 
     export const loginModuleConfig: ModuleConfig = {

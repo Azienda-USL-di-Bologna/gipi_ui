@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import {GetStruttureByTipoProcedimento, Struttura} from "@bds/nt-entities";
 import DataSource from "devextreme/data/data_source";
-import {OdataContextFactory} from "@bds/nt-context";
+import {OdataContextFactory, ResponseMessages, ErrorMessage} from "@bds/nt-context";
 import {HttpClient} from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { CUSTOM_RESOURCES_BASE_URL } from "../../../environments/app.constants";
@@ -18,6 +18,9 @@ export class StruttureTreeComponent implements OnInit {
   private _nodesToCheckSelectedStatus: Object = {};
   private _popupVisible: boolean ;
   private odataContextDefinition;
+
+  private NO_DELETE_ERROR_CODE: number = 1;
+
   public datasource: DataSource;
   public datasourceOriginal: DataSource;
   public strutture: Struttura = new Struttura();
@@ -159,7 +162,7 @@ export class StruttureTreeComponent implements OnInit {
   public sendDataConfirm() {
     if (Object.keys(this.nodeInvolved).length > 0) {
       // const req = this.http.post("http://localhost:10006/gipi/resources/custom/updateProcedimenti", {
-        const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "updateProcedimenti", {
+        const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "UpdateProcedimenti", {
         idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
         nodeInvolved: this.nodeInvolved
       })
@@ -170,7 +173,34 @@ export class StruttureTreeComponent implements OnInit {
           this.nodeInvolved = {};
         },
         err => {
-          this.showStatusOperation("Associazione non andata a buon fine", "error");
+            console.log("err: ", err);
+            // TODO by gdm
+            // TODO 1: rifattorizzare, il componente dovrebbe gestire solo l'albero delle struttre e non i procedimenti
+            // TODO 2: valutare se fare questa gesione dell'errore in una classe a parte, magari con un metodo specifico e poi richiamarla qui
+            // controllo se nell'errore è presente httpCode, se lo è vuol dire che l'errore è del tipo ResponseMessage
+            if (err.error && err.error.httpCode) {
+
+                // se l'errore è del tipo ResponseMessage, lo parso nell'oggetto corrispondente
+                const responseMessages: ResponseMessages = err.error;
+
+                // estraggo i messaggi di errore
+                const errorMessages: ErrorMessage[] = responseMessages.errorMessages;
+
+                // anche se è possibile passare più messaggi di errore, per scelta, in questo caso ce ne sarà solo 1
+                const errorCode = errorMessages[0].code;
+
+                // lo switch serve per mostrare i vari messaggi di errore in base al codice
+                switch (errorCode) {
+                    case this.NO_DELETE_ERROR_CODE:
+                        this.showStatusOperation("Impossible togliere l'associazione: ci sono degli iter collegati", "error");
+                        break;
+                    default: // caso generale
+                        this.showStatusOperation("Associazione non andata a buon fine", "error");
+                }
+            }
+            else { // se l'errore non è del tipo ResponseMessage, allora mostro un errore generico
+                this.showStatusOperation("Associazione non andata a buon fine", "error");
+            }
         }
         );
     } else {
