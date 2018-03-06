@@ -61,6 +61,7 @@ export class PassaggioDiFaseComponent implements OnInit {
       this.iterParams.numeroDocumento = queryParams["numero"];
       this.iterParams.annoDocumento = queryParams["anno"];
     });
+    
     this.passaggioFaseParams = {
       currentFaseName :"",
       nextFaseName : "",
