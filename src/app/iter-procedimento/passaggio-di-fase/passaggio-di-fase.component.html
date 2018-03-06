@@ -49,9 +49,9 @@
                         </dxi-validation-rule>
                     </dxi-item>
                     <dxi-item [colSpan]="12" dataField="notePassaggio" [label]="{text: 'Note Passaggio'}" [editorOptions]="{ height:70,disabled: false}"></dxi-item>
-                    <dxi-item [colSpan]="12" dataField="esito" [label]="{text: 'Esito'}" [editorOptions]="{ height:70,disabled: false }" [visible]="isNextFaseDiChiusura"></dxi-item>
+                    <dxi-item [colSpan]="12" dataField="esito" [label]="{text: 'Esito'}" [editorOptions]="{ height:70,disabled: false }" [visible]="passaggioFaseParams.isNextFaseDiChiusura"></dxi-item>
                     <dxi-item [colSpan]="12" dataField="motivazioneEsito" [label]="{text: 'Motivo Esito'}" [editorOptions]="{ height:70,disabled: false}"
-                        [visible]="isNextFaseDiChiusura"></dxi-item>
+                    [visible]="passaggioFaseParams.isNextFaseDiChiusura"></dxi-item>
                 </dx-form>
 
             </div>
