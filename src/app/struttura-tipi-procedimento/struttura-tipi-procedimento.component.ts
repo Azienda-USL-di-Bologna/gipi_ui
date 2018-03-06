@@ -183,6 +183,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       }
     });
   }
+
   setInitialValues() {
     this.initialProcedimento = Entity.cloneObject(this.procedimento);
 
@@ -192,11 +193,10 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public bottoneModificaProcedimento() {
     this.possoAgire = true;
-
   }
 
 
-  public bottoneSalvaProcedimento() {
+  public bottoneSalvaProcedimento(strutturaSelezionata: any) {
 
     let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
     let differenzeStr: string = "";
@@ -215,7 +215,9 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         if (!(this.procedimento.dataFine < this.procedimento.dataInizio) || this.procedimento.dataFine === null) {
           this.dataSourceProcedimento.store()
             .update(this.procedimento.id, this.procedimento)
-            .done(res => (this.caricaDettaglioProcedimento()));
+            .done(res => {
+                this.caricaDettaglioProcedimento();
+            } );
           notify({
             message: "Salvataggio effettuato con successo",
             type: "success",
@@ -234,7 +236,6 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   public bottoneAnnulla() {
-
     let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
     console.log("DIFFERENZE", differenze);
     // c'è qualche differenza, ricaricare i dati tramite chiamata http per tornare alla situazione di partenza
@@ -247,10 +248,28 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
 
 
+  setStruttura(struttura: any): void {
+      this.headerStruttura = struttura.nome;
+      this.strutturaSelezionata.id = struttura.id;
+      this.caricaDettaglioProcedimento();
+  }
+
   selezionaStruttura(obj) {
-    this.headerStruttura = obj.nome;
-    this.strutturaSelezionata.id = obj.id;
-    this.caricaDettaglioProcedimento();
+    console.log("click su struttura selezionata");
+
+    if (this.initialProcedimento && this.procedimento) {
+        let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
+        if (differenze.length !== 0) {
+            this.bottoneSalvaProcedimento(obj);
+        }
+        else {
+            this.possoAgire = false;
+        }
+    }
+
+     if (!this.possoAgire) {
+         this.setStruttura(obj);
+     }
   }
 
   /* Setto qui i dati che verranno passati al componente dell'albero e alla popup */
@@ -268,7 +287,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   // QUESTO EVENTO VIENE EMESSO DALLA POPUP E INDICA ALLA PAGINA SOTTOSTANTE CHE DEVE RICARICARE L'ALBERO PER FAR VEDERE LE MODIFICHE EFFETTUATE
-  // qui al posto di fare questa load, vado a ciclare sugli elementi dell'albero in modo da modificare il check direttamente 
+  // qui al posto di fare questa load, vado a ciclare sugli elementi dell'albero in modo da modificare il check direttamente
   // sui nodi dell'albero. Non posso fare il .load() sul datasource perchè poi ogni volta mi richiude l'albero
   //  console.log(this.treeView.datasource);
   refreshTreeView(nodesInvolved) {

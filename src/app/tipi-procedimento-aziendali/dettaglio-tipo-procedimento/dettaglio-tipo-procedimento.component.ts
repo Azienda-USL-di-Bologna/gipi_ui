@@ -13,13 +13,16 @@ import notify from "devextreme/ui/notify";
   styleUrls: ["./dettaglio-tipo-procedimento.component.scss"]
 })
 export class DettaglioTipoProcedimentoComponent implements OnInit {
+
+  private odataContextDefinition: OdataContextDefinition;
+  private loaded: boolean = false;
+
   public idProcedimentoInput: number;
   public proc: AziendaTipoProcedimento = new AziendaTipoProcedimento();
   public dataSourceTitoli: DataSource;
   public dataSourceAziendaTipoProcedimento: DataSource;
   public loggedUser: LoggedUser;
-  private odataContextDefinition: OdataContextDefinition;
-  private loaded: boolean = false;
+
 
   // tslint:disable-next-line:no-input-rename
   @Input()
@@ -50,8 +53,8 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
       }),
       filter: ["idAzienda", "=", this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id]],
       map: (item) => {
-        if(item){
-          item.titAndClass = '[' + item.classificazione + '] ' + item.nome;
+        if (item) {
+          item.titAndClass = "[" + item.classificazione + "] " + item.nome;
         }
         return item;
       }
@@ -61,7 +64,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
 
   ngOnInit() {
     console.log("dettaglio-tipo-procedimento ngOnInit");
-    if(!this.loaded){
+    if (!this.loaded) {
       console.log("dettaglio-tipo-procedimento ngOnInit --> !loaded...");
       this.caricaDataSource();
     }
@@ -77,14 +80,14 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
 
   ngOnClose() {
     console.log("dettaglio-tipo-procedimento ngOnClose");
-    //this.proc = new AziendaTipoProcedimento(); 
+    // this.proc = new AziendaTipoProcedimento();
     this.loaded = false;
     this.messageEvent.emit({visible: false, reloadPadre: false});
   }
 
   public close(toReloadPadre: boolean) {
     console.log("dettaglio-tipo-procedimento CLOSE");
-    //this.proc = new AziendaTipoProcedimento(); 
+    // this.proc = new AziendaTipoProcedimento();
     this.loaded = false;
     this.messageEvent.emit({visible: false, reloadPadre: (toReloadPadre ? true : false)});
   }
@@ -129,8 +132,8 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
       filter: ["id", "=", this.idProcedimentoInput],
       map: (item) => {
         console.log("MI MAPPO GLI ITEM");
-        if(item.idTitolo){
-          item.titAndClass = '[' + item.idTitolo.classificazione + '] ' +  item.idTitolo.nome;
+        if (item.idTitolo) {
+          item.titAndClass = "[" + item.idTitolo.classificazione + "] " +  item.idTitolo.nome;
           console.log(item.titAndClass);
         }
         return item;
