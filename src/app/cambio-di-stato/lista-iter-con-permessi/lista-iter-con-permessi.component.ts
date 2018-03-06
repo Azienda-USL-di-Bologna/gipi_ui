@@ -65,6 +65,21 @@ export class ListaIterConPermessiComponent implements OnInit {
     
   }
 
+  customizeColumns(columns: any) {
+    columns.forEach(column => {
+      const defaultCalculateFilterExpression = column.calculateFilterExpression;
+      column.calculateFilterExpression = function(value, selectedFilterOperation) {
+        if (this.dataType === "string" && !this.lookup && value) {
+          return ["tolower(" + this.dataField + ")",
+            selectedFilterOperation || "contains",
+            value.toLowerCase()];
+        } else {
+          return defaultCalculateFilterExpression.apply(this, arguments);
+        }
+      };
+    });
+  }
+
 }
 
 interface UserInfo{

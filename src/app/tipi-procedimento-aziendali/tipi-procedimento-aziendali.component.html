@@ -25,7 +25,8 @@
     </dx-data-grid>
   
 
-  <dx-popup id="popupDettaglioTipoProcedimento"
+  <dx-popup *ngIf="popupVisible"
+    id="popupDettaglioTipoProcedimento"
     style="overflow: auto;"
     title="Dettaglio tipo procedimento"
     (onHiding) = "caricaDataSource()"

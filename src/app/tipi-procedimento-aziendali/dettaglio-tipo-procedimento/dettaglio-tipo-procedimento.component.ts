@@ -34,7 +34,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
     /* if(!this.loaded){
       console.log("dettaglio-tipo-procedimento Input --> !loaded...");
     } */
-    this.caricaDataSource();
+    this.caricaDataSource(false);
   }
 
   @Output() messageEvent: EventEmitter<any>= new EventEmitter();
@@ -66,7 +66,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
     console.log("dettaglio-tipo-procedimento ngOnInit");
     if (!this.loaded) {
       console.log("dettaglio-tipo-procedimento ngOnInit --> !loaded...");
-      this.caricaDataSource();
+      this.caricaDataSource(false);
     }
   }
 
@@ -83,6 +83,11 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
     // this.proc = new AziendaTipoProcedimento();
     this.loaded = false;
     this.messageEvent.emit({visible: false, reloadPadre: false});
+    this.ngOnDestroy();
+  }
+
+  ngOnDestroy() {
+    console.log("NG-ON-DESTROY");
   }
 
   public close(toReloadPadre: boolean) {
@@ -90,6 +95,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
     // this.proc = new AziendaTipoProcedimento();
     this.loaded = false;
     this.messageEvent.emit({visible: false, reloadPadre: (toReloadPadre ? true : false)});
+    this.ngOnDestroy();
   }
 
   public save() {
@@ -105,12 +111,13 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
           },
           width: "max-content"
         });
-        this.close(true);
+        this.caricaDataSource(true);
+        
       },
       err => {
         console.log("--> ERR", err);
         notify({
-          message: "Problemi nel salvataggio del detteglio. Se il problema persiste contattare BabelCare",
+          message: "Problemi nel salvataggio del dettaglio. Se il problema persiste contattare BabelCare.",
           type: "error",
           displayTime: 2100,
           position: {
@@ -122,7 +129,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
     );
   }
 
-  public caricaDataSource() {
+  public caricaDataSource(chiudi: boolean) {
     this.loaded = true;
     console.log("dettaglio-tipo-procedimento CARICADATASOURCE");   
     // this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -140,9 +147,12 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
       }
 
     });
+    console.log("dettaglio-tipo-procedimento caricato il dataSource?");  
     this.dataSourceAziendaTipoProcedimento.load().then((res) => { 
       this.proc.build(res[0]); 
       console.log("QUESTO E' IL BUILD", this.proc);  
+      if(chiudi)
+        this.close(true);
     });
     console.log("Loggo se mi ha caricato", this.dataSourceAziendaTipoProcedimento);
   }

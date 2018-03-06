@@ -8,6 +8,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Subscription, Subscriber } from "rxjs";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
+import { ActivatedRoute, Params } from "@angular/router";
 
 @Component({
   selector: "app-passaggio-di-fase",
@@ -48,13 +49,25 @@ export class PassaggioDiFaseComponent implements OnInit {
   @Output() out = new EventEmitter<any>();
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private activatedRoute: ActivatedRoute) {}
 
   showStatusOperation(arg0: any, arg1: any): any {
     throw new Error("Method not implemented.");
   }
   
-  ngOnInit() { }
+  ngOnInit() {
+    this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
+      this.iterParams.codiceRegistroDocumento = queryParams["registro"];
+      this.iterParams.numeroDocumento = queryParams["numero"];
+      this.iterParams.annoDocumento = queryParams["anno"];
+    });
+    
+    this.passaggioFaseParams = {
+      currentFaseName :"",
+      nextFaseName : "",
+      isNextFaseDiChiusura : false
+    }
+  }
 
   procedi() {
     if(!this.isOpenedAsPopup){
@@ -75,11 +88,19 @@ export class PassaggioDiFaseComponent implements OnInit {
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/stepOn", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({},)
       .subscribe(
       res => {
-        this.out.emit({ visible: false, proceduto: true });
+        if(!this.isOpenedAsPopup){
+          notify("Proceduto con successo", "success", 1000);
+        }else{
+          this.out.emit({ visible: false, proceduto: true });
+        }
       },
       err => {
-        this.showStatusOperation("Boh, che sarà successo", "error");
-        this.out.emit({ visible: false, proceduto: false });
+        if(!this.isOpenedAsPopup){
+          notify("Si è verificato un errore durante il procedi", "error", 1000);
+          console.log("Errore:", err);
+        }else{
+          this.out.emit({ visible: false, proceduto: false });
+        }
       });
   }
 
@@ -112,6 +133,8 @@ export class PassaggioDiFaseComponent implements OnInit {
   }
 
   onFormSubmit(event: Event) {}
+
+
 
 }
 
