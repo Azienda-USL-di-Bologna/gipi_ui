@@ -172,7 +172,6 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
         break;
 
       case "rowValidating":
-        //debugger;
        // return false;
        break;
 
@@ -227,8 +226,6 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
   }
 
   public calcolaSeAttiva(row: any) {
-    // console.log(coso);
-    // debugger;
 
     // var utilityFunctions = new UtilityFunctions();
 
@@ -247,9 +244,6 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
       daAttivare = true;
     else
       daAttivare = false;
-
-    // debugger;
-
 
     /*    if(utilityFunctions.isDataBiggerOrEqual(new Date(),coso.dataInizioValidita) && coso.dataInizioValidita!= null)
           attivo = "Sì";
@@ -271,9 +265,8 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
     if (event.data["dataInizioValidita"] <= event.data["dataFineValidita"]) {
       return true;
     }
-    else{
+    else {
       return false;
     }
-    
   }
 }
