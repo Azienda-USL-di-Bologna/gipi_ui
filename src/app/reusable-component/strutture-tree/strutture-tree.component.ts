@@ -5,6 +5,7 @@ import {OdataContextFactory, ResponseMessages, ErrorMessage} from "@bds/nt-conte
 import {HttpClient} from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { CUSTOM_RESOURCES_BASE_URL } from "../../../environments/app.constants";
+import { debug } from "util";
 
 @Component({
   selector: "strutture-tree",
@@ -55,6 +56,33 @@ export class StruttureTreeComponent implements OnInit {
 
   get popupVisible(): boolean { return this._popupVisible; }
 
+
+  private setSelectedNodeRecursively(node: any, select: boolean): void {
+    // this.node.item
+    const res = this.getNestedChildren(this.datasource.items(), node.id, select);
+
+    res.forEach(function (element) {
+      element.selected = select;
+    });
+  }
+
+  private getNestedChildren(inputArray, selectedNode, select: boolean) {
+    const result = [];
+
+    for (const i in inputArray) {
+      if (inputArray[i].idStrutturaPadre === selectedNode) {
+        this.getNestedChildren(inputArray, inputArray[i].id, select);
+
+        if (select)
+          this.treeViewChild.instance.selectItem(inputArray[i].id);
+        else
+          this.treeViewChild.instance.unselectItem(inputArray[i].id);
+        result.push(inputArray[i]);
+      }
+    }
+    return result;
+  }
+
   selectionChanged(e) {
     // Devo controllare se la popup è visibile perchè, se lo è devo disabilitare momentaneamente questa parte di codice
     // che non permette di cambiare lo stato del selected in quanto lo rimette come era prima. Questo perchè voglio
@@ -86,6 +114,10 @@ export class StruttureTreeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.caricaDati();
+  }
+
+  caricaDati() {
     this.datasource = new DataSource({
       store: this.odataContextDefinition.getContext()[new GetStruttureByTipoProcedimento().getName()],
       customQueryParams: {
@@ -133,31 +165,7 @@ export class StruttureTreeComponent implements OnInit {
     // console.log('VAL: ' + this.nodeSelectedFromContextMenu.id);
   }
 
-  private setSelectedNodeRecursively(node: any, select: boolean): void {
-    // this.node.item
-    const res = this.getNestedChildren(this.datasource.items(), node.id, select);
 
-    res.forEach(function (element) {
-      element.selected = select;
-    });
-  }
-
-  private getNestedChildren(inputArray, selectedNode, select: boolean) {
-    const result = [];
-
-    for (const i in inputArray) {
-      if (inputArray[i].idStrutturaPadre === selectedNode) {
-        this.getNestedChildren(inputArray, inputArray[i].id, select);
-
-        if (select)
-          this.treeViewChild.instance.selectItem(inputArray[i].id);
-        else
-          this.treeViewChild.instance.unselectItem(inputArray[i].id);
-        result.push(inputArray[i]);
-      }
-    }
-    return result;
-  }
 
   public sendDataConfirm() {
     if (Object.keys(this.nodeInvolved).length > 0) {
@@ -223,15 +231,16 @@ public getClass() {
   }
 
 public  selezionaStruttura(e) {
+  let hasChildren: boolean = e.node.children.length > 0;
     const obj = {
       id: e.itemData.id,
-      nome: e.itemData.nome
+      nome: e.itemData.nome,
+      hasChildren: hasChildren
     };
     this.strutturaSelezionata.emit(obj);
   }
 
 public showStatusOperation(message: string, type: string) {
-
     notify( {
       message: message,
       type: type,
