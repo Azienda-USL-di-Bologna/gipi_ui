@@ -56,7 +56,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams.oggettoIter = doc.oggetto;
     this.iterParams.dataAvvioIter = new Date(doc.dataRegistrazione);
     this.iterParams.dataCreazioneIter = new Date();
-    this.iterParams.promotoreIter = doc.promotore;
+    this.iterParams.promotore = doc.promotore;
   }
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
@@ -212,7 +212,7 @@ export class AvviaNuovoIterComponent implements OnInit {
       + "<br><b>Responsabilie procedimento amministrativo:</b> " + this.descrizioneUtenteResponsabile
       + "<br><b>Data avvio iter:</b> " + this.formatDateToString(this.iterParams.dataAvvioIter)
       + "<br><b>Data massima conclusione:</b> " + this.formatDateToString(this.dataMassimaConclusione)
-      + "<br><b>Promotore:</b> " + this.iterParams.promotoreIter
+      + "<br><b>Promotore:</b> " + this.iterParams.promotore
       + "<br><b>Oggetto:</b> " + this.iterParams.oggettoIter;
   }
 
@@ -287,6 +287,6 @@ class IterParams {
   public codiceRegistroDocumento: string;
   public numeroDocumento: string;
   public annoDocumento: number;
-  public promotoreIter: string;
+  public promotore: string;
   public procedimento: Procedimento;
 }
