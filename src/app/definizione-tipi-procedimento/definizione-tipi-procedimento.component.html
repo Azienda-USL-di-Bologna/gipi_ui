@@ -19,9 +19,9 @@
         [allowFiltering]="true"></dxi-column>
     <dxi-column dataField="dataFineValidita" caption="Data Fine Validità" caption="Data Fine Validità" [dataType]="'date'" [format]="'dd/MM/yyyy'"
         alignment="center" [allowFiltering]="true">
-        <dxi-validation-rule 
-        type="custom" [validationCallback] = "validazione">
-    </dxi-validation-rule>
+        <dxi-validation-rule
+                type="custom" [validationCallback] = "validazione" message="La data di fine validità deve essere successiva a quella di inzio">
+        </dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
     <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
