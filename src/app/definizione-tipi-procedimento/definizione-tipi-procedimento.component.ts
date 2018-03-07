@@ -1,10 +1,10 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { DxDataGridComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from "./definizione-tipi-procedimento.service";
-import {TipoProcedimento} from "@bds/nt-entities";
-import {OdataContextDefinition, GlobalContextService, OdataContextFactory} from "@bds/nt-context";
-import {ActivatedRoute, Router} from "@angular/router";
+import { TipoProcedimento } from "@bds/nt-entities";
+import { OdataContextDefinition, GlobalContextService, OdataContextFactory } from "@bds/nt-context";
+import { ActivatedRoute, Router } from "@angular/router";
 
 
 @Component({
@@ -12,19 +12,20 @@ import {ActivatedRoute, Router} from "@angular/router";
   templateUrl: "./definizione-tipi-procedimento.component.html",
   styleUrls: ["./definizione-tipi-procedimento.component.scss"]
 })
-export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
+export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
   private odataContextDefinition: OdataContextDefinition;
 
   // questa proprietà serve per capire che pulsante è stato cliccato
   private comando: any;
+  private selectedRow: any;
 
   @ViewChild("definizione_tipi_procedimento") public grid: DxDataGridComponent;
-  @Input ("refreshButton") public refreshButton;
+  @Input("refreshButton") public refreshButton;
 
   public dataSource: DataSource;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
-  public texts: Object= {
+  public texts: Object = {
     editRow: "Modifica",
     deleteRow: "Elimina",
     saveRowChanges: "Salva",
@@ -34,24 +35,24 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
   public popupButtons: any[];
 
   constructor(private odataContexFactory: OdataContextFactory,
-              private service: DefinizioneTipiProcedimentoService,
-              private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private globalContextService: GlobalContextService) {
+    private service: DefinizioneTipiProcedimentoService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private globalContextService: GlobalContextService) {
 
     // this.sharedData.setSharedObject({route: "definizione-tipi-procedimento"});
 
     this.odataContextDefinition = odataContexFactory.buildOdataContextEntitiesDefinition();
     this.dataSource = new DataSource({
       store: this.odataContextDefinition.getContext()[new TipoProcedimento().getName()],
-/*       map: function (item) {
-       if (item.dataInizioValidita != null)
-          item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
-        if (item.dataFineValidita != null)
-          item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);
-
-        return item;
-      } */
+      /*       map: function (item) {
+             if (item.dataInizioValidita != null)
+                item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
+              if (item.dataFineValidita != null)
+                item.dataFineValidita = new Date(item.dataFineValidita.getTime() - new Date().getTimezoneOffset() * 60000);
+      
+              return item;
+            } */
     });
 
     this.dataSource.load().then(res => this.buildTipiProcedimento(res));
@@ -64,11 +65,11 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
       location: "center",
       widget: "dxButton",
       options: {
-          type: "normal",
-          text: "Chiudi",
-          onClick: () => {
-              this.grid.instance.cancelEditData();
-          }
+        type: "normal",
+        text: "Chiudi",
+        onClick: () => {
+          this.grid.instance.cancelEditData();
+        }
       }
     },
     {
@@ -76,11 +77,11 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
       location: "center",
       widget: "dxButton",
       options: {
-          type: "normal",
-          text: "Salva",
-          onClick: () => {
-              this.grid.instance.saveEditData();
-          }
+        type: "normal",
+        text: "Salva",
+        onClick: () => {
+          this.grid.instance.saveEditData();
+        }
       }
     }];
   }
@@ -106,10 +107,13 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
   public handleEvent(name: String, event: any) {
     // console.log("EVENTO "+name, event);
-    switch (name){
+    switch (name) {
       // Questo evento scatta al cliccare di qualsiasi cella: se però siamo sulla 5 colonna e si è cliccato un pulsante viene gestito
       case "CellClick":
+        this.selectedRow = event.row;
+
         this.cellClick(event);
+
         // console.log("CellClick --> COMANDO = ", this.comando);
 
         if (event.columnIndex === 5 && this.comando != null)  // se ho cliccato sulla colonna Azioni potrei modificare o cancellare la riga
@@ -117,7 +121,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
 
           // console.log(event.columnIndex);
 
-          switch (this.comando){
+          switch (this.comando) {
             case "edita":
               this.modificaRiga(event.row);
               break;
@@ -167,9 +171,15 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
         }
         break;
 
+      case "rowValidating":
+        //debugger;
+       // return false;
+       break;
+
       case "RowUpdating":
         event.cancel = true;
         return;
+
 
       default:
         break;
@@ -193,8 +203,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     let toolbarItems = e.toolbarOptions.items;
 
     toolbarItems.forEach(element => {
-      if (element.name === "addRowButton")
-      {
+      if (element.name === "addRowButton") {
         element.options.hint = "Aggiungi";
         element.options.text = "Aggiungi";
         element.options.showText = "always";
@@ -205,16 +214,16 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
   public onCellPrepared(e: any) {
 
     if (e.rowType === "data" && e.column.command === "edit") {
-        let isEditing = e.row.isEditing,
-            $links = e.cellElement.find(".dx-link");
-        $links.text("");
-        $links.filter(".dx-link-edit").addClass("dx-icon-edit");
-        $links.filter(".dx-link-delete").addClass("dx-icon-trash");
+      let isEditing = e.row.isEditing,
+        $links = e.cellElement.find(".dx-link");
+      $links.text("");
+      $links.filter(".dx-link-edit").addClass("dx-icon-edit");
+      $links.filter(".dx-link-delete").addClass("dx-icon-trash");
     }
   }
 
   public calculateDecimal(e: any) {
-    console.log(e); 
+    console.log(e);
   }
 
   public calcolaSeAttiva(row: any) {
@@ -256,5 +265,15 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
     attivo = daAttivare ? "Sì" : "No";
 
     return attivo;
+  }
+
+  validazione(event: any): boolean {
+    if (event.data["dataInizioValidita"] <= event.data["dataFineValidita"]) {
+      return true;
+    }
+    else{
+      return false;
+    }
+    
   }
 }

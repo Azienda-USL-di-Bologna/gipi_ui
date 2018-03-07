@@ -1,39 +1,33 @@
 <h3 class="intestazione" style="text-align: center">Tipi di procedimento</h3>
 
-<dx-data-grid #definizione_tipi_procedimento
-    id="gridContainer"
-    [dataSource]="dataSource"
-    [allowColumnReordering]="true"
-    [columnAutoWidth]="true"
-    [paging]="false"
-    (onEditingStart)="handleEvent('EditingStart',$event)"
-    (onInitNewRow)="handleEvent('InitNewRow',$event)"
-    (onRowInserting)="handleEvent('RowInserting',$event)"
-    (onRowInserted)="handleEvent('RowInserted',$event)"
-    (onRowUpdating)="handleEvent('RowUpdating',$event)"
-    (onRowUpdated)="handleEvent('RowUpdated',$event)"
-    (onRowRemoving)="handleEvent('RowRemoving',$event)"
-    (onRowRemoved)="handleEvent('RowRemoved',$event)"
-    (onRowClick)="handleEvent('RowClick',$event)"
-    (onSelectionChanged)="handleEvent('SelectionChanged',$event)"
-    (onCellClick)="handleEvent('CellClick',$event)"
-    (onToolbarPreparing)="onToolbarPreparing($event)"
-    (onCellPrepared)="onCellPrepared($event)"
-    (onButtonClick)="handleEvent('ButtonClick',$event)"
-    (onEditorPreparing)="handleEvent('onEditorPreparing',$event)">
+<dx-data-grid #definizione_tipi_procedimento id="gridContainer" [dataSource]="dataSource" [allowColumnReordering]="true"
+    [columnAutoWidth]="true" [paging]="false" (onEditingStart)="handleEvent('EditingStart',$event)" (onInitNewRow)="handleEvent('InitNewRow',$event)"
+    (onRowInserting)="handleEvent('RowInserting',$event)" (onRowInserted)="handleEvent('RowInserted',$event)" (onRowUpdating)="handleEvent('RowUpdating',$event)"
+    (onRowUpdated)="handleEvent('RowUpdated',$event)" (onRowRemoving)="handleEvent('RowRemoving',$event)" (onRowRemoved)="handleEvent('RowRemoved',$event)"
+    (onRowClick)="handleEvent('RowClick',$event)" (onSelectionChanged)="handleEvent('SelectionChanged',$event)" (onCellClick)="handleEvent('CellClick',$event)"
+    (onToolbarPreparing)="onToolbarPreparing($event)" (onCellPrepared)="onCellPrepared($event)" (onButtonClick)="handleEvent('ButtonClick',$event)"
+    (onEditorPreparing)="handleEvent('onEditorPreparing',$event)"
+    (onRowValidating)= "handleEvent('rowValidating',$event)">
 
-    <dxo-filter-row [visible]="true" ></dxo-filter-row>
-    
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+
     <dxi-column dataField="codice" caption="Codice" alignment="center" sortOrder="asc" width="auto"></dxi-column>
     <dxi-column dataField="nome"></dxi-column>
-    <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva" [allowSorting]="true" alignment="center" [allowFiltering]="true" width="auto"></dxi-column>
-    <dxi-column dataField="dataInizioValidita" caption="Data Inizio Validità" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true"></dxi-column>
-    <dxi-column dataField="dataFineValidita" caption="Data Fine Validità" caption="Data Fine Validità" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true"></dxi-column>
+    <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva" [allowSorting]="true" alignment="center" [allowFiltering]="true"
+        width="auto"></dxi-column>
+    <dxi-column dataField="dataInizioValidita" caption="Data Inizio Validità" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center"
+        [allowFiltering]="true"></dxi-column>
+    <dxi-column dataField="dataFineValidita" caption="Data Fine Validità" caption="Data Fine Validità" [dataType]="'date'" [format]="'dd/MM/yyyy'"
+        alignment="center" [allowFiltering]="true">
+        <dxi-validation-rule 
+        type="custom" [validationCallback] = "validazione">
+    </dxi-validation-rule>
+    </dxi-column>
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
     <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
     <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni">
 
-        <dx-button text="" hint="Associazione alle Aziende" icon='preferences' (onClick)="handleEvent('associaClicked', $event)" ></dx-button>
+        <dx-button text="" hint="Associazione alle Aziende" icon='preferences' (onClick)="handleEvent('associaClicked', $event)"></dx-button>
         <dx-button text="" hint="Modifica dettagli tipo procedimento" icon='edit' (onClick)="handleEvent('editClicked', $event)"></dx-button>
     </div>
     <dxi-column dataField="descrizioneDefault" [visible]="false"></dxi-column>
@@ -43,31 +37,20 @@
     <dxi-column dataField="pubblicazioneRegistroAccessi" [visible]="false"></dxi-column>
     <dxi-column dataField="durataMassimaIter" [visible]="false"></dxi-column>
 
-    <dxo-editing 
-        mode="popup"
-        cellTemplate="Modifica"
-        title="Modifica"
-        style="align-content: center; justify-content: center"
-        [allowUpdating]="false"
-        [allowDeleting]="false"
-        [allowAdding]="true"
-        [texts]="texts">
-        <dxo-popup
-            [maxWidth]="800"
-            [minWidth]="500"
-            [maxHeight]="600"
-            title="Modifica Tipo Procedimento"
-            [showTitle]="true"
-            [toolbarItems]="popupButtons">
+    <dxo-editing mode="popup" cellTemplate="Modifica" title="Modifica" style="align-content: center; justify-content: center"
+        [allowUpdating]="false" [allowDeleting]="false" [allowAdding]="true" [texts]="texts">
+        <dxo-popup [maxWidth]="800" [minWidth]="500" [maxHeight]="600" title="Modifica Tipo Procedimento" [showTitle]="true" [toolbarItems]="popupButtons">
         </dxo-popup>
         <dxo-form colCount="2">
-            <dxi-item dataField="codice"  [editorOptions]="{ format: '#####' }" [colSpan]="2"></dxi-item>
+            <dxi-item dataField="codice" [editorOptions]="{ format: '#####' }" [colSpan]="2"></dxi-item>
             <dxi-item dataField="nome" [colSpan]="2"></dxi-item>
-            <dxi-item dataField="descrizioneDefault" [colSpan]="2"></dxi-item>
+            <dxi-item dataField="descrizioneDefault" [colSpan]="2" >
+
+            </dxi-item>
             <dxi-item dataField="modoApertura" [colSpan]="2"></dxi-item>
             <dxi-item dataField="normaRiferimento" [colSpan]="2"></dxi-item>
             <dxi-item dataField="dataInizioValidita" [colSpan]="1"></dxi-item>
-            <dxi-item dataField="dataFineValidita"  [colSpan]="1"></dxi-item>
+            <dxi-item dataField="dataFineValidita" [colSpan]="1"></dxi-item>
             <dxi-item dataField="durataMassimaIter" [editorOptions]="{ format: '#####' }" [colSpan]="1"></dxi-item>
             <dxi-item dataField="durataMassimaSospensione" [editorOptions]="{ format: '#####' }" [colSpan]="1"></dxi-item>
             <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="1"></dxi-item>
@@ -75,10 +58,3 @@
         </dxo-form>
     </dxo-editing>
 </dx-data-grid>
-
-
-
-
-
-
-
