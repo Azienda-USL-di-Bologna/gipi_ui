@@ -167,6 +167,10 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy{
         }
         break;
 
+      case "RowUpdating":
+        event.cancel = true;
+        return;
+
       default:
         break;
     }

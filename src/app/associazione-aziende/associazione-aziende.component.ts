@@ -8,8 +8,8 @@ import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition } from "@bds/nt-context";
 import { OdataContextFactory } from "@bds/nt-context";
 import { GlobalContextService } from "@bds/nt-context";
-import { CustomReuseStrategy } from "@bds/nt-context/routes/custom-reuse-strategy";
-import { ButtonAppearance } from "@bds/nt-context/templates/buttons-bar/buttons-bar.component";
+import { CustomReuseStrategy } from "@bds/nt-context";
+import { ButtonAppearance } from "@bds/nt-context";
 import { LoggedUser } from "@bds/nt-login";
 
 @Component({

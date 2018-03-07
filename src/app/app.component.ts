@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, HostListener, Input } from "@angular/core";
 import { Location } from "@angular/common";
-import { CustomReuseStrategy } from "@bds/nt-context/routes/custom-reuse-strategy";
+import { CustomReuseStrategy } from "@bds/nt-context";
 import {NavigationEnd, NavigationStart, Router} from "@angular/router";
 import { Observable } from "rxjs/Observable";
 import {GlobalContextService, OdataContextFactory, OdataForeignKey} from "@bds/nt-context";
