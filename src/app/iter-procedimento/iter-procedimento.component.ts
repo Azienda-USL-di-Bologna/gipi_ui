@@ -6,7 +6,7 @@ import { Iter, Utente, Fase, FaseIter, ProcedimentoCache, bUtente, bAzienda } fr
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
-import { ActivatedRoute, Params } from "@angular/router";
+import { ActivatedRoute, Params, Resolve } from "@angular/router";
 import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
 import * as moment from "moment";
 import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stato-box.component";
@@ -67,7 +67,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   private subscriptions: Subscription[] = [];
   public userInfo: UserInfo;
   public iodaPermission: boolean;
-  public hasPermissionOnFascicolo: boolean = true;
+  public hasPermissionOnFascicolo: boolean = false;
 
   constructor(
     private odataContextFactory: OdataContextFactory, 
@@ -146,13 +146,14 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   isSospeso() {
-    if (this.iter.stato === "sospeso")
+    if (this.iter.stato === "sospeso" || this.iter.stato === "apertura_sospensione") // apertura_sospensione va cambiato, va tolto, va eliminato ovunque, ma senza questo OR non funziona!
       return true;
     else
       return false;
   }
 
   setNomeBottoneSospensione() {
+    console.log("ENTRATO IN SETNOMEBOTTONESOSPENSIONE");
     this.sospendiButton.label = this.getNomeBottoneSospensione();
   }
 
@@ -163,31 +164,42 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       return "Sospendi";
   }
 
+  disableProcedi(){
+    console.log("*****disableProcedi??????*****")
+    console.log("this.hasPermissionOnFascicolo", this.hasPermissionOnFascicolo);
+    console.log("this.hasPermissionOnFascicolo === true-->",this.hasPermissionOnFascicolo === true);
+    console.log("this.isSospeso()-->", this.isSospeso());
+    console.log("this.iter.idFaseCorrente.faseDiChiusura-->", this.iter.idFaseCorrente.faseDiChiusura);
+    return this.hasPermissionOnFascicolo!==true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura;
+  }
 
-  hoPermessi() {
-    this.calculateIodaPermission();
-
-    console.log("Ma allora questi permessi ce li ho???? --> ", this.hasPermissionOnFascicolo);
-    return this.hasPermissionOnFascicolo;
-    }
+  disableSospendi(){
+    console.log("*****disableSospendi??????*****")
+    console.log("this.hasPermissionOnFascicolo", this.hasPermissionOnFascicolo);
+    console.log("this.hasPermissionOnFascicolo === true-->",this.hasPermissionOnFascicolo===true);
+    console.log("this.iter.idFaseCorrente.faseDiChiusura-->", this.iter.idFaseCorrente.faseDiChiusura);
+    return this.hasPermissionOnFascicolo!==true || this.iter.idFaseCorrente.faseDiChiusura;
+  }
 
   generateCustomButtons() {
+    console.log("ENTRATO IN GENERATEcUSTOMbUTTONS()");
+    // this.calculateIodaPermission();
     this.genericButtons = new Array<ButtonAppearance>();
-
-    let disabilita: boolean = !this.hoPermessi();
-
-    this.procediButton = new ButtonAppearance("Procedi", "", false, ((this.isSospeso() || disabilita ) || this.iter.idFaseCorrente.faseDiChiusura));
-    this.sospendiButton = new ButtonAppearance("Sospendi", "", false, (this.iter.idFaseCorrente.faseDiChiusura || disabilita) );
-    this.genericButtons.push(this.procediButton, this.sospendiButton);
+    this.procediButton = new ButtonAppearance("Procedi", "", false, this.disableProcedi());
+    this.sospendiButton = new ButtonAppearance("Sospendi", "", false, this.disableSospendi());
     this.setNomeBottoneSospensione();
-    
+    console.log("Aggiungo i pulsanti al genericButton")
+    this.genericButtons.push(this.procediButton, this.sospendiButton);
   }
 
   buildIter() {
+    console.log("entrato in buildIter()");
     this.dataSourceIter.load().then(res => {
       // this.iter.build(res[0], Iter);
       this.iter.build(res[0]);
+      console.log(this.iter);
       this.generateCustomButtons();
+      this.calculateIodaPermissionAndSetButton();
       this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
       this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + this.iter.procedimentoCache.durataMassimaProcedimento);
       this.buildTitoloDatiGenerali();
@@ -358,9 +370,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     return b;
   }
 
-  public calculateIodaPermission() {
+  public calculateIodaPermissionAndSetButton() {
+    let x;
+    console.log("ENTRATO IN calculateIodaPermissionAndSetButton");
     if(this.iter.idFascicolo){
-      console.log("CALCULATEIODAPERMISSION")
       console.log("PATH --> ", CUSTOM_RESOURCES_BASE_URL + "iter/hasPermissionOnFascicolo");
       let data = new Map<String, Object>();
       console.log("LOG DATA", data)
@@ -369,18 +382,20 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       .subscribe(
         res => {
           console.log("RES!!! -> ", res);
-          this.hasPermissionOnFascicolo = res["hasPermission"];
+          console.log(" res['hasPermission'] -> ",  res["hasPermission"]);
+          console.log(" res['hasPermission'] === 'true'", res["hasPermission"] === "true");
+          this.hasPermissionOnFascicolo = res["hasPermission"] === "true";
           console.log("hasPerm -> ", this.hasPermissionOnFascicolo);
-          return this.hasPermissionOnFascicolo;
+          this.generateCustomButtons(); // ora che ho i permessi mi posso creare i bottoni
         },
         err => {
           console.log("AHI, erroraccio! -> ", err);
           // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+          this.generateCustomButtons();
         }
       );
     }
   }
-
 }
 
 interface UserInfo{

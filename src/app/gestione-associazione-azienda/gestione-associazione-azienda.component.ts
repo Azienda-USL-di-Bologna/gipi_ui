@@ -3,14 +3,9 @@ import DataSource from "devextreme/data/data_source";
 import { Router } from "@angular/router";
 import {AziendaTipoProcedimento, TipoProcedimento, Azienda, Titolo} from "@bds/nt-entities";
 import {DxFormComponent} from "devextreme-angular";
-import {OdataContextDefinition} from "@bds/nt-context";
+import {GlobalContextService, OdataContextFactory, OdataContextDefinition, OdataCustomStore, Entity, CustomLoadingFilterParams, ButtonAppearance} from "@bds/nt-context";
 import notify from "devextreme/ui/notify";
-import {Entity} from "@bds/nt-context";
 import {custom} from "devextreme/ui/dialog";
-import {OdataContextFactory} from "@bds/nt-context";
-import { CustomLoadingFilterParams } from "@bds/nt-context";
-import {GlobalContextService} from "@bds/nt-context";
-import {ButtonAppearance} from "@bds/nt-context/templates/buttons-bar/buttons-bar.component";
 
 
 @Component({
@@ -236,6 +231,8 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
         else {
             this.statusPage = "modify-status";
             // this.datasource.store().update(this.aziendaTipoProcedimento.id, this.aziendaTipoProcedimento).done(res => (this.setFields(this.dataFromDettaglioProcedimentoComponent["tipoProcedimento"])));
+            // const odataCustomStore: OdataCustomStore = new OdataCustomStore(this.datasource.store(), this.odataContextEntitiesAziendaTipoProcedimento);
+            // odataCustomStore.update(this.aziendaTipoProcedimento.id, this.aziendaTipoProcedimento);
             this.datasource.store().update(this.aziendaTipoProcedimento.id, this.aziendaTipoProcedimento).done(res => (this.buildAziendaTipoProcedimento(true)));
         }
         notify( {

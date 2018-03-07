@@ -7,12 +7,14 @@ import {
   Entity, CustomLoadingFilterParams, GlobalContextService, ServerObject
 } from "@bds/nt-context";
 import {
-  Struttura, AziendaTipoProcedimento, Procedimento, Utente,
-  GetStruttureByTipoProcedimento, UtenteStruttura
+  Struttura, Procedimento, Utente,
+  GetStruttureByTipoProcedimento, UtenteStruttura, AziendaTipoProcedimento
 } from "@bds/nt-entities";
 import notify from "devextreme/ui/notify";
 import { NodeOperations } from "../reusable-component/strutture-tree/strutture-tree.component";
 import { confirm } from "devextreme/ui/dialog";
+import { HttpClient } from "@angular/common/http";
+import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 
 @Component({
   selector: "app-struttura-tipi-procedimento",
@@ -25,10 +27,13 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   private nodeSelectedFromContextMenu: any;
   private initialState: any;
   private dataSourceProcedimento: DataSource;
-  private datasourceAziendaTipiProcedimento: DataSource;
+  //private datasourceAziendaTipiProcedimento: DataSource;
   private strutturaSelezionata: Struttura;
   private odataContextDefinitionTitolare;
   private odataContextDefinitionResponsabile;
+  private odataContextDefinitionProcedimento;
+
+  private aziendaTipoProcedimento: AziendaTipoProcedimento;
 
   @ViewChild("treeView") treeView: any;
 
@@ -56,7 +61,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   /* Variabili passate all'albero */
   public idAziendaFront: number;
   public idAziendaTipoProcedimentoFront: number;
-  public aziendaTipiProcedimentoData: any;
+  public aziendaTipiProcedimentoData: any;  // vedi dove serve
 
   public defaultResponsabile: UtenteStruttura;
   public defaultTitolare: UtenteStruttura;
@@ -70,7 +75,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public descrizioneDataFields: any =
     {
-      "idResponsabileAdozioneAttoFinale": "Responsabile dell\'adozione dell\'atto finale", 
+      "idResponsabileAdozioneAttoFinale": "Responsabile dell\'adozione dell\'atto finale",
       "idTitolarePotereSostitutivo": "Titolare potere sostitutivo",
       "ufficio": "Ufficio",
       "strumenti": "Strumenti di tutela amministrativa e giurisdizionale riconosciuti dalla Legge",
@@ -82,12 +87,13 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public testoTooltipResponsabile: String;
   public testoTooltipTitolare: String;
-  public dataFromAziendaTipiProcedimentoComponent: AziendaTipoProcedimento = new AziendaTipoProcedimento();
+  //public dataFromAziendaTipiProcedimentoComponent: AziendaTipoProcedimento = new AziendaTipoProcedimento();
 
   constructor(private odataContextFactory: OdataContextFactory,
     private globalContextService: GlobalContextService,
     private router: Router, private activatedRoute: ActivatedRoute,
-    private _location: Location) {
+    private _location: Location,
+    private http: HttpClient) {
 
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
       this.idAziendaFront = +queryParams["azienda"];
@@ -102,6 +108,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
     this.odataContextDefinitionTitolare = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.odataContextDefinitionResponsabile = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    this.odataContextDefinitionProcedimento = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    
 
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("descrizione");
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
@@ -110,24 +118,58 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
 
   private caricaDettaglioProcedimento() {
-    const odataContextDefinitionProcedimento: OdataContextEntitiesDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
-    const aziendaTipoProcedimento: AziendaTipoProcedimento = this.dataFromAziendaTipiProcedimentoComponent["aziendaTipoProcedimento"];
+
+    // ricarico l'aziendaTipoProcedimento "padre"
+    if (!this.aziendaTipoProcedimento) {
+      this.aziendaTipoProcedimento = new AziendaTipoProcedimento();
+      let dataSourceAziendaTipoProcedimento: DataSource;  
+      const odataContextDefinitionAziendaTipoProcedimento: OdataContextEntitiesDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+      dataSourceAziendaTipoProcedimento = new DataSource({
+        store: odataContextDefinitionAziendaTipoProcedimento.getContext()[new AziendaTipoProcedimento().getName()],
+        expand: ["idTitolo"],
+        filter: ["id", "=", this.idAziendaTipoProcedimentoFront]
+      });
+
+
+      dataSourceAziendaTipoProcedimento.load().then(res => {
+        this.aziendaTipoProcedimento.build(res[0]);
+      });
+    }
+
+    // devo gestire l'expand. Se metto anche "idAziendaTipoProcedimento.idTitolo" l'aziendaProcedimento padre non ha il titolo si rompe tutto e non si visualizzano i dati
+    // l'aziendaProcedimento padre dovrebbe sempre avere il titolo, ma siccome questo non è gestito devo fare qui la gestione
+    let expandArrayProcedimento: string[] =  ["idAziendaTipoProcedimento", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento",
+     "idStrutturaTitolarePotereSostitutivo", "idStrutturaResponsabileAdozioneAttoFinale", "idResponsabileAdozioneAttoFinale"];
+
+     if (this.aziendaTipoProcedimento.idTitolo) {
+      expandArrayProcedimento.push("idAziendaTipoProcedimento.idTitolo");
+     }
+
+
+    console.log("aziendaTipoProcedimentoOOOOOOOOOOOOOOOOOOOOOOOOOOO", this.aziendaTipoProcedimento);
+
+
+
+    //const aziendaTipoProcedimento: AziendaTipoProcedimento = this.dataFromAziendaTipiProcedimentoComponent["aziendaTipoProcedimento"];
 
     this.defaultResponsabile = new UtenteStruttura();
     this.defaultTitolare = new UtenteStruttura();
 
-/*     this.defaultResponsabile = undefined;
-    this.defaultTitolare = undefined; */
+
+
+    /*     this.defaultResponsabile = undefined;
+        this.defaultTitolare = undefined; */
     if (!this.dataSourceProcedimento) {
       this.dataSourceProcedimento = new DataSource({
-        store: odataContextDefinitionProcedimento.getContext()[new Procedimento().getName()],
+        store: this.odataContextDefinitionProcedimento.getContext()[new Procedimento().getName()],
         requireTotalCount: true,
-        expand: ["idAziendaTipoProcedimento", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento", "idAziendaTipoProcedimento.idTitolo",
-          "idStrutturaTitolarePotereSostitutivo", "idStrutturaResponsabileAdozioneAttoFinale", "idResponsabileAdozioneAttoFinale"],
+        expand: expandArrayProcedimento,
         filter: [["idAziendaTipoProcedimento.id", "=", this.idAziendaTipoProcedimentoFront], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]],
         map: (item) => {
-          item.idAziendaTipoProcedimento.idTitolo.nome = "[" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + item.idAziendaTipoProcedimento.idTitolo.nome;
-          return item;
+          if (item.idAziendaTipoProcedimento.idTitolo) {
+            item.idAziendaTipoProcedimento.idTitolo.nome = "[" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + item.idAziendaTipoProcedimento.idTitolo.nome;
+            return item;
+          }
         }
       });
     } else {
@@ -138,7 +180,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       this.procedimento.build(res[0]);
       this.setInitialValues();
 
-      
+
 
       let idUtente = res[0].idResponsabileAdozioneAttoFinale ? res[0].idResponsabileAdozioneAttoFinale.id : null;
       let idStruttura = res[0].idStrutturaResponsabileAdozioneAttoFinale ? res[0].idStrutturaResponsabileAdozioneAttoFinale.id : null;
@@ -170,7 +212,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         this.dataSourceTitolare = this.creaDataSourceUtente(this.odataContextDefinitionTitolare, idUtente, idStruttura, "titolare");
       } else if (idUtente && idStruttura) {
         this.dataSourceTitolare.filter([["idStruttura.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and", ["idUtente.attivo", "=", true],
-        "and", ["idStruttura.id", "=", idStruttura], "and", ["idStruttura.attiva", "=", true]]);
+          "and", ["idStruttura.id", "=", idStruttura], "and", ["idStruttura.attiva", "=", true]]);
         this.dataSourceTitolare.load().then(result => {
           console.log("SUCCESSO_CARICAMENTO_TITOLARE");
           // console.log("RESULT = ", result);
@@ -183,6 +225,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       }
     });
   }
+
   setInitialValues() {
     this.initialProcedimento = Entity.cloneObject(this.procedimento);
 
@@ -192,49 +235,83 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public bottoneModificaProcedimento() {
     this.possoAgire = true;
-
   }
 
 
   public bottoneSalvaProcedimento() {
 
-    let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
-    let differenzeStr: string = "";
-    if (differenze.length > 0) {
-      differenze.forEach(element => differenzeStr += element + ", ");
-    }
-
-    if (differenzeStr === "") {
+    if (this.procedimento.dataFine && (this.procedimento.dataFine < this.procedimento.dataInizio)) {
+      notify({ message: "Correggere l'intervallo di validità", type: "error", displayTime: 1200 });
       return;
     }
 
-    differenzeStr = differenzeStr.substring(0, differenzeStr.length - 2);
+    let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
+    let differenzeStr: string = "";
+    if (differenze.length > 0) {
+      differenze.forEach(element => differenzeStr += "<li><b>" + element + "</b></li>");
+    }
 
-    confirm("Hai modificato i seguenti campi: " + differenzeStr + ". Sei sicuro di voler procedere?", "Conferma").then(dialogResult => {
-      if (dialogResult) {
-        if (!(this.procedimento.dataFine < this.procedimento.dataInizio) || this.procedimento.dataFine === null) {
-          this.dataSourceProcedimento.store()
-            .update(this.procedimento.id, this.procedimento)
-            .done(res => (this.caricaDettaglioProcedimento()));
-          notify({
-            message: "Salvataggio effettuato con successo",
-            type: "success",
-            displayTime: 1200
-          });
-          this.possoAgire = false;
-        } else {
-          notify({
-            message: "Correggere l'intervallo di validità",
-            type: "error",
-            displayTime: 1200
-          });
-        }
+    if (differenzeStr === "") {
+      this.possoAgire = false;
+      return;
+    }
+
+    //differenzeStr = differenzeStr.substring(0, differenzeStr.length - 2);
+
+    let saveSuccecc: boolean = false;
+
+    confirm("Hai modificato i seguenti campi: <br/>" + differenzeStr + "<br/> Sei sicuro di voler procedere?", "Conferma").then(dialogResult => {
+      if (!dialogResult) {
+        // non ho confermato di salvare le modifiche. Non devo far niente
+        return;
       }
+
+      // ho confermato, procedo
+      this.dataSourceProcedimento.store()
+        .update(this.procedimento.id, this.procedimento)
+        .done(res => {
+          saveSuccecc = true;
+          if (this.strutturaSelezionata["hasChildren"]) {
+            confirm("Vuoi Estendere le modifiche alle strutture figlie?", "Conferma").then(dialogResult2 => {
+              if (dialogResult2) {
+                this.http.post(CUSTOM_RESOURCES_BASE_URL + "espandiProcedimenti", this.procedimento.id)
+                  .subscribe(
+                    res2 => {
+                      saveSuccecc = true;
+                      notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
+                      this.treeView.caricaDati();
+                      console.log("risultato POST OK", res);
+                    },
+                    err => {
+                      saveSuccecc = false;
+                      console.log("risultato POST Error", err);
+                      notify({ message: "Errore nel salvataggio", type: "error", displayTime: 1200 });
+                    }
+                  );
+              } else {
+                notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
+              }
+            });
+          }
+          this.caricaDettaglioProcedimento();
+        });
+
+
+      this.possoAgire = false;
+
+      /*    if (saveSuccecc) {
+           this.caricaDettaglioProcedimento();
+           notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
+         } else {
+           notify({ message: "Errore nel salvataggio", type: "error", displayTime: 1200 });
+         } */
     });
   }
 
-  public bottoneAnnulla() {
 
+
+
+  public bottoneAnnulla() {
     let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
     console.log("DIFFERENZE", differenze);
     // c'è qualche differenza, ricaricare i dati tramite chiamata http per tornare alla situazione di partenza
@@ -247,10 +324,35 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
 
 
-  selezionaStruttura(obj) {
-    this.headerStruttura = obj.nome;
-    this.strutturaSelezionata.id = obj.id;
-    this.caricaDettaglioProcedimento();
+  setStruttura(struttura: any): void {
+    this.strutturaSelezionata.nome = struttura.nome;
+    this.strutturaSelezionata.id = struttura.id;
+    this.strutturaSelezionata["hasChildren"] = struttura.hasChildren;
+  }
+
+  selezionaStruttura(selectedNode) {
+    console.log("click su struttura selezionata");
+
+    this.setStruttura(selectedNode);
+
+    if (this.initialProcedimento && this.procedimento) {
+      let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
+      if (differenze.length !== 0) {
+        // il caricamento del dettaglio Procedimento lo fa dentro alla seguente funzione
+        this.bottoneSalvaProcedimento();
+      }
+      else {
+        this.possoAgire = false;
+        this.caricaDettaglioProcedimento();
+      }
+    } else {
+      // al primo nodo che clicco entro qua e devo comunque caricarmi i dati 
+      this.caricaDettaglioProcedimento();
+    }
+
+    /*     if (!this.possoAgire) {
+          this.setStruttura(obj);
+        } */
   }
 
   /* Setto qui i dati che verranno passati al componente dell'albero e alla popup */
@@ -268,7 +370,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   // QUESTO EVENTO VIENE EMESSO DALLA POPUP E INDICA ALLA PAGINA SOTTOSTANTE CHE DEVE RICARICARE L'ALBERO PER FAR VEDERE LE MODIFICHE EFFETTUATE
-  // qui al posto di fare questa load, vado a ciclare sugli elementi dell'albero in modo da modificare il check direttamente 
+  // qui al posto di fare questa load, vado a ciclare sugli elementi dell'albero in modo da modificare il check direttamente
   // sui nodi dell'albero. Non posso fare il .load() sul datasource perchè poi ogni volta mi richiude l'albero
   //  console.log(this.treeView.datasource);
   refreshTreeView(nodesInvolved) {
