@@ -236,9 +236,11 @@ public showStatusOperation(message: string, type: string) {
       message: message,
       type: type,
       displayTime: 1700,
+      width: message.length * 7,
       position: {
-          my: "top",
-          at: "top",
+          my: "center",
+          at: "center",
+          offset: "-100 20",
           of: "#center-div"
        }
     });
