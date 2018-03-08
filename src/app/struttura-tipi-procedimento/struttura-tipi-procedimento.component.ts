@@ -107,7 +107,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.odataContextDefinitionTitolare = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.odataContextDefinitionResponsabile = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.odataContextDefinitionProcedimento = this.odataContextFactory.buildOdataContextEntitiesDefinition();
-    
+
 
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("descrizione");
     customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
@@ -117,15 +117,15 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   private caricaDettaglioProcedimento() {
 
-/*     if (selectedNode) {
-      this.setStruttura(selectedNode);
-    } */
-    
+    /*     if (selectedNode) {
+          this.setStruttura(selectedNode);
+        } */
+
 
     // ricarico l'aziendaTipoProcedimento "padre"
     if (!this.aziendaTipoProcedimento) {
       this.aziendaTipoProcedimento = new AziendaTipoProcedimento();
-      let dataSourceAziendaTipoProcedimento: DataSource;  
+      let dataSourceAziendaTipoProcedimento: DataSource;
       const odataContextDefinitionAziendaTipoProcedimento: OdataContextEntitiesDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
       dataSourceAziendaTipoProcedimento = new DataSource({
         store: odataContextDefinitionAziendaTipoProcedimento.getContext()[new AziendaTipoProcedimento().getName()],
@@ -141,12 +141,12 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
     // devo gestire l'expand. Se metto anche "idAziendaTipoProcedimento.idTitolo" l'aziendaProcedimento padre non ha il titolo si rompe tutto e non si visualizzano i dati
     // l'aziendaProcedimento padre dovrebbe sempre avere il titolo, ma siccome questo non è gestito devo fare qui la gestione
-    let expandArrayProcedimento: string[] =  ["idAziendaTipoProcedimento", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento",
-     "idStrutturaTitolarePotereSostitutivo", "idStrutturaResponsabileAdozioneAttoFinale", "idResponsabileAdozioneAttoFinale"];
+    let expandArrayProcedimento: string[] = ["idAziendaTipoProcedimento", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento",
+      "idStrutturaTitolarePotereSostitutivo", "idStrutturaResponsabileAdozioneAttoFinale", "idResponsabileAdozioneAttoFinale"];
 
-     if (this.aziendaTipoProcedimento.idTitolo) {
+    if (this.aziendaTipoProcedimento.idTitolo) {
       expandArrayProcedimento.push("idAziendaTipoProcedimento.idTitolo");
-     }
+    }
 
 
     // console.log("aziendaTipoProcedimentoOOOOOOOOOOOOOOOOOOOOOOOOOOO", this.aziendaTipoProcedimento);
@@ -230,11 +230,9 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     });
   }
 
-  
-  setInitialValues() {
-    
-    this.initialProcedimento = Entity.cloneObject(this.procedimento);
 
+  setInitialValues() {
+    this.initialProcedimento = Entity.cloneObject(this.procedimento);
   }
 
   public bottoneModificaProcedimento() {
@@ -258,40 +256,45 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
     this.possoAgireForm = false;
 
+    // se non ho differenze non vado oltre
+    if (differenzeStr === "") {
+      return;
+    }
+
     confirm("Hai modificato i seguenti campi: <br/>" + differenzeStr + "<br/> Sei sicuro di voler procedere?", "Conferma").then(dialogResult => {
 
       if (dialogResult) {
-      // ho confermato, procedo
-      this.dataSourceProcedimento.store().update(this.procedimento.id, this.procedimento)
-        .then(res => {
-          console.log("OK_UPDATE", res); 
-          this.caricaDettaglioProcedimento();
-          if (this.strutturaSelezionata["hasChildren"]) {
-            confirm("Vuoi Estendere le modifiche alle strutture figlie?", "Conferma").then(dialogResult2 => {
-              if (dialogResult2) {
-                this.http.post(CUSTOM_RESOURCES_BASE_URL + "espandiProcedimenti", this.procedimento.id).subscribe(
-                  res2 => {
-                    console.log("risultato POST OK", res);
-                    this.treeView.caricaDati();
-                    notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
-                  },
-                  err => {
-                    console.log("risultato POST Error", err);
-                    notify({ message: "Errore nel salvataggio", type: "error", displayTime: 1200 });
-                  }
-                );
-              } else {
-                notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
-              }
-            });
-          } else {
-            notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
-          }
-        })
-        .catch(err => {
-          console.log("ERROR_UPDATE", err); 
-          notify({ message: "Errore nel salvataggio", type: "error", displayTime: 1200 });
-        });
+        // ho confermato, procedo
+        this.dataSourceProcedimento.store().update(this.procedimento.id, this.procedimento)
+          .then(res => {
+            console.log("OK_UPDATE", res);
+            this.caricaDettaglioProcedimento();
+            if (this.strutturaSelezionata["hasChildren"]) {
+              confirm("Vuoi Estendere le modifiche alle strutture figlie?", "Conferma").then(dialogResult2 => {
+                if (dialogResult2) {
+                  this.http.post(CUSTOM_RESOURCES_BASE_URL + "espandiProcedimenti", this.procedimento.id).subscribe(
+                    res2 => {
+                      console.log("risultato POST OK", res);
+                      this.treeView.caricaDati();
+                      notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
+                    },
+                    err => {
+                      console.log("risultato POST Error", err);
+                      notify({ message: "Errore nel salvataggio", type: "error", displayTime: 1200 });
+                    }
+                  );
+                } else {
+                  notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
+                }
+              });
+            } else {
+              notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
+            }
+          })
+          .catch(err => {
+            console.log("ERROR_UPDATE", err);
+            notify({ message: "Errore nel salvataggio", type: "error", displayTime: 1200 });
+          });
       }
     });
   }
@@ -326,21 +329,21 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
     // console.log("click su struttura selezionata");
 
-/*     if (this.initialProcedimento && this.procedimento) {
-      let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
-      if (differenze.length !== 0) {
-        // il caricamento del dettaglio Procedimento lo fa dentro alla seguente funzione
-        // qui devo arrivarci con la struttura selezionata precedente
-        this.bottoneSalvaProcedimento(selectedNode);
-      }
-      else {        
-        this.possoAgireForm = false;
-        this.caricaDettaglioProcedimento(selectedNode);
-      }
-    } else {
-      // al primo nodo che clicco entro qua e devo comunque caricarmi i dati 
-      this.caricaDettaglioProcedimento(selectedNode);
-    } */
+    /*     if (this.initialProcedimento && this.procedimento) {
+          let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
+          if (differenze.length !== 0) {
+            // il caricamento del dettaglio Procedimento lo fa dentro alla seguente funzione
+            // qui devo arrivarci con la struttura selezionata precedente
+            this.bottoneSalvaProcedimento(selectedNode);
+          }
+          else {        
+            this.possoAgireForm = false;
+            this.caricaDettaglioProcedimento(selectedNode);
+          }
+        } else {
+          // al primo nodo che clicco entro qua e devo comunque caricarmi i dati 
+          this.caricaDettaglioProcedimento(selectedNode);
+        } */
   }
 
   /* Setto qui i dati che verranno passati al componente dell'albero e alla popup */
