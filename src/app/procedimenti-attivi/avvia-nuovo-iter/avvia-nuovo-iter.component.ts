@@ -83,8 +83,15 @@ export class AvviaNuovoIterComponent implements OnInit {
       this.iterParams.procedimento = procedimento.procedimento;
       this.buildDataSourceUtenti(procedimento.procedimento.idStruttura.id);
       console.log("ITER PARAMS", this.iterParams)
-      this.setDescription(this.iterParams.procedimento.idTitolarePotereSostitutivo.id, this.iterParams.procedimento.idStrutturaTitolarePotereSostitutivo.id, "titolare");
-      this.setDescription(this.iterParams.procedimento.idResponsabileAdozioneAttoFinale.id, this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale.id, "responsabile");
+      if(this.iterParams.procedimento.idTitolarePotereSostitutivo && this.iterParams.procedimento.idStrutturaTitolarePotereSostitutivo)
+        this.setDescription(this.iterParams.procedimento.idTitolarePotereSostitutivo.id, this.iterParams.procedimento.idStrutturaTitolarePotereSostitutivo.id, "titolare");
+      else
+        this.iterParams.titolarePotereSostitutivoitolareDesc = "Non definito"
+      if(this.iterParams.procedimento.idResponsabileAdozioneAttoFinale &&  this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale)
+       this.setDescription(this.iterParams.procedimento.idResponsabileAdozioneAttoFinale.id, this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale.id, "responsabile");
+      else
+        this.iterParams.responsabileAdozioneAttoFinaleDesc = "Non definito"
+
     }
   }
 
