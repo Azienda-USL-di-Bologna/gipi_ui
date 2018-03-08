@@ -28,7 +28,9 @@ import {
     DxSlideOutModule, 
     DxToolbarModule, 
     DxSwitchModule,
-    DxScrollViewModule
+    DxScrollViewModule,
+    DxNumberBoxModule,
+    DxValidationGroupModule
 } from "devextreme-angular";
 
 import {RouterModule} from "@angular/router";
@@ -77,8 +79,6 @@ import { CambioDiStatoComponent } from "./cambio-di-stato/cambio-di-stato.compon
 import { TipiProcedimentoAziendaliComponent } from "./tipi-procedimento-aziendali/tipi-procedimento-aziendali.component";
 import { DettaglioTipoProcedimentoComponent } from "./tipi-procedimento-aziendali/dettaglio-tipo-procedimento/dettaglio-tipo-procedimento.component";
 import {LoginModule} from "@bds/nt-login";
-
-
 
 @NgModule({
     declarations: [
@@ -146,7 +146,9 @@ import {LoginModule} from "@bds/nt-login";
         DxScrollViewModule,
         ContextModule.forRoot(contextModuleConfig),
         LoginModule.forRoot(loginModuleConfig),
-        EntitiesModule.forRoot(null)
+        EntitiesModule.forRoot(null),
+        DxNumberBoxModule,
+        DxValidationGroupModule
     ],
     providers: [DefinizioneTipiProcedimentoService, RoleGuard,
         // NavbarService

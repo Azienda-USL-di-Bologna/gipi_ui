@@ -80,11 +80,13 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
     });
   }  
 
-  public getWidth(){
+  public getWidth() {
     return window.screen.width;
   }
 
-  public getHeight(){
+  public getHeight() {
     return window.screen.height;
   }
+
+
 }
