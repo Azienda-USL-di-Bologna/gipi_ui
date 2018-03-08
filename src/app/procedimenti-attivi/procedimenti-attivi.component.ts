@@ -7,6 +7,7 @@ import {LoggedUser} from "@bds/nt-login";
 import {GlobalContextService} from "@bds/nt-context";
 import {UtilityFunctions} from "app/utility-functions";
 import {bAzienda, bStruttura, bUtente, Procedimento} from "@bds/nt-entities";
+import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
     selector: "procedimenti-attivi",
@@ -59,7 +60,15 @@ export class ProcedimentiAttiviComponent {
 
         this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
         this.dataSourceProcedimenti = new DataSource({
-            store: this.odataContextDefinition.getContext()[new Procedimento().getName()],
+            store: this.odataContextDefinition.getContext()[new Procedimento().getName()].on("loaded", (res: any) => {
+                // for (let i = 0; i < res.length; i++) {
+                //     if (i < 100)
+                //         res.pop();
+                // }
+                console.log("res: ", res);
+            }),
+            // paginate: true,
+            // pageSize: 20,
             expand: [
                 "idStruttura",
                 "idTitolarePotereSostitutivo/idPersona",
@@ -182,6 +191,10 @@ export class ProcedimentiAttiviComponent {
     }
 
     public descrizioneTitolo(item: any): string {
+        // non togliere questo if altrimenti capita il caso del loading infinito #RM: https://babelmine-auslbo.avec.emr.it/issues/20360
+        if (item && item.idAziendaTipoProcedimento && item.idAziendaTipoProcedimento.idTitolo && item.idAziendaTipoProcedimento.idTitolo.classificazione &&
+            item.idAziendaTipoProcedimento.idTitolo.nome
+        )
         return "[" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + item.idAziendaTipoProcedimento.idTitolo.nome;
     }
 
