@@ -16,7 +16,9 @@
       <!-- <dxi-column dataField="descrizioneDefault" caption="Descrizione"></dxi-column> -->
       <dxi-column dataField="dataInizio" caption="Valido dal" alignment="center" [dataType]="'date'" [format]="'dd/MM/yyyy'"></dxi-column>
       <dxi-column dataField="durataMassimaProcedimento" caption="Durata massima iter (gg)" alignment="center" ></dxi-column>
-      <dxi-column dataField="durataMassimaSospensione" caption="Durata massima della sospensione (gg)" alignment="center"></dxi-column>
+      <dxi-column dataField="durataMassimaSospensione" caption="Durata massima della sospensione (gg)" alignment="center">
+
+      </dxi-column>
       <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
       <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni" width="auto">
           <dx-button id="modifica" text="" hint="Modifica dettagli tipo procedimento" icon='edit' (onClick)="modificaDettagli($event, d)"></dx-button>
