@@ -84,7 +84,18 @@
                     <dxi-item dataField="idFascicolo" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Fascicolo dell'iter"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="nomeTitolo" [editorOptions]="{ disabled: true }"></dxi-item>
+                    <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [editorOptions]="{
+                        disabled: true,
+                        dataSource: dataSourceClassificazione,
+                        displayExpr: customDisplayExprClassificazione,
+                        closeOnOutsideClick: true,
+                        showPopupTitle: false,
+                        showCancelButton: false,
+                        placeholder: 'Seleziona una voce...',
+                        searchPlaceholder: 'Cerca...',
+                        valueExpr: 'this'
+                        }"></dxi-item> 
+                   <!--  <dxi-item dataField="nomeTitolo" [editorOptions]="{ disabled: true }"></dxi-item> -->
                 </dxi-item>
             </dx-form>
         </div>

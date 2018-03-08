@@ -40,7 +40,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
   @Output() messageEvent: EventEmitter<any>= new EventEmitter();
 
   constructor(private odataContextFactory: OdataContextFactory, private globalContextService: GlobalContextService, private http: HttpClient) {
-    console.log("dettaglio-tipo-procedimento Constructor");
+    console.log("dettaglio-tipo-procedimento CONSTRUCTOR");
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser")
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nome");

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
-import { Iter, Utente, Fase, FaseIter, ProcedimentoCache, bUtente, bAzienda } from "@bds/nt-entities";
+import { Iter, Utente, Fase, FaseIter, ProcedimentoCache, bUtente, bAzienda, Titolo } from "@bds/nt-entities";
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
@@ -69,9 +69,11 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public iodaPermission: boolean;
   public hasPermissionOnFascicolo: boolean = false;
 
+  public dataSourceClassificazione: DataSource;
+
   constructor(
-    private odataContextFactory: OdataContextFactory, 
-    private http: HttpClient, private activatedRoute: ActivatedRoute,  
+    private odataContextFactory: OdataContextFactory,
+    private http: HttpClient, private activatedRoute: ActivatedRoute,
     private globalContextService: GlobalContextService
   ) {
 
@@ -90,6 +92,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.dataSourceIter = new DataSource({
       store: oataContextDefinitionTitolo.getContext()[new Iter().getName()],
       expand: [
+        "idTitolo",
         "idFaseCorrente",
         "idIterPrecedente",
         "idResponsabileProcedimento.idPersona",
@@ -106,33 +109,38 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       ricarica: false  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore
     };
     this.recuperaUserInfo();
-    
+
 
     this.paramsPerSospensione = {
       iter: this.iter,
       stato: this.iter.stato,
       dataSospensione: this.iter.stato === "sospeso" ? this.getDataUltimaSospensione() : null
     };
+
+    this.dataSourceClassificazione = new DataSource({
+      store: oataContextDefinitionTitolo.getContext()[new Titolo().getName()],
+      filter: [["idAzienda", "=", this.userInfo.idAzienda]] // questo non so se ci vuole in realtà, la classificazione non è sceglibile
+    });
   }
 
   ngAfterViewInit() {
     // this.passaggioDiFaseVisible = this.child.visibile;
   }
 
-  recuperaUserInfo(){
+  recuperaUserInfo() {
     this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
     this.subscriptions.push(
-        this.loggedUser$.subscribe(
-            (loggedUser: LoggedUser) => {
-                if (loggedUser) {
-                  this.userInfo = {
-                    idUtente: loggedUser.getField(bUtente.id),
-                    idAzienda:  loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id],
-                    cf: "GSLFNC89A05G224Y"
-                  }
-                }
+      this.loggedUser$.subscribe(
+        (loggedUser: LoggedUser) => {
+          if (loggedUser) {
+            this.userInfo = {
+              idUtente: loggedUser.getField(bUtente.id),
+              idAzienda: loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id],
+              cf: "GSLFNC89A05G224Y"
             }
-        )
+          }
+        }
+      )
     );
   }
 
@@ -164,21 +172,21 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       return "Sospendi";
   }
 
-  disableProcedi(){
+  disableProcedi() {
     console.log("*****disableProcedi??????*****")
     console.log("this.hasPermissionOnFascicolo", this.hasPermissionOnFascicolo);
-    console.log("this.hasPermissionOnFascicolo === true-->",this.hasPermissionOnFascicolo === true);
+    console.log("this.hasPermissionOnFascicolo === true-->", this.hasPermissionOnFascicolo === true);
     console.log("this.isSospeso()-->", this.isSospeso());
     console.log("this.iter.idFaseCorrente.faseDiChiusura-->", this.iter.idFaseCorrente.faseDiChiusura);
-    return this.hasPermissionOnFascicolo!==true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura;
+    return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura;
   }
 
-  disableSospendi(){
+  disableSospendi() {
     console.log("*****disableSospendi??????*****")
     console.log("this.hasPermissionOnFascicolo", this.hasPermissionOnFascicolo);
-    console.log("this.hasPermissionOnFascicolo === true-->",this.hasPermissionOnFascicolo===true);
+    console.log("this.hasPermissionOnFascicolo === true-->", this.hasPermissionOnFascicolo === true);
     console.log("this.iter.idFaseCorrente.faseDiChiusura-->", this.iter.idFaseCorrente.faseDiChiusura);
-    return this.hasPermissionOnFascicolo!==true || this.iter.idFaseCorrente.faseDiChiusura;
+    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura;
   }
 
   generateCustomButtons() {
@@ -249,23 +257,23 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public passaggioDiFase() {
     const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.idIter)
       .subscribe(
-      res => {
-        let current = JSON.parse(res["currentFase"]);
-        let next = JSON.parse(res["nextFase"]);
+        res => {
+          let current = JSON.parse(res["currentFase"]);
+          let next = JSON.parse(res["nextFase"]);
 
-        this.perFiglioPassaggioFase = {
-          idIter: this.idIter,
-          currentFaseName: current.nomeFase,
-          nextFaseName: next.nomeFase,
-          isNextFaseDiChiusura: next.faseDiChiusura
-        };
+          this.perFiglioPassaggioFase = {
+            idIter: this.idIter,
+            currentFaseName: current.nomeFase,
+            nextFaseName: next.nomeFase,
+            isNextFaseDiChiusura: next.faseDiChiusura
+          };
 
-        this.popupData.title = "Passaggio Di Fase";
-        this.passaggioDiFaseVisible = true;
-      },
-      err => {
-        notify("Non esiste la fase successiva", "error", 1000);
-      });
+          this.popupData.title = "Passaggio Di Fase";
+          this.passaggioDiFaseVisible = true;
+        },
+        err => {
+          notify("Non esiste la fase successiva", "error", 1000);
+        });
   }
 
   public sospensioneIter() {
@@ -301,7 +309,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.sospensioneParams.idIter = this.idIter;
     this.sospensioneParams.numeroIter = this.iter.numero;
     this.sospensioneParams.annoIter = this.iter.anno;
-    this.sospensioneParams.statoCorrente =  this.iter.stato;
+    this.sospensioneParams.statoCorrente = this.iter.stato;
     this.sospensioneParams.statoCorrente = this.iter.stato;
     this.popupData.title = "Cambia stato iter";
     this.sospensioneIterVisible = true;
@@ -342,14 +350,14 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     let date;
     const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.iter.id)
       .subscribe(
-      res => {
-        let r: any = res;
-        date = moment(r.dataSospensione);
-        return date;
-      },
-      err => {
-        // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
-      }
+        res => {
+          let r: any = res;
+          date = moment(r.dataSospensione);
+          return date;
+        },
+        err => {
+          // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+        }
       );
   }
 
@@ -357,48 +365,60 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     let b: boolean;
     const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.iter.id)
       .subscribe(
-      res => {
-        let next = JSON.parse(res["nextFase"]);
-        if (next != null)
-          b = false;
-        else
+        res => {
+          let next = JSON.parse(res["nextFase"]);
+          if (next != null)
+            b = false;
+          else
+            b = true;
+        },
+        err => {
           b = true;
-      },
-      err => {
-        b = true;
-      });
+        });
     return b;
   }
 
   public calculateIodaPermissionAndSetButton() {
     let x;
     console.log("ENTRATO IN calculateIodaPermissionAndSetButton");
-    if(this.iter.idFascicolo){
+    if (this.iter.idFascicolo) {
       console.log("PATH --> ", CUSTOM_RESOURCES_BASE_URL + "iter/hasPermissionOnFascicolo");
       let data = new Map<String, Object>();
       console.log("LOG DATA", data)
       data.set("numerazioneGerarchica", this.iter.idFascicolo);
-      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/hasPermissionOnFascicolo", this.iter.idFascicolo, {headers: new HttpHeaders().set("content-type", "application/json")})
-      .subscribe(
-        res => {
-          console.log("RES!!! -> ", res);
-          console.log(" res['hasPermission'] -> ",  res["hasPermission"]);
-          console.log(" res['hasPermission'] === 'true'", res["hasPermission"] === "true");
-          this.hasPermissionOnFascicolo = res["hasPermission"] === "true";
-          console.log("hasPerm -> ", this.hasPermissionOnFascicolo);
-          this.generateCustomButtons(); // ora che ho i permessi mi posso creare i bottoni
-        },
-        err => {
-          console.log("AHI, erroraccio! -> ", err);
-          // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
-          this.generateCustomButtons();
-        }
-      );
+      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/hasPermissionOnFascicolo", this.iter.idFascicolo, { headers: new HttpHeaders().set("content-type", "application/json") })
+        .subscribe(
+          res => {
+            console.log("RES!!! -> ", res);
+            console.log(" res['hasPermission'] -> ", res["hasPermission"]);
+            console.log(" res['hasPermission'] === 'true'", res["hasPermission"] === "true");
+            this.hasPermissionOnFascicolo = res["hasPermission"] === "true";
+            console.log("hasPerm -> ", this.hasPermissionOnFascicolo);
+            this.generateCustomButtons(); // ora che ho i permessi mi posso creare i bottoni
+          },
+          err => {
+            console.log("AHI, erroraccio! -> ", err);
+            // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
+            this.generateCustomButtons();
+          }
+        );
     }
   }
+
+  customDisplayExprClassificazione(data: Titolo) {
+    let displayExpression: string = "";
+
+    if (data) {
+      displayExpression = "[" + data.classificazione + "] " + data.nome;
+    }
+
+    console.log("DISPLAY_EXPRESSION", displayExpression);
+    return displayExpression;
+  }
+
 }
 
-interface UserInfo{
+interface UserInfo {
   idUtente: number;
   cf: string;
   idAzienda: number;
