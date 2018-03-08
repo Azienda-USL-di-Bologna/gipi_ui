@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Utente, bUtente, bAzienda, Procedimento, GetUtentiGerarchiaStruttura } from "@bds/nt-entities";
+import { Utente, bUtente, bAzienda, Procedimento, GetUtentiGerarchiaStruttura, Persona, Struttura } from "@bds/nt-entities";
 import { OdataContextFactory } from "@bds/nt-context";
 import { OdataContextDefinition } from "@bds/nt-context";
 import { CustomLoadingFilterParams } from "@bds/nt-context";
@@ -32,6 +32,8 @@ export class AvviaNuovoIterComponent implements OnInit {
   public searchString: string = "";
   public idUtenteDefault: number;
   public descrizioneUtenteResponsabile: string;
+  public td: string;
+  public respAdozione: string;
 
   @Input()
   set procedimentoSelezionato(procedimento: any) {
@@ -56,7 +58,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams.oggettoIter = doc.oggetto;
     this.iterParams.dataAvvioIter = new Date(doc.dataRegistrazione);
     this.iterParams.dataCreazioneIter = new Date();
-    this.iterParams.promotore = doc.promotore;
+    this.iterParams.promotoreIter = doc.promotore;
   }
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
@@ -80,6 +82,16 @@ export class AvviaNuovoIterComponent implements OnInit {
       this.iterParams.idProcedimento = procedimento.procedimento.id;
       this.iterParams.procedimento = procedimento.procedimento;
       this.buildDataSourceUtenti(procedimento.procedimento.idStruttura.id);
+      console.log("ITER PARAMS", this.iterParams)
+      if(this.iterParams.procedimento.idTitolarePotereSostitutivo && this.iterParams.procedimento.idStrutturaTitolarePotereSostitutivo)
+        this.setDescription(this.iterParams.procedimento.idTitolarePotereSostitutivo.id, this.iterParams.procedimento.idStrutturaTitolarePotereSostitutivo.id, "titolare");
+      else
+        this.iterParams.titolarePotereSostitutivoitolareDesc = "Non definito"
+      if(this.iterParams.procedimento.idResponsabileAdozioneAttoFinale &&  this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale)
+       this.setDescription(this.iterParams.procedimento.idResponsabileAdozioneAttoFinale.id, this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale.id, "responsabile");
+      else
+        this.iterParams.responsabileAdozioneAttoFinaleDesc = "Non definito"
+
     }
   }
 
@@ -212,7 +224,7 @@ export class AvviaNuovoIterComponent implements OnInit {
       + "<br><b>Responsabilie procedimento amministrativo:</b> " + this.descrizioneUtenteResponsabile
       + "<br><b>Data avvio iter:</b> " + this.formatDateToString(this.iterParams.dataAvvioIter)
       + "<br><b>Data massima conclusione:</b> " + this.formatDateToString(this.dataMassimaConclusione)
-      + "<br><b>Promotore:</b> " + this.iterParams.promotore
+      + "<br><b>Promotore:</b> " + this.iterParams.promotoreIter
       + "<br><b>Oggetto:</b> " + this.iterParams.oggettoIter;
   }
 
@@ -275,6 +287,40 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.dataSourceUtenti.filter(null);
     this.dataSourceUtenti.load();
   }
+
+  public setDescription(idUtente: number, idStruttura, chi: string){
+    console.log("set other: ", idUtente, idStruttura);
+    let odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    let dataSourceUtenteX = new DataSource({
+      store: odataContextDefinition.getContext()[new Utente().getName()],
+      expand: ["idPersona"],
+      filter: ["id", "=", idUtente]
+    });
+
+    let dataSoureStrutturaX = new DataSource({
+      store: odataContextDefinition.getContext()[new Struttura().getName()],
+      filter: ["id", "=", idStruttura]
+    })
+
+    let descX;
+    let descStrut;
+    dataSourceUtenteX.load().then(res => {
+      console.log("dataSourceUtenteX", res[0].idPersona.descrizione); 
+      descX = res[0].idPersona.descrizione;
+      dataSoureStrutturaX.load().then(res2 => {
+        console.log("dataSoureStrutturaX", res[0].nome); descStrut = res2[0].nome
+        if(chi === "titolare")
+          this.iterParams.titolarePotereSostitutivoitolareDesc = descX + " (" + descStrut + ")";
+        else
+          this.iterParams.responsabileAdozioneAttoFinaleDesc = descX + " (" + descStrut + ")";
+      });
+    });
+  }
+
+  public getDescriptionByProc(item: Procedimento) {
+    return item.idStrutturaTitolarePotereSostitutivo.nome;
+  }
+
 }
 
 class IterParams {
@@ -287,6 +333,8 @@ class IterParams {
   public codiceRegistroDocumento: string;
   public numeroDocumento: string;
   public annoDocumento: number;
-  public promotore: string;
+  public promotoreIter: string;
   public procedimento: Procedimento;
+  public titolarePotereSostitutivoitolareDesc: string;
+  public responsabileAdozioneAttoFinaleDesc: string;
 }

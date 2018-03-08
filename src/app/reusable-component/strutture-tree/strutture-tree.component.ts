@@ -27,6 +27,7 @@ export class StruttureTreeComponent implements OnInit {
   public strutture: Struttura = new Struttura();
   public contextMenuItems;
   public showContextMenu: boolean = false;
+ // public _disabled: boolean = false;
 
 
   @ViewChild("treeViewChild") treeViewChild: any;
@@ -34,6 +35,7 @@ export class StruttureTreeComponent implements OnInit {
   @Input("idAzienda") idAzienda: number;
   @Input("idAziendaTipoProcedimento") idAziendaTipoProcedimento: number;
   @Input("readOnly") readOnly: boolean;
+  @Input("disabled") disabled: boolean;
   @Input("enableCheckRecursively") enableCheckRecursively: boolean;
   @Input("nodesToCheckSelectedStatus") nodesToCheckSelectedStatus: any;
   @Output("strutturaSelezionata") strutturaSelezionata = new EventEmitter<Object>();
@@ -48,6 +50,7 @@ export class StruttureTreeComponent implements OnInit {
 
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }
+
 
   @Input()
   set popupVisible(visibile: boolean) {

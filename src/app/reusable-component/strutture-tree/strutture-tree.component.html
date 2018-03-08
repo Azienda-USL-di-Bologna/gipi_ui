@@ -3,7 +3,7 @@
 <div id="container-tree">
   <dx-tree-view #treeViewChild id="simple-treeview" [dataSource]="datasource" [height]="440" keyExpr="id" displayExpr="nome"
                 dataStructure="plain" parentIdExpr="idStrutturaPadre" [searchValue]="textBox.value"
-                showCheckBoxesMode="normal" [selectNodesRecursive]= "enableCheckRecursively"
+                showCheckBoxesMode="normal" [selectNodesRecursive]= "enableCheckRecursively" [disabled]= "disabled"
                 (onClick)="onTreeViewClick($event)"
                 (onItemContextMenu)="openContextMenu($event)" (onItemSelectionChanged)="selectionChanged($event)"
                 (onItemClick)="selezionaStruttura($event)" 

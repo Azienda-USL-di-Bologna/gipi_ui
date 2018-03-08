@@ -48,12 +48,16 @@
         onOpened: reloadResponsabile
       }">
     </dxi-item>
-    <dxi-item dataField="promotore" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
+    <dxi-item dataField="promotoreIter" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
     <dxi-item dataField="oggettoIter" [colSpan]="6" cssClass="label-wrap" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
-    <dxi-item dataField="procedimento.idResponsabileAdozioneAttoFinale.idPersona.descrizione" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Responsabile adozione atto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
-    <dxi-item dataField="procedimento.idStrutturaResponsabileAdozioneAttoFinale.nome" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Struttura del responsabile adozione atto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
-    <dxi-item dataField="procedimento.idTitolarePotereSostitutivo.idPersona.descrizione" [colSpan]="3" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
-    <dxi-item dataField="procedimento.idStrutturaTitolarePotereSostitutivo.nome" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Struttura del titolare potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
+    <!-- questi 4 campi sono stati fusi in quei due campi più sotto
+      <dxi-item dataField="procedimento.idResponsabileAdozioneAttoFinale.idPersona.descrizione" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Responsabile adozione atto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item dataField="procedimento.idStrutturaResponsabileAdozioneAttoFinale.nome" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Struttura del responsabile adozione atto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item dataField="procedimento.idTitolarePotereSostitutivo.idPersona.descrizione" [colSpan]="3" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item dataField="procedimento.idStrutturaTitolarePotereSostitutivo.nome" [colSpan]="3" cssClass="label-wrap no-baseline" [label]="{text: 'Struttura del titolare potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item> 
+    -->
+    <dxi-item dataField="responsabileAdozioneAttoFinaleDesc" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Responsabile adozione atto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
+    <dxi-item dataField="titolarePotereSostitutivoitolareDesc" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
   </dx-form>
 
   <br>
