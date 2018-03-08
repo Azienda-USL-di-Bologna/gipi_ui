@@ -80,19 +80,23 @@
                         <span>{{azienda.descrizione}}</span>
                     </div>
 
-                    <div class="col" align="right">
+                    <div class="col" align="center">  <!-- messo center al posto di right per #20446 -->
                         <div *ngIf="loggedUser.isCI()">
+                        <!-- commentato per RM #20446 e sostituito con dx-button sotto
                             <dx-button *ngIf="checkAssociata.value" [text]="'Disassocia'" (onClick)="buttonClicked(azienda, 'disassocia')" [type]="confirm"></dx-button>
-                            <dx-button *ngIf="!checkAssociata.value" [text]="'Associa'" (onClick)="buttonClicked(azienda, 'associa')" [type]="confirm"></dx-button>
+                            <dx-button *ngIf="!checkAssociata.value" [text]="'Associa'" (onClick)="buttonClicked(azienda, 'associa')" [type]="confirm"></dx-button> 
+                        -->
+                            <dx-button [text]="'Associa'" (onClick)="buttonClicked(azienda, 'associa')" [type]="'confirm'" [disabled]='checkAssociata.value'></dx-button>
                         </div>
                     </div>
-
+                <!-- commentato per RM #20446
                     <div class="col">
                         <div *ngIf="loggedUser.isCA() && idAziendaUtente == azienda.id">
                             <dx-button *ngIf="checkAssociata.value" [text]="'Gestisci associazione'" (onClick)="buttonClicked(azienda, 'gestisciAssociazione')"
                                 [type]="confirm"></dx-button>
                         </div>
-                    </div>
+                    </div> 
+                -->
                 </div>
             </div>
 
