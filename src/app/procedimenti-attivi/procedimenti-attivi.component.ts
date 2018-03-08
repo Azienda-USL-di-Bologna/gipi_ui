@@ -1,212 +1,221 @@
-import { Component, ViewChild, Input, Output, EventEmitter } from "@angular/core";
-import { DxDataGridComponent } from "devextreme-angular";
+import {Component, ViewChild, Input, Output, EventEmitter} from "@angular/core";
+import {DxDataGridComponent} from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextFactory, OdataContextDefinition } from "@bds/nt-context";
-import { Router } from "@angular/router";
-import { LoggedUser } from "@bds/nt-login";
-import { GlobalContextService } from "@bds/nt-context";
-import { UtilityFunctions } from "app/utility-functions";
-import { bAzienda, bStruttura, bUtente, Procedimento } from "@bds/nt-entities";
+import {OdataContextFactory, OdataContextDefinition} from "@bds/nt-context";
+import {Router} from "@angular/router";
+import {LoggedUser} from "@bds/nt-login";
+import {GlobalContextService} from "@bds/nt-context";
+import {UtilityFunctions} from "app/utility-functions";
+import {bAzienda, bStruttura, bUtente, Procedimento} from "@bds/nt-entities";
 
 @Component({
-  selector: "procedimenti-attivi",
-  templateUrl: "./procedimenti-attivi.component.html",
-  styleUrls: ["./procedimenti-attivi.component.scss"]
+    selector: "procedimenti-attivi",
+    templateUrl: "./procedimenti-attivi.component.html",
+    styleUrls: ["./procedimenti-attivi.component.scss"]
 })
 export class ProcedimentiAttiviComponent {
 
-  private odataContextDefinition: OdataContextDefinition;
-  private rigaSelezionata: any;
-  private utility: UtilityFunctions = new UtilityFunctions();
+    private odataContextDefinition: OdataContextDefinition;
+    private rigaSelezionata: any;
+    private idStruttureUtente: number[];
+    private utility: UtilityFunctions = new UtilityFunctions();
 
-  @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
-  public idAzienda: number;
-  public dataSourceProcedimenti: DataSource;
-  public popupButtons: any[];
-  public popupNuovoIterVisible: boolean = false;
-  public procedimentoDaPassare: any;
-  public iterAvviato: boolean = false;
-  public idIterAvviato: number;
-  public daDocumento: boolean = false;
-  public enableSelection: string = "none";
-  public colonnaVisibile: boolean = true;
-  public showTitle: boolean = true;
+    @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
+    public idAzienda: number;
+    public dataSourceProcedimenti: DataSource;
+    public popupButtons: any[];
+    public popupNuovoIterVisible: boolean = false;
+    public procedimentoDaPassare: any;
+    public iterAvviato: boolean = false;
+    public idIterAvviato: number;
+    public daDocumento: boolean = false;
+    public enableSelection: string = "none";
+    public colonnaVisibile: boolean = true;
+    public showTitle: boolean = true;
 
-  @Input()
-  set avviaIterDaDocumento(daDocumento: any) {
-    this.daDocumento = daDocumento;
-    this.setDataAvviaIterDaDocumento();
-    this.setFormLookAvviaIterDaDocumento();
-  }
+    @Input()
+    set avviaIterDaDocumento(daDocumento: any) {
+        this.daDocumento = daDocumento;
+        this.setDataAvviaIterDaDocumento();
+        this.setFormLookAvviaIterDaDocumento();
+    }
 
-  @Output("messageEvent") messageEvent = new EventEmitter<any>();
+    @Output("messageEvent") messageEvent = new EventEmitter<any>();
 
-  public loggedUser: LoggedUser;
+    public loggedUser: LoggedUser;
 
-  constructor(private odataContextFactory: OdataContextFactory,
-    public router: Router,
-    private globalContextService: GlobalContextService) {
-    console.log("procedimenti-attivi (constructor)");
+    constructor(private odataContextFactory: OdataContextFactory,
+                public router: Router,
+                private globalContextService: GlobalContextService) {
+        console.log("file: app/procedimenti-attivi/procedimenti-attivi.components.ts");
+        console.log("procedimenti-attivi (constructor)");
 
-    this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
-    this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
+        this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
+        this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
+        this.idStruttureUtente = this.getIdStruttureUtente();
 
-    // this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).aziende.id;
-    const now = new Date();
+        // this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).aziende.id;
+        const now = new Date();
 
-    this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
-    this.dataSourceProcedimenti = new DataSource({
-      store: this.odataContextDefinition.getContext()[new Procedimento().getName()],
-      expand: [
-        "idStruttura",
-        "idTitolarePotereSostitutivo/idPersona",
-        "idStrutturaTitolarePotereSostitutivo",
-        "idAziendaTipoProcedimento/idTitolo",
-        "idAziendaTipoProcedimento/idTipoProcedimento",
-        "idResponsabileAdozioneAttoFinale/idPersona",
-        "idStrutturaResponsabileAdozioneAttoFinale"
+        this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
+        this.dataSourceProcedimenti = new DataSource({
+            store: this.odataContextDefinition.getContext()[new Procedimento().getName()],
+            expand: [
+                "idStruttura",
+                "idTitolarePotereSostitutivo/idPersona",
+                "idStrutturaTitolarePotereSostitutivo",
+                "idAziendaTipoProcedimento/idTitolo",
+                "idAziendaTipoProcedimento/idTipoProcedimento",
+                "idResponsabileAdozioneAttoFinale/idPersona",
+                "idStrutturaResponsabileAdozioneAttoFinale"
 
-      ],
-      filter: [
-        ["idAziendaTipoProcedimento.idAzienda.id", "=", this.idAzienda],
-        ["dataInizio", "<=", now],
-        [
-          ["dataFine", ">", now],
-          "or",
-          ["dataFine", "=", null]
-        ]
-      ]/* ,
+            ],
+            filter: [
+                ["idAziendaTipoProcedimento.idAzienda.id", "=", this.idAzienda],
+                this.utility.buildMultipleFilterForArray("idStruttura.id", this.idStruttureUtente),
+                ["dataInizio", "<=", now],
+                [
+                    ["dataFine", ">", now],
+                    "or",
+                    ["dataFine", "=", null]
+                ]
+            ]/* ,
       map: (item) => {
         console.log(item);
         // item.idAziendaTipoProcedimento.idTitolo.nome += " [" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "]";
         item.descrizioneTitolo =  item.idAziendaTipoProcedimento.idTitolo.nome + " [" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "]";
         return item;
       } */
-    });
+        });
 
-    this.itemClear = this.itemClear.bind(this);
-    this.setFormLookBase();
-  }
-
-  private setDataAvviaIterDaDocumento() {
-    // Devo aggiungere il filtro sulle strutture dell'utente
-    // Prima mi creo l'array con gli id struttura
-    let idStrutture: any = [];
-    this.loggedUser.getField(bUtente.struttureAfferenzaDiretta).forEach(function (struttura: any) {
-      idStrutture.push(struttura[bStruttura.id]);
-    });
-    if (this.loggedUser.getField(bUtente.struttureAfferenzaFunzionale) != null) {
-      this.loggedUser.getField(bUtente.struttureAfferenzaFunzionale).forEach(function (struttura: any) {
-        idStrutture.push(struttura[bStruttura.id]);
-      });
+        this.itemClear = this.itemClear.bind(this);
+        this.setFormLookBase();
     }
-    // Ora mi creo l'array-filtro e filtro
-    this.dataSourceProcedimenti.filter(
-      [this.utility.buildMultipleFilterForArray("idStruttura.id", idStrutture)]
-        .concat(this.dataSourceProcedimenti.filter())
-      );
-  }
 
-  private setFormLookAvviaIterDaDocumento() {
-    this.enableSelection = "single";
-    this.colonnaVisibile = false;
-    this.showTitle = false;
-  }
+    private setDataAvviaIterDaDocumento() {
+        // Devo aggiungere il filtro sulle strutture dell'utente
+        // Prima mi creo l'array con gli id struttura
 
-  private apriDettaglio(row: any) {
-    this.gridContainer.instance.editRow(row.rowIndex);
-  }
+        // Ora mi creo l'array-filtro e filtro
+        this.dataSourceProcedimenti.filter(
+            [this.utility.buildMultipleFilterForArray("idStruttura.id", this.idStruttureUtente)]
+                .concat(this.dataSourceProcedimenti.filter())
+        );
+    }
 
-  // Definisco l'aspetto della pagina
-  private setFormLookBase() {
-    this.popupButtons = [{
-      toolbar: "bottom",
-      location: "center",
-      widget: "dxButton",
-      options: {
-        type: "normal",
-        text: "Chiudi",
-        onClick: () => {
-          this.gridContainer.instance.cancelEditData();
+    private getIdStruttureUtente(): number[] {
+        let idStrutture: number[] = [];
+        this.loggedUser.getField(bUtente.struttureAfferenzaDiretta).forEach((struttura: any) => {
+            idStrutture.push(struttura[bStruttura.id]);
+        });
+        if (this.loggedUser.getField(bUtente.struttureAfferenzaFunzionale) != null) {
+            this.loggedUser.getField(bUtente.struttureAfferenzaFunzionale).forEach((struttura: any) => {
+                idStrutture.push(struttura[bStruttura.id]);
+            });
         }
-      }
-    }];
-  }
-
-  // Gestisco la toolbar di ricerca. La voglio centrale.
-  onToolbarPreparing(e) {
-    const toolbarItems = e.toolbarOptions.items;
-    const searchPanel = toolbarItems.filter(item => item.name === "searchPanel");
-
-    if (searchPanel && searchPanel[0]) {
-      searchPanel[0].location = "center";
+        return idStrutture;
     }
-  }
 
-  // Calcolo la Width dei widget in base alla grandezza della finestra del browser.
-  calcWidth(divisore: number, responsive = false): any {
-    if (responsive && window.innerWidth < 1280)
-      return "90%";
-    return window.innerWidth / divisore;
-  }
+    private setFormLookAvviaIterDaDocumento() {
+        this.enableSelection = "single";
+        this.colonnaVisibile = false;
+        this.showTitle = false;
+    }
 
-  // Creo un template per item "puri"
-  itemClear(data, itemElement): string {
-    const rowData = this.gridContainer.instance.getDataSource().items()[this.rigaSelezionata.rowIndex];
-    return data.dataField.split(".").reduce((o, i) => o[i], rowData); // Devo parsare il dataField per entrare in profondità nell'oggetto
-  }
+    private apriDettaglio(row: any) {
+        this.gridContainer.instance.editRow(row.rowIndex);
+    }
 
-  // Aggiungo l'ignore case per tutte le colonne non lookup
-  customizeColumns(columns: any) {
-    columns.forEach(column => {
-      const defaultCalculateFilterExpression = column.calculateFilterExpression;
-      column.calculateFilterExpression = function (value, selectedFilterOperation) {
-        if (this.dataType === "string" && !this.lookup && value) {
-          return ["tolower(" + this.dataField + ")",
-          selectedFilterOperation || "contains",
-          value.toLowerCase()];
-        } else {
-          return defaultCalculateFilterExpression.apply(this, arguments);
+    // Definisco l'aspetto della pagina
+    private setFormLookBase() {
+        this.popupButtons = [{
+            toolbar: "bottom",
+            location: "center",
+            widget: "dxButton",
+            options: {
+                type: "normal",
+                text: "Chiudi",
+                onClick: () => {
+                    this.gridContainer.instance.cancelEditData();
+                }
+            }
+        }];
+    }
+
+    // Gestisco la toolbar di ricerca. La voglio centrale.
+    onToolbarPreparing(e) {
+        const toolbarItems = e.toolbarOptions.items;
+        const searchPanel = toolbarItems.filter(item => item.name === "searchPanel");
+
+        if (searchPanel && searchPanel[0]) {
+            searchPanel[0].location = "center";
         }
-      };
-    });
-  }
-
-  public descrizioneTitolo(item: any): string {
-    return "[" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + item.idAziendaTipoProcedimento.idTitolo.nome;
-  }
-
-  public receiveMessage(event: any) {
-    this.iterAvviato = !!event.idIter;
-    if (this.iterAvviato) {
-      this.idIterAvviato = event.idIter;
     }
-    this.popupNuovoIterVisible = event.visible;
-  }
 
-  public popupHidden() {
-    this.popupNuovoIterVisible = false; // Settaggio necessario in caso il popup venga chiuso tramite la X
-    if (this.iterAvviato) {
-      this.iterAvviato = false;
-      this.router.navigate(["iter-procedimento"], { queryParams: { idIter: this.idIterAvviato } });
+    // Calcolo la Width dei widget in base alla grandezza della finestra del browser.
+    calcWidth(divisore: number, responsive = false): any {
+        if (responsive && window.innerWidth < 1280)
+            return "90%";
+        return window.innerWidth / divisore;
     }
-  }
 
-  public handleEvent(name: String, e: any) {
-    switch (name) {
-      case "infoOnClick":
-        this.rigaSelezionata = e.row;
-        this.apriDettaglio(e.row);
-        break;
-      case "iterOnClick":
-        this.popupNuovoIterVisible = true;
-        this.procedimentoDaPassare = {
-          procedimento: e.row.data
-        };
-        break;
-      case "onSelectionChanged":
-        this.messageEvent.emit({ row: e });
-        break;
+    // Creo un template per item "puri"
+    itemClear(data, itemElement): string {
+        const rowData = this.gridContainer.instance.getDataSource().items()[this.rigaSelezionata.rowIndex];
+        return data.dataField.split(".").reduce((o, i) => o[i], rowData); // Devo parsare il dataField per entrare in profondità nell'oggetto
     }
-  }
+
+    // Aggiungo l'ignore case per tutte le colonne non lookup
+    customizeColumns(columns: any) {
+        columns.forEach(column => {
+            const defaultCalculateFilterExpression = column.calculateFilterExpression;
+            column.calculateFilterExpression = function (value, selectedFilterOperation) {
+                if (this.dataType === "string" && !this.lookup && value) {
+                    return ["tolower(" + this.dataField + ")",
+                        selectedFilterOperation || "contains",
+                        value.toLowerCase()];
+                } else {
+                    return defaultCalculateFilterExpression.apply(this, arguments);
+                }
+            };
+        });
+    }
+
+    public descrizioneTitolo(item: any): string {
+        return "[" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + item.idAziendaTipoProcedimento.idTitolo.nome;
+    }
+
+    public receiveMessage(event: any) {
+        this.iterAvviato = !!event.idIter;
+        if (this.iterAvviato) {
+            this.idIterAvviato = event.idIter;
+        }
+        this.popupNuovoIterVisible = event.visible;
+    }
+
+    public popupHidden() {
+        this.popupNuovoIterVisible = false; // Settaggio necessario in caso il popup venga chiuso tramite la X
+        if (this.iterAvviato) {
+            this.iterAvviato = false;
+            this.router.navigate(["iter-procedimento"], {queryParams: {idIter: this.idIterAvviato}});
+        }
+    }
+
+    public handleEvent(name: String, e: any) {
+        switch (name) {
+            case "infoOnClick":
+                this.rigaSelezionata = e.row;
+                this.apriDettaglio(e.row);
+                break;
+            case "iterOnClick":
+                this.popupNuovoIterVisible = true;
+                this.procedimentoDaPassare = {
+                    procedimento: e.row.data
+                };
+                break;
+            case "onSelectionChanged":
+                this.messageEvent.emit({row: e});
+                break;
+        }
+    }
 }

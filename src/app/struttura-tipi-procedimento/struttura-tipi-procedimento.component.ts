@@ -28,7 +28,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   private nodeSelectedFromContextMenu: any;
   private initialState: any;
   private dataSourceProcedimento: DataSource;
-  private strutturaSelezionata: Struttura;
+  public strutturaSelezionata: Struttura;
   private odataContextDefinitionTitolare;
   private odataContextDefinitionResponsabile;
   private odataContextDefinitionProcedimento;

@@ -23,6 +23,8 @@ export class AvviaNuovoIterDaDocumentoComponent {
     this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
 
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
+      console.log("Data Registrazione: ", queryParams["dataRegistrazione"]);
+      console.log("In Date: ", new Date(queryParams["dataRegistrazione"]));
       this.doc = {
         registro: queryParams["registro"],
         numero: queryParams["numero"],
