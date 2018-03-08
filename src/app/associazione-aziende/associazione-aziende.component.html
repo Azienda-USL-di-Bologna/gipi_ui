@@ -86,7 +86,7 @@
                             <dx-button *ngIf="checkAssociata.value" [text]="'Disassocia'" (onClick)="buttonClicked(azienda, 'disassocia')" [type]="confirm"></dx-button>
                             <dx-button *ngIf="!checkAssociata.value" [text]="'Associa'" (onClick)="buttonClicked(azienda, 'associa')" [type]="confirm"></dx-button> 
                         -->
-                            <dx-button [text]="'Associa'" (onClick)="buttonClicked(azienda, 'associa')" [type]="'confirm'" [disabled]='checkAssociata.value'></dx-button>
+                            <dx-button [text]="!checkAssociata.value ? 'Associa' : 'Associata'" (onClick)="buttonClicked(azienda, 'associa')" [type]="'confirm'" [disabled]='checkAssociata.value'></dx-button>
                         </div>
                     </div>
                 <!-- commentato per RM #20446
