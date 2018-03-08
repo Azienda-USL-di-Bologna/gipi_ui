@@ -78,8 +78,6 @@ import { TipiProcedimentoAziendaliComponent } from "./tipi-procedimento-aziendal
 import { DettaglioTipoProcedimentoComponent } from "./tipi-procedimento-aziendali/dettaglio-tipo-procedimento/dettaglio-tipo-procedimento.component";
 import {LoginModule} from "@bds/nt-login";
 
-
-
 @NgModule({
     declarations: [
         AppComponent,
@@ -112,7 +110,7 @@ import {LoginModule} from "@bds/nt-login";
         CambioDiStatoBoxComponent,
         CambioDiStatoComponent,
         TipiProcedimentoAziendaliComponent,
-        DettaglioTipoProcedimentoComponent,
+        DettaglioTipoProcedimentoComponent
     ],
     imports: [
         BrowserModule,
