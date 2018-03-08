@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild, SimpleChange, OnChanges, SimpleChanges } from "@angular/core";
 import { Location } from "@angular/common";
 import DataSource from "devextreme/data/data_source";
+import ODataStore from "devextreme/data/odata/store";
 import { Router, ActivatedRoute, Params } from "@angular/router";
 import {
   OdataContextDefinition, OdataContextFactory, OdataContextEntitiesDefinition,
@@ -27,7 +28,6 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   private nodeSelectedFromContextMenu: any;
   private initialState: any;
   private dataSourceProcedimento: DataSource;
-  //private datasourceAziendaTipiProcedimento: DataSource;
   private strutturaSelezionata: Struttura;
   private odataContextDefinitionTitolare;
   private odataContextDefinitionResponsabile;
@@ -49,11 +49,9 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   public procedimento: Procedimento = new Procedimento();
   public initialProcedimento: Procedimento;
 
-  public possoAgire = false;
+  public possoAgireForm = false;
 
-  /*   public abilitaSalva = false;
-    public campiEditabiliDisabilitati = true;
-    public testoBottone = "Modifica"; */
+
 
   public headerTipoProcedimento: string;
   public headerStruttura;
@@ -87,7 +85,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public testoTooltipResponsabile: String;
   public testoTooltipTitolare: String;
-  //public dataFromAziendaTipiProcedimentoComponent: AziendaTipoProcedimento = new AziendaTipoProcedimento();
+
 
   constructor(private odataContextFactory: OdataContextFactory,
     private globalContextService: GlobalContextService,
@@ -119,6 +117,11 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   private caricaDettaglioProcedimento() {
 
+/*     if (selectedNode) {
+      this.setStruttura(selectedNode);
+    } */
+    
+
     // ricarico l'aziendaTipoProcedimento "padre"
     if (!this.aziendaTipoProcedimento) {
       this.aziendaTipoProcedimento = new AziendaTipoProcedimento();
@@ -146,19 +149,13 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
      }
 
 
-    console.log("aziendaTipoProcedimentoOOOOOOOOOOOOOOOOOOOOOOOOOOO", this.aziendaTipoProcedimento);
+    // console.log("aziendaTipoProcedimentoOOOOOOOOOOOOOOOOOOOOOOOOOOO", this.aziendaTipoProcedimento);
 
-
-
-    //const aziendaTipoProcedimento: AziendaTipoProcedimento = this.dataFromAziendaTipiProcedimentoComponent["aziendaTipoProcedimento"];
 
     this.defaultResponsabile = new UtenteStruttura();
     this.defaultTitolare = new UtenteStruttura();
 
 
-
-    /*     this.defaultResponsabile = undefined;
-        this.defaultTitolare = undefined; */
     if (!this.dataSourceProcedimento) {
       this.dataSourceProcedimento = new DataSource({
         store: this.odataContextDefinitionProcedimento.getContext()[new Procedimento().getName()],
@@ -176,9 +173,16 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       this.dataSourceProcedimento.filter([["idAziendaTipoProcedimento.id", "=", this.idAziendaTipoProcedimentoFront], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]);
     }
     this.dataSourceProcedimento.load().then(res => {
-      res.length ? this.formVisible = true : this.formVisible = false;  /* Se non ho risultato nascondo il form */
-      this.procedimento.build(res[0]);
-      this.setInitialValues();
+      if (res.length) {
+        this.procedimento = new Procedimento();
+        this.procedimento.build(res[0]);
+        this.setInitialValues();
+        this.formVisible = true;
+      } else {
+        this.procedimento = null;
+        this.initialProcedimento = null;
+        this.formVisible = false;
+      }
 
 
 
@@ -193,11 +197,10 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         this.dataSourceResponsabile.filter([["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and", ["idUtente.attivo", "=", true], "and",
         ["idStruttura.id", "=", idStruttura], "and", ["idStruttura.attiva", "=", true]]);
         this.dataSourceResponsabile.load().then(result => {
-          // console.log("RESULT = ", result);
+
           this.defaultResponsabile = result[0];
           this.testoTooltipResponsabile = result[0].nomeVisualizzato;
         });
-        // this.dato =  this.dataSourceResponsabile.items().filter(x => x.idUtente.id === idResp && x.idStruttura.id === idStruttResp)[0];
       } else {
         this.defaultResponsabile = undefined;
         this.testoTooltipResponsabile = null;
@@ -209,6 +212,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
 
       if (!this.dataSourceTitolare) {
+
         this.dataSourceTitolare = this.creaDataSourceUtente(this.odataContextDefinitionTitolare, idUtente, idStruttura, "titolare");
       } else if (idUtente && idStruttura) {
         this.dataSourceTitolare.filter([["idStruttura.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and", ["idUtente.attivo", "=", true],
@@ -226,20 +230,21 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     });
   }
 
+  
   setInitialValues() {
+    
     this.initialProcedimento = Entity.cloneObject(this.procedimento);
 
-    console.log("PROCEDIMENTO", this.procedimento);
-    console.log("INITIAL_PROCEDIMENTO", this.initialProcedimento);
   }
 
   public bottoneModificaProcedimento() {
-    this.possoAgire = true;
+    this.possoAgireForm = true;
   }
 
 
   public bottoneSalvaProcedimento() {
 
+    // questo lo devo spostare nel validata
     if (this.procedimento.dataFine && (this.procedimento.dataFine < this.procedimento.dataInizio)) {
       notify({ message: "Correggere l'intervallo di validità", type: "error", displayTime: 1200 });
       return;
@@ -251,60 +256,43 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       differenze.forEach(element => differenzeStr += "<li><b>" + element + "</b></li>");
     }
 
-    if (differenzeStr === "") {
-      this.possoAgire = false;
-      return;
-    }
-
-    //differenzeStr = differenzeStr.substring(0, differenzeStr.length - 2);
-
-    let saveSuccecc: boolean = false;
+    this.possoAgireForm = false;
 
     confirm("Hai modificato i seguenti campi: <br/>" + differenzeStr + "<br/> Sei sicuro di voler procedere?", "Conferma").then(dialogResult => {
-      if (!dialogResult) {
-        // non ho confermato di salvare le modifiche. Non devo far niente
-        return;
-      }
 
+      if (dialogResult) {
       // ho confermato, procedo
-      this.dataSourceProcedimento.store()
-        .update(this.procedimento.id, this.procedimento)
-        .done(res => {
-          saveSuccecc = true;
+      this.dataSourceProcedimento.store().update(this.procedimento.id, this.procedimento)
+        .then(res => {
+          console.log("OK_UPDATE", res); 
+          this.caricaDettaglioProcedimento();
           if (this.strutturaSelezionata["hasChildren"]) {
             confirm("Vuoi Estendere le modifiche alle strutture figlie?", "Conferma").then(dialogResult2 => {
               if (dialogResult2) {
-                this.http.post(CUSTOM_RESOURCES_BASE_URL + "espandiProcedimenti", this.procedimento.id)
-                  .subscribe(
-                    res2 => {
-                      saveSuccecc = true;
-                      notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
-                      this.treeView.caricaDati();
-                      console.log("risultato POST OK", res);
-                    },
-                    err => {
-                      saveSuccecc = false;
-                      console.log("risultato POST Error", err);
-                      notify({ message: "Errore nel salvataggio", type: "error", displayTime: 1200 });
-                    }
-                  );
+                this.http.post(CUSTOM_RESOURCES_BASE_URL + "espandiProcedimenti", this.procedimento.id).subscribe(
+                  res2 => {
+                    console.log("risultato POST OK", res);
+                    this.treeView.caricaDati();
+                    notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
+                  },
+                  err => {
+                    console.log("risultato POST Error", err);
+                    notify({ message: "Errore nel salvataggio", type: "error", displayTime: 1200 });
+                  }
+                );
               } else {
                 notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
               }
             });
+          } else {
+            notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
           }
-          this.caricaDettaglioProcedimento();
+        })
+        .catch(err => {
+          console.log("ERROR_UPDATE", err); 
+          notify({ message: "Errore nel salvataggio", type: "error", displayTime: 1200 });
         });
-
-
-      this.possoAgire = false;
-
-      /*    if (saveSuccecc) {
-           this.caricaDettaglioProcedimento();
-           notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
-         } else {
-           notify({ message: "Errore nel salvataggio", type: "error", displayTime: 1200 });
-         } */
+      }
     });
   }
 
@@ -319,7 +307,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     if (differenze.length !== 0) {
       this.caricaDettaglioProcedimento();
     }
-    this.possoAgire = false;
+    this.possoAgireForm = false;
   }
 
 
@@ -330,29 +318,29 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.strutturaSelezionata["hasChildren"] = struttura.hasChildren;
   }
 
-  selezionaStruttura(selectedNode) {
-    console.log("click su struttura selezionata");
+  selezionaStruttura(selectedNode: any) {
 
     this.setStruttura(selectedNode);
+    this.caricaDettaglioProcedimento();
 
-    if (this.initialProcedimento && this.procedimento) {
+
+    // console.log("click su struttura selezionata");
+
+/*     if (this.initialProcedimento && this.procedimento) {
       let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
       if (differenze.length !== 0) {
         // il caricamento del dettaglio Procedimento lo fa dentro alla seguente funzione
-        this.bottoneSalvaProcedimento();
+        // qui devo arrivarci con la struttura selezionata precedente
+        this.bottoneSalvaProcedimento(selectedNode);
       }
-      else {
-        this.possoAgire = false;
-        this.caricaDettaglioProcedimento();
+      else {        
+        this.possoAgireForm = false;
+        this.caricaDettaglioProcedimento(selectedNode);
       }
     } else {
       // al primo nodo che clicco entro qua e devo comunque caricarmi i dati 
-      this.caricaDettaglioProcedimento();
-    }
-
-    /*     if (!this.possoAgire) {
-          this.setStruttura(obj);
-        } */
+      this.caricaDettaglioProcedimento(selectedNode);
+    } */
   }
 
   /* Setto qui i dati che verranno passati al componente dell'albero e alla popup */
@@ -455,7 +443,6 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   setTitolarePlusStruttura(event: any) {
     // console.log("EVENT SETTITO = ", event);
-
     this.procedimento.idTitolarePotereSostitutivo = event.itemData.idUtente;
     this.procedimento.idStrutturaTitolarePotereSostitutivo = event.itemData.idStruttura;
     this.testoTooltipTitolare = event.itemData.nomeVisualizzato;
