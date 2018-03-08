@@ -1,4 +1,4 @@
-<form action="your-action" (submit)="onFormSubmit($event)">
+<form *ngIf="!isFaseAttualeDiChiusura" action="your-action" (submit)="onFormSubmit($event)">
     <div class="container-fluid">
         <!-- Prima riga: fasi -->
         <div class="row">
@@ -70,6 +70,9 @@
 
     </div>
 </form>
+<!-- <div *ngIf="isFaseAttualeDiChiusura" class="alert alert-warning text-center" role="alert">
+    Il procedimento è già nell'ultima fase prevista: "Fase di chiusura".
+</div> -->
 
 
 <dx-popup
