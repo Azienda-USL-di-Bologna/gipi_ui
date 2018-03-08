@@ -77,7 +77,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       "idTitolarePotereSostitutivo": "Titolare potere sostitutivo",
       "ufficio": "Ufficio",
       "strumenti": "Strumenti di tutela amministrativa e giurisdizionale riconosciuti dalla Legge",
-      "modalitaInfo": "'Modalità informativa stato iter",
+      "modalitaInfo": "Modalità informativa stato iter",
       "descrizioneAtti": "Descrizione atti e documenti da allegare all\'istanza",
       "dataInizio": "Data Inizio",
       "dataFine": "Data Fine",
