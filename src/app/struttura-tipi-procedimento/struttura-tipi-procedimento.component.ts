@@ -119,9 +119,10 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   private caricaDettaglioProcedimento() {
 
-    /*     if (selectedNode) {
-          this.setStruttura(selectedNode);
-        } */
+    console.log("in caricaDettaglioProcedimento");
+    console.log("PROCEDIMENTO", this.procedimento);
+    console.log("INITIAL_PROCEDIMENTO", this.initialProcedimento);
+
 
 
     // ricarico l'aziendaTipoProcedimento "padre"
@@ -244,13 +245,18 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public bottoneSalvaProcedimento() {
 
+    console.log("in bottoneSalvaProcedimento");
+    console.log("PROCEDIMENTO", this.procedimento);
+    console.log("INITIAL_PROCEDIMENTO", this.initialProcedimento);
+
     // questo lo devo spostare nel validata
     if (this.procedimento.dataFine && (this.procedimento.dataFine < this.procedimento.dataInizio)) {
       notify({ message: "Correggere l'intervallo di validità", type: "error", displayTime: 1200 });
       return;
     }
 
-    let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
+    //let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
+    let differenze: string[] = this.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
     let differenzeStr: string = "";
     if (differenze.length > 0) {
       differenze.forEach(element => differenzeStr += "<li><b>" + element + "</b></li>");
@@ -305,7 +311,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
 
   public bottoneAnnulla() {
-    let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
+    // let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
+    let differenze: string[] = this.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
     console.log("DIFFERENZE", differenze);
     // c'è qualche differenza, ricaricare i dati tramite chiamata http per tornare alla situazione di partenza
     // potrebbe bastare che mi riassegni il valore iniziale del procedimento ma non funziona coi dati delle lookup
@@ -324,6 +331,10 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   selezionaStruttura(selectedNode: any) {
+
+    console.log("in selezionaStruttura");
+    console.log("PROCEDIMENTO", this.procedimento);
+    console.log("INITIAL_PROCEDIMENTO", this.initialProcedimento);
 
     this.setStruttura(selectedNode);
     this.caricaDettaglioProcedimento();
@@ -468,6 +479,41 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this._location.back();
   }
 
+
+
+  // questo è temporaneo. Sto usando la locale anche se dovrei usare quella del modulo.
+  // quella del modulo è corretta ma non pushata, perchè non volevo ripubblicare la versione
+  public compareObjs(datafieldsDescription: any, obj1: any, obj2: any) {
+    
+    const differences: string[] = [];
+    const propToCompare: string[] = Object.getOwnPropertyNames(datafieldsDescription);
+    propToCompare.forEach(p => {
+      // se sono tutti e due null o undefined -> sono uguali
+      if ((!obj1[p] || obj1[p] === "") && (!obj2[p] || obj2[p] === "")) {
+        return;
+      } else if (((!obj1[p] || obj1[p] === "") && obj2[p])  // se sono uno è valorizzato e l'altro no -> sono diversi
+        || (obj1[p] && (!obj1[p] || obj1[p] === ""))) {
+        differences.push(datafieldsDescription[p]);
+      } else if (obj1[p] && obj2[p]) { // se sono tutti e due valorizzati vado a confrontarli
+        // tipo data
+        if (obj1[p] instanceof Date) {
+          if (obj1[p].toString() !== obj2[p].toString()) {
+            differences.push(datafieldsDescription[p]);
+          }
+        } else if (typeof obj1[p] === "object") { // tipo oggetto
+          if (!ServerObject.isEquals(obj1[p], obj2[p])) {
+            differences.push(datafieldsDescription[p]);
+          }
+        }else {
+          // altri tipi (stringhe o numeri)
+          if (obj1[p] !== obj2[p]) {
+            differences.push(datafieldsDescription[p]);
+          }
+        }
+      }
+    });
+    return differences;
+  }
 
 
 }
