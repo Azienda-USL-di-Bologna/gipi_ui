@@ -54,7 +54,7 @@ export class CambioDiStatoComponent implements OnInit {
                   this.userInfo = {
                     idUtente: loggedUser.getField(bUtente.id),
                     idAzienda:  loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id],
-                    cf: "GSLFNC89A05G224Y"
+                    cf: loggedUser.getField(bUtente.codiceFiscale)
                   };
                 }
             }
