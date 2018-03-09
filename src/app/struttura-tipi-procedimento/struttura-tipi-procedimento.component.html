@@ -28,7 +28,7 @@
         <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" editorType="dxTextArea" cssClass="label-wrap" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" cssClass="label-wrap" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" cssClass="label-wrap" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
-        <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nome" cssClass="label-wrap" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.titAndClass" cssClass="label-wrap" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" cssClass="label-wrap" [label]="{text: 'Durata massima sospensione'}" [editorOptions]="{ disabled: true }"></dxi-item>    
         <dxi-item [template]="'responsabile'" cssClass="label-wrap lookup-wrap" [label]="{text: 'Responsabile dell\'adozione dell\'atto finale'}" ></dxi-item>
           <div *dxTemplate="let data of 'responsabile'">

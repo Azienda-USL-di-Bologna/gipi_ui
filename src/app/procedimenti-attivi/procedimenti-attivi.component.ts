@@ -53,10 +53,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
         this.initData();
     }
 
-    ngOnInit(): void {
-    }
-
-    initData(): void {
+    private initData(): void {
         this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
         this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
         this.idStruttureUtente = this.getIdStruttureUtente();
@@ -155,6 +152,9 @@ export class ProcedimentiAttiviComponent implements OnInit {
                 }
             }
         }];
+    }
+
+    ngOnInit(): void {
     }
 
     // Gestisco la toolbar di ricerca. La voglio centrale.
