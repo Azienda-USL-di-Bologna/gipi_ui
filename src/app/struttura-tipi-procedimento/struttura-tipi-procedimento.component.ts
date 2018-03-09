@@ -165,9 +165,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         expand: expandArrayProcedimento,
         filter: [["idAziendaTipoProcedimento.id", "=", this.idAziendaTipoProcedimentoFront], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]],
         map: (item) => {
-          console.log("MI MAPPO GLI ITEM!!!!", item)
-          console.log("MI MAPPO GLI ITEM.idAziendatipoProc!!!!", item.idAziendaTipoProcedimento)
           if (item.idAziendaTipoProcedimento.idTitolo) {
+            // questo sembra essere il pattern più funzionale: mi creo una variabile (titAndClass) che richiamo poi nell'html
             item.idAziendaTipoProcedimento.idTitolo.titAndClass = "[" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + item.idAziendaTipoProcedimento.idTitolo.nome;
           }
           return item;
