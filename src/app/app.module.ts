@@ -28,7 +28,9 @@ import {
     DxSlideOutModule, 
     DxToolbarModule, 
     DxSwitchModule,
-    DxScrollViewModule
+    DxScrollViewModule,
+    DxNumberBoxModule,
+    DxValidationGroupModule
 } from "devextreme-angular";
 
 import {RouterModule} from "@angular/router";
@@ -144,7 +146,9 @@ import {LoginModule} from "@bds/nt-login";
         DxScrollViewModule,
         ContextModule.forRoot(contextModuleConfig),
         LoginModule.forRoot(loginModuleConfig),
-        EntitiesModule.forRoot(null)
+        EntitiesModule.forRoot(null),
+        DxNumberBoxModule,
+        DxValidationGroupModule
     ],
     providers: [DefinizioneTipiProcedimentoService, RoleGuard,
         // NavbarService

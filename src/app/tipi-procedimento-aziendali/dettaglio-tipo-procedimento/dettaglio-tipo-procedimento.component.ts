@@ -3,7 +3,7 @@ import {AziendaTipoProcedimento, Titolo, bAzienda, bUtente} from "@bds/nt-entiti
 import DataSource from "devextreme/data/data_source";
 import { CustomLoadingFilterParams, OdataContextFactory, GlobalContextService, OdataContextDefinition } from "@bds/nt-context";
 import { LoggedUser } from "@bds/nt-login";
-import { HttpHeaders, HttpClient } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 
 
@@ -22,7 +22,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
   public dataSourceTitoli: DataSource;
   public dataSourceAziendaTipoProcedimento: DataSource;
   public loggedUser: LoggedUser;
-
+  public pattern: any =  "^[0-9][0-9]*$";
 
   // tslint:disable-next-line:no-input-rename
   @Input()
@@ -40,7 +40,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
   @Output() messageEvent: EventEmitter<any>= new EventEmitter();
 
   constructor(private odataContextFactory: OdataContextFactory, private globalContextService: GlobalContextService, private http: HttpClient) {
-    console.log("dettaglio-tipo-procedimento Constructor");
+    console.log("dettaglio-tipo-procedimento CONSTRUCTOR");
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser")
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nome");
@@ -98,7 +98,17 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
     this.ngOnDestroy();
   }
 
-  public save() {
+    validate(params) {
+        console.log("passo di validazione");
+        let result = params.validationGroup.validate();
+        if (result.isValid) {
+            this.save();
+        }
+    }
+
+
+    public save() {
+
     console.log("dettaglio-tipo-procedimento CARICADATASOURCE");
     this.dataSourceAziendaTipoProcedimento.store().update(this.proc.id, this.proc).then( 
       res => {
