@@ -18,7 +18,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
 
     private odataContextDefinition: OdataContextDefinition;
     private rigaSelezionata: any;
-    private idStruttureUtente: number[];
+    private idStruttureUtentes: number[];
     private utility: UtilityFunctions = new UtilityFunctions();
 
     @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
@@ -50,13 +50,11 @@ export class ProcedimentiAttiviComponent implements OnInit {
                 private globalContextService: GlobalContextService) {
         console.log("file: app/procedimenti-attivi/procedimenti-attivi.components.ts");
         console.log("procedimenti-attivi (constructor)");
-        this.initData();
+        if (!!!this.dataInitialized)
+            this.initData();
     }
 
-    ngOnInit(): void {
-    }
-
-    initData(): void {
+    private initData(): void {
         this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
         this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
         this.idStruttureUtente = this.getIdStruttureUtente();
@@ -105,6 +103,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
 
         this.itemClear = this.itemClear.bind(this);
         this.setFormLookBase();
+        this.dataInitialized = true;
     }
 
     private setDataAvviaIterDaDocumento() {
@@ -155,6 +154,9 @@ export class ProcedimentiAttiviComponent implements OnInit {
                 }
             }
         }];
+    }
+
+    ngOnInit(): void {
     }
 
     // Gestisco la toolbar di ricerca. La voglio centrale.
