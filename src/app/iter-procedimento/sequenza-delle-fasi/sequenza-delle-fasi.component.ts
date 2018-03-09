@@ -13,12 +13,21 @@ import { OdataContextDefinition } from "@bds/nt-context";
 export class SequenzaDelleFasiComponent implements OnInit {
 
   public datasource: DataSource;
+  public idIter: number;
+  public statoAttuale: string;
 
-  // qua devo prendermi poi il parametro dell'oggetto Iter che mi passa la videata
-  // @Input("idIter") idIter: string;
-  @Input("daPadre") daPadre: Object;
-
-
+  @Input() set daPadre(value: any){
+    this.idIter = parseInt(value["idIter"]);
+    let _that = this;
+    this.datasource = new DataSource({
+      store: this.odataContextDefinition.getContext()[new FaseIter().getName()],
+      expand: ["idFase", "idIter"],
+      filter: ["idIter.id", "=", this.idIter],
+      onChanged: function(){
+        _that.statoAttuale = "(" + this.items()[0].idFase.nome + ")";
+      }
+    });
+  };
 
   public faseIter: FaseIter = new FaseIter;
   public iter: Iter = new Iter();
@@ -27,32 +36,9 @@ export class SequenzaDelleFasiComponent implements OnInit {
 
   constructor(private odataContextFactory: OdataContextFactory) {
     this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
-
-    // this.datasource = new DataSource({
-    //   store: this.odataContextDefinition.getContext()[Entities.FaseIter.name],
-    //   expand: ['idFase'],
-    //   filter: ['FK_id_iter', '=', this.idIter]
-    //   //sort: ['dataInizioFase']
-    // });
-    // this.datasource.sort({ getter: "dataInizioFase", desc: true });
   }
 
-  ngOnInit() {
-    this.datasource = new DataSource({
-      store: this.odataContextDefinition.getContext()[new FaseIter().getName()],
-      expand: ["idFase", "idIter"],
-      filter: ["idIter.id", "=", parseInt(this.daPadre["idIter"])]
-      // sort: ['dataInizioFase']
-    });
-    this.datasource.sort({ getter: "idFase", desc: true });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.datasource !== undefined) {
-      this.datasource.load();
-    }
-
-  }
+  ngOnInit() { }
 
 
 }
