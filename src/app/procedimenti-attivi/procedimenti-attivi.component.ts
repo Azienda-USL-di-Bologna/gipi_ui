@@ -102,7 +102,6 @@ export class ProcedimentiAttiviComponent implements OnInit {
 
         this.itemClear = this.itemClear.bind(this);
         this.setFormLookBase();
-        this.dataInitialized = true;
     }
 
     private setDataAvviaIterDaDocumento() {
