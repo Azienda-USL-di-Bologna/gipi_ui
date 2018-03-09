@@ -18,7 +18,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
 
     private odataContextDefinition: OdataContextDefinition;
     private rigaSelezionata: any;
-    private idStruttureUtentes: number[];
+    private idStruttureUtente: number[];
     private utility: UtilityFunctions = new UtilityFunctions();
 
     @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
@@ -50,8 +50,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
                 private globalContextService: GlobalContextService) {
         console.log("file: app/procedimenti-attivi/procedimenti-attivi.components.ts");
         console.log("procedimenti-attivi (constructor)");
-        if (!!!this.dataInitialized)
-            this.initData();
+        this.initData();
     }
 
     private initData(): void {
