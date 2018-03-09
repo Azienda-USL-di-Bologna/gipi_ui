@@ -1,4 +1,4 @@
-import {Component, ViewChild, Input, Output, EventEmitter} from "@angular/core";
+import {Component, ViewChild, Input, Output, EventEmitter, OnInit} from "@angular/core";
 import {DxDataGridComponent} from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import {OdataContextFactory, OdataContextDefinition} from "@bds/nt-context";
@@ -14,7 +14,7 @@ import {forEach} from "@angular/router/src/utils/collection";
     templateUrl: "./procedimenti-attivi.component.html",
     styleUrls: ["./procedimenti-attivi.component.scss"]
 })
-export class ProcedimentiAttiviComponent {
+export class ProcedimentiAttiviComponent implements OnInit {
 
     private odataContextDefinition: OdataContextDefinition;
     private rigaSelezionata: any;
@@ -37,7 +37,7 @@ export class ProcedimentiAttiviComponent {
     @Input()
     set avviaIterDaDocumento(daDocumento: any) {
         this.daDocumento = daDocumento;
-        this.setDataAvviaIterDaDocumento();
+        // this.setDataAvviaIterDaDocumento();
         this.setFormLookAvviaIterDaDocumento();
     }
 
@@ -50,7 +50,13 @@ export class ProcedimentiAttiviComponent {
                 private globalContextService: GlobalContextService) {
         console.log("file: app/procedimenti-attivi/procedimenti-attivi.components.ts");
         console.log("procedimenti-attivi (constructor)");
+        this.initData();
+    }
 
+    ngOnInit(): void {
+    }
+
+    initData(): void {
         this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
         this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
         this.idStruttureUtente = this.getIdStruttureUtente();
@@ -58,7 +64,7 @@ export class ProcedimentiAttiviComponent {
         // this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).aziende.id;
         const now = new Date();
 
-        this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
+        this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
         this.dataSourceProcedimenti = new DataSource({
             store: this.odataContextDefinition.getContext()[new Procedimento().getName()].on("loaded", (res: any) => {
                 // for (let i = 0; i < res.length; i++) {
@@ -107,7 +113,7 @@ export class ProcedimentiAttiviComponent {
 
         // Ora mi creo l'array-filtro e filtro
         this.dataSourceProcedimenti.filter(
-            [this.utility.buildMultipleFilterForArray("idStruttura.id", this.idStruttureUtente)]
+            this.utility.buildMultipleFilterForArray("idStruttura.id", this.idStruttureUtente)
                 .concat(this.dataSourceProcedimenti.filter())
         );
     }
