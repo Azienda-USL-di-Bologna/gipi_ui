@@ -23,6 +23,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
   @ViewChild("definizione_tipi_procedimento") public grid: DxDataGridComponent;
   @Input("refreshButton") public refreshButton;
 
+  public pattern: any =  "^[0-9][0-9]*$";
   public dataSource: DataSource;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
   public texts: Object = {
@@ -79,7 +80,8 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
       options: {
         type: "normal",
         text: "Salva",
-        onClick: () => {
+        onClick: (params) => {
+          params.validationGroup.validate();
           this.grid.instance.saveEditData();
         }
       }
@@ -172,11 +174,9 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
         break;
 
       case "rowValidating":
-       // return false;
        break;
 
       case "RowUpdating":
-        event.cancel = true;
         return;
 
 

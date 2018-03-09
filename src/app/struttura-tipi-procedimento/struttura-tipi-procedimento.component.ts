@@ -18,25 +18,25 @@ import { HttpClient } from "@angular/common/http";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 
 @Component({
-  selector: "app-struttura-tipi-procedimento",
+  selector: "struttura-tipi-procedimento",
   templateUrl: "./struttura-tipi-procedimento.component.html",
   styleUrls: ["./struttura-tipi-procedimento.component.scss"]
 })
 export class StrutturaTipiProcedimentoComponent implements OnInit {
-  private odataContextDefinition;
-  private odataContextDefinitionAzienda;
+  private odataContextDefinition: OdataContextDefinition;
+  private odataContextDefinitionAzienda: OdataContextDefinition;
+  private odataContextDefinitionTitolare: OdataContextDefinition;
+  private odataContextDefinitionResponsabile: OdataContextDefinition;
+  private odataContextDefinitionProcedimento: OdataContextDefinition;
   private nodeSelectedFromContextMenu: any;
   private initialState: any;
   private dataSourceProcedimento: DataSource;
-  public strutturaSelezionata: Struttura;
-  private odataContextDefinitionTitolare;
-  private odataContextDefinitionResponsabile;
-  private odataContextDefinitionProcedimento;
 
   private aziendaTipoProcedimento: AziendaTipoProcedimento;
 
   @ViewChild("treeView") treeView: any;
 
+  public strutturaSelezionata: Struttura;
   public datasource: DataSource;
   public strutture: Struttura = new Struttura();
   public contextMenuItems;
@@ -92,6 +92,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     private router: Router, private activatedRoute: ActivatedRoute,
     private _location: Location,
     private http: HttpClient) {
+
+      console.log("struttura-tipi-procedimento CONSTRUCTOR");
 
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
       this.idAziendaFront = +queryParams["azienda"];
@@ -465,5 +467,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   goBack() {
     this._location.back();
   }
+
+
 
 }
