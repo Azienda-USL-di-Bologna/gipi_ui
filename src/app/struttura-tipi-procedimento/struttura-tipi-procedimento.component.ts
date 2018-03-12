@@ -238,12 +238,18 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.initialProcedimento = Entity.cloneObject(this.procedimento);
   }
 
-  public bottoneModificaProcedimento() {
+  public bottoneModificaProcedimento(validationParams: any) {
     this.possoAgireForm = true;
   }
 
 
-  public bottoneSalvaProcedimento() {
+  public bottoneSalvaProcedimento(validationParams: any) {
+    console.log("passo di validazione Salva");
+    let valResult = validationParams.validationGroup.validate();
+    if (!valResult.isValid) {
+      return;
+    }
+
 
     // questo lo devo spostare nel validata
     if (this.procedimento.dataFine && (this.procedimento.dataFine < this.procedimento.dataInizio)) {
