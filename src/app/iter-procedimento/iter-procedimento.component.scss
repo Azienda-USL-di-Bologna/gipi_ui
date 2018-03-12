@@ -74,3 +74,17 @@ label{
 #gridContainer .dx-scrollable-scroll {
     width: 15px;
 }
+// /deep/ dx-form .dx-form-group{
+//   box-shadow: 0 0 1px rgba(0,0,0,.15); 
+//   padding: 15px; 
+//   background-color: #fff; 
+//   border-radius: 2px;
+//   margin-bottom: 8px;
+// }
+dx-form .dx-form-group-with-caption{
+  box-shadow: 0 0 1px rgba(0,0,0,.15);
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
