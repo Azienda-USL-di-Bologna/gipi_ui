@@ -24,11 +24,11 @@
         [idAziendaTipoProcedimento]=idAziendaTipoProcedimentoFront [readOnly]="true" [disabled]="possoAgireForm" focusStateEnabled="false" [enableCheckRecursively]="false" (strutturaSelezionata)="selezionaStruttura($event)"></strutture-tree>
     </div>
     <div class="col-8" id="center-div">
-      <dx-form id="form" #myform [(formData)]="procedimento" [visible]="formVisible"> 
+      <dx-form id="form" #myform [(formData)]="procedimento" [visible]="formVisible" validationGroup="validationDettaglioProcedimento"> 
         <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" editorType="dxTextArea" cssClass="label-wrap" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" cssClass="label-wrap" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" cssClass="label-wrap" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
-        <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nome" cssClass="label-wrap" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.titAndClass" cssClass="label-wrap" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" cssClass="label-wrap" [label]="{text: 'Durata massima sospensione'}" [editorOptions]="{ disabled: true }"></dxi-item>    
         <dxi-item [template]="'responsabile'" cssClass="label-wrap lookup-wrap" [label]="{text: 'Responsabile dell\'adozione dell\'atto finale'}" ></dxi-item>
           <div *dxTemplate="let data of 'responsabile'">
@@ -68,10 +68,18 @@
               [hint]="testoTooltipTitolare">
             </dx-lookup>
           </div>
-          <dxi-item dataField="ufficio" cssClass="label-wrap" [label]="{text: 'Ufficio'}" [editorOptions]="{ disabled: !possoAgireForm }"></dxi-item>
-          <dxi-item dataField="strumenti" cssClass="label-wrap" [label]="{text: 'Strumenti di tutela amministrativa e giurisdizionale riconosciuti dalla Legge'}" [editorOptions]="{ disabled: !possoAgireForm }"></dxi-item>
-          <dxi-item dataField="modalitaInfo" cssClass="label-wrap" [label]="{text: 'Modalità informativa stato iter'}" [editorOptions]="{ disabled: !possoAgireForm }"></dxi-item>
-          <dxi-item dataField="descrizioneAtti" cssClass="label-wrap" [label]="{text: 'Descrizione atti e documenti da allegare all\'istanza'}" editorType="dxTextArea" [editorOptions]="{ height:70, disabled: !possoAgireForm }"></dxi-item>
+          <dxi-item dataField="ufficio" cssClass="label-wrap" [label]="{text: 'Ufficio'}" [editorOptions]="{ disabled: !possoAgireForm }">
+            <dxi-validation-rule type="required" message="Questo campo è obbligatorio"></dxi-validation-rule>
+          </dxi-item>
+          <dxi-item dataField="strumenti" cssClass="label-wrap" [label]="{text: 'Strumenti di tutela amministrativa e giurisdizionale riconosciuti dalla Legge'}" [editorOptions]="{ disabled: !possoAgireForm }">
+            <dxi-validation-rule type="required" message="Questo campo è obbligatorio"></dxi-validation-rule>
+          </dxi-item>
+          <dxi-item dataField="modalitaInfo" cssClass="label-wrap" [label]="{text: 'Modalità informativa stato iter'}" [editorOptions]="{ disabled: !possoAgireForm }">
+            <dxi-validation-rule type="required" message="Questo campo è obbligatorio"></dxi-validation-rule>
+          </dxi-item>
+          <dxi-item dataField="descrizioneAtti" cssClass="label-wrap" [label]="{text: 'Descrizione atti e documenti da allegare all\'istanza'}" editorType="dxTextArea" [editorOptions]="{ height:70, disabled: !possoAgireForm }">
+            <dxi-validation-rule type="required" message="Questo campo è obbligatorio"></dxi-validation-rule>
+          </dxi-item>
           <div class="dx-field">
           <dxi-item dataField="dataInizio" cssClass="label-wrap" [label]="{text: 'Data inizio validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
           <dxi-item dataField="dataFine" cssClass="label-wrap" [label]="{text: 'Data fine validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, displayFormat: 'dd/MM/yyyy', 
@@ -80,14 +88,12 @@
           <dxi-item [template]="'bottoneUno'"></dxi-item>
         <div *dxTemplate="let data of 'bottoneUno'"></div>
       </dx-form>
-      <dx-button *ngIf= "possoAgireForm" class="buttons-form margine-sinistro custom-sm-col" [visible]=formVisible (onClick)="bottoneSalvaProcedimento()" text="Salva"
-      hint="Salva i campi"></dx-button>
+      <dx-button *ngIf= "possoAgireForm" class="buttons-form margine-sinistro custom-sm-col" [visible]=formVisible (onClick)="bottoneSalvaProcedimento($event)" text="Salva"
+      hint="Salva i campi" validationGroup="validationDettaglioProcedimento"></dx-button>
 
     <dx-button *ngIf= "!possoAgireForm" class="buttons-form margine-sinistro custom-sm-col" [visible]=formVisible (onClick)="bottoneModificaProcedimento()" text="Modifica"
       hint="Modifica i campi"></dx-button>
 
-<!--       <dx-button class="buttons-form margine-sinistro custom-sm-col" [visible]=formVisible (onClick)="bottoneSalvaProcedimento(true)" text="{{ testoBottone }}"
-      hint="Salva i campi"></dx-button> -->
 
       <dx-button class="buttons-form" [visible]=formVisible (onClick)="bottoneAnnulla()" text="Annulla" hint="Annulla le modifiche"></dx-button>
       <span *ngIf="!formVisible">
@@ -97,17 +103,6 @@
     <div class="col"></div>
   </div>
 
- <!--  <div class="row item padding-bottom">
-    <div class="col"></div>
-    <div class="col-2" id="responsive-box-buttons">
-      <dx-button class="padding-top" [visible]=formVisible (onClick)="bottoneSalvaProcedimento(true)" text="{{ testoBottone }}"
-        hint="Salva i campi"></dx-button>
-    </div>
-    <div class="col-2">
-      <dx-button class="padding-top" [visible]=formVisible (onClick)="bottoneAnnulla()" text="Annulla" hint="Annulla le modifiche"></dx-button>
-    </div>
-    <div class="col"></div>
-  </div> -->
 </div>
 
 

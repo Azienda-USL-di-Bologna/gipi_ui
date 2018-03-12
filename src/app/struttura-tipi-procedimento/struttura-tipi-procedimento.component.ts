@@ -143,7 +143,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
     // devo gestire l'expand. Se metto anche "idAziendaTipoProcedimento.idTitolo" l'aziendaProcedimento padre non ha il titolo si rompe tutto e non si visualizzano i dati
     // l'aziendaProcedimento padre dovrebbe sempre avere il titolo, ma siccome questo non è gestito devo fare qui la gestione
-    let expandArrayProcedimento: string[] = ["idAziendaTipoProcedimento", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento",
+    let expandArrayProcedimento: string[] = ["idAziendaTipoProcedimento","idAziendaTipoProcedimento.idTitolo", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento",
       "idStrutturaTitolarePotereSostitutivo", "idStrutturaResponsabileAdozioneAttoFinale", "idResponsabileAdozioneAttoFinale"];
 
     if (this.aziendaTipoProcedimento.idTitolo) {
@@ -166,9 +166,10 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         filter: [["idAziendaTipoProcedimento.id", "=", this.idAziendaTipoProcedimentoFront], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]],
         map: (item) => {
           if (item.idAziendaTipoProcedimento.idTitolo) {
-            item.idAziendaTipoProcedimento.idTitolo.nome = "[" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + item.idAziendaTipoProcedimento.idTitolo.nome;
-            return item;
+            // questo sembra essere il pattern più funzionale: mi creo una variabile (titAndClass) che richiamo poi nell'html
+            item.idAziendaTipoProcedimento.idTitolo.titAndClass = "[" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + item.idAziendaTipoProcedimento.idTitolo.nome;
           }
+          return item;
         }
       });
     } else {
@@ -237,12 +238,18 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.initialProcedimento = Entity.cloneObject(this.procedimento);
   }
 
-  public bottoneModificaProcedimento() {
+  public bottoneModificaProcedimento(validationParams: any) {
     this.possoAgireForm = true;
   }
 
 
-  public bottoneSalvaProcedimento() {
+  public bottoneSalvaProcedimento(validationParams: any) {
+    console.log("passo di validazione Salva");
+    let valResult = validationParams.validationGroup.validate();
+    if (!valResult.isValid) {
+      return;
+    }
+
 
     // questo lo devo spostare nel validata
     if (this.procedimento.dataFine && (this.procedimento.dataFine < this.procedimento.dataInizio)) {
