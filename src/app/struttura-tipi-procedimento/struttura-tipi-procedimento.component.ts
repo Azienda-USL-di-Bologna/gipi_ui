@@ -176,6 +176,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       this.dataSourceProcedimento.filter([["idAziendaTipoProcedimento.id", "=", this.idAziendaTipoProcedimentoFront], "and", ["idStruttura.id", "=", this.strutturaSelezionata.id]]);
     }
     this.dataSourceProcedimento.load().then(res => {
+
+
       if (res.length) {
         this.procedimento = new Procedimento();
         this.procedimento.build(res[0]);
@@ -244,11 +246,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
 
   public bottoneSalvaProcedimento(validationParams: any) {
-    console.log("passo di validazione Salva");
-    let valResult = validationParams.validationGroup.validate();
-    if (!valResult.isValid) {
-      return;
-    }
+
+
 
 
     // questo lo devo spostare nel validata
