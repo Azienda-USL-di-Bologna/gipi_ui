@@ -23,7 +23,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
   @ViewChild("definizione_tipi_procedimento") public grid: DxDataGridComponent;
   @Input("refreshButton") public refreshButton;
 
-  public pattern: any =  "^[0-9][0-9]*$";
+  public pattern: any =  "^[1-9][0-9]+$";
   public dataSource: DataSource;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
   public texts: Object = {
@@ -102,7 +102,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
            let result = params.validationGroup.validate();
 
-          console.log("RESULT: ", result);
+          // console.log("RESULT: ", result);
 
           if (result.isValid) {
               this.grid.instance.saveEditData();
@@ -204,7 +204,17 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
           let dataInizioValidita = new Date(this.selectedRow.data.dataInizioValidita);
           let dataFineValidita = new Date(this.selectedRow.data.dataFineValidita);
 
-          if (dataInizioValidita <= dataFineValidita) {
+          let durataMassimaIter = (this.selectedRow.data.durataMassimaIter && this.selectedRow.data.durataMassimaIter > 0) ? true : false;
+          // console.log("Max iter: ", durataMassimaIter);
+          let durataMassimaSospensione = (this.selectedRow.data.durataMassimaSospensione && this.selectedRow.data.durataMassimaSospensione > 0) ? true : false;
+          // console.log(this.selectedRow.data.durataMassimaSospensione);
+          // console.log("Max durataMassimaSospensione: ", durataMassimaSospensione);
+          debugger;
+          console.log("VAL: ", this.selectedRow.data.durataMassimaIter);
+
+          debugger;
+
+          if ((dataInizioValidita <= dataFineValidita) && (durataMassimaIter) && (durataMassimaSospensione)) {
               event.isValid = true;
           } else {
               event.isValid = false;
@@ -306,5 +316,9 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
       return false;
     }
   }
+
+    onValueChanged(e:any){
+      console.log(e);
+    }
 
 }
