@@ -81,8 +81,34 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
         type: "normal",
         text: "Salva",
         onClick: (params) => {
-          params.validationGroup.validate();
-          this.grid.instance.saveEditData();
+            // let result = false;
+            // console.log(this.selectedRow.data.dataInizioValidita);
+            //
+            // let d1 = new Date(this.selectedRow.data.dataInizioValidita);
+            // console.log(d1);
+            //
+            // let d2 = new Date(this.selectedRow.data.dataFineValidita);
+            // console.log(d2);
+            //
+            // debugger;
+            //
+            // if (d1 <= d2) {
+            //     result = true;
+            // } else {
+            //
+            // }
+            //
+
+
+           let result = params.validationGroup.validate();
+
+          console.log("RESULT: ", result);
+
+          if (result.isValid) {
+              this.grid.instance.saveEditData();
+          } else {
+              // params.validator.reset();
+          }
         }
       }
     }];
@@ -174,7 +200,16 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
         break;
 
       case "rowValidating":
-       break;
+          // console.log("onRowValidating")
+          let dataInizioValidita = new Date(this.selectedRow.data.dataInizioValidita);
+          let dataFineValidita = new Date(this.selectedRow.data.dataFineValidita);
+
+          if (dataInizioValidita <= dataFineValidita) {
+              event.isValid = true;
+          } else {
+              event.isValid = false;
+          }
+      break;
 
       case "RowUpdating":
         return;
@@ -262,11 +297,14 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
   }
 
   validazione(event: any): boolean {
-    if (event.data["dataInizioValidita"] <= event.data["dataFineValidita"]) {
+    let from = new Date(event.data["dataInizioValidita"]);
+    let to = new Date(event.data["dataFineValidita"]);
+
+    if (from <= to) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
+
 }
