@@ -1,6 +1,6 @@
 <h3 class="intestazione" style="text-align: center">Tipi di procedimento</h3>
 
-<dx-data-grid #definizione_tipi_procedimento id="gridContainer" [dataSource]="dataSource" [allowColumnReordering]="true"
+<dx-data-grid #definizione_tipi_procedimento wordWrapEnabled="true" id="gridContainer" [dataSource]="dataSource" [allowColumnReordering]="true"
     [columnAutoWidth]="true" [paging]="false" (onEditingStart)="handleEvent('EditingStart',$event)" (onInitNewRow)="handleEvent('InitNewRow',$event)"
     (onRowInserting)="handleEvent('RowInserting',$event)" (onRowInserted)="handleEvent('RowInserted',$event)" (onRowUpdating)="handleEvent('RowUpdating',$event)"
     (onRowUpdated)="handleEvent('RowUpdated',$event)" (onRowRemoving)="handleEvent('RowRemoving',$event)" (onRowRemoved)="handleEvent('RowRemoved',$event)"
@@ -24,7 +24,7 @@
         </dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
-    <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
+    <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="100"></dxi-column>
     <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni">
 
         <dx-button text="" hint="Associazione alle Aziende" icon='preferences' (onClick)="handleEvent('associaClicked', $event)"></dx-button>

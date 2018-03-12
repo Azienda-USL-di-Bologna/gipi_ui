@@ -38,7 +38,6 @@ export class CambioDiStatoComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
       this.sospensioneParams = new SospensioneParams();
       this.sospensioneParams.annoDocumento = queryParams["anno"];
-
       this.sospensioneParams.numeroDocumento = queryParams["numero"];
       this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
       this.sospensioneParams.dataRegistrazioneDocumento = queryParams["dataRegistrazione"];
@@ -51,21 +50,18 @@ export class CambioDiStatoComponent implements OnInit {
         this.loggedUser$.subscribe(
             (loggedUser: LoggedUser) => {
                 if (loggedUser) {
-                  console.log('LOGGED USER: ', loggedUser);
                   this.userInfo = {
                     idUtente: loggedUser.getField(bUtente.id),
                     idAzienda:  loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id],
                     cf: loggedUser.getField(bUtente.codiceFiscale)
                   };
                 }
-                console.log('USER INFO: ', this.userInfo);
             }
         )
     );
   }
 
   selectedRowChanged(e) {
-    console.log("Iter: ", e);
     this.selectedIter = "Iter selezionato: " + e.numero + "/" + e.anno;
     this.sospensioneParams.numeroIter = e.numero;
     this.sospensioneParams.annoIter = e.anno;
