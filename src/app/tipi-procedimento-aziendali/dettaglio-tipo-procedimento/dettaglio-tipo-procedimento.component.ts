@@ -22,7 +22,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
   public dataSourceTitoli: DataSource;
   public dataSourceAziendaTipoProcedimento: DataSource;
   public loggedUser: LoggedUser;
-  public pattern: any =  "^[0-9][0-9]*$";
+  public pattern: any =  "^[1-9][0-9]*$";
 
   // tslint:disable-next-line:no-input-rename
   @Input()
