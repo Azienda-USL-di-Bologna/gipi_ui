@@ -278,7 +278,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
             console.log("OK_UPDATE", res);
             this.caricaDettaglioProcedimento();
             if (this.strutturaSelezionata["hasChildren"]) {
-              confirm("Vuoi Estendere le modifiche alle strutture figlie?", "Conferma").then(dialogResult2 => {
+              confirm("Vuoi Estendere le modifiche alle strutture figlie già associate a questo tipo di procedimento?", "Conferma").then(dialogResult2 => {
                 if (dialogResult2) {
                   this.http.post(CUSTOM_RESOURCES_BASE_URL + "espandiProcedimenti", this.procedimento.id).subscribe(
                     res2 => {
