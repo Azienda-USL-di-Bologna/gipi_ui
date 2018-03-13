@@ -32,8 +32,6 @@ export class AvviaNuovoIterComponent implements OnInit {
   public searchString: string = "";
   public idUtenteDefault: number;
   public descrizioneUtenteResponsabile: string;
-  /* public td: string; */
-  /* public respAdozione: string; */
 
   @Input()
   set procedimentoSelezionato(procedimento: any) {
@@ -82,18 +80,16 @@ export class AvviaNuovoIterComponent implements OnInit {
       this.iterParams.idProcedimento = procedimento.procedimento.id;
       this.iterParams.procedimento = procedimento.procedimento;
       this.buildDataSourceUtenti(procedimento.procedimento.idStruttura.id);
-      if (this.iterParams.procedimento.idTitolarePotereSostitutivo && this.iterParams.procedimento.idStrutturaTitolarePotereSostitutivo)
-        this.setDescription(this.iterParams.procedimento.idTitolarePotereSostitutivo.id, this.iterParams.procedimento.idStrutturaTitolarePotereSostitutivo.id, "titolare");
-      else
-        this.iterParams.titolarePotereSostitutivoDesc = "Non definito";
-      if (this.iterParams.procedimento.idResponsabileAdozioneAttoFinale &&  this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale)
-       this.setDescription(this.iterParams.procedimento.idResponsabileAdozioneAttoFinale.id, this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale.id, "responsabile");
-      else
-        this.iterParams.responsabileAdozioneAttoFinaleDesc = "Non definito";
 
-      /* if (this.iterParams.procedimento.idResponsabileAdozioneAttoFinale &&  this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale) {
-        this.iterParams.responsabileAdozioneAttoFinaleDesc = this.iterParams.procedimento.idResponsabileAdozioneAttoFinale.idPersona.descrizione;
-      } */
+      if (this.iterParams.procedimento.idResponsabileAdozioneAttoFinale &&  this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale) {
+        this.iterParams.responsabileAdozioneAttoFinaleDesc = this.iterParams.procedimento.idResponsabileAdozioneAttoFinale.idPersona.descrizione
+          + " (" + this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale.nome + ")";
+      }
+
+      if (this.iterParams.procedimento.idTitolarePotereSostitutivo &&  this.iterParams.procedimento.idStrutturaTitolarePotereSostitutivo) {
+        this.iterParams.titolarePotereSostitutivoDesc = this.iterParams.procedimento.idTitolarePotereSostitutivo.idPersona.descrizione
+          + " (" + this.iterParams.procedimento.idStrutturaTitolarePotereSostitutivo.nome + ")";
+      }
     }
   }
 
@@ -122,6 +118,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.dataSourceUtenti.load().then(res => {
       for (let e of res) {
         if (e.idUtente.id === this.loggedUser.getField(bUtente.id) && e.idStruttura.id === this.iterParams.procedimento.idStruttura.id) {
+          console.log("ciao caro");
           this.idUtenteDefault = e.id;
           this.iterParams.idUtenteResponsabile = this.loggedUser.getField(bUtente.id);
           this.descrizioneUtenteResponsabile = e.idUtente.idPersona.descrizione 
@@ -261,8 +258,9 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   public setDataMax(): Date {
-    if (this.iterParams.procedimento != null && this.iterParams.dataAvvioIter !== undefined) {
+    if (this.iterParams.procedimento && this.iterParams.dataAvvioIter) {
       this.dataMassimaConclusione = new Date();
+      // debugger;
       this.dataMassimaConclusione.setDate(this.iterParams.dataAvvioIter.getDate() + this.iterParams.procedimento.idAziendaTipoProcedimento.durataMassimaProcedimento);
     }
     return this.dataMassimaConclusione;
@@ -283,44 +281,9 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   public reloadResponsabile(): void {
-    console.log("eccolo");
     this.dataSourceUtenti.filter(null);
     this.dataSourceUtenti.load();
   }
-
-  public setDescription(idUtente: number, idStruttura, chi: string) {
-    console.log("set other: ", idUtente, idStruttura);
-    let odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
-    let dataSourceUtenteX = new DataSource({
-      store: odataContextDefinition.getContext()[new Utente().getName()],
-      expand: ["idPersona"],
-      filter: ["id", "=", idUtente]
-    });
-
-    let dataSoureStrutturaX = new DataSource({
-      store: odataContextDefinition.getContext()[new Struttura().getName()],
-      filter: ["id", "=", idStruttura]
-    });
-
-    let descX;
-    let descStrut;
-    dataSourceUtenteX.load().then(res => {
-      console.log("dataSourceUtenteX", res[0].idPersona.descrizione); 
-      descX = res[0].idPersona.descrizione;
-      dataSoureStrutturaX.load().then(res2 => {
-        console.log("dataSoureStrutturaX", res[0].nome); descStrut = res2[0].nome
-        if (chi === "titolare")
-          this.iterParams.titolarePotereSostitutivoDesc = descX + " (" + descStrut + ")";
-        else
-          this.iterParams.responsabileAdozioneAttoFinaleDesc = descX + " (" + descStrut + ")";
-      });
-    });
-  }
-
-  /* public getDescriptionByProc(item: Procedimento) {
-    return item.idStrutturaTitolarePotereSostitutivo.nome;
-  } */
-
 }
 
 class IterParams {
