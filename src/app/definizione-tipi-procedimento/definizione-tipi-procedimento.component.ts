@@ -23,7 +23,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
   @ViewChild("definizione_tipi_procedimento") public grid: DxDataGridComponent;
   @Input("refreshButton") public refreshButton;
 
-  public pattern: any =  "^[1-9]+$";
+  public pattern: any =  "^[1-9]+[0-9]*$";
   public dataSource: DataSource;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
   public texts: Object = {
