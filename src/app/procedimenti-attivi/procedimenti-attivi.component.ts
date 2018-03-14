@@ -1,12 +1,12 @@
 import {Component, ViewChild, Input, Output, EventEmitter, OnInit} from "@angular/core";
-import {DxDataGridComponent} from "devextreme-angular";
+import {DxDataGridComponent, DxFormComponent} from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import {OdataContextFactory, OdataContextDefinition} from "@bds/nt-context";
 import {Router} from "@angular/router";
 import {LoggedUser} from "@bds/nt-login";
 import {GlobalContextService} from "@bds/nt-context";
 import {UtilityFunctions} from "app/utility-functions";
-import {bAzienda, bStruttura, bUtente, Procedimento} from "@bds/nt-entities";
+import {bAzienda, bStruttura, bUtente, Procedimento, Titolo} from "@bds/nt-entities";
 import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
@@ -22,6 +22,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
     private utility: UtilityFunctions = new UtilityFunctions();
 
     @ViewChild("gridContainer") gridContainer: DxDataGridComponent;
+
     public idAzienda: number;
     public dataSourceProcedimenti: DataSource;
     public popupButtons: any[];
@@ -193,16 +194,18 @@ export class ProcedimentiAttiviComponent implements OnInit {
                     return defaultCalculateFilterExpression.apply(this, arguments);
                 }
             };
+         
+            if (column.dataField === "idAziendaTipoProcedimento.idTitolo.nome") {
+                column.calculateCellValue = function (value, a) {
+                    if (value && value.idAziendaTipoProcedimento && value.idAziendaTipoProcedimento.idTitolo) {
+                        return "[" + value.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + value.idAziendaTipoProcedimento.idTitolo.nome;
+                    }
+                };                
+            }
+            
         });
     }
 
-    public descrizioneTitolo(item: any): string {
-        // non togliere questo if altrimenti capita il caso del loading infinito #RM: https://babelmine-auslbo.avec.emr.it/issues/20360
-        if (item && item.idAziendaTipoProcedimento && item.idAziendaTipoProcedimento.idTitolo && item.idAziendaTipoProcedimento.idTitolo.classificazione &&
-            item.idAziendaTipoProcedimento.idTitolo.nome
-        )
-        return "[" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + item.idAziendaTipoProcedimento.idTitolo.nome;
-    }
 
     public receiveMessage(event: any) {
         this.iterAvviato = !!event.idIter;
@@ -237,4 +240,6 @@ export class ProcedimentiAttiviComponent implements OnInit {
                 break;
         }
     }
+
+
 }
