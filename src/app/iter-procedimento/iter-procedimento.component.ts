@@ -68,6 +68,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public userInfo: UserInfo;
   public iodaPermission: boolean;
   public hasPermissionOnFascicolo: boolean = false;
+  public soloEditing: boolean = false;
+
 
   public dataSourceClassificazione: DataSource;
 
@@ -161,7 +163,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   setNomeBottoneSospensione() {
-    console.log("ENTRATO IN SETNOMEBOTTONESOSPENSIONE");
     this.sospendiButton.label = this.getNomeBottoneSospensione();
   }
 
@@ -173,39 +174,27 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   disableProcedi() {
-    console.log("*****disableProcedi??????*****")
-    console.log("this.hasPermissionOnFascicolo", this.hasPermissionOnFascicolo);
-    console.log("this.hasPermissionOnFascicolo === true-->", this.hasPermissionOnFascicolo === true);
-    console.log("this.isSospeso()-->", this.isSospeso());
-    console.log("this.iter.idFaseCorrente.faseDiChiusura-->", this.iter.idFaseCorrente.faseDiChiusura);
     return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura;
   }
 
   disableSospendi() {
-    console.log("*****disableSospendi??????*****")
-    console.log("this.hasPermissionOnFascicolo", this.hasPermissionOnFascicolo);
-    console.log("this.hasPermissionOnFascicolo === true-->", this.hasPermissionOnFascicolo === true);
-    console.log("this.iter.idFaseCorrente.faseDiChiusura-->", this.iter.idFaseCorrente.faseDiChiusura);
     return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura;
   }
 
   generateCustomButtons() {
-    console.log("ENTRATO IN GENERATEcUSTOMbUTTONS()");
     // this.calculateIodaPermission();
     this.genericButtons = new Array<ButtonAppearance>();
     this.procediButton = new ButtonAppearance("Procedi", "", false, this.disableProcedi());
     this.sospendiButton = new ButtonAppearance("Sospendi", "", false, this.disableSospendi());
     this.setNomeBottoneSospensione();
-    console.log("Aggiungo i pulsanti al genericButton")
     this.genericButtons.push(this.procediButton, this.sospendiButton);
+    this.soloEditing = this.disableSospendi();
   }
 
   buildIter() {
-    console.log("entrato in buildIter()");
     this.dataSourceIter.load().then(res => {
       // this.iter.build(res[0], Iter);
       this.iter.build(res[0]);
-      console.log(this.iter);
       this.generateCustomButtons();
       this.calculateIodaPermissionAndSetButton();
       this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
@@ -380,24 +369,16 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   public calculateIodaPermissionAndSetButton() {
     let x;
-    console.log("ENTRATO IN calculateIodaPermissionAndSetButton");
     if (this.iter.idFascicolo) {
-      console.log("PATH --> ", CUSTOM_RESOURCES_BASE_URL + "iter/hasPermissionOnFascicolo");
       let data = new Map<String, Object>();
-      console.log("LOG DATA", data)
       data.set("numerazioneGerarchica", this.iter.idFascicolo);
       const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/hasPermissionOnFascicolo", this.iter.idFascicolo, { headers: new HttpHeaders().set("content-type", "application/json") })
         .subscribe(
           res => {
-            console.log("RES!!! -> ", res);
-            console.log(" res['hasPermission'] -> ", res["hasPermission"]);
-            console.log(" res['hasPermission'] === 'true'", res["hasPermission"] === "true");
             this.hasPermissionOnFascicolo = res["hasPermission"] === "true";
-            console.log("hasPerm -> ", this.hasPermissionOnFascicolo);
             this.generateCustomButtons(); // ora che ho i permessi mi posso creare i bottoni
           },
           err => {
-            console.log("AHI, erroraccio! -> ", err);
             // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
             this.generateCustomButtons();
           }
