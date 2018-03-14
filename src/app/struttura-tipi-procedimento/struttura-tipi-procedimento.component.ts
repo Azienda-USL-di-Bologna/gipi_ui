@@ -51,8 +51,6 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public possoAgireForm = false;
 
-
-
   public headerTipoProcedimento: string;
   public headerStruttura;
 
@@ -143,7 +141,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
     // devo gestire l'expand. Se metto anche "idAziendaTipoProcedimento.idTitolo" l'aziendaProcedimento padre non ha il titolo si rompe tutto e non si visualizzano i dati
     // l'aziendaProcedimento padre dovrebbe sempre avere il titolo, ma siccome questo non è gestito devo fare qui la gestione
-    let expandArrayProcedimento: string[] = ["idAziendaTipoProcedimento","idAziendaTipoProcedimento.idTitolo", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento",
+    let expandArrayProcedimento: string[] = ["idAziendaTipoProcedimento", "idAziendaTipoProcedimento.idTitolo", "idTitolarePotereSostitutivo", "idAziendaTipoProcedimento.idTipoProcedimento",
       "idStrutturaTitolarePotereSostitutivo", "idStrutturaResponsabileAdozioneAttoFinale", "idResponsabileAdozioneAttoFinale"];
 
     if (this.aziendaTipoProcedimento.idTitolo) {

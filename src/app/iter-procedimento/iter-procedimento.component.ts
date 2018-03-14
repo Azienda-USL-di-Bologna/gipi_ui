@@ -67,6 +67,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public userInfo: UserInfo;
   public iodaPermission: boolean;
   public hasPermissionOnFascicolo: boolean = false;
+  public soloEditing: boolean = false;
+
 
   public dataSourceClassificazione: DataSource;
 
@@ -178,6 +180,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.sospendiButton = new ButtonAppearance("Sospendi", "", false, this.disableSospendi());
     this.setNomeBottoneSospensione();
     this.genericButtons.push(this.procediButton, this.sospendiButton);
+    this.soloEditing = this.disableSospendi();
   }
 
   buildIter() {

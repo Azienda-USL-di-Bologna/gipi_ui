@@ -15,11 +15,13 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   private odataContextDefinition: OdataContextDefinition;
   public dataSourceProcedimenti: DataSource;
   public popupVisible: boolean = false;
+  public popupOrganigrammaVisible = false;
   public loggedUser: LoggedUser;
   public idAzienda: number;
   public descAzienda: string;
   public procedimentoDaPassare: AziendaTipoProcedimento;
   public screenWidth: number = screen.width;
+  public aziendaTipiProcedimentoData: any;
 
   constructor(private odataContextFactory: OdataContextFactory, 
     public router: Router,
@@ -58,16 +60,29 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
       console.log("THIS.ROUTE", this.route);
       console.log("handleEvent tipiProcAz: procedimentoDaPassare", this.procedimentoDaPassare.id);
       this.popupVisible = true;
-      //this.caricaDataSource();
+      // this.caricaDataSource();
     }
   }
 
-  associaOrganigramma(rigaDatagrid: any) {    
+  gestisciAssociazioni(rigaDatagrid: any) {    
     this.router.navigate(["/struttura-tipi-procedimento"], {queryParams: {
       aziendaTipoProcedimento: rigaDatagrid.data.id,
       azienda: rigaDatagrid.data.idAzienda.id,
       tipoProcedimento: rigaDatagrid.data.idTipoProcedimento.nome
     }});
+  }
+
+  public  associaOrganigramma(row: any) {
+    this.aziendaTipiProcedimentoData = {
+      idAzienda: this.idAzienda,
+      idAziendaTipoProcedimento: row.data.id,
+      headerTipoProcedimento: row.data.descrizioneTipoProcedimento
+    };
+    this.popupOrganigrammaVisible = true;
+  }
+
+  public closePopup() {
+    this.popupOrganigrammaVisible = false;
   }
 
   public caricaDataSource() {
