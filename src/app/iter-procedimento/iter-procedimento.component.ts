@@ -24,7 +24,6 @@ import { HttpHeaders } from "@angular/common/http";
 })
 export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
-  // @ViewChild(PassaggioDiFaseComponent) child;
 
   public iter: Iter = new Iter();
   public idIterArray: Object;
@@ -103,7 +102,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       ],
       filter: [["id", "=", this.idIter]]
     });
-    // this.generateCustomButtons();
     this.buildIter();
 
     this.perFigliParteDestra = {
@@ -125,9 +123,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
-    // this.passaggioDiFaseVisible = this.child.visibile;
-  }
+  ngAfterViewInit() {}
 
   recuperaUserInfo() {
     this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
@@ -146,10 +142,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     );
   }
 
-  ngOnInit() {
-
-
-  }
+  ngOnInit() { }
 
   public buildTitoloDatiGenerali() {
     this.datiGenerali = "Iter n." + this.iter.id + "/" + this.iter.anno + " (" + this.iter.stato + ")";
@@ -182,7 +175,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   generateCustomButtons() {
-    // this.calculateIodaPermission();
     this.genericButtons = new Array<ButtonAppearance>();
     this.procediButton = new ButtonAppearance("Procedi", "", false, this.disableProcedi());
     this.sospendiButton = new ButtonAppearance("Sospendi", "", false, this.disableSospendi());
@@ -193,7 +185,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   buildIter() {
     this.dataSourceIter.load().then(res => {
-      // this.iter.build(res[0], Iter);
       this.iter.build(res[0]);
       this.generateCustomButtons();
       this.calculateIodaPermissionAndSetButton();
@@ -266,35 +257,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public sospensioneIter() {
-    // let dataDaPassare: Date;
-    // if (this.iter.stato === "sospeso") {
-    //   const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.iter.id)
-    //     .subscribe(
-    //     res => {
-    //       let r: any = res;
-    //       dataDaPassare = new Date(r);
-    //       this.paramsPerSospensione = {
-    //         iter: this.iter,
-    //         stato: this.iter.stato,
-    //         dataSospensione: dataDaPassare
-    //       };
-    //       this.popupData.title = "Gestione Sospensione";
-    //       this.sospensioneIterVisible = true;
-    //     },
-    //     err => {
-    //       // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
-    //     }
-    //     );
-    // } else {
-    //   this.paramsPerSospensione = {
-    //     iter: this.iter,
-    //     stato: this.iter.stato,
-    //     dataSospensione: null
-    //   };
-    //   this.popupData.title = "Gestione Sospensione";
-    //   this.sospensioneIterVisible = true;
-    // }
-    console.log("Sent UserInfo: ", this.userInfo);
     this.sospensioneParams.idIter = this.idIter;
     this.sospensioneParams.numeroIter = this.iter.numero;
     this.sospensioneParams.annoIter = this.iter.anno;
@@ -317,9 +279,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   receiveMessageFromSospensione($event) {
     this.sospensioneIterVisible = $event["visible"];
     this.buildIter();
-    // this.setNomeBottoneSospensione();
-
-
   }
 
   onGenericButtonClick(buttonName: string) {
@@ -379,7 +338,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
             this.generateCustomButtons(); // ora che ho i permessi mi posso creare i bottoni
           },
           err => {
-            // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
             this.generateCustomButtons();
           }
         );
@@ -388,12 +346,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   customDisplayExprClassificazione(data: Titolo) {
     let displayExpression: string = "";
-
     if (data) {
       displayExpression = "[" + data.classificazione + "] " + data.nome;
     }
-
-    console.log("DISPLAY_EXPRESSION", displayExpression);
     return displayExpression;
   }
 
