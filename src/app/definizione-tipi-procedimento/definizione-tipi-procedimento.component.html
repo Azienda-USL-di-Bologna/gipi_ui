@@ -45,16 +45,26 @@
         [allowUpdating]="false" [allowDeleting]="false" [allowAdding]="true" [texts]="texts" #pippo>
         <dxo-popup [maxWidth]="800" [minWidth]="500" [maxHeight]="600" title="Modifica Tipo Procedimento" [showTitle]="true" [toolbarItems]="popupButtons">
         </dxo-popup>
-        <dxo-form colCount="2" validationGroup="validationDefinizioneTipiProcedimento" [showValidationSummary]="true">
+        <dxo-form colCount="2" validationGroup="validationDefinizioneTipiProcedimento" [showValidationSummary]="true" [colCount]="2">
             <!--<dxi-item dataField="codice" [editorOptions]="{ format: '#####' }" [colSpan]="2"></dxi-item>-->
-            <dxi-item dataField="nome" [colSpan]="2"></dxi-item>
+            <dxi-item dataField="nome" [colSpan]="2">
+                <dxi-validation-rule type="required" message="inserire il nome"></dxi-validation-rule>
+            </dxi-item>
             <dxi-item dataField="descrizioneDefault" [colSpan]="2" >
+                <dxi-validation-rule type="required" message="inserire la descrizione di default"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="modoApertura" [colSpan]="2">
+                <dxi-validation-rule type="required" message="scegliere la modalità di apertura"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="normaRiferimento" [colSpan]="2">
+                <dxi-validation-rule type="required" message="inserire la norma di riferimento"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="dataInizioValidita" [colSpan]="1">
 
             </dxi-item>
-            <dxi-item dataField="modoApertura" [colSpan]="2"></dxi-item>
-            <dxi-item dataField="normaRiferimento" [colSpan]="2"></dxi-item>
-            <dxi-item dataField="dataInizioValidita" [colSpan]="1"></dxi-item>
-            <dxi-item dataField="dataFineValidita" [colSpan]="1"></dxi-item>
+            <dxi-item dataField="dataFineValidita" [colSpan]="1">
+
+            </dxi-item>
             <dxi-item dataField="durataMassimaIter" [editorOptions]="{ format: '#####' }" editorType="dxNumberBox" [colSpan]="1">
                 <dxi-validation-rule type="required" message="la durata massima dell'iter è obbligatoria"></dxi-validation-rule>
                 <dxi-validation-rule type="pattern" [pattern]="pattern" message="la durata massima di procedimento deve avere un valore positivo"></dxi-validation-rule>
