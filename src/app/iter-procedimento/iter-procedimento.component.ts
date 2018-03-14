@@ -145,7 +145,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   ngOnInit() { }
 
   public buildTitoloDatiGenerali() {
-    this.datiGenerali = "Iter n." + this.iter.id + "/" + this.iter.anno + " (" + this.iter.stato + ")";
+    this.datiGenerali = "Iter n." + this.iter.numero + "/" + this.iter.anno + " (" + this.iter.stato + ")";
   }
 
   isSospeso() {

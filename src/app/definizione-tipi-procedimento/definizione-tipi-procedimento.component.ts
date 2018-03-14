@@ -217,6 +217,11 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
           }
       break;
 
+      case "InitNewRow":
+        event.data.obbligoEsitoConclusivo = false;
+        event.data.pubblicazioneRegistroAccessi = false;
+        break;
+      
       case "RowUpdating":
         return;
 
