@@ -11,4 +11,5 @@ export class SospensioneParams {
     public statoCorrente: string;
     public statoProssimo: string;
     public dataCambioDiStato: Date;
+    public isFaseDiChiusura: boolean;
   }
