@@ -26,18 +26,15 @@
                         [allowEditing]="false"
                         alignment="left" cssClass="column" [filterOperations]="['reset', 'contains']"
                         [selectedFilterOperation]="'contains'"></dxi-column>
-
             <dxi-column [minWidth]="100" dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" caption="Nome"
                         [dataType]="'string'"
                         [allowEditing]="false" alignment="center" cssClass="column"
                         [filterOperations]="['reset', 'contains']" [selectedFilterOperation]="'contains'"></dxi-column>
-
             <dxi-column [minWidth]="150" dataField="idAziendaTipoProcedimento.idTitolo.nome" [visible]="colonnaVisibile"
                         caption="Classificazione"
                         [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"
                         [filterOperations]="['reset', 'contains']"
-                        [selectedFilterOperation]="'contains'" [calculateDisplayValue]="descrizioneTitolo"></dxi-column>
-
+                        [selectedFilterOperation]="'contains'" ></dxi-column>
             <dxi-column [width]="100" dataField="idAziendaTipoProcedimento.durataMassimaProcedimento"
                         [visible]="colonnaVisibile" caption="Durata massima (gg)"
                         [dataType]="'number'" [allowEditing]="false" alignment="center" cssClass="column"
@@ -47,7 +44,6 @@
                         [dataType]="'date'" [format]="'dd/MM/yyyy'"
                         [allowEditing]="false" alignment="center" cssClass="column"
                         [filterOperations]="['reset', 'contains']" [selectedFilterOperation]="'contains'"></dxi-column>
-
             <dxi-column [minWidth]="100" dataField="idTitolarePotereSostitutivo.idPersona.descrizione"
                         caption="Titolare potere sostitutivo"
                         [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"
@@ -93,13 +89,13 @@
                            title="Dettaglio Tipo Procedimento"
                            [showTitle]="true">
                 </dxo-popup>
-                <dxo-form #formgdm colCount="1">
+                
+                <dxo-form #formgdm id="formgdm" colCount="1" >
                     <dxi-item dataField="idStruttura.nome" [disabled]="true" [template]="itemClear"
                               [label]="{visible: true}" cssClass="item popup-title"></dxi-item>
                     <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" [disabled]="true"
                               [template]="itemClear" [label]="{visible: true, text: 'Tipo Procedimento'}"
                               cssClass="item popup-title"></dxi-item>
-
                     <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" [disabled]="true"
                               [label]="{text:'Descrizione'}" [colSpan]="1"
                               cssClass="item"></dxi-item>
@@ -129,7 +125,7 @@
                               [colSpan]="1" cssClass="item"></dxi-item>
                     <dxi-item dataField="descrizioneAtti" [disabled]="true" [label]="{text:'Atti da allegare'}"
                               [colSpan]="1" cssClass="item"></dxi-item>
-                </dxo-form>
+                </dxo-form>             
             </dxo-editing>
         </dx-data-grid>
     </div>

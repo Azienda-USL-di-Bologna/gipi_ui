@@ -23,8 +23,9 @@ import { HttpHeaders } from "@angular/common/http";
   encapsulation: ViewEncapsulation.None
 })
 export class IterProcedimentoComponent implements OnInit, AfterViewInit {
-
+  
   // @ViewChild(PassaggioDiFaseComponent) child;
+  private subscriptions: Subscription[] = [];
 
   public iter: Iter = new Iter();
   public idIterArray: Object;
@@ -64,7 +65,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public paramsPerSospensione: Object;
   public sospensioneParams: SospensioneParams = new SospensioneParams();
   public loggedUser$: Observable<LoggedUser>;
-  private subscriptions: Subscription[] = [];
   public userInfo: UserInfo;
   public iodaPermission: boolean;
   public hasPermissionOnFascicolo: boolean = false;
