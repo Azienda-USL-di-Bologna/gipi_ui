@@ -14,9 +14,16 @@
 
   <div class="row">
     <div class="col-12">
-      <strutture-tree #treeView [idAzienda]="idAzienda" [idAziendaTipoProcedimento]="idAziendaTipoProcedimento" [readOnly]="readOnly"
-        [enableCheckRecursively]="enableCheckRecursively" (refreshAfterChange)="refresh($event)">
-      </strutture-tree>
+      
+        <strutture-tree #treeView 
+          [idAzienda]="idAzienda" 
+          [idAziendaTipoProcedimento]="idAziendaTipoProcedimento" 
+          [ricarica]="ricarica" 
+          [readOnly]="readOnly"
+          [enableCheckRecursively]="enableCheckRecursively" 
+          (refreshAfterChange)="refresh($event)">
+        </strutture-tree>
+      
     </div>
   </div>
 

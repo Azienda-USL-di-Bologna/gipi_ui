@@ -69,7 +69,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
                 //     if (i < 100)
                 //         res.pop();
                 // }
-                console.log("res: ", res);
+                
             }),
             // paginate: true,
             // pageSize: 20,
@@ -92,13 +92,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
                     "or",
                     ["dataFine", "=", null]
                 ]
-            ]/* ,
-      map: (item) => {
-        console.log(item);
-        // item.idAziendaTipoProcedimento.idTitolo.nome += " [" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "]";
-        item.descrizioneTitolo =  item.idAziendaTipoProcedimento.idTitolo.nome + " [" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "]";
-        return item;
-      } */
+            ]
         });
 
         this.itemClear = this.itemClear.bind(this);

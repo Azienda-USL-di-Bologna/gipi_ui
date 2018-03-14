@@ -22,11 +22,18 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
   public testoHeaderTipoProcedimento: string;
   public idAzienda: number;
   public idAziendaTipoProcedimento: number;
+  public ricarica: any;
 
   @ViewChild("treeView") treeView: StruttureTreeComponent;
   @Input("readOnly") readOnly: boolean;
   @Input("enableCheckRecursively") enableCheckRecursively: boolean;
-  @Input("aziendaTipoProcedimentoObj") aziendaTipoProcedimentoObj: any;
+  @Input() 
+  set aziendaTipoProcedimentoObj(obj: any) {
+    this.idAzienda = obj.idAzienda;
+    this.idAziendaTipoProcedimento = obj.idAziendaTipoProcedimento;
+    this.testoHeaderTipoProcedimento = obj.headerTipoProcedimento;
+    this.ricarica = { ricarica: true };
+  }
   @Input("lanciaRefreshAlPadre") lanciaRefreshAlPadre: boolean;
   @Output("refreshAfterChange") refreshAfterChange = new EventEmitter<Object>();
   @Output("closePopup") closePopup = new EventEmitter<Object>();
@@ -35,9 +42,9 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.idAzienda = this.aziendaTipoProcedimentoObj.idAzienda;
+    /* this.idAzienda = this.aziendaTipoProcedimentoObj.idAzienda;
     this.idAziendaTipoProcedimento = this.aziendaTipoProcedimentoObj.idAziendaTipoProcedimento;
-    this.testoHeaderTipoProcedimento = this.aziendaTipoProcedimentoObj.headerTipoProcedimento;
+    this.testoHeaderTipoProcedimento = this.aziendaTipoProcedimentoObj.headerTipoProcedimento; */
   }
 
   screen(width) {
@@ -45,7 +52,6 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   sendDataConfirm() {
-    console.log("sto per salvare");
      // INOLTRO LA CHIAMATA AL FIGLIO
      this.treeView.sendDataConfirm();
   }
@@ -55,7 +61,6 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   refresh(nodeInvolved) {
-    console.log("dovrei chiudermi:", this.lanciaRefreshAlPadre);
     if (this.lanciaRefreshAlPadre) {
       // La popup avvisa il padre che è cambiata la configurazione dell'albero
       this.refreshAfterChange.emit(nodeInvolved);

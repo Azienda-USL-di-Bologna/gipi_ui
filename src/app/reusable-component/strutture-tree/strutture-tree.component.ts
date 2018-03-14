@@ -38,6 +38,10 @@ export class StruttureTreeComponent implements OnInit {
   @Input("disabled") disabled: boolean;
   @Input("enableCheckRecursively") enableCheckRecursively: boolean;
   @Input("nodesToCheckSelectedStatus") nodesToCheckSelectedStatus: any;
+  @Input() 
+  set ricarica(ricarica: any) {
+    if (ricarica.ricarica) this.caricaDati();
+  }
   @Output("strutturaSelezionata") strutturaSelezionata = new EventEmitter<Object>();
   @Output("refreshAfterChange") refreshAfterChange = new EventEmitter <Object>();
 
