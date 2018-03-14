@@ -156,9 +156,6 @@ export class ProcedimentiAttiviComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        if (this && this.formgdm) {
-            console.log("form", this.formgdm);
-        }
     }
 
     // Gestisco la toolbar di ricerca. La voglio centrale.
