@@ -22,7 +22,7 @@
     <div class="mb-3 text-center">
         <div class="d-inline-block col col-lg-8">
             <app-cambio-di-stato-box *ngIf="lookupValue === 'Cambio di stato'" [sospensioneParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="false"></app-cambio-di-stato-box>
-            <app-passaggio-di-fase *ngIf="lookupValue === 'Passaggio di fase'" [idIter]="sospensioneParams.idIter" [isOpenedAsPopup]="false"></app-passaggio-di-fase>
+            <app-passaggio-di-fase *ngIf="!sospensioneParams.isFaseDiChiusura && lookupValue === 'Passaggio di fase'" [idIter]="sospensioneParams.idIter" [isOpenedAsPopup]="false"></app-passaggio-di-fase>
         </div>
     </div>
 </div>
