@@ -22,10 +22,6 @@ export class PassaggioDiFaseComponent implements OnInit {
   public iterParams: IterParams = new IterParams();
   public visibile: boolean = false;
   public fase: Fase = new Fase();
-  public currentFaseName: string = "";
-  public nextFaseName: string = "";
-  public isFaseAttualeDiChiusura: boolean = true;
-  // public disabilitaInterfaccia: boolean = true;
   public passaggioFaseParams: PassaggioFaseParams;
   public showPopupAnnullamento : boolean = false;
   public messaggioAnnullamento : string;
@@ -41,17 +37,9 @@ export class PassaggioDiFaseComponent implements OnInit {
         nextFaseName : JSON.parse(res["nextFase"]).nomeFase,
         isNextFaseDiChiusura : JSON.parse(res["nextFase"]).faseDiChiusura
       }
-      if(this.passaggioFaseParams.currentFaseName === "Fase di Chiusura"){
-        // this.isFaseAttualeDiChiusura = true;
-        notify("Il procedimento è già nell'ultima fase prevista: Fase di chiusura.", "warning", 10000);
-      }else{
-        this.isFaseAttualeDiChiusura = false;
-      }
-      
-      // this.disabilitaInterfaccia = !this.isFaseAttualeDiChiusura;
     },
     err => {
-      console.log("ERR: ", err)
+      console.error("ERR: ", err)
       notify("Non esiste la fase successiva", "error", 1000);
     });
   }
@@ -108,7 +96,7 @@ export class PassaggioDiFaseComponent implements OnInit {
       err => {
         if(!this.isOpenedAsPopup){
           notify("Si è verificato un errore durante il procedi", "error", 1000);
-          console.log("Errore:", err);
+          console.error("Errore:", err);
         }else{
           this.out.emit({ visible: false, proceduto: false });
         }

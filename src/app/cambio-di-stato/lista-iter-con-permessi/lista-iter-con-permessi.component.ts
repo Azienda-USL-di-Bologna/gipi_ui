@@ -44,7 +44,7 @@ export class ListaIterConPermessiComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("USER INFO LISTA ONINIT:", this._userInfo);
+    // console.log("USER INFO LISTA ONINIT:", this._userInfo);
     // this.recuperaUserInfo();
     this.dataSource = new DataSource({
       store: this.odataContextDefinition.getContext()[new GetIterUtente().getName()],
@@ -54,13 +54,13 @@ export class ListaIterConPermessiComponent implements OnInit {
         // cf: "GSLFNC89A05G224Y", // this._userInfo.cf
         // idAzienda: 2  // this._userInfo.idAzienda
       },
-      expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona"]
+      expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona", "idFaseCorrente"]
     });
     this.dataSource.load().then(res => { console.log("LISTA RES: ", res); });
 }
 
   selectedRowChanged(e) {
-    // console.log("SELECTED:", e.selectedRowsData[0].id);
+    console.log("SELECTED:", e);
     this.selectedRow.emit(e.selectedRowsData[0]);
     
   }

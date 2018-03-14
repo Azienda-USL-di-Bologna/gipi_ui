@@ -86,9 +86,11 @@
   border-color: #265a87;
 }
 
-/deep/ .button-azioni :hover {
-  background-color: #285f8f;
-  border-color: #265a87;
+/deep/ .button-azioni:disabled:hover {
+  /* background-color: #285f8f;
+  border-color: #265a87; */
+  background-color: #337ab7;
+  border-color: #2d6da3;
 }
 
 
@@ -193,7 +195,7 @@
   height: 64px;
   background-color: #fff;
   box-shadow: 0 0 1px rgba(0,0,0,.15);
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }
 .clContentBody {
   height: 100%;

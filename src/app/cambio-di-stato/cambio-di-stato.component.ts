@@ -6,6 +6,7 @@ import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-p
 import { ActivatedRoute, Params } from "@angular/router";
 import { Observable, Subscription } from "rxjs";
 import { bUtente, bAzienda } from "@bds/nt-entities";
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: "app-cambio-di-stato",
@@ -67,10 +68,22 @@ export class CambioDiStatoComponent implements OnInit {
     this.sospensioneParams.annoIter = e.anno;
     this.sospensioneParams.idIter = e.id;
     this.sospensioneParams.statoCorrente = e.stato;
+    this.sospensioneParams.isFaseDiChiusura = e.idFaseCorrente.faseDiChiusura;
   }
 
   lookupValueChanged(e){
     this.lookupValue = e.value;
+    if(e.value === "Passaggio di fase" && this.sospensioneParams.isFaseDiChiusura){
+      notify({
+        message: "Il procedimento è già nell'ultima fase prevista: Fase di chiusura.",
+        type: "warning",
+        displayTime: 4000,
+        position: {
+          my: "center", at: "center", of: window
+        },
+        width: "max-content"
+      });
+    }
   }
 
 }

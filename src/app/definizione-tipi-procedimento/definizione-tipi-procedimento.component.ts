@@ -23,7 +23,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
   @ViewChild("definizione_tipi_procedimento") public grid: DxDataGridComponent;
   @Input("refreshButton") public refreshButton;
 
-  public pattern: any =  "^[1-9][0-9]+$";
+  public pattern: any =  "^[1-9]+[0-9]*$";
   public dataSource: DataSource;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
   public texts: Object = {
@@ -209,10 +209,6 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
           let durataMassimaSospensione = (this.selectedRow.data.durataMassimaSospensione && this.selectedRow.data.durataMassimaSospensione > 0) ? true : false;
           // console.log(this.selectedRow.data.durataMassimaSospensione);
           // console.log("Max durataMassimaSospensione: ", durataMassimaSospensione);
-          debugger;
-          console.log("VAL: ", this.selectedRow.data.durataMassimaIter);
-
-          debugger;
 
           if ((dataInizioValidita <= dataFineValidita) && (durataMassimaIter) && (durataMassimaSospensione)) {
               event.isValid = true;
@@ -221,8 +217,23 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
           }
       break;
 
+      case "InitNewRow":
+        event.data.obbligoEsitoConclusivo = false;
+        event.data.pubblicazioneRegistroAccessi = false;
+        break;
+      
       case "RowUpdating":
         return;
+
+      case "InitNewRow":
+        this.grid.editing.popup.title = "Aggiungi Nuovo Tipo Procedimento";
+        break;
+
+      case "EditingStart":
+        this.grid.editing.popup.title =  "Modifica Tipo Procedimento";
+        break;
+      
+
 
 
       default:
@@ -320,5 +331,4 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
     onValueChanged(e:any){
       console.log(e);
     }
-
 }

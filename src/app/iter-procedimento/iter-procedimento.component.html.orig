@@ -21,7 +21,7 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12 col-lg-6 contentLeft">
+        <div class="col-lg-6 col-md-12">
             <dx-form id="form" [colCount]="1" [formData]="iter">
                 <dxi-item itemType="group" [colCount]="6" [caption]="datiGenerali">
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
@@ -43,7 +43,7 @@
                         </dxi-item>
 
                         <dxi-item [colSpan]="2">
-                            <button class="btn button-azioni" type="button" (click)="updateNoteControInteressati()">Note</button>
+                            <button class="btn button-azioni" type="button" (click)="updateNoteControInteressati()" [disabled]="soloEditing">Note</button>
                             <!-- <dx-button text="Note controinteressati" type="default" (onClick)="updateNoteControInteressati()"></dx-button> -->
                         </dxi-item>
 
@@ -55,12 +55,12 @@
                     <dxi-item [colSpan]="4" dataField="esito" cssClass="fix-bug-dx" [editorOptions]="{ disabled: true }"></dxi-item>
 
                     <dxi-item [colSpan]="2">
-                        <button class="btn button-azioni" type="button" (click)="updateEsitoMotivazione()">Motivazione</button>
+                        <button class="btn button-azioni" type="button" (click)="updateEsitoMotivazione()" [disabled]="soloEditing">Motivazione</button>
                         <!-- <dx-button text="Motivazione" type="default" (onClick)="updateEsitoMotivazione()"></dx-button> -->
                     </dxi-item>
                 </dxi-item>
 
-                <dxi-item itemType="group" caption="Dati temporali">
+                <dxi-item itemType="group" [colCount]="1" caption="Dati temporali">
                     <dxi-item dataField="dataAvvio" editorType="dxDateBox" [editorOptions]="{ disabled: true }"></dxi-item>
 
                     <dxi-item dataField="dataChiusuraPrevista" editorType="dxDateBox" [editorOptions]="{ disabled: true }">
@@ -84,37 +84,32 @@
                     <dxi-item dataField="idFascicolo" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Fascicolo dell'iter"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="nomeTitolo" [editorOptions]="{ disabled: true }"></dxi-item>
+                    <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [editorOptions]="{
+                        disabled: true,
+                        dataSource: dataSourceClassificazione,
+                        displayExpr: customDisplayExprClassificazione,
+                        closeOnOutsideClick: true,
+                        showPopupTitle: false,
+                        showCancelButton: false,
+                        placeholder: 'Seleziona una voce...',
+                        searchPlaceholder: 'Cerca...',
+                        valueExpr: 'this'
+                        }"></dxi-item> 
+                   <!--  <dxi-item dataField="nomeTitolo" [editorOptions]="{ disabled: true }"></dxi-item> -->
                 </dxi-item>
             </dx-form>
         </div>
 
-        <div class="col-xs-12 col-lg-6 contentRight">
-<<<<<<< working copy
-            <div class="whitePanel mb-3 fixHeight">
-                <app-sequenza-delle-fasi [daPadre]="perFigliParteDestra"></app-sequenza-delle-fasi>     
-=======
+        <div class="col-lg-6 col-md-12">
             <div class="whitePanel mb-3">
                 <app-sequenza-delle-fasi [daPadre]="perFigliParteDestra"></app-sequenza-delle-fasi>
->>>>>>> merge rev
             </div>
-<<<<<<< working copy
             <div class="whitePanel mb-3 fixHeight">
-                <app-cronologia-eventi [daPadre]="perFigliParteDestra"></app-cronologia-eventi>     
-=======
-            <div class="whitePanel mb-3">
                 <app-cronologia-eventi [daPadre]="perFigliParteDestra"></app-cronologia-eventi>
->>>>>>> merge rev
             </div>
-<<<<<<< working copy
             <div class="whitePanel fixHeight">
-                <documenti-iter [daPadre]="perFigliParteDestra"></documenti-iter>   
-            </div>  
-=======
-            <div class="whitePanel">
                 <documenti-iter [daPadre]="perFigliParteDestra"></documenti-iter>
             </div>
->>>>>>> merge rev
         </div>
     </div>
 
@@ -144,14 +139,14 @@
 <dx-popup class="passaggioFase" [width]="700" [showTitle]="true" [title]="popupData.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
     [(visible)]="passaggioDiFaseVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-passaggio-di-fase [daPadre]="perFiglioPassaggioFase" (messageEvent)="receiveMessage($event)"></app-passaggio-di-fase>
+        <app-passaggio-di-fase [idIter]="idIter" [isOpenedAsPopup]="true" (out)="receiveMessage($event)"></app-passaggio-di-fase>
     </div>
 </dx-popup>
 
 <dx-popup class="sospensionePopup" [width]="700" [showTitle]="true" [title]="popupData.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
     [(visible)]="sospensioneIterVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-cambio-di-stato-box [sospensioneParams]="paramsPerSospensione"></app-cambio-di-stato-box>
+        <app-cambio-di-stato-box [sospensioneParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="true" (out)="receiveMessageFromSospensione($event)"></app-cambio-di-stato-box>
         <!-- <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter> -->
     </div>
 </dx-popup>

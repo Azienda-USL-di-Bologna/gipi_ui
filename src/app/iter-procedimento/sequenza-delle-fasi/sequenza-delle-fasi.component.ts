@@ -23,7 +23,6 @@ export class SequenzaDelleFasiComponent implements OnInit {
       store: this.odataContextDefinition.getContext()[new FaseIter().getName()],
       expand: ["idFase", "idIter"],
       filter: ["idIter.id", "=", this.idIter],
-      pageSize: 5,
       onChanged: function(){
         _that.statoAttuale = "(" + this.items()[0].idFase.nome + ")";
       }
