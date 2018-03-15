@@ -139,8 +139,6 @@ export class StruttureTreeComponent implements OnInit {
   openContextMenu(e) {
     this.nodeSelectedFromContextMenu = e.itemData;
     this.showContextMenu = true;
-    
-    // this.abilitaRicorsione = true;
   }
 
   onTreeViewClick(e) {
@@ -148,8 +146,7 @@ export class StruttureTreeComponent implements OnInit {
   }
 
   // Questo scatta quando clicchiamo sulla voce del menu contestuale "Espandi..."
-  contextualItemClick(e) {
-    
+  contextualItemClick(e) {  
     switch (e.itemIndex)
     {
       case 0:
@@ -158,25 +155,20 @@ export class StruttureTreeComponent implements OnInit {
         this.setSelectedNodeRecursively(this.nodeSelectedFromContextMenu, true);
         this.treeViewChild.instance.expandItem(this.nodeSelectedFromContextMenu);
         break;
-        
+
       case 1:
-      this.nodeSelectedFromContextMenu.selected = false;
-      this.treeViewChild.instance.unselectItem(this.nodeSelectedFromContextMenu);
+        this.nodeSelectedFromContextMenu.selected = false;
+        this.treeViewChild.instance.unselectItem(this.nodeSelectedFromContextMenu);
         this.setSelectedNodeRecursively(this.nodeSelectedFromContextMenu, false);  
         this.treeViewChild.instance.expandItem(this.nodeSelectedFromContextMenu);
         break;  
     }
-    // this.treeView.selectNodesRecursive = true;
-    // this.treeView.selectNodesRecursive = false;
-
-    // console.log('VAL: ' + this.nodeSelectedFromContextMenu.id);
   }
 
 
 
   public sendDataConfirm() {
     if (Object.keys(this.nodeInvolved).length > 0) {
-      // const req = this.http.post("http://localhost:10006/gipi/resources/custom/updateProcedimenti", {
         const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "UpdateProcedimenti", {
         idAziendaTipoProcedimento: this.idAziendaTipoProcedimento,
         nodeInvolved: this.nodeInvolved

@@ -102,7 +102,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
     private setDataAvviaIterDaDocumento() {
         // Devo aggiungere il filtro sulle strutture dell'utente
         // Prima mi creo l'array con gli id struttura
-
+        
         // Ora mi creo l'array-filtro e filtro
         this.dataSourceProcedimenti.filter(
             this.utility.buildMultipleFilterForArray("idStruttura.id", this.idStruttureUtente)
