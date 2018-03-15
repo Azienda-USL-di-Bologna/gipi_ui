@@ -23,6 +23,12 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
   @ViewChild("definizione_tipi_procedimento") public grid: DxDataGridComponent;
   @Input("refreshButton") public refreshButton;
 
+  public minVal= new Date();
+  public dataInizio;
+  public dataFine;
+  public now: Date = new Date();
+
+  public minima;
   public pattern: any =  "^[1-9]+[0-9]*$";
   public dataSource: DataSource;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
@@ -58,6 +64,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
     this.dataSource.load().then(res => this.buildTipiProcedimento(res));
     this.setFormLook();
+
   }
 
   private setFormLook() {
@@ -106,8 +113,6 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
           if (result.isValid) {
               this.grid.instance.saveEditData();
-          } else {
-              // params.validator.reset();
           }
         }
       }
@@ -123,7 +128,11 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
   // modifico la riga passata come parametro
   private modificaRiga(row: any) {
-    this.grid.instance.editRow(row.rowIndex);
+
+      this.dataInizio = row.data.dataInizioValidita;
+      this.dataFine = row.data.dataFineValidita;
+      this.grid.instance.editRow(row.rowIndex);
+
     this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
   }
 
@@ -201,16 +210,24 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
       case "rowValidating":
           // console.log("onRowValidating")
-          let dataInizioValidita = new Date(this.selectedRow.data.dataInizioValidita);
-          let dataFineValidita = new Date(this.selectedRow.data.dataFineValidita);
+          // let dataInizioValidita = new Date(this.selectedRow.data.dataInizioValidita);
+          // let dataFineValidita = new Date(this.selectedRow.data.dataFineValidita);
 
-          let durataMassimaIter = (this.selectedRow.data.durataMassimaIter && this.selectedRow.data.durataMassimaIter > 0) ? true : false;
+          event.newData.dataInizioValidita = this.dataInizio;
+          event.newData.dataFineValidita = this.dataFine;
+
+          let durataMassimaIter = (event.newData.durataMassimaIter && event.newData.durataMassimaIter > 0) ? true : false;
           // console.log("Max iter: ", durataMassimaIter);
-          let durataMassimaSospensione = (this.selectedRow.data.durataMassimaSospensione && this.selectedRow.data.durataMassimaSospensione > 0) ? true : false;
+          let durataMassimaSospensione = (event.newData.durataMassimaSospensione && event.newData.durataMassimaSospensione > 0) ? true : false;
           // console.log(this.selectedRow.data.durataMassimaSospensione);
           // console.log("Max durataMassimaSospensione: ", durataMassimaSospensione);
 
-          if ((dataInizioValidita <= dataFineValidita) && (durataMassimaIter) && (durataMassimaSospensione)) {
+          // if ((dataInizioValidita <= dataFineValidita) && (durataMassimaIter) && (durataMassimaSospensione)) {
+          //     event.isValid = true;
+          // } else {
+          //     event.isValid = false;
+          // }
+          if ((durataMassimaIter) && (durataMassimaSospensione)) {
               event.isValid = true;
           } else {
               event.isValid = false;
@@ -302,19 +319,38 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
     return attivo;
   }
 
-  validazione(event: any): boolean {
-    let from = new Date(event.data["dataInizioValidita"]);
-    let to = new Date(event.data["dataFineValidita"]);
+  // validazione1(event: any): boolean {
+  //   let from = new Date(event.data["dataInizioValidita"]);
+  //   this.minVal = from;
+  //   return true;
+  //   // let to = new Date(event.data["dataFineValidita"]);
+  //   //
+  //   // if (from <= to) {
+  //   //   return true;
+  //   // } else {
+  //   //   return false;
+  //   // }
+  // }
 
-    if (from <= to) {
-      return true;
-    } else {
-      return false;
+    // validazione2(event: any): boolean {
+    //     let from = new Date(event.data["dataInizioValidita"]);
+    //     let to = new Date(event.data["dataFineValidita"]);
+    //
+    //     if (from <= to) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
+
+
+
+    onValueChangedFrom(e:any){
+      this.dataInizio = e.value;
     }
-  }
 
-    onValueChanged(e:any){
-      console.log(e);
+    onValueChangedTo(e:any){
+        this.dataFine = e.value;
     }
 
 }
