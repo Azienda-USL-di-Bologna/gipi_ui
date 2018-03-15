@@ -220,14 +220,11 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
       case "InitNewRow":
         event.data.obbligoEsitoConclusivo = false;
         event.data.pubblicazioneRegistroAccessi = false;
+        this.grid.editing.popup.title = "Aggiungi Nuovo Tipo Procedimento";
         break;
       
       case "RowUpdating":
         return;
-
-      case "InitNewRow":
-        this.grid.editing.popup.title = "Aggiungi Nuovo Tipo Procedimento";
-        break;
 
       case "EditingStart":
         this.grid.editing.popup.title =  "Modifica Tipo Procedimento";
