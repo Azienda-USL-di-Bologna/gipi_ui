@@ -234,8 +234,20 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
           }
       break;
 
+      case "InitNewRow":
+        event.data.obbligoEsitoConclusivo = false;
+        event.data.pubblicazioneRegistroAccessi = false;
+        this.grid.editing.popup.title = "Aggiungi Nuovo Tipo Procedimento";
+        break;
+      
       case "RowUpdating":
         return;
+
+      case "EditingStart":
+        this.grid.editing.popup.title =  "Modifica Tipo Procedimento";
+        break;
+      
+
 
 
       default:
@@ -352,5 +364,4 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
     onValueChangedTo(e:any){
         this.dataFine = e.value;
     }
-
 }

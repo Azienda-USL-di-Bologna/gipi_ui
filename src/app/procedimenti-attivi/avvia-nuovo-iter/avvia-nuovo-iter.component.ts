@@ -118,7 +118,6 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.dataSourceUtenti.load().then(res => {
       for (let e of res) {
         if (e.idUtente.id === this.loggedUser.getField(bUtente.id) && e.idStruttura.id === this.iterParams.procedimento.idStruttura.id) {
-          console.log("ciao caro");
           this.idUtenteDefault = e.id;
           this.iterParams.idUtenteResponsabile = this.loggedUser.getField(bUtente.id);
           this.descrizioneUtenteResponsabile = e.idUtente.idPersona.descrizione 

@@ -38,6 +38,10 @@ export class StruttureTreeComponent implements OnInit {
   @Input("disabled") disabled: boolean;
   @Input("enableCheckRecursively") enableCheckRecursively: boolean;
   @Input("nodesToCheckSelectedStatus") nodesToCheckSelectedStatus: any;
+  @Input() 
+  set ricarica(ricarica: any) {
+    if (ricarica.ricarica) this.caricaDati();
+  }
   @Output("strutturaSelezionata") strutturaSelezionata = new EventEmitter<Object>();
   @Output("refreshAfterChange") refreshAfterChange = new EventEmitter <Object>();
 
@@ -184,34 +188,34 @@ export class StruttureTreeComponent implements OnInit {
           this.nodeInvolved = {};
         },
         err => {
-            console.log("err: ", err);
-            // TODO by gdm
-            // TODO 1: rifattorizzare, il componente dovrebbe gestire solo l'albero delle struttre e non i procedimenti
-            // TODO 2: valutare se fare questa gesione dell'errore in una classe a parte, magari con un metodo specifico e poi richiamarla qui
-            // controllo se nell'errore è presente httpCode, se lo è vuol dire che l'errore è del tipo ResponseMessage
-            if (err.error && err.error.httpCode) {
+          console.log("err: ", err);
+          // TODO by gdm
+          // TODO 1: rifattorizzare, il componente dovrebbe gestire solo l'albero delle struttre e non i procedimenti
+          // TODO 2: valutare se fare questa gesione dell'errore in una classe a parte, magari con un metodo specifico e poi richiamarla qui
+          // controllo se nell'errore è presente httpCode, se lo è vuol dire che l'errore è del tipo ResponseMessage
+          if (err.error && err.error.httpCode) {
 
-                // se l'errore è del tipo ResponseMessage, lo parso nell'oggetto corrispondente
-                const responseMessages: ResponseMessages = err.error;
+            // se l'errore è del tipo ResponseMessage, lo parso nell'oggetto corrispondente
+            const responseMessages: ResponseMessages = err.error;
 
-                // estraggo i messaggi di errore
-                const errorMessages: ErrorMessage[] = responseMessages.errorMessages;
+            // estraggo i messaggi di errore
+            const errorMessages: ErrorMessage[] = responseMessages.errorMessages;
 
-                // anche se è possibile passare più messaggi di errore, per scelta, in questo caso ce ne sarà solo 1
-                const errorCode = errorMessages[0].code;
+            // anche se è possibile passare più messaggi di errore, per scelta, in questo caso ce ne sarà solo 1
+            const errorCode = errorMessages[0].code;
 
-                // lo switch serve per mostrare i vari messaggi di errore in base al codice
-                switch (errorCode) {
-                    case this.NO_DELETE_ERROR_CODE:
-                        this.showStatusOperation("Impossible togliere l'associazione: ci sono degli iter collegati", "error");
-                        break;
-                    default: // caso generale
-                        this.showStatusOperation("Associazione non andata a buon fine", "error");
-                }
+            // lo switch serve per mostrare i vari messaggi di errore in base al codice
+            switch (errorCode) {
+                case this.NO_DELETE_ERROR_CODE:
+                    this.showStatusOperation("Impossible togliere l'associazione: ci sono degli iter collegati", "error");
+                    break;
+                default: // caso generale
+                    this.showStatusOperation("Associazione non andata a buon fine", "error");
             }
-            else { // se l'errore non è del tipo ResponseMessage, allora mostro un errore generico
-                this.showStatusOperation("Associazione non andata a buon fine", "error");
-            }
+          }
+          else { // se l'errore non è del tipo ResponseMessage, allora mostro un errore generico
+              this.showStatusOperation("Associazione non andata a buon fine", "error");
+          }
         }
         );
     } else {
@@ -252,12 +256,11 @@ public showStatusOperation(message: string, type: string) {
       position: {
           my: "center",
           at: "center",
-          offset: "-100 20",
-          of: "#center-div"
+          // offset: "-100 20",
+          of: window
        }
     });
   }
-
 }
 
 export const NodeOperations  = {INSERT: "INSERT", DELETE: "DELETE"};

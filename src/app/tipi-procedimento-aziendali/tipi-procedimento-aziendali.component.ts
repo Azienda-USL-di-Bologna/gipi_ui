@@ -15,11 +15,13 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   private odataContextDefinition: OdataContextDefinition;
   public dataSourceProcedimenti: DataSource;
   public popupVisible: boolean = false;
+  public popupOrganigrammaVisible = false;
   public loggedUser: LoggedUser;
   public idAzienda: number;
   public descAzienda: string;
   public procedimentoDaPassare: AziendaTipoProcedimento;
   public screenWidth: number = screen.width;
+  public aziendaTipiProcedimentoData: any;
 
   constructor(private odataContextFactory: OdataContextFactory, 
     public router: Router,
@@ -42,8 +44,6 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
 
 
   receiveMessage(event: any, reloadPadre: boolean) {
-    console.log("RECEIVE MESSAGE: ", event);
-    console.log("receive da padre = ", event.reloadPadre)
     this.popupVisible = event.visible;
     let toReload: boolean = event.reloadPadre ? true : false;
     if (toReload)
@@ -52,17 +52,14 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   }
 
   public modificaDettagli(event: any, rigaDatagrid: any) {
-    console.log("tipi-procedimento-aziendali handleEvent", event);
     if (rigaDatagrid.columnIndex === 4) {
       this.procedimentoDaPassare = rigaDatagrid.data;
-      console.log("THIS.ROUTE", this.route);
-      console.log("handleEvent tipiProcAz: procedimentoDaPassare", this.procedimentoDaPassare.id);
       this.popupVisible = true;
-      //this.caricaDataSource();
+      // this.caricaDataSource();
     }
   }
 
-  associaOrganigramma(rigaDatagrid: any) {    
+  gestisciAssociazioni(rigaDatagrid: any) {    
     this.router.navigate(["/struttura-tipi-procedimento"], {queryParams: {
       aziendaTipoProcedimento: rigaDatagrid.data.id,
       azienda: rigaDatagrid.data.idAzienda.id,
@@ -70,8 +67,20 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
     }});
   }
 
+  public  associaOrganigramma(row: any) {
+    this.aziendaTipiProcedimentoData = {
+      idAzienda: this.idAzienda,
+      idAziendaTipoProcedimento: row.data.id,
+      headerTipoProcedimento: row.data.idTipoProcedimento.nome
+    };
+    this.popupOrganigrammaVisible = true;
+  }
+
+  public closePopup() {
+    this.popupOrganigrammaVisible = false;
+  }
+
   public caricaDataSource() {
-    console.log("tipi-procedimento-aziendali CARICADATASOURCE");
     this.dataSourceProcedimenti = new DataSource({
       store: this.odataContextDefinition.getContext()[new AziendaTipoProcedimento().getName()],    
       expand: ["idAzienda", "idTipoProcedimento", "idTitolo"],

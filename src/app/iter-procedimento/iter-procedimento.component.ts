@@ -23,7 +23,8 @@ import { HttpHeaders } from "@angular/common/http";
   encapsulation: ViewEncapsulation.None
 })
 export class IterProcedimentoComponent implements OnInit, AfterViewInit {
-
+  
+  private subscriptions: Subscription[] = [];
 
   public iter: Iter = new Iter();
   public idIterArray: Object;
@@ -63,10 +64,11 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public paramsPerSospensione: Object;
   public sospensioneParams: SospensioneParams = new SospensioneParams();
   public loggedUser$: Observable<LoggedUser>;
-  private subscriptions: Subscription[] = [];
   public userInfo: UserInfo;
   public iodaPermission: boolean;
   public hasPermissionOnFascicolo: boolean = false;
+  public soloEditing: boolean = false;
+
 
   public dataSourceClassificazione: DataSource;
 
@@ -143,7 +145,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   ngOnInit() { }
 
   public buildTitoloDatiGenerali() {
-    this.datiGenerali = "Iter n." + this.iter.id + "/" + this.iter.anno + " (" + this.iter.stato + ")";
+    this.datiGenerali = "Iter n." + this.iter.numero + "/" + this.iter.anno + " (" + this.iter.stato + ")";
   }
 
   isSospeso() {
@@ -178,6 +180,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.sospendiButton = new ButtonAppearance("Sospendi", "", false, this.disableSospendi());
     this.setNomeBottoneSospensione();
     this.genericButtons.push(this.procediButton, this.sospendiButton);
+    this.soloEditing = this.disableSospendi();
   }
 
   buildIter() {

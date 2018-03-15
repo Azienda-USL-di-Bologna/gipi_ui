@@ -24,16 +24,10 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
   public loggedUser: LoggedUser;
   public pattern: any =  "^[1-9][0-9]*$";
 
-  // tslint:disable-next-line:no-input-rename
   @Input()
   set procedimento(procedimento: number) {
-    console.log("dettaglio-tipo-procedimento Sono nell'@Input");
-    console.log("INPUT PROCEDIMENTO", procedimento);
     this.idProcedimentoInput = procedimento;
     this.proc = new AziendaTipoProcedimento(); 
-    /* if(!this.loaded){
-      console.log("dettaglio-tipo-procedimento Input --> !loaded...");
-    } */
     this.caricaDataSource(false);
   }
 
@@ -59,57 +53,33 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
         return item;
       }
     });
-
   }
 
   ngOnInit() {
     console.log("dettaglio-tipo-procedimento ngOnInit");
     if (!this.loaded) {
-      console.log("dettaglio-tipo-procedimento ngOnInit --> !loaded...");
       this.caricaDataSource(false);
     }
   }
 
-  ngOnChanges() {
-    console.log("dettaglio-tipo-procedimento ngOnChanges");
-    /* if(!this.loaded){
-      console.log("dettaglio-tipo-procedimento ngOnChanges --> !loaded...");
-      this.caricaDataSource();
-    } */
-  }
-
   ngOnClose() {
-    console.log("dettaglio-tipo-procedimento ngOnClose");
-    // this.proc = new AziendaTipoProcedimento();
     this.loaded = false;
     this.messageEvent.emit({visible: false, reloadPadre: false});
-    this.ngOnDestroy();
-  }
-
-  ngOnDestroy() {
-    console.log("NG-ON-DESTROY");
   }
 
   public close(toReloadPadre: boolean) {
-    console.log("dettaglio-tipo-procedimento CLOSE");
-    // this.proc = new AziendaTipoProcedimento();
     this.loaded = false;
     this.messageEvent.emit({visible: false, reloadPadre: (toReloadPadre ? true : false)});
-    this.ngOnDestroy();
   }
 
-    validate(params) {
-        console.log("passo di validazione");
-        let result = params.validationGroup.validate();
-        if (result.isValid) {
-            this.save();
-        }
-    }
+  validate(params) {
+      let result = params.validationGroup.validate();
+      if (result.isValid) {
+          this.save();
+      }
+  }
 
-
-    public save() {
-
-    console.log("dettaglio-tipo-procedimento CARICADATASOURCE");
+  public save() {
     this.dataSourceAziendaTipoProcedimento.store().update(this.proc.id, this.proc).then( 
       res => {
         notify({
@@ -141,30 +111,21 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
 
   public caricaDataSource(chiudi: boolean) {
     this.loaded = true;
-    console.log("dettaglio-tipo-procedimento CARICADATASOURCE");   
-    // this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.dataSourceAziendaTipoProcedimento = new DataSource({
-      store: this.odataContextDefinition.getContext()[new AziendaTipoProcedimento().getName()].on("loading", console.log("STO CARICNDO I DATIIIIII!!!!!!!!!!!")),
+      store: this.odataContextDefinition.getContext()[new AziendaTipoProcedimento().getName()],
       expand: ["idTitolo", "idTipoProcedimento", "idAzienda"],
       filter: ["id", "=", this.idProcedimentoInput],
       map: (item) => {
-        console.log("MI MAPPO GLI ITEM");
         if (item.idTitolo) {
           item.titAndClass = "[" + item.idTitolo.classificazione + "] " +  item.idTitolo.nome;
-          console.log(item.titAndClass);
         }
         return item;
       }
-
     });
-    console.log("dettaglio-tipo-procedimento caricato il dataSource?");  
     this.dataSourceAziendaTipoProcedimento.load().then((res) => { 
       this.proc.build(res[0]); 
-      console.log("QUESTO E' IL BUILD", this.proc);  
-      if(chiudi)
+      if (chiudi)
         this.close(true);
     });
-    console.log("Loggo se mi ha caricato", this.dataSourceAziendaTipoProcedimento);
   }
 }
-
