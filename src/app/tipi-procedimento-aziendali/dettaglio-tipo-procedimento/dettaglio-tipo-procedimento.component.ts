@@ -37,9 +37,10 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
     console.log("dettaglio-tipo-procedimento CONSTRUCTOR");
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser")
-    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nome");
-    customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
-  
+    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
+    customLoadingFilterParams.addFilter("nome", ["tolower(${target})", "contains", "${value.tolower}"]);
+    customLoadingFilterParams.addFilter("classificazione", ["tolower(${target})", "contains", "${value.tolower}"]);
+
     this.dataSourceTitoli = new DataSource({
       store: this.odataContextDefinition.getContext()[new Titolo().getName()].on("loading", (loadOptions) => {
         loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;

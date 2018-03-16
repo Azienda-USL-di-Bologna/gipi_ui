@@ -79,6 +79,7 @@ import { CambioDiStatoComponent } from "./cambio-di-stato/cambio-di-stato.compon
 import { TipiProcedimentoAziendaliComponent } from "./tipi-procedimento-aziendali/tipi-procedimento-aziendali.component";
 import { DettaglioTipoProcedimentoComponent } from "./tipi-procedimento-aziendali/dettaglio-tipo-procedimento/dettaglio-tipo-procedimento.component";
 import {LoginModule} from "@bds/nt-login";
+import { TestGridComponent } from './test/test-grid/test-grid.component';
 
 @NgModule({
     declarations: [
@@ -112,7 +113,8 @@ import {LoginModule} from "@bds/nt-login";
         CambioDiStatoBoxComponent,
         CambioDiStatoComponent,
         TipiProcedimentoAziendaliComponent,
-        DettaglioTipoProcedimentoComponent
+        DettaglioTipoProcedimentoComponent,
+        TestGridComponent
     ],
     imports: [
         BrowserModule,
