@@ -25,7 +25,6 @@ export class PassaggioDiFaseComponent implements OnInit {
   public passaggioFaseParams: PassaggioFaseParams;
   public showPopupAnnullamento : boolean = false;
   public messaggioAnnullamento : string;
-  public 
 
   @Input() set idIter(value: number){
     this.iterParams.idIter = value;
@@ -88,7 +87,10 @@ export class PassaggioDiFaseComponent implements OnInit {
       .subscribe(
       res => {
         if(!this.isOpenedAsPopup){
-          notify("Proceduto con successo", "success", 1000);
+          setTimeout(() =>{
+            notify("Proceduto con successo", "success", 1000); 
+            window.close();
+          }, 1000);
         }else{
           this.out.emit({ visible: false, proceduto: true });
         }

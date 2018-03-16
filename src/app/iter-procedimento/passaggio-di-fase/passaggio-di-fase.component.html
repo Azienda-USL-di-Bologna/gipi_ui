@@ -31,19 +31,17 @@
                         <dxi-validation-rule type="required" message="La data di passaggio è obbligatoria">
                         </dxi-validation-rule>
                     </dxi-item>
-                    <dxi-item [colSpan]="4" dataField="codiceRegistroDocumento" [editorOptions]="{ disabled: false }">
-
+                    <dxi-item [colSpan]="4" dataField="codiceRegistroDocumento" [editorOptions]="{ disabled: !isOpenedAsPopup }">
                         <dxo-label text="Reg."></dxo-label>
                         <dxi-validation-rule type="required" message="Il registro è obbligatorio">
                         </dxi-validation-rule>
                     </dxi-item>
-                    <dxi-item [colSpan]="5" dataField="numeroDocumento" [editorOptions]="{disabled: false }">
-
+                    <dxi-item [colSpan]="5" dataField="numeroDocumento" [editorOptions]="{disabled: !isOpenedAsPopup }">
                         <dxo-label text="Num"></dxo-label>
                         <dxi-validation-rule type="required" message="Il numero registro è obbligatorio">
                         </dxi-validation-rule>
                     </dxi-item>
-                    <dxi-item [colSpan]="3" dataField="annoDocumento" [editorOptions]="{disabled: false}">
+                    <dxi-item [colSpan]="3" dataField="annoDocumento" [editorOptions]="{disabled: !isOpenedAsPopup}">
                         <dxo-label text="Anno"></dxo-label>
                         <dxi-validation-rule type="required" message="L'anno registro è obbligatorio">
                         </dxi-validation-rule>
