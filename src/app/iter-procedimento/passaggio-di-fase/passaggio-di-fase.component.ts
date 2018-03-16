@@ -87,10 +87,8 @@ export class PassaggioDiFaseComponent implements OnInit {
       .subscribe(
       res => {
         if(!this.isOpenedAsPopup){
-          setTimeout(() =>{
-            notify("Proceduto con successo", "success", 1000); 
-            window.close();
-          }, 1000);
+          notify("Proceduto con successo", "success", 300); 
+          setTimeout(window.close(), 3000);
         }else{
           this.out.emit({ visible: false, proceduto: true });
         }
