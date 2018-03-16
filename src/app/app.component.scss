@@ -193,7 +193,8 @@
   display: table;
   padding: 0 32px;
   height: 64px;
-  background-color: #fff;
+  // background-color: #fff;
+  background-color: #993366;
   box-shadow: 0 0 1px rgba(0,0,0,.15);
   margin-bottom: 5px;
 }
@@ -334,8 +335,8 @@
 }
 
 #userDropdownToggle {
-  width: 36px;
-  height: 36px;
+  width: 25px;
+  height: 25px;
 }
 
 #userDropdown {
