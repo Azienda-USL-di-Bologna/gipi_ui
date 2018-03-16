@@ -86,9 +86,11 @@
   border-color: #265a87;
 }
 
-/deep/ .button-azioni :hover {
-  background-color: #285f8f;
-  border-color: #265a87;
+/deep/ .button-azioni:disabled:hover {
+  /* background-color: #285f8f;
+  border-color: #265a87; */
+  background-color: #337ab7;
+  border-color: #2d6da3;
 }
 
 

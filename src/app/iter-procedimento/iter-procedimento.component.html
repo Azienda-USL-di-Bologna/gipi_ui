@@ -43,7 +43,7 @@
                         </dxi-item>
 
                         <dxi-item [colSpan]="2">
-                            <button class="btn button-azioni" type="button" (click)="updateNoteControInteressati()" [disabled]="soloEditing">Note</button>
+                            <button class="btn button-azioni" id="note" type="button" (click)="updateNoteControInteressati()" [disabled]="soloEditing">Note</button>
                             <!-- <dx-button text="Note controinteressati" type="default" (onClick)="updateNoteControInteressati()"></dx-button> -->
                         </dxi-item>
 
@@ -55,7 +55,7 @@
                     <dxi-item [colSpan]="4" dataField="esito" cssClass="fix-bug-dx" [editorOptions]="{ disabled: true }"></dxi-item>
 
                     <dxi-item [colSpan]="2">
-                        <button class="btn button-azioni" type="button" (click)="updateEsitoMotivazione()" [disabled]="soloEditing">Motivazione</button>
+                        <button class="btn button-azioni" id="motivazione" type="button" (click)="updateEsitoMotivazione()" [disabled]="soloEditing">Motivazione</button>
                         <!-- <dx-button text="Motivazione" type="default" (onClick)="updateEsitoMotivazione()"></dx-button> -->
                     </dxi-item>
                 </dxi-item>
@@ -113,13 +113,16 @@
         </div>
     </div>
 
+
     <div class="col footerDiv">
+<!-- COMMENTATO NELLO SPRINT "SOCCIA CHE ZAGNO" (Seriamente: a che servono??) 
         <dx-button [text]="'Annulla'" [type]="'normal'"></dx-button>
 
-        <dx-button [text]="'Conferma'" [type]="'normal'"></dx-button>
-        <div>
-        </div>
+        <dx-button [text]="'Conferma'" [type]="'normal'"></dx-button> -->
+        <div>        </div>
     </div>
+
+
 
 </div>
 
