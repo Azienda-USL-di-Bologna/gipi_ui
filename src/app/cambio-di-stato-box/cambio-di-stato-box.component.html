@@ -31,7 +31,7 @@
         ngClass= "width100">
           <dxi-validation-rule type="required" message="Lo stato prossimo è obbligatorio"></dxi-validation-rule>
       </dxi-item>
-      <dxi-item dataField="dataCambioDiStato" editorType="dxDateBox" [label]="{text: 'Data cambio di stato'}" [editorOptions]="{ displayFormat: 'dd/MM/yyyy' }">
+      <dxi-item dataField="dataCambioDiStato" editorType="dxDateBox" [label]="{text: 'Data cambio di stato'}" [editorOptions]="{value:dataIniziale, displayFormat: 'dd/MM/yyyy' }">
         <dxi-validation-rule type="required" message="La data di cambio di stato è obbligatoria"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="note" editorType="dxTextArea" [label]="{text: 'Note'}" [editorOptions]="{ disabled: false }"></dxi-item>

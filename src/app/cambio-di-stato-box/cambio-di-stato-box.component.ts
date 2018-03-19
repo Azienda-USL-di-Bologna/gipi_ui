@@ -17,11 +17,13 @@ import notify from "devextreme/ui/notify";
 export class CambioDiStatoBoxComponent implements OnInit{
 
   public _sospensioneParams: SospensioneParams;
+  public _isOpenedAsPopup: boolean;
   public statiIter: string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
   public statiIterService: string[] = new Array();
   public _userInfo: UserInfo;
   public showPopupRiassunto: boolean = false;
   public showPopupAnnullamento: boolean = false;
+  public dataIniziale: Date;
 
   @Output() out = new EventEmitter<any>();
 
@@ -31,8 +33,18 @@ export class CambioDiStatoBoxComponent implements OnInit{
   @Input()
   set sospensioneParams(value: SospensioneParams) {
     this._sospensioneParams = value;
+      if (!this._isOpenedAsPopup) {
+          this.dataIniziale = new Date(this._sospensioneParams.dataRegistrazioneDocumento);
+      }
+
   }
-  @Input("isOpenedAsPopup") isOpenedAsPopup?: boolean;
+  @Input()set isOpenedAsPopup(value: boolean) {
+        this._isOpenedAsPopup = value;
+        if (this._isOpenedAsPopup) {
+            this.dataIniziale = new Date();
+        }
+
+    }
 
   constructor(private http: HttpClient) { 
     this.statiIterService[this.statiIter[0]] = "iter_in_corso";
@@ -42,8 +54,9 @@ export class CambioDiStatoBoxComponent implements OnInit{
 
   ngOnInit() {}
 
+
    handleSubmit(e) {
-    e.preventDefault();
+     e.preventDefault();
     if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.statoCorrente) {return; }
 
     let shippedParams: ShippedParams = {
