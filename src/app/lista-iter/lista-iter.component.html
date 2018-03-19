@@ -1,11 +1,9 @@
 <div class="container-fluid ">
   <div class="col header-font">
-      <!--<h3><span >Azienda:</span> <i>{{infoGeneriche.azienda}}</i></h3>-->
-      <h3><span >Struttura:</span> <i>{{infoGeneriche.struttura}}</i></h3>
-      <h3><span >Procedimento:</span> <i>{{infoGeneriche.procedimento}}</i></h3>
+      <h3>Lista iter attivi</h3>
   </div>
   <div class="whitePanel">
-      <dx-data-grid
+    <dx-data-grid
       allowColumnResizing="true"
       hoverStateEnabled="true" 
       columnResizingMode="nextColumn" 
@@ -25,8 +23,8 @@
         <dxi-column dataField="oggetto" [minWidth]="200"></dxi-column>
         <dxi-column dataField="idResponsabileProcedimento.idPersona.descrizione" caption="Responsabile procedimento" [minWidth]="200"></dxi-column>
         <dxi-column dataField="stato"[width]="100"></dxi-column>
-        <dxi-column dataField="dataAvvio" caption="Aperto il" [width]="100"></dxi-column>
-        <dxi-column dataField="dataChiusura" caption="Chiuso il" [width]="100"></dxi-column>
+        <dxi-column dataField="dataAvvio" caption="Aperto il" [width]="100" format="dd/MM/yyyy"></dxi-column>
+        <dxi-column dataField="dataChiusura" caption="Chiuso il" [width]="100" format="dd/MM/yyyy"></dxi-column>
 
         <dxi-column caption="Apri" cellTemplate="buttonCellTemplate" [width]="60"></dxi-column>
         <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni">

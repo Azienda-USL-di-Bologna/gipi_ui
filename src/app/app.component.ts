@@ -87,7 +87,7 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
         this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
-        this.sidebarItems.push(new SidebarItem("Lista Iter", "app-lista-iter"));
+        this.sidebarItems.push(new SidebarItem("Iter di procedimento attivi", "app-lista-iter"));
         // this.sidebarItems.push(new SidebarItem("Test", "", this.sidebarItems2));
     }
 
@@ -118,9 +118,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // sad but necessary :c
         var $this = this;
-        window.addEventListener('click', function(e){   
+        window.addEventListener("click", function(e){   
             if (!document.getElementById("userDropdown").contains(<Node>e.target) && !document.getElementById("userDropdownToggle").contains(<Node>e.target)
-                && $("#userDropdown").hasClass('show')) {
+                && $("#userDropdown").hasClass("show")) {
                 $this.onProfileBtnClick(e);
             }
         });
