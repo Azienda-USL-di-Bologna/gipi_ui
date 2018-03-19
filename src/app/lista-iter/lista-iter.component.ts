@@ -16,16 +16,17 @@ import { LoggedUser } from "@bds/nt-login";
 export class ListaIterComponent implements OnInit {
 
   private odataContextDefinition: OdataContextDefinition;
-  public dataSource: DataSource;
   private subscriptions: Subscription[] = [];
+  public dataSource: DataSource;
   
   public loggedUser$: Observable<LoggedUser>;
+  public idAzienda: number;
 
-  public infoGeneriche: any = {
+  /* public infoGeneriche: any = {
     azienda: "Caricamento...",
     struttura: "UO DaTer",
     procedimento: "Procedimento A"
-  };
+  }; */
 
   constructor(private odataContextFactory: OdataContextFactory, private router: Router, private globalContextService: GlobalContextService) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -37,13 +38,14 @@ export class ListaIterComponent implements OnInit {
       this.loggedUser$.subscribe(
           (loggedUser: LoggedUser) => {
             if (loggedUser)
-              this.infoGeneriche.azienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.nome];
+              this.idAzienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
           }
       )
   );
     this.dataSource = new DataSource({
       store: this.odataContextDefinition.getContext()[new Iter().getName()],
       expand: ["idResponsabileProcedimento.idPersona"],
+      filter: ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id", "=", this.idAzienda]
     });
   }
 
