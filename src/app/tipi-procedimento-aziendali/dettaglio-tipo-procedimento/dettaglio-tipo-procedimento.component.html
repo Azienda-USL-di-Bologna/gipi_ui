@@ -39,8 +39,12 @@
     </dxi-item>
     
     <dxi-item itemType="group" [colCount]="12">
-      <dxi-item dataField="dataInizio" [colSpan]="3" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita', location:'top'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-      <dxi-item dataField="dataFine" [colSpan]="3" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data fine validita', location:'top'}" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+      <dxi-item dataField="dataInizio" [colSpan]="3" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita', location:'top'}" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy', max: proc.dataFine, invalidDateMessage:'La data deve avere il seguente formato: dd/MM/yyyy' }">
+        <dxi-validation-rule></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="dataFine" [colSpan]="3" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data fine validita', location:'top'}" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy', min: proc.dataInizio , invalidDateMessage:'La data deve avere il seguente formato: dd/MM/yyyy' }">
+        <dxi-validation-rule></dxi-validation-rule>
+      </dxi-item>
       <dxi-item dataField="giorniPreavvisoScadenzaTermini" [colSpan]="3" editorType="dxNumberBox" [label]="{text: 'Preavviso scadenza termini (gg)', location:'top'}" [editorOptions]="{ disabled: false}">
           <dxi-validation-rule type="required" message="inserire i giorni di preavviso scadenza dei termini"></dxi-validation-rule>
           <dxi-validation-rule type="pattern" [pattern]="pattern" message="giorni di preavviso scadenza dei termini deve avere valore positivo"></dxi-validation-rule>
