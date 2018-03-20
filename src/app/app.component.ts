@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, HostListener, Input } from "@angular/core";
 import { Location } from "@angular/common";
 import { CustomReuseStrategy } from "@bds/nt-context";
-import {NavigationEnd, NavigationStart, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, NavigationStart, Params, Router} from "@angular/router";
 import { Observable } from "rxjs/Observable";
 import {GlobalContextService, OdataContextFactory, OdataForeignKey} from "@bds/nt-context";
 import { Ruolo, bUtente, bAzienda, bRuolo } from "@bds/nt-entities";
@@ -12,6 +12,7 @@ import { LoggedUser } from "@bds/nt-login";
 import * as $ from "jquery";
 import * as deLocalization from "devextreme/localization";
 import {AppConfiguration} from "./config/app-configuration";
+import {SospensioneParams} from "./classi/condivise/sospensione/sospensione-params";
 
 
 @Component({
@@ -42,7 +43,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public userInfoMap$: Observable<Object>;
     public loggedUser$: Observable<LoggedUser>;
 
-    constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService,
+    constructor(private location: Location, public router: Router, private activatedRoute: ActivatedRoute,
+                private globalContextService: GlobalContextService,
                 private odataContextFactory: OdataContextFactory, public appConfig: AppConfiguration) {
         this.odataContextFactory.setOdataBaseUrl(ODATA_BASE_URL);
         console.log("hostname", window.location.hostname);
@@ -58,6 +60,22 @@ export class AppComponent implements OnInit, OnDestroy {
                 let reset = false;
             }
             );
+
+      this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
+          const showBarsParam: string = queryParams["showbars"];
+          let showBars: boolean;
+          if (showBarsParam) {
+            showBars = showBarsParam === "true";
+            if (showBars) {
+              this.appConfig.setAppBarVisible(true);
+              this.appConfig.setSideBarVisible(true);
+            }
+            else {
+              this.appConfig.setAppBarVisible(false);
+              this.appConfig.setSideBarVisible(false);
+            }
+          }
+      });
 
         this.buildLocalization();
     }

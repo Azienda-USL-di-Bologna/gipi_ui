@@ -21,9 +21,6 @@ export class AvviaNuovoIterDaDocumentoComponent {
               private appConfig: AppConfiguration) {
     console.log("avvia-nuovo-iter-da-documento (constructor)");
 
-    this.appConfig.setAppBarVisible(false);
-    this.appConfig.setSideBarVisible(false);
-
     this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
     this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
 
@@ -36,11 +33,6 @@ export class AvviaNuovoIterDaDocumentoComponent {
         dataRegistrazione: queryParams["dataRegistrazione"],
         promotore: decodeURIComponent(queryParams["promotore"].replace(/\+/g, " "))
       };
-      const noBars: boolean = queryParams["nobars"];
-      if (!!noBars) {
-        this.appConfig.setAppBarVisible(false);
-        this.appConfig.setSideBarVisible(false);
-      }
     });
   }
 
