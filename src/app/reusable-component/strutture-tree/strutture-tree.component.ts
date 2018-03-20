@@ -35,7 +35,6 @@ export class StruttureTreeComponent implements OnInit {
 
   public datasource: DataSource;
   public datasourceStrutture: DataSource;
-  public strutture: Struttura = new Struttura();
   public contextMenuItems;
   public showContextMenu: boolean = false;
 
@@ -77,6 +76,8 @@ export class StruttureTreeComponent implements OnInit {
 
 
   private setSelectedNodeRecursively(node: any, select: boolean): void {
+    // console.log("segnaposto");
+
     const res = this.getNestedChildren(this.datasource.items(), node.id, select);
 
     res.forEach(function (element) {
@@ -152,7 +153,7 @@ export class StruttureTreeComponent implements OnInit {
 
   ngOnInit() {
     this.creaDataSourceTree();
-      this.creaDatasourceLookup();
+    this.creaDatasourceLookup();
   }
 
   creaDatasourceLookup() {
@@ -304,7 +305,7 @@ export class StruttureTreeComponent implements OnInit {
   }
 
   handleEvent(name: string, event: any) {
-    console.log(name, event);
+    // console.log(name, event);
 
     switch (name) {
 

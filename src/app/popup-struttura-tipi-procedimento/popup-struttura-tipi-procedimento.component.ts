@@ -24,7 +24,7 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
   public idAziendaTipoProcedimento: number;
   public ricarica: any;
 
-  @ViewChild("tree") tree: StruttureTreeComponent;
+  @ViewChild("treeView") treeView: StruttureTreeComponent;
   @Input("readOnly") readOnly: boolean;
   @Input("enableCheckRecursively") enableCheckRecursively: boolean;
   @Input() 
@@ -52,14 +52,12 @@ export class PopupStrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   sendDataConfirm() {
-    console.log("debug");
-    
      // INOLTRO LA CHIAMATA AL FIGLIO
-     this.tree.sendDataConfirm();
+     this.treeView.sendDataConfirm();
   }
 
   sendDataCancel() { 
-    this.tree.setDataCancel();
+    this.treeView.setDataCancel();
   }
 
   refresh(nodeInvolved) {
