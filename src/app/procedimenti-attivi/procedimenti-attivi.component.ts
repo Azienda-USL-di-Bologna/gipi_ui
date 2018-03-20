@@ -49,8 +49,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
 
     constructor(private odataContextFactory: OdataContextFactory,
                 public router: Router,
-                private globalContextService: GlobalContextService,
-                public appConfig: AppConfiguration) {
+                private globalContextService: GlobalContextService) {
         console.log("file: app/procedimenti-attivi/procedimenti-attivi.components.ts");
         console.log("procedimenti-attivi (constructor)");
         this.initData();
@@ -58,8 +57,6 @@ export class ProcedimentiAttiviComponent implements OnInit {
 
     private initData(): void {
 
-        this.appConfig.setAppBarVisible(false);
-        this.appConfig.setSideBarVisible(false);
         this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
         this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
         this.idStruttureUtente = this.getIdStruttureUtente();
