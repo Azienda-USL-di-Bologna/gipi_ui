@@ -196,13 +196,12 @@ export class ProcedimentiAttiviComponent implements OnInit {
             };
          
             if (column.dataField === "idAziendaTipoProcedimento.idTitolo.nome") {
-                column.calculateCellValue = function (value, a) {
+                column.calculateCellValue = function (value, parametroInutile) {
                     if (value && value.idAziendaTipoProcedimento && value.idAziendaTipoProcedimento.idTitolo) {
                         return "[" + value.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + value.idAziendaTipoProcedimento.idTitolo.nome;
                     }
                 };                
             }
-            
         });
     }
 
