@@ -36,6 +36,11 @@ export class AvviaNuovoIterDaDocumentoComponent {
         dataRegistrazione: queryParams["dataRegistrazione"],
         promotore: decodeURIComponent(queryParams["promotore"].replace(/\+/g, " "))
       };
+      const noBars: boolean = queryParams["nobars"];
+      if (!!noBars) {
+        this.appConfig.setAppBarVisible(false);
+        this.appConfig.setSideBarVisible(false);
+      }
     });
   }
 
