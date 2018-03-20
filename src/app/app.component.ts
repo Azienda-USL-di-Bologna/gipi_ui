@@ -61,7 +61,9 @@ export class AppComponent implements OnInit, OnDestroy {
             }
             );
 
-      this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
+        // leggo dai queryParams il parametro "showbars", se c'è a seconda del suo valore decido di mostrare o nascondere l'appbar e la sidebar
+        // mettendolo qui nell'AppComponent, vale per tutte le interfacce
+        this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
           const showBarsParam: string = queryParams["showbars"];
           let showBars: boolean;
           if (showBarsParam) {
