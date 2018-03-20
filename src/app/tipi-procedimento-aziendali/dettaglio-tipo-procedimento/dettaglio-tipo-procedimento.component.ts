@@ -22,7 +22,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
   public dataSourceTitoli: DataSource;
   public dataSourceAziendaTipoProcedimento: DataSource;
   public loggedUser: LoggedUser;
-  public pattern: any =  "^[1-9][0-9]*$";
+  public pattern: any = "^[1-9][0-9]*$";
 
   @Input()
   set procedimento(procedimento: number) {
@@ -130,5 +130,11 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
       if (chiudi)
         this.close(true);
     });
+  }
+
+  public checkData(event: any) {
+    if (event.value instanceof Date || event.value === null) {
+      return true;
+    } else return false;
   }
 }
