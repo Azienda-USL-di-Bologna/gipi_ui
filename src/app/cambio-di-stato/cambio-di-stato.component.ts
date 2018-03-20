@@ -31,8 +31,6 @@ export class CambioDiStatoComponent implements OnInit {
 
 
   constructor( private activatedRoute: ActivatedRoute, private globalContextService: GlobalContextService, private appConfig: AppConfiguration) {
-    this.appConfig.setAppBarVisible(false);
-    this.appConfig.setSideBarVisible(false);
     if (!this.userInfo) {
       this.recuperaUserInfo();
     }
@@ -45,6 +43,11 @@ export class CambioDiStatoComponent implements OnInit {
       this.sospensioneParams.numeroDocumento = queryParams["numero"];
       this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
       this.sospensioneParams.dataRegistrazioneDocumento = queryParams["dataRegistrazione"];
+      const noBars: boolean = queryParams["nobars"];
+      if (!!noBars) {
+        this.appConfig.setAppBarVisible(false);
+        this.appConfig.setSideBarVisible(false);
+      }
     });
   }
 
