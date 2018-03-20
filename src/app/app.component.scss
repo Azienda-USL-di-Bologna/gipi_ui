@@ -35,8 +35,8 @@
 
 /deep/ .navbar-login
 {
-  width: 305px;
-  padding: 10px;
+  //width: px;
+  //padding: 10px;
   padding-bottom: 0px;
 
 }
@@ -191,7 +191,7 @@
 // }
 .clHeader {
   display: table;
-  padding: 0 32px;
+  padding: 0 20px;
   height: 64px;
   // background-color: #fff;
   background-color: #993366;
@@ -226,7 +226,8 @@
   width: 36px;
   //padding: 4px;
   background-color: #993366;
-  border-color: #791c4a;
+  //border-color: #791c4a;
+  border-color: #993366;
 }
 #sidebar-toggle-button:hover {
   background-color: #791c4a;
@@ -289,10 +290,6 @@
   font-size: 87px;
 }
 
-#userProfile {
-  float: right;
-  margin-right: 8px;
-}
 // /deep/ dx-data-grid > .dx-datagrid{
 //   box-shadow: 0 0 1px rgba(0,0,0,.15);
 //   background-color: #fff;
@@ -320,12 +317,7 @@
   padding: 15px;
   background-color: #fff;
 }
-.floatRight{
-  float: right;
-}
-//.logout{
-//  cursor: pointer;
-//}
+
 .dropdown-toggle::after{
   border: none;
 }
@@ -340,11 +332,34 @@
 }
 
 #userDropdown {
-  left: -250px;
-  top: 40px;
+  left: -150px;
+   top: 40px;
 }
 
-.image-btn {
-  background-image: attr(data-btn-bgimage);
+//.image-btn {
+//  background-image: attr(data-btn-bgimage);
+//}
 
+.userInformationBox{
+  height: 38px;
 }
+
+.tableUserInformation{
+  height: 100%;
+}
+
+.dimBoxImageSignOut{
+  width: 25px;
+  height: 25px;
+}
+
+.boxNomeCognome{
+  font-weight: bold;
+  color: white;
+}
+
+.boxAzienda {
+  color: white;
+  font-weight: normal;
+}
+

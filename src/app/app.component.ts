@@ -25,6 +25,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public username: string;
     public azienda: string;
+    public descrizioneAzienda: string;
+    public nomeUtente: string;
+    public cognomeUtente: string;
     public isUserLogged: boolean = false;
 
     public ruolo: string = "";
@@ -146,6 +149,10 @@ export class AppComponent implements OnInit, OnDestroy {
                         this.ruoli = loggedUser.getField(bUtente.ruoli);
                         this.ruolo = "";
                         this.azienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.nome];
+                        this.descrizioneAzienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.descrizione];
+                        this.nomeUtente = loggedUser.getField(bUtente.nome);
+                        this.cognomeUtente = loggedUser.getField(bUtente.cognome);
+
                         this.ruoli.forEach(element => {
                             this.ruolo += element[bRuolo.nomeBreve] + " ";
                         });
