@@ -8,6 +8,7 @@ import {GlobalContextService} from "@bds/nt-context";
 import {UtilityFunctions} from "app/utility-functions";
 import {bAzienda, bStruttura, bUtente, Procedimento, Titolo} from "@bds/nt-entities";
 import {forEach} from "@angular/router/src/utils/collection";
+import {AppConfiguration} from "../config/app-configuration";
 
 @Component({
     selector: "procedimenti-attivi",
@@ -55,6 +56,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
     }
 
     private initData(): void {
+
         this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
         this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
         this.idStruttureUtente = this.getIdStruttureUtente();
@@ -69,7 +71,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
                 //     if (i < 100)
                 //         res.pop();
                 // }
-                console.log("res: ", res);
+                
             }),
             // paginate: true,
             // pageSize: 20,
@@ -92,13 +94,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
                     "or",
                     ["dataFine", "=", null]
                 ]
-            ]/* ,
-      map: (item) => {
-        console.log(item);
-        // item.idAziendaTipoProcedimento.idTitolo.nome += " [" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "]";
-        item.descrizioneTitolo =  item.idAziendaTipoProcedimento.idTitolo.nome + " [" + item.idAziendaTipoProcedimento.idTitolo.classificazione + "]";
-        return item;
-      } */
+            ]
         });
 
         this.itemClear = this.itemClear.bind(this);
@@ -108,7 +104,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
     private setDataAvviaIterDaDocumento() {
         // Devo aggiungere il filtro sulle strutture dell'utente
         // Prima mi creo l'array con gli id struttura
-
+        
         // Ora mi creo l'array-filtro e filtro
         this.dataSourceProcedimenti.filter(
             this.utility.buildMultipleFilterForArray("idStruttura.id", this.idStruttureUtente)
@@ -156,6 +152,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
     }
 
     ngOnInit(): void {
+
     }
 
     // Gestisco la toolbar di ricerca. La voglio centrale.

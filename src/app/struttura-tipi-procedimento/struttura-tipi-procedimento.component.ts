@@ -109,8 +109,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.odataContextDefinitionProcedimento = this.odataContextFactory.buildOdataContextEntitiesDefinition();
 
 
-    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("descrizione");
-    customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
+    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
+    customLoadingFilterParams.addFilter("descrizione",["tolower(${target})", "contains", "${value.tolower}"]);
 
   }
 
@@ -404,8 +404,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   }
 
   creaDataSourceUtente(context: OdataContextDefinition, idUtente: number, idStruttura: number, chiamante: string): DataSource {
-    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("idUtente.idPersona.descrizione");
-    customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
+    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
+    customLoadingFilterParams.addFilter("idUtente.idPersona.descrizione", ["tolower(${target})", "contains", "${value.tolower}"]);
     const dataSource = new DataSource({
       store: context.getContext()[new UtenteStruttura().getName()].on("loading", (loadOptions) => {
         loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;

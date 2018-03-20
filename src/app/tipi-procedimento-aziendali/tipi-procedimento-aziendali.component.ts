@@ -45,8 +45,6 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
 
 
   receiveMessage(event: any, reloadPadre: boolean) {
-    console.log("RECEIVE MESSAGE: ", event);
-    console.log("receive da padre = ", event.reloadPadre)
     this.popupVisible = event.visible;
     let toReload: boolean = event.reloadPadre ? true : false;
     if (toReload)
@@ -55,11 +53,8 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   }
 
   public modificaDettagli(event: any, rigaDatagrid: any) {
-    console.log("tipi-procedimento-aziendali handleEvent", event);
     if (rigaDatagrid.columnIndex === 4) {
       this.procedimentoDaPassare = rigaDatagrid.data;
-      console.log("THIS.ROUTE", this.route);
-      console.log("handleEvent tipiProcAz: procedimentoDaPassare", this.procedimentoDaPassare.id);
       this.popupVisible = true;
       // this.caricaDataSource();
     }
@@ -77,7 +72,7 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
     this.aziendaTipiProcedimentoData = {
       idAzienda: this.idAzienda,
       idAziendaTipoProcedimento: row.data.id,
-      headerTipoProcedimento: row.data.descrizioneTipoProcedimento
+      headerTipoProcedimento: row.data.idTipoProcedimento.nome
     };
     this.popupOrganigrammaVisible = true;
   }
@@ -87,7 +82,6 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
   }
 
   public caricaDataSource() {
-    console.log("tipi-procedimento-aziendali CARICADATASOURCE");
     this.dataSourceProcedimenti = new DataSource({
       store: this.odataContextDefinition.getContext()[new AziendaTipoProcedimento().getName()],    
       expand: ["idAzienda", "idTipoProcedimento", "idTitolo"],

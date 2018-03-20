@@ -201,33 +201,30 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
       case "rowValidating":
           // console.log("onRowValidating")
-          let dataInizioValidita = new Date(this.selectedRow.data.dataInizioValidita);
-          let dataFineValidita = new Date(this.selectedRow.data.dataFineValidita);
+          // let dataInizioValidita = new Date(this.selectedRow.data.dataInizioValidita);
+          // let dataFineValidita = new Date(this.selectedRow.data.dataFineValidita);
 
-          let durataMassimaIter = (this.selectedRow.data.durataMassimaIter && this.selectedRow.data.durataMassimaIter > 0) ? true : false;
-          // console.log("Max iter: ", durataMassimaIter);
-          let durataMassimaSospensione = (this.selectedRow.data.durataMassimaSospensione && this.selectedRow.data.durataMassimaSospensione > 0) ? true : false;
-          // console.log(this.selectedRow.data.durataMassimaSospensione);
-          // console.log("Max durataMassimaSospensione: ", durataMassimaSospensione);
-
-          if ((dataInizioValidita <= dataFineValidita) && (durataMassimaIter) && (durataMassimaSospensione)) {
-              event.isValid = true;
-          } else {
-              event.isValid = false;
-          }
+          // let durataMassimaIter = (this.selectedRow.data.durataMassimaIter && this.selectedRow.data.durataMassimaIter > 0) ? true : false;
+          // // console.log("Max iter: ", durataMassimaIter);
+          // let durataMassimaSospensione = (this.selectedRow.data.durataMassimaSospensione && this.selectedRow.data.durataMassimaSospensione > 0) ? true : false;
+          // // console.log(this.selectedRow.data.durataMassimaSospensione);
+          // // console.log("Max durataMassimaSospensione: ", durataMassimaSospensione);
+          //
+          // if ((durataMassimaIter) && (durataMassimaSospensione)) {
+          //     event.isValid = true;
+          // } else {
+          //     event.isValid = false;
+          // }
       break;
 
       case "InitNewRow":
         event.data.obbligoEsitoConclusivo = false;
         event.data.pubblicazioneRegistroAccessi = false;
+        this.grid.editing.popup.title = "Aggiungi Nuovo Tipo Procedimento";
         break;
       
       case "RowUpdating":
         return;
-
-      case "InitNewRow":
-        this.grid.editing.popup.title = "Aggiungi Nuovo Tipo Procedimento";
-        break;
 
       case "EditingStart":
         this.grid.editing.popup.title =  "Modifica Tipo Procedimento";

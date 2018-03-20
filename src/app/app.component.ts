@@ -11,6 +11,7 @@ import { SidebarItem } from "@bds/nt-context";
 import { LoggedUser } from "@bds/nt-login";
 import * as $ from "jquery";
 import * as deLocalization from "devextreme/localization";
+import {AppConfiguration} from "./config/app-configuration";
 
 
 @Component({
@@ -24,6 +25,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public username: string;
     public azienda: string;
+    public descrizioneAzienda: string;
+    public nomeUtente: string;
+    public cognomeUtente: string;
     public isUserLogged: boolean = false;
 
     public ruolo: string = "";
@@ -38,8 +42,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public userInfoMap$: Observable<Object>;
     public loggedUser$: Observable<LoggedUser>;
 
-
-    constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
+    constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService,
+                private odataContextFactory: OdataContextFactory, public appConfig: AppConfiguration) {
         this.odataContextFactory.setOdataBaseUrl(ODATA_BASE_URL);
         console.log("hostname", window.location.hostname);
         console.log("host", window.location.host);
@@ -54,8 +58,6 @@ export class AppComponent implements OnInit, OnDestroy {
                 let reset = false;
             }
             );
-
-        this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);
 
         this.buildLocalization();
     }
@@ -87,7 +89,7 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
         this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
-        this.sidebarItems.push(new SidebarItem("Lista Iter", "app-lista-iter"));
+        this.sidebarItems.push(new SidebarItem("Iter di procedimento attivi", "app-lista-iter"));
         // this.sidebarItems.push(new SidebarItem("Test", "", this.sidebarItems2));
     }
 
@@ -118,13 +120,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // sad but necessary :c
         var $this = this;
-        window.addEventListener('click', function(e){   
+        window.addEventListener("click", function(e){   
             if (!document.getElementById("userDropdown").contains(<Node>e.target) && !document.getElementById("userDropdownToggle").contains(<Node>e.target)
-                && $("#userDropdown").hasClass('show')) {
+                && $("#userDropdown").hasClass("show")) {
                 $this.onProfileBtnClick(e);
             }
         });
-        
 
         /** sottoscrivendosi a questo evento è possibile intercettare la pressione di indietro o aventi del browser
          * purtroppo non c'è modo di differenziarli
@@ -148,6 +149,10 @@ export class AppComponent implements OnInit, OnDestroy {
                         this.ruoli = loggedUser.getField(bUtente.ruoli);
                         this.ruolo = "";
                         this.azienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.nome];
+                        this.descrizioneAzienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.descrizione];
+                        this.nomeUtente = loggedUser.getField(bUtente.nome);
+                        this.cognomeUtente = loggedUser.getField(bUtente.cognome);
+
                         this.ruoli.forEach(element => {
                             this.ruolo += element[bRuolo.nomeBreve] + " ";
                         });

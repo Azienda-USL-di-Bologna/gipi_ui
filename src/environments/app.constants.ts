@@ -47,53 +47,11 @@ export const odataCompanyPath = "/Aziendas";
 export const odataAziendeTipiProcPath = "/AziendaTipoProcedimentos";
 export const odataStrutturePath = "/Strutturas";
 
+// =====================GlobalContextServiceData================================
+
+
 // ======================= ENUM ========================================
-// export const afferenzaStruttura = {
-//     diretta: "diretta",
-//     funzionale: "funzionale"
-// };
 
-// Azienda: Entity = new Azienda(),
-//     Utente: Entity = new Utente(),
-//     Struttura: Entity = new Struttura(),
-//     UtenteStruttura: Entity = new UtenteStruttura(),
-//     AfferenzaStruttura: Entity = new AfferenzaStruttura(),
-//     TipoProcedimento: Entity = new TipoProcedimento(),
-//     Ruolo: Entity = new Ruolo(),
-//     AziendaTipoProcedimento: Entity = new AziendaTipoProcedimento(),
-//     Titolo: Entity = new Titolo(),
-//     Procedimento: Entity = new Procedimento(),
-//     Iter: Entity = new Iter(),
-//     Fase: Entity = new Fase(),
-//     FaseIter: Entity = new FaseIter(),
-//     Evento: Entity = new Evento(),
-//     EventoIter: Entity = new EventoIter(),
-//     ProcedimentoCache: Entity = new ProcedimentoCache(),
-//     DocumentoIter: Entity = new DocumentoIter(),
-
-// export const Entities: ServerObjectsDescriptor = {
-    // Azienda: azienda,
-    // Utente:  new Utente(),
-    // Struttura: new Struttura(),
-    // UtenteStruttura: new UtenteStruttura(),
-    // AfferenzaStruttura: new AfferenzaStruttura(),
-    // TipoProcedimento: new TipoProcedimento(),
-    // Ruolo: new Ruolo(),
-    // AziendaTipoProcedimento: new AziendaTipoProcedimento(),
-    // Titolo: new Titolo(),
-    // Procedimento: new Procedimento(),
-    // Iter: new Iter(),
-    // Fase: new Fase(),
-    // FaseIter: new FaseIter(),
-    // Evento: new Evento(),
-    // EventoIter: new EventoIter(),
-    // ProcedimentoCache:  new ProcedimentoCache(),
-    // DocumentoIter: new DocumentoIter()
-// };
-
-// export const FunctionsImport: ServerObjectsDescriptor = {
-//     GetStruttureByTipoProcedimento: new GetStruttureByTipoProcedimento()
-// };
 
 
 
