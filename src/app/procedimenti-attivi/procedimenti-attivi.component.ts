@@ -8,6 +8,7 @@ import {GlobalContextService} from "@bds/nt-context";
 import {UtilityFunctions} from "app/utility-functions";
 import {bAzienda, bStruttura, bUtente, Procedimento, Titolo} from "@bds/nt-entities";
 import {forEach} from "@angular/router/src/utils/collection";
+import {AppConfiguration} from "../config/app-configuration";
 
 @Component({
     selector: "procedimenti-attivi",
@@ -48,13 +49,17 @@ export class ProcedimentiAttiviComponent implements OnInit {
 
     constructor(private odataContextFactory: OdataContextFactory,
                 public router: Router,
-                private globalContextService: GlobalContextService) {
+                private globalContextService: GlobalContextService,
+                public appConfig: AppConfiguration) {
         console.log("file: app/procedimenti-attivi/procedimenti-attivi.components.ts");
         console.log("procedimenti-attivi (constructor)");
         this.initData();
     }
 
     private initData(): void {
+
+        this.appConfig.setAppBarVisible(false);
+        this.appConfig.setSideBarVisible(false);
         this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
         this.idAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
         this.idStruttureUtente = this.getIdStruttureUtente();
@@ -150,6 +155,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
     }
 
     ngOnInit(): void {
+
     }
 
     // Gestisco la toolbar di ricerca. La voglio centrale.

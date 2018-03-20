@@ -1,13 +1,13 @@
 <!-- se si vuole usare il responsive-box in qualche componente, bisogna metterlo anche qui, altrimenti non funziona bene (specialmente con chrome)-->
 <div class="pageWrapper heightCPC">
     <div class="row heightCPC">
-        <div id="sidebar-id" *ngIf="router.url !== '/login'" class="{{classeSidebar}}">
+        <div id="sidebar-id" *ngIf="router.url !== '/login' && (!!(appConfig.sideBarVisible | async))" class="{{classeSidebar}}">
             <!-- rendere parametri la larghezza della sidebar -->
             <sidebar [sidebarItems]="sidebarItems"></sidebar>
         </div>
         <div class="{{classeRightSide}} col px-0 ovf-auto">
             <div class="clRightSide">
-                <div class="clHeader col ovf-auto" *ngIf="router.url !== '/login'">
+                <div class="clHeader col ovf-auto" *ngIf="router.url !== '/login' && (!!(appConfig.appBarVisible | async))">
                     <div class="centerVertivally">
                         <dx-button id="sidebar-toggle-button" icon="menu" type="default" (click)="slide()"></dx-button>
                     </div>

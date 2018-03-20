@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import {SessionManager, LoggedUser} from "@bds/nt-login";
 import { GlobalContextService } from "@bds/nt-context";
+import {AppConfiguration} from "../config/app-configuration";
 
 @Component({
   selector: "app-home",
@@ -9,8 +10,10 @@ import { GlobalContextService } from "@bds/nt-context";
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private sessionManager: SessionManager) {
+  constructor(private sessionManager: SessionManager, private globalContextService: GlobalContextService, public appConfig: AppConfiguration) {
 
+    this.appConfig.setAppBarVisible(true);
+    this.appConfig.setSideBarVisible(true);
       // if (this.globalContextService.getInnerSharedObject("loggedUser") === undefined) {
       //   let loggedUser = new LoggedUser(JSON.parse(sessionStorage.getItem("userInfo")));
       //   this.globalContextService.setSubjectInnerSharedObject("loggedUser", loggedUser);

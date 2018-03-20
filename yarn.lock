@@ -164,8 +164,8 @@
     tsickle "^0.21.0"
 
 "@bds/nt-context@latest":
-  version "1.0.44"
-  resolved "http://gdml.internal.ausl.bologna.it:4873/@bds%2fnt-context/-/nt-context-1.0.44.tgz#3ec704727a238b8ef3611d523fa3a4c1f90e7254"
+  version "1.0.45"
+  resolved "http://gdml.internal.ausl.bologna.it:4873/@bds%2fnt-context/-/nt-context-1.0.45.tgz#f090986e3ffba2129ffe1b59da4621f123b2a21f"
   dependencies:
     moment "~2"
 

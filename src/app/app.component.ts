@@ -11,6 +11,7 @@ import { SidebarItem } from "@bds/nt-context";
 import { LoggedUser } from "@bds/nt-login";
 import * as $ from "jquery";
 import * as deLocalization from "devextreme/localization";
+import {AppConfiguration} from "./config/app-configuration";
 
 
 @Component({
@@ -38,8 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public userInfoMap$: Observable<Object>;
     public loggedUser$: Observable<LoggedUser>;
 
-
-    constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService, private odataContextFactory: OdataContextFactory) {
+    constructor(private location: Location, public router: Router, private globalContextService: GlobalContextService,
+                private odataContextFactory: OdataContextFactory, public appConfig: AppConfiguration) {
         this.odataContextFactory.setOdataBaseUrl(ODATA_BASE_URL);
         console.log("hostname", window.location.hostname);
         console.log("host", window.location.host);
@@ -54,8 +55,6 @@ export class AppComponent implements OnInit, OnDestroy {
                 let reset = false;
             }
             );
-
-        this.globalContextService.setSubjectInnerSharedObject("userInfoMap", null);
 
         this.buildLocalization();
     }
@@ -124,7 +123,6 @@ export class AppComponent implements OnInit, OnDestroy {
                 $this.onProfileBtnClick(e);
             }
         });
-        
 
         /** sottoscrivendosi a questo evento è possibile intercettare la pressione di indietro o aventi del browser
          * purtroppo non c'è modo di differenziarli

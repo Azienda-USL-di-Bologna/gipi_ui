@@ -79,7 +79,8 @@ import { CambioDiStatoComponent } from "./cambio-di-stato/cambio-di-stato.compon
 import { TipiProcedimentoAziendaliComponent } from "./tipi-procedimento-aziendali/tipi-procedimento-aziendali.component";
 import { DettaglioTipoProcedimentoComponent } from "./tipi-procedimento-aziendali/dettaglio-tipo-procedimento/dettaglio-tipo-procedimento.component";
 import {LoginModule} from "@bds/nt-login";
-import { TestGridComponent } from './test/test-grid/test-grid.component';
+import { TestGridComponent } from "./test/test-grid/test-grid.component";
+import {AppConfiguration} from "./config/app-configuration";
 
 @NgModule({
     declarations: [
@@ -152,7 +153,7 @@ import { TestGridComponent } from './test/test-grid/test-grid.component';
         DxNumberBoxModule,
         DxValidationGroupModule
     ],
-    providers: [DefinizioneTipiProcedimentoService, RoleGuard,
+    providers: [DefinizioneTipiProcedimentoService, RoleGuard, AppConfiguration
         // NavbarService
     ],
     bootstrap: [AppComponent],
