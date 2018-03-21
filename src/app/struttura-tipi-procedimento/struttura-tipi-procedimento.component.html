@@ -45,7 +45,7 @@
               searchExpr="idUtente.idPersona.descrizione"
               [value]="defaultResponsabile"
               (onOpened)="reloadResponsabile($event)"
-              (onItemClick)="setResponsabilePlusStruttura($event)"
+              (onSelectionChanged)="setResponsabilePlusStruttura($event)"
               [hint]="testoTooltipResponsabile">
             </dx-lookup>
           </div>
@@ -64,7 +64,7 @@
               searchExpr="idUtente.idPersona.descrizione"
               [value]="defaultTitolare"
               (onOpened)="reloadTitolare()"
-              (onItemClick)="setTitolarePlusStruttura($event)"
+              (onSelectionChanged)="setTitolarePlusStruttura($event)"
               [hint]="testoTooltipTitolare">
             </dx-lookup>
           </div>

@@ -179,7 +179,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       if (res.length) {
         this.procedimento = new Procedimento();
         this.procedimento.build(res[0]);
-        this.setInitialValues();
+        // this.setInitialValues(); // l'ho messo nel click sul modifica
         this.formVisible = true;
       } else {
         this.procedimento = null;
@@ -230,16 +230,19 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         this.defaultTitolare = undefined;
         this.testoTooltipResponsabile = null;
       }
+
     });
   }
 
 
-  setInitialValues() {
+  // mi copio l'oggetto iniziale per potere fare dei confronti e dire cosa è stato modificato
+  private setInitialValues() {
     this.initialProcedimento = Entity.cloneObject(this.procedimento);
   }
 
   public bottoneModificaProcedimento(validationParams: any) {
     this.possoAgireForm = true;
+    this.setInitialValues();
   }
 
 
@@ -331,25 +334,6 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
     this.setStruttura(selectedNode);
     this.caricaDettaglioProcedimento();
-
-
-    // console.log("click su struttura selezionata");
-
-    /*     if (this.initialProcedimento && this.procedimento) {
-          let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
-          if (differenze.length !== 0) {
-            // il caricamento del dettaglio Procedimento lo fa dentro alla seguente funzione
-            // qui devo arrivarci con la struttura selezionata precedente
-            this.bottoneSalvaProcedimento(selectedNode);
-          }
-          else {        
-            this.possoAgireForm = false;
-            this.caricaDettaglioProcedimento(selectedNode);
-          }
-        } else {
-          // al primo nodo che clicco entro qua e devo comunque caricarmi i dati 
-          this.caricaDettaglioProcedimento(selectedNode);
-        } */
   }
 
   /* Setto qui i dati che verranno passati al componente dell'albero e alla popup */
@@ -444,17 +428,21 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   setResponsabilePlusStruttura(event: any) {
     // console.log("EVENT SETRESP = ", event);
-    this.procedimento.idResponsabileAdozioneAttoFinale = event.itemData.idUtente;
-    this.procedimento.idStrutturaResponsabileAdozioneAttoFinale = event.itemData.idStruttura;
-    this.testoTooltipResponsabile = event.itemData.nomeVisualizzato;
+    if (event.selectedItem) {
+      this.procedimento.idResponsabileAdozioneAttoFinale = event.selectedItem.idUtente;
+      this.procedimento.idStrutturaResponsabileAdozioneAttoFinale = event.selectedItem.idStruttura;
+      this.testoTooltipResponsabile = event.selectedItem.nomeVisualizzato;
+    }
     // console.log("PROCEDIMENTO RESP = ", event);
   }
 
   setTitolarePlusStruttura(event: any) {
     // console.log("EVENT SETTITO = ", event);
-    this.procedimento.idTitolarePotereSostitutivo = event.itemData.idUtente;
-    this.procedimento.idStrutturaTitolarePotereSostitutivo = event.itemData.idStruttura;
-    this.testoTooltipTitolare = event.itemData.nomeVisualizzato;
+    if (event.selectedItem) {
+      this.procedimento.idTitolarePotereSostitutivo = event.selectedItem.idUtente;
+      this.procedimento.idStrutturaTitolarePotereSostitutivo = event.selectedItem.idStruttura;
+      this.testoTooltipTitolare = event.selectedItem.nomeVisualizzato;
+    }
     // console.log("PROCEDIMENTO TITO = ", this.procedimento);
   }
 

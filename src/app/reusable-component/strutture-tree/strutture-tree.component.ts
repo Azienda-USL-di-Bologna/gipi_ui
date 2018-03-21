@@ -313,23 +313,33 @@ export class StruttureTreeComponent implements OnInit {
       case "onSelectionChangedLookupRicerca":
         // console.log("segnaposto", event);
 
+        // HO EFFETTUATO UNA RICERCA, AGISCO SULL'ALBERO PER SELEZIONARE IL NODO DELLA STRUTTURA SCELTA
         this.searchResultLookup = event.selectedItem;
 
-        if (this.searchResultLookup.idStrutturaPadre) {
-          this.tree.instance.expandItem(this.searchResultLookup.idStrutturaPadre.id);
-        }
+        // espando il nodo scelto, in questo modo mi espande anche tutti i genitori, se ne ha
+        this.tree.instance.expandItem(this.searchResultLookup.id);
 
+/*         if (this.searchResultLookup.idStrutturaPadre) {
+          this.tree.instance.expandItem(this.searchResultLookup.idStrutturaPadre.id);
+        } */
+
+        // mi devo trovare l'elemento del DOM in modo da settarlo come selezionato (evidenziato di blu). 
+        // La selezine di devextreme non funziona perchè l'albero ha le check-box
+        // non funziona neanche assegnandogli la classe css (state-selected) di devextreme, quindi mi sono creato una classe css da assegnargli
         this.argStr = "[data-item-id=\"" + this.searchResultLookup.id + "\"]";
 
-
+        // tolgo la selezione al nodo precedentemente selezionato
         if (this.elmTreeSelected) {
           this.elmTreeSelected.classList.remove("tree-item-selected");
         }
+        // trovo l'elemento del DOM
         let  elmTreeFromSearchParent = this.tree.element.nativeElement.querySelectorAll(this.argStr)[0]; // questo è il nodo padre, contiene anche la check-box
         this.elmTreeFromSearch = elmTreeFromSearchParent.childNodes[1]; // questo è il nodo figlio, l'item cercato. E' corretto riferirmi in modo posizionale??
         this.elmTreeSelected = this.elmTreeFromSearch;
+        // lo seleziono
         this.elmTreeSelected.classList.add("tree-item-selected");
 
+        // mi prendo il Nodo di quell'elemento. Mi serve il nodo perchè solo li ho l'informazione se ha figli
         this.setSelectedNode(this.tree.instance.getNodes(), this.searchResultLookup.id);
 
         this.selezionaStruttura(this.selectedNode.key, this.selectedNode.text, this.selectedNode.children.length > 0);
@@ -355,21 +365,21 @@ export class StruttureTreeComponent implements OnInit {
       case "onItemClickTree":
         // console.log("segnaposto", event);
 
+        // la visualizzazione dells voce selezionata blu si deve gestire a mano (perchè l'albero ha le checkbox e per lui selected vuol dire chcchato)
+        // anche al click devo gestire la selezione, togliendola dal nodo precedentemente selezionato e aggiungendola al nuovo
         if (this.elmTreeSelected) {
           this.elmTreeSelected.classList.remove("tree-item-selected");
         }
-
         this.elmTreeSelected = event.itemElement;
         this.elmTreeSelected.classList.add("tree-item-selected");
         
-
-        // dovrà fare anche questo
          this.selezionaStruttura(event.itemData.id, event.itemData.nome, event.node.children.length > 0);
         break;
 
       case "onItemExpandedTree":
         // console.log("segnaposto", event);
         
+      // scrollo fino all elemento selezionato (quando vengo dalla ricerca)
       if (this.tree.instance && this.tree.instance._scrollableContainer && this.elmTreeFromSearch) {
           this.tree.instance._scrollableContainer.scrollToElement(this.elmTreeFromSearch);
           this.elmTreeFromSearch = null;
