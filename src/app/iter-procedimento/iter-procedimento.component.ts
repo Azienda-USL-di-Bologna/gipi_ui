@@ -257,6 +257,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public sospensioneIter() {
+    this.sospensioneParams = new SospensioneParams();
     this.sospensioneParams.idIter = this.idIter;
     this.sospensioneParams.numeroIter = this.iter.numero;
     this.sospensioneParams.annoIter = this.iter.anno;
