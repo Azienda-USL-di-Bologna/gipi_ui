@@ -85,8 +85,8 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
         this.buildAziendaTipoProcedimento(true);
 
         const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
-        const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nomeTitolo");
-        customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
+        const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
+        customLoadingFilterParams.addFilter("nomeTitolo", ["tolower(${target})", "contains", "${value.tolower}"]);
 
         this.dataSourceClassificazione = new DataSource({
             store: oataContextDefinitionTitolo.getContext()[new Titolo().getName()].on("loading", (loadOptions) => {

@@ -28,6 +28,7 @@ export class TipiProcedimentoAziendaliComponent implements OnInit {
     public route: ActivatedRoute,
     private globalContextService: GlobalContextService) {
 
+      console.log("file: app/tipi-procedimento-aziendali/tipi-procedimento-aziendali.components.ts");
       console.log("tipi-procedimento-aziendali CONSTRUCTOR");
       this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
       this.descAzienda = this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.descrizione];

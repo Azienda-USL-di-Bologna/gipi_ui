@@ -1,33 +1,48 @@
-<dx-text-box #textBox 
-  placeholder="Cerca" 
-  mode="search" 
-  valueChangeEvent="keyup"
-  value="" 
-  style="margin-bottom:8px;">
-</dx-text-box>
+ <div class="dx-field">
+  <dx-lookup 
+    id="lookupRicerca"
+    [dataSource]="datasourceStrutture"
+    [showPopupTitle]="false"
+    cancelButtonText="Chiudi"
+    closeOnOutsideClick="true"
+    placeholder= "Seleziona..."
+    searchPlaceholder= "Cerca..."
+    [disabled]="false"
+    displayExpr="nome"
+    searchExpr="nome"
+    [value]="this"
+    (onOpened)="handleEvent('onOpenedLookupRicerca', $event)"
+    (onSelectionChanged)="handleEvent('onSelectionChangedLookupRicerca', $event)"
+    >
+  </dx-lookup>
+</div>
+
 <div id="container-tree">
-  <dx-tree-view #treeViewChild id="simple-treeview" 
+  <dx-tree-view #tree id="tree" 
     [dataSource]="datasource" 
-    [height]="440" 
+    [height]="440"
     keyExpr="id" 
     displayExpr="nome"
-    dataStructure="plain" 
-    parentIdExpr="idStrutturaPadre" 
-    [searchValue]="textBox.value"
-    showCheckBoxesMode="normal" 
-    [selectNodesRecursive]= "enableCheckRecursively" 
-    [disabled]="disabled"
-    (onClick)="onTreeViewClick($event)"
+    dataStructure="plain" parentIdExpr="idStrutturaPadre"
+    showCheckBoxesMode="normal" [selectNodesRecursive]= "enableCheckRecursively" [disabled]= "disabled"
     (onItemContextMenu)="openContextMenu($event)" 
-    (onItemSelectionChanged)="selectionChanged($event)"
-    (onItemClick)="selezionaStruttura($event)" 
+    (onClick)="handleEvent('onClickTree',$event)"
+    (onItemSelectionChanged)="handleEvent('onItemSelectionChangedTree', $event)"
+    (onItemClick)="handleEvent('onItemClickTree', $event)"
+    (onOptionChanged)="handleEvent('onOptionChangedTree', $event)"
+    (onItemExpanded)="handleEvent('onItemExpandedTree', $event)"
+    (onItemCollapsed)="handleEvent('onItemCollapsedTree', $event)"
+    (onContentReady)="handleEvent('onContentReadyTree', $event)"
     [class]="getClass()">
-  </dx-tree-view>
+  </dx-tree-view> <!--[searchValue]="textBox.value"-->
 </div>
+
+<!-- (onContentReady)="handleEvent('onContentReady', $event)"  (onItemClick)="selezionaStruttura($event)"  (onOptionChanged)="handleEvent('onOptionChanged',$event)"-->
+
 
 <dx-context-menu *ngIf="!readOnly"
   [dataSource]="contextMenuItems"
   [width]="200"
-  target=".dx-treeview-node.dx-treeview-item-with-checkbox"
+  target=".dx-treeview-item"
   (onItemClick)="contextualItemClick($event)">
 </dx-context-menu>

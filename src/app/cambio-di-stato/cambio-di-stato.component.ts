@@ -7,6 +7,7 @@ import { ActivatedRoute, Params } from "@angular/router";
 import { Observable, Subscription } from "rxjs";
 import { bUtente, bAzienda } from "@bds/nt-entities";
 import notify from "devextreme/ui/notify";
+import {AppConfiguration} from "../config/app-configuration";
 
 @Component({
   selector: "app-cambio-di-stato",
@@ -23,13 +24,13 @@ export class CambioDiStatoComponent implements OnInit {
 
   public loggedUser$: Observable<LoggedUser>;
 
-  public showPopupAnnullamento : boolean = false;
-  public messaggioAnnullamento : string;
+  public showPopupAnnullamento: boolean = false;
+  public messaggioAnnullamento: string;
   public lookupItems: string[] = ["Cambio di stato", "Passaggio di fase"];
   public lookupValue: string= "";
 
 
-  constructor( private activatedRoute: ActivatedRoute, private globalContextService: GlobalContextService) { 
+  constructor( private activatedRoute: ActivatedRoute, private globalContextService: GlobalContextService, private appConfig: AppConfiguration) {
     if (!this.userInfo) {
       this.recuperaUserInfo();
     }
@@ -42,6 +43,7 @@ export class CambioDiStatoComponent implements OnInit {
       this.sospensioneParams.numeroDocumento = queryParams["numero"];
       this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
       this.sospensioneParams.dataRegistrazioneDocumento = queryParams["dataRegistrazione"];
+      const noBars: boolean = queryParams["nobars"];
     });
   }
 

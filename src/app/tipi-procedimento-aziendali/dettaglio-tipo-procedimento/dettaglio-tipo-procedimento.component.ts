@@ -22,7 +22,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
   public dataSourceTitoli: DataSource;
   public dataSourceAziendaTipoProcedimento: DataSource;
   public loggedUser: LoggedUser;
-  public pattern: any =  "^[1-9][0-9]*$";
+  public pattern: any = "^[1-9][0-9]*$";
 
   @Input()
   set procedimento(procedimento: number) {
@@ -35,13 +35,16 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
 
   constructor(private odataContextFactory: OdataContextFactory, private globalContextService: GlobalContextService, private http: HttpClient) {
     console.log("dettaglio-tipo-procedimento CONSTRUCTOR");
+    console.log("file: app/tipi-procedimento-aziendali/dettaglio-tipo-procedimento/dettaglio-tipo-procedimento.components.ts");
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
-    this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser")
-    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nome");
-    customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
-  
+    this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
+    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
+    customLoadingFilterParams.addFilter("nome", ["tolower(${target})", "contains", "${value.tolower}"]);
+    customLoadingFilterParams.addFilter("classificazione", ["tolower(${target})", "contains", "${value.tolower}"]);
+
     this.dataSourceTitoli = new DataSource({
-      store: this.odataContextDefinition.getContext()[new Titolo().getName()].on("loading", (loadOptions) => {
+      store: this.odataContextDefinition.getContext()[new Titolo().getName()]
+      .on("loading", (loadOptions) => {
         loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
         this.odataContextDefinition.customLoading(loadOptions);
       }),
@@ -127,5 +130,11 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
       if (chiudi)
         this.close(true);
     });
+  }
+
+  public checkData(event: any) {
+    if (event.value instanceof Date || event.value === null) {
+      return true;
+    } else return false;
   }
 }

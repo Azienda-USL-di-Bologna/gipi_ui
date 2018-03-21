@@ -31,3 +31,18 @@
 }
 
 
+.dx-treeview {
+    width: 100%;
+}
+
+
+/deep/ .tree-item-selected.dx-treeview-item {
+    background-color: #337AB7 !important;
+
+}
+
+/deep/ .tree-item-selected.dx-treeview-item .dx-treeview-item-content > span {
+    color:white !important;
+}
+
+

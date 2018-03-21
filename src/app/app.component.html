@@ -1,47 +1,62 @@
 <!-- se si vuole usare il responsive-box in qualche componente, bisogna metterlo anche qui, altrimenti non funziona bene (specialmente con chrome)-->
 <div class="pageWrapper heightCPC">
     <div class="row heightCPC">
-        <div id="sidebar-id" *ngIf="router.url !== '/login'" class="{{classeSidebar}}">
+        <div id="sidebar-id" *ngIf="router.url !== '/login' && (!!(appConfig.sideBarVisible | async))" class="{{classeSidebar}}">
             <!-- rendere parametri la larghezza della sidebar -->
             <sidebar [sidebarItems]="sidebarItems"></sidebar>
         </div>
         <div class="{{classeRightSide}} col px-0 ovf-auto">
             <div class="clRightSide">
-                <div class="clHeader col ovf-auto" *ngIf="router.url !== '/login'">
+                <!--header vuoto nel caso si nasconde l'appbar, serve per lasciare un po' di spazio vuoto e non avere i bottoni attaccati in alto-->
+                <div class="clEmptyHeader" *ngIf="(!!!(appConfig.appBarVisible | async))">
+                </div>
+
+                <div class="clHeader col ovf-auto" *ngIf="router.url !== '/login' && (!!(appConfig.appBarVisible | async))">
                     <div class="centerVertivally">
                         <dx-button id="sidebar-toggle-button" icon="menu" type="default" (click)="slide()"></dx-button>
                     </div>
                     <div class="centerVertivally">
-                        <img src="assets/images/logout.png" (click)="onLogout()" class="floatRight logout" width="36px" height="36px" alt="logout">
-                        <div #userProfileToggle id="userProfile" class="dropdown">
-
-                            <button class="btn default-btn image-btn rounded-circle" type="button" id="userDropdownToggle" style="background-image: url('assets/images/user.ico'); background-size: contain;"
-                                alt="Profilo" width="36px" height="36px" (click)="onProfileBtnClick($event)">
-                            </button>
-                            <ul class="dropdown-menu" id="userDropdown">
-                                <li>
-                                    <div class="navbar-login">
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <p class="text-center">
-                                                    <span class="glyphicon glyphicon-user icon-size"></span>
-                                                </p>
-                                            </div>
-                                            <div class="col-8">
-                                                <p class="text-left">
-                                                    <strong>Informazioni Utente</strong>
-                                                </p>
-
-                                                <p class="text-left small">Azienda: {{azienda}}</p>
-
-                                                <p class="text-left small">Ruolo: {{ruolo}}</p>
-                                            </div>
-                                        </div>
+                        <div class="userInformationBox centerVertivally float-right d-inline-block ml- ">
+                            <div class="d-table tableUserInformation">
+                                <div class="d-table-cell centerVertivally">
+                                    <div #userProfileToggle id="userProfile" class="dropdown d-inline-block btn">
+                                        <img src="assets/images/user.svg"  id="userDropdownToggle" (click)="onProfileBtnClick($event)" alt="utente">
+                                        <ul class="dropdown-menu" id="userDropdown">
+                                            <li>
+                                                <div class="navbar-login">
+                                                    <div class="row">
+                                                        <!--<div class="col-4">-->
+                                                            <!--<p class="text-center">-->
+                                                                <!--<span class="glyphicon glyphicon-user icon-size"></span>-->
+                                                            <!--</p>-->
+                                                        <!--</div>-->
+                                                        <div class="col-8">
+                                                            <p class="text-left">
+                                                                <strong>Informazioni Utente</strong>
+                                                            </p>
+                                                            <div class="text-left small">Azienda: {{azienda}}</div>
+                                                            <div class="text-left small">Ruolo: {{ruolo}}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <!--<div class="button" id="userDropdownToggle" style="background-image: url('assets/images/user.svg')"-->
+                                        <!--alt="Profilo" (click)="onProfileBtnClick($event)">-->
+                                        <!--</div>-->
                                     </div>
-                                </li>
-                            </ul>
+                                    <img src="assets/images/signout.svg" (click)="onLogout()" class="dimBoxImageSignOut d-inline-block logout ml-1" alt="logout">
+                                </div>
+                            </div>
                         </div>
-
+                        <div class="d-inline-block float-right">
+                            <div class="boxNomeCognome text-center">
+                                {{this.nomeUtente}} {{this.cognomeUtente}}
+                            </div>
+                            <div class="boxAzienda text-center">
+                                {{this.descrizioneAzienda}}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div [ngClass]="getContentBodyClasses()">

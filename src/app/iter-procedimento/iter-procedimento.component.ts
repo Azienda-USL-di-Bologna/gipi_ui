@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService } from "@bds/nt-context";
+import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { Iter, Utente, Fase, FaseIter, ProcedimentoCache, bUtente, bAzienda, Titolo } from "@bds/nt-entities";
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
@@ -87,8 +87,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     });
 
     const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
-    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nomeTitolo");
-    customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
+    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
+    customLoadingFilterParams.addFilter("nomeTitolo", ["tolower(${target})", "contains", "${value.tolower}"]);
 
     this.dataSourceIter = new DataSource({
       store: oataContextDefinitionTitolo.getContext()[new Iter().getName()],
@@ -222,7 +222,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       }
     }
     if (doUpdate) {
-      this.dataSourceIter.store().update(this.iter.id, this.iter);
+      let iterClonato = Entity.cloneObject(this.iter);
+      this.dataSourceIter.store().update(this.iter.id, iterClonato);
     }
     this.closePopupNote();
   }
