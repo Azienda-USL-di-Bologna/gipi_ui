@@ -279,6 +279,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   receiveMessageFromSospensione($event) {
+    console.log("Evento emesso da sospenisone: ", $event);
     this.sospensioneIterVisible = $event["visible"];
     this.buildIter();
   }
