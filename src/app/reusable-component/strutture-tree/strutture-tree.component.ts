@@ -231,7 +231,7 @@ export class StruttureTreeComponent implements OnInit {
             // TODO 1: rifattorizzare, il componente dovrebbe gestire solo l'albero delle struttre e non i procedimenti
             // TODO 2: valutare se fare questa gesione dell'errore in una classe a parte, magari con un metodo specifico e poi richiamarla qui
             // controllo se nell'errore è presente httpCode, se lo è vuol dire che l'errore è del tipo ResponseMessage
-            if (err.error && err.error.httpCode) {
+            if (err.error && err.error.httpCode && err.error.isBdsException) {
 
               // se l'errore è del tipo ResponseMessage, lo parso nell'oggetto corrispondente
               const responseMessages: ResponseMessages = err.error;
