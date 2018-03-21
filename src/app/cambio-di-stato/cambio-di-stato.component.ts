@@ -71,6 +71,13 @@ export class CambioDiStatoComponent implements OnInit {
     this.sospensioneParams.idIter = e.id;
     this.sospensioneParams.statoCorrente = e.stato;
     this.sospensioneParams.isFaseDiChiusura = e.idFaseCorrente.faseDiChiusura;
+    console.log("Cambio di stato: ", this.sospensioneParams.statoCorrente);
+    if((this.sospensioneParams.statoCorrente === "sospeso" || this.sospensioneParams.statoCorrente === "apertura_sospensione") && this.lookupItems.length !== 1){
+      this.lookupValue = "Cambio di stato";
+      this.lookupItems = ["Cambio di stato"];
+    }else if(this.lookupItems.length === 1){
+      this.lookupItems = ["Cambio di stato", "Passaggio di fase"];
+    }
   }
 
   lookupValueChanged(e){

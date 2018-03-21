@@ -99,7 +99,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
    }
 
   handleClose() {
-    if(!this.isOpenedAsPopup){
+    if(!this._isOpenedAsPopup){
       window.close();
     }else{
       this.showPopupAnnullamento = !this.showPopupAnnullamento;
@@ -113,7 +113,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
 
   handleRiassunto(){
     this.showPopupRiassunto = !this.showPopupRiassunto;
-    if(!this.isOpenedAsPopup){
+    if(!this._isOpenedAsPopup){
       window.close();
     }else{
       this.out.emit({ visible: false });
