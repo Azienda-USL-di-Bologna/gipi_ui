@@ -38,7 +38,7 @@ export class PassaggioDiFaseComponent implements OnInit {
       }
     },
     err => {
-      console.error("ERR: ", err)
+
       notify("Non esiste la fase successiva", "error", 1000);
     });
   }
@@ -86,7 +86,7 @@ export class PassaggioDiFaseComponent implements OnInit {
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/stepOn", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({},)
       .subscribe(
       res => {
-        notify("Proceduto con successo", "success", 3000); 
+        notify({message:"Proceduto con successo", type: "success", displayTime: 3000, position:{my:"center", at:"center", of: window}}); 
         if(!this.isOpenedAsPopup){ 
           setTimeout(() =>{window.close()}, 4000);
         }else{
@@ -95,10 +95,28 @@ export class PassaggioDiFaseComponent implements OnInit {
       },
       err => {
         if(!this.isOpenedAsPopup){
-          notify("Si è verificato un errore durante il procedi", "error", 1000);
+          notify({
+            message: "Si è verificato un errore durante il procedi",
+            type: "error",
+            displayTime: 1000,
+            position: {
+              my: "center", at: "center", of: window
+            },
+            width: "max-content"
+          });
           console.error("Errore:", err);
         }else{
           this.out.emit({ visible: false, proceduto: false });
+          notify({
+            message: "Si è verificato un errore durante il procedi",
+            type: "error",
+            displayTime: 1000,
+            position: {
+              my: "center", at: "center", of: window
+            },
+            width: "max-content"
+          });
+          console.error("Errore:", err);
         }
       });
   }

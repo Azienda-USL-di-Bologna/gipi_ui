@@ -15,14 +15,23 @@
             [showPopupTitle]="false"
             [searchEnabled]="false"
             [showCancelButton]="false"
-            (onValueChanged)="lookupValueChanged($event)">
+            (onValueChanged)="lookupValueChanged($event)"
+            [value]="lookupValue">
         </dx-lookup>
     </div>
 
     <div class="mb-3 text-center">
         <div class="d-inline-block col col-lg-8">
-            <app-cambio-di-stato-box *ngIf="lookupValue === 'Cambio di stato'" [sospensioneParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="false"></app-cambio-di-stato-box>
-            <app-passaggio-di-fase *ngIf="!sospensioneParams.isFaseDiChiusura && lookupValue === 'Passaggio di fase'" [idIter]="sospensioneParams.idIter" [isOpenedAsPopup]="false"></app-passaggio-di-fase>
+            <app-cambio-di-stato-box *ngIf="!sospensioneParams.isFaseDiChiusura 
+                && sospensioneParams.idStatoCorrente!==3 
+                && lookupValue === 'Cambio di stato'" 
+                [sospensioneParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="false">
+            </app-cambio-di-stato-box>
+            <app-passaggio-di-fase *ngIf="!sospensioneParams.isFaseDiChiusura 
+                && sospensioneParams.idStatoCorrente===1 
+                && lookupValue === 'Passaggio di fase'" 
+                [idIter]="sospensioneParams.idIter" [isOpenedAsPopup]="false">
+            </app-passaggio-di-fase>
         </div>
     </div>
 </div>

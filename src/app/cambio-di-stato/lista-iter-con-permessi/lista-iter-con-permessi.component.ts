@@ -54,7 +54,7 @@ export class ListaIterConPermessiComponent implements OnInit {
         // cf: "GSLFNC89A05G224Y", // this._userInfo.cf
         // idAzienda: 2  // this._userInfo.idAzienda
       },
-      expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona", "idFaseCorrente"]
+      expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona", "idFaseCorrente", "idStato"]
     });
     this.dataSource.load().then(res => { console.log("LISTA RES: ", res); });
 }

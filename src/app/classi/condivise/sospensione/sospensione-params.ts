@@ -8,8 +8,8 @@ export class SospensioneParams {
     public annoDocumento: number;
     public dataRegistrazioneDocumento: Date;
     public note: string;
-    public statoCorrente: string;
-    public statoProssimo: string;
+    public idStatoCorrente: number;
+    public idStatoProssimo: number;
     public dataCambioDiStato: Date;
     public isFaseDiChiusura: boolean;
   }

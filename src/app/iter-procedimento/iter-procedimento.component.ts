@@ -95,6 +95,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       expand: [
         "idTitolo",
         "idFaseCorrente",
+        "idStato",
         "idIterPrecedente",
         "idResponsabileProcedimento.idPersona",
         "idResponsabileAdozioneProcedimentoFinale.idPersona",
@@ -109,13 +110,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       ricarica: false  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore
     };
     this.recuperaUserInfo();
-
-
-    this.paramsPerSospensione = {
-      iter: this.iter,
-      stato: this.iter.stato,
-      dataSospensione: this.iter.stato === "sospeso" ? this.getDataUltimaSospensione() : null
-    };
 
     this.dataSourceClassificazione = new DataSource({
       store: oataContextDefinitionTitolo.getContext()[new Titolo().getName()],
@@ -145,11 +139,11 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   ngOnInit() { }
 
   public buildTitoloDatiGenerali() {
-    this.datiGenerali = "Iter n." + this.iter.numero + "/" + this.iter.anno + " (" + this.iter.stato + ")";
+    this.datiGenerali = "Iter n." + this.iter.numero + "/" + this.iter.anno + " (" + this.iter.idStato.descrizione + ")";
   }
 
   isSospeso() {
-    if (this.iter.stato === "sospeso" || this.iter.stato === "apertura_sospensione") // apertura_sospensione va cambiato, va tolto, va eliminato ovunque, ma senza questo OR non funziona!
+    if (this.iter.idStato.id === 2) // 2 --> SOSPESO
       return true;
     else
       return false;
@@ -191,6 +185,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
       this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + this.iter.procedimentoCache.durataMassimaProcedimento);
       this.buildTitoloDatiGenerali();
+
+      this.setParametriSospensione();
     });
   }
 
@@ -257,13 +253,20 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         });
   }
 
+  public setParametriSospensione() {
+    this.paramsPerSospensione = {
+      iter: this.iter,
+      stato: this.iter.idStato,
+      dataSospensione: this.iter.idStato.id === 2 ? this.getDataUltimaSospensione() : null
+    };
+  }
+
   public sospensioneIter() {
     this.sospensioneParams = new SospensioneParams();
     this.sospensioneParams.idIter = this.idIter;
     this.sospensioneParams.numeroIter = this.iter.numero;
     this.sospensioneParams.annoIter = this.iter.anno;
-    this.sospensioneParams.statoCorrente = this.iter.stato;
-    this.sospensioneParams.statoCorrente = this.iter.stato;
+    this.sospensioneParams.idStatoCorrente = this.iter.idStato.id;
     this.popupData.title = "Cambia stato iter";
     this.sospensioneIterVisible = true;
   }
@@ -274,13 +277,14 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"] };
       this.perFigliParteDestra = perFigliNew;
       this.buildIter();
-      notify("Proceduto con successo", "success", 1000);
     }
   }
 
   receiveMessageFromSospensione($event) {
     console.log("Evento emesso da sospenisone: ", $event);
     this.sospensioneIterVisible = $event["visible"];
+    let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"] };
+    this.perFigliParteDestra = perFigliNew;
     this.buildIter();
   }
 

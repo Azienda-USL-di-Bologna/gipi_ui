@@ -142,14 +142,14 @@
 <dx-popup class="passaggioFase" [width]="700" [showTitle]="true" [title]="popupData.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
     [(visible)]="passaggioDiFaseVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-passaggio-di-fase [idIter]="idIter" [isOpenedAsPopup]="true" (out)="receiveMessage($event)"></app-passaggio-di-fase>
+        <app-passaggio-di-fase *ngIf="passaggioDiFaseVisible" [idIter]="idIter" [isOpenedAsPopup]="true" (out)="receiveMessage($event)"></app-passaggio-di-fase>
     </div>
 </dx-popup>
 
 <dx-popup class="sospensionePopup" [width]="700" [showTitle]="true" [title]="popupData.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
     [(visible)]="sospensioneIterVisible">
     <div *dxTemplate="let data of 'content'">
-        <app-cambio-di-stato-box [sospensioneParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="true" (out)="receiveMessageFromSospensione($event)"></app-cambio-di-stato-box>
+        <app-cambio-di-stato-box *ngIf="sospensioneIterVisible" [sospensioneParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="true" (out)="receiveMessageFromSospensione($event)"></app-cambio-di-stato-box>
         <!-- <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter> -->
     </div>
 </dx-popup>
