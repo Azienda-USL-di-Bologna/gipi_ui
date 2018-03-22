@@ -112,6 +112,7 @@ import {AppConfiguration} from "./config/app-configuration";
         ListaIterConPermessiComponent,
         CambioDiStatoBoxComponent,
         CambioDiStatoComponent,
+        
         TipiProcedimentoAziendaliComponent,
         DettaglioTipoProcedimentoComponent,
         TestGridComponent
