@@ -21,6 +21,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
   private selectedRow: any;
 
   @ViewChild("definizione_tipi_procedimento") public grid: DxDataGridComponent;
+
   @Input("refreshButton") public refreshButton;
 
   public pattern: any =  "^[1-9]+[0-9]*$";
@@ -134,7 +135,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
   }
 
   public handleEvent(name: String, event: any) {
-    // console.log("EVENTO "+name, event);
+   console.log("EVENTO "+name, event);
     switch (name) {
       // Questo evento scatta al cliccare di qualsiasi cella: se però siamo sulla 5 colonna e si è cliccato un pulsante viene gestito
       case "CellClick":
@@ -228,10 +229,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
       case "EditingStart":
         this.grid.editing.popup.title =  "Modifica Tipo Procedimento";
-        break;
-      
-
-
+        break;  
 
       default:
         break;
@@ -325,7 +323,12 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
     }
   }
 
-    onValueChanged(e:any){
-      console.log(e);
+  // questa potrebbe essere riutilizzata
+  onInputNumberBox(e: any) {
+    let val = e.component._getInputVal();
+    if (val.length > 4) {
+      e.component._setInputText(val.slice(0, 4));
     }
+  }
+
 }

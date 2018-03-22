@@ -1,11 +1,21 @@
 <h3 class="intestazione" style="text-align: center">Tipi di procedimento</h3>
 
 <dx-data-grid #definizione_tipi_procedimento wordWrapEnabled="true" id="gridContainer" [dataSource]="dataSource" [allowColumnReordering]="true"
-    [columnAutoWidth]="true" [paging]="false" (onEditingStart)="handleEvent('EditingStart',$event)" (onInitNewRow)="handleEvent('InitNewRow',$event)"
-    (onRowInserting)="handleEvent('RowInserting',$event)" (onRowInserted)="handleEvent('RowInserted',$event)" (onRowUpdating)="handleEvent('RowUpdating',$event)"
-    (onRowUpdated)="handleEvent('RowUpdated',$event)" (onRowRemoving)="handleEvent('RowRemoving',$event)" (onRowRemoved)="handleEvent('RowRemoved',$event)"
-    (onRowClick)="handleEvent('RowClick',$event)" (onSelectionChanged)="handleEvent('SelectionChanged',$event)" (onCellClick)="handleEvent('CellClick',$event)"
-    (onToolbarPreparing)="onToolbarPreparing($event)" (onCellPrepared)="onCellPrepared($event)" (onButtonClick)="handleEvent('ButtonClick',$event)"
+    [columnAutoWidth]="true" [paging]="false" 
+    (onEditingStart)="handleEvent('EditingStart',$event)" 
+    (onInitNewRow)="handleEvent('InitNewRow',$event)"
+    (onRowInserting)="handleEvent('RowInserting',$event)" 
+    (onRowInserted)="handleEvent('RowInserted',$event)" 
+    (onRowUpdating)="handleEvent('RowUpdating',$event)"
+    (onRowUpdated)="handleEvent('RowUpdated',$event)" 
+    (onRowRemoving)="handleEvent('RowRemoving',$event)" 
+    (onRowRemoved)="handleEvent('RowRemoved',$event)"
+    (onRowClick)="handleEvent('RowClick',$event)" 
+    (onSelectionChanged)="handleEvent('SelectionChanged',$event)" 
+    (onCellClick)="handleEvent('CellClick',$event)"
+    (onToolbarPreparing)="onToolbarPreparing($event)" 
+    (onCellPrepared)="onCellPrepared($event)" 
+    (onButtonClick)="handleEvent('ButtonClick',$event)"
     (onEditorPreparing)="handleEvent('onEditorPreparing',$event)"
     (onRowValidating)= "handleEvent('rowValidating',$event)">
 
@@ -67,15 +77,11 @@
             <dxi-item dataField="dataFineValidita" [colSpan]="1">
 
             </dxi-item>
-            <dxi-item dataField="durataMassimaIter" [editorOptions]="{ format: '#####' }" editorType="dxNumberBox" [colSpan]="1">
+            <dxi-item dataField="durataMassimaIter" [editorOptions]="{onInput:onInputNumberBox}" editorType="dxNumberBox" [colSpan]="1">
                 <dxi-validation-rule type="required" message="la durata massima dell'iter è obbligatoria"></dxi-validation-rule>
                 <dxi-validation-rule type="pattern" [pattern]="pattern" message="la durata massima di procedimento deve avere un valore positivo"></dxi-validation-rule>
             </dxi-item>
-<!--             <dxi-item dataField="durataMassimaIter" [editorOptions]="{ mask: '0000' maskRules: 'pattern'}" editorType="dxNumberBox" [colSpan]="1">
-                <dxi-validation-rule type="required" message="la durata massima dell'iter è obbligatoria"></dxi-validation-rule>
-                <dxi-validation-rule type="pattern" [pattern]="pattern" message="la durata massima di procedimento deve avere un valore positivo"></dxi-validation-rule>
-            </dxi-item> -->
-            <dxi-item dataField="durataMassimaSospensione" [editorOptions]="{ format: '#####' }" [colSpan]="1">
+            <dxi-item  dataField="durataMassimaSospensione" [editorOptions]="{onInput:onInputNumberBox}" [colSpan]="1">
                 <dxi-validation-rule type="required" message="la durata massima di sospensione è obbligatoria"></dxi-validation-rule>
                 <dxi-validation-rule type="pattern" [pattern]="pattern" message="la durata massima di sospensione deve avere un valore positivo"></dxi-validation-rule>
             </dxi-item>
