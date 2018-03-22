@@ -177,9 +177,8 @@ export class AvviaNuovoIterComponent implements OnInit {
     let dd = date.getDate(); 
     let mm = date.getMonth() + 1; 
     let yyyy = date.getFullYear();
-    let dds, mms;
-    if (dd < 10) dds = "0" + dd;
-    if (mm < 10) mms = "0" + mm; 
+    let dds = (dd < 10) ? "0" + dd : dd; 
+    let mms = (mm < 10) ? "0" + mm : mm;
     return dds + "/" + mms + "/" + yyyy;
   }
 
