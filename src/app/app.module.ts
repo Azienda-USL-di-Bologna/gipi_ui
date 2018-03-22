@@ -140,7 +140,7 @@ import {AppConfiguration} from "./config/app-configuration";
         // MomentModule,
         DxValidatorModule,
         DxValidationSummaryModule,
-         NgIdleKeepaliveModule.forRoot(),
+        NgIdleKeepaliveModule.forRoot(),
         DxSlideOutModule,
         DxToolbarModule,
         DxSwitchModule,
