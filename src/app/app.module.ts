@@ -53,7 +53,6 @@ import { StrutturaTipiProcedimentoComponent } from "./struttura-tipi-procediment
 import {RoleGuard} from "./authorization/guards/role.guard";
 
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
 import {MomentModule} from "angular2-moment";
 import {NgIdleKeepaliveModule} from "@ng-idle/keepalive";
 import {ContextModule} from "@bds/nt-context";
@@ -138,7 +137,6 @@ import {AppConfiguration} from "./config/app-configuration";
         DxTreeViewModule,
         DxContextMenuModule,
         FormsModule,
-        HttpClientModule,
         MomentModule,
         DxValidatorModule,
         DxValidationSummaryModule,
