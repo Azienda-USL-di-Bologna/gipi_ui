@@ -25,8 +25,8 @@
 
 /deep/ .label-wrap .dx-field-item-label-text {
   max-width: 200px;
-  white-space: normal;
-  display: inline-block;
+  white-space: pre;
+  // display: inline-block;   // Ho dovuto toglierla per allineare l'asterisco del required alla label
 }
 
 /deep/ .label-wrap-date > label {
@@ -35,7 +35,7 @@
 
 /deep/ .label-wrap-date .dx-field-item-label-text {
   max-width: 110px;
-  white-space: normal;
+  white-space: pre;
   display: inline-block;
 }
 
@@ -58,4 +58,9 @@
 
 /deep/ .form-avvia-iter div div div div div div div:first-child div .dx-item.dx-box-item {
   flex: initial !important;
+}
+
+/deep/ .textbox-position .dx-textbox {
+  position: relative;
+  top: 10px;
 }

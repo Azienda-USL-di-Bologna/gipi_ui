@@ -19,15 +19,22 @@
   </dxi-item>  
 
     <dxi-item itemType="group">
-      <dxi-item dataField="statoCorrente" [label]="{text: 'Stato corrente'}" [editorOptions]="{ disabled: true }">
+      <dxi-item dataField="idStatoCorrente" [label]="{text: 'Stato corrente'}" editorType="dxLookup"  [editorOptions]="{ disabled: true,
+        dataSource: dataSourceStati,
+        displayExpr: 'descrizione',
+        displayValue: 'descrizione' }">
           <dxi-validation-rule type="required" message="Occorre prima selezionare un Iter dalla lista soprastante"></dxi-validation-rule>    
       </dxi-item>
-      <dxi-item dataField="statoProssimo" editorType="dxLookup" [editorOptions]="{ 
-        items: statiIter,  
+      <dxi-item dataField="idStatoProssimo" [label]="{text: 'Prossimo prossimo'}" editorType="dxLookup" [editorOptions]="{ 
+        items: statiIter,
         selectionMode: 'single',
         showPopupTitle: false,
+        closeOnOutsideClick: 'true',
         showCancelButton: false,
-        searchEnabled: false }" 
+        placeholder: 'Seleziona il prossimo stato',
+        displayExpr: 'descrizione',
+        searchEnabled: false, 
+        valueExpr: 'id'}" 
         ngClass= "width100">
           <dxi-validation-rule type="required" message="Lo stato prossimo è obbligatorio"></dxi-validation-rule>
       </dxi-item>
@@ -61,15 +68,15 @@
       [readOnly]="true"
       [formData]="_sospensioneParams"
       [colCount]="1">
-      <dxi-item dataField="codiceRegistroDocumento" >
-          <dxo-label text="Registro"></dxo-label>
-      </dxi-item>
-      <dxi-item dataField="numeroDocumento">
-          <dxo-label text="Numero"></dxo-label>
-      </dxi-item>
-      <dxi-item dataField="annoDocumento">
-          <dxo-label text="Anno"></dxo-label>
-      </dxi-item>  
+        <dxi-item dataField="codiceRegistroDocumento" >
+            <dxo-label text="Registro"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="numeroDocumento">
+            <dxo-label text="Numero"></dxo-label>
+        </dxi-item>
+        <dxi-item dataField="annoDocumento">
+            <dxo-label text="Anno"></dxo-label>
+        </dxi-item>  
       </dx-form>
 
       <h3 class="mt-4">Dati dell'iter</h3>
@@ -83,8 +90,16 @@
         <dxi-item dataField="annoIter" >
             <dxo-label text="Anno"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="statoCorrente" ></dxi-item>
-        <dxi-item dataField="statoProssimo"></dxi-item>
+        <dxi-item dataField="idStatoCorrente" editorType="dxLookup" [editorOptions]="{ disabled: true,
+          dataSource: dataSourceStati,
+          displayExpr: 'descrizione',
+          displayValue: 'descrizione' }">
+        </dxi-item>
+        <dxi-item dataField="idStatoProssimo" editorType="dxLookup" [editorOptions]="{ disabled: true,
+          dataSource: dataSourceStati,
+          displayExpr: 'descrizione',
+          displayValue: 'descrizione' }">
+        </dxi-item>
         <dxi-item dataField="dataCambioDiStato" editorType="dxDateBox" [editorOptions]="{ displayFormat: 'dd/MM/yyyy' }"></dxi-item>
         <dxi-item dataField="note" editorType="dxTextArea"></dxi-item>
       </dx-form>

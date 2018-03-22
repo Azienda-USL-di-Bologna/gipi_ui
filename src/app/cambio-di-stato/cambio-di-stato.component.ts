@@ -31,6 +31,7 @@ export class CambioDiStatoComponent implements OnInit {
 
 
   constructor( private activatedRoute: ActivatedRoute, private globalContextService: GlobalContextService, private appConfig: AppConfiguration) {
+    console.log("app-cambio-di-stato constructor")
     if (!this.userInfo) {
       this.recuperaUserInfo();
     }
@@ -65,16 +66,17 @@ export class CambioDiStatoComponent implements OnInit {
   }
 
   selectedRowChanged(e) {
+    
     this.selectedIter = "Iter selezionato: " + e.numero + "/" + e.anno;
+    this.lookupValue = null;
     this.sospensioneParams.numeroIter = e.numero;
     this.sospensioneParams.annoIter = e.anno;
     this.sospensioneParams.idIter = e.id;
-    this.sospensioneParams.statoCorrente = e.stato;
+    this.sospensioneParams.idStatoCorrente = e.idStato.id;
     this.sospensioneParams.isFaseDiChiusura = e.idFaseCorrente.faseDiChiusura;
-    console.log("Cambio di stato: ", this.sospensioneParams.statoCorrente);
-    if((this.sospensioneParams.statoCorrente === "sospeso" || this.sospensioneParams.statoCorrente === "apertura_sospensione") && this.lookupItems.length !== 1){
-      this.lookupValue = "Cambio di stato";
+    if((this.sospensioneParams.idStatoCorrente === 2) && this.lookupItems.length !== 1){
       this.lookupItems = ["Cambio di stato"];
+      this.lookupValue = "Cambio di stato";
     }else if(this.lookupItems.length === 1){
       this.lookupItems = ["Cambio di stato", "Passaggio di fase"];
     }
@@ -82,7 +84,7 @@ export class CambioDiStatoComponent implements OnInit {
 
   lookupValueChanged(e){
     this.lookupValue = e.value;
-    if(e.value === "Passaggio di fase" && this.sospensioneParams.isFaseDiChiusura){
+    if((e.value === "Passaggio di fase" || e.value === "Cambio di stato") && (this.sospensioneParams.idStatoCorrente === 3 || this.sospensioneParams.isFaseDiChiusura)) {
       notify({
         message: "Il procedimento è già nell'ultima fase prevista: Fase di chiusura.",
         type: "warning",
@@ -93,6 +95,7 @@ export class CambioDiStatoComponent implements OnInit {
         width: "max-content"
       });
     }
+    
   }
 
 }

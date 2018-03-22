@@ -133,7 +133,7 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
   }
 
   public checkData(event: any) {
-    if (event.value instanceof Date || event.value === null) {
+    if (event.value instanceof Date || event.value === null) { // La data di fine validità può essere nulla
       return true;
     } else return false;
   }

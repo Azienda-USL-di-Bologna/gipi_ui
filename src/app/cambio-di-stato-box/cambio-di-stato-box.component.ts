@@ -2,12 +2,13 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import CustomStore from 'devextreme/data/custom_store';
 import ArrayStore from 'devextreme/data/array_store';
-import { GlobalContextService } from "@bds/nt-context";
+import { GlobalContextService, OdataContextDefinition, OdataContextFactory } from "@bds/nt-context";
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
+import { Stato } from "@bds/nt-entities";
 
 @Component({
   selector: "app-cambio-di-stato-box",
@@ -16,13 +17,15 @@ import notify from "devextreme/ui/notify";
 })
 export class CambioDiStatoBoxComponent implements OnInit{
 
-  public _sospensioneParams: SospensioneParams;
+  public _sospensioneParams: SospensioneParams;  
+  
+  public statiIter: any[] = new Array();    // string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
   public _isOpenedAsPopup: boolean;
-  public statiIter: string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
-  public statiIterService: string[] = new Array();
+  public statiIterService: any[] = new Array();
   public _userInfo: UserInfo;
   public showPopupRiassunto: boolean = false;
   public showPopupAnnullamento: boolean = false;
+  public dataSourceStati: DataSource;
   public dataIniziale: Date;
 
   @Output() out = new EventEmitter<any>();
@@ -33,23 +36,40 @@ export class CambioDiStatoBoxComponent implements OnInit{
   @Input()
   set sospensioneParams(value: SospensioneParams) {
     this._sospensioneParams = value;
-      if (!this._isOpenedAsPopup) {
-          this.dataIniziale = new Date(this._sospensioneParams.dataRegistrazioneDocumento);
-      }
+    if (!this._isOpenedAsPopup) {
+      this.dataIniziale = new Date(this._sospensioneParams.dataRegistrazioneDocumento);
+    }
 
   }
-  @Input()set isOpenedAsPopup(value: boolean) {
-        this._isOpenedAsPopup = value;
-        if (this._isOpenedAsPopup) {
-            this.dataIniziale = new Date();
-        }
+  @Input() set isOpenedAsPopup(value: boolean) {
+      this._isOpenedAsPopup = value;
+      if (this._isOpenedAsPopup) {
+        this.dataIniziale = new Date();
+      }
 
     }
 
-  constructor(private http: HttpClient) { 
-    this.statiIterService[this.statiIter[0]] = "iter_in_corso";
+  constructor(private odataContextFactory: OdataContextFactory,
+    private http: HttpClient, 
+    private activatedRoute: ActivatedRoute,
+    private globalContextService: GlobalContextService
+  ) { 
+    /* this.statiIterService[this.statiIter[0]] = "iter_in_corso";
     this.statiIterService[this.statiIter[1]] = "apertura_sospensione";
-    this.statiIterService[this.statiIter[2]] = "chiusura_iter";
+    this.statiIterService[this.statiIter[2]] = "chiusura_iter"; */
+
+    // bisogna fare il datasource per la lookup dello stato
+    const oataContextDefinition: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    this.dataSourceStati = new DataSource({
+      store: oataContextDefinition.getContext()[new Stato().getName()],
+    });
+    this.dataSourceStati.load().then(res=> (res.forEach(element => {
+      this.statiIterService.push(element);
+      if(element.id !== this._sospensioneParams.idStatoCorrente)
+        this.statiIter.push(element);
+    })));
+    
+
   }
 
   ngOnInit() {}
@@ -57,8 +77,8 @@ export class CambioDiStatoBoxComponent implements OnInit{
 
    handleSubmit(e) {
      e.preventDefault();
-    if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.statoCorrente) {return; }
-
+    if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.idStatoCorrente) {return; }
+    
     let shippedParams: ShippedParams = {
       idIter : this._sospensioneParams.idIter,
       idUtente : this._userInfo.idUtente,
@@ -66,10 +86,10 @@ export class CambioDiStatoBoxComponent implements OnInit{
       numeroDocumento: this._sospensioneParams.numeroDocumento,
       annoDocumento: this._sospensioneParams.annoDocumento,
       note: this._sospensioneParams.note,
-      stato: this.statiIterService[this._sospensioneParams.statoProssimo],
+      // stato: this.statiIterService[this._sospensioneParams.idStatoProssimo],
+      idStato: this._sospensioneParams.idStatoProssimo,
       dataEvento: this._sospensioneParams.dataCambioDiStato,
     };
-
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
     .subscribe(
       res => {
@@ -129,7 +149,7 @@ interface ShippedParams {
   numeroDocumento: string;
   annoDocumento: number;
   note: string;
-  stato: string;
+  idStato: number;
   dataEvento: Date;
 }
 
