@@ -1,7 +1,7 @@
 <div class="container whitePanel">
-    <h2 class="text-center mb-3">PG {{sospensioneParams.numeroDocumento}}/{{sospensioneParams.annoDocumento}}</h2>
+    <h2 class="text-center mb-3">{{sospensioneParams.codiceRegistroDocumento}} {{sospensioneParams.numeroDocumento}}/{{sospensioneParams.annoDocumento}}</h2>
     <div class="mb-3">
-        <app-lista-iter-con-permessi (selectedRow)="selectedRowChanged($event)" [userInfo]="userInfo"></app-lista-iter-con-permessi>
+        <app-lista-iter-con-permessi (selectedRow)="selectedRowChanged($event)" [userInfo]="userInfo" [documento]="sospensioneParams"></app-lista-iter-con-permessi>
     </div>
 
     <hr class="m-4"/>

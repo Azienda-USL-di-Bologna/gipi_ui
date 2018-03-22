@@ -74,17 +74,17 @@ export class CambioDiStatoComponent implements OnInit {
     this.sospensioneParams.idIter = e.id;
     this.sospensioneParams.idStatoCorrente = e.idStato.id;
     this.sospensioneParams.isFaseDiChiusura = e.idFaseCorrente.faseDiChiusura;
-    if((this.sospensioneParams.idStatoCorrente === 2) && this.lookupItems.length !== 1){
+    if((this.sospensioneParams.idStatoCorrente === 2) && this.lookupItems.length !== 1) {
       this.lookupItems = ["Cambio di stato"];
       this.lookupValue = "Cambio di stato";
-    }else if(this.lookupItems.length === 1){
+    }else if (this.lookupItems.length === 1) {
       this.lookupItems = ["Cambio di stato", "Passaggio di fase"];
     }
   }
 
-  lookupValueChanged(e){
+  lookupValueChanged(e) {
     this.lookupValue = e.value;
-    if((e.value === "Passaggio di fase" || e.value === "Cambio di stato") && (this.sospensioneParams.idStatoCorrente === 3 || this.sospensioneParams.isFaseDiChiusura)) {
+    if ((e.value === "Passaggio di fase" || e.value === "Cambio di stato") && (this.sospensioneParams.idStatoCorrente === 3 || this.sospensioneParams.isFaseDiChiusura)) {
       notify({
         message: "Il procedimento è già nell'ultima fase prevista: Fase di chiusura.",
         type: "warning",

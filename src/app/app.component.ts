@@ -141,7 +141,7 @@ export class AppComponent implements OnInit, OnDestroy {
         // sad but necessary :c
         const $this = this;
         window.addEventListener("click", function(e) {
-            if (!document.getElementById("userDropdown").contains(<Node> e.target) && !document.getElementById("userDropdownToggle").contains(<Node> e.target)
+            if (document.getElementById("userDropdown") && !document.getElementById("userDropdown").contains(<Node> e.target) && !document.getElementById("userDropdownToggle").contains(<Node> e.target)
                 && $("#userDropdown").hasClass("show")) {
                 $this.onProfileBtnClick(e);
             }
