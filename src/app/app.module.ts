@@ -53,8 +53,8 @@ import { StrutturaTipiProcedimentoComponent } from "./struttura-tipi-procediment
 import {RoleGuard} from "./authorization/guards/role.guard";
 
 import { FormsModule } from "@angular/forms";
-import {MomentModule} from "angular2-moment";
-import {NgIdleKeepaliveModule} from "@ng-idle/keepalive";
+// import {MomentModule} from "angular2-moment";
+ import {NgIdleKeepaliveModule} from "@ng-idle/keepalive";
 import {ContextModule} from "@bds/nt-context";
 import {contextModuleConfig, loginModuleConfig} from "./config/module-configurations";
 import { StruttureTreeComponent } from "./reusable-component/strutture-tree/strutture-tree.component";
@@ -137,10 +137,10 @@ import {AppConfiguration} from "./config/app-configuration";
         DxTreeViewModule,
         DxContextMenuModule,
         FormsModule,
-        MomentModule,
+        // MomentModule,
         DxValidatorModule,
         DxValidationSummaryModule,
-        NgIdleKeepaliveModule.forRoot(),
+         NgIdleKeepaliveModule.forRoot(),
         DxSlideOutModule,
         DxToolbarModule,
         DxSwitchModule,
