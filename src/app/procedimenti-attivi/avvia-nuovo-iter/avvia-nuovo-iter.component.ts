@@ -129,18 +129,18 @@ export class AvviaNuovoIterComponent implements OnInit {
     });
   }
 
-  private campiObbligatoriCompilati(): boolean {
+  private isProcedimentoSelected(): boolean {
     if (this.iterParams.idProcedimento == null) {
       this.showStatusOperation("Per avviare un nuovo iter devi selezionare un procedimento", "warning");
       return false;
     }
-
-    if (this.iterParams.dataAvvioIter == null || this.iterParams.oggettoIter == null || this.iterParams.oggettoIter === "" ||
+    /* Con la nuova validazione questa parte non viene utilizzata */
+    /* if (this.iterParams.dataAvvioIter == null || this.iterParams.oggettoIter == null || this.iterParams.oggettoIter === "" ||
         this.iterParams.numeroDocumento == null || this.iterParams.annoDocumento == null || this.iterParams.codiceRegistroDocumento == null ||
         this.iterParams.codiceRegistroDocumento === "") {
       this.showStatusOperation("Per avviare un nuovo iter tutti i campi sono obbligatori", "warning");
       return false;
-    }
+    } */
     return true;
   }
 
@@ -230,9 +230,12 @@ export class AvviaNuovoIterComponent implements OnInit {
   public handleEvent(name: string, data: any): void {
     switch (name) {
       case "onClickProcedi":
-        if (this.campiObbligatoriCompilati()) {
-          this.askConfirmAndExecute("Avvio iter", "Stai avviando un nuovo iter, confermi?", this.avviaIter.bind(this));
-        }
+        if (this.isProcedimentoSelected()) {
+          const result = data.validationGroup.validate();
+          if (result.isValid) {
+            this.askConfirmAndExecute("Avvio iter", "Stai avviando un nuovo iter, confermi?", this.avviaIter.bind(this));
+          }
+        }  
         break;
       case "onClickAnnulla":
         if (this.avviaIterDaDocumento) {

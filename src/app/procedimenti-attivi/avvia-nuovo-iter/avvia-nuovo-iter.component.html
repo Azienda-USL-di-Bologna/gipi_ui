@@ -1,69 +1,82 @@
 <dx-scroll-view>
-  <h4 *ngIf="nomeProcedimento != null" class="titolo-procedimento">Procedimento: {{nomeProcedimento}}</h4>
-
-  <br>
-
-  <dx-form
-    [(formData)]="iterParams"
-    scrollingEnabled="true"
-    colCount="6"
-    class="form-avvia-iter">
-    <dxi-item dataField="dataCreazioneIter" 
-      [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data creazione'}" 
-      [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"
-      cssClass="label-wrap-date">
-    </dxi-item>
-    <dxi-item dataField="dataAvvioIter" 
-      [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data avvio'}" 
-      [editorOptions]="{ disabled: false, max: now, displayFormat: 'dd/MM/yyyy' }"
-      cssClass="label-wrap-date">
-    </dxi-item>
-    <dxi-item dataField="dataMassimaConclusione" 
-      [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data massima conclusione'}" 
-      [editorOptions]="{ disabled: true, value: setDataMax(), displayFormat: 'dd/MM/yyyy' }"
-      cssClass="label-wrap-date no-baseline">
-    </dxi-item>
-    <dxi-item itemType="group" [colCount]="3" [colSpan]="6" cssClass="label-wrap no-baseline" [label]="{text: 'Documento'}">
-      <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: avviaIterDaDocumento }"></dxi-item>
-      <dxi-item dataField="numeroDocumento" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento }"></dxi-item>
-      <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento}"></dxi-item> 
-    </dxi-item>
-    <dxi-item  #lookup dataField="idUtenteStrutturaResponsabile" [colSpan]="6" cssClass="label-wrap no-baseline lookup-wrap" editorType="dxLookup" 
-      [label]="{text: 'Responsabile procedimento amministrativo'}"
-      [editorOptions]="{
-        value: idUtenteDefault,
-        dataSource: dataSourceUtenti,
-        displayExpr: getDescrizioneUtente,
-        searchEnabled: true,
-        valueExpr: 'id',
-        onItemClick: setUtenteResponsabile,
-        hint: descrizioneUtenteResponsabile,
-        cancelButtonText: 'Chiudi',
-        pageLoadingText: 'Caricamento..',
-        placeholder: 'Seleziona..',
-        noDataText: 'Nessun dato disponibile',
-        closeOnOutsideClick: true,
-        searchPlaceholder: 'Cerca',
-        showPopupTitle: false,
-        onOpened: reloadResponsabile
-      }">
-    </dxi-item>
-    <dxi-item dataField="promotoreIter" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
-    <dxi-item dataField="oggettoIter" [colSpan]="6" cssClass="label-wrap" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }"></dxi-item>
-    <dxi-item dataField="responsabileAdozioneAttoFinaleDesc" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Responsabile adozione atto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
-    <dxi-item dataField="titolarePotereSostitutivoDesc" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
-  </dx-form>
-
-  <br>
-
-  <div class="buttons">
-    <dx-button
-      text="Annulla"
-      (onClick)="handleEvent('onClickAnnulla',$event)">
-    </dx-button>
-    <dx-button
-      text="Avvia"
-      (onClick)="handleEvent('onClickProcedi',$event)">
-    </dx-button>
-  </div>
-</dx-scroll-view>
+    <h4 *ngIf="nomeProcedimento != null" class="titolo-procedimento">Procedimento: {{nomeProcedimento}}</h4>
+  
+    <br>
+  
+    <dx-form
+      [(formData)]="iterParams"
+      scrollingEnabled="true"
+      colCount="6"
+      class="form-avvia-iter"
+      validationGroup="validationAvviaIter"
+      [showValidationSummary]="true">
+        <dxi-item dataField="dataCreazioneIter" 
+          [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data creazione'}" 
+          [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"
+          cssClass="label-wrap-date">
+        </dxi-item>
+        <dxi-item dataField="dataAvvioIter" 
+          [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data avvio'}" 
+          [editorOptions]="{ disabled: false, max: now, displayFormat: 'dd/MM/yyyy', invalidDateMessage:'La data deve avere il seguente formato: dd/MM/yyyy' }"
+          cssClass="label-wrap-date">
+          <dxi-validation-rule type="required" message="la data di avvio iter è obbligatoria"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item dataField="dataMassimaConclusione" 
+          [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data massima\nconclusione'}" 
+          [editorOptions]="{ disabled: true, value: setDataMax(), displayFormat: 'dd/MM/yyyy' }"
+          cssClass="label-wrap-date no-baseline">
+        </dxi-item>
+      <dxi-item itemType="group" [colCount]="3" [colSpan]="6" cssClass="label-wrap no-baseline" [label]="{text: 'Documento'}">
+        <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: avviaIterDaDocumento }">
+          <dxi-validation-rule type="required" message="il codice registro del documento è obbligatorio"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item dataField="numeroDocumento" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento }">
+          <dxi-validation-rule type="required" message="il numero del documento è obbligatorio"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1" cssClass="fix-bug-dx" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: avviaIterDaDocumento}">
+          <dxi-validation-rule type="required" message="l'anno del documento è obbligatorio"></dxi-validation-rule>
+        </dxi-item> 
+      </dxi-item>
+      <dxi-item  #lookup dataField="idUtenteStrutturaResponsabile" [colSpan]="6" cssClass="label-wrap no-baseline lookup-wrap" editorType="dxLookup" 
+        [label]="{text: 'Responsabile procedimento\namministrativo'}"
+        [editorOptions]="{
+          value: idUtenteDefault,
+          dataSource: dataSourceUtenti,
+          displayExpr: getDescrizioneUtente,
+          searchEnabled: true,
+          valueExpr: 'id',
+          onItemClick: setUtenteResponsabile,
+          hint: descrizioneUtenteResponsabile,
+          cancelButtonText: 'Chiudi',
+          pageLoadingText: 'Caricamento..',
+          placeholder: 'Seleziona..',
+          noDataText: 'Nessun dato disponibile',
+          closeOnOutsideClick: true,
+          searchPlaceholder: 'Cerca',
+          showPopupTitle: false,
+          onOpened: reloadResponsabile
+        }">
+        <dxi-validation-rule type="required" message="il responsabile del procedimento amministrativo è obbligatorio"></dxi-validation-rule>
+      </dxi-item>
+        <dxi-item dataField="promotoreIter" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
+        <dxi-item dataField="oggettoIter" [colSpan]="6" cssClass="label-wrap" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false }">
+            <dxi-validation-rule type="required" message="l'oggetto è obbligatorio"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item dataField="responsabileAdozioneAttoFinaleDesc" [colSpan]="6" cssClass="label-wrap textbox-position" [label]="{text: 'Responsabile adozione\natto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="titolarePotereSostitutivoDesc" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
+    </dx-form>
+  
+    <br>
+  
+    <div class="buttons">
+      <dx-button
+        text="Annulla"
+        (onClick)="handleEvent('onClickAnnulla',$event)">
+      </dx-button>
+      <dx-button
+        text="Avvia"
+        (onClick)="handleEvent('onClickProcedi',$event)" validationGroup="validationAvviaIter">
+      </dx-button>
+    </div>
+  </dx-scroll-view>
+  
