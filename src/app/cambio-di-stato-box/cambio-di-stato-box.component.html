@@ -42,6 +42,8 @@
         <dxi-validation-rule type="required" message="La data di cambio di stato è obbligatoria"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="note" editorType="dxTextArea" [label]="{text: 'Note'}" [editorOptions]="{ disabled: false }"></dxi-item>
+      <dxi-item *ngIf="_sospensioneParams.idStatoProssimo===3" dataField="esito" editorType="dxTextArea" [label]="{text: 'Esito'}" [editorOptions]="{ disabled: false }"></dxi-item>
+      <dxi-item *ngIf="_sospensioneParams.idStatoProssimo===3" dataField="esitoMotivazione" editorType="dxTextArea" [label]="{text: 'Motivazione'}" [editorOptions]="{ disabled: false }"></dxi-item>
     </dxi-item>
   </dx-form>
 
@@ -56,7 +58,7 @@
   <dx-popup
   class="popup"
   [width]="700"
-  [height]="650"
+  [height]="'auto'"
   [showTitle]="true"
   [title]="'Riassunto operazioni'"
   [dragEnabled]="false"
@@ -102,6 +104,8 @@
         </dxi-item>
         <dxi-item dataField="dataCambioDiStato" editorType="dxDateBox" [editorOptions]="{ displayFormat: 'dd/MM/yyyy' }"></dxi-item>
         <dxi-item dataField="note" editorType="dxTextArea"></dxi-item>
+        <dxi-item *ngIf="_sospensioneParams.idStatoProssimo===3" dataField="esito" editorType="dxTextArea" [label]="{text: 'Esito'}" [editorOptions]="{ disabled: false }"></dxi-item>
+        <dxi-item *ngIf="_sospensioneParams.idStatoProssimo===3" dataField="esitoMotivazione" editorType="dxTextArea" [label]="{text: 'Motivazione'}" [editorOptions]="{ disabled: false }"></dxi-item>
       </dx-form>
       <div class="text-center">
           <dx-button class="d-inline-block" text="Chiudi" (click)="handleRiassunto($event)"></dx-button>

@@ -161,11 +161,11 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   disableProcedi() {
-    return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura;
+    return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.id === 3;
   }
 
   disableSospendi() {
-    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura;
+    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.id === 3;
   }
 
   generateCustomButtons() {
