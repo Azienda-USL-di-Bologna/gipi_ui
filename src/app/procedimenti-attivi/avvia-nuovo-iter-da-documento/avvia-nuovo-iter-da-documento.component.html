@@ -1,4 +1,4 @@
-<div >
+<div class="avviaNuovoIterWrapper">
   <h3>Avvia un nuovo iter con: <i>{{doc.registro}} {{doc.numero}}/{{doc.anno}}</i></h3>
   <h4>Seleziona un procedimento tra i seguenti:</h4>
   <procedimenti-attivi [avviaIterDaDocumento]="doc" (messageEvent)="receiveMessage($event)"></procedimenti-attivi>

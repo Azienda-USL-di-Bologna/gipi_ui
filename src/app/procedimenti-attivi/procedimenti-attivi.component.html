@@ -3,7 +3,6 @@
 
     <div class="gridContainerDiv">
         <dx-data-grid #gridContainer id="gridContainer" [dataSource]="dataSourceProcedimenti"
-                      height="700px"
                       [customizeColumns]="customizeColumns"
                       columnResizingMode="nextColumn" hoverStateEnabled="checkBoxState"
                       noDataText="Non ci sono procedimenti attivi" (onToolbarPreparing)="onToolbarPreparing($event)"
