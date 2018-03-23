@@ -161,17 +161,17 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   disableProcedi() {
-    return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura;
+    return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.id === 3;
   }
 
   disableSospendi() {
-    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura;
+    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.id === 3;
   }
 
   generateCustomButtons() {
     this.genericButtons = new Array<ButtonAppearance>();
     this.procediButton = new ButtonAppearance("Procedi", "", false, this.disableProcedi());
-    this.sospendiButton = new ButtonAppearance("Sospendi", "", false, this.disableSospendi());
+    this.sospendiButton = new ButtonAppearance("Gestisci stato", "", false, this.disableSospendi());
     this.setNomeBottoneSospensione();
     this.genericButtons.push(this.procediButton, this.sospendiButton);
     this.soloEditing = this.disableSospendi();

@@ -4,7 +4,8 @@ export const HEADER_AUTH_TOKEN_NAME = "authorization";
 // ========================= Url =====================================
 // export const ODATA_BASE_URL: string = environment.odataStoreRootUrl;
 const hostname: string = window.location.hostname;
-const port: string = hostname === "localhost" ? ":10006" : ":443";
+export const LOCALHOST_PORT: string = "10006";
+const port: string = hostname === "localhost" ? ":" + LOCALHOST_PORT : ":443";
 console.log("hostname", hostname);
 console.log("port", port);
 

@@ -89,6 +89,8 @@ export class CambioDiStatoBoxComponent implements OnInit{
       // stato: this.statiIterService[this._sospensioneParams.idStatoProssimo],
       idStato: this._sospensioneParams.idStatoProssimo,
       dataEvento: this._sospensioneParams.dataCambioDiStato,
+      esito: this._sospensioneParams.esito,
+      esitoMotivazione: this._sospensioneParams.esitoMotivazione
     };
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
     .subscribe(
@@ -151,6 +153,8 @@ interface ShippedParams {
   note: string;
   idStato: number;
   dataEvento: Date;
+  esito: string;
+  esitoMotivazione: string;
 }
 
 interface UserInfo{
