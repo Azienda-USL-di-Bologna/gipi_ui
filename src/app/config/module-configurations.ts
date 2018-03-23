@@ -1,5 +1,5 @@
 import {
-    DEFAULT_CURRENCY, DEFAULT_TIMEZONE_OFFSET, HOME_ROUTE, LOGIN_RELATIVE_URL, LOGIN_ROUTE,
+    DEFAULT_CURRENCY, DEFAULT_TIMEZONE_OFFSET, HOME_ROUTE, LOCALHOST_PORT, LOGIN_RELATIVE_URL, LOGIN_ROUTE,
     ODATA_BASE_URL
 } from "../../environments/app.constants";
 import {ModuleConfig, JwtInterceptor} from "@bds/nt-login";
@@ -23,6 +23,7 @@ console.log("dentro module", ODATA_BASE_URL);
         relativeURL: LOGIN_RELATIVE_URL,
         loginComponentRoute: LOGIN_ROUTE,
         homeComponentRoute: HOME_ROUTE,
+        localhostPort: LOCALHOST_PORT
     };
 
 // export class contextModuleConfig implements ContextModuleConfig  {

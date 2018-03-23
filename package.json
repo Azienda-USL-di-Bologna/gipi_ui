@@ -27,7 +27,6 @@
     "@ng-idle/core": "2.0.0-beta.12",
     "@ng-idle/keepalive": "2.0.0-beta.12",
     "ajv": "^6.2.1",
-    "angular2-moment": "^1.8.0",
     "bootstrap": "4.0.0-beta.2",
     "copy-webpack-plugin": "^4.5.1",
     "core-js": "^2.4.1",
