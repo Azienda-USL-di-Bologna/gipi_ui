@@ -27,7 +27,7 @@
             <div class="col">
 
                 <dx-form itemType="group" [formData]="iterParams" [colCount]="12" [showValidationSummary]="true" validationGroup="passaggioFase">
-                    <dxi-item [colSpan]="12" dataField="dataPassaggio" editorType="dxDateBox" [label]="{text: 'Data Passaggio'}" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }">
+                    <dxi-item [colSpan]="12" dataField="dataPassaggio" editorType="dxDateBox" [label]="{text: 'Data Passaggio'}" [editorOptions]="{ disabled: false, value: dataIniziale, displayFormat: 'dd/MM/yyyy' }">
                         <dxi-validation-rule type="required" message="La data di passaggio è obbligatoria">
                         </dxi-validation-rule>
                     </dxi-item>

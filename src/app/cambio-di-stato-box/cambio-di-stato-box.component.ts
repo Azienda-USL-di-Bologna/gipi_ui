@@ -46,8 +46,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
       if (this._isOpenedAsPopup) {
         this.dataIniziale = new Date();
       }
-
-    }
+  }
 
   constructor(private odataContextFactory: OdataContextFactory,
     private http: HttpClient, 

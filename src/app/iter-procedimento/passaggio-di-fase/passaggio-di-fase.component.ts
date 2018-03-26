@@ -25,16 +25,20 @@ export class PassaggioDiFaseComponent implements OnInit {
   public passaggioFaseParams: PassaggioFaseParams;
   public showPopupAnnullamento : boolean = false;
   public messaggioAnnullamento : string;
+  public dataIniziale: Date;
 
-  @Input() set idIter(value: number){
+  @Input() set idIter(value: number) {
     this.iterParams.idIter = value;
     const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.iterParams.idIter)
     .subscribe(
     res => {
+        console.log("QUIIII: ", res );
       this.passaggioFaseParams = {
         currentFaseName : JSON.parse(res["currentFase"]).nomeFase,
         nextFaseName : JSON.parse(res["nextFase"]).nomeFase,
-        isNextFaseDiChiusura : JSON.parse(res["nextFase"]).faseDiChiusura
+        isNextFaseDiChiusura : JSON.parse(res["nextFase"]).faseDiChiusura,
+
+
       }
     },
     err => {
@@ -44,6 +48,10 @@ export class PassaggioDiFaseComponent implements OnInit {
   }
 
   @Input("isOpenedAsPopup") isOpenedAsPopup?: boolean;
+
+
+
+
   @Output() out = new EventEmitter<any>();
 
 
@@ -58,6 +66,13 @@ export class PassaggioDiFaseComponent implements OnInit {
       this.iterParams.codiceRegistroDocumento = queryParams["registro"];
       this.iterParams.numeroDocumento = queryParams["numero"];
       this.iterParams.annoDocumento = queryParams["anno"];
+      if (queryParams["dataRegistrazione"]) {
+          this.dataIniziale = queryParams["dataRegistrazione"];
+      } else {
+          this.dataIniziale = new Date();
+      }
+
+
     });
     
     this.passaggioFaseParams = {
