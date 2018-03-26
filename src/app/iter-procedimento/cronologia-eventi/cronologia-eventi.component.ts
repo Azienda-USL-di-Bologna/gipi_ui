@@ -25,7 +25,7 @@ export class CronologiaEventiComponent implements OnInit {
   ngOnInit() {
     this.dataSourceEventoIter = new DataSource({
       store: this.odataContextDefinition.getContext()[new EventoIter().getName()],
-      expand: ["idEvento", "idIter", "idFaseIter.idFase", "autore.idPersona"],
+      expand: ["idEvento", "idIter", "idFaseIter.idFase", "autore.idPersona", "idDocumentoIter"],
       filter: ["idIter.id", "=", parseInt(this.daPadre["idIter"])]
     });
   }
@@ -35,4 +35,16 @@ export class CronologiaEventiComponent implements OnInit {
       this.dataSourceEventoIter.load();
     }
   }
+
+  customizeColumns(columns: any) {
+    columns.forEach(column => {
+        if (column.dataField === "idDocumentoIter") {
+            column.calculateCellValue = function (value) {
+                if (value && value.idDocumentoIter) {
+                    return value.idDocumentoIter.registro + " " + value.idDocumentoIter.numeroRegistro + "/" + value.idDocumentoIter.anno;
+                }
+            };                
+        }
+    });
+}
 }
