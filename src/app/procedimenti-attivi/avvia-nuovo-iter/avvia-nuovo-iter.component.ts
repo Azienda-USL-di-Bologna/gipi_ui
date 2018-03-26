@@ -12,6 +12,7 @@ import { LoggedUser } from "@bds/nt-login";
 import { GlobalContextService } from "@bds/nt-context";
 import { confirm, custom } from "devextreme/ui/dialog";
 import DataSource from "devextreme/data/data_source";
+import {OdataUtilities} from "@bds/nt-context";
 
 @Component({
   selector: "avvia-nuovo-iter",
@@ -61,7 +62,8 @@ export class AvviaNuovoIterComponent implements OnInit {
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
 
-  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private globalContextService: GlobalContextService) {
+  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient,
+              private globalContextService: GlobalContextService, private odataUtilities: OdataUtilities) {
     console.log("avvia-nuovo-iter (constructor)");
     this.odataContextDefinitionFunctionImport = this.odataContextFactory.buildOdataFunctionsImportDefinition();
     this.getInfoSessionStorage();
@@ -97,16 +99,11 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.dataSourceUtenti = new DataSource({
       store: this.odataContextDefinitionFunctionImport.getContext()[new GetUtentiGerarchiaStruttura().getName()]
       .on("loading", (loadOptions) => {
-        if (loadOptions.filter && loadOptions.filter[0]) {
-          loadOptions.customQueryParams.searchString = loadOptions.filter[0][2] /* ? loadOptions.filter[0][2] : "" */;
-          // loadOptions.filter = null;
-        } 
-        else {
-          loadOptions.customQueryParams.searchString = "";
-        }
+        this.odataUtilities.filterToCustomQueryParams(["searchString"], loadOptions);
       }),
       customQueryParams: {
-        idStruttura: idStruttura
+        idStruttura: idStruttura,
+        // searchString: ""
       },
       expand: [
         "idUtente/idPersona",
