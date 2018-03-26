@@ -1,6 +1,7 @@
 <div class="container-fluid">
-    <app-buttons-bar (onGenericButtonClick)="onGenericButtonClick($event)" [genericButtons]="genericButtons">
-    </app-buttons-bar>
+    <!-- Non cancellare. Potrenne tornare utile in futuro 
+        <app-buttons-bar (onGenericButtonClick)="onGenericButtonClick($event)" [genericButtons]="genericButtons">
+    </app-buttons-bar> -->
     <div class="col header-font">
         <h3>
             <span class="header-font">Struttura procedente:</span>
@@ -43,7 +44,7 @@
                         </dxi-item>
 
                         <dxi-item [colSpan]="2">
-                            <button class="btn button-azioni" id="note" type="button" (click)="updateNoteControInteressati()" [disabled]="soloEditing">Note</button>
+                            <button class="btn button-azioni" id="note" type="button" (click)="updateNoteControInteressati()" [disabled]="inSolaLettura()">Note</button>
                             <!-- <dx-button text="Note controinteressati" type="default" (onClick)="updateNoteControInteressati()"></dx-button> -->
                         </dxi-item>
 
@@ -55,7 +56,7 @@
                     <dxi-item [colSpan]="4" dataField="esito" cssClass="fix-bug-dx" [editorOptions]="{ disabled: true }"></dxi-item>
 
                     <dxi-item [colSpan]="2">
-                        <button class="btn button-azioni" id="motivazione" type="button" (click)="updateEsitoMotivazione()" [disabled]="soloEditing">Motivazione</button>
+                        <button class="btn button-azioni" id="motivazione" type="button" (click)="updateEsitoMotivazione()" [disabled]="inSolaLettura()">Motivazione</button>
                         <!-- <dx-button text="Motivazione" type="default" (onClick)="updateEsitoMotivazione()"></dx-button> -->
                     </dxi-item>
                 </dxi-item>

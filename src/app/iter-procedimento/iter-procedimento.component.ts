@@ -46,10 +46,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public datiGenerali = "";
   // Dati che verranno ricevuti dall'interfaccia chiamante
   public infoGeneriche: any = {
-    azienda: "RENDERE DINAMICA",
-    struttura: "RENDERE DINAMICA",
-    tipoProcedimento: "RENDERE DINAMICA",
-    numeroIter: 109 // <-- rendere dinamico mi sa che in realtà lo è già cmq
+    struttura: "",
+    tipoProcedimento: "",
   };
   public popupData: any = {
     visible: false,
@@ -67,7 +65,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public userInfo: UserInfo;
   public iodaPermission: boolean;
   public hasPermissionOnFascicolo: boolean = false;
-  public soloEditing: boolean = false;
+  // public soloEditing: boolean = false;
 
 
   public dataSourceClassificazione: DataSource;
@@ -99,7 +97,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "idIterPrecedente",
         "idResponsabileProcedimento.idPersona",
         "idResponsabileAdozioneProcedimentoFinale.idPersona",
-        "procedimentoCache.idTitolarePotereSostitutivo.idPersona"
+        "procedimentoCache.idTitolarePotereSostitutivo.idPersona",
+        "procedimentoCache.idStruttura"
       ],
       filter: [["id", "=", this.idIter]]
     });
@@ -168,6 +167,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.id === 3;
   }
 
+  inSolaLettura() {
+    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.id === 3;
+  }
+
+  /* 
+  Non cancellare, potrebbe tornare utile in futuro
   generateCustomButtons() {
     this.genericButtons = new Array<ButtonAppearance>();
     this.procediButton = new ButtonAppearance("Procedi", "", false, this.disableProcedi());
@@ -175,18 +180,20 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.setNomeBottoneSospensione();
     this.genericButtons.push(this.procediButton, this.sospendiButton);
     this.soloEditing = this.disableSospendi();
-  }
+  } */
 
   buildIter() {
     this.dataSourceIter.load().then(res => {
       this.iter.build(res[0]);
-      this.generateCustomButtons();
+      // this.generateCustomButtons(); Non cancellare, potrebbe tornare utile in futuro
       this.calculateIodaPermissionAndSetButton();
       this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
       this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + this.iter.procedimentoCache.durataMassimaProcedimento);
       this.buildTitoloDatiGenerali();
 
       this.setParametriSospensione();
+      this.infoGeneriche.struttura = this.iter.procedimentoCache.idStruttura.nome;
+      this.infoGeneriche.tipoProcedimento = this.iter.procedimentoCache.nomeTipoProcedimento;
     });
   }
 
@@ -288,6 +295,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.buildIter();
   }
 
+  /* 
+  Non cancellare. Potrebbe tornare utile in futuro
   onGenericButtonClick(buttonName: string) {
     switch (buttonName) {
       case "Termina Sospensione":
@@ -299,7 +308,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         this.passaggioDiFase();
         break;
     }
-  }
+  } */
 
   getDataUltimaSospensione() {
     let date;
@@ -342,10 +351,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         .subscribe(
           res => {
             this.hasPermissionOnFascicolo = res["hasPermission"] === "true";
-            this.generateCustomButtons(); // ora che ho i permessi mi posso creare i bottoni
+            // this.generateCustomButtons(); // ora che ho i permessi mi posso creare i bottoni
           },
           err => {
-            this.generateCustomButtons();
+            // this.generateCustomButtons();
           }
         );
     }
