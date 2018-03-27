@@ -86,6 +86,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
 
             ],
             filter: [
+                ["completo", "=", "true"],
                 ["idAziendaTipoProcedimento.idAzienda.id", "=", this.idAzienda],
                 this.utility.buildMultipleFilterForArray("idStruttura.id", this.idStruttureUtente),
                 ["dataInizio", "<=", now],
