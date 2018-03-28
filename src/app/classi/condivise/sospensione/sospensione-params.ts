@@ -6,6 +6,7 @@ export class SospensioneParams {
     public codiceRegistroDocumento: string;
     public numeroDocumento: string;
     public annoDocumento: number;
+    public oggettoDocumento: string;
     public dataRegistrazioneDocumento: Date;
     public note: string;
     public idStatoCorrente: number;

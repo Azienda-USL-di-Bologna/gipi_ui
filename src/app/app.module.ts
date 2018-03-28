@@ -30,7 +30,8 @@ import {
     DxSwitchModule,
     DxScrollViewModule,
     DxNumberBoxModule,
-    DxValidationGroupModule
+    DxValidationGroupModule,
+    DxTooltipModule
 } from "devextreme-angular";
 
 import {RouterModule} from "@angular/router";
@@ -149,7 +150,8 @@ import {AppConfiguration} from "./config/app-configuration";
         LoginModule.forRoot(loginModuleConfig),
         EntitiesModule.forRoot(null),
         DxNumberBoxModule,
-        DxValidationGroupModule
+        DxValidationGroupModule,
+        DxTooltipModule
     ],
     providers: [DefinizioneTipiProcedimentoService, RoleGuard, AppConfiguration
         // NavbarService

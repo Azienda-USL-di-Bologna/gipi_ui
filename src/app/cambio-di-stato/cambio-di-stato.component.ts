@@ -44,6 +44,7 @@ export class CambioDiStatoComponent implements OnInit {
       this.sospensioneParams.numeroDocumento = queryParams["numero"];
       this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
       this.sospensioneParams.dataRegistrazioneDocumento = queryParams["dataRegistrazione"];
+      this.sospensioneParams.oggettoDocumento = queryParams["oggetto"];
       const noBars: boolean = queryParams["nobars"];
     });
   }
@@ -74,7 +75,7 @@ export class CambioDiStatoComponent implements OnInit {
     this.sospensioneParams.idIter = e.id;
     this.sospensioneParams.idStatoCorrente = e.idStato.id;
     this.sospensioneParams.isFaseDiChiusura = e.idFaseCorrente.faseDiChiusura;
-    if((this.sospensioneParams.idStatoCorrente === 2) && this.lookupItems.length !== 1) {
+    if ((this.sospensioneParams.idStatoCorrente === 2) && this.lookupItems.length !== 1) {
       this.lookupItems = ["Cambio di stato"];
       this.lookupValue = "Cambio di stato";
     }else if (this.lookupItems.length === 1) {

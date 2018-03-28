@@ -65,6 +65,8 @@ export class PassaggioDiFaseComponent implements OnInit {
       this.iterParams.codiceRegistroDocumento = queryParams["registro"];
       this.iterParams.numeroDocumento = queryParams["numero"];
       this.iterParams.annoDocumento = queryParams["anno"];
+      console.log("oggetto", queryParams["oggetto"])
+      this.iterParams.oggettoDocumento = queryParams["oggetto"];
       if (queryParams["dataRegistrazione"]) {
           this.dataIniziale = queryParams["dataRegistrazione"];
       } else {
@@ -75,15 +77,15 @@ export class PassaggioDiFaseComponent implements OnInit {
     });
     
     this.passaggioFaseParams = {
-      currentFaseName :"",
+      currentFaseName : "",
       nextFaseName : "",
       isNextFaseDiChiusura : false
     }
   }
 
   procedi() {
-    if(!this.isOpenedAsPopup){
-      if(!this.iterParams.idIter){
+    if (!this.isOpenedAsPopup) {
+      if (!this.iterParams.idIter) {
         notify({
           message: "Selezionare un iter per poter procedere!",
           type: "warning",
@@ -96,19 +98,19 @@ export class PassaggioDiFaseComponent implements OnInit {
         return;
       }
     }
-
+    console.log(this.iterParams);
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/stepOn", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({},)
       .subscribe(
       res => {
-        notify({message:"Proceduto con successo", type: "success", displayTime: 3000, position:{my:"center", at:"center", of: window}}); 
-        if(!this.isOpenedAsPopup){ 
-          setTimeout(() =>{window.close()}, 4000);
-        }else{
+        notify({message: "Proceduto con successo", type: "success", displayTime: 3000, position: {my: "center", at: "center", of: window}}); 
+        if (!this.isOpenedAsPopup) { 
+          setTimeout(() => { window.close(); }, 4000);
+        } else {
           this.out.emit({ visible: false, proceduto: true });
         }
       },
       err => {
-        if(!this.isOpenedAsPopup){
+        if (!this.isOpenedAsPopup) {
           notify({
             message: "Si è verificato un errore durante il procedi",
             type: "error",
@@ -119,7 +121,7 @@ export class PassaggioDiFaseComponent implements OnInit {
             width: "max-content"
           });
           console.error("Errore:", err);
-        }else{
+        } else {
           this.out.emit({ visible: false, proceduto: false });
           notify({
             message: "Si è verificato un errore durante il procedi",
@@ -146,14 +148,14 @@ export class PassaggioDiFaseComponent implements OnInit {
 
 
 
-  handleAnnulla(e){
+  handleAnnulla(e) {
       this.showPopupAnnullamento = !this.showPopupAnnullamento;
   }
 
-  handleClose(){
-    if(!this.isOpenedAsPopup){
+  handleClose() {
+    if (!this.isOpenedAsPopup) {
       window.close();
-    }else{
+    }else {
       this.showPopupAnnullamento = !this.showPopupAnnullamento;
       this.out.emit({ visible: false, proceduto: false });
     }
@@ -181,6 +183,7 @@ export class IterParams {
   codiceRegistroDocumento: string;
   numeroDocumento: string;
   annoDocumento: number;
+  oggettoDocumento: string;
   notePassaggio: string;
   esito: string;
   motivazioneEsito: string;

@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, SimpleChanges } from "@angular/core";
-import { DxDataGridComponent } from "devextreme-angular";
+import { Component, OnInit, Input, SimpleChanges, ViewChild } from "@angular/core";
+import { DxDataGridComponent, DxTooltipComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition } from "@bds/nt-context";
 import { OdataContextFactory } from "@bds/nt-context";
@@ -14,6 +14,8 @@ export class CronologiaEventiComponent implements OnInit {
 
   private odataContextDefinition: OdataContextDefinition;  
   public dataSourceEventoIter: DataSource;
+  @ViewChild(DxTooltipComponent) tooltip: DxTooltipComponent;
+  public oggettoDocumento: string = "";
 
   // @Input("idIter") idIter: string;
   @Input("daPadre") daPadre: Object;
@@ -46,5 +48,20 @@ export class CronologiaEventiComponent implements OnInit {
             };                
         }
     });
-}
+  }
+
+  onCellPrepared(e) {
+    let self = this;
+
+    if (e.rowType === "data" && e.column.dataField === "idDocumentoIter") {
+      e.cellElement.onmouseover = function () {
+        self.tooltip.instance.option("target", e.cellElement);
+        self.oggettoDocumento = e.row.data.idDocumentoIter.oggetto;
+        self.tooltip.instance.show();
+      };
+      e.cellElement.onmouseout = function () {
+        self.tooltip.instance.hide();
+      };
+    }  
+  }
 }

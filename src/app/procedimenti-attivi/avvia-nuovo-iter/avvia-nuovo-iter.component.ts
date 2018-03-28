@@ -54,6 +54,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams.codiceRegistroDocumento = doc.registro;
     this.iterParams.numeroDocumento = doc.numero;
     this.iterParams.annoDocumento = doc.anno;
+    this.iterParams.oggettoDocumento = doc.oggetto;
     this.iterParams.oggettoIter = doc.oggetto;
     this.iterParams.dataAvvioIter = new Date(doc.dataRegistrazione);
     this.iterParams.dataCreazioneIter = new Date();
@@ -294,6 +295,7 @@ class IterParams {
   public codiceRegistroDocumento: string;
   public numeroDocumento: string;
   public annoDocumento: number;
+  public oggettoDocumento: string;
   public promotoreIter: string;
   public procedimento: Procedimento;
   public titolarePotereSostitutivoDesc: string;

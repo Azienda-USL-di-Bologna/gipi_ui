@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import CustomStore from 'devextreme/data/custom_store';
-import ArrayStore from 'devextreme/data/array_store';
+import CustomStore from "devextreme/data/custom_store";
+import ArrayStore from "devextreme/data/array_store";
 import { GlobalContextService, OdataContextDefinition, OdataContextFactory } from "@bds/nt-context";
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
@@ -62,10 +62,10 @@ export class CambioDiStatoBoxComponent implements OnInit{
     this.dataSourceStati = new DataSource({
       store: oataContextDefinition.getContext()[new Stato().getName()],
     });
-    this.dataSourceStati.load().then(res=> (res.forEach(element => {
+    this.dataSourceStati.load().then(res => (res.forEach(element => {
       this.statiIterService.push(element);
       /* E' stato chiesto di mettere la possibilità di aggiungere un documento anche senza cambiare lo stato: secondo me non è giusto, ma...
-      if(element.id !== this._sospensioneParams.idStatoCorrente)
+      if (element.id !== this._sospensioneParams.idStatoCorrente)
         this.statiIter.push(element); 
       */
       this.statiIter.push(element); // se si decommentano le righe sopra, togliere questa!
@@ -87,6 +87,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
       codiceRegistroDocumento: this._sospensioneParams.codiceRegistroDocumento,
       numeroDocumento: this._sospensioneParams.numeroDocumento,
       annoDocumento: this._sospensioneParams.annoDocumento,
+      oggettoDocumento: this._sospensioneParams.oggettoDocumento,
       note: this._sospensioneParams.note,
       // stato: this.statiIterService[this._sospensioneParams.idStatoProssimo],
       idStato: this._sospensioneParams.idStatoProssimo,
@@ -123,9 +124,9 @@ export class CambioDiStatoBoxComponent implements OnInit{
    }
 
   handleClose() {
-    if(!this._isOpenedAsPopup){
+    if (!this._isOpenedAsPopup) {
       window.close();
-    }else{
+    }else {
       this.showPopupAnnullamento = !this.showPopupAnnullamento;
       this.out.emit({ visible: false });
     }
@@ -135,11 +136,11 @@ export class CambioDiStatoBoxComponent implements OnInit{
     this.showPopupAnnullamento = !this.showPopupAnnullamento;
   }
 
-  handleRiassunto(){
+  handleRiassunto() {
     this.showPopupRiassunto = !this.showPopupRiassunto;
-    if(!this._isOpenedAsPopup){
+    if (!this._isOpenedAsPopup) {
       window.close();
-    }else{
+    }else {
       this.out.emit({ visible: false });
     }
   }
@@ -152,6 +153,7 @@ interface ShippedParams {
   codiceRegistroDocumento: string;
   numeroDocumento: string;
   annoDocumento: number;
+  oggettoDocumento: string;
   note: string;
   idStato: number;
   dataEvento: Date;
