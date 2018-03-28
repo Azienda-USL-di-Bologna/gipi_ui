@@ -64,8 +64,11 @@ export class CambioDiStatoBoxComponent implements OnInit{
     });
     this.dataSourceStati.load().then(res=> (res.forEach(element => {
       this.statiIterService.push(element);
+      /* E' stato chiesto di mettere la possibilità di aggiungere un documento anche senza cambiare lo stato: secondo me non è giusto, ma...
       if(element.id !== this._sospensioneParams.idStatoCorrente)
-        this.statiIter.push(element);
+        this.statiIter.push(element); 
+      */
+      this.statiIter.push(element); // se si decommentano le righe sopra, togliere questa!
     })));
     
 
