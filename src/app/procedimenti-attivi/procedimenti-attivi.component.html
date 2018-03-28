@@ -20,7 +20,7 @@
             <!-- nome: [width]="170" -->
             <!-- tit: [width]="200" -->
             <dxo-selection [mode]="enableSelection" [allowSelectAll]="false"></dxo-selection>
-
+            
             <dxi-column [minWidth]="200" dataField="idStruttura.nome" caption="Struttura" [dataType]="'string'"
                         [allowEditing]="false"
                         alignment="left" cssClass="column" [filterOperations]="['reset', 'contains']"
@@ -29,9 +29,7 @@
                         [dataType]="'string'"
                         [allowEditing]="false" alignment="center" cssClass="column"
                         [filterOperations]="['reset', 'contains']" [selectedFilterOperation]="'contains'"></dxi-column>
-            <dxi-column [minWidth]="50" [width]="80" dataField="completo" caption="Completo" [dataType]="'boolean'"
-                        [allowFiltering]="false" [allowSorting]="false"></dxi-column>
-            <dxi-column [minWidth]="150" dataField="idAziendaTipoProcedimento.idTitolo.nome" [visible]="colonnaVisibile"
+                        <dxi-column [minWidth]="150" dataField="idAziendaTipoProcedimento.idTitolo.nome" [visible]="colonnaVisibile"
                         caption="Classificazione"
                         [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"
                         [filterOperations]="['reset', 'contains']"
@@ -53,7 +51,9 @@
             <dxi-column [width]="80" caption="Dettagli" cellTemplate="buttonActions" alignment="center"
                         [visible]="colonnaVisibile" [filterOperations]="['reset', 'contains']"
                         [selectedFilterOperation]="'contains'"></dxi-column>
-
+            <dxi-column [minWidth]="50" [width]="80" dataField="completo" caption="Completo" [dataType]="'boolean'"
+                        [allowFiltering]="false" [allowSorting]="false"></dxi-column>
+                        
             <div *dxTemplate="let element of 'buttonActions'" cssClass="app-azioni">
                 <dx-button text="" hint="Vai al dettaglio" icon='info'
                            (onClick)="handleEvent('infoOnClick', element)"></dx-button>
