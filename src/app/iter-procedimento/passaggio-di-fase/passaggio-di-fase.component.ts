@@ -65,8 +65,7 @@ export class PassaggioDiFaseComponent implements OnInit {
       this.iterParams.codiceRegistroDocumento = queryParams["registro"];
       this.iterParams.numeroDocumento = queryParams["numero"];
       this.iterParams.annoDocumento = queryParams["anno"];
-      console.log("oggetto", queryParams["oggetto"])
-      this.iterParams.oggettoDocumento = queryParams["oggetto"];
+      this.iterParams.oggettoDocumento = decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " "));
       if (queryParams["dataRegistrazione"]) {
           this.dataIniziale = queryParams["dataRegistrazione"];
       } else {

@@ -51,8 +51,8 @@
             <dxi-column [width]="80" caption="Dettagli" cellTemplate="buttonActions" alignment="center"
                         [visible]="colonnaVisibile" [filterOperations]="['reset', 'contains']"
                         [selectedFilterOperation]="'contains'"></dxi-column>
-            <dxi-column [minWidth]="50" [width]="80" dataField="completo" caption="Completo" [dataType]="'boolean'"
-                        [allowFiltering]="false" [allowSorting]="false"></dxi-column>
+            <!-- <dxi-column [minWidth]="50" [width]="80" dataField="completo" caption="Completo" [dataType]="'boolean'"
+                        [allowFiltering]="false" [allowSorting]="false" visible="false"></dxi-column> -->
                         
             <div *dxTemplate="let element of 'buttonActions'" cssClass="app-azioni">
                 <dx-button text="" hint="Vai al dettaglio" icon='info'

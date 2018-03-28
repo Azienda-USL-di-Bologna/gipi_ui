@@ -44,7 +44,7 @@ export class CambioDiStatoComponent implements OnInit {
       this.sospensioneParams.numeroDocumento = queryParams["numero"];
       this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
       this.sospensioneParams.dataRegistrazioneDocumento = queryParams["dataRegistrazione"];
-      this.sospensioneParams.oggettoDocumento = queryParams["oggetto"];
+      this.sospensioneParams.oggettoDocumento = decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " "));
       const noBars: boolean = queryParams["nobars"];
     });
   }
