@@ -109,7 +109,7 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
         this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
-        this.sidebarItems.push(new SidebarItem("Iter di procedimento", "app-lista-iter"));
+        this.sidebarItems.push(new SidebarItem("Elenco iter", "app-lista-iter"));
         // this.sidebarItems.push(new SidebarItem("Test", "", this.sidebarItems2));
     }
 

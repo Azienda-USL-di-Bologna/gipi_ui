@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Utente, bUtente, bAzienda, Procedimento, GetUtentiGerarchiaStruttura, Persona, Struttura } from "@bds/nt-entities";
+import { Utente, bUtente, bAzienda, Procedimento, GetUtentiGerarchiaStruttura, Persona, Struttura, UtenteStruttura } from "@bds/nt-entities";
 import { OdataContextFactory } from "@bds/nt-context";
 import { OdataContextDefinition } from "@bds/nt-context";
 import { CustomLoadingFilterParams } from "@bds/nt-context";
@@ -22,9 +22,11 @@ import {OdataUtilities} from "@bds/nt-context";
 export class AvviaNuovoIterComponent implements OnInit {
 
   private odataContextDefinitionFunctionImport: OdataContextDefinition;
-  
+  private odataContextDefinition: OdataContextDefinition;
+
   public avviaIterDaDocumento: boolean;
   public dataSourceUtenti: DataSource;
+  public dataSourceUtenteLoggato: DataSource;
   public iterParams: IterParams = new IterParams();
   public nomeProcedimento: string;
   public dataMassimaConclusione: Date;
@@ -67,6 +69,7 @@ export class AvviaNuovoIterComponent implements OnInit {
               private globalContextService: GlobalContextService, private odataUtilities: OdataUtilities) {
     console.log("avvia-nuovo-iter (constructor)");
     this.odataContextDefinitionFunctionImport = this.odataContextFactory.buildOdataFunctionsImportDefinition();
+    this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.getInfoSessionStorage();
     this.setUtenteResponsabile = this.setUtenteResponsabile.bind(this);
     this.reloadResponsabile = this.reloadResponsabile.bind(this);
@@ -97,6 +100,12 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   private buildDataSourceUtenti(idStruttura: number): void {
+    /*
+      Il caricamento del datasource per la lookup ha un problema. E' paginato. 
+      Se l'utente loggato, che deve essere impostato come utente default, non è presente nella prima tranche di dati
+      che il datasource tira su, allora non si riuscirà ad impostare l'utente default.
+      Il workaraound consiste nel caricare l'utente loggato ed aggiungerlo qualora non fosse già presente.
+    */
     this.dataSourceUtenti = new DataSource({
       store: this.odataContextDefinitionFunctionImport.getContext()[new GetUtentiGerarchiaStruttura().getName()]
       .on("loading", (loadOptions) => {
@@ -113,17 +122,40 @@ export class AvviaNuovoIterComponent implements OnInit {
       ]
     });
 
-    this.dataSourceUtenti.load().then(res => {
-      for (let e of res) {
-        if (e.idUtente.id === this.loggedUser.getField(bUtente.id) && e.idStruttura.id === this.iterParams.procedimento.idStruttura.id) {
-          this.idUtenteDefault = e.id;
-          this.iterParams.idUtenteResponsabile = this.loggedUser.getField(bUtente.id);
-          this.descrizioneUtenteResponsabile = e.idUtente.idPersona.descrizione 
-            + " (" + e.idStruttura.nome
-            + " - " + e.idAfferenzaStruttura.descrizione + ")";
-          break;
+    this.dataSourceUtenteLoggato = new DataSource({
+      store: this.odataContextDefinition.getContext()[new UtenteStruttura().getName()],
+      expand: [
+        "idUtente.idPersona", 
+        "idStruttura", 
+        "idAfferenzaStruttura"
+      ],
+      filter: [
+        ["idUtente.id", "=", this.loggedUser.getField(bUtente.id)],
+        ["idStruttura.id", "=", idStruttura]
+      ]
+    });
+
+    // Ora faccio le load dell'utente loggato, e quando ce l'ho faccio la load del datasource.
+    // A quel punto a seconda che ci sia o meno aggiungo l'utente loggato al datasource
+    this.dataSourceUtenteLoggato.load().then(re => {
+      let usLogged = re[0];
+      this.dataSourceUtenti.load().then(res => {
+        let ciSonoGià = false;
+        for (let e of res) {
+          if (e.idUtente.id === this.loggedUser.getField(bUtente.id) && e.idStruttura.id === this.iterParams.procedimento.idStruttura.id) {
+            ciSonoGià = true;
+            break;
+          }
         }
-      }
+        if (!ciSonoGià) {
+          res.push(usLogged);
+        }
+        this.idUtenteDefault = re[0].id;
+        this.iterParams.idUtenteResponsabile = this.loggedUser.getField(bUtente.id);
+        this.descrizioneUtenteResponsabile = re[0].idUtente.idPersona.descrizione 
+          + " (" + re[0].idStruttura.nome
+          + " - " + re[0].idAfferenzaStruttura.descrizione + ")";
+      });
     });
   }
 
