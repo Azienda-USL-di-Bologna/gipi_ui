@@ -44,7 +44,11 @@ export class ListaIterComponent implements OnInit {
   );
     this.dataSource = new DataSource({
       store: this.odataContextDefinition.getContext()[new Iter().getName()],
-      expand: ["idResponsabileProcedimento.idPersona", "idStato"],
+      expand: [
+        "idResponsabileProcedimento.idPersona", 
+        "idStato",
+        "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento"
+      ],
       filter: ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id", "=", this.idAzienda]
     });
   }
