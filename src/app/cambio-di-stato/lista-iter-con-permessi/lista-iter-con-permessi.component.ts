@@ -54,7 +54,7 @@ export class ListaIterConPermessiComponent implements OnInit {
         codiceRegistro: this.doc.codiceRegistro,
         numeroDocumento: this.doc.numeroDocumento,
         annoDocumento: this.doc.annoDocumento,
-        nonChiusi: true
+        stato: ""
       },
       expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona", "idFaseCorrente", "idStato"]
     });
