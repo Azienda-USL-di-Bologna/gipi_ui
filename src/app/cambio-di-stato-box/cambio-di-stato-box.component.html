@@ -19,13 +19,14 @@
   </dxi-item>  
 
     <dxi-item itemType="group">
-      <dxi-item dataField="idStatoCorrente" [label]="{text: 'Stato corrente'}" editorType="dxLookup"  [editorOptions]="{ disabled: true,
+      <dxi-item dataField="codiceStatoCorrente" [label]="{text: 'Stato corrente'}" editorType="dxLookup"  [editorOptions]="{ disabled: true,
         dataSource: dataSourceStati,
         displayExpr: 'descrizione',
-        displayValue: 'descrizione' }">
+        displayValue: 'codice',
+        valueExpr: 'codice' }">
           <dxi-validation-rule type="required" message="Occorre prima selezionare un Iter dalla lista soprastante"></dxi-validation-rule>    
       </dxi-item>
-      <dxi-item dataField="idStatoProssimo" [label]="{text: 'Prossimo stato'}" editorType="dxLookup" [editorOptions]="{ 
+      <dxi-item dataField="codiceStatoProssimo" [label]="{text: 'Prossimo stato'}" editorType="dxLookup" [editorOptions]="{ 
         items: statiIter,
         selectionMode: 'single',
         showPopupTitle: false,
@@ -34,7 +35,7 @@
         placeholder: 'Seleziona il prossimo stato',
         displayExpr: 'descrizione',
         searchEnabled: false, 
-        valueExpr: 'id'}" 
+        valueExpr: 'codice'}" 
         ngClass= "width100">
           <dxi-validation-rule type="required" message="Lo stato prossimo è obbligatorio"></dxi-validation-rule>
       </dxi-item>
@@ -42,8 +43,8 @@
         <dxi-validation-rule type="required" message="La data di cambio di stato è obbligatoria"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="note" editorType="dxTextArea" [label]="{text: 'Note'}" [editorOptions]="{ disabled: false }"></dxi-item>
-      <dxi-item *ngIf="_sospensioneParams.idStatoProssimo===3" dataField="esito" editorType="dxTextArea" [label]="{text: 'Esito'}" [editorOptions]="{ disabled: false }"></dxi-item>
-      <dxi-item *ngIf="_sospensioneParams.idStatoProssimo===3" dataField="esitoMotivazione" editorType="dxTextArea" [label]="{text: 'Motivazione'}" [editorOptions]="{ disabled: false }"></dxi-item>
+      <dxi-item *ngIf="_sospensioneParams.codiceStatoProssimo === 'CHIUSO'" dataField="esito" editorType="dxTextArea" [label]="{text: 'Esito'}" [editorOptions]="{ disabled: false }"></dxi-item>
+      <dxi-item *ngIf="_sospensioneParams.codiceStatoProssimo === 'CHIUSO'" dataField="esitoMotivazione" editorType="dxTextArea" [label]="{text: 'Motivazione'}" [editorOptions]="{ disabled: false }"></dxi-item>
     </dxi-item>
   </dx-form>
 
@@ -92,20 +93,20 @@
         <dxi-item dataField="annoIter" >
             <dxo-label text="Anno"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="idStatoCorrente" editorType="dxLookup" [editorOptions]="{ disabled: true,
+        <dxi-item dataField="codiceStatoCorrente" editorType="dxLookup" [editorOptions]="{ disabled: true,
           dataSource: dataSourceStati,
-          displayExpr: 'descrizione',
+          displayExpr: 'codice',
           displayValue: 'descrizione' }">
         </dxi-item>
         <dxi-item dataField="idStatoProssimo" editorType="dxLookup" [editorOptions]="{ disabled: true,
           dataSource: dataSourceStati,
-          displayExpr: 'descrizione',
+          displayExpr: 'codice',
           displayValue: 'descrizione' }">
         </dxi-item>
         <dxi-item dataField="dataCambioDiStato" editorType="dxDateBox" [editorOptions]="{ displayFormat: 'dd/MM/yyyy' }"></dxi-item>
         <dxi-item dataField="note" editorType="dxTextArea"></dxi-item>
-        <dxi-item *ngIf="_sospensioneParams.idStatoProssimo===3" dataField="esito" editorType="dxTextArea" [label]="{text: 'Esito'}" [editorOptions]="{ disabled: false }"></dxi-item>
-        <dxi-item *ngIf="_sospensioneParams.idStatoProssimo===3" dataField="esitoMotivazione" editorType="dxTextArea" [label]="{text: 'Motivazione'}" [editorOptions]="{ disabled: false }"></dxi-item>
+        <dxi-item *ngIf="_sospensioneParams.idStatoProssimo === 'CHIUSO'" dataField="esito" editorType="dxTextArea" [label]="{text: 'Esito'}" [editorOptions]="{ disabled: false }"></dxi-item>
+        <dxi-item *ngIf="_sospensioneParams.idStatoProssimo === 'CHIUSO'" dataField="esitoMotivazione" editorType="dxTextArea" [label]="{text: 'Motivazione'}" [editorOptions]="{ disabled: false }"></dxi-item>
       </dx-form>
       <div class="text-center">
           <dx-button class="d-inline-block" text="Chiudi" (click)="handleRiassunto($event)"></dx-button>

@@ -13,6 +13,7 @@ import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stat
 import { LoggedUser } from "@bds/nt-login";
 import { Observable, Subscription } from "rxjs";
 import { HttpHeaders } from "@angular/common/http";
+import { CODICE_STATI } from "@bds/nt-entities/client-objects/constants/stati-iter";
 
 
 
@@ -142,7 +143,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   isSospeso() {
-    if (this.iter.idStato.id === 2) // 2 --> SOSPESO
+    if (this.iter.idStato.codice === CODICE_STATI.SOSPESO) // 2 --> SOSPESO
       return true;
     else
       return false;
@@ -160,15 +161,15 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   disableProcedi() {
-    return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.id === 3;
+    return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === CODICE_STATI.CHIUSO;
   }
 
   disableSospendi() {
-    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.id === 3;
+    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === CODICE_STATI.CHIUSO;
   }
 
   inSolaLettura() {
-    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.id === 3;
+    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === CODICE_STATI.CHIUSO;
   }
 
   /* 
@@ -264,7 +265,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.paramsPerSospensione = {
       iter: this.iter,
       stato: this.iter.idStato,
-      dataSospensione: this.iter.idStato.id === 2 ? this.getDataUltimaSospensione() : null
+      dataSospensione: this.iter.idStato.codice === CODICE_STATI.SOSPESO ? this.getDataUltimaSospensione() : null
     };
   }
 
@@ -273,7 +274,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.sospensioneParams.idIter = this.idIter;
     this.sospensioneParams.numeroIter = this.iter.numero;
     this.sospensioneParams.annoIter = this.iter.anno;
-    this.sospensioneParams.idStatoCorrente = this.iter.idStato.id;
+    this.sospensioneParams.codiceStatoCorrente = this.iter.idStato.codice;
     this.popupData.title = "Cambia stato iter";
     this.sospensioneIterVisible = true;
   }

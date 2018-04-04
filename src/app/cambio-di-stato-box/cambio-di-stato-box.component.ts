@@ -9,6 +9,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
 import { Stato } from "@bds/nt-entities";
+import { CODICE_STATI } from "@bds/nt-entities/client-objects/constants/stati-iter";
 
 @Component({
   selector: "app-cambio-di-stato-box",
@@ -53,6 +54,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
     private activatedRoute: ActivatedRoute,
     private globalContextService: GlobalContextService
   ) { 
+    console.log("costanti: ", CODICE_STATI);
     /* this.statiIterService[this.statiIter[0]] = "iter_in_corso";
     this.statiIterService[this.statiIter[1]] = "apertura_sospensione";
     this.statiIterService[this.statiIter[2]] = "chiusura_iter"; */
@@ -79,7 +81,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
 
    handleSubmit(e) {
      e.preventDefault();
-    if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.idStatoCorrente) {return; }
+    if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.codiceStatoCorrente) {return; }
     
     let shippedParams: ShippedParams = {
       idIter : this._sospensioneParams.idIter,
@@ -90,7 +92,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
       oggettoDocumento: this._sospensioneParams.oggettoDocumento,
       note: this._sospensioneParams.note,
       // stato: this.statiIterService[this._sospensioneParams.idStatoProssimo],
-      idStato: this._sospensioneParams.idStatoProssimo,
+      codiceStato: this._sospensioneParams.codiceStatoProssimo,
       dataEvento: this._sospensioneParams.dataCambioDiStato,
       esito: this._sospensioneParams.esito,
       esitoMotivazione: this._sospensioneParams.esitoMotivazione
@@ -155,7 +157,7 @@ interface ShippedParams {
   annoDocumento: number;
   oggettoDocumento: string;
   note: string;
-  idStato: number;
+  codiceStato: string;
   dataEvento: Date;
   esito: string;
   esitoMotivazione: string;

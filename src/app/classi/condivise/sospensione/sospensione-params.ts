@@ -9,8 +9,8 @@ export class SospensioneParams {
     public oggettoDocumento: string;
     public dataRegistrazioneDocumento: Date;
     public note: string;
-    public idStatoCorrente: number;
-    public idStatoProssimo: number;
+    public codiceStatoCorrente: string;
+    public codiceStatoProssimo: string;
     public dataCambioDiStato: Date;
     public isFaseDiChiusura: boolean;
     public esito: string;
