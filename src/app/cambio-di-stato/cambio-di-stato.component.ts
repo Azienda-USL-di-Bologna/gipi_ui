@@ -8,7 +8,9 @@ import { Observable, Subscription } from "rxjs";
 import { bUtente, bAzienda } from "@bds/nt-entities";
 import notify from "devextreme/ui/notify";
 import {AppConfiguration} from "../config/app-configuration";
-import { CODICE_STATI } from "@bds/nt-entities/client-objects/constants/stati-iter";
+import {  IN_CORSO_CODICE,
+          SOSPESO_CODICE,
+          CHIUSO_CODICE } from "@bds/nt-entities/client-objects/constants/stati-iter"
 
 @Component({
   selector: "app-cambio-di-stato",
@@ -76,7 +78,7 @@ export class CambioDiStatoComponent implements OnInit {
     this.sospensioneParams.idIter = e.id;
     this.sospensioneParams.codiceStatoCorrente = e.idStato.codice;
     this.sospensioneParams.isFaseDiChiusura = e.idFaseCorrente.faseDiChiusura;
-    if ((this.sospensioneParams.codiceStatoCorrente === CODICE_STATI.SOSPESO) && this.lookupItems.length !== 1) {
+    if ((this.sospensioneParams.codiceStatoCorrente === SOSPESO_CODICE) && this.lookupItems.length !== 1) {
       this.lookupItems = ["Cambio di stato"];
       this.lookupValue = "Cambio di stato";
     }else if (this.lookupItems.length === 1) {
@@ -86,7 +88,7 @@ export class CambioDiStatoComponent implements OnInit {
 
   lookupValueChanged(e) {
     this.lookupValue = e.value;
-    if ((e.value === "Passaggio di fase" || e.value === "Cambio di stato") && (this.sospensioneParams.codiceStatoCorrente === CODICE_STATI.CHIUSO || this.sospensioneParams.isFaseDiChiusura)) {
+    if ((e.value === "Passaggio di fase" || e.value === "Cambio di stato") && (this.sospensioneParams.codiceStatoCorrente === CHIUSO_CODICE || this.sospensioneParams.isFaseDiChiusura)) {
       notify({
         message: "Il procedimento è già nell'ultima fase prevista: Fase di chiusura.",
         type: "warning",

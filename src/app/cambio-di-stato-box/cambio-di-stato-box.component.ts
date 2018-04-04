@@ -9,7 +9,9 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
 import { Stato } from "@bds/nt-entities";
-import { CODICE_STATI } from "@bds/nt-entities/client-objects/constants/stati-iter";
+import {  IN_CORSO_CODICE,
+  SOSPESO_CODICE,
+  CHIUSO_CODICE } from "@bds/nt-entities/client-objects/constants/stati-iter"
 
 @Component({
   selector: "app-cambio-di-stato-box",
@@ -54,7 +56,6 @@ export class CambioDiStatoBoxComponent implements OnInit{
     private activatedRoute: ActivatedRoute,
     private globalContextService: GlobalContextService
   ) { 
-    console.log("costanti: ", CODICE_STATI);
     /* this.statiIterService[this.statiIter[0]] = "iter_in_corso";
     this.statiIterService[this.statiIter[1]] = "apertura_sospensione";
     this.statiIterService[this.statiIter[2]] = "chiusura_iter"; */
