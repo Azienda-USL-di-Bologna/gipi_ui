@@ -14,9 +14,7 @@ import { LoggedUser } from "@bds/nt-login";
 import { Observable, Subscription } from "rxjs";
 import { HttpHeaders } from "@angular/common/http";
 // import { CODICE_STATI } from "@bds/nt-entities/client-objects/constants/stati-iter";
-import {  IN_CORSO_CODICE,
-          SOSPESO_CODICE,
-          CHIUSO_CODICE } from "@bds/nt-entities/client-objects/constants/stati-iter"
+import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter"
 
 
 
@@ -146,7 +144,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   isSospeso() {
-    if (this.iter.idStato.codice === SOSPESO_CODICE) // 2 --> SOSPESO
+    if (this.iter.idStato.codice === STATI.SOSPESO.CODICE) // 2 --> SOSPESO
       return true;
     else
       return false;
@@ -164,15 +162,15 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   disableProcedi() {
-    return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === CHIUSO_CODICE;
+    return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO.CODICE;
   }
 
   disableSospendi() {
-    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === CHIUSO_CODICE;
+    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO.CODICE;
   }
 
   inSolaLettura() {
-    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === CHIUSO_CODICE;
+    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO.CODICE;
   }
 
   /* 
@@ -268,7 +266,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.paramsPerSospensione = {
       iter: this.iter,
       stato: this.iter.idStato,
-      dataSospensione: this.iter.idStato.codice === SOSPESO_CODICE ? this.getDataUltimaSospensione() : null
+      dataSospensione: this.iter.idStato.codice === STATI.SOSPESO.CODICE ? this.getDataUltimaSospensione() : null
     };
   }
 

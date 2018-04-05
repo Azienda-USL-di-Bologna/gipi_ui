@@ -9,9 +9,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
 import { Stato } from "@bds/nt-entities";
-import {  IN_CORSO_CODICE,
-  SOSPESO_CODICE,
-  CHIUSO_CODICE } from "@bds/nt-entities/client-objects/constants/stati-iter"
+import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter"
 
 @Component({
   selector: "app-cambio-di-stato-box",
