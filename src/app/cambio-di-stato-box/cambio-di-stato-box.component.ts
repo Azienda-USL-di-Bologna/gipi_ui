@@ -20,7 +20,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
 
   public _sospensioneParams: SospensioneParams;  
   
-  public statiIter: any[] = new Array();    // string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
+  public statiIter: string[];    // string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
   public _isOpenedAsPopup: boolean;
   public statiIterService: any[] = new Array();
   public _userInfo: UserInfo;
@@ -53,30 +53,28 @@ export class CambioDiStatoBoxComponent implements OnInit{
     private http: HttpClient, 
     private activatedRoute: ActivatedRoute,
     private globalContextService: GlobalContextService
-  ) { 
-    /* this.statiIterService[this.statiIter[0]] = "iter_in_corso";
-    this.statiIterService[this.statiIter[1]] = "apertura_sospensione";
-    this.statiIterService[this.statiIter[2]] = "chiusura_iter"; */
+  ) {
 
     // bisogna fare il datasource per la lookup dello stato
     const oataContextDefinition: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.dataSourceStati = new DataSource({
       store: oataContextDefinition.getContext()[new Stato().getName()],
     });
-    this.dataSourceStati.load().then(res => (res.forEach(element => {
+    this.statiIter = new Array();
+    this.dataSourceStati.load().then(res => {res.forEach(element => {
       this.statiIterService.push(element);
       /* E' stato chiesto di mettere la possibilità di aggiungere un documento anche senza cambiare lo stato: secondo me non è giusto, ma...
       if (element.id !== this._sospensioneParams.idStatoCorrente)
         this.statiIter.push(element); 
       */
       this.statiIter.push(element); // se si decommentano le righe sopra, togliere questa!
-    })));
+      // this.statiIter[element.codice] = element;
+    })});
     
 
   }
 
   ngOnInit() {}
-
 
    handleSubmit(e) {
      e.preventDefault();
@@ -94,7 +92,8 @@ export class CambioDiStatoBoxComponent implements OnInit{
       codiceStato: this._sospensioneParams.codiceStatoProssimo,
       dataEvento: this._sospensioneParams.dataCambioDiStato,
       esito: this._sospensioneParams.esito,
-      esitoMotivazione: this._sospensioneParams.esitoMotivazione
+      esitoMotivazione: this._sospensioneParams.esitoMotivazione,
+      idOggettoOrigine: this._sospensioneParams.idOggettoOrigine
     };
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
     .subscribe(
@@ -160,6 +159,7 @@ interface ShippedParams {
   dataEvento: Date;
   esito: string;
   esitoMotivazione: string;
+  idOggettoOrigine: string;
 }
 
 interface UserInfo{

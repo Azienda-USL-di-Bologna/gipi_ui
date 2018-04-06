@@ -46,6 +46,9 @@ export class CambioDiStatoComponent implements OnInit {
       this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
       this.sospensioneParams.dataRegistrazioneDocumento = queryParams["dataRegistrazione"];
       this.sospensioneParams.oggettoDocumento = decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " "));
+      this.sospensioneParams.azione = queryParams["azione"] ? queryParams["azione"].toLowerCase() : undefined;
+      this.sospensioneParams.codiceStatoProssimo = queryParams["stato"].toUpperCase();
+      this.sospensioneParams.idOggettoOrigine = queryParams["idOggettoOrigine"];
       const noBars: boolean = queryParams["nobars"];
     });
   }
@@ -76,12 +79,13 @@ export class CambioDiStatoComponent implements OnInit {
     this.sospensioneParams.idIter = e.id;
     this.sospensioneParams.codiceStatoCorrente = e.idStato.codice;
     this.sospensioneParams.isFaseDiChiusura = e.idFaseCorrente.faseDiChiusura;
-    if ((this.sospensioneParams.codiceStatoCorrente === STATI.SOSPESO.CODICE) && this.lookupItems.length !== 1) {
-      this.lookupItems = ["Cambio di stato"];
-      this.lookupValue = "Cambio di stato";
-    }else if (this.lookupItems.length === 1) {
-      this.lookupItems = ["Cambio di stato", "Passaggio di fase"];
-    }
+    console.log("Father sospensione params: ", this.sospensioneParams)
+    // if ((this.sospensioneParams.codiceStatoCorrente === STATI.SOSPESO.CODICE) && this.lookupItems.length !== 1) {
+    //   this.lookupItems = ["Cambio di stato"];
+    //   this.lookupValue = "Cambio di stato";
+    // }else if (this.lookupItems.length === 1) {
+    //   this.lookupItems = ["Cambio di stato", "Passaggio di fase"];
+    // }
   }
 
   lookupValueChanged(e) {

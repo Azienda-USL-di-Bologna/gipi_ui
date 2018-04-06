@@ -15,4 +15,6 @@ export class SospensioneParams {
     public isFaseDiChiusura: boolean;
     public esito: string;
     public esitoMotivazione: string;
+    public azione: string; // Passaggio di fase o Cambio di stato
+    public idOggettoOrigine: string;
   }
