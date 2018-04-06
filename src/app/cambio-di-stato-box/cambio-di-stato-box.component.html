@@ -54,7 +54,20 @@
         <dxi-validation-rule type="required" message="La data di cambio di stato è obbligatoria"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="note" editorType="dxTextArea" [label]="{text: 'Note'}" [editorOptions]="{ disabled: false }"></dxi-item>
-      <dxi-item *ngIf="_sospensioneParams.codiceStatoProssimo === 'CHIUSO'" dataField="esito" editorType="dxTextArea" [label]="{text: 'Esito'}" [editorOptions]="{ disabled: false }"></dxi-item>
+      <dxi-item *ngIf="_sospensioneParams.codiceStatoProssimo === 'CHIUSO'" dataField="esito" editorType="dxLookup" [label]="{text: 'Esito'}" [editorOptions]="{ 
+        disabled: false,
+        items: arrayEsiti,
+        displayExpr: 'descrizione',
+        displayValue: 'codice',
+        valueExpr: 'codice',
+        selectionMode: 'single',
+        showPopupTitle: false,
+        closeOnOutsideClick: true,
+        showCancelButton: false,
+        placeholder: 'Seleziona esito',
+        searchEnabled: false
+      }">
+    </dxi-item>
       <dxi-item *ngIf="_sospensioneParams.codiceStatoProssimo === 'CHIUSO'" dataField="esitoMotivazione" editorType="dxTextArea" [label]="{text: 'Motivazione'}" [editorOptions]="{ disabled: false }"></dxi-item>
     </dxi-item>
   </dx-form>

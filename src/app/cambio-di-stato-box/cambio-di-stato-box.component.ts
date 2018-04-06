@@ -28,6 +28,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
   public showPopupAnnullamento: boolean = false;
   public dataSourceStati: DataSource;
   public dataIniziale: Date;
+  public arrayEsiti : any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione":ESITI[key]}});
 
   @Output() out = new EventEmitter<any>();
 
@@ -54,7 +55,6 @@ export class CambioDiStatoBoxComponent implements OnInit{
     private activatedRoute: ActivatedRoute,
     private globalContextService: GlobalContextService
   ) {
-
     // bisogna fare il datasource per la lookup dello stato
     const oataContextDefinition: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.dataSourceStati = new DataSource({
@@ -166,4 +166,9 @@ interface UserInfo{
   idUtente: number;
   cf: string;
   idAzienda: number;
+}
+const ESITI = {
+  ACCOLTO: "Accolto",
+  RIFIUTO_TOTALE: "Rifiuto totale",
+  RIFIUTO_PARZIALE: "Rifiuto parziale"
 }
