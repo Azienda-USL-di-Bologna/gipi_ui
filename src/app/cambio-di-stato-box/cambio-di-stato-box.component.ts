@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import CustomStore from "devextreme/data/custom_store";
 import ArrayStore from "devextreme/data/array_store";
@@ -9,7 +9,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
 import { Stato } from "@bds/nt-entities";
-import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter"
+import { STATI } from "@bds/nt-entities/client-objects/constants/stati-iter";
 
 @Component({
   selector: "app-cambio-di-stato-box",
@@ -79,61 +79,60 @@ export class CambioDiStatoBoxComponent implements OnInit {
     });
     /* Esplicita il bind della callback del widget sul componente
     * per dare alla procedura lo scope alle variabili e metodi del componente */
-    /* this.validaData = this.validaData.bind(this); */
     this.reimpostaDataIniziale = this.reimpostaDataIniziale.bind(this);
   }
 
   ngOnInit() { }
 
-   handleSubmit(e) {
-    // e.preventDefault(); // Con l'evento onClick non dovrebbe essere necessaria
-    if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.codiceStatoCorrente) {return; }
+  handleSubmit(e) {
+  // e.preventDefault(); // Con l'evento onClick non dovrebbe essere necessaria
+  if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.codiceStatoCorrente) {return; }
+  
+  const result = e.validationGroup.validate(); 
+  if (!result.isValid) { return; }
     
-    const result = e.validationGroup.validate(); 
-    if (!result.isValid) { return; }
-     
-    let shippedParams: ShippedParams = {
-      idIter : this._sospensioneParams.idIter,
-      idUtente : this._userInfo.idUtente,
-      codiceRegistroDocumento: this._sospensioneParams.codiceRegistroDocumento,
-      numeroDocumento: this._sospensioneParams.numeroDocumento,
-      annoDocumento: this._sospensioneParams.annoDocumento,
-      oggettoDocumento: this._sospensioneParams.oggettoDocumento,
-      note: this._sospensioneParams.note,
-      // stato: this.statiIterService[this._sospensioneParams.idStatoProssimo],
-      codiceStato: this._sospensioneParams.codiceStatoProssimo,
-      dataEvento: this._sospensioneParams.dataCambioDiStato,
-      esito: this._sospensioneParams.esito,
-      esitoMotivazione: this._sospensioneParams.esitoMotivazione,
-      idOggettoOrigine: this._sospensioneParams.idOggettoOrigine
-    };
-    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
-    .subscribe(
-      res => {
-        notify({
-          message: "Salvataggio effettuato con successo!",
-          type: "success",
-          displayTime: 2100,
-          position: {
-            my: "center", at: "center", of: window
-          },
-          width: "max-content"
-        });
-        this.showPopupRiassunto = true;
-      },
-      err => {
-        notify({
-          message: "Errore durante il salvataggio!",
-          type: "error",
-          displayTime: 2100,
-          position: {
-            my: "center", at: "center", of: window
-          },
-          width: "max-content"
-        });
-      }
-    );
-   }
+  let shippedParams: ShippedParams = {
+    idIter : this._sospensioneParams.idIter,
+    idUtente : this._userInfo.idUtente,
+    codiceRegistroDocumento: this._sospensioneParams.codiceRegistroDocumento,
+    numeroDocumento: this._sospensioneParams.numeroDocumento,
+    annoDocumento: this._sospensioneParams.annoDocumento,
+    oggettoDocumento: this._sospensioneParams.oggettoDocumento,
+    note: this._sospensioneParams.note,
+    // stato: this.statiIterService[this._sospensioneParams.idStatoProssimo],
+    codiceStato: this._sospensioneParams.codiceStatoProssimo,
+    dataEvento: this._sospensioneParams.dataCambioDiStato,
+    esito: this._sospensioneParams.esito,
+    esitoMotivazione: this._sospensioneParams.esitoMotivazione,
+    idOggettoOrigine: this._sospensioneParams.idOggettoOrigine
+  };
+  const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
+  .subscribe(
+    res => {
+      notify({
+        message: "Salvataggio effettuato con successo!",
+        type: "success",
+        displayTime: 2100,
+        position: {
+          my: "center", at: "center", of: window
+        },
+        width: "max-content"
+      });
+      this.showPopupRiassunto = true;
+    },
+    err => {
+      notify({
+        message: "Errore durante il salvataggio!",
+        type: "error",
+        displayTime: 2100,
+        position: {
+          my: "center", at: "center", of: window
+        },
+        width: "max-content"
+      });
+    }
+  );
+  }
 
   handleClose() {
     if (!this._isOpenedAsPopup) {
@@ -156,10 +155,6 @@ export class CambioDiStatoBoxComponent implements OnInit {
       this.out.emit({ visible: false });
     }
   }
-
-  /* validaData(dataAvvio: any): boolean {
-    return dataAvvio.value < this._sospensioneParams.dataAvvioIter ? false : true;
-  } */
 
   reimpostaDataIniziale(e: any) { 
     this.dataIniziale = e.component._options.value;
