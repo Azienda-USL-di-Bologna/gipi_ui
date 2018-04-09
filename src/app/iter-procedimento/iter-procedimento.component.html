@@ -62,13 +62,13 @@
                 </dxi-item>
 
                 <dxi-item itemType="group" [colCount]="1" caption="Dati temporali">
-                    <dxi-item dataField="dataAvvio" editorType="dxDateBox" [editorOptions]="{ disabled: true }"></dxi-item>
+                    <dxi-item dataField="dataAvvio" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
 
-                    <dxi-item dataField="dataChiusuraPrevista" editorType="dxDateBox" [editorOptions]="{ disabled: true }">
+                    <dxi-item dataField="dataChiusuraPrevista" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }">
                         <dxo-label text="Data chiusura prevista"></dxo-label>
                     </dxi-item>
 
-                    <dxi-item dataField="dataChiusura" editorType="dxDateBox" [editorOptions]="{ disabled: true }"></dxi-item>
+                    <dxi-item dataField="dataChiusura" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
 
                     <dxi-item dataField="derogaSospensione" [editorOptions]="{ disabled: true }"></dxi-item>
 
