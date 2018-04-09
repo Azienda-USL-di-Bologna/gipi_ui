@@ -129,8 +129,8 @@
         </dxi-item>
         <dxi-item dataField="dataCambioDiStato" editorType="dxDateBox" [editorOptions]="{ displayFormat: 'dd/MM/yyyy' }"></dxi-item>
         <dxi-item dataField="note" editorType="dxTextArea"></dxi-item>
-        <dxi-item *ngIf="_sospensioneParams.idStatoProssimo === 'CHIUSO'" dataField="esito" editorType="dxTextArea" [label]="{text: 'Esito'}" [editorOptions]="{ disabled: false }"></dxi-item>
-        <dxi-item *ngIf="_sospensioneParams.idStatoProssimo === 'CHIUSO'" dataField="esitoMotivazione" editorType="dxTextArea" [label]="{text: 'Motivazione'}" [editorOptions]="{ disabled: false }"></dxi-item>
+        <dxi-item *ngIf="_sospensioneParams.codiceStatoProssimo === 'CHIUSO'" dataField="esito" editorType="dxTextArea" [label]="{text: 'Esito'}" [editorOptions]="{ disabled: false }"></dxi-item>
+        <dxi-item *ngIf="_sospensioneParams.codiceStatoProssimo === 'CHIUSO'" dataField="esitoMotivazione" editorType="dxTextArea" [label]="{text: 'Motivazione'}" [editorOptions]="{ disabled: false }"></dxi-item>
       </dx-form>
       <div class="text-center">
           <dx-button class="d-inline-block" text="Chiudi" (click)="handleRiassunto($event)"></dx-button>

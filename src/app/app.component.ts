@@ -12,7 +12,7 @@ import { LoggedUser } from "@bds/nt-login";
 import * as $ from "jquery";
 import * as deLocalization from "devextreme/localization";
 import {AppConfiguration} from "./config/app-configuration";
-import {SospensioneParams} from "./classi/condivise/sospensione/sospensione-params";
+import {CambioDiStatoParams} from "./classi/condivise/sospensione/gestione-stato-params";
 
 
 @Component({
