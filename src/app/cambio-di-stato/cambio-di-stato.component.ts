@@ -71,7 +71,9 @@ export class CambioDiStatoComponent implements OnInit {
   }
 
   selectedRowChanged(e) {
-    
+    let cloneSospensione = new SospensioneParams();
+    Object.assign(cloneSospensione, this.sospensioneParams);
+    this.sospensioneParams = cloneSospensione;
     this.selectedIter = "Iter selezionato: " + e.numero + "/" + e.anno;
     this.lookupValue = null;
     this.sospensioneParams.numeroIter = e.numero;

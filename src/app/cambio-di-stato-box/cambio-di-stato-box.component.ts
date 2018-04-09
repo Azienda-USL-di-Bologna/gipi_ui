@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import CustomStore from "devextreme/data/custom_store";
 import ArrayStore from "devextreme/data/array_store";
@@ -16,10 +16,11 @@ import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter"
   templateUrl: "./cambio-di-stato-box.component.html",
   styleUrls: ["./cambio-di-stato-box.component.scss"]
 })
-export class CambioDiStatoBoxComponent implements OnInit{
+export class CambioDiStatoBoxComponent implements OnInit {
 
   public _sospensioneParams: SospensioneParams;  
   
+  public dataMinimaValida: Date;
   public statiIter: string[];    // string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
   public _isOpenedAsPopup: boolean;
   public statiIterService: any[] = new Array();
@@ -38,16 +39,20 @@ export class CambioDiStatoBoxComponent implements OnInit{
   @Input()
   set sospensioneParams(value: SospensioneParams) {
     this._sospensioneParams = value;
-    if (!this._isOpenedAsPopup) {
+    if (!this._isOpenedAsPopup && this.dataIniziale === undefined) {
       this.dataIniziale = new Date(this._sospensioneParams.dataRegistrazioneDocumento);
     }
-
+    let dataRegTemp = new Date(value.dataRegistrazioneDocumento);
+    this.dataMinimaValida = dataRegTemp > value.dataAvvioIter ? dataRegTemp : value.dataAvvioIter;
+  }
+  get dataMinima(): Date {   
+    return this.dataMinimaValida;
   }
   @Input() set isOpenedAsPopup(value: boolean) {
-      this._isOpenedAsPopup = value;
-      if (this._isOpenedAsPopup) {
-        this.dataIniziale = new Date();
-      }
+    this._isOpenedAsPopup = value;
+    if (this._isOpenedAsPopup) {
+      this.dataIniziale = new Date();
+    }
   }
 
   constructor(private odataContextFactory: OdataContextFactory,
@@ -74,10 +79,11 @@ export class CambioDiStatoBoxComponent implements OnInit{
     });
     /* Esplicita il bind della callback del widget sul componente
     * per dare alla procedura lo scope alle variabili e metodi del componente */
-    this.validaData = this.validaData.bind(this);
+    /* this.validaData = this.validaData.bind(this); */
+    this.reimpostaDataIniziale = this.reimpostaDataIniziale.bind(this);
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
    handleSubmit(e) {
     // e.preventDefault(); // Con l'evento onClick non dovrebbe essere necessaria
@@ -151,8 +157,12 @@ export class CambioDiStatoBoxComponent implements OnInit{
     }
   }
 
-  validaData(dataAvvio: any): boolean {
+  /* validaData(dataAvvio: any): boolean {
     return dataAvvio.value < this._sospensioneParams.dataAvvioIter ? false : true;
+  } */
+
+  reimpostaDataIniziale(e: any) { 
+    this.dataIniziale = e.component._options.value;
   }
 
 }
