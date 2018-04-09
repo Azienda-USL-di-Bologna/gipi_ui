@@ -38,6 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public classeSidebar: string = "sidebar-style d-none";
     public classeRightSide: string;
 
+    public enableSidebarByRole: boolean;
     public sidebarItems: Array<SidebarItem> = [];
     // public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
@@ -70,7 +71,7 @@ export class AppComponent implements OnInit, OnDestroy {
             showBars = showBarsParam === "true";
             if (showBars) {
               this.appConfig.setAppBarVisible(true);
-              this.appConfig.setSideBarVisible(true);
+              this.appConfig.setSideBarVisible(false);  // La sidebar parte disabilitata sempre, verrà abilitata in base al ruolo
             }
             else {
               this.appConfig.setAppBarVisible(false);
@@ -120,8 +121,8 @@ export class AppComponent implements OnInit, OnDestroy {
         }
     }
 
-    slide() {
-        if (this.classeSidebar.indexOf("active") >= 0) {
+    slide(isLogout: boolean) {
+        if (this.classeSidebar.indexOf("active") >= 0 || isLogout) {
             this.classeSidebar = "col-2 sidebar-style d-none ";
             this.classeRightSide = "";
         } else {
@@ -172,11 +173,17 @@ export class AppComponent implements OnInit, OnDestroy {
                         this.descrizioneAzienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.descrizione];
                         this.nomeUtente = loggedUser.getField(bUtente.nome);
                         this.cognomeUtente = loggedUser.getField(bUtente.cognome);
-
+                        
+                        this.enableSidebarByRole = false;
                         this.ruoli.forEach(element => {
+                            if (!this.enableSidebarByRole && element[bRuolo.nomeBreve] !== "UG") {
+                                this.enableSidebarByRole = true;
+                            }
                             this.ruolo += element[bRuolo.nomeBreve] + " ";
                         });
-                        this.buildSideBar(loggedUser);
+                        if (this.enableSidebarByRole) {
+                            this.buildSideBar(loggedUser);
+                        }
                     }
                 }
             )
@@ -197,6 +204,8 @@ export class AppComponent implements OnInit, OnDestroy {
     onLogout() {
 
         const loginMethod = sessionStorage.getItem("loginMethod");
+
+        this.slide(true); // Chiudo la sidebar se è aperta
 
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("userInfo");
