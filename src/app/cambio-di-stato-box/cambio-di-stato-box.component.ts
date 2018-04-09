@@ -28,7 +28,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
   public showPopupAnnullamento: boolean = false;
   public dataSourceStati: DataSource;
   public dataIniziale: Date;
-  public arrayEsiti : any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione":ESITI[key]}});
+  public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione":ESITI[key]}});
 
   @Output() out = new EventEmitter<any>();
 
@@ -61,25 +61,31 @@ export class CambioDiStatoBoxComponent implements OnInit{
       store: oataContextDefinition.getContext()[new Stato().getName()],
     });
     this.statiIter = new Array();
-    this.dataSourceStati.load().then(res => {res.forEach(element => {
-      this.statiIterService.push(element);
-      /* E' stato chiesto di mettere la possibilità di aggiungere un documento anche senza cambiare lo stato: secondo me non è giusto, ma...
-      if (element.id !== this._sospensioneParams.idStatoCorrente)
-        this.statiIter.push(element); 
-      */
-      this.statiIter.push(element); // se si decommentano le righe sopra, togliere questa!
-      // this.statiIter[element.codice] = element;
-    })});
-    
-
+    this.dataSourceStati.load().then(res => {
+      res.forEach(element => {
+        this.statiIterService.push(element);
+        /* E' stato chiesto di mettere la possibilità di aggiungere un documento anche senza cambiare lo stato: secondo me non è giusto, ma...
+        if (element.id !== this._sospensioneParams.idStatoCorrente)
+          this.statiIter.push(element); 
+        */
+        this.statiIter.push(element); // se si decommentano le righe sopra, togliere questa!
+        // this.statiIter[element.codice] = element;
+      });
+    });
+    /* Esplicita il bind della callback del widget sul componente
+    * per dare alla procedura lo scope alle variabili e metodi del componente */
+    this.validaData = this.validaData.bind(this);
   }
 
   ngOnInit() {}
 
    handleSubmit(e) {
-     e.preventDefault();
+    // e.preventDefault(); // Con l'evento onClick non dovrebbe essere necessaria
     if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.codiceStatoCorrente) {return; }
     
+    const result = e.validationGroup.validate(); 
+    if (!result.isValid) { return; }
+     
     let shippedParams: ShippedParams = {
       idIter : this._sospensioneParams.idIter,
       idUtente : this._userInfo.idUtente,
@@ -145,6 +151,10 @@ export class CambioDiStatoBoxComponent implements OnInit{
     }
   }
 
+  validaData(dataAvvio: any): boolean {
+    return dataAvvio.value < this._sospensioneParams.dataAvvioIter ? false : true;
+  }
+
 }
 
 interface ShippedParams {
@@ -167,8 +177,9 @@ interface UserInfo{
   cf: string;
   idAzienda: number;
 }
+
 const ESITI = {
   ACCOLTO: "Accolto",
   RIFIUTO_TOTALE: "Rifiuto totale",
   RIFIUTO_PARZIALE: "Rifiuto parziale"
-}
+};
