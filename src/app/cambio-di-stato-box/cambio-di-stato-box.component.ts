@@ -79,10 +79,13 @@ export class CambioDiStatoBoxComponent implements OnInit {
     });
     /* Esplicita il bind della callback del widget sul componente
     * per dare alla procedura lo scope alle variabili e metodi del componente */
+    this.validaData = this.validaData.bind(this); 
     this.reimpostaDataIniziale = this.reimpostaDataIniziale.bind(this);
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.dataMinimaValida = new Date();
+   }
 
   handleSubmit(e) {
   // e.preventDefault(); // Con l'evento onClick non dovrebbe essere necessaria
@@ -156,8 +159,12 @@ export class CambioDiStatoBoxComponent implements OnInit {
     }
   }
 
-  reimpostaDataIniziale(e: any) { 
+  reimpostaDataIniziale(e: any) {
     this.dataIniziale = e.component._options.value;
+  }
+
+  validaData(dataAvvio: any): boolean {
+    return dataAvvio.value < this.dataMinimaValida ? false : true;
   }
 
 }
