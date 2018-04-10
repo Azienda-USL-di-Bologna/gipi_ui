@@ -97,30 +97,39 @@ export class CambioDiStatoBoxComponent implements OnInit{
       esitoMotivazione: this._sospensioneParams.esitoMotivazione,
       idOggettoOrigine: this._sospensioneParams.idOggettoOrigine
     };
-    console.log("QUESTI SONO I MIEI SHIPPED PARAMS", shippedParams)
 
-    // const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
-    const req = this.http.post("http://localhost:10006/gipi-api/resources/custom/iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
+    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
     .subscribe(
       res => {
-        console.log("GOOOD!!!!!",res)
-        notify({
-          message: "Salvataggio effettuato con successo!",
-          type: "success",
-          displayTime: 2100,
-          position: {
-            my: "center", at: "center", of: window
-          },
-          width: "max-content"
-        });
-        this.showPopupRiassunto = true;
+        if(res["idIter"] > 0){
+          notify({
+            message: "Salvataggio effettuato con successo!",
+            type: "success",
+            displayTime: 21000,
+            position: {
+              my: "center", at: "center", of: window
+            },
+            width: "max-content"
+          });
+          this.showPopupRiassunto = true;
+        }
+        else{
+          notify({
+            message: "Salvataggio non riuscito: è già presente un'associazione all'iter con questa bozza di documento.",
+            type: "warning",
+            displayTime: 21000,
+            position: {
+              my: "center", at: "center", of: window
+            },
+            width: "max-content"
+          });
+        }
       },
       err => {
-        console.log("ERRORE!!!!!",err)
         notify({
           message: "Errore durante il salvataggio!",
           type: "error",
-          displayTime: 2100,
+          displayTime: 21000,
           position: {
             my: "center", at: "center", of: window
           },
