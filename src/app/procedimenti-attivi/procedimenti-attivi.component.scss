@@ -78,3 +78,47 @@
   //width: 50%;
 }
 
+
+/deep/ .label-wrap > label {
+  width: 220px;
+  display: inline-block !important;
+}
+
+/deep/ .label-wrap .dx-field-item-content.dx-field-item-content-location-right {
+  width: initial !important;
+  display: inline-block;
+}
+
+/deep/ .label-wrap .dx-item-content .dx-box-item-content {
+  display: -webkit-inline-box;
+}
+
+/deep/ .label-wrap .dx-field-item-label-content {
+  max-width: 220px;
+  white-space: pre;
+  display: inline-block;   // Ho dovuto toglierla per allineare l'asterisco del required alla label
+}
+
+/deep/ .label-wrap .dx-field-item-label-text {
+  max-width: 220px;
+  white-space: pre;
+  display: inline-block;   // Ho dovuto toglierla per allineare l'asterisco del required alla label
+}
+
+/deep/ .label-wrap-date > label {
+  max-width: 110px;
+}
+
+/deep/ .label-wrap-date .dx-field-item-label-content {
+  max-width: 110px;
+  white-space: pre;
+  display: inline-block;
+}
+
+/deep/ .dx-layout-manager .dx-label-h-align.dx-flex-layout {
+  display: -webkit-box;
+}
+
+/deep/ .label-on-top {
+  -webkit-box-align: inherit !important;
+}
