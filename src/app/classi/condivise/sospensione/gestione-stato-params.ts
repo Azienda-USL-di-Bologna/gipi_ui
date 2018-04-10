@@ -18,4 +18,5 @@ export class CambioDiStatoParams {
     public esito: string;
     public esitoMotivazione: string;
     public azione: string;
+    public dataAvvioIter: Date;
   }

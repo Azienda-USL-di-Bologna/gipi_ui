@@ -9,6 +9,7 @@ import { bUtente, bAzienda } from "@bds/nt-entities";
 import notify from "devextreme/ui/notify";
 import {AppConfiguration} from "../config/app-configuration";
 import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter"
+import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 
 @Component({
   selector: "app-cambio-di-stato",
@@ -71,7 +72,7 @@ export class CambioDiStatoComponent implements OnInit {
   }
 
   selectedRowChanged(e) {
-    let cloneSospensione = new SospensioneParams();
+    let cloneSospensione = new CambioDiStatoParams();
     Object.assign(cloneSospensione, this.sospensioneParams);
     this.sospensioneParams = cloneSospensione;
     this.selectedIter = "Iter selezionato: " + e.numero + "/" + e.anno;

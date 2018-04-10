@@ -38,7 +38,6 @@ export class CambioDiStatoBoxComponent implements OnInit {
   }
   @Input()
   set sospensioneParams(value: CambioDiStatoParams) {
-    console.log("COS'E' VALUE??",value)
     this._sospensioneParams = value;
     if (!this._isOpenedAsPopup && this._sospensioneParams.dataRegistrazioneDocumento) {
       this.dataIniziale = new Date(this._sospensioneParams.dataRegistrazioneDocumento);
@@ -93,17 +92,17 @@ export class CambioDiStatoBoxComponent implements OnInit {
   const result = e.validationGroup.validate(); 
   if (!result.isValid) { return; }
     
-  let shippedParams: ShippedParams = {
+  let shippedParams: GestioneStatiParams = {
     idIter : this._sospensioneParams.idIter,
-      cfAutore : this._userInfo.cf,
-      idAzienda: this._userInfo.idAzienda,
-      azione: "CambioDiStato",
+    cfAutore : this._userInfo.cf,
+    idAzienda: this._userInfo.idAzienda,
+    azione: "CambioDiStato",
     codiceRegistroDocumento: this._sospensioneParams.codiceRegistroDocumento,
     numeroDocumento: this._sospensioneParams.numeroDocumento,
     annoDocumento: this._sospensioneParams.annoDocumento,
     oggettoDocumento: this._sospensioneParams.oggettoDocumento,
     note: this._sospensioneParams.note,
-      statoRichiesto: this._sospensioneParams.codiceStatoProssimo,
+    statoRichiesto: this._sospensioneParams.codiceStatoProssimo,
     dataEvento: this._sospensioneParams.dataCambioDiStato,
     esito: this._sospensioneParams.esito,
     esitoMotivazione: this._sospensioneParams.esitoMotivazione,
@@ -193,8 +192,6 @@ interface GestioneStatiParams {
   numeroDocumento: string;
   annoDocumento: number;
   oggettoDocumento: string;
-  note: string;
-  codiceStato: string;
   dataEvento: Date;
   note: string;
   esito: string;
