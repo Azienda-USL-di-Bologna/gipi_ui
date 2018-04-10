@@ -9,17 +9,18 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
 import { Stato } from "@bds/nt-entities";
-import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter"
+import { STATI } from "@bds/nt-entities/client-objects/constants/stati-iter";
 
 @Component({
   selector: "app-cambio-di-stato-box",
   templateUrl: "./cambio-di-stato-box.component.html",
   styleUrls: ["./cambio-di-stato-box.component.scss"]
 })
-export class CambioDiStatoBoxComponent implements OnInit{
+export class CambioDiStatoBoxComponent implements OnInit {
 
   public _sospensioneParams: CambioDiStatoParams;  
   
+  public dataMinimaValida: Date;
   public statiIter: string[];    // string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
   public _isOpenedAsPopup: boolean;
   public statiIterService: any[] = new Array();
@@ -42,13 +43,17 @@ export class CambioDiStatoBoxComponent implements OnInit{
     if (!this._isOpenedAsPopup && this._sospensioneParams.dataRegistrazioneDocumento) {
       this.dataIniziale = new Date(this._sospensioneParams.dataRegistrazioneDocumento);
     }
-
+    let dataRegTemp = new Date(value.dataRegistrazioneDocumento);
+    this.dataMinimaValida = dataRegTemp > value.dataAvvioIter ? dataRegTemp : value.dataAvvioIter;
+  }
+  get dataMinima(): Date {   
+    return this.dataMinimaValida;
   }
   @Input() set isOpenedAsPopup(value: boolean) {
-      this._isOpenedAsPopup = value;
-      if (this._isOpenedAsPopup) {
-        this.dataIniziale = new Date();
-      }
+    this._isOpenedAsPopup = value;
+    if (this._isOpenedAsPopup) {
+      this.dataIniziale = new Date();
+    }
   }
 
   constructor(private odataContextFactory: OdataContextFactory,
@@ -73,45 +78,52 @@ export class CambioDiStatoBoxComponent implements OnInit{
     })});
     
 
+    this.validaData = this.validaData.bind(this); 
+    this.reimpostaDataIniziale = this.reimpostaDataIniziale.bind(this);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.dataMinimaValida = new Date();
+   }
 
-   handleSubmit(e) {
-     e.preventDefault();
-    if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.codiceStatoCorrente) {return; }
+  handleSubmit(e) {
+  // e.preventDefault(); // Con l'evento onClick non dovrebbe essere necessaria
+  if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.codiceStatoCorrente) {return; }
+  
+  const result = e.validationGroup.validate(); 
+  if (!result.isValid) { return; }
     
-    let shippedParams: GestioneStatiParams = {
-      idIter : this._sospensioneParams.idIter,
+  let shippedParams: ShippedParams = {
+    idIter : this._sospensioneParams.idIter,
       cfAutore : this._userInfo.cf,
       idAzienda: this._userInfo.idAzienda,
       azione: "CambioDiStato",
-      codiceRegistroDocumento: this._sospensioneParams.codiceRegistroDocumento,
-      numeroDocumento: this._sospensioneParams.numeroDocumento,
-      annoDocumento: this._sospensioneParams.annoDocumento,
-      oggettoDocumento: this._sospensioneParams.oggettoDocumento,
-      note: this._sospensioneParams.note,
+    codiceRegistroDocumento: this._sospensioneParams.codiceRegistroDocumento,
+    numeroDocumento: this._sospensioneParams.numeroDocumento,
+    annoDocumento: this._sospensioneParams.annoDocumento,
+    oggettoDocumento: this._sospensioneParams.oggettoDocumento,
+    note: this._sospensioneParams.note,
       statoRichiesto: this._sospensioneParams.codiceStatoProssimo,
-      dataEvento: this._sospensioneParams.dataCambioDiStato,
-      esito: this._sospensioneParams.esito,
-      esitoMotivazione: this._sospensioneParams.esitoMotivazione,
-      idOggettoOrigine: this._sospensioneParams.idOggettoOrigine
-    };
+    dataEvento: this._sospensioneParams.dataCambioDiStato,
+    esito: this._sospensioneParams.esito,
+    esitoMotivazione: this._sospensioneParams.esitoMotivazione,
+    idOggettoOrigine: this._sospensioneParams.idOggettoOrigine
+  };
 
-    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
-    .subscribe(
-      res => {
+  const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
+  .subscribe(
+    res => {
         if(res["idIter"] > 0){
-          notify({
-            message: "Salvataggio effettuato con successo!",
-            type: "success",
-            displayTime: 21000,
-            position: {
-              my: "center", at: "center", of: window
-            },
-            width: "max-content"
-          });
-          this.showPopupRiassunto = true;
+      notify({
+        message: "Salvataggio effettuato con successo!",
+        type: "success",
+        displayTime: 2100,
+        position: {
+          my: "center", at: "center", of: window
+        },
+        width: "max-content"
+      });
+      this.showPopupRiassunto = true;
         }
         else{
           notify({
@@ -124,20 +136,20 @@ export class CambioDiStatoBoxComponent implements OnInit{
             width: "max-content"
           });
         }
-      },
-      err => {
-        notify({
-          message: "Errore durante il salvataggio!",
-          type: "error",
-          displayTime: 21000,
-          position: {
-            my: "center", at: "center", of: window
-          },
-          width: "max-content"
-        });
-      }
-    );
-   }
+    },
+    err => {
+      notify({
+        message: "Errore durante il salvataggio!",
+        type: "error",
+        displayTime: 2100,
+        position: {
+          my: "center", at: "center", of: window
+        },
+        width: "max-content"
+      });
+    }
+  );
+  }
 
   handleClose() {
     if (!this._isOpenedAsPopup) {
@@ -161,6 +173,14 @@ export class CambioDiStatoBoxComponent implements OnInit{
     }
   }
 
+  reimpostaDataIniziale(e: any) {
+    this.dataIniziale = e.component._options.value;
+  }
+
+  validaData(dataAvvio: any): boolean {
+    return dataAvvio.value < this.dataMinimaValida ? false : true;
+  }
+
 }
 
 // questi devono essere gli stessi identici parametri che trovo sul server
@@ -173,6 +193,8 @@ interface GestioneStatiParams {
   numeroDocumento: string;
   annoDocumento: number;
   oggettoDocumento: string;
+  note: string;
+  codiceStato: string;
   dataEvento: Date;
   note: string;
   esito: string;
@@ -186,8 +208,9 @@ interface UserInfo{
   cf: string;
   idAzienda: number;
 }
+
 const ESITI = {
   ACCOLTO: "Accolto",
   RIFIUTO_TOTALE: "Rifiuto totale",
   RIFIUTO_PARZIALE: "Rifiuto parziale"
-}
+};
