@@ -248,7 +248,12 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public bottoneSalvaProcedimento(validationParams: any) {
 
+    const validator = validationParams.validationGroup.validate();
 
+    console.log("validazione", validator);
+    if (!validator.isValid) {
+      return;
+    }
 
 
     // questo lo devo spostare nel validata
