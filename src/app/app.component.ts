@@ -6,7 +6,7 @@ import { Observable } from "rxjs/Observable";
 import {GlobalContextService, OdataContextFactory, OdataForeignKey} from "@bds/nt-context";
 import { Ruolo, bUtente, bAzienda, bRuolo } from "@bds/nt-entities";
 import { Subscription } from "rxjs/Subscription";
-import {LOGOUT_URL, ODATA_BASE_URL} from "../environments/app.constants";
+import {BarsMode, LOGOUT_URL, ODATA_BASE_URL} from "../environments/app.constants";
 import { SidebarItem } from "@bds/nt-context";
 import { LoggedUser } from "@bds/nt-login";
 import * as $ from "jquery";
@@ -65,18 +65,29 @@ export class AppComponent implements OnInit, OnDestroy {
         // leggo dai queryParams il parametro "showbars", se c'è a seconda del suo valore decido di mostrare o nascondere l'appbar e la sidebar
         // mettendolo qui nell'AppComponent, vale per tutte le interfacce
         this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
-          const showBarsParam: string = queryParams["showbars"];
-          let showBars: boolean;
-          if (showBarsParam) {
-            showBars = showBarsParam === "true";
-            if (showBars) {
-              this.appConfig.setAppBarVisible(true);
-              this.appConfig.setSideBarVisible(true);
-            }
-            else {
-              this.appConfig.setAppBarVisible(false);
-              this.appConfig.setSideBarVisible(false);
-            }
+          const barsModeParam: string = queryParams["barsmode"];
+
+          if (barsModeParam) {
+              switch(barsModeParam) {
+                  case BarsMode.ALL: {
+                      this.appConfig.setAppBarVisible(true);
+                      this.appConfig.setSideBarVisible(true);
+                      this.appConfig.setAppBarSimple(false);
+                      break;
+                  }
+                  case BarsMode.NONE: {
+                      this.appConfig.setAppBarVisible(false);
+                      this.appConfig.setSideBarVisible(false);
+                      this.appConfig.setAppBarSimple(false);
+                      break;
+                  }
+                  case BarsMode.SIMPLE: {
+                      this.appConfig.setAppBarVisible(true);
+                      this.appConfig.setSideBarVisible(false);  // La sidebar parte disabilitata sempre, verrà abilitata in base al ruolo
+                      this.appConfig.setAppBarSimple(true);
+                      break;
+                  }
+              }
           }
       });
 

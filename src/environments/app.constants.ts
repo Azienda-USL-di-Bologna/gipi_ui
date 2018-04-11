@@ -51,6 +51,8 @@ export const odataStrutturePath = "/Strutturas";
 // =====================GlobalContextServiceData================================
 
 
+export const BarsMode = {ALL: "all", NONE: "none", SIMPLE: "simple"};
+
 // ======================= ENUM ========================================
 
 
