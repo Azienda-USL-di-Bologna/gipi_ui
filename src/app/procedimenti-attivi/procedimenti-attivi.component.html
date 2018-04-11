@@ -7,6 +7,7 @@
                       columnResizingMode="nextColumn" hoverStateEnabled="checkBoxState"
                       noDataText="Non ci sono procedimenti attivi" (onToolbarPreparing)="onToolbarPreparing($event)"
                       (onSelectionChanged)="handleEvent('onSelectionChanged', $event)" wordWrapEnabled="true"
+                      (onEditorPreparing)="handleEvent('onEditorPreparing',$event)"
                       allowColumnResizing="true" columnResizingMode="nextColumn">
 
             <!--<dxo-paging [pageSize]="154"></dxo-paging>-->
@@ -48,6 +49,10 @@
                         [dataType]="'string'" [allowEditing]="false" alignment="center" cssClass="column"
                         [filterOperations]="['reset', 'contains']"
                         [selectedFilterOperation]="'contains'"></dxi-column>
+            <dxi-column dataField="nomeVisualTitolare" [visible]="false"></dxi-column> <!-- segnaposti per dettaglio start-->
+            <dxi-column dataField="nomeVisualResponsabile" [visible]="false"></dxi-column>
+            <dxi-column dataField="ufficio" [visible]="false"></dxi-column>
+            <dxi-column dataField="strumenti" [visible]="false"></dxi-column> <!-- segnaposti per dettaglio end-->
             <dxi-column [width]="80" caption="Dettagli" cellTemplate="buttonActions" alignment="center"
                         [visible]="colonnaVisibile" [filterOperations]="['reset', 'contains']"
                         [selectedFilterOperation]="'contains'"></dxi-column>
@@ -93,39 +98,46 @@
                 
                 <dxo-form #formgdm id="formgdm" colCount="1" >
                     <dxi-item dataField="idStruttura.nome" [disabled]="true" [template]="itemClear"
-                              [label]="{visible: true}" cssClass="item popup-title"></dxi-item>
+                              [label]="{visible: true}" cssClass="item label-wrap popup-title"></dxi-item>
                     <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" [disabled]="true"
                               [template]="itemClear" [label]="{visible: true, text: 'Tipo Procedimento'}"
-                              cssClass="item popup-title"></dxi-item>
+                              cssClass="item label-wrap popup-title"></dxi-item>
                     <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" [disabled]="true"
                               [label]="{text:'Descrizione'}" [colSpan]="1"
-                              cssClass="item"></dxi-item>
+                              cssClass="item label-wrap label-on-top"></dxi-item>
                     <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [disabled]="true"
                               [label]="{text:'Modo apertura'}" [colSpan]="1"
-                              cssClass="item"></dxi-item>
+                              cssClass="item label-wrap"></dxi-item>
                     <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento"
                               [disabled]="true"
                               [label]="{text:'Norma di riferimento'}"
-                              [colSpan]="1" cssClass="item"></dxi-item>
+                              [colSpan]="1" cssClass="item label-wrap"></dxi-item>
                     <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.nome" [disabled]="true"
-                              [label]="{text:'Classificazione'}" [colSpan]="1" cssClass="item"></dxi-item>
-                    <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [disabled]="true"
-                              [label]="{text:'Durata massima (gg)'}" [colSpan]="1"
-                              cssClass="item"></dxi-item>
+                              [label]="{text:'Classificazione'}" [colSpan]="1" cssClass="item label-wrap"></dxi-item>
                     <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" [disabled]="true"
                               [label]="{text:'Durata massima sospensione (gg)'}"
-                              [colSpan]="1" cssClass="item"></dxi-item>
+                              [colSpan]="1" cssClass="item label-wrap"></dxi-item>
+                    <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaProcedimento" [disabled]="true"
+                              [label]="{text:'Durata massima (gg)'}" [colSpan]="1"
+                              cssClass="item label-wrap"></dxi-item>
+                    <dxi-item dataField="nomeVisualResponsabile" [disabled]="true"
+                              [label]="{text:'Responsabile dell\'adozione dell\'atto\nfinale'}" [colSpan]="1"
+                              cssClass="item label-wrap"></dxi-item>
+                    <dxi-item dataField="nomeVisualTitolare" [disabled]="true"
+                              [label]="{text:'Titolare potere sostitutivo'}" [colSpan]="1"
+                              cssClass="item label-wrap"></dxi-item>
+                    <dxi-item dataField="ufficio" [disabled]="true" [label]="{text:'Ufficio'}"
+                              [colSpan]="1" cssClass="item label-wrap"></dxi-item>
+                    <dxi-item dataField="strumenti" [disabled]="true" [label]="{text:'Strumenti di tutela amministrativa\ne giurisdizionale riconosciuti\ndalla Legge'}"
+                              [colSpan]="1" cssClass="item label-wrap"></dxi-item>
+                    <dxi-item dataField="modalitaInfo" [disabled]="true" [label]="{text:'Modalità informativa stato iter'}"
+                              [colSpan]="1" cssClass="item label-wrap"></dxi-item>
+                    <dxi-item dataField="descrizioneAtti" [disabled]="true" editorType="dxTextArea" [label]="{text:'Descrizione atti e documenti da\nallegare all\'istanza'}"
+                              [colSpan]="1" cssClass="item label-wrap"></dxi-item>
                     <dxi-item dataField="dataInizio" [label]="{text:'Valido dal'}" [disabled]="true" [colSpan]="1"
-                              cssClass="item"></dxi-item>
+                              cssClass="item label-wrap"></dxi-item>
                     <dxi-item dataField="dataFine" [label]="{text:'Al'}" [disabled]="true" [colSpan]="1"
-                              cssClass="item"></dxi-item>
-                    <dxi-item dataField="idTitolarePotereSostitutivo.idPersona.descrizione" [disabled]="true"
-                              [label]="{text:'Titolare Potere Sostitutivo'}" [colSpan]="1"
-                              cssClass="item"></dxi-item>
-                    <dxi-item dataField="modalitaInfo" [disabled]="true" [label]="{text:'Modalità informativa'}"
-                              [colSpan]="1" cssClass="item"></dxi-item>
-                    <dxi-item dataField="descrizioneAtti" [disabled]="true" [label]="{text:'Atti da allegare'}"
-                              [colSpan]="1" cssClass="item"></dxi-item>
+                              cssClass="item label-wrap"></dxi-item>
                 </dxo-form>             
             </dxo-editing>
         </dx-data-grid>

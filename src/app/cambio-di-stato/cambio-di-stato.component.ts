@@ -2,13 +2,14 @@ import { Component, OnInit } from "@angular/core";
 import { LoggedUser } from "@bds/nt-login";
 import { GlobalContextService } from "@bds/nt-context";
 import { PassaggioDiFaseComponent } from "../iter-procedimento/passaggio-di-fase/passaggio-di-fase.component"
-import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
+import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
 import { ActivatedRoute, Params } from "@angular/router";
 import { Observable, Subscription } from "rxjs";
 import { bUtente, bAzienda } from "@bds/nt-entities";
 import notify from "devextreme/ui/notify";
 import {AppConfiguration} from "../config/app-configuration";
 import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter"
+import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 
 @Component({
   selector: "app-cambio-di-stato",
@@ -19,7 +20,7 @@ export class CambioDiStatoComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
 
-  public sospensioneParams: SospensioneParams;
+  public sospensioneParams: CambioDiStatoParams;
   public userInfo: UserInfo;
   public selectedIter: string = "Selezionare un iter dalla tabella";
 
@@ -40,7 +41,7 @@ export class CambioDiStatoComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
-      this.sospensioneParams = new SospensioneParams();
+      this.sospensioneParams = new CambioDiStatoParams();
       this.sospensioneParams.annoDocumento = queryParams["anno"];
       this.sospensioneParams.numeroDocumento = queryParams["numero"];
       this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
@@ -71,7 +72,9 @@ export class CambioDiStatoComponent implements OnInit {
   }
 
   selectedRowChanged(e) {
-    
+    let cloneSospensione = new CambioDiStatoParams();
+    Object.assign(cloneSospensione, this.sospensioneParams);
+    this.sospensioneParams = cloneSospensione;
     this.selectedIter = "Iter selezionato: " + e.numero + "/" + e.anno;
     this.lookupValue = null;
     this.sospensioneParams.numeroIter = e.numero;
