@@ -95,9 +95,22 @@ export class ProcedimentiAttiviComponent implements OnInit {
                     "or",
                     ["dataFine", "=", null]
                 ]
-            ]
+            ],
+            map: (item) => {
+                if (item) {
+                    if (item.idTitolarePotereSostitutivo && item.idStrutturaTitolarePotereSostitutivo) {
+                        item.nomeVisualTitolare = item.idTitolarePotereSostitutivo.idPersona.descrizione + " (" +
+                            item.idStrutturaTitolarePotereSostitutivo.nome + ")";
+                    }
+                    if (item.idResponsabileAdozioneAttoFinale && item.idStrutturaResponsabileAdozioneAttoFinale) {
+                        item.nomeVisualResponsabile = item.idResponsabileAdozioneAttoFinale.idPersona.descrizione + " (" +
+                            item.idStrutturaResponsabileAdozioneAttoFinale.nome + ")";    
+                    }
+                    return item;
+                }
+            }
         });
-
+        
         this.itemClear = this.itemClear.bind(this);
         this.setFormLookBase();
     }
@@ -235,8 +248,13 @@ export class ProcedimentiAttiviComponent implements OnInit {
             case "onSelectionChanged":
                 this.messageEvent.emit({row: e});
                 break;
+            case "onEditorPreparing":
+                if (e.dataField === "idAziendaTipoProcedimento.descrizioneTipoProcedimento") {
+                e.editorName = "dxTextArea";
+                e.editorOptions.height = "70px";
+              }
+              break;    
         }
     }
-
 
 }
