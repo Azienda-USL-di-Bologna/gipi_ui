@@ -119,15 +119,27 @@
         <dxi-item dataField="annoIter" >
             <dxo-label text="Anno"></dxo-label>
         </dxi-item>
-        <dxi-item dataField="codiceStatoCorrente" editorType="dxLookup" [editorOptions]="{ disabled: true,
-          dataSource: dataSourceStati,
-          displayExpr: 'codice',
-          displayValue: 'descrizione' }">
-        </dxi-item>
-        <dxi-item dataField="idStatoProssimo" editorType="dxLookup" [editorOptions]="{ disabled: true,
-          dataSource: dataSourceStati,
-          displayExpr: 'codice',
-          displayValue: 'descrizione' }">
+        <!-- <dxi-item 
+          dataField="codiceStatoCorrente"
+          [label]="{text: 'Stato'}"
+          editorType="dxLookup" 
+          [editorOptions]="{ 
+            disabled: true,
+            dataSource: dataSourceStati,
+            displayExpr: 'descrizione',
+            valueExpr: 'codice'
+          }">
+        </dxi-item> -->
+        <dxi-item 
+          dataField="codiceStatoProssimo"
+          [label]="{text: 'Stato'}" 
+          editorType="dxLookup" 
+          [editorOptions]="{ 
+            disabled: true,
+            dataSource: dataSourceStati,
+            displayExpr: 'descrizione',
+            valueExpr: 'codice'
+          }">
         </dxi-item>
         <dxi-item dataField="dataCambioDiStato" editorType="dxDateBox" [editorOptions]="{ displayFormat: 'dd/MM/yyyy' }"></dxi-item>
         <dxi-item dataField="note" editorType="dxTextArea"></dxi-item>

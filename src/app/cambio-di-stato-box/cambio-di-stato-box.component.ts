@@ -29,7 +29,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
   public showPopupAnnullamento: boolean = false;
   public dataSourceStati: DataSource;
   public dataIniziale: Date;
-  public arrayEsiti : any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione":ESITI[key]}});
+  public arrayEsiti : any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}});
 
   @Output() out = new EventEmitter<any>();
 
@@ -112,7 +112,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
   const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
   .subscribe(
     res => {
-        if(res["idIter"] > 0){
+        if (res["idIter"] > 0) {
       notify({
         message: "Salvataggio effettuato con successo!",
         type: "success",
@@ -124,7 +124,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
       });
       this.showPopupRiassunto = true;
         }
-        else{
+        else {
           notify({
             message: "Salvataggio non riuscito: è già presente un'associazione all'iter con questa bozza di documento.",
             type: "warning",
