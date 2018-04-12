@@ -250,4 +250,16 @@ export class AppComponent implements OnInit, OnDestroy {
             return "col";
         }
     }
+
+    getBackgroundColor() {
+        let router: any = this.router;
+        if (router.currentUrlTree.root && 
+            router.currentUrlTree.root.children && 
+            router.currentUrlTree.root.children.primary && 
+            router.currentUrlTree.root.children.primary.segments[0].path === "iter-procedimento") {
+            return "background-darker clRightSide";
+        } else {
+            return "clRightSide";
+        }
+    }
 }

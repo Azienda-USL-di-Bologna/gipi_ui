@@ -28,6 +28,8 @@
 }
 
 
+
+
 .dropdown-menu {
   box-shadow: 0 0 3px rgba(0,0,0,.15);
   border: none;
@@ -244,6 +246,11 @@
 .heightCPC{
   height: 100%;
 }
+
+/deep/ .background-darker {
+  background-color: #d9d9e0 !important;
+}
+
 .clRightSide{
   display: table;
   height: 100%;
@@ -322,6 +329,12 @@
   box-shadow: 0 0 1px rgba(0,0,0,.15);
   padding: 15px;
   background-color: #fff;
+}
+
+/deep/ .griginoPanel{
+  box-shadow: 0 0 1px rgba(0,0,0,.15);
+  padding: 15px;
+  background-color: #f1f1f3;
 }
 
 .dropdown-toggle::after{
