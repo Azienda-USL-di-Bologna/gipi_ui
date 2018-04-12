@@ -68,7 +68,7 @@ export class AppComponent implements OnInit, OnDestroy {
           const barsModeParam: string = queryParams["barsmode"];
 
           if (barsModeParam) {
-              switch(barsModeParam) {
+              switch (barsModeParam) {
                   case BarsMode.ALL: {
                       this.appConfig.setAppBarVisible(true);
                       this.appConfig.setSideBarVisible(true);
@@ -83,9 +83,14 @@ export class AppComponent implements OnInit, OnDestroy {
                   }
                   case BarsMode.SIMPLE: {
                       this.appConfig.setAppBarVisible(true);
-                      this.appConfig.setSideBarVisible(false);  // La sidebar parte disabilitata sempre, verrà abilitata in base al ruolo
+                      this.appConfig.setSideBarVisible(false);
                       this.appConfig.setAppBarSimple(true);
                       break;
+                  }
+                  case BarsMode.SIMPLE_WITH_SIDEBAR: {
+                      this.appConfig.setAppBarVisible(true);
+                      this.appConfig.setSideBarVisible(true);
+                      this.appConfig.setAppBarSimple(true);
                   }
               }
           }
