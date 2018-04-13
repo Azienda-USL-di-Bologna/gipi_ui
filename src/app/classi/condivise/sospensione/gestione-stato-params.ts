@@ -1,8 +1,10 @@
-export class SospensioneParams {
+export class CambioDiStatoParams {
     public idIter: number;
     public numeroIter: number;
     public annoIter: number;
-    public idUtente: number;
+    public cfAutore: string;
+    public idAzienda: number;
+    public idOggettoOrigine: string;
     public codiceRegistroDocumento: string;
     public numeroDocumento: string;
     public annoDocumento: number;
@@ -15,7 +17,6 @@ export class SospensioneParams {
     public isFaseDiChiusura: boolean;
     public esito: string;
     public esitoMotivazione: string;
-    public azione: string; // Passaggio di fase o Cambio di stato
-    public idOggettoOrigine: string;
-    public dataAvvioIter: Date; 
+    public azione: string;
+    public dataAvvioIter: Date;
   }

@@ -3,23 +3,25 @@ import DataSource from "devextreme/data/data_source";
 import CustomStore from "devextreme/data/custom_store";
 import ArrayStore from "devextreme/data/array_store";
 import { GlobalContextService, OdataContextDefinition, OdataContextFactory } from "@bds/nt-context";
-import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
+import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
 import { Stato } from "@bds/nt-entities";
+import { STATI } from "@bds/nt-entities/client-objects/constants/stati-iter";
 
 @Component({
   selector: "app-cambio-di-stato-box",
   templateUrl: "./cambio-di-stato-box.component.html",
   styleUrls: ["./cambio-di-stato-box.component.scss"]
 })
-export class CambioDiStatoBoxComponent implements OnInit{
+export class CambioDiStatoBoxComponent implements OnInit {
 
-  public _sospensioneParams: SospensioneParams;  
+  public _sospensioneParams: CambioDiStatoParams;  
   
-  public statiIter: any[] = new Array();    // string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
+  public dataMinimaValida: Date;
+  public statiIter: string[];    // string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
   public _isOpenedAsPopup: boolean;
   public statiIterService: any[] = new Array();
   public _userInfo: UserInfo;
@@ -27,6 +29,7 @@ export class CambioDiStatoBoxComponent implements OnInit{
   public showPopupAnnullamento: boolean = false;
   public dataSourceStati: DataSource;
   public dataIniziale: Date;
+  public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}});
 
   @Output() out = new EventEmitter<any>();
 
@@ -34,94 +37,119 @@ export class CambioDiStatoBoxComponent implements OnInit{
     this._userInfo = value;
   }
   @Input()
-  set sospensioneParams(value: SospensioneParams) {
+  set sospensioneParams(value: CambioDiStatoParams) {
     this._sospensioneParams = value;
-    if (!this._isOpenedAsPopup) {
+    if (!this._isOpenedAsPopup && this._sospensioneParams.dataRegistrazioneDocumento && this.dataIniziale === undefined) {
       this.dataIniziale = new Date(this._sospensioneParams.dataRegistrazioneDocumento);
     }
-
+    let dataRegTemp = new Date(value.dataRegistrazioneDocumento);
+    this.dataMinimaValida = dataRegTemp > value.dataAvvioIter ? dataRegTemp : value.dataAvvioIter;
+  }
+  get dataMinima(): Date {   
+    return this.dataMinimaValida;
   }
   @Input() set isOpenedAsPopup(value: boolean) {
-      this._isOpenedAsPopup = value;
-      if (this._isOpenedAsPopup) {
-        this.dataIniziale = new Date();
-      }
+    this._isOpenedAsPopup = value;
+    if (this._isOpenedAsPopup) {
+      this.dataIniziale = new Date();
+    }
   }
 
   constructor(private odataContextFactory: OdataContextFactory,
     private http: HttpClient, 
     private activatedRoute: ActivatedRoute,
     private globalContextService: GlobalContextService
-  ) { 
-    /* this.statiIterService[this.statiIter[0]] = "iter_in_corso";
-    this.statiIterService[this.statiIter[1]] = "apertura_sospensione";
-    this.statiIterService[this.statiIter[2]] = "chiusura_iter"; */
-
+  ) {
     // bisogna fare il datasource per la lookup dello stato
     const oataContextDefinition: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.dataSourceStati = new DataSource({
       store: oataContextDefinition.getContext()[new Stato().getName()],
     });
-    this.dataSourceStati.load().then(res => (res.forEach(element => {
-      this.statiIterService.push(element);
-      /* E' stato chiesto di mettere la possibilità di aggiungere un documento anche senza cambiare lo stato: secondo me non è giusto, ma...
-      if (element.id !== this._sospensioneParams.idStatoCorrente)
-        this.statiIter.push(element); 
-      */
-      this.statiIter.push(element); // se si decommentano le righe sopra, togliere questa!
-    })));
-    
+    this.statiIter = new Array();
+    this.dataSourceStati.load().then(res => {
+      res.forEach(element => {
+        this.statiIterService.push(element);
+        /* E' stato chiesto di mettere la possibilità di aggiungere un documento anche senza cambiare lo stato: secondo me non è giusto, ma...
+        if (element.id !== this._sospensioneParams.idStatoCorrente)
+          this.statiIter.push(element); 
+        */
+        this.statiIter.push(element); // se si decommentano le righe sopra, togliere questa!
+        // this.statiIter[element.codice] = element;
+      });
+    });
 
+    /* Esplicita il bind della callback del widget sul componente
+     * per dare alla procedura lo scope alle variabili e metodi del componente */
+    this.validaData = this.validaData.bind(this); 
+    this.reimpostaDataIniziale = this.reimpostaDataIniziale.bind(this);
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-
-   handleSubmit(e) {
-     e.preventDefault();
-    if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.idStatoCorrente) {return; }
+  handleSubmit(e) {
+  // e.preventDefault(); // Con l'evento onClick non dovrebbe essere necessaria
+  if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.codiceStatoCorrente) { return; }
+  
+  const result = e.validationGroup.validate(); 
+  if (!result.isValid) { return; }
     
-    let shippedParams: ShippedParams = {
-      idIter : this._sospensioneParams.idIter,
-      idUtente : this._userInfo.idUtente,
-      codiceRegistroDocumento: this._sospensioneParams.codiceRegistroDocumento,
-      numeroDocumento: this._sospensioneParams.numeroDocumento,
-      annoDocumento: this._sospensioneParams.annoDocumento,
-      oggettoDocumento: this._sospensioneParams.oggettoDocumento,
-      note: this._sospensioneParams.note,
-      // stato: this.statiIterService[this._sospensioneParams.idStatoProssimo],
-      idStato: this._sospensioneParams.idStatoProssimo,
-      dataEvento: this._sospensioneParams.dataCambioDiStato,
-      esito: this._sospensioneParams.esito,
-      esitoMotivazione: this._sospensioneParams.esitoMotivazione
-    };
-    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
-    .subscribe(
-      res => {
-        notify({
-          message: "Salvataggio effettuato con successo!",
-          type: "success",
-          displayTime: 2100,
-          position: {
-            my: "center", at: "center", of: window
-          },
-          width: "max-content"
-        });
-        this.showPopupRiassunto = true;
-      },
-      err => {
-        notify({
-          message: "Errore durante il salvataggio!",
-          type: "error",
-          displayTime: 2100,
-          position: {
-            my: "center", at: "center", of: window
-          },
-          width: "max-content"
-        });
-      }
-    );
-   }
+  let shippedParams: GestioneStatiParams = {
+    idIter : this._sospensioneParams.idIter,
+    cfAutore : this._userInfo.cf,
+    idAzienda: this._userInfo.idAzienda,
+    azione: "CambioDiStato",
+    codiceRegistroDocumento: this._sospensioneParams.codiceRegistroDocumento,
+    numeroDocumento: this._sospensioneParams.numeroDocumento,
+    annoDocumento: this._sospensioneParams.annoDocumento,
+    oggettoDocumento: this._sospensioneParams.oggettoDocumento,
+    note: this._sospensioneParams.note,
+    statoRichiesto: this._sospensioneParams.codiceStatoProssimo,
+    dataEvento: this._sospensioneParams.dataCambioDiStato,
+    esito: this._sospensioneParams.esito,
+    esitoMotivazione: this._sospensioneParams.esitoMotivazione,
+    idOggettoOrigine: this._sospensioneParams.idOggettoOrigine
+  };
+
+  const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
+  .subscribe(
+    res => {
+        if (res["idIter"] > 0) {
+      notify({
+        message: "Salvataggio effettuato con successo!",
+        type: "success",
+        displayTime: 2100,
+        position: {
+          my: "center", at: "center", of: window
+        },
+        width: "max-content"
+      });
+      this.showPopupRiassunto = true;
+        }
+        else {
+          notify({
+            message: "Salvataggio non riuscito: è già presente un'associazione all'iter con questa bozza di documento.",
+            type: "warning",
+            displayTime: 21000,
+            position: {
+              my: "center", at: "center", of: window
+            },
+            width: "max-content"
+          });
+        }
+    },
+    err => {
+      notify({
+        message: "Errore durante il salvataggio!",
+        type: "error",
+        displayTime: 2100,
+        position: {
+          my: "center", at: "center", of: window
+        },
+        width: "max-content"
+      });
+    }
+  );
+  }
 
   handleClose() {
     if (!this._isOpenedAsPopup) {
@@ -145,20 +173,32 @@ export class CambioDiStatoBoxComponent implements OnInit{
     }
   }
 
+  reimpostaDataIniziale(e: any) {
+    this.dataIniziale = e.component._options.value;
+  }
+
+  validaData(dataAvvio: any): boolean {
+    return dataAvvio.value < this.dataMinimaValida ? false : true;
+  }
+
 }
 
-interface ShippedParams {
+// questi devono essere gli stessi identici parametri che trovo sul server
+interface GestioneStatiParams {
+  statoRichiesto: string;
   idIter: number;
-  idUtente: number;
+  cfAutore: string;
+  idAzienda: number;
   codiceRegistroDocumento: string;
   numeroDocumento: string;
   annoDocumento: number;
   oggettoDocumento: string;
-  note: string;
-  idStato: number;
   dataEvento: Date;
+  note: string;
   esito: string;
   esitoMotivazione: string;
+  idOggettoOrigine: string;
+  azione: string;
 }
 
 interface UserInfo{
@@ -166,3 +206,9 @@ interface UserInfo{
   cf: string;
   idAzienda: number;
 }
+
+const ESITI = {
+  ACCOLTO: "Accolto",
+  RIFIUTO_TOTALE: "Rifiuto totale",
+  RIFIUTO_PARZIALE: "Rifiuto parziale"
+};

@@ -3,7 +3,7 @@ import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { Iter, Utente, Fase, FaseIter, ProcedimentoCache, bUtente, bAzienda, Titolo } from "@bds/nt-entities";
-import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
+import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params, Resolve } from "@angular/router";
@@ -13,6 +13,8 @@ import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stat
 import { LoggedUser } from "@bds/nt-login";
 import { Observable, Subscription } from "rxjs";
 import { HttpHeaders } from "@angular/common/http";
+// import { CODICE_STATI } from "@bds/nt-entities/client-objects/constants/stati-iter";
+import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter"
 
 
 
@@ -60,7 +62,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public perFiglioPassaggioFase: Object;
 
   public paramsPerSospensione: Object;
-  public sospensioneParams: SospensioneParams = new SospensioneParams();
+  public sospensioneParams: CambioDiStatoParams = new CambioDiStatoParams();
   public loggedUser$: Observable<LoggedUser>;
   public userInfo: UserInfo;
   public iodaPermission: boolean;
@@ -142,7 +144,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   isSospeso() {
-    if (this.iter.idStato.id === 2) // 2 --> SOSPESO
+    if (this.iter.idStato.codice === STATI.SOSPESO.CODICE) // 2 --> SOSPESO
       return true;
     else
       return false;
@@ -160,15 +162,15 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   disableProcedi() {
-    return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.id === 3;
+    return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO.CODICE;
   }
 
   disableSospendi() {
-    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.id === 3;
+    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO.CODICE;
   }
 
   inSolaLettura() {
-    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.id === 3;
+    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO.CODICE;
   }
 
   /* 
@@ -264,16 +266,16 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.paramsPerSospensione = {
       iter: this.iter,
       stato: this.iter.idStato,
-      dataSospensione: this.iter.idStato.id === 2 ? this.getDataUltimaSospensione() : null
+      dataSospensione: this.iter.idStato.codice === STATI.SOSPESO.CODICE ? this.getDataUltimaSospensione() : null
     };
   }
 
   public sospensioneIter() {
-    this.sospensioneParams = new SospensioneParams();
+    this.sospensioneParams = new CambioDiStatoParams();
     this.sospensioneParams.idIter = this.idIter;
     this.sospensioneParams.numeroIter = this.iter.numero;
     this.sospensioneParams.annoIter = this.iter.anno;
-    this.sospensioneParams.idStatoCorrente = this.iter.idStato.id;
+    this.sospensioneParams.codiceStatoCorrente = this.iter.idStato.codice;
     this.popupData.title = "Cambia stato iter";
     this.sospensioneIterVisible = true;
   }

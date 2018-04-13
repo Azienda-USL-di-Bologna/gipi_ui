@@ -8,6 +8,7 @@ export class AppConfiguration {
   constructor(private globalContextService: GlobalContextService) {
     this.setAppBarVisible(true);
     this.setSideBarVisible(true);
+    this.setAppBarSimple(false);
   }
 
   get appBarVisible(): Observable<boolean> {
@@ -25,4 +26,12 @@ export class AppConfiguration {
   setSideBarVisible(value: boolean) {
     this.globalContextService.setSubjectInnerSharedObject("_sideBarVisible", value);
   }
+
+    get appBarSimple(): Observable<boolean> {
+        return this.globalContextService.getSubjectInnerSharedObject("_appBarSimple");
+    }
+
+    setAppBarSimple(value: boolean) {
+        this.globalContextService.setSubjectInnerSharedObject("_appBarSimple", value);
+    }
 }

@@ -7,6 +7,8 @@ import { Subscription } from "rxjs/Subscription";
 import { Observable } from "rxjs/Observable";
 import { LoggedUser } from "@bds/nt-login";
 import { GetIterUtente } from "@bds/nt-entities";
+import { SospensioneParams } from "../../classi/condivise/sospensione/sospensione-params";
+import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter"
 
 @Component({
   selector: "app-lista-iter-con-permessi",
@@ -22,22 +24,13 @@ export class ListaIterConPermessiComponent implements OnInit {
   // public listaItems: any;
   // public loggedUser$: Observable<LoggedUser>;
   public _userInfo: UserInfo;
-  public doc: any = {
-    codiceRegistro: null,
-    numeroDocumento: null,
-    annoDocumento: null
-  };
-
+  public _sospensioneParams: SospensioneParams;
 
   @Input() set userInfo(value: UserInfo) {
     this._userInfo = value;
   }
-  @Input() set documento(doc: any) {
-    this.doc = {
-      codiceRegistro: doc.codiceRegistroDocumento,
-      numeroDocumento: doc.numeroDocumento,
-      annoDocumento: +doc.annoDocumento
-    };
+  @Input() set sospensioneParams(value: SospensioneParams) {
+    this._sospensioneParams = value;
   }
   @Output() selectedRow: EventEmitter<any> = new EventEmitter();
 
@@ -51,10 +44,10 @@ export class ListaIterConPermessiComponent implements OnInit {
       customQueryParams: {
         cf: this._userInfo.cf,
         idAzienda: this._userInfo.idAzienda,
-        codiceRegistro: this.doc.codiceRegistro,
-        numeroDocumento: this.doc.numeroDocumento,
-        annoDocumento: this.doc.annoDocumento,
-        nonChiusi: true
+        codiceRegistro: this._sospensioneParams.codiceRegistroDocumento ? this._sospensioneParams.codiceRegistroDocumento : '',
+        numeroDocumento: this._sospensioneParams.numeroDocumento ? this._sospensioneParams.numeroDocumento : '',
+        annoDocumento: this._sospensioneParams.annoDocumento ? +this._sospensioneParams.annoDocumento: 0,
+        stato: this.getStatoPrecedente(this._sospensioneParams.codiceStatoProssimo)
       },
       expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona", "idFaseCorrente", "idStato"]
     });
@@ -63,6 +56,20 @@ export class ListaIterConPermessiComponent implements OnInit {
 
   selectedRowChanged(e) {
     this.selectedRow.emit(e.selectedRowsData[0]);
+  }
+
+  getStatoPrecedente(codiceStatoProssimo): string{
+    switch(codiceStatoProssimo){
+      case STATI.IN_CORSO.CODICE:{
+        return STATI.SOSPESO.CODICE; // solo i sospesi possono essere rimessi a in corso
+      }
+      case STATI.SOSPESO.CODICE:{
+        return STATI.IN_CORSO.CODICE; // solo gli in_corso possono essere sospesi
+      }
+      case STATI.CHIUSO.CODICE:{
+        return STATI.IN_CORSO.CODICE + ":" + STATI.SOSPESO.CODICE;
+      }
+    }
   }
 
   customizeColumns(columns: any) {

@@ -2,12 +2,14 @@ import { Component, OnInit } from "@angular/core";
 import { LoggedUser } from "@bds/nt-login";
 import { GlobalContextService } from "@bds/nt-context";
 import { PassaggioDiFaseComponent } from "../iter-procedimento/passaggio-di-fase/passaggio-di-fase.component"
-import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
+import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
 import { ActivatedRoute, Params } from "@angular/router";
 import { Observable, Subscription } from "rxjs";
 import { bUtente, bAzienda } from "@bds/nt-entities";
 import notify from "devextreme/ui/notify";
 import {AppConfiguration} from "../config/app-configuration";
+import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter"
+import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 
 @Component({
   selector: "app-cambio-di-stato",
@@ -18,7 +20,7 @@ export class CambioDiStatoComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
 
-  public sospensioneParams: SospensioneParams;
+  public sospensioneParams: CambioDiStatoParams;
   public userInfo: UserInfo;
   public selectedIter: string = "Selezionare un iter dalla tabella";
 
@@ -39,12 +41,15 @@ export class CambioDiStatoComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
-      this.sospensioneParams = new SospensioneParams();
+      this.sospensioneParams = new CambioDiStatoParams();
       this.sospensioneParams.annoDocumento = queryParams["anno"];
       this.sospensioneParams.numeroDocumento = queryParams["numero"];
       this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
       this.sospensioneParams.dataRegistrazioneDocumento = queryParams["dataRegistrazione"];
       this.sospensioneParams.oggettoDocumento = decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " "));
+      this.sospensioneParams.azione = queryParams["azione"] ? queryParams["azione"].toLowerCase() : undefined;
+      this.sospensioneParams.codiceStatoProssimo = queryParams["stato"].toUpperCase();
+      this.sospensioneParams.idOggettoOrigine = queryParams["idOggettoOrigine"];
       const noBars: boolean = queryParams["nobars"];
     });
   }
@@ -67,25 +72,29 @@ export class CambioDiStatoComponent implements OnInit {
   }
 
   selectedRowChanged(e) {
-    
+    let cloneSospensione = new CambioDiStatoParams();
+    Object.assign(cloneSospensione, this.sospensioneParams);
+    this.sospensioneParams = cloneSospensione;
     this.selectedIter = "Iter selezionato: " + e.numero + "/" + e.anno;
     this.lookupValue = null;
     this.sospensioneParams.numeroIter = e.numero;
     this.sospensioneParams.annoIter = e.anno;
     this.sospensioneParams.idIter = e.id;
-    this.sospensioneParams.idStatoCorrente = e.idStato.id;
+    this.sospensioneParams.dataAvvioIter = e.dataAvvio;
+    this.sospensioneParams.codiceStatoCorrente = e.idStato.codice;
     this.sospensioneParams.isFaseDiChiusura = e.idFaseCorrente.faseDiChiusura;
-    if ((this.sospensioneParams.idStatoCorrente === 2) && this.lookupItems.length !== 1) {
-      this.lookupItems = ["Cambio di stato"];
-      this.lookupValue = "Cambio di stato";
-    }else if (this.lookupItems.length === 1) {
-      this.lookupItems = ["Cambio di stato", "Passaggio di fase"];
-    }
+    console.log("Father sospensione params: ", this.sospensioneParams)
+    // if ((this.sospensioneParams.codiceStatoCorrente === STATI.SOSPESO.CODICE) && this.lookupItems.length !== 1) {
+    //   this.lookupItems = ["Cambio di stato"];
+    //   this.lookupValue = "Cambio di stato";
+    // }else if (this.lookupItems.length === 1) {
+    //   this.lookupItems = ["Cambio di stato", "Passaggio di fase"];
+    // }
   }
 
   lookupValueChanged(e) {
     this.lookupValue = e.value;
-    if ((e.value === "Passaggio di fase" || e.value === "Cambio di stato") && (this.sospensioneParams.idStatoCorrente === 3 || this.sospensioneParams.isFaseDiChiusura)) {
+    if ((e.value === "Passaggio di fase" || e.value === "Cambio di stato") && (this.sospensioneParams.codiceStatoCorrente === STATI.CHIUSO.CODICE || this.sospensioneParams.isFaseDiChiusura)) {
       notify({
         message: "Il procedimento è già nell'ultima fase prevista: Fase di chiusura.",
         type: "warning",

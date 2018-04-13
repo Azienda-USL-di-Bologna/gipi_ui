@@ -6,13 +6,13 @@ import { Observable } from "rxjs/Observable";
 import {GlobalContextService, OdataContextFactory, OdataForeignKey} from "@bds/nt-context";
 import { Ruolo, bUtente, bAzienda, bRuolo } from "@bds/nt-entities";
 import { Subscription } from "rxjs/Subscription";
-import {LOGOUT_URL, ODATA_BASE_URL} from "../environments/app.constants";
+import {BarsMode, LOGOUT_URL, ODATA_BASE_URL} from "../environments/app.constants";
 import { SidebarItem } from "@bds/nt-context";
 import { LoggedUser } from "@bds/nt-login";
 import * as $ from "jquery";
 import * as deLocalization from "devextreme/localization";
 import {AppConfiguration} from "./config/app-configuration";
-import {SospensioneParams} from "./classi/condivise/sospensione/sospensione-params";
+import {CambioDiStatoParams} from "./classi/condivise/sospensione/gestione-stato-params";
 
 
 @Component({
@@ -38,6 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public classeSidebar: string = "sidebar-style d-none";
     public classeRightSide: string;
 
+    public enableSidebarByRole: boolean;
     public sidebarItems: Array<SidebarItem> = [];
     // public sidebarItems2: Array<SidebarItem> = [new SidebarItem("Iter Procedimento", "iter-procedimento")];
     public userInfoMap$: Observable<Object>;
@@ -64,18 +65,34 @@ export class AppComponent implements OnInit, OnDestroy {
         // leggo dai queryParams il parametro "showbars", se c'è a seconda del suo valore decido di mostrare o nascondere l'appbar e la sidebar
         // mettendolo qui nell'AppComponent, vale per tutte le interfacce
         this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
-          const showBarsParam: string = queryParams["showbars"];
-          let showBars: boolean;
-          if (showBarsParam) {
-            showBars = showBarsParam === "true";
-            if (showBars) {
-              this.appConfig.setAppBarVisible(true);
-              this.appConfig.setSideBarVisible(true);
-            }
-            else {
-              this.appConfig.setAppBarVisible(false);
-              this.appConfig.setSideBarVisible(false);
-            }
+          const barsModeParam: string = queryParams["barsmode"];
+
+          if (barsModeParam) {
+              switch (barsModeParam) {
+                  case BarsMode.ALL: {
+                      this.appConfig.setAppBarVisible(true);
+                      this.appConfig.setSideBarVisible(true);
+                      this.appConfig.setAppBarSimple(false);
+                      break;
+                  }
+                  case BarsMode.NONE: {
+                      this.appConfig.setAppBarVisible(false);
+                      this.appConfig.setSideBarVisible(false);
+                      this.appConfig.setAppBarSimple(false);
+                      break;
+                  }
+                  case BarsMode.SIMPLE: {
+                      this.appConfig.setAppBarVisible(true);
+                      this.appConfig.setSideBarVisible(false);
+                      this.appConfig.setAppBarSimple(true);
+                      break;
+                  }
+                  case BarsMode.SIMPLE_WITH_SIDEBAR: {
+                      this.appConfig.setAppBarVisible(true);
+                      this.appConfig.setSideBarVisible(true);
+                      this.appConfig.setAppBarSimple(true);
+                  }
+              }
           }
       });
 
@@ -120,8 +137,8 @@ export class AppComponent implements OnInit, OnDestroy {
         }
     }
 
-    slide() {
-        if (this.classeSidebar.indexOf("active") >= 0) {
+    slide(isLogout: boolean) {
+        if (this.classeSidebar.indexOf("active") >= 0 || isLogout) {
             this.classeSidebar = "col-2 sidebar-style d-none ";
             this.classeRightSide = "";
         } else {
@@ -173,10 +190,16 @@ export class AppComponent implements OnInit, OnDestroy {
                         this.nomeUtente = loggedUser.getField(bUtente.nome);
                         this.cognomeUtente = loggedUser.getField(bUtente.cognome);
 
+                        this.enableSidebarByRole = false;
                         this.ruoli.forEach(element => {
+                            if (!this.enableSidebarByRole && element[bRuolo.nomeBreve] !== "UG") {
+                                this.enableSidebarByRole = true;
+                            }
                             this.ruolo += element[bRuolo.nomeBreve] + " ";
                         });
-                        this.buildSideBar(loggedUser);
+                        if (this.enableSidebarByRole) {
+                            this.buildSideBar(loggedUser);
+                        }    
                     }
                 }
             )
@@ -198,6 +221,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
         const loginMethod = sessionStorage.getItem("loginMethod");
 
+        this.slide(true); // Chiudo la sidebar se è aperta
+        
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("userInfo");
         sessionStorage.removeItem("loginMethod");
@@ -223,6 +248,18 @@ export class AppComponent implements OnInit, OnDestroy {
             return "col heightCPC";
         } else {
             return "col";
+        }
+    }
+
+    getBackgroundColor() {
+        let router: any = this.router;
+        if (router.currentUrlTree.root && 
+            router.currentUrlTree.root.children && 
+            router.currentUrlTree.root.children.primary && 
+            router.currentUrlTree.root.children.primary.segments[0].path === "iter-procedimento") {
+            return "background-darker clRightSide";
+        } else {
+            return "clRightSide";
         }
     }
 }
