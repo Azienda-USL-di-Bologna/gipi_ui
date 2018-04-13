@@ -89,13 +89,17 @@
           <dxi-item dataField="dataInizio" cssClass="label-wrap" [label]="{text: 'Data inizio validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
           <dxi-item dataField="dataFine" cssClass="label-wrap" [label]="{text: 'Data fine validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, displayFormat: 'dd/MM/yyyy', 
                   min: procedimento.dataInizio, dateOutOfRangeMessage: 'Il valore è fuori dall\'intervallo'}"></dxi-item>
+
           </div>
           <dxi-item [template]="'bottoneUno'"></dxi-item>
         <div *dxTemplate="let data of 'bottoneUno'"></div>
-        
       </dx-form>
-      
+
+      <label *ngIf="formVisible" class="notice">(*) i campi sono obbligatori</label>
+
       <dx-validation-summary id="summary"></dx-validation-summary>
+
+
 
       <dx-button *ngIf= "possoAgireForm" class="buttons-form margine-sinistro custom-sm-col" [visible]=formVisible (onClick)="bottoneSalvaProcedimento($event)" text="Salva"
       hint="Salva i campi" [validationGroup]="procedimentoValGroup" [useSubmitBehavior]="true"></dx-button>
