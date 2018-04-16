@@ -248,7 +248,12 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public bottoneSalvaProcedimento(validationParams: any) {
 
+    const validator = validationParams.validationGroup.validate();
 
+    console.log("validazione", validator);
+    if (!validator.isValid) {
+      return;
+    }
 
 
     // questo lo devo spostare nel validata
@@ -311,7 +316,12 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
 
 
-  public bottoneAnnulla() {
+  public bottoneAnnulla(validationParams: any) {
+
+
+    validationParams.validationGroup.reset();
+
+
     let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
     console.log("DIFFERENZE", differenze);
     // c'è qualche differenza, ricaricare i dati tramite chiamata http per tornare alla situazione di partenza
