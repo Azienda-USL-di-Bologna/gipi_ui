@@ -1,19 +1,25 @@
 .header-font{
     font-weight: bold;
- }
- .header-font h3{
-     text-align: center;
- }
- .footerDiv{
+}
+.header-font h3{
+    text-align: center;
+}
+.footerDiv{
     // position: fixed;
     // bottom: 0;
     text-align: right;
     margin: 14px 0 16px 0;
     padding: 0 96px;
- }
- .fixHeight{
-     height: 340px;
- }
+}
+.fixHeight{
+    height: 340px;
+}
+
+.iter-procedimento .dx-state-disabled.dx-widget, .iter-procedimento .dx-state-disabled.dx-checkbox .dx-checkbox-icon{
+    opacity: 0.8 !important;
+    color: black !important;
+}
+
 /*  .footerDiv > dx-button{
     display: inline-block;
     padding: 2px 8px;

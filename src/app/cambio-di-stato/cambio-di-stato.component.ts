@@ -8,8 +8,9 @@ import { Observable, Subscription } from "rxjs";
 import { bUtente, bAzienda } from "@bds/nt-entities";
 import notify from "devextreme/ui/notify";
 import {AppConfiguration} from "../config/app-configuration";
-import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter"
+import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter";
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
+import { UtilityFunctions } from "../utility-functions";
 
 @Component({
   selector: "app-cambio-di-stato",
@@ -30,6 +31,7 @@ export class CambioDiStatoComponent implements OnInit {
   public messaggioAnnullamento: string;
   public lookupItems: string[] = ["Cambio di stato", "Passaggio di fase"];
   public lookupValue: string= "";
+  public titleDataDocumento: string;
 
 
   constructor( private activatedRoute: ActivatedRoute, private globalContextService: GlobalContextService, private appConfig: AppConfiguration) {
@@ -37,7 +39,7 @@ export class CambioDiStatoComponent implements OnInit {
     if (!this.userInfo) {
       this.recuperaUserInfo();
     }
-   }
+  }
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
@@ -46,6 +48,7 @@ export class CambioDiStatoComponent implements OnInit {
       this.sospensioneParams.numeroDocumento = queryParams["numero"];
       this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
       this.sospensioneParams.dataRegistrazioneDocumento = queryParams["dataRegistrazione"];
+      // this.titleDataDocumento = UtilityFunctions.formatDateToString(new Date(this.sospensioneParams.dataRegistrazioneDocumento));
       this.sospensioneParams.oggettoDocumento = decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " "));
       this.sospensioneParams.azione = queryParams["azione"] ? queryParams["azione"].toLowerCase() : undefined;
       this.sospensioneParams.codiceStatoProssimo = queryParams["stato"].toUpperCase();
