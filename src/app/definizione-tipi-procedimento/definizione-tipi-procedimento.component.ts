@@ -315,8 +315,8 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
   validazione(event: any): boolean {
     let from = new Date(event.data["dataInizioValidita"]);
     let to = new Date(event.data["dataFineValidita"]);
-
-    if (from <= to) {
+    /* La data di fine non è obbligatoria, permetto quindi che sia nulla */
+    if (event.data["dataFineValidita"] === null || from <= to) {
       return true;
     } else {
       return false;

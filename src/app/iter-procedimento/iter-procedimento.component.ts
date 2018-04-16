@@ -100,9 +100,31 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "idResponsabileProcedimento.idPersona",
         "idResponsabileAdozioneProcedimentoFinale.idPersona",
         "procedimentoCache.idTitolarePotereSostitutivo.idPersona",
+        "procedimentoCache.idStrutturaTitolarePotereSostitutivo",
+        "procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona",
+        "procedimentoCache.idStrutturaResponsabileAdozioneAttoFinale",
+        "procedimentoCache.idResponsabileProcedimento.idPersona",        
+        "procedimentoCache.idStrutturaResponsabileProcedimento",        
         "procedimentoCache.idStruttura"
       ],
-      filter: [["id", "=", this.idIter]]
+      filter: [["id", "=", this.idIter]],
+      map: (item) => {
+        if (item) {
+          if (item.procedimentoCache.idTitolarePotereSostitutivo && item.procedimentoCache.idStrutturaTitolarePotereSostitutivo) {
+            item.procedimentoCache.nomeVisualTitolare = item.procedimentoCache.idTitolarePotereSostitutivo.idPersona.descrizione +
+              " (" + item.procedimentoCache.idStrutturaTitolarePotereSostitutivo.nome + ")";
+          }
+          if (item.procedimentoCache.idResponsabileAdozioneAttoFinale && item.procedimentoCache.idStrutturaResponsabileAdozioneAttoFinale) {
+            item.procedimentoCache.nomeVisualResponsabileAttoFinale = item.procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona.descrizione +
+              " (" + item.procedimentoCache.idStrutturaResponsabileAdozioneAttoFinale.nome + ")";
+          }
+          if (item.procedimentoCache.idResponsabileProcedimento && item.procedimentoCache.idStrutturaResponsabileProcedimento) {
+            item.procedimentoCache.nomeVisualResponsabileProcedimento = item.procedimentoCache.idResponsabileProcedimento.idPersona.descrizione +
+              " (" + item.procedimentoCache.idStrutturaResponsabileProcedimento.nome + ")";
+          }
+          return item;
+        }
+      }
     });
     this.buildIter();
 
@@ -129,8 +151,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
             this.userInfo = {
               idUtente: loggedUser.getField(bUtente.id),
               idAzienda: loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id],
-                    cf: loggedUser.getField(bUtente.codiceFiscale)
-            }
+              cf: loggedUser.getField(bUtente.codiceFiscale)
+            };
           }
         }
       )
