@@ -48,7 +48,7 @@ export class CambioDiStatoComponent implements OnInit {
       this.sospensioneParams.numeroDocumento = queryParams["numero"];
       this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
       this.sospensioneParams.dataRegistrazioneDocumento = queryParams["dataRegistrazione"];
-      // this.titleDataDocumento = UtilityFunctions.formatDateToString(new Date(this.sospensioneParams.dataRegistrazioneDocumento));
+      this.titleDataDocumento = UtilityFunctions.formatDateToString(new Date(this.sospensioneParams.dataRegistrazioneDocumento));
       this.sospensioneParams.oggettoDocumento = decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " "));
       this.sospensioneParams.azione = queryParams["azione"] ? queryParams["azione"].toLowerCase() : undefined;
       this.sospensioneParams.codiceStatoProssimo = queryParams["stato"].toUpperCase();
