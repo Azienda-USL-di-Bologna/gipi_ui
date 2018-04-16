@@ -5,10 +5,9 @@ import { PassaggioDiFaseComponent } from "../iter-procedimento/passaggio-di-fase
 import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
 import { ActivatedRoute, Params } from "@angular/router";
 import { Observable, Subscription } from "rxjs";
-import { bUtente, bAzienda } from "@bds/nt-entities";
+import { bUtente, bAzienda, STATI } from "@bds/nt-entities";
 import notify from "devextreme/ui/notify";
 import {AppConfiguration} from "../config/app-configuration";
-import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter";
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { UtilityFunctions } from "../utility-functions";
 
@@ -97,7 +96,8 @@ export class CambioDiStatoComponent implements OnInit {
 
   lookupValueChanged(e) {
     this.lookupValue = e.value;
-    if ((e.value === "Passaggio di fase" || e.value === "Cambio di stato") && (this.sospensioneParams.codiceStatoCorrente === STATI.CHIUSO.CODICE || this.sospensioneParams.isFaseDiChiusura)) {
+    if ((e.value === "Passaggio di fase" || e.value === "Cambio di stato") 
+      && (this.sospensioneParams.codiceStatoCorrente === STATI.CHIUSO || this.sospensioneParams.isFaseDiChiusura)) {
       notify({
         message: "Il procedimento è già nell'ultima fase prevista: Fase di chiusura.",
         type: "warning",
