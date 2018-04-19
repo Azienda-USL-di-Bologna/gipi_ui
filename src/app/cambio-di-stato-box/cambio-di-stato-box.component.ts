@@ -106,7 +106,8 @@ export class CambioDiStatoBoxComponent implements OnInit {
     dataEvento: this._sospensioneParams.dataCambioDiStato,
     esito: this._sospensioneParams.esito,
     esitoMotivazione: this._sospensioneParams.esitoMotivazione,
-    idOggettoOrigine: this._sospensioneParams.idOggettoOrigine
+    idOggettoOrigine: this._sospensioneParams.idOggettoOrigine,
+    descrizione: this._sospensioneParams.descrizione
   };
 
   const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
@@ -197,6 +198,7 @@ interface GestioneStatiParams {
   esito: string;
   esitoMotivazione: string;
   idOggettoOrigine: string;
+  descrizione: string;
   azione: string;
 }
 

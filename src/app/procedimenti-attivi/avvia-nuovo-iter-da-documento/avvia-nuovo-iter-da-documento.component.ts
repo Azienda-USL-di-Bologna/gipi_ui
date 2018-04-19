@@ -29,6 +29,8 @@ export class AvviaNuovoIterDaDocumentoComponent {
         registro: queryParams["registro"],
         numero: queryParams["numero"],
         anno: queryParams["anno"],
+        idOggettoOrigine: queryParams["idOggettoOrigine"],
+        descrizione: decodeURIComponent(queryParams["descrizione"].replace(/\+/g, " ")),
         oggetto: decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " ")),
         dataRegistrazione: queryParams["dataRegistrazione"],
         promotore: decodeURIComponent(queryParams["promotore"].replace(/\+/g, " "))
