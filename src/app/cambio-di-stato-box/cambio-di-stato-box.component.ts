@@ -168,7 +168,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
     this.showPopupAnnullamento = !this.showPopupAnnullamento;
   }
 
-  handleRiassunto() {
+  handleRiassunto(e: any) {
     this.showPopupRiassunto = !this.showPopupRiassunto;
     if (!this._isOpenedAsPopup) {
       window.close();
