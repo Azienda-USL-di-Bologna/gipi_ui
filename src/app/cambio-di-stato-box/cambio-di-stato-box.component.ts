@@ -183,14 +183,18 @@ export class CambioDiStatoBoxComponent implements OnInit {
       let stato = value as any;
       objStati[stato.codice] = stato.descrizione;
     });
-    this.arrayRiassunto = [
-      new PopupRow("codiceRegistroDocumento","Registro", this._sospensioneParams.codiceRegistroDocumento),
-      new PopupRow("numeroDocumento","Numero", this._sospensioneParams.numeroDocumento),
-      new PopupRow("annoIter","Anno", this._sospensioneParams.annoIter.toString()),
-      new PopupRow("codiceStatoProssimo","Stato", objStati[this._sospensioneParams.codiceStatoProssimo]),
-      new PopupRow("dataCambioDiStato","Data cambio di stato", this._sospensioneParams.dataCambioDiStato.toLocaleDateString()),
-      new PopupRow("note","Note", this._sospensioneParams.note)
-    ]
+    this.arrayRiassunto = []
+    this.arrayRiassunto.push(new PopupRow("codiceRegistroDocumento","Registro", this._sospensioneParams.codiceRegistroDocumento))
+    if(this._sospensioneParams.numeroDocumento){
+      this.arrayRiassunto.push(new PopupRow("numeroDocumento","Numero", this._sospensioneParams.numeroDocumento))
+      this.arrayRiassunto.push(new PopupRow("annoIter","Anno", this._sospensioneParams.annoIter.toString()))
+    }
+    this.arrayRiassunto.push(new PopupRow("codiceStatoProssimo","Stato", objStati[this._sospensioneParams.codiceStatoProssimo]))
+    if(this._sospensioneParams.dataCambioDiStato){
+      this.arrayRiassunto.push(new PopupRow("dataCambioDiStato","Data cambio di stato", this._sospensioneParams.dataCambioDiStato.toLocaleDateString()))
+    }
+    this.arrayRiassunto.push(new PopupRow("note","Note", this._sospensioneParams.note))
+    
     if(this._sospensioneParams.isFaseDiChiusura){
       this.arrayRiassunto.push(new PopupRow("esito","Esito", this._sospensioneParams.esito));
       this.arrayRiassunto.push(new PopupRow("esitoMotivazione","Esito Motivazione", this._sospensioneParams.esitoMotivazione));
