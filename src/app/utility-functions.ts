@@ -43,4 +43,19 @@ export class UtilityFunctions {
 
         return array;
     }
+
+
+
+    /**
+     * Riceve in input una data Date e restituisce una stringa in formato dd/mm/yyyy
+     * @param date 
+     */
+    public static formatDateToString(date: Date): string {
+        let dd = date.getDate(); 
+        let mm = date.getMonth() + 1; 
+        let yyyy = date.getFullYear();
+        let dds = (dd < 10) ? "0" + dd : dd; 
+        let mms = (mm < 10) ? "0" + mm : mm;
+        return dds + "/" + mms + "/" + yyyy;
+    }
 }

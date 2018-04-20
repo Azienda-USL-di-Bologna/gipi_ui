@@ -13,6 +13,7 @@ import { GlobalContextService } from "@bds/nt-context";
 import { confirm, custom } from "devextreme/ui/dialog";
 import DataSource from "devextreme/data/data_source";
 import {OdataUtilities} from "@bds/nt-context";
+import { UtilityFunctions } from "../../utility-functions";
 
 @Component({
   selector: "avvia-nuovo-iter",
@@ -57,6 +58,8 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams.numeroDocumento = doc.numero;
     this.iterParams.annoDocumento = doc.anno;
     this.iterParams.oggettoDocumento = doc.oggetto;
+    this.iterParams.idOggettoOrigine = doc.idOggettoOrigine;
+    this.iterParams.descrizione = doc.descrizione;
     this.iterParams.oggettoIter = doc.oggetto;
     this.iterParams.dataAvvioIter = new Date(doc.dataRegistrazione);
     this.iterParams.dataCreazioneIter = new Date();
@@ -203,15 +206,6 @@ export class AvviaNuovoIterComponent implements OnInit {
     });
   }
 
-  private formatDateToString(date: Date): string {
-    let dd = date.getDate(); 
-    let mm = date.getMonth() + 1; 
-    let yyyy = date.getFullYear();
-    let dds = (dd < 10) ? "0" + dd : dd; 
-    let mms = (mm < 10) ? "0" + mm : mm;
-    return dds + "/" + mms + "/" + yyyy;
-  }
-
   private riepilogaAndChiudi(res): void {
     let text = "Torna a";
     switch (this.iterParams.codiceRegistroDocumento) {
@@ -246,8 +240,8 @@ export class AvviaNuovoIterComponent implements OnInit {
     return "<b>E' stato creato l'iter numero:</b> " + res["numero"]
       + "<br><b>Tramite il documento:</b> " + this.iterParams.codiceRegistroDocumento + " " + this.iterParams.numeroDocumento + "/" + this.iterParams.annoDocumento
       + "<br><b>Responsabilie procedimento amministrativo:</b> " + this.descrizioneUtenteResponsabile
-      + "<br><b>Data avvio iter:</b> " + this.formatDateToString(this.iterParams.dataAvvioIter)
-      + "<br><b>Data massima conclusione:</b> " + this.formatDateToString(this.dataMassimaConclusione)
+      + "<br><b>Data avvio iter:</b> " + UtilityFunctions.formatDateToString(this.iterParams.dataAvvioIter)
+      + "<br><b>Data massima conclusione:</b> " + UtilityFunctions.formatDateToString(this.dataMassimaConclusione)
       + "<br><b>Promotore:</b> " + this.iterParams.promotoreIter
       + "<br><b>Oggetto:</b> " + this.iterParams.oggettoIter;
   }
@@ -328,6 +322,8 @@ class IterParams {
   public numeroDocumento: string;
   public annoDocumento: number;
   public oggettoDocumento: string;
+  public idOggettoOrigine: string;
+  public descrizione: string;
   public promotoreIter: string;
   public procedimento: Procedimento;
   public titolarePotereSostitutivoDesc: string;

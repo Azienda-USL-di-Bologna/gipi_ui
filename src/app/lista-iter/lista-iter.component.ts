@@ -49,7 +49,8 @@ export class ListaIterComponent implements OnInit {
         "idStato",
         "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento"
       ],
-      filter: ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id", "=", this.idAzienda]
+      filter: ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id", "=", this.idAzienda],
+      sort: [{ field: "numero", desc: true }]
     });
   }
 

@@ -8,7 +8,7 @@ import { Observable } from "rxjs/Observable";
 import { LoggedUser } from "@bds/nt-login";
 import { GetIterUtente } from "@bds/nt-entities";
 import { SospensioneParams } from "../../classi/condivise/sospensione/sospensione-params";
-import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter"
+import {  STATI } from "@bds/nt-entities";
 
 @Component({
   selector: "app-lista-iter-con-permessi",
@@ -44,12 +44,13 @@ export class ListaIterConPermessiComponent implements OnInit {
       customQueryParams: {
         cf: this._userInfo.cf,
         idAzienda: this._userInfo.idAzienda,
-        codiceRegistro: this._sospensioneParams.codiceRegistroDocumento ? this._sospensioneParams.codiceRegistroDocumento : '',
-        numeroDocumento: this._sospensioneParams.numeroDocumento ? this._sospensioneParams.numeroDocumento : '',
-        annoDocumento: this._sospensioneParams.annoDocumento ? +this._sospensioneParams.annoDocumento: 0,
+        codiceRegistro: this._sospensioneParams.codiceRegistroDocumento ? this._sospensioneParams.codiceRegistroDocumento : "",
+        numeroDocumento: this._sospensioneParams.numeroDocumento ? this._sospensioneParams.numeroDocumento : "",
+        annoDocumento: this._sospensioneParams.annoDocumento ? +this._sospensioneParams.annoDocumento : 0,
         stato: this.getStatoPrecedente(this._sospensioneParams.codiceStatoProssimo)
       },
-      expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona", "idFaseCorrente", "idStato"]
+      expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona", "idFaseCorrente", "idStato"]/* ,
+      sort: [{ field: "oggetto", desc: true }] */
     });
     this.dataSource.load().then(res => { console.log("LISTA RES: ", res); });
   }
@@ -58,16 +59,16 @@ export class ListaIterConPermessiComponent implements OnInit {
     this.selectedRow.emit(e.selectedRowsData[0]);
   }
 
-  getStatoPrecedente(codiceStatoProssimo): string{
-    switch(codiceStatoProssimo){
-      case STATI.IN_CORSO.CODICE:{
-        return STATI.SOSPESO.CODICE; // solo i sospesi possono essere rimessi a in corso
+  getStatoPrecedente(codiceStatoProssimo): string {
+    switch (codiceStatoProssimo){
+      case STATI.IN_CORSO: {
+        return STATI.SOSPESO; // solo i sospesi possono essere rimessi a in corso
       }
-      case STATI.SOSPESO.CODICE:{
-        return STATI.IN_CORSO.CODICE; // solo gli in_corso possono essere sospesi
+      case STATI.SOSPESO: {
+        return STATI.IN_CORSO; // solo gli in_corso possono essere sospesi
       }
-      case STATI.CHIUSO.CODICE:{
-        return STATI.IN_CORSO.CODICE + ":" + STATI.SOSPESO.CODICE;
+      case STATI.CHIUSO: {
+        return STATI.IN_CORSO + ":" + STATI.SOSPESO;
       }
     }
   }
