@@ -10,6 +10,8 @@ import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
 import { Stato } from "@bds/nt-entities";
 import { STATI } from "@bds/nt-entities/client-objects/constants/stati-iter";
+import { Popup } from "@bds/nt-context"
+import { PopupRow } from "../classi/condivise/popup/popup-tools"
 
 @Component({
   selector: "app-cambio-di-stato-box",
@@ -30,6 +32,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
   public dataSourceStati: DataSource;
   public dataIniziale: Date;
   public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}});
+  public arrayRiassunto: PopupRow[];
 
   @Output() out = new EventEmitter<any>();
 
@@ -89,7 +92,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
   handleSubmit(e) {
   // e.preventDefault(); // Con l'evento onClick non dovrebbe essere necessaria
   if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.codiceStatoCorrente) { return; }
-  
+
   const result = e.validationGroup.validate(); 
   if (!result.isValid) { return; }
     
@@ -123,6 +126,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
         },
         width: "max-content"
       });
+      this.updateArrayRiassunto();
       this.showPopupRiassunto = true;
         }
         else {
@@ -170,6 +174,26 @@ export class CambioDiStatoBoxComponent implements OnInit {
       window.close();
     }else {
       this.out.emit({ visible: false });
+    }
+  }
+
+  updateArrayRiassunto(){
+    let objStati: string[] = [];
+    this.statiIter.forEach(value =>{
+      let stato = value as any;
+      objStati[stato.codice] = stato.descrizione;
+    });
+    this.arrayRiassunto = [
+      new PopupRow("codiceRegistroDocumento","Registro", this._sospensioneParams.codiceRegistroDocumento),
+      new PopupRow("numeroDocumento","Numero", this._sospensioneParams.numeroDocumento),
+      new PopupRow("annoIter","Anno", this._sospensioneParams.annoIter.toString()),
+      new PopupRow("codiceStatoProssimo","Stato", objStati[this._sospensioneParams.codiceStatoProssimo]),
+      new PopupRow("dataCambioDiStato","Data cambio di stato", this._sospensioneParams.dataCambioDiStato.toLocaleDateString()),
+      new PopupRow("note","Note", this._sospensioneParams.note)
+    ]
+    if(this._sospensioneParams.isFaseDiChiusura){
+      this.arrayRiassunto.push(new PopupRow("esito","Esito", this._sospensioneParams.esito));
+      this.arrayRiassunto.push(new PopupRow("esitoMotivazione","Esito Motivazione", this._sospensioneParams.esitoMotivazione));
     }
   }
 
