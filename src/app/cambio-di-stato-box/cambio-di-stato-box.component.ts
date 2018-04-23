@@ -184,9 +184,9 @@ export class CambioDiStatoBoxComponent implements OnInit {
       objStati[stato.codice] = stato.descrizione;
     });
     this.arrayRiassunto = []
-    this.arrayRiassunto.push(new PopupRow("codiceRegistroDocumento","Registro", this._sospensioneParams.codiceRegistroDocumento))
+    // this.arrayRiassunto.push(new PopupRow("codiceRegistroDocumento","Registro", this._sospensioneParams.codiceRegistroDocumento))
     if(this._sospensioneParams.numeroDocumento){
-      this.arrayRiassunto.push(new PopupRow("numeroDocumento","Numero", this._sospensioneParams.numeroDocumento))
+      this.arrayRiassunto.push(new PopupRow("numeroIter","Numero", this._sospensioneParams.numeroIter.toString()))
       this.arrayRiassunto.push(new PopupRow("annoIter","Anno", this._sospensioneParams.annoIter.toString()))
     }
     this.arrayRiassunto.push(new PopupRow("codiceStatoProssimo","Stato", objStati[this._sospensioneParams.codiceStatoProssimo]))
