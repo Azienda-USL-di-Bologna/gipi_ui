@@ -54,8 +54,8 @@ export class CambioDiStatoComponent implements OnInit {
       this.sospensioneParams.isFaseDiChiusura = this.sospensioneParams.codiceStatoProssimo === STATI.CHIUSO
       this.sospensioneParams.idOggettoOrigine = queryParams["idOggettoOrigine"];
       this.sospensioneParams.descrizione = decodeURIComponent(queryParams["descrizione"].replace(/\+/g, " "));
+      this.sospensioneParams.idApplicazione = decodeURIComponent(queryParams["idApplicazione"].replace(/\+/g, " "));
       const noBars: boolean = queryParams["nobars"];
-      console.log("CIAO params = ", queryParams);
     });
   }
 
@@ -88,7 +88,7 @@ export class CambioDiStatoComponent implements OnInit {
     this.sospensioneParams.dataAvvioIter = e.dataAvvio;
     this.sospensioneParams.codiceStatoCorrente = e.idStato.codice;
     // this.sospensioneParams.isFaseDiChiusura = e.idFaseCorrente.faseDiChiusura;
-    console.log("Father sospensione params: ", this.sospensioneParams);
+    // console.log("Father sospensione params: ", this.sospensioneParams);
     // if ((this.sospensioneParams.codiceStatoCorrente === STATI.SOSPESO.CODICE) && this.lookupItems.length !== 1) {
     //   this.lookupItems = ["Cambio di stato"];
     //   this.lookupValue = "Cambio di stato";

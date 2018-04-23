@@ -64,6 +64,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams.dataAvvioIter = new Date(doc.dataRegistrazione);
     this.iterParams.dataCreazioneIter = new Date();
     this.iterParams.promotoreIter = doc.promotore;
+    this.iterParams.idApplicazione = doc.idApplicazione;
   }
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
@@ -328,4 +329,5 @@ class IterParams {
   public procedimento: Procedimento;
   public titolarePotereSostitutivoDesc: string;
   public responsabileAdozioneAttoFinaleDesc: string;
+  public idApplicazione: string;
 }
