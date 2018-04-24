@@ -79,15 +79,15 @@
         (onClick)="handleEvent('onClickProcedi',$event)" validationGroup="validationAvviaIter">
       </dx-button>
     </div>
-  </dx-scroll-view>
-  <dx-load-panel
-      #loadPanel
-      shadingColor="rgba(191, 191, 191, 0.5)"
-      [position]="{ of: window }"
-      [(visible)]="loadingVisible"
-      [showIndicator]="true"
-      message="Attendere prego..."
-      [showPane]="true"
-      [shading]="true"
-      [closeOnOutsideClick]="false">
-    </dx-load-panel>
+</dx-scroll-view>
+<dx-load-panel
+  #loadPanel
+  shadingColor="rgba(191, 191, 191, 0.5)"
+  [position]="{ of: 'window' }"
+  [(visible)]="loadingVisible"
+  [showIndicator]="true"
+  message="Attendere prego..."
+  [showPane]="true"
+  [shading]="true"
+  [closeOnOutsideClick]="false">
+</dx-load-panel>
