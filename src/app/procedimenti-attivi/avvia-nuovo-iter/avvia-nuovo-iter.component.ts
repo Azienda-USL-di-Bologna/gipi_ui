@@ -208,7 +208,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   private riepilogaAndChiudi(res): void {
-    let text = "Torna a";
+    /* let text = "Torna a";
     switch (this.iterParams.codiceRegistroDocumento) {
       case "PG": 
         text += " Pico";
@@ -222,14 +222,13 @@ export class AvviaNuovoIterComponent implements OnInit {
       default:
         text += "lla Home";
         break;
-    }
+    } */
     custom({
       title: "Iter avviato con successo", 
       message: this.buildMessaggioRiepilogativo(res), 
       buttons: [{
-        type: "success",
-        text: text,
-        icon: "back",
+        type: "default",
+        text: "OK",
         onClick: () => {
           window.close();
         }
