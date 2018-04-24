@@ -34,7 +34,9 @@
         showCancelButton: false,
         searchPlaceholder: 'Cerca...',
         valueExpr: 'this'
-      }"></dxi-item>
+      }">
+        <dxi-validation-rule type="required" message="La classificazione è obbligatoria"></dxi-validation-rule>
+      </dxi-item>
       <dxi-item dataField="idTipoProcedimento.normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true}"></dxi-item>
     </dxi-item>
     
