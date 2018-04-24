@@ -32,6 +32,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
   public dataIniziale: Date;
   public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}});
   public arrayRiassunto: PopupRow[];
+  public loadingVisible: boolean = false;
 
   @Output() out = new EventEmitter<any>();
 
@@ -113,10 +114,11 @@ export class CambioDiStatoBoxComponent implements OnInit {
     descrizione: this._sospensioneParams.descrizione,
     idApplicazione: this._sospensioneParams.idApplicazione
   };
-
+  this.loadingVisible = true;
   const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
   .subscribe(
     res => {
+      this.loadingVisible = false;
         if (res["idIter"] > 0) {
       notify({
         message: "Salvataggio effettuato con successo!",
@@ -143,6 +145,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
         }
     },
     err => {
+      this.loadingVisible = false;
       notify({
         message: "Errore durante il salvataggio!",
         type: "error",

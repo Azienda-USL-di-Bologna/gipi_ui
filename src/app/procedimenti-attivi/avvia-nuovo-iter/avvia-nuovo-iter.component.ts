@@ -36,6 +36,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   public searchString: string = "";
   public idUtenteDefault: number;
   public descrizioneUtenteResponsabile: string;
+  public loadingVisible: boolean = false;
 
   @Input()
   set procedimentoSelezionato(procedimento: any) {
@@ -179,9 +180,11 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   private avviaIter(): void {
+    this.loadingVisible = true;
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({}, this.iterParams))
       .subscribe(
-        res => {
+      res => {
+        this.loadingVisible = false;
           if (this.avviaIterDaDocumento) {
             this.riepilogaAndChiudi(res);
           } else {
@@ -189,7 +192,8 @@ export class AvviaNuovoIterComponent implements OnInit {
             this.closePopUp(idIter);
           }
         },
-        err => {
+      err => {
+        this.loadingVisible = false;
           this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
         }
       );
