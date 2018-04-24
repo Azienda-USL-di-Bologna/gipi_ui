@@ -1,4 +1,4 @@
-<div>
+<div class="text-left">
   <dx-form
   [(formData)]="_sospensioneParams"
   validationGroup="sospensioneParams"
@@ -82,7 +82,7 @@
     </dx-button>
   </div>
 
-  <dx-popup
+  <!-- <dx-popup
   class="popup"
   [width]="700"
   [height]="'auto'"
@@ -92,66 +92,19 @@
   [closeOnOutsideClick]="false"
   [(visible)]="showPopupRiassunto">
   <div *dxTemplate="let data of 'content'">
-      <h3>Dati del documento</h3>
-      <dx-form
-      [readOnly]="true"
-      [formData]="_sospensioneParams"
-      [colCount]="1">
-        <dxi-item dataField="codiceRegistroDocumento" >
-            <dxo-label text="Registro"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="numeroDocumento">
-            <dxo-label text="Numero"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="annoDocumento">
-            <dxo-label text="Anno"></dxo-label>
-        </dxi-item>  
-      </dx-form>
-
-      <h3 class="mt-4">Dati dell'iter</h3>
-      <dx-form
-      [readOnly]="true"
-      [formData]="_sospensioneParams"
-      [colCount]="1">
-        <dxi-item dataField="numeroIter" >
-            <dxo-label text="Numero"></dxo-label>
-        </dxi-item>
-        <dxi-item dataField="annoIter" >
-            <dxo-label text="Anno"></dxo-label>
-        </dxi-item>
-        <!-- <dxi-item 
-          dataField="codiceStatoCorrente"
-          [label]="{text: 'Stato'}"
-          editorType="dxLookup" 
-          [editorOptions]="{ 
-            disabled: true,
-            dataSource: dataSourceStati,
-            displayExpr: 'descrizione',
-            valueExpr: 'codice'
-          }">
-        </dxi-item> -->
-        <dxi-item 
-          dataField="codiceStatoProssimo"
-          [label]="{text: 'Stato'}" 
-          editorType="dxLookup" 
-          [editorOptions]="{ 
-            disabled: true,
-            dataSource: dataSourceStati,
-            displayExpr: 'descrizione',
-            valueExpr: 'codice'
-          }">
-        </dxi-item>
-        <dxi-item dataField="dataCambioDiStato" editorType="dxDateBox" [editorOptions]="{ displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-        <dxi-item dataField="note" editorType="dxTextArea"></dxi-item>
-        <dxi-item *ngIf="_sospensioneParams.codiceStatoProssimo === 'CHIUSO'" dataField="esito" editorType="dxTextArea" [label]="{text: 'Esito'}" [editorOptions]="{ disabled: false }"></dxi-item>
-        <dxi-item *ngIf="_sospensioneParams.codiceStatoProssimo === 'CHIUSO'" dataField="esitoMotivazione" editorType="dxTextArea" [label]="{text: 'Motivazione'}" [editorOptions]="{ disabled: false }"></dxi-item>
-      </dx-form>
+      <ul>
+        <li *ngFor="let row of arrayRiassunto">
+          <span>{{row.descrizione}}: </span><span>{{row.valore}}</span>
+        </li>
+      </ul>
       <div class="text-center">
           <dx-button class="d-inline-block" text="Chiudi" (click)="handleRiassunto($event)"></dx-button>
       </div>
       
   </div>
-</dx-popup>
+</dx-popup> -->
+
+<popup [title]="'Riassunto operazione'" [arrayRiassunto]="arrayRiassunto" [showPopup]="showPopupRiassunto" (out)="handleRiassunto($event)"></popup>
 
 <dx-popup
 class="popup"

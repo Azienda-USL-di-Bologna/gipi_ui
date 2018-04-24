@@ -9,7 +9,8 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
 import { Stato } from "@bds/nt-entities";
-import { STATI } from "@bds/nt-entities/client-objects/constants/stati-iter";
+import { Popup } from "@bds/nt-context"
+import { PopupRow } from "../classi/condivise/popup/popup-tools"
 
 @Component({
   selector: "app-cambio-di-stato-box",
@@ -30,6 +31,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
   public dataSourceStati: DataSource;
   public dataIniziale: Date;
   public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}});
+  public arrayRiassunto: PopupRow[];
 
   @Output() out = new EventEmitter<any>();
 
@@ -89,7 +91,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
   handleSubmit(e) {
   // e.preventDefault(); // Con l'evento onClick non dovrebbe essere necessaria
   if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.codiceStatoCorrente) { return; }
-  
+
   const result = e.validationGroup.validate(); 
   if (!result.isValid) { return; }
     
@@ -107,7 +109,9 @@ export class CambioDiStatoBoxComponent implements OnInit {
     dataEvento: this._sospensioneParams.dataCambioDiStato,
     esito: this._sospensioneParams.esito,
     esitoMotivazione: this._sospensioneParams.esitoMotivazione,
-    idOggettoOrigine: this._sospensioneParams.idOggettoOrigine
+    idOggettoOrigine: this._sospensioneParams.idOggettoOrigine,
+    descrizione: this._sospensioneParams.descrizione,
+    idApplicazione: this._sospensioneParams.idApplicazione
   };
 
   const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
@@ -123,6 +127,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
         },
         width: "max-content"
       });
+      this.updateArrayRiassunto();
       this.showPopupRiassunto = true;
         }
         else {
@@ -164,12 +169,36 @@ export class CambioDiStatoBoxComponent implements OnInit {
     this.showPopupAnnullamento = !this.showPopupAnnullamento;
   }
 
-  handleRiassunto() {
+  handleRiassunto(e: any) {
     this.showPopupRiassunto = !this.showPopupRiassunto;
     if (!this._isOpenedAsPopup) {
       window.close();
     }else {
       this.out.emit({ visible: false });
+    }
+  }
+
+  updateArrayRiassunto() {
+    let objStati: string[] = [];
+    this.statiIter.forEach(value => {
+      let stato = value as any;
+      objStati[stato.codice] = stato.descrizione;
+    });
+    this.arrayRiassunto = []
+    // this.arrayRiassunto.push(new PopupRow("codiceRegistroDocumento","Registro", this._sospensioneParams.codiceRegistroDocumento))
+    if(this._sospensioneParams.numeroDocumento) {
+      this.arrayRiassunto.push(new PopupRow("numeroIter", "Numero", this._sospensioneParams.numeroIter.toString()))
+      this.arrayRiassunto.push(new PopupRow("annoIter", "Anno", this._sospensioneParams.annoIter.toString()))
+    }
+    this.arrayRiassunto.push(new PopupRow("codiceStatoProssimo", "Stato", objStati[this._sospensioneParams.codiceStatoProssimo]))
+    if (this._sospensioneParams.dataCambioDiStato) {
+      this.arrayRiassunto.push(new PopupRow("dataCambioDiStato", "Data cambio di stato", this._sospensioneParams.dataCambioDiStato.toLocaleDateString()))
+    }
+    this.arrayRiassunto.push(new PopupRow("note", "Note", this._sospensioneParams.note))
+    
+    if (this._sospensioneParams.isFaseDiChiusura) {
+      this.arrayRiassunto.push(new PopupRow("esito", "Esito", this._sospensioneParams.esito));
+      this.arrayRiassunto.push(new PopupRow("esitoMotivazione", "Esito Motivazione", this._sospensioneParams.esitoMotivazione));
     }
   }
 
@@ -198,7 +227,9 @@ interface GestioneStatiParams {
   esito: string;
   esitoMotivazione: string;
   idOggettoOrigine: string;
+  descrizione: string;
   azione: string;
+  idApplicazione: string;
 }
 
 interface UserInfo{

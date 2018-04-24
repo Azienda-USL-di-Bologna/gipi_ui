@@ -34,7 +34,6 @@
     </dxi-column>
     <dxi-column dataField="dataFineValidita"  caption="Data Fine Validità" caption="Data Fine Validità" [dataType]="'date'" [format]="'dd/MM/yyyy'"
         alignment="center" [allowFiltering]="true">
-        <dxi-validation-rule type="required" message="la data fine validità è obbligatoria"></dxi-validation-rule>
         <dxi-validation-rule
                 type="custom" [validationCallback] = "validazione" message="La data di fine validità deve essere successiva a quella di inizio">
         </dxi-validation-rule>

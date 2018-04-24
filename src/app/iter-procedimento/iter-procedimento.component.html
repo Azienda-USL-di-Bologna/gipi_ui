@@ -1,4 +1,4 @@
-<div class="container-fluid background">
+<div class="container-fluid iter-procedimento">
     <!-- Non cancellare. Potrenne tornare utile in futuro 
         <app-buttons-bar (onGenericButtonClick)="onGenericButtonClick($event)" [genericButtons]="genericButtons">
     </app-buttons-bar> -->
@@ -29,11 +29,13 @@
 
                     <dxi-item [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }"></dxi-item>
 
-                    <dxi-item [colSpan]="6" dataField="idResponsabileProcedimento.idPersona.descrizione" [editorOptions]="{ disabled: true }">
+                    <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. procedimento"></dxo-label>
                     </dxi-item>
-
-                    <dxi-item [colSpan]="6" dataField="procedimentoCache.idTitolarePotereSostitutivo.idPersona.descrizione" [editorOptions]="{ disabled: true }">
+                    <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileAttoFinale" [editorOptions]="{ disabled: true }">
+                        <dxo-label text="Resp. adozione atto finale"></dxo-label>
+                    </dxi-item>
+                    <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualTitolare" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Tit. potere sostitutivo"></dxo-label>
                     </dxi-item>
 
