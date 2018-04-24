@@ -31,7 +31,8 @@ import {
     DxScrollViewModule,
     DxNumberBoxModule,
     DxValidationGroupModule,
-    DxTooltipModule
+    DxTooltipModule,
+    DxLoadPanelModule
 } from "devextreme-angular";
 
 import {RouterModule} from "@angular/router";
@@ -151,7 +152,8 @@ import {AppConfiguration} from "./config/app-configuration";
         EntitiesModule.forRoot(null),
         DxNumberBoxModule,
         DxValidationGroupModule,
-        DxTooltipModule
+        DxTooltipModule,
+        DxLoadPanelModule
     ],
     providers: [DefinizioneTipiProcedimentoService, RoleGuard, AppConfiguration
         // NavbarService

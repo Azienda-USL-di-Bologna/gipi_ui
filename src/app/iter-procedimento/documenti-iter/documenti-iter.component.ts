@@ -24,7 +24,7 @@ export class DocumentiIterComponent {
     this.dataSourceDocumentiIter = new DataSource({
       store: this.odataContextDefinition.getContext()[new DocumentoIter().getName()],
       expand: ["eventoIterList/idEvento"],
-      filter: ["idIter.id", "=", parseInt(this.daPadre["idIter"])]
+      filter: [["idIter.id", "=", parseInt(this.daPadre["idIter"])], ["parziale", "=", false]]
     });
    }
 

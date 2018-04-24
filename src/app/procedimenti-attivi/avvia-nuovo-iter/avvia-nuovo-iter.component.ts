@@ -36,6 +36,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   public searchString: string = "";
   public idUtenteDefault: number;
   public descrizioneUtenteResponsabile: string;
+  public loadingVisible: boolean = false;
 
   @Input()
   set procedimentoSelezionato(procedimento: any) {
@@ -58,10 +59,13 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams.numeroDocumento = doc.numero;
     this.iterParams.annoDocumento = doc.anno;
     this.iterParams.oggettoDocumento = doc.oggetto;
+    this.iterParams.idOggettoOrigine = doc.idOggettoOrigine;
+    this.iterParams.descrizione = doc.descrizione;
     this.iterParams.oggettoIter = doc.oggetto;
     this.iterParams.dataAvvioIter = new Date(doc.dataRegistrazione);
     this.iterParams.dataCreazioneIter = new Date();
     this.iterParams.promotoreIter = doc.promotore;
+    this.iterParams.idApplicazione = doc.idApplicazione;
   }
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
@@ -176,9 +180,11 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   private avviaIter(): void {
+    this.loadingVisible = true;
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({}, this.iterParams))
       .subscribe(
-        res => {
+      res => {
+        this.loadingVisible = false;
           if (this.avviaIterDaDocumento) {
             this.riepilogaAndChiudi(res);
           } else {
@@ -186,7 +192,8 @@ export class AvviaNuovoIterComponent implements OnInit {
             this.closePopUp(idIter);
           }
         },
-        err => {
+      err => {
+        this.loadingVisible = false;
           this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
         }
       );
@@ -205,7 +212,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   private riepilogaAndChiudi(res): void {
-    let text = "Torna a";
+    /* let text = "Torna a";
     switch (this.iterParams.codiceRegistroDocumento) {
       case "PG": 
         text += " Pico";
@@ -219,14 +226,13 @@ export class AvviaNuovoIterComponent implements OnInit {
       default:
         text += "lla Home";
         break;
-    }
+    } */
     custom({
       title: "Iter avviato con successo", 
       message: this.buildMessaggioRiepilogativo(res), 
       buttons: [{
-        type: "success",
-        text: text,
-        icon: "back",
+        type: "default",
+        text: "OK",
         onClick: () => {
           window.close();
         }
@@ -320,8 +326,11 @@ class IterParams {
   public numeroDocumento: string;
   public annoDocumento: number;
   public oggettoDocumento: string;
+  public idOggettoOrigine: string;
+  public descrizione: string;
   public promotoreIter: string;
   public procedimento: Procedimento;
   public titolarePotereSostitutivoDesc: string;
   public responsabileAdozioneAttoFinaleDesc: string;
+  public idApplicazione: string;
 }

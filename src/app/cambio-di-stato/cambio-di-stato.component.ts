@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { LoggedUser } from "@bds/nt-login";
 import { GlobalContextService } from "@bds/nt-context";
-import { PassaggioDiFaseComponent } from "../iter-procedimento/passaggio-di-fase/passaggio-di-fase.component"
+import { PassaggioDiFaseComponent } from "../iter-procedimento/passaggio-di-fase/passaggio-di-fase.component";
 import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
 import { ActivatedRoute, Params } from "@angular/router";
 import { Observable, Subscription } from "rxjs";
@@ -34,7 +34,7 @@ export class CambioDiStatoComponent implements OnInit {
 
 
   constructor( private activatedRoute: ActivatedRoute, private globalContextService: GlobalContextService, private appConfig: AppConfiguration) {
-    console.log("app-cambio-di-stato constructor")
+    console.log("app-cambio-di-stato constructor");
     if (!this.userInfo) {
       this.recuperaUserInfo();
     }
@@ -51,7 +51,10 @@ export class CambioDiStatoComponent implements OnInit {
       this.sospensioneParams.oggettoDocumento = decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " "));
       this.sospensioneParams.azione = queryParams["azione"] ? queryParams["azione"].toLowerCase() : undefined;
       this.sospensioneParams.codiceStatoProssimo = queryParams["stato"].toUpperCase();
+      this.sospensioneParams.isFaseDiChiusura = this.sospensioneParams.codiceStatoProssimo === STATI.CHIUSO;
       this.sospensioneParams.idOggettoOrigine = queryParams["idOggettoOrigine"];
+      this.sospensioneParams.descrizione = decodeURIComponent(queryParams["descrizione"].replace(/\+/g, " "));
+      this.sospensioneParams.idApplicazione = decodeURIComponent(queryParams["idApplicazione"].replace(/\+/g, " "));
       const noBars: boolean = queryParams["nobars"];
     });
   }
@@ -84,8 +87,8 @@ export class CambioDiStatoComponent implements OnInit {
     this.sospensioneParams.idIter = e.id;
     this.sospensioneParams.dataAvvioIter = e.dataAvvio;
     this.sospensioneParams.codiceStatoCorrente = e.idStato.codice;
-    this.sospensioneParams.isFaseDiChiusura = e.idFaseCorrente.faseDiChiusura;
-    console.log("Father sospensione params: ", this.sospensioneParams)
+    // this.sospensioneParams.isFaseDiChiusura = e.idFaseCorrente.faseDiChiusura;
+    // console.log("Father sospensione params: ", this.sospensioneParams);
     // if ((this.sospensioneParams.codiceStatoCorrente === STATI.SOSPESO.CODICE) && this.lookupItems.length !== 1) {
     //   this.lookupItems = ["Cambio di stato"];
     //   this.lookupValue = "Cambio di stato";
