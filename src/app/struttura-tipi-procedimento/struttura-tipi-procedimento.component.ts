@@ -243,7 +243,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public bottoneModificaProcedimento(validationParams: any) {
     if(this.isNullClassificazione()){
-      notify({message: 'Attenzione: non è stata inserita la classificazione sul procedimento. Correggere prima di continuare', position: 'center', width: "max-content"}, 'warning', 10000);
+      notify({message: 'Attenzione: non è stata inserita la classificazione sul procedimento. Correggere prima di continuare', position: 'center', width: "max-content"}, 'warning', 3000);
       return;
     }      
 
