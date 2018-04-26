@@ -87,6 +87,7 @@ export class CambioDiStatoComponent implements OnInit {
     this.sospensioneParams.idIter = e.id;
     this.sospensioneParams.dataAvvioIter = e.dataAvvio;
     this.sospensioneParams.codiceStatoCorrente = e.idStato.codice;
+    this.sospensioneParams.oggettoIter = e.oggetto;
     // this.sospensioneParams.isFaseDiChiusura = e.idFaseCorrente.faseDiChiusura;
     console.log("Father sospensione params: ", this.sospensioneParams);
     // if ((this.sospensioneParams.codiceStatoCorrente === STATI.SOSPESO.CODICE) && this.lookupItems.length !== 1) {

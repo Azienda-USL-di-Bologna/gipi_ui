@@ -185,10 +185,10 @@ export class CambioDiStatoBoxComponent implements OnInit {
     });
     this.arrayRiassunto = []
     // this.arrayRiassunto.push(new PopupRow("codiceRegistroDocumento","Registro", this._sospensioneParams.codiceRegistroDocumento))
-    if(this._sospensioneParams.numeroDocumento){
-      this.arrayRiassunto.push(new PopupRow("numeroIter","Numero", this._sospensioneParams.numeroIter.toString()))
-      this.arrayRiassunto.push(new PopupRow("annoIter","Anno", this._sospensioneParams.annoIter.toString()))
-    }
+    this.arrayRiassunto.push(new PopupRow("oggettoIter","Oggetto", this._sospensioneParams.oggettoIter))
+    this.arrayRiassunto.push(new PopupRow("numeroIter","Numero", this._sospensioneParams.numeroIter.toString()))
+    this.arrayRiassunto.push(new PopupRow("annoIter","Anno", this._sospensioneParams.annoIter.toString()))
+
     this.arrayRiassunto.push(new PopupRow("codiceStatoProssimo","Stato", objStati[this._sospensioneParams.codiceStatoProssimo]))
     if(this._sospensioneParams.dataCambioDiStato){
       this.arrayRiassunto.push(new PopupRow("dataCambioDiStato","Data cambio di stato", this._sospensioneParams.dataCambioDiStato.toLocaleDateString()))
