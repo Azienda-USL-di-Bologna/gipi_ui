@@ -32,6 +32,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
   public dataIniziale: Date;
   public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}});
   public arrayRiassunto: PopupRow[];
+  public loadingVisible: boolean = false;
 
   @Output() out = new EventEmitter<any>();
 
@@ -110,12 +111,14 @@ export class CambioDiStatoBoxComponent implements OnInit {
     esito: this._sospensioneParams.esito,
     esitoMotivazione: this._sospensioneParams.esitoMotivazione,
     idOggettoOrigine: this._sospensioneParams.idOggettoOrigine,
-    descrizione: this._sospensioneParams.descrizione
+    descrizione: this._sospensioneParams.descrizione,
+    idApplicazione: this._sospensioneParams.idApplicazione
   };
-
+  this.loadingVisible = true;
   const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
   .subscribe(
     res => {
+      this.loadingVisible = false;
         if (res["idIter"] > 0) {
       notify({
         message: "Salvataggio effettuato con successo!",
@@ -142,6 +145,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
         }
     },
     err => {
+      this.loadingVisible = false;
       notify({
         message: "Errore durante il salvataggio!",
         type: "error",
@@ -177,9 +181,9 @@ export class CambioDiStatoBoxComponent implements OnInit {
     }
   }
 
-  updateArrayRiassunto(){
+  updateArrayRiassunto() {
     let objStati: string[] = [];
-    this.statiIter.forEach(value =>{
+    this.statiIter.forEach(value => {
       let stato = value as any;
       objStati[stato.codice] = stato.descrizione;
     });
@@ -189,15 +193,15 @@ export class CambioDiStatoBoxComponent implements OnInit {
     this.arrayRiassunto.push(new PopupRow("numeroIter","Numero", this._sospensioneParams.numeroIter.toString()))
     this.arrayRiassunto.push(new PopupRow("annoIter","Anno", this._sospensioneParams.annoIter.toString()))
 
-    this.arrayRiassunto.push(new PopupRow("codiceStatoProssimo","Stato", objStati[this._sospensioneParams.codiceStatoProssimo]))
-    if(this._sospensioneParams.dataCambioDiStato){
-      this.arrayRiassunto.push(new PopupRow("dataCambioDiStato","Data cambio di stato", this._sospensioneParams.dataCambioDiStato.toLocaleDateString()))
+    this.arrayRiassunto.push(new PopupRow("codiceStatoProssimo", "Stato", objStati[this._sospensioneParams.codiceStatoProssimo]))
+    if (this._sospensioneParams.dataCambioDiStato) {
+      this.arrayRiassunto.push(new PopupRow("dataCambioDiStato", "Data cambio di stato", this._sospensioneParams.dataCambioDiStato.toLocaleDateString()))
     }
-    this.arrayRiassunto.push(new PopupRow("note","Note", this._sospensioneParams.note))
+    this.arrayRiassunto.push(new PopupRow("note", "Note", this._sospensioneParams.note))
     
-    if(this._sospensioneParams.isFaseDiChiusura){
-      this.arrayRiassunto.push(new PopupRow("esito","Esito", this._sospensioneParams.esito));
-      this.arrayRiassunto.push(new PopupRow("esitoMotivazione","Esito Motivazione", this._sospensioneParams.esitoMotivazione));
+    if (this._sospensioneParams.isFaseDiChiusura) {
+      this.arrayRiassunto.push(new PopupRow("esito", "Esito", this._sospensioneParams.esito));
+      this.arrayRiassunto.push(new PopupRow("esitoMotivazione", "Esito Motivazione", this._sospensioneParams.esitoMotivazione));
     }
   }
 
@@ -228,6 +232,7 @@ interface GestioneStatiParams {
   idOggettoOrigine: string;
   descrizione: string;
   azione: string;
+  idApplicazione: string;
 }
 
 interface UserInfo{

@@ -66,7 +66,7 @@
         <dxi-item dataField="responsabileAdozioneAttoFinaleDesc" [colSpan]="6" cssClass="label-wrap textbox-position" [label]="{text: 'Responsabile adozione\natto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
         <dxi-item dataField="titolarePotereSostitutivoDesc" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
     </dx-form>
-  
+
     <br>
   
     <div class="buttons">
@@ -79,5 +79,15 @@
         (onClick)="handleEvent('onClickProcedi',$event)" validationGroup="validationAvviaIter">
       </dx-button>
     </div>
-  </dx-scroll-view>
-  
+</dx-scroll-view>
+<dx-load-panel
+  #loadPanel
+  shadingColor="rgba(191, 191, 191, 0.5)"
+  position="{ of: window }"
+  [(visible)]="loadingVisible"
+  [showIndicator]="true"
+  message="Attendere prego..."
+  [showPane]="true"
+  [shading]="true"
+  [closeOnOutsideClick]="false">
+</dx-load-panel>

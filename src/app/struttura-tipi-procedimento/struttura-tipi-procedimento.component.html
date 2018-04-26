@@ -101,8 +101,8 @@
 
 
 
-      <dx-button *ngIf= "possoAgireForm" class="buttons-form margine-sinistro custom-sm-col" [visible]=formVisible (onClick)="bottoneSalvaProcedimento($event)" text="Salva"
-      hint="Salva i campi" [validationGroup]="procedimentoValGroup" [useSubmitBehavior]="true"></dx-button>
+    <dx-button *ngIf= "possoAgireForm" class="buttons-form margine-sinistro custom-sm-col" [visible]=formVisible (onClick)="bottoneSalvaProcedimento($event)" text="Salva"
+      hint="Salva i campi" [validationGroup]="'procedimentoValGroup'" [useSubmitBehavior]="true"></dx-button>
 
     <dx-button *ngIf= "!possoAgireForm" class="buttons-form margine-sinistro custom-sm-col" [visible]=formVisible (onClick)="bottoneModificaProcedimento()" text="Modifica"
       hint="Modifica i campi"></dx-button>

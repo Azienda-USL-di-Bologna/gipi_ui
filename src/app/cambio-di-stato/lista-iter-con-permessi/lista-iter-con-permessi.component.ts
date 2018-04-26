@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import CustomStore from "devextreme/data/custom_store";
-import { GlobalContextService, OdataContextFactory, OdataContextDefinition } from "@bds/nt-context";
+import { GlobalContextService, OdataContextFactory, OdataContextDefinition, OdataUtilities } from "@bds/nt-context";
 import { HttpClient } from "@angular/common/http";
 import { Subscription } from "rxjs/Subscription";
 import { Observable } from "rxjs/Observable";
@@ -34,13 +34,19 @@ export class ListaIterConPermessiComponent implements OnInit {
   }
   @Output() selectedRow: EventEmitter<any> = new EventEmitter();
 
-  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private globalContextService: GlobalContextService) {
+  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, 
+    private globalContextService: GlobalContextService, private odataUtilities: OdataUtilities) {
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }
 
   ngOnInit() {
     this.dataSource = new DataSource({
-      store: this.odataContextDefinition.getContext()[new GetIterUtente().getName()],
+      store: this.odataContextDefinition.getContext()[new GetIterUtente().getName()]
+      .on("loading", (loadOptions) => {
+        // console.log("loadOptions_prima", loadOptions);
+        this.odataUtilities.filterToCustomQueryParams(["oggetto", "numero", "idStato.descrizione", "idResponsabileProcedimento.idPersona.descrizione"], loadOptions);
+        // console.log("loadOptions_dopo", loadOptions);
+      }),
       customQueryParams: {
         cf: this._userInfo.cf,
         idAzienda: this._userInfo.idAzienda,
@@ -73,7 +79,7 @@ export class ListaIterConPermessiComponent implements OnInit {
     }
   }
 
-  customizeColumns(columns: any) {
+/*   customizeColumns(columns: any) {
     columns.forEach(column => {
       const defaultCalculateFilterExpression = column.calculateFilterExpression;
       column.calculateFilterExpression = function(value, selectedFilterOperation) {
@@ -86,7 +92,7 @@ export class ListaIterConPermessiComponent implements OnInit {
         }
       };
     });
-  }
+  } */
 }
 
 interface UserInfo {

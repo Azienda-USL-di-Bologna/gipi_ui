@@ -128,4 +128,15 @@ class="popup"
       </div>
   </div>
 </dx-popup>
+  <dx-load-panel
+    #loadPanel
+    shadingColor="rgba(191, 191, 191, 0.5)"
+    position="{ of: window }"
+    [(visible)]="loadingVisible"
+    [showIndicator]="true"
+    message="Attendere prego..."
+    [showPane]="true"
+    [shading]="true"
+    [closeOnOutsideClick]="false">
+  </dx-load-panel>
 </div>

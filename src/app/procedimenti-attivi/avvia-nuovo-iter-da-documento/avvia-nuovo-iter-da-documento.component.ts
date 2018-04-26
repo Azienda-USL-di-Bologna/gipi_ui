@@ -33,7 +33,8 @@ export class AvviaNuovoIterDaDocumentoComponent {
         descrizione: decodeURIComponent(queryParams["descrizione"].replace(/\+/g, " ")),
         oggetto: decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " ")),
         dataRegistrazione: queryParams["dataRegistrazione"],
-        promotore: decodeURIComponent(queryParams["promotore"].replace(/\+/g, " "))
+        promotore: decodeURIComponent(queryParams["promotore"].replace(/\+/g, " ")),
+        idApplicazione: decodeURIComponent(queryParams["idApplicazione"].replace(/\+/g, " "))
       };
     });
   }

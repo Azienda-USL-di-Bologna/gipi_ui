@@ -20,5 +20,6 @@ export class CambioDiStatoParams {
   public esitoMotivazione: string;
   public azione: string;
   public dataAvvioIter: Date;
+  public idApplicazione: string;
   public oggettoIter: string;
 }
