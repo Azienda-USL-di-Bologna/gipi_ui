@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import CustomStore from "devextreme/data/custom_store";
-import { GlobalContextService, OdataContextFactory, OdataContextDefinition } from "@bds/nt-context";
+import { GlobalContextService, OdataContextFactory, OdataContextDefinition, OdataUtilities } from "@bds/nt-context";
 import { HttpClient } from "@angular/common/http";
 import { Subscription } from "rxjs/Subscription";
 import { Observable } from "rxjs/Observable";
 import { LoggedUser } from "@bds/nt-login";
 import { GetIterUtente } from "@bds/nt-entities";
 import { SospensioneParams } from "../../classi/condivise/sospensione/sospensione-params";
-import {  STATI } from "@bds/nt-entities/client-objects/constants/stati-iter"
+import {  STATI } from "@bds/nt-entities";
 
 @Component({
   selector: "app-lista-iter-con-permessi",
@@ -34,13 +34,19 @@ export class ListaIterConPermessiComponent implements OnInit {
   }
   @Output() selectedRow: EventEmitter<any> = new EventEmitter();
 
-  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, private globalContextService: GlobalContextService) {
+  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient, 
+    private globalContextService: GlobalContextService, private odataUtilities: OdataUtilities) {
     this.odataContextDefinition = odataContextFactory.buildOdataFunctionsImportDefinition();
   }
 
   ngOnInit() {
     this.dataSource = new DataSource({
-      store: this.odataContextDefinition.getContext()[new GetIterUtente().getName()],
+      store: this.odataContextDefinition.getContext()[new GetIterUtente().getName()]
+      .on("loading", (loadOptions) => {
+        // console.log("loadOptions_prima", loadOptions);
+        this.odataUtilities.filterToCustomQueryParams(["oggetto", "numero", "idStato.descrizione", "idResponsabileProcedimento.idPersona.descrizione"], loadOptions);
+        // console.log("loadOptions_dopo", loadOptions);
+      }),
       customQueryParams: {
         cf: this._userInfo.cf,
         idAzienda: this._userInfo.idAzienda,
@@ -61,19 +67,19 @@ export class ListaIterConPermessiComponent implements OnInit {
 
   getStatoPrecedente(codiceStatoProssimo): string {
     switch (codiceStatoProssimo){
-      case STATI.IN_CORSO.CODICE: {
-        return STATI.SOSPESO.CODICE; // solo i sospesi possono essere rimessi a in corso
+      case STATI.IN_CORSO: {
+        return STATI.SOSPESO; // solo i sospesi possono essere rimessi a in corso
       }
-      case STATI.SOSPESO.CODICE: {
-        return STATI.IN_CORSO.CODICE; // solo gli in_corso possono essere sospesi
+      case STATI.SOSPESO: {
+        return STATI.IN_CORSO; // solo gli in_corso possono essere sospesi
       }
-      case STATI.CHIUSO.CODICE: {
-        return STATI.IN_CORSO.CODICE + ":" + STATI.SOSPESO.CODICE;
+      case STATI.CHIUSO: {
+        return STATI.IN_CORSO + ":" + STATI.SOSPESO;
       }
     }
   }
 
-  customizeColumns(columns: any) {
+/*   customizeColumns(columns: any) {
     columns.forEach(column => {
       const defaultCalculateFilterExpression = column.calculateFilterExpression;
       column.calculateFilterExpression = function(value, selectedFilterOperation) {
@@ -86,7 +92,7 @@ export class ListaIterConPermessiComponent implements OnInit {
         }
       };
     });
-  }
+  } */
 }
 
 interface UserInfo {

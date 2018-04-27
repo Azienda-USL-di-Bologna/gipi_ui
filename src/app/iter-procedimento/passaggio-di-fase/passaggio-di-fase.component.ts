@@ -186,5 +186,6 @@ export class IterParams {
   notePassaggio: string;
   esito: string;
   motivazioneEsito: string;
-
+  idOggettoOrigine: string;
+  descrizione: string;
 }

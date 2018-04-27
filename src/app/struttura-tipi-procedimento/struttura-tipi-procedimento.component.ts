@@ -146,11 +146,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
     if (this.aziendaTipoProcedimento.idTitolo) {
       expandArrayProcedimento.push("idAziendaTipoProcedimento.idTitolo");
-    }
-
-
-    // console.log("aziendaTipoProcedimentoOOOOOOOOOOOOOOOOOOOOOOOOOOO", this.aziendaTipoProcedimento);
-
+    } 
 
     this.defaultResponsabile = new UtenteStruttura();
     this.defaultTitolare = new UtenteStruttura();
@@ -221,8 +217,6 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         this.dataSourceTitolare.filter([["idStruttura.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.idAzienda.id", "=", this.idAziendaFront], "and", ["idUtente.id", "=", idUtente], "and", ["idUtente.attivo", "=", true],
           "and", ["idStruttura.id", "=", idStruttura], "and", ["idStruttura.attiva", "=", true]]);
         this.dataSourceTitolare.load().then(result => {
-          console.log("SUCCESSO_CARICAMENTO_TITOLARE");
-          // console.log("RESULT = ", result);
           this.defaultTitolare = result[0];
           this.testoTooltipTitolare = result[0].nomeVisualizzato;
         }).catch(err => console.log("ERRORE_CARICAMENTO_TITOLARE", err));
@@ -240,15 +234,29 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.initialProcedimento = Entity.cloneObject(this.procedimento);
   }
 
+  private isNullClassificazione(): boolean {
+    if(!this.aziendaTipoProcedimento.idTitolo)
+      return true;
+    else
+      return false
+  }
+
   public bottoneModificaProcedimento(validationParams: any) {
+    if(this.isNullClassificazione()){
+      notify({message: 'Attenzione: non è stata inserita la classificazione sul procedimento. Correggere prima di continuare', position: 'center', width: "max-content"}, 'warning', 3000);
+      return;
+    }      
+
     this.possoAgireForm = true;
     this.setInitialValues();
   }
 
 
   public bottoneSalvaProcedimento(validationParams: any) {
-
-
+    const validator = validationParams.validationGroup.validate();
+    if (!validator.isValid) {
+      return;
+    }
 
 
     // questo lo devo spostare nel validata
@@ -311,7 +319,12 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
 
 
-  public bottoneAnnulla() {
+  public bottoneAnnulla(validationParams: any) {
+
+
+    validationParams.validationGroup.reset();
+
+
     let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
     console.log("DIFFERENZE", differenze);
     // c'è qualche differenza, ricaricare i dati tramite chiamata http per tornare alla situazione di partenza
