@@ -57,7 +57,8 @@ export const BarsMode = {ALL: "all", NONE: "none", SIMPLE: "simple", SIMPLE_WITH
 
 
 
-
-
+// ======================= VALUES ========================================
+export const TOAST_WIDTH = 300;
+export const TOAST_POSITION = { my: "center", at: "center", of: window };
 
 

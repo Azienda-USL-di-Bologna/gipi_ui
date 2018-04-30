@@ -3,7 +3,7 @@ import { Utente, bUtente, bAzienda, Procedimento, GetUtentiGerarchiaStruttura, P
 import { OdataContextFactory } from "@bds/nt-context";
 import { OdataContextDefinition } from "@bds/nt-context";
 import { CustomLoadingFilterParams } from "@bds/nt-context";
-import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
+import { CUSTOM_RESOURCES_BASE_URL, TOAST_POSITION } from "environments/app.constants";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { HttpHeaders } from "@angular/common/http";
@@ -204,10 +204,7 @@ export class AvviaNuovoIterComponent implements OnInit {
       message: message,
       type: type,
       displayTime: 2100,
-      position: {
-        my: "center", at: "center", of: window
-      },
-      width: "max-content"
+      position: TOAST_POSITION
     });
   }
 

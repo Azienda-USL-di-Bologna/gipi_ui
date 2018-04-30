@@ -15,7 +15,7 @@ import notify from "devextreme/ui/notify";
 import { NodeOperations } from "../reusable-component/strutture-tree/strutture-tree.component";
 import { confirm } from "devextreme/ui/dialog";
 import { HttpClient } from "@angular/common/http";
-import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
+import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 
 @Component({
   selector: "struttura-tipi-procedimento",
@@ -243,7 +243,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public bottoneModificaProcedimento(validationParams: any) {
     if(this.isNullClassificazione()){
-      notify({message: 'Attenzione: non è stata inserita la classificazione sul procedimento. Correggere prima di continuare', position: 'center', width: "max-content"}, 'warning', 3000);
+      notify({message: 'Attenzione: non è stata inserita la classificazione sul procedimento. Correggere prima di continuare', position: 'center', width: TOAST_WIDTH + 100}, 'warning', 3000);
       return;
     }      
 
@@ -261,7 +261,12 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
     // questo lo devo spostare nel validata
     if (this.procedimento.dataFine && (this.procedimento.dataFine < this.procedimento.dataInizio)) {
-      notify({ message: "Correggere l'intervallo di validità", type: "error", displayTime: 1200 });
+      notify({
+        message: "Correggere l'intervallo di validità",
+        type: "error",
+        position: TOAST_POSITION,
+        width: TOAST_WIDTH
+      });
       return;
     }
 
@@ -293,24 +298,44 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
                     res2 => {
                       console.log("risultato POST OK", res);
                       this.treeView.caricaDati();
-                      notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
+                      notify({
+                        message: "Salvataggio effettuato con successo",
+                        position: TOAST_POSITION,
+                        type: "success", displayTime: 1200, width: TOAST_WIDTH
+                      });
                     },
                     err => {
                       console.log("risultato POST Error", err);
-                      notify({ message: "Errore nel salvataggio", type: "error", displayTime: 1200 });
+                      notify({
+                        message: "Errore nel salvataggio",
+                        position: TOAST_POSITION,
+                        type: "error", displayTime: 1200, width: TOAST_WIDTH
+                      });
                     }
                   );
                 } else {
-                  notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
+                  notify({
+                    message: "Salvataggio effettuato con successo",
+                    position: TOAST_POSITION,
+                    type: "success", displayTime: 1200, width: TOAST_WIDTH
+                  });
                 }
               });
             } else {
-              notify({ message: "Salvataggio effettuato con successo", type: "success", displayTime: 1200 });
+              notify({
+                message: "Salvataggio effettuato con successo",
+                position: TOAST_POSITION,
+                type: "success", displayTime: 1200, width: TOAST_WIDTH
+              });
             }
           })
           .catch(err => {
             console.log("ERROR_UPDATE", err);
-            notify({ message: "Errore nel salvataggio", type: "error", displayTime: 1200 });
+            notify({
+              message: "Errore nel salvataggio",
+              position: TOAST_POSITION,
+              type: "error", displayTime: 1200, width: TOAST_WIDTH
+            });
           });
       }
     });

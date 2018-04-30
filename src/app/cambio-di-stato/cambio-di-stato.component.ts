@@ -7,6 +7,7 @@ import { ActivatedRoute, Params } from "@angular/router";
 import { Observable, Subscription } from "rxjs";
 import { bUtente, bAzienda, STATI } from "@bds/nt-entities";
 import notify from "devextreme/ui/notify";
+import { TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 import {AppConfiguration} from "../config/app-configuration";
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { UtilityFunctions } from "../utility-functions";
@@ -106,10 +107,8 @@ export class CambioDiStatoComponent implements OnInit {
         message: "Il procedimento è già nell'ultima fase prevista: Fase di chiusura.",
         type: "warning",
         displayTime: 4000,
-        position: {
-          my: "center", at: "center", of: window
-        },
-        width: "max-content"
+        position: TOAST_POSITION,
+        width: TOAST_WIDTH
       });
     }
     

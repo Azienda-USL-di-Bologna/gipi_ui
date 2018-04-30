@@ -5,6 +5,7 @@ import { CustomLoadingFilterParams, OdataContextFactory, GlobalContextService, O
 import { LoggedUser } from "@bds/nt-login";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
+import { TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 
 
 @Component({
@@ -89,10 +90,8 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
           message: "Salvataggio effettuato con successo!",
           type: "success",
           displayTime: 2100,
-          position: {
-            my: "center", at: "center", of: window
-          },
-          width: "max-content"
+          position: TOAST_POSITION,
+          width: TOAST_WIDTH
         });
         this.caricaDataSource(true);
         
@@ -103,10 +102,8 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
           message: "Problemi nel salvataggio del dettaglio. Se il problema persiste contattare BabelCare.",
           type: "error",
           displayTime: 2100,
-          position: {
-            my: "center", at: "center", of: window
-          },
-          width: "max-content"
+          position: TOAST_POSITION,
+          width: TOAST_WIDTH
         });
       }
     );

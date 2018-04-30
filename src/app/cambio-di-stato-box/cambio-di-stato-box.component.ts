@@ -4,13 +4,13 @@ import CustomStore from "devextreme/data/custom_store";
 import ArrayStore from "devextreme/data/array_store";
 import { GlobalContextService, OdataContextDefinition, OdataContextFactory } from "@bds/nt-context";
 import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
-import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
+import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
 import { Stato } from "@bds/nt-entities";
-import { Popup } from "@bds/nt-context"
-import { PopupRow } from "../classi/condivise/popup/popup-tools"
+import { Popup } from "@bds/nt-context";
+import { PopupRow } from "../classi/condivise/popup/popup-tools";
 
 @Component({
   selector: "app-cambio-di-stato-box",
@@ -124,10 +124,8 @@ export class CambioDiStatoBoxComponent implements OnInit {
         message: "Salvataggio effettuato con successo!",
         type: "success",
         displayTime: 2100,
-        position: {
-          my: "center", at: "center", of: window
-        },
-        width: "max-content"
+        position: TOAST_POSITION,
+        width: TOAST_WIDTH
       });
       this.updateArrayRiassunto();
       this.showPopupRiassunto = true;
@@ -136,11 +134,9 @@ export class CambioDiStatoBoxComponent implements OnInit {
           notify({
             message: "Salvataggio non riuscito: è già presente un'associazione all'iter con questa bozza di documento.",
             type: "warning",
-            displayTime: 21000,
-            position: {
-              my: "center", at: "center", of: window
-            },
-            width: "max-content"
+            displayTime: 2100,
+            position: TOAST_POSITION,
+            width: TOAST_WIDTH
           });
         }
     },
@@ -150,10 +146,8 @@ export class CambioDiStatoBoxComponent implements OnInit {
         message: "Errore durante il salvataggio!",
         type: "error",
         displayTime: 2100,
-        position: {
-          my: "center", at: "center", of: window
-        },
-        width: "max-content"
+        position: TOAST_POSITION,
+        width: TOAST_WIDTH
       });
     }
   );
@@ -187,17 +181,17 @@ export class CambioDiStatoBoxComponent implements OnInit {
       let stato = value as any;
       objStati[stato.codice] = stato.descrizione;
     });
-    this.arrayRiassunto = []
+    this.arrayRiassunto = [];
     // this.arrayRiassunto.push(new PopupRow("codiceRegistroDocumento","Registro", this._sospensioneParams.codiceRegistroDocumento))
-    this.arrayRiassunto.push(new PopupRow("oggettoIter","Oggetto", this._sospensioneParams.oggettoIter))
-    this.arrayRiassunto.push(new PopupRow("numeroIter","Numero", this._sospensioneParams.numeroIter.toString()))
-    this.arrayRiassunto.push(new PopupRow("annoIter","Anno", this._sospensioneParams.annoIter.toString()))
+    this.arrayRiassunto.push(new PopupRow("oggettoIter", "Oggetto", this._sospensioneParams.oggettoIter));
+    this.arrayRiassunto.push(new PopupRow("numeroIter", "Numero", this._sospensioneParams.numeroIter.toString()));
+    this.arrayRiassunto.push(new PopupRow("annoIter", "Anno", this._sospensioneParams.annoIter.toString()));
 
-    this.arrayRiassunto.push(new PopupRow("codiceStatoProssimo", "Stato", objStati[this._sospensioneParams.codiceStatoProssimo]))
+    this.arrayRiassunto.push(new PopupRow("codiceStatoProssimo", "Stato", objStati[this._sospensioneParams.codiceStatoProssimo]));
     if (this._sospensioneParams.dataCambioDiStato) {
-      this.arrayRiassunto.push(new PopupRow("dataCambioDiStato", "Data cambio di stato", this._sospensioneParams.dataCambioDiStato.toLocaleDateString()))
+      this.arrayRiassunto.push(new PopupRow("dataCambioDiStato", "Data cambio di stato", this._sospensioneParams.dataCambioDiStato.toLocaleDateString()));
     }
-    this.arrayRiassunto.push(new PopupRow("note", "Note", this._sospensioneParams.note))
+    this.arrayRiassunto.push(new PopupRow("note", "Note", this._sospensioneParams.note));
     
     if (this._sospensioneParams.isFaseDiChiusura) {
       this.arrayRiassunto.push(new PopupRow("esito", "Esito", this._sospensioneParams.esito));
