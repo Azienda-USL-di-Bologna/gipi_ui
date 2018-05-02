@@ -96,15 +96,15 @@
                            [showTitle]="true">
                 </dxo-popup>
                 
-                <dxo-form #formgdm id="formgdm" colCount="1" >
+                <dxo-form #formgdm id="formgdm" colCount="1">
                     <dxi-item dataField="idStruttura.nome" [disabled]="true" [template]="itemClear"
                               [label]="{visible: true}" cssClass="item label-wrap popup-title"></dxi-item>
                     <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.nome" [disabled]="true"
                               [template]="itemClear" [label]="{visible: true, text: 'Tipo Procedimento'}"
                               cssClass="item label-wrap popup-title"></dxi-item>
-                    <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" [disabled]="true"
+                    <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" [disabled]="false"
                               [label]="{text:'Descrizione'}" [colSpan]="1"
-                              cssClass="item label-wrap label-on-top"></dxi-item>
+                              cssClass="item label-wrap label-on-top read-only-field" [editorOptions]="{ onContentReady:setCursorPosition, hoverStateEnabled: false, focusStateEnabled: false }" ></dxi-item>
                     <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" [disabled]="true"
                               [label]="{text:'Modo apertura'}" [colSpan]="1"
                               cssClass="item label-wrap"></dxi-item>

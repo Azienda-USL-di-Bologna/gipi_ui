@@ -257,4 +257,12 @@ export class ProcedimentiAttiviComponent implements OnInit {
         }
     }
 
+    public setCursorPosition(event: any) {
+        let textArea = event.element.children[0].children[0];
+        if (textArea !== null) {
+            textArea.focus();
+            textArea.setSelectionRange(0, 0);
+        }
+    }
+
 }
