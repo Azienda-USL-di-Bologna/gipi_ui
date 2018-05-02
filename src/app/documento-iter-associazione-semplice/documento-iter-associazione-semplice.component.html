@@ -1,0 +1,70 @@
+<p>
+  Associa con documento
+</p>
+<div class="text-left">
+  <dx-form
+  [(formData)]="associazionePrams"
+  validationGroup="sospensioneParams"
+  [showValidationSummary]="true"
+  >
+    <dxi-item dataField="oggettoDocumento" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: true }"></dxi-item>
+    <dxi-item *ngIf="isOpenedAsPopup" itemType="group" [colCount]="3001" [label]="{text: 'Documento'}">
+      <dxi-item itemType="empty" [colSpan]="1"></dxi-item>
+      <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1000" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item dataField="numeroDocumento" [colSpan]="1000" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: true }"></dxi-item>
+      <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'Anno', showColon: true}" [editorOptions]="{disabled: true }"></dxi-item> 
+    </dxi-item>
+    <dxi-item *ngIf="associazionePrams.numeroDocumento" dataField="dataCambioDiStato" editorType="dxDateBox" [label]="{text: 'Data cambio di stato'}" [editorOptions]="{value:dataIniziale, displayFormat: 'dd/MM/yyyy',
+      onValueChanged: reimpostaDataIniziale, dateOutOfRangeMessage: 'Il valore è fuori dall\'intervallo' }">
+        <dxi-validation-rule type="required" message="La data di cambio di stato è obbligatoria"></dxi-validation-rule>
+        <dxi-validation-rule type="custom" [validationCallback]="validaData" message="La data non può essere minore della data di apertura iter o di registrazione del documento"></dxi-validation-rule>
+    </dxi-item>
+    
+    <dxi-item dataField="note" editorType="dxTextArea" [label]="{text: 'Note'}" [editorOptions]="{ disabled: false }"></dxi-item> 
+  </dx-form>
+  <br/>  
+  <div class="buttons text-center">
+    <dx-button text="Annulla" [type]="'normal'" (onClick)="handleAnnulla($event)">
+    </dx-button>
+    <dx-button text="Procedi" [useSubmitBehavior]="true" validationGroup="sospensioneParams" (onClick)="handleSubmit($event)">
+    </dx-button>
+  </div>
+
+  <popup [title]="'Riassunto operazione'" 
+        [someText]="'Dati Iter:'" 
+        [arrayRiassunto]="arrayRiassunto" 
+        [showPopup]="showPopupRiassunto" 
+        (out)="handleRiassunto($event)">
+  </popup>
+
+  <dx-popup
+    class="popup"
+    [width]="425"
+    [height]="200"
+    [showTitle]="true"
+    [title]="'Avviso'"
+    [dragEnabled]="false"
+    [closeOnOutsideClick]="false"
+    [(visible)]="showPopupAnnullamento">
+    <div *dxTemplate="let data of 'content'">
+        <h3>Le modifiche non verranno salvate. Ok?</h3> 
+        <div class="text-center mt-4">
+            <dx-button class="d-inline-block" text="No" (click)="handleAnnulla($event)"></dx-button>
+            <dx-button class="d-inline-block" text="Si" (click)="handleClose($event)"></dx-button>
+        </div>
+    </div>
+  </dx-popup>
+
+  <dx-load-panel
+    #loadPanel
+    shadingColor="rgba(191, 191, 191, 0.5)"
+    position="{ of: window }"
+    [(visible)]="loadingVisible"
+    [showIndicator]="true"
+    message="Attendere prego..."
+    [showPane]="true"
+    [shading]="true"
+    [closeOnOutsideClick]="false">
+  </dx-load-panel>
+
+</div>

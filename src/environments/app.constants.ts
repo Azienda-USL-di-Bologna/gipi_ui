@@ -13,6 +13,7 @@ export const ODATA_BASE_RELATIVE_URL: string = "/gipi-api/resources/odata.svc";
 export const ODATA_BASE_URL: string = window.location.protocol + "//" + hostname + port + ODATA_BASE_RELATIVE_URL;
 export const CUSTOM_RESOURCES_RELATIVE_URL: string = "/gipi-api/resources/custom/";
 export const CUSTOM_RESOURCES_BASE_URL: string = window.location.protocol + "//" + hostname + port + CUSTOM_RESOURCES_RELATIVE_URL;
+console.log("CUSTOM_RESOURCES_BASE_URL", CUSTOM_RESOURCES_BASE_URL);
 
 
 // login

@@ -35,9 +35,13 @@
                 && lookupValue === 'Passaggio di fase'" 
                 [idIter]="sospensioneParams.idIter" [isOpenedAsPopup]="false">
             </app-passaggio-di-fase> -->
-            <app-cambio-di-stato-box  *ngIf="sospensioneParams.idIter"
+            <app-cambio-di-stato-box  *ngIf="sospensioneParams.idIter && sospensioneParams.azione !== 'associa'"
                 [sospensioneParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="false">
             </app-cambio-di-stato-box>
+
+            <app-documento-iter-associazione-semplice *ngIf="sospensioneParams.idIter && sospensioneParams.azione === 'associa'"
+                [associaParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="false">
+            </app-documento-iter-associazione-semplice>
         </div>
     </div>
 </div>
