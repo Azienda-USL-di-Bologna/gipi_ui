@@ -54,6 +54,10 @@ export const odataStrutturePath = "/Strutturas";
 
 export const BarsMode = {ALL: "all", NONE: "none", SIMPLE: "simple", SIMPLE_WITH_SIDEBAR: "simple_with_sidebar"};
 
+export const GlobalContextVariable = {
+    ACCESS_PATHS_ARRAY: "accessPathsArray",
+};
+
 // ======================= ENUM ========================================
 
 

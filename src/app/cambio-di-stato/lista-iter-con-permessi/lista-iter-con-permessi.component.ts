@@ -53,6 +53,7 @@ export class ListaIterConPermessiComponent implements OnInit {
         codiceRegistro: this._sospensioneParams.codiceRegistroDocumento ? this._sospensioneParams.codiceRegistroDocumento : "",
         numeroDocumento: this._sospensioneParams.numeroDocumento ? this._sospensioneParams.numeroDocumento : "",
         annoDocumento: this._sospensioneParams.annoDocumento ? +this._sospensioneParams.annoDocumento : 0,
+        idOggettoOrigine: this._sospensioneParams.idOggettoOrigine ? this._sospensioneParams.idOggettoOrigine : "",
         stato: this._sospensioneParams.azione === "associa" ? STATI.IN_CORSO + ":" + STATI.SOSPESO : this.getStatoPrecedente(this._sospensioneParams.codiceStatoProssimo)
       },
       expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona", "idFaseCorrente", "idStato"]/* ,

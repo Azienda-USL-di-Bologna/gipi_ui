@@ -1,18 +1,19 @@
-import { Component, OnDestroy, OnInit, HostListener, Input } from "@angular/core";
-import { Location } from "@angular/common";
-import { CustomReuseStrategy } from "@bds/nt-context";
+import {Component, OnDestroy, OnInit, HostListener, Input} from "@angular/core";
+import {Location} from "@angular/common";
+import {CustomReuseStrategy} from "@bds/nt-context";
 import {ActivatedRoute, NavigationEnd, NavigationStart, Params, Router} from "@angular/router";
-import { Observable } from "rxjs/Observable";
+import {Observable} from "rxjs/Observable";
 import {GlobalContextService, OdataContextFactory, OdataForeignKey} from "@bds/nt-context";
-import { Ruolo, bUtente, bAzienda, bRuolo } from "@bds/nt-entities";
-import { Subscription } from "rxjs/Subscription";
-import {BarsMode, LOGOUT_URL, ODATA_BASE_URL} from "../environments/app.constants";
-import { SidebarItem } from "@bds/nt-context";
-import { LoggedUser } from "@bds/nt-login";
+import {Ruolo, bUtente, bAzienda, bRuolo} from "@bds/nt-entities";
+import {Subscription} from "rxjs/Subscription";
+import {BarsMode, GlobalContextVariable, LOGOUT_URL, ODATA_BASE_URL} from "../environments/app.constants";
+import {SidebarItem} from "@bds/nt-context";
+import {LoggedUser} from "@bds/nt-login";
 import * as $ from "jquery";
 import * as deLocalization from "devextreme/localization";
 import {AppConfiguration} from "./config/app-configuration";
 import {CambioDiStatoParams} from "./classi/condivise/sospensione/gestione-stato-params";
+import {UtilityFunctions} from "./utility-functions";
 
 
 @Component({
@@ -44,6 +45,10 @@ export class AppComponent implements OnInit, OnDestroy {
     public userInfoMap$: Observable<Object>;
     public loggedUser$: Observable<LoggedUser>;
 
+    public XIcon: string = "assets/images/x-mark-512.png";
+    public backArrowIcon: string = "assets/images/arrow-112-512.png";
+    public closeIcon: string = this.XIcon;
+
     constructor(private location: Location, public router: Router, private activatedRoute: ActivatedRoute,
                 private globalContextService: GlobalContextService,
                 private odataContextFactory: OdataContextFactory, public appConfig: AppConfiguration) {
@@ -57,44 +62,75 @@ export class AppComponent implements OnInit, OnDestroy {
         this.router.events
             .filter((event) => (event instanceof NavigationStart) || (event instanceof NavigationEnd))
             .subscribe(
-            (next) => {
-                let reset = false;
-            }
-            );
+                (next: any) => {
+
+                    // quando navigo verso un path...
+                    if (next instanceof NavigationStart) {
+
+                        // ripulisco l'url dai query params
+                        const path: string = UtilityFunctions.clearUrl(next.url);
+
+                        // escludo il login dai controlli
+                        if (path !== "login") {
+
+                            // leggo l'array dei path visitati
+                            let accessPathsArray: string[] = this.globalContextService.getInnerSharedObject(GlobalContextVariable.ACCESS_PATHS_ARRAY);
+
+                            // è vuoto lo creo inserendo il path corrente (è il primo path che visito)
+                            if (!accessPathsArray) {
+                                accessPathsArray = [path];
+                            }
+                            // altrimento inserisco il path in coda all'array
+                            // NB: questo evento scatta anche quando si torna indietro: nel caso sto tornando indietro non devo aggiungere niente nell'array, il controllo nell'if serve a questo
+                            else if (accessPathsArray[accessPathsArray.length - 1] !== path) {
+                                // dato che da ora alla pressione del pulsante di chiusura tornerò indietro, cambio anche l'icona mettendone una con una freccia all'indietro
+                                this.closeIcon = this.backArrowIcon;
+                                accessPathsArray.push(path);
+                            }
+                            // nel caso sia rimasto un solo elemento nell'array (per sicurezza controllo anche il caso in cui sia vuoto), cambio l'icona mettendoci quella con la X
+                            else if (accessPathsArray.length <= 1) {
+                                this.closeIcon = this.XIcon;
+                            }
+
+                            // salvo l'array come variabile globale
+                            this.globalContextService.setInnerSharedObject(GlobalContextVariable.ACCESS_PATHS_ARRAY, accessPathsArray);
+                        }
+                    }
+                });
 
         // leggo dai queryParams il parametro "showbars", se c'è a seconda del suo valore decido di mostrare o nascondere l'appbar e la sidebar
         // mettendolo qui nell'AppComponent, vale per tutte le interfacce
         this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
-          const barsModeParam: string = queryParams["barsmode"];
+            const barsModeParam: string = queryParams["barsmode"];
 
-          if (barsModeParam) {
-              switch (barsModeParam) {
-                  case BarsMode.ALL: {
-                      this.appConfig.setAppBarVisible(true);
-                      this.appConfig.setSideBarVisible(true);
-                      this.appConfig.setAppBarSimple(false);
-                      break;
-                  }
-                  case BarsMode.NONE: {
-                      this.appConfig.setAppBarVisible(false);
-                      this.appConfig.setSideBarVisible(false);
-                      this.appConfig.setAppBarSimple(false);
-                      break;
-                  }
-                  case BarsMode.SIMPLE: {
-                      this.appConfig.setAppBarVisible(true);
-                      this.appConfig.setSideBarVisible(false);
-                      this.appConfig.setAppBarSimple(true);
-                      break;
-                  }
-                  case BarsMode.SIMPLE_WITH_SIDEBAR: {
-                      this.appConfig.setAppBarVisible(true);
-                      this.appConfig.setSideBarVisible(true);
-                      this.appConfig.setAppBarSimple(true);
-                  }
-              }
-          }
-      });
+            if (barsModeParam) {
+                switch (barsModeParam) {
+                    case BarsMode.ALL: {
+                        this.appConfig.setAppBarVisible(true);
+                        this.appConfig.setSideBarVisible(true);
+                        this.appConfig.setAppBarSimple(false);
+                        break;
+                    }
+                    case BarsMode.NONE: {
+                        this.appConfig.setAppBarVisible(false);
+                        this.appConfig.setSideBarVisible(false);
+                        this.appConfig.setAppBarSimple(false);
+                        break;
+                    }
+                    case BarsMode.SIMPLE: {
+                        this.appConfig.setAppBarVisible(true);
+                        this.appConfig.setSideBarVisible(false);
+                        this.appConfig.setAppBarSimple(true);
+                        break;
+                    }
+                    case BarsMode.SIMPLE_WITH_SIDEBAR: {
+                        this.appConfig.setAppBarVisible(true);
+                        this.appConfig.setSideBarVisible(true);
+                        this.appConfig.setAppBarSimple(true);
+                    }
+                }
+            }
+        });
 
         this.buildLocalization();
     }
@@ -102,13 +138,12 @@ export class AppComponent implements OnInit, OnDestroy {
     private buildLocalization() {
         deLocalization.locale("it");
 
-        $.getJSON("assets/localization/it.json").then(function(data) {
+        $.getJSON("assets/localization/it.json").then(function (data) {
             deLocalization.loadMessages(data);
-        }).fail(function() {
+        }).fail(function () {
             console.log("It language not found, fallback to en");
             deLocalization.locale("en");
         });
-
 
 
         //  deLocalization.date.getD
@@ -157,7 +192,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // sad but necessary :c
         const $this = this;
-        window.addEventListener("click", function(e) {
+        window.addEventListener("click", function (e) {
             if (document.getElementById("userDropdown") && !document.getElementById("userDropdown").contains(<Node> e.target) && !document.getElementById("userDropdownToggle").contains(<Node> e.target)
                 && $("#userDropdown").hasClass("show")) {
                 $this.onProfileBtnClick(e);
@@ -169,13 +204,13 @@ export class AppComponent implements OnInit, OnDestroy {
          */
         this.subscriptions.push(
             (this.location.subscribe(
-                x => {
-                    if (!!x.pop && x.type === "popstate") {
-                        console.log("pressed back or forward or changed location manually");
-                        // ogni volta che vado indietro o avanti indico di ricaricare dalla cache il componente nel quale si sta andando
-                        CustomReuseStrategy.componentsReuseList.push("*");
-                    }
-                })
+                    x => {
+                        if (!!x.pop && x.type === "popstate") {
+                            console.log("pressed back or forward or changed location manually");
+                            // ogni volta che vado indietro o avanti indico di ricaricare dalla cache il componente nel quale si sta andando
+                            CustomReuseStrategy.componentsReuseList.push("*");
+                        }
+                    })
             ) as Subscription);
 
         this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
@@ -199,13 +234,12 @@ export class AppComponent implements OnInit, OnDestroy {
                         });
                         if (this.enableSidebarByRole) {
                             this.buildSideBar(loggedUser);
-                        }    
+                        }
                     }
                 }
             )
         );
     }
-
 
 
     ngOnDestroy() {
@@ -222,7 +256,7 @@ export class AppComponent implements OnInit, OnDestroy {
         const loginMethod = sessionStorage.getItem("loginMethod");
 
         this.slide(true); // Chiudo la sidebar se è aperta
-        
+
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("userInfo");
         sessionStorage.removeItem("loginMethod");
@@ -233,6 +267,26 @@ export class AppComponent implements OnInit, OnDestroy {
         else {
             // window.location.href = "https://gdml.internal.ausl.bologna.it/Shibboleth.sso/Logout";
             window.location.href = LOGOUT_URL;
+        }
+    }
+
+    onClose() {
+
+        // Al click del pulsante di chiusura, controllo se sono nella finestra iniziale, se si chiudo la finistra, se no vado indietro
+
+        // leggo l'array dei path visitati
+        const navigatedPaths: string[] = this.globalContextService.getInnerSharedObject(GlobalContextVariable.ACCESS_PATHS_ARRAY);
+
+        // rimuovo l'ultimo elemento dall'array
+        navigatedPaths.pop();
+
+        // se non ci sono più elementi allora vuol dire che sono nella finestra iniziale, quindi chiudo la finestra
+        if (navigatedPaths.length < 1) {
+            this.globalContextService.setInnerSharedObject(GlobalContextVariable.ACCESS_PATHS_ARRAY, null);
+            window.close();
+        } else { // altrimenti vado indietro
+            this.globalContextService.setInnerSharedObject(GlobalContextVariable.ACCESS_PATHS_ARRAY, navigatedPaths);
+            this.location.back();
         }
     }
 
@@ -253,9 +307,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     getBackgroundColor() {
         let router: any = this.router;
-        if (router.currentUrlTree.root && 
-            router.currentUrlTree.root.children && 
-            router.currentUrlTree.root.children.primary && 
+        if (router.currentUrlTree.root &&
+            router.currentUrlTree.root.children &&
+            router.currentUrlTree.root.children.primary &&
             router.currentUrlTree.root.children.primary.segments[0].path === "iter-procedimento") {
             return "background-darker clRightSide";
         } else {
