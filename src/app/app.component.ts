@@ -6,13 +6,14 @@ import { Observable } from "rxjs/Observable";
 import {GlobalContextService, OdataContextFactory, OdataForeignKey} from "@bds/nt-context";
 import { Ruolo, bUtente, bAzienda, bRuolo } from "@bds/nt-entities";
 import { Subscription } from "rxjs/Subscription";
-import {BarsMode, LOGOUT_URL, ODATA_BASE_URL} from "../environments/app.constants";
+import {BarsMode, GlobalContextVariable, LOGOUT_URL, ODATA_BASE_URL} from "../environments/app.constants";
 import { SidebarItem } from "@bds/nt-context";
 import { LoggedUser } from "@bds/nt-login";
 import * as $ from "jquery";
 import * as deLocalization from "devextreme/localization";
 import {AppConfiguration} from "./config/app-configuration";
 import {CambioDiStatoParams} from "./classi/condivise/sospensione/gestione-stato-params";
+import {UtilityFunctions} from "./utility-functions";
 
 
 @Component({
@@ -57,10 +58,18 @@ export class AppComponent implements OnInit, OnDestroy {
         this.router.events
             .filter((event) => (event instanceof NavigationStart) || (event instanceof NavigationEnd))
             .subscribe(
-            (next) => {
+            (next: any) => {
                 let reset = false;
-            }
-            );
+                // console.log(this.router);
+                if (next instanceof NavigationStart) {
+                    const accessPath: string = UtilityFunctions.clearUrl(next.url);
+                    this.globalContextService.setInnerSharedObject(GlobalContextVariable.CURRENT_PATH, accessPath);
+                    const firstAccessPath: string = this.globalContextService.getInnerSharedObject(GlobalContextVariable.FIRST_ACCESS_PATH);
+                    if (!firstAccessPath) {
+                        this.globalContextService.setInnerSharedObject(GlobalContextVariable.FIRST_ACCESS_PATH, accessPath);
+                    }
+                }
+            });
 
         // leggo dai queryParams il parametro "showbars", se c'è a seconda del suo valore decido di mostrare o nascondere l'appbar e la sidebar
         // mettendolo qui nell'AppComponent, vale per tutte le interfacce
@@ -222,7 +231,7 @@ export class AppComponent implements OnInit, OnDestroy {
         const loginMethod = sessionStorage.getItem("loginMethod");
 
         this.slide(true); // Chiudo la sidebar se è aperta
-        
+
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("userInfo");
         sessionStorage.removeItem("loginMethod");
@@ -235,6 +244,23 @@ export class AppComponent implements OnInit, OnDestroy {
             window.location.href = LOGOUT_URL;
         }
     }
+
+  onClose() {
+
+    console.log("CLOSE CLICKED");
+    const currentPath = this.globalContextService.getInnerSharedObject(GlobalContextVariable.CURRENT_PATH);
+    const firstAccessPath = this.globalContextService.getInnerSharedObject(GlobalContextVariable.FIRST_ACCESS_PATH);
+    if (currentPath === firstAccessPath) {
+        console.log("CLOSING WINDOW...");
+        this.globalContextService.setInnerSharedObject(GlobalContextVariable.CURRENT_PATH, null);
+        this.globalContextService.setInnerSharedObject(GlobalContextVariable.FIRST_ACCESS_PATH, null);
+        window.close();
+    }
+    else {
+        console.log("GOING BACK...");
+        this.location.back();
+    }
+  }
 
     onProfileBtnClick(e) {
         let btn = $("#userDropdownToggle");

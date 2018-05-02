@@ -46,6 +46,7 @@
                                         <!--</div>-->
                                     </div>
                                     <img *ngIf="(!!!(appConfig.appBarSimple | async))" src="assets/images/signout.svg" (click)="onLogout()" class="dimBoxImageSignOut d-inline-block logout ml-1" alt="logout">
+                                    <img *ngIf="(!!(appConfig.appBarSimple | async))" src="assets/images/x-mark-512.png" (click)="onClose()" class="dimBoxImageSignOut d-inline-block logout ml-1" alt="logout">
                                 </div>
                             </div>
                         </div>
