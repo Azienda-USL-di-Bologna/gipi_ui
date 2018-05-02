@@ -70,27 +70,31 @@ export class AppComponent implements OnInit, OnDestroy {
                         // ripulisco l'url dai query params
                         const path: string = UtilityFunctions.clearUrl(next.url);
 
-                        // leggo l'array dei path visitati
-                        let accessPathsArray: string[] = this.globalContextService.getInnerSharedObject(GlobalContextVariable.ACCESS_PATHS_ARRAY);
+                        // escludo il login dai controlli
+                        if (path !== "login") {
 
-                        // è vuoto lo creo inserendo il path corrente (è il primo path che visito)
-                        if (!accessPathsArray) {
-                            accessPathsArray = [path];
-                        }
-                        // altrimento inserisco il path in coda all'array
-                        // NB: questo evento scatta anche quando si torna indietro: nel caso sto tornando indietro non devo aggiungere niente nell'array, il controllo nell'if serve a questo
-                        else if (accessPathsArray[accessPathsArray.length - 1] !== path) {
-                            // dato che da ora alla pressione del pulsante di chiusura tornerò indietro, cambio anche l'icona mettendone una con una freccia all'indietro
-                            this.closeIcon = this.backArrowIcon;
-                            accessPathsArray.push(path);
-                        }
-                        // nel caso sia rimasto un solo elemento nell'array (per sicurezza controllo anche il caso in cui sia vuoto), cambio l'icona mettendoci quella con la X
-                        else if (accessPathsArray.length <= 1) {
-                            this.closeIcon = this.XIcon;
-                        }
+                            // leggo l'array dei path visitati
+                            let accessPathsArray: string[] = this.globalContextService.getInnerSharedObject(GlobalContextVariable.ACCESS_PATHS_ARRAY);
 
-                        // salvo l'array come variabile globale
-                        this.globalContextService.setInnerSharedObject(GlobalContextVariable.ACCESS_PATHS_ARRAY, accessPathsArray);
+                            // è vuoto lo creo inserendo il path corrente (è il primo path che visito)
+                            if (!accessPathsArray) {
+                                accessPathsArray = [path];
+                            }
+                            // altrimento inserisco il path in coda all'array
+                            // NB: questo evento scatta anche quando si torna indietro: nel caso sto tornando indietro non devo aggiungere niente nell'array, il controllo nell'if serve a questo
+                            else if (accessPathsArray[accessPathsArray.length - 1] !== path) {
+                                // dato che da ora alla pressione del pulsante di chiusura tornerò indietro, cambio anche l'icona mettendone una con una freccia all'indietro
+                                this.closeIcon = this.backArrowIcon;
+                                accessPathsArray.push(path);
+                            }
+                            // nel caso sia rimasto un solo elemento nell'array (per sicurezza controllo anche il caso in cui sia vuoto), cambio l'icona mettendoci quella con la X
+                            else if (accessPathsArray.length <= 1) {
+                                this.closeIcon = this.XIcon;
+                            }
+
+                            // salvo l'array come variabile globale
+                            this.globalContextService.setInnerSharedObject(GlobalContextVariable.ACCESS_PATHS_ARRAY, accessPathsArray);
+                        }
                     }
                 });
 
