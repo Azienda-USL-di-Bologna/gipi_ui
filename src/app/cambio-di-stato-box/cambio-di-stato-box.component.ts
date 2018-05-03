@@ -100,7 +100,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
     idIter : this._sospensioneParams.idIter,
     cfAutore : this._userInfo.cf,
     idAzienda: this._userInfo.idAzienda,
-    azione: "CambioDiStato",
+    azione: this._sospensioneParams.azione,
     codiceRegistroDocumento: this._sospensioneParams.codiceRegistroDocumento,
     numeroDocumento: this._sospensioneParams.numeroDocumento,
     annoDocumento: this._sospensioneParams.annoDocumento,
