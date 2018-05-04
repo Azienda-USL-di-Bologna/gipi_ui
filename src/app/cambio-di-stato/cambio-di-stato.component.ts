@@ -78,6 +78,8 @@ export class CambioDiStatoComponent implements OnInit {
   }
 
   selectedRowChanged(e) {
+    console.log("selectedRowChanged(e)");
+    console.log("this.sospensioneParams.azione", this.sospensioneParams.azione);
     let cloneSospensione = new CambioDiStatoParams();
     Object.assign(cloneSospensione, this.sospensioneParams);
     this.sospensioneParams = cloneSospensione;

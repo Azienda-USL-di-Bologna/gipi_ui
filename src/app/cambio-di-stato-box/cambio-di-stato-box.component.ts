@@ -30,7 +30,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
   public showPopupAnnullamento: boolean = false;
   public dataSourceStati: DataSource;
   public dataIniziale: Date;
-  public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}});
+  public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}; });
   public arrayRiassunto: PopupRow[];
   public loadingVisible: boolean = false;
 
@@ -100,7 +100,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
     idIter : this._sospensioneParams.idIter,
     cfAutore : this._userInfo.cf,
     idAzienda: this._userInfo.idAzienda,
-    azione: "CambioDiStato",
+    azione: this._sospensioneParams.azione,
     codiceRegistroDocumento: this._sospensioneParams.codiceRegistroDocumento,
     numeroDocumento: this._sospensioneParams.numeroDocumento,
     annoDocumento: this._sospensioneParams.annoDocumento,
@@ -142,6 +142,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
     },
     err => {
       this.loadingVisible = false;
+      console.log(err.message);
       notify({
         message: "Errore durante il salvataggio!",
         type: "error",
