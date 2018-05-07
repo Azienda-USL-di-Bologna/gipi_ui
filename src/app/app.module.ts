@@ -82,7 +82,7 @@ import { DettaglioTipoProcedimentoComponent } from "./tipi-procedimento-aziendal
 import {LoginModule} from "@bds/nt-login";
 import { TestGridComponent } from "./test/test-grid/test-grid.component";
 import {AppConfiguration} from "./config/app-configuration";
-import { DocumentoIterAssociazioneSempliceComponent } from './documento-iter-associazione-semplice/documento-iter-associazione-semplice.component';
+import { DocumentoIterAssociazioneSempliceComponent } from "./documento-iter-associazione-semplice/documento-iter-associazione-semplice.component";
 
 @NgModule({
     declarations: [

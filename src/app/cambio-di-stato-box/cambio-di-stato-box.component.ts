@@ -128,37 +128,37 @@ export class CambioDiStatoBoxComponent implements OnInit {
   };
   this.loadingVisible = true;
   const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
-  .subscribe(
-    res => {
-      this.loadingVisible = false;
-      if (res["idIter"] > 0) {
-        this.showStatusOperation("Salvataggio effettuato con successo!", "success");
-        this.updateArrayRiassunto();
-        this.showPopupRiassunto = true;
-      }
-      else {
-        this.showStatusOperation("Salvataggio non riuscito: è già presente un'associazione all'iter con questa bozza di documento.", "warning");
-      }
-    },
-    err => {
-      this.loadingVisible = false;
-      console.log("err: ", err);
-      if (err.error && err.error.httpCode && err.error.isBdsException) {
-        const responseMessages: ResponseMessages = err.error;
-        const errorMessages: ErrorMessage[] = responseMessages.errorMessages;
-        const errorCode = errorMessages[0].code;
-        switch (errorCode) {
-          case this.FASCICOLAZIONE_ERROR:
-            this.showStatusOperation(errorMessages[0].message, "error");
-            break;
-          default: // caso generale
+    .subscribe(
+      res => {
+        this.loadingVisible = false;
+        if (res["idIter"] > 0) {
+          this.showStatusOperation("Salvataggio effettuato con successo!", "success");
+          this.updateArrayRiassunto();
+          this.showPopupRiassunto = true;
+        }
+        else {
+          this.showStatusOperation("Salvataggio non riuscito: è già presente un'associazione all'iter con questa bozza di documento.", "warning");
+        }
+      },
+      err => {
+        this.loadingVisible = false;
+        // console.log("err: ", err);
+        if (err.error && err.error.httpCode && err.error.isBdsException) {
+          const responseMessages: ResponseMessages = err.error;
+          const errorMessages: ErrorMessage[] = responseMessages.errorMessages;
+          const errorCode = errorMessages[0].code;
+          switch (errorCode) {
+            case this.FASCICOLAZIONE_ERROR:
+              this.showStatusOperation(errorMessages[0].message, "error");
+              break;
+            default: // caso generale
+              this.showStatusOperation("Errore durante il salvataggio!", "error");
+          }
+        } else { // se l'errore non è del tipo ResponseMessage, allora mostro un errore generico
             this.showStatusOperation("Errore durante il salvataggio!", "error");
         }
-      } else { // se l'errore non è del tipo ResponseMessage, allora mostro un errore generico
-          this.showStatusOperation("Errore durante il salvataggio!", "error");
       }
-    }
-  );
+    );
   }
 
   handleClose() {

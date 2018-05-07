@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, Input } from "@angular/core";
 import { EventEmitter } from "events";
 import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
-import { OdataContextFactory, GlobalContextService, OdataContextDefinition } from "@bds/nt-context";
+import { OdataContextFactory, GlobalContextService, OdataContextDefinition, ResponseMessages, ErrorMessage } from "@bds/nt-context";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ActivatedRoute } from "@angular/router";
 import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
@@ -16,6 +16,8 @@ import { PopupRow } from "../classi/condivise/popup/popup-tools";
   styleUrls: ["./documento-iter-associazione-semplice.component.scss"]
 })
 export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
+
+  private FASCICOLAZIONE_ERROR: number = 0;
 
   showPopupAnnullamento: boolean;
   arrayRiassunto: any[];
@@ -68,6 +70,15 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
     this.reimpostaDataIniziale = this.reimpostaDataIniziale.bind(this);
      }
 
+  private showStatusOperation(message: string, type: string) {
+    notify({
+      message: message,
+      type: type,
+      displayTime: 2100,
+      position: TOAST_POSITION,
+      width: TOAST_WIDTH
+    });
+  }
   ngOnInit() {
     console.log("ngOnInit() -> this.associazionePrams", this.associazionePrams);
     
@@ -95,6 +106,7 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
       esito: this.associazionePrams.esito,
       esitoMotivazione: this.associazionePrams.esitoMotivazione,
       idOggettoOrigine: this.associazionePrams.idOggettoOrigine,
+      tipoOggettoOrigine: this.associazionePrams.tipoOggettoOrigine,
       descrizione: this.associazionePrams.descrizione,
       idApplicazione: this.associazionePrams.idApplicazione
     };
@@ -104,36 +116,32 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
     .subscribe(
       res => {
         this.loadingVisible = false;
-          if (res["idIter"] > 0) {
-        notify({
-          message: "Salvataggio effettuato con successo!",
-          type: "success",
-          displayTime: 2100,
-          position: TOAST_POSITION,
-          width: TOAST_WIDTH
-        });
-        this.updateArrayRiassunto();
-        this.showPopupRiassunto = true;
-          }
-          else {
-            notify({
-              message: "Salvataggio non riuscito: è già presente un'associazione all'iter con questa bozza di documento.",
-              type: "warning",
-              displayTime: 2100,
-              position: TOAST_POSITION,
-              width: TOAST_WIDTH
-            });
-          }
+        if (res["idIter"] > 0) {
+          this.showStatusOperation("Salvataggio effettuato con successo!", "success");
+          this.updateArrayRiassunto();
+          this.showPopupRiassunto = true;
+        }
+        else {
+          this.showStatusOperation("Salvataggio non riuscito: è già presente un'associazione all'iter con questa bozza di documento.", "warning");
+        }
       },
       err => {
         this.loadingVisible = false;
-        notify({
-          message: "Errore durante il salvataggio!",
-          type: "error",
-          displayTime: 2100,
-          position: TOAST_POSITION,
-          width: TOAST_WIDTH
-        });
+        // console.log("err: ", err);
+        if (err.error && err.error.httpCode && err.error.isBdsException) {
+          const responseMessages: ResponseMessages = err.error;
+          const errorMessages: ErrorMessage[] = responseMessages.errorMessages;
+          const errorCode = errorMessages[0].code;
+          switch (errorCode) {
+            case this.FASCICOLAZIONE_ERROR:
+              this.showStatusOperation(errorMessages[0].message, "error");
+              break;
+            default: // caso generale
+              this.showStatusOperation("Errore durante il salvataggio!", "error");
+          }
+        } else { // se l'errore non è del tipo ResponseMessage, allora mostro un errore generico
+            this.showStatusOperation("Errore durante il salvataggio!", "error");
+        }
       }
     );
     }
@@ -209,6 +217,7 @@ interface GestioneStatiParams {
   esito: string;
   esitoMotivazione: string;
   idOggettoOrigine: string;
+  tipoOggettoOrigine: string;
   descrizione: string;
   azione: string;
   idApplicazione: string;
