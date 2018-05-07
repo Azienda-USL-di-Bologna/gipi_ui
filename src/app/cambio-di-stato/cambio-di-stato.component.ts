@@ -54,6 +54,7 @@ export class CambioDiStatoComponent implements OnInit {
       this.sospensioneParams.codiceStatoProssimo = queryParams["stato"].toUpperCase();
       this.sospensioneParams.isFaseDiChiusura = this.sospensioneParams.codiceStatoProssimo === STATI.CHIUSO;
       this.sospensioneParams.idOggettoOrigine = queryParams["idOggettoOrigine"];
+      this.sospensioneParams.tipoOggettoOrigine = queryParams["tipoOggettoOrigine"];
       this.sospensioneParams.descrizione = decodeURIComponent(queryParams["descrizione"].replace(/\+/g, " "));
       this.sospensioneParams.idApplicazione = decodeURIComponent(queryParams["idApplicazione"].replace(/\+/g, " "));
       const noBars: boolean = queryParams["nobars"];

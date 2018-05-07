@@ -5,6 +5,7 @@ export class CambioDiStatoParams {
   public cfAutore: string;
   public idAzienda: number;
   public idOggettoOrigine: string;
+  public tipoOggettoOrigine: string;
   public descrizione: string;
   public codiceRegistroDocumento: string;
   public numeroDocumento: string;

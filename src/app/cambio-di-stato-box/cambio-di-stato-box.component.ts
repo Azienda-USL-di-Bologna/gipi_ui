@@ -111,6 +111,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
     esito: this._sospensioneParams.esito,
     esitoMotivazione: this._sospensioneParams.esitoMotivazione,
     idOggettoOrigine: this._sospensioneParams.idOggettoOrigine,
+    tipoOggettoOrigine: this._sospensioneParams.tipoOggettoOrigine,
     descrizione: this._sospensioneParams.descrizione,
     idApplicazione: this._sospensioneParams.idApplicazione
   };
@@ -225,6 +226,7 @@ interface GestioneStatiParams {
   esito: string;
   esitoMotivazione: string;
   idOggettoOrigine: string;
+  tipoOggettoOrigine: string;
   descrizione: string;
   azione: string;
   idApplicazione: string;
