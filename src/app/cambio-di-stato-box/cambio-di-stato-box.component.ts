@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import CustomStore from "devextreme/data/custom_store";
 import ArrayStore from "devextreme/data/array_store";
-import { GlobalContextService, OdataContextDefinition, OdataContextFactory } from "@bds/nt-context";
+import { GlobalContextService, OdataContextDefinition, OdataContextFactory, ResponseMessages, ErrorMessage } from "@bds/nt-context";
 import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
@@ -19,8 +19,9 @@ import { PopupRow } from "../classi/condivise/popup/popup-tools";
 })
 export class CambioDiStatoBoxComponent implements OnInit {
 
+  private FASCICOLAZIONE_ERROR: number = 0;
+
   public _sospensioneParams: CambioDiStatoParams;  
-  
   public dataMinimaValida: Date;
   public statiIter: string[];    // string[] = ["Iter in corso", "Apertura sospensione", "Chiusura iter"];
   public _isOpenedAsPopup: boolean;
@@ -87,7 +88,17 @@ export class CambioDiStatoBoxComponent implements OnInit {
     this.reimpostaDataIniziale = this.reimpostaDataIniziale.bind(this);
   }
 
+  private showStatusOperation(message: string, type: string) {
+    notify({
+      message: message,
+        type: type,
+        displayTime: 2100,
+        position: TOAST_POSITION,
+        width: TOAST_WIDTH
+    });
+  }
   ngOnInit() { }
+
 
   handleSubmit(e) {
   // e.preventDefault(); // Con l'evento onClick non dovrebbe essere necessaria
@@ -120,37 +131,32 @@ export class CambioDiStatoBoxComponent implements OnInit {
   .subscribe(
     res => {
       this.loadingVisible = false;
-        if (res["idIter"] > 0) {
-      notify({
-        message: "Salvataggio effettuato con successo!",
-        type: "success",
-        displayTime: 2100,
-        position: TOAST_POSITION,
-        width: TOAST_WIDTH
-      });
-      this.updateArrayRiassunto();
-      this.showPopupRiassunto = true;
-        }
-        else {
-          notify({
-            message: "Salvataggio non riuscito: è già presente un'associazione all'iter con questa bozza di documento.",
-            type: "warning",
-            displayTime: 2100,
-            position: TOAST_POSITION,
-            width: TOAST_WIDTH
-          });
-        }
+      if (res["idIter"] > 0) {
+        this.showStatusOperation("Salvataggio effettuato con successo!", "success");
+        this.updateArrayRiassunto();
+        this.showPopupRiassunto = true;
+      }
+      else {
+        this.showStatusOperation("Salvataggio non riuscito: è già presente un'associazione all'iter con questa bozza di documento.", "warning");
+      }
     },
     err => {
       this.loadingVisible = false;
-      console.log(err.message);
-      notify({
-        message: "Errore durante il salvataggio!",
-        type: "error",
-        displayTime: 2100,
-        position: TOAST_POSITION,
-        width: TOAST_WIDTH
-      });
+      console.log("err: ", err);
+      if (err.error && err.error.httpCode && err.error.isBdsException) {
+        const responseMessages: ResponseMessages = err.error;
+        const errorMessages: ErrorMessage[] = responseMessages.errorMessages;
+        const errorCode = errorMessages[0].code;
+        switch (errorCode) {
+          case this.FASCICOLAZIONE_ERROR:
+            this.showStatusOperation(errorMessages[0].message, "error");
+            break;
+          default: // caso generale
+            this.showStatusOperation("Errore durante il salvataggio!", "error");
+        }
+      } else { // se l'errore non è del tipo ResponseMessage, allora mostro un errore generico
+          this.showStatusOperation("Errore durante il salvataggio!", "error");
+      }
     }
   );
   }
