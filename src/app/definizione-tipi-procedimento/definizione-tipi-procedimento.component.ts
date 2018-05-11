@@ -24,7 +24,8 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
   @Input("refreshButton") public refreshButton;
 
-  public pattern: any =  "^[1-9]+[0-9]*$";
+  public patternGreaterZero: any =  "^[1-9]+[0-9]*$";
+  public patternGreaterEqualZero: any =  "^[0-9]+[0-9]*$";
   public dataSource: DataSource;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
   public texts: Object = {
