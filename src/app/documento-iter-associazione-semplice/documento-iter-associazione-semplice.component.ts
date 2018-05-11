@@ -57,6 +57,7 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
       this.dataIniziale = new Date();
     }
   }
+  public someTextTesto: string = "Documento associato all'iter con ";
 
   constructor(private odataContextFactory: OdataContextFactory,
     private http: HttpClient, 
@@ -175,6 +176,7 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
         objStati[stato.codice] = stato.descrizione;
       }); */
       this.arrayRiassunto = [];
+      this.someTextTesto += "associazione semplice";
       // this.arrayRiassunto.push(new PopupRow("codiceRegistroDocumento","Registro", this._sospensioneParams.codiceRegistroDocumento))
       this.arrayRiassunto.push(new PopupRow("oggettoIter", "Oggetto", this.associazionePrams.oggettoIter));
       this.arrayRiassunto.push(new PopupRow("numeroIter", "Numero", this.associazionePrams.numeroIter.toString()));
