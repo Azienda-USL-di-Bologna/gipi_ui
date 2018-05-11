@@ -67,11 +67,11 @@
             <div *dxTemplate="let element of 'buttonStorico'" cssClass="app-azioni">
               <dx-button text="" icon='event'></dx-button>
             </div>-->
-            <dxi-column [width]="80" caption="Nuovo iter" cellTemplate="buttonIter" alignment="center"
+            <!-- <dxi-column [width]="80" caption="Nuovo iter" cellTemplate="buttonIter" alignment="center"
                         [visible]="colonnaVisibile"></dxi-column>
             <div *dxTemplate="let element of 'buttonIter'" cssClass="app-azioni">
                 <dx-button text="" icon='repeat' (onClick)="handleEvent('iterOnClick', element)"></dx-button>
-            </div>
+            </div> -->
             <dxi-column dataField="idAziendaTipoProcedimento.durataMassimaSospensione" [dataType]="'number'"
                         [allowEditing]="false" [visible]="false"></dxi-column>
             <dxi-column dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" [dataType]="'string'"
