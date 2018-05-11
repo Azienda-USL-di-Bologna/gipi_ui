@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from "@angular/core";
 import { Fase, Iter, DocumentoIter } from "@bds/nt-entities";
 import DataSource from "devextreme/data/data_source";
-import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
+import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 import { log } from "util";
 import { OdataContextFactory } from "@bds/nt-context";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
@@ -41,8 +41,12 @@ export class PassaggioDiFaseComponent implements OnInit {
       }
     },
     err => {
-
-      notify("Non esiste la fase successiva", "error", 1000);
+      notify({
+        message: "Non esiste la fase successiva",
+        type: "error",
+        position: TOAST_POSITION,
+        width: TOAST_WIDTH
+      });
     });
   }
 
@@ -89,10 +93,8 @@ export class PassaggioDiFaseComponent implements OnInit {
           message: "Selezionare un iter per poter procedere!",
           type: "warning",
           displayTime: 2100,
-          position: {
-            my: "center", at: "center", of: window
-          },
-          width: "max-content"
+          position: TOAST_POSITION,
+          width: TOAST_WIDTH
         });
         return;
       }
@@ -101,7 +103,13 @@ export class PassaggioDiFaseComponent implements OnInit {
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/stepOn", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({},)
       .subscribe(
       res => {
-        notify({message: "Proceduto con successo", type: "success", displayTime: 3000, position: {my: "center", at: "center", of: window}}); 
+        notify({
+          message: "Proceduto con successo",
+          type: "success",
+          displayTime: 3000,
+          position: TOAST_POSITION,
+          width: TOAST_WIDTH
+        }); 
         if (!this.isOpenedAsPopup) { 
           setTimeout(() => { window.close(); }, 4000);
         } else {
@@ -113,11 +121,9 @@ export class PassaggioDiFaseComponent implements OnInit {
           notify({
             message: "Si è verificato un errore durante il procedi",
             type: "error",
-            displayTime: 1000,
-            position: {
-              my: "center", at: "center", of: window
-            },
-            width: "max-content"
+            displayTime: 2000,
+            position: TOAST_POSITION,
+            width: TOAST_WIDTH
           });
           console.error("Errore:", err);
         } else {
@@ -125,11 +131,9 @@ export class PassaggioDiFaseComponent implements OnInit {
           notify({
             message: "Si è verificato un errore durante il procedi",
             type: "error",
-            displayTime: 1000,
-            position: {
-              my: "center", at: "center", of: window
-            },
-            width: "max-content"
+            displayTime: 2000,
+            position: TOAST_POSITION,
+            width: TOAST_WIDTH
           });
           console.error("Errore:", err);
         }

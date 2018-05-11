@@ -1,4 +1,6 @@
 import {forEach} from "@angular/router/src/utils/collection";
+import {Router} from "@angular/router";
+import {Component} from "@angular/core/core";
 
 export class UtilityFunctions {
 
@@ -57,5 +59,30 @@ export class UtilityFunctions {
         let dds = (dd < 10) ? "0" + dd : dd; 
         let mms = (mm < 10) ? "0" + mm : mm;
         return dds + "/" + mms + "/" + yyyy;
+    }
+
+    /**
+     * Estrare un componente dalla configurazione del router cercandolo tramite un url
+     * @param {Router} router
+     * @param {string} url l'url tramite il quale estrarre il componente (non c'è bisogno di ripulirlo dai query params)
+     * @returns {Component}
+     */
+    public static getComponentFromRouterConfig(router: Router, url: string): Component {
+        const path: string = UtilityFunctions.clearUrl(url);
+        let route: any = router.config.filter(s => s.path === path)[0];
+        return route.component;
+    }
+
+    /**
+     * Ripulisce un url dai query params e dalla barra iniziale (da utilizzare sugli url catturati dagli eventi di routing)
+     * @param {string} url
+     * @returns {String}
+     */
+    public static clearUrl(url: string): string {
+        let pos: number = url.indexOf("?");
+        if (pos <= 0 )
+            pos = url.length;
+        const path: string = url.substring(1, pos);
+        return path;
     }
 }

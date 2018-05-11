@@ -4,7 +4,7 @@ import DataSource from "devextreme/data/data_source";
 import { OdataContextFactory, ResponseMessages, ErrorMessage, CustomLoadingFilterParams } from "@bds/nt-context";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
-import { CUSTOM_RESOURCES_BASE_URL } from "../../../environments/app.constants";
+import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH } from "../../../environments/app.constants";
 import { debug } from "util";
 
 @Component({
@@ -293,7 +293,7 @@ export class StruttureTreeComponent implements OnInit {
       message: message,
       type: type,
       displayTime: 1700,
-      width: message.length * 7,
+      width: TOAST_WIDTH,
       position: {
         my: "center",
         at: "center",

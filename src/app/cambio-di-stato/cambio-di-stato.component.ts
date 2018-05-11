@@ -7,6 +7,7 @@ import { ActivatedRoute, Params } from "@angular/router";
 import { Observable, Subscription } from "rxjs";
 import { bUtente, bAzienda, STATI } from "@bds/nt-entities";
 import notify from "devextreme/ui/notify";
+import { TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 import {AppConfiguration} from "../config/app-configuration";
 import { SospensioneParams } from "../classi/condivise/sospensione/sospensione-params";
 import { UtilityFunctions } from "../utility-functions";
@@ -48,13 +49,20 @@ export class CambioDiStatoComponent implements OnInit {
       this.sospensioneParams.codiceRegistroDocumento = queryParams["registro"];
       this.sospensioneParams.dataRegistrazioneDocumento = queryParams["dataRegistrazione"];
       this.titleDataDocumento = UtilityFunctions.formatDateToString(new Date(this.sospensioneParams.dataRegistrazioneDocumento));
-      this.sospensioneParams.oggettoDocumento = decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " "));
+      if (queryParams["oggetto"]) {
+        this.sospensioneParams.oggettoDocumento = decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " "));
+      }
       this.sospensioneParams.azione = queryParams["azione"] ? queryParams["azione"].toLowerCase() : undefined;
       this.sospensioneParams.codiceStatoProssimo = queryParams["stato"].toUpperCase();
       this.sospensioneParams.isFaseDiChiusura = this.sospensioneParams.codiceStatoProssimo === STATI.CHIUSO;
       this.sospensioneParams.idOggettoOrigine = queryParams["idOggettoOrigine"];
-      this.sospensioneParams.descrizione = decodeURIComponent(queryParams["descrizione"].replace(/\+/g, " "));
-      this.sospensioneParams.idApplicazione = decodeURIComponent(queryParams["idApplicazione"].replace(/\+/g, " "));
+      this.sospensioneParams.tipoOggettoOrigine = queryParams["tipoOggettoOrigine"];
+      if (queryParams["descrizione"]) {
+        this.sospensioneParams.descrizione = decodeURIComponent(queryParams["descrizione"].replace(/\+/g, " "));
+      }
+      if (queryParams["idApplicazione"]) {
+        this.sospensioneParams.idApplicazione = decodeURIComponent(queryParams["idApplicazione"].replace(/\+/g, " "));
+      }
       const noBars: boolean = queryParams["nobars"];
     });
   }
@@ -77,6 +85,8 @@ export class CambioDiStatoComponent implements OnInit {
   }
 
   selectedRowChanged(e) {
+    console.log("selectedRowChanged(e)");
+    console.log("this.sospensioneParams.azione", this.sospensioneParams.azione);
     let cloneSospensione = new CambioDiStatoParams();
     Object.assign(cloneSospensione, this.sospensioneParams);
     this.sospensioneParams = cloneSospensione;
@@ -106,10 +116,8 @@ export class CambioDiStatoComponent implements OnInit {
         message: "Il procedimento è già nell'ultima fase prevista: Fase di chiusura.",
         type: "warning",
         displayTime: 4000,
-        position: {
-          my: "center", at: "center", of: window
-        },
-        width: "max-content"
+        position: TOAST_POSITION,
+        width: TOAST_WIDTH
       });
     }
     

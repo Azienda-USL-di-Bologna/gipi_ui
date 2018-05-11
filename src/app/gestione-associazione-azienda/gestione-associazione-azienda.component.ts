@@ -6,6 +6,7 @@ import { DxFormComponent } from "devextreme-angular";
 import { GlobalContextService, OdataContextFactory, OdataContextDefinition, OdataCustomStore, Entity, CustomLoadingFilterParams, ButtonAppearance } from "@bds/nt-context";
 import notify from "devextreme/ui/notify";
 import { custom } from "devextreme/ui/dialog";
+import { TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 
 
 @Component({
@@ -218,14 +219,11 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
             this.datasource.store().update(this.aziendaTipoProcedimento.id, this.aziendaTipoProcedimento).done(res => (this.buildAziendaTipoProcedimento(true)));
         }
         notify({
-            message: "salvataggio effettuato con successo",
+            message: "Salvataggio effettuato con successo",
             type: "success",
             displayTime: 1200,
-            position: {
-                my: "bottom",
-                at: "top",
-                of: "#button-row-2"
-            }
+            position: TOAST_POSITION,
+            width: TOAST_WIDTH
         });
     }
 

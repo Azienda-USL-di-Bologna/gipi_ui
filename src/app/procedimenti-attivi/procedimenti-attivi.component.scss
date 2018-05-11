@@ -122,3 +122,8 @@
 /deep/ .label-on-top {
   -webkit-box-align: inherit !important;
 }
+
+/deep/ .read-only-field .dx-texteditor-input {
+  background-color: #f8f8f9 !important;
+  color: #929293 !important;
+}
