@@ -3,7 +3,7 @@ import DataSource from "devextreme/data/data_source";
 import { DxDataGridComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from "./definizione-tipi-procedimento.service";
 import { TipoProcedimento } from "@bds/nt-entities";
-import { OdataContextDefinition, GlobalContextService, OdataContextFactory } from "@bds/nt-context";
+import { OdataContextDefinition, GlobalContextService, OdataContextFactory, CustomLoadingFilterParams } from "@bds/nt-context";
 import { ActivatedRoute, Router } from "@angular/router";
 
 
@@ -46,8 +46,13 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
     // this.sharedData.setSharedObject({route: "definizione-tipi-procedimento"});
 
     this.odataContextDefinition = odataContexFactory.buildOdataContextEntitiesDefinition();
+    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
+    customLoadingFilterParams.addFilter("nome", ["tolower(${target})", "contains", "${value.tolower}"]);
     this.dataSource = new DataSource({
-      store: this.odataContextDefinition.getContext()[new TipoProcedimento().getName()],
+      store: this.odataContextDefinition.getContext()[new TipoProcedimento().getName()].on("loading", (loadOptions) => {
+        loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
+        this.odataContextDefinition.customLoading(loadOptions);
+      })
       /*       map: function (item) {
              if (item.dataInizioValidita != null)
                 item.dataInizioValidita = new Date(item.dataInizioValidita.getTime() - new Date().getTimezoneOffset() * 60000);
