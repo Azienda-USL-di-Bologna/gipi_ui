@@ -29,6 +29,8 @@
         <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" editorType="dxTextArea" cssClass="label-wrap" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" cssClass="label-wrap" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" cssClass="label-wrap" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.regolamentiRiferimentiInterni" cssClass="label-wrap" [label]="{text: 'Regolamenti/procedure interni'}" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="normativaDiSettore" cssClass="label-wrap" [label]="{text: 'Normativa di settore'}" [editorOptions]="{ disabled: !possoAgireForm }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.titAndClass" cssClass="label-wrap" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" cssClass="label-wrap" [label]="{text: 'Durata massima sospensione'}" [editorOptions]="{ disabled: true }"></dxi-item>    
         <dxi-item [template]="'responsabile'"  [isRequired]="true" cssClass="label-wrap lookup-wrap" [label]="{text: 'Responsabile dell\'adozione dell\'atto finale'}" ></dxi-item>

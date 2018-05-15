@@ -16,11 +16,11 @@
     <dxi-item itemType="group" [colCount]="12">
         <dxi-item dataField="durataMassimaProcedimento" [colSpan]="6" editorType="dxNumberBox" [label]="{text: 'Durata massima dell\'iter'}" [editorOptions]="{ disabled: false}">
             <dxi-validation-rule type="required" message="la durata massima dell'iter è obbligatoria"></dxi-validation-rule>
-            <dxi-validation-rule type="pattern" [pattern]="pattern" message="la durata massima di procedimento deve avere un valore positivo"></dxi-validation-rule>
+            <dxi-validation-rule type="pattern" [pattern]="patternGreaterZero" message="la durata massima di procedimento deve avere un valore positivo"></dxi-validation-rule>
         </dxi-item>
         <dxi-item dataField="durataMassimaSospensione" [colSpan]="6" editorType="dxNumberBox" [label]="{text: 'Durata massima di sospensione'}" [editorOptions]="{ disabled: false}">
                 <dxi-validation-rule type="required" message="la durata massima di sospensione è obbligatoria"></dxi-validation-rule>
-                <dxi-validation-rule type="pattern" [pattern]="pattern" message="la durata massima di sospensione deve avere un valore positivo"></dxi-validation-rule>
+                <dxi-validation-rule type="pattern" [pattern]="patternGreaterEqualZero" message="la durata massima di sospensione non può essere negativa"></dxi-validation-rule>
         </dxi-item>
     </dxi-item>
     <dxi-item itemType="group">
@@ -51,7 +51,7 @@
       </dxi-item>
       <dxi-item dataField="giorniPreavvisoScadenzaTermini" [colSpan]="3" editorType="dxNumberBox" [label]="{text: 'Preavviso scadenza termini (gg)', location:'top'}" [editorOptions]="{ disabled: false}">
           <dxi-validation-rule type="required" message="inserire i giorni di preavviso scadenza dei termini"></dxi-validation-rule>
-          <dxi-validation-rule type="pattern" [pattern]="pattern" message="giorni di preavviso scadenza dei termini deve avere valore positivo"></dxi-validation-rule>
+          <dxi-validation-rule type="pattern" [pattern]="patternGreaterZero" message="giorni di preavviso scadenza dei termini deve avere valore positivo"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="3"  editorType="dxCheckBox" [label]="{text: 'Obbligo esito conclusivo e motivazione', location:'top'}" [editorOptions]="{ disabled: false}"></dxi-item>
     </dxi-item>

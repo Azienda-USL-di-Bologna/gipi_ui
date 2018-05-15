@@ -33,6 +33,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
   public dataIniziale: Date;
   public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}; });
   public arrayRiassunto: PopupRow[];
+  public someTextTesto: string = "Documento associato all'iter con ";
   public loadingVisible: boolean = false;
 
   @Output() out = new EventEmitter<any>();
@@ -189,6 +190,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
       let stato = value as any;
       objStati[stato.codice] = stato.descrizione;
     });
+    this.someTextTesto += STATI[this._sospensioneParams.codiceStatoProssimo];
     this.arrayRiassunto = [];
     // this.arrayRiassunto.push(new PopupRow("codiceRegistroDocumento","Registro", this._sospensioneParams.codiceRegistroDocumento))
     this.arrayRiassunto.push(new PopupRow("oggettoIter", "Oggetto", this._sospensioneParams.oggettoIter));
@@ -248,4 +250,10 @@ const ESITI = {
   ACCOLTO: "Accolto",
   RIFIUTO_TOTALE: "Rifiuto totale",
   RIFIUTO_PARZIALE: "Rifiuto parziale"
+};
+
+const STATI = {
+  SOSPESO: "sospensione",
+  IN_CORSO: "riattivazione",
+  CHIUSO: "chiusura"
 };

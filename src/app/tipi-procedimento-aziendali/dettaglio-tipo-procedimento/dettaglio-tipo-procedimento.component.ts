@@ -23,7 +23,8 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
   public dataSourceTitoli: DataSource;
   public dataSourceAziendaTipoProcedimento: DataSource;
   public loggedUser: LoggedUser;
-  public pattern: any = "^[1-9][0-9]*$";
+  public patternGreaterZero: any = "^[1-9][0-9]*$";
+  public patternGreaterEqualZero: any = "^[0-9][0-9]*$";
 
   @Input()
   set procedimento(procedimento: number) {

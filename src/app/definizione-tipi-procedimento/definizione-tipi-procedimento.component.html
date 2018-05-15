@@ -78,11 +78,11 @@
             </dxi-item>
             <dxi-item dataField="durataMassimaIter" [editorOptions]="{onInput:onInputNumberBox}" editorType="dxNumberBox" [colSpan]="1">
                 <dxi-validation-rule type="required" message="la durata massima dell'iter è obbligatoria"></dxi-validation-rule>
-                <dxi-validation-rule type="pattern" [pattern]="pattern" message="la durata massima di procedimento deve avere un valore positivo"></dxi-validation-rule>
+                <dxi-validation-rule type="pattern" [pattern]="patternGreaterZero" message="la durata massima di procedimento deve avere un valore positivo"></dxi-validation-rule>
             </dxi-item>
             <dxi-item  dataField="durataMassimaSospensione" [editorOptions]="{onInput:onInputNumberBox}" [colSpan]="1">
                 <dxi-validation-rule type="required" message="la durata massima di sospensione è obbligatoria"></dxi-validation-rule>
-                <dxi-validation-rule type="pattern" [pattern]="pattern" message="la durata massima di sospensione deve avere un valore positivo"></dxi-validation-rule>
+                <dxi-validation-rule type="pattern" [pattern]="patternGreaterEqualZero" message="la durata massima di sospensione non può essere negativa"></dxi-validation-rule>
             </dxi-item>
             <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="1"></dxi-item>
             <dxi-item dataField="pubblicazioneRegistroAccessi" [colSpan]="1"></dxi-item>

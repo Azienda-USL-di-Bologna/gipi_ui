@@ -3,5 +3,5 @@
   <h4>Seleziona un procedimento tra i seguenti:</h4>
   <procedimenti-attivi [avviaIterDaDocumento]="doc" (messageEvent)="receiveMessage($event)"></procedimenti-attivi>
   <br>   
-  <avvia-nuovo-iter [documentoSelezionato]="doc" [procedimentoSelezionatoDaDocumento]="procedimentoDaPassare"></avvia-nuovo-iter>
+  <avvia-nuovo-iter *ngIf="procedimentoDaPassare" [documentoSelezionato]="doc" [procedimentoSelezionatoDaDocumento]="procedimentoDaPassare"></avvia-nuovo-iter>
 </div>
