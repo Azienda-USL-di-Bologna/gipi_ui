@@ -76,6 +76,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public descrizioneDataFields: any =
     {
+      "normativaDiSettore": "Normativa di settore",
       "idResponsabileAdozioneAttoFinale": "Responsabile dell\'adozione dell\'atto finale",
       "idTitolarePotereSostitutivo": "Titolare potere sostitutivo",
       "ufficio": "Ufficio",
