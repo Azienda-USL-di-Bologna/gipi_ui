@@ -56,7 +56,6 @@ export class AvviaNuovoIterComponent implements OnInit {
 
   @Input()
   set documentoSelezionato(doc: any) {
-    this.iterParams = new IterParams();
     this.iterParams.codiceRegistroDocumento = doc.registro;
     this.iterParams.numeroDocumento = doc.numero;
     this.iterParams.annoDocumento = doc.anno;
