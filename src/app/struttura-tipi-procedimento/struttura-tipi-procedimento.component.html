@@ -24,7 +24,7 @@
         [idAziendaTipoProcedimento]=idAziendaTipoProcedimentoFront [readOnly]="true" [disabled]="possoAgireForm" focusStateEnabled="false" [enableCheckRecursively]="false" (strutturaSelezionata)="selezionaStruttura($event)"></strutture-tree>
     </div>
     <div class="col-8" id="center-div">
-      <dx-form id="form" #myform [(formData)]="procedimento" requiredMark="(*)" [visible]="formVisible" validationGroup="procedimentoValGroup" showValidationSummary="true">
+      <dx-form id="form" #myForm [(formData)]="procedimento" requiredMark="(*)" [visible]="formVisible" validationGroup="procedimentoValGroup" showValidationSummary="true">
           
         <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" editorType="dxTextArea" cssClass="label-wrap" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: true }"></dxi-item>
         <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" cssClass="label-wrap" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
@@ -88,10 +88,13 @@
           <dxi-item dataField="descrizioneAtti" cssClass="label-wrap" [label]="{text: 'Descrizione atti e documenti da allegare all\'istanza'}" editorType="dxTextArea" [editorOptions]="{ height:70, disabled: !possoAgireForm }">
           </dxi-item>
           <div class="dx-field">
-          <dxi-item dataField="dataInizio" cssClass="label-wrap" [label]="{text: 'Data inizio validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-          <dxi-item dataField="dataFine" cssClass="label-wrap" [label]="{text: 'Data fine validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, displayFormat: 'dd/MM/yyyy', 
-                  min: procedimento.dataInizio, dateOutOfRangeMessage: 'Il valore è fuori dall\'intervallo'}"></dxi-item>
-
+          <dxi-item dataField="dataInizio" cssClass="label-wrap" [label]="{text: 'Data inizio validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, onClosed: validaForm, min: dataInizioProcAzienda, max: dataFineProcAzienda, displayFormat: 'dd/MM/yyyy' }">
+            <dxi-validation-rule type="custom" [reevaluate]="true" [validationCallback]="checkDataInizio" message="Inserire una data di inizio corretta minore della data di fine validità"></dxi-validation-rule>
+          </dxi-item>
+          <dxi-item dataField="dataFine" cssClass="label-wrap" [label]="{text: 'Data fine validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, onChange: validaForm, onClosed: validaForm, min: dataInizioProcAzienda, max: dataFineProcAzienda, displayFormat: 'dd/MM/yyyy', 
+            dateOutOfRangeMessage: 'Il valore è fuori dall\'intervallo'}">
+            <dxi-validation-rule type="custom" [reevaluate]="true" [validationCallback]="checkDataFine" message="Inserire una data di fine corretta maggiore della data di inizio validità"></dxi-validation-rule>
+          </dxi-item>
           </div>
           <dxi-item [template]="'bottoneUno'"></dxi-item>
         <div *dxTemplate="let data of 'bottoneUno'"></div>
