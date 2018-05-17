@@ -125,7 +125,6 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     
     this.checkDataInizio = this.checkDataInizio.bind(this);
     this.checkDataFine = this.checkDataFine.bind(this);
-    this.validaForm = this.validaForm.bind(this);
   }
 
 
@@ -279,8 +278,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
         this.testoTooltipResponsabile = null;
       }
 */
-
-
+      this.validaForm();  // Lancio di nuovo il validatore per eliminare eventuali messaggi di errore quando si annulla
     });
 
 
@@ -378,8 +376,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.myForm.instance.validate();
   }
   public bottoneModificaProcedimento(validationParams: any) {
-    if(this.isNullClassificazione()){
-      notify({message: 'Attenzione: non è stata inserita la classificazione sul procedimento. Correggere prima di continuare', position: 'center', width: TOAST_WIDTH + 100}, 'warning', 3000);
+    if (this.isNullClassificazione()) {
+      notify({message: "Attenzione: non è stata inserita la classificazione sul procedimento. Correggere prima di continuare", position: "center", width: TOAST_WIDTH + 100}, 'warning', 3000);
       return;
     }      
 
@@ -395,11 +393,11 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     }
 
 
-    // questo lo devo spostare nel validata
+   /*  // questo lo devo spostare nel validata -> Fatto, commento il codice per adesso
     if (this.procedimento.dataFine && (this.procedimento.dataFine < this.procedimento.dataInizio)) {
       this.showStatusOperation("Correggere l'intervallo di validità", "error");
       return;
-    }
+    } */
 
     let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
     let differenzeStr: string = "";
@@ -458,7 +456,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   public bottoneAnnulla(validationParams: any) {
 
     validationParams.validationGroup.reset();
-
+     // this.myForm.instance.resetValues();
 
     let differenze: string[] = Entity.compareObjs(this.descrizioneDataFields, this.initialProcedimento, this.procedimento);
     console.log("DIFFERENZE", differenze);

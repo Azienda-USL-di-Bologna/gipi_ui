@@ -88,11 +88,13 @@
           <dxi-item dataField="descrizioneAtti" cssClass="label-wrap" [label]="{text: 'Descrizione atti e documenti da allegare all\'istanza'}" editorType="dxTextArea" [editorOptions]="{ height:70, disabled: !possoAgireForm }">
           </dxi-item>
           <div class="dx-field">
-          <dxi-item dataField="dataInizio" cssClass="label-wrap" [label]="{text: 'Data inizio validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, onClosed: validaForm, min: dataInizioProcAzienda, max: dataFineProcAzienda, displayFormat: 'dd/MM/yyyy' }">
+          <dxi-item dataField="dataInizio" cssClass="label-wrap" [label]="{text: 'Data inizio validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, onClosed: validaForm, min: dataInizioProcAzienda, max: dataFineProcAzienda, displayFormat: 'dd/MM/yyyy', invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy'}">
+            <dxi-validation-rule type="range" [min]="dataInizioProcAzienda" [max]="dataFineProcAzienda" message="Data inizio non coerente con le date del tipo procedimento aziendale"></dxi-validation-rule>
             <dxi-validation-rule type="custom" [reevaluate]="true" [validationCallback]="checkDataInizio" message="Inserire una data di inizio corretta minore della data di fine validità"></dxi-validation-rule>
           </dxi-item>
-          <dxi-item dataField="dataFine" cssClass="label-wrap" [label]="{text: 'Data fine validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, onChange: validaForm, onClosed: validaForm, min: dataInizioProcAzienda, max: dataFineProcAzienda, displayFormat: 'dd/MM/yyyy', 
-            dateOutOfRangeMessage: 'Il valore è fuori dall\'intervallo'}">
+          <dxi-item dataField="dataFine" cssClass="label-wrap" [label]="{text: 'Data fine validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, onFocusOut: validaForm, onClosed: validaForm, min: dataInizioProcAzienda, max: dataFineProcAzienda, displayFormat: 'dd/MM/yyyy', 
+            invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy'}">
+            <dxi-validation-rule type="range" [min]="dataInizioProcAzienda" [max]="dataFineProcAzienda" message="Data inizio non coerente con le date del tipo procedimento aziendale"></dxi-validation-rule>
             <dxi-validation-rule type="custom" [reevaluate]="true" [validationCallback]="checkDataFine" message="Inserire una data di fine corretta maggiore della data di inizio validità"></dxi-validation-rule>
           </dxi-item>
           </div>
