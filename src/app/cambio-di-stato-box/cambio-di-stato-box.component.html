@@ -67,10 +67,14 @@
         closeOnOutsideClick: true,
         showCancelButton: false,
         placeholder: 'Seleziona esito',
-        searchEnabled: false
+        searchEnabled: false,
+        showClearButton: true
       }">
+      <dxi-validation-rule *ngIf="obbligoEsitoMotivazione" type="required" message="L'esito è obbligatorio"></dxi-validation-rule>
     </dxi-item>
-      <dxi-item *ngIf="_sospensioneParams.codiceStatoProssimo === 'CHIUSO'" dataField="esitoMotivazione" editorType="dxTextArea" [label]="{text: 'Motivazione'}" [editorOptions]="{ disabled: false }"></dxi-item>
+      <dxi-item *ngIf="_sospensioneParams.codiceStatoProssimo === 'CHIUSO'" dataField="esitoMotivazione" editorType="dxTextArea" [label]="{text: 'Motivazione'}" [editorOptions]="{ disabled: false }">
+        <dxi-validation-rule *ngIf="obbligoEsitoMotivazione" type="required" message="La motivazione è obbligatoria"></dxi-validation-rule>
+      </dxi-item>
     </dxi-item>
   </dx-form>
 

@@ -3,3 +3,11 @@
     font-size: 18px;
     margin: 0 3px;
 }
+
+/deep/ .label-wrap > label {
+    white-space: inherit !important;
+}
+
+/deep/ .label-wrap > label > span {
+    width: 200px !important;
+}
