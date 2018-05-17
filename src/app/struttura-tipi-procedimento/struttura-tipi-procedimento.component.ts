@@ -16,6 +16,7 @@ import { NodeOperations } from "../reusable-component/strutture-tree/strutture-t
 import { confirm } from "devextreme/ui/dialog";
 import { HttpClient } from "@angular/common/http";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
+import { DxFormComponent } from "devextreme-angular";
 
 @Component({
   selector: "struttura-tipi-procedimento",
@@ -37,6 +38,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
   private aziendaTipoProcedimento: AziendaTipoProcedimento;
 
   @ViewChild("treeView") treeView: any;
+  @ViewChild("myForm") myForm: DxFormComponent;
 
   public strutturaSelezionata: Struttura;
   public datasource: DataSource;
@@ -66,6 +68,8 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
   public defaultResponsabile: UtenteStruttura;
   public defaultTitolare: UtenteStruttura;
+  public dataInizioProcAzienda: Date;
+  public dataFineProcAzienda: Date;
 
   public formVisible = false;
   public popupVisible = false;
@@ -116,11 +120,12 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this.odataContextDefinitionResponsabileDefault = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.odataContextDefinitionTitolareDefault = this.odataContextFactory.buildOdataContextEntitiesDefinition();
 
-    
-
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
-    customLoadingFilterParams.addFilter("descrizione",["tolower(${target})", "contains", "${value.tolower}"]);
-
+    customLoadingFilterParams.addFilter("descrizione", ["tolower(${target})", "contains", "${value.tolower}"]);
+    
+    this.checkDataInizio = this.checkDataInizio.bind(this);
+    this.checkDataFine = this.checkDataFine.bind(this);
+    this.validaForm = this.validaForm.bind(this);
   }
 
 
@@ -145,7 +150,10 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
       dataSourceAziendaTipoProcedimento.load().then(res => {
         this.aziendaTipoProcedimento.build(res[0]);
+        this.dataInizioProcAzienda = res[0].dataInizio;
+        this.dataFineProcAzienda = res[0].dataFine;
       });
+      
     }
 
     // devo gestire l'expand. Se metto anche "idAziendaTipoProcedimento.idTitolo" l'aziendaProcedimento padre non ha il titolo si rompe tutto e non si visualizzano i dati
@@ -356,6 +364,19 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
       return false;
   }
 
+  private showStatusOperation(message: string, type: string) {
+    notify({
+      message: message,
+        type: type,
+        displayTime: 1500,
+        position: TOAST_POSITION,
+        width: TOAST_WIDTH
+    });
+  }
+
+  validaForm = () => {
+    this.myForm.instance.validate();
+  }
   public bottoneModificaProcedimento(validationParams: any) {
     if(this.isNullClassificazione()){
       notify({message: 'Attenzione: non è stata inserita la classificazione sul procedimento. Correggere prima di continuare', position: 'center', width: TOAST_WIDTH + 100}, 'warning', 3000);
@@ -376,12 +397,7 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
 
     // questo lo devo spostare nel validata
     if (this.procedimento.dataFine && (this.procedimento.dataFine < this.procedimento.dataInizio)) {
-      notify({
-        message: "Correggere l'intervallo di validità",
-        type: "error",
-        position: TOAST_POSITION,
-        width: TOAST_WIDTH
-      });
+      this.showStatusOperation("Correggere l'intervallo di validità", "error");
       return;
     }
 
@@ -413,44 +429,24 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
                     res2 => {
                       console.log("risultato POST OK", res);
                       this.treeView.caricaDati();
-                      notify({
-                        message: "Salvataggio effettuato con successo",
-                        position: TOAST_POSITION,
-                        type: "success", displayTime: 1200, width: TOAST_WIDTH
-                      });
+                      this.showStatusOperation("Salvataggio effettuato con successo", "success");
                     },
                     err => {
                       console.log("risultato POST Error", err);
-                      notify({
-                        message: "Errore nel salvataggio",
-                        position: TOAST_POSITION,
-                        type: "error", displayTime: 1200, width: TOAST_WIDTH
-                      });
+                      this.showStatusOperation("Errore nel salvataggio", "error");
                     }
                   );
                 } else {
-                  notify({
-                    message: "Salvataggio effettuato con successo",
-                    position: TOAST_POSITION,
-                    type: "success", displayTime: 1200, width: TOAST_WIDTH
-                  });
+                  this.showStatusOperation("Salvataggio effettuato con successo", "success");
                 }
               });
             } else {
-              notify({
-                message: "Salvataggio effettuato con successo",
-                position: TOAST_POSITION,
-                type: "success", displayTime: 1200, width: TOAST_WIDTH
-              });
+              this.showStatusOperation("Salvataggio effettuato con successo", "success");
             }
           })
           .catch(err => {
             console.log("ERROR_UPDATE", err);
-            notify({
-              message: "Errore nel salvataggio",
-              position: TOAST_POSITION,
-              type: "error", displayTime: 1200, width: TOAST_WIDTH
-            });
+            this.showStatusOperation("Errore nel salvataggio", "error");
           });
       }
     });
@@ -615,6 +611,17 @@ export class StrutturaTipiProcedimentoComponent implements OnInit {
     this._location.back();
   }
 
+  public checkDataFine(event: any) {
+    if ((event.value instanceof Date && event.value >= this.procedimento.dataInizio) || event.value === null) { // La data di fine validità può essere nulla
+      return true;
+    } else return false;
+  }  
 
+  public checkDataInizio(event: any) {
+    if (event.value <= this.procedimento.dataFine || this.procedimento.dataFine === null) {
+      return true;
+    } else return false;
+  }
 
+  
 }
