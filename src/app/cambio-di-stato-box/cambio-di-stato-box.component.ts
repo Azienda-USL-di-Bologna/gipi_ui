@@ -4,7 +4,7 @@ import CustomStore from "devextreme/data/custom_store";
 import ArrayStore from "devextreme/data/array_store";
 import { GlobalContextService, OdataContextDefinition, OdataContextFactory, ResponseMessages, ErrorMessage } from "@bds/nt-context";
 import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
-import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
+import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
@@ -276,12 +276,6 @@ interface UserInfo{
   cf: string;
   idAzienda: number;
 }
-
-const ESITI = {
-  ACCOLTO: "Accolto",
-  RIFIUTO_TOTALE: "Rifiuto totale",
-  RIFIUTO_PARZIALE: "Rifiuto parziale"
-};
 
 const STATI = {
   SOSPESO: "sospensione",
