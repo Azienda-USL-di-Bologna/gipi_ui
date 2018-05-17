@@ -55,7 +55,23 @@
                 </dxi-item> -->
 
                     <!-- <dxi-item [colSpan]="2" dataField="stato" [editorOptions]="{ disabled: true }"></dxi-item> -->
-                    <dxi-item [colSpan]="4" dataField="esito" cssClass="fix-bug-dx" [editorOptions]="{ disabled: true }"></dxi-item>
+                    <!-- <dxi-item [colSpan]="4" dataField="esito" cssClass="fix-bug-dx" [editorOptions]="{ disabled: true }">
+                        <dxo-label text="Esito"></dxo-label>
+                    </dxi-item> -->
+                    <dxi-item dataField="esito" [colSpan]="4" cssClass="fix-bug-dx" editorType="dxLookup" [label]="{text: 'Esito'}" [editorOptions]="{ 
+                        disabled: false,
+                        items: arrayEsiti,
+                        displayExpr: 'descrizione',
+                        displayValue: 'codice',
+                        valueExpr: 'codice',
+                        selectionMode: 'single',
+                        showPopupTitle: false,
+                        closeOnOutsideClick: true,
+                        showCancelButton: false,
+                        placeholder: '-',
+                        searchEnabled: false,
+                        disabled: true
+                      }"></dxi-item>
 
                     <dxi-item [colSpan]="2">
                         <button class="btn button-azioni" id="motivazione" type="button" (click)="updateEsitoMotivazione()" [disabled]="inSolaLettura()">Motivazione</button>

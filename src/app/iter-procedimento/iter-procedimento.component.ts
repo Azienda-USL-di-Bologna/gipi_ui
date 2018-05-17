@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity } from "@bds/nt-context";
-import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
+import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
 import { Iter, Utente, Fase, FaseIter, ProcedimentoCache, bUtente, bAzienda, Titolo } from "@bds/nt-entities";
 import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
 import { HttpClient } from "@angular/common/http";
@@ -70,6 +70,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
 
   public dataSourceClassificazione: DataSource;
+  public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}; });
 
   constructor(
     private odataContextFactory: OdataContextFactory,
@@ -126,7 +127,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       }
     });
     this.buildIter();
-
+    
     this.perFigliParteDestra = {
       idIter: this.idIter,
       ricarica: false  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore

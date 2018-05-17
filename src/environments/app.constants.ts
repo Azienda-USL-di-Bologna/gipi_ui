@@ -66,4 +66,10 @@ export const GlobalContextVariable = {
 export const TOAST_WIDTH = 300;
 export const TOAST_POSITION = { my: "center", at: "center", of: window };
 
+//========================================================================
+export const ESITI = {
+    ACCOLTO: "Accolto",
+    RIFIUTO_TOTALE: "Rifiuto totale",
+    RIFIUTO_PARZIALE: "Rifiuto parziale"
+  };
 
