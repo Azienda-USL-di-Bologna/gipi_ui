@@ -37,6 +37,8 @@ export class AvviaNuovoIterComponent implements OnInit {
   public idUtenteDefault: number;
   public descrizioneUtenteResponsabile: string;
   public loadingVisible: boolean = false;
+  public dataRegistrazioneDocumento: Date;
+  public durataMassimaProcedimentoDaProcedimento: number;
 
   @Input()
   set procedimentoSelezionato(procedimento: any) {
@@ -63,6 +65,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams.descrizione = doc.descrizione;
     this.iterParams.oggettoIter = doc.oggetto;
     this.iterParams.dataAvvioIter = new Date(doc.dataRegistrazione);
+    this.dataRegistrazioneDocumento = new Date(doc.dataRegistrazione);
     this.iterParams.dataCreazioneIter = new Date();
     this.iterParams.promotoreIter = doc.promotore;
     this.iterParams.idApplicazione = doc.idApplicazione;
@@ -90,6 +93,7 @@ export class AvviaNuovoIterComponent implements OnInit {
         + " (" + procedimento.procedimento.idStruttura.nome + ")";
       this.iterParams.idProcedimento = procedimento.procedimento.id;
       this.iterParams.procedimento = procedimento.procedimento;
+      this.durataMassimaProcedimentoDaProcedimento = procedimento.procedimento.idAziendaTipoProcedimento.durataMassimaProcedimento;
       this.buildDataSourceUtenti(procedimento.procedimento.idStruttura.id);
 
       if (this.iterParams.procedimento.idResponsabileAdozioneAttoFinale &&  this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale) {
@@ -283,12 +287,17 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.messageEvent.emit({ visible: false, idIter: idIter });
   }
 
-  public setDataMax(): Date {
-    if (this.iterParams.procedimento && this.iterParams.dataAvvioIter) {
+  public setDataMax(): void {
+    if (this.durataMassimaProcedimentoDaProcedimento && this.dataRegistrazioneDocumento) {
       this.dataMassimaConclusione = new Date();
       // debugger;
-      this.dataMassimaConclusione.setDate(this.iterParams.dataAvvioIter.getDate() + this.iterParams.procedimento.idAziendaTipoProcedimento.durataMassimaProcedimento);
+      this.dataMassimaConclusione.setDate(this.dataRegistrazioneDocumento.getDate() + this.durataMassimaProcedimentoDaProcedimento);
     }
+    
+  }
+
+  public getDataMax(): Date {
+    this.setDataMax();
     return this.dataMassimaConclusione;
   }
 
