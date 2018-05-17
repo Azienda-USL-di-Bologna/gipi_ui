@@ -1,5 +1,5 @@
 <div class="conainer fluid" style="padding: 5px">
-  <dx-form
+  <dx-form #myForm
   [(formData)]="proc" validationGroup="validationDettaglioTipoProcedimento" [showValidationSummary]="true">
     <dxi-item itemType="group" [colCount]="12">
       <dxi-item dataField="idAzienda.descrizione" [colSpan]="6"  [label]="{text: 'Azienda'}" [editorOptions]="{ disabled: true }"></dxi-item>
@@ -43,11 +43,12 @@
 
 
     <dxi-item itemType="group" [colCount]="12">
-      <dxi-item dataField="dataInizio" [colSpan]="3" editorType="dxDateBox" dataType="date" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita', location:'top'}" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy', max: proc.dataFine, invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy' }">
-        <dxi-validation-rule type="required" message="la data di inizio validità è obbligatoria"></dxi-validation-rule>
+      <dxi-item dataField="dataInizio" [colSpan]="3" editorType="dxDateBox" dataType="date" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita', location:'top'}" [editorOptions]="{ disabled: false, onClosed: validaForm, displayFormat: 'dd/MM/yyyy', min: dataInizioTipoProcedimento, max: dataFineTipoProcedimento, invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy' }">
+        <dxi-validation-rule type="required" message="la data di inizio validità è obbligatoria"></dxi-validation-rule>             
+        <dxi-validation-rule type="custom" [reevaluate]="true" [validationCallback]="checkDataInizio" message="Inserire una data di inizio corretta minore della data di fine validità"></dxi-validation-rule>
       </dxi-item>
-      <dxi-item dataField="dataFine" [colSpan]="3" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data fine validita', location:'top'}" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy', min: proc.dataInizio , invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy' }">
-        <dxi-validation-rule type="custom" [validationCallback]="checkData"></dxi-validation-rule>       
+      <dxi-item dataField="dataFine" [colSpan]="3" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data fine validita', location:'top'}" [editorOptions]="{ disabled: false, onChange: validaForm, onClosed: validaForm, displayFormat: 'dd/MM/yyyy', min: dataInizioTipoProcedimento, max: dataFineTipoProcedimento,invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy' }">
+        <dxi-validation-rule type="custom" [reevaluate]="true" [validationCallback]="checkDataFine" message="Inserire una data di fine corretta maggiore della data di inizio validità"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="giorniPreavvisoScadenzaTermini" [colSpan]="3" editorType="dxNumberBox" [label]="{text: 'Preavviso scadenza termini (gg)', location:'top'}" [editorOptions]="{ disabled: false}">
           <dxi-validation-rule type="required" message="inserire i giorni di preavviso scadenza dei termini"></dxi-validation-rule>
