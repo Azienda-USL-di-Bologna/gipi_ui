@@ -84,22 +84,22 @@
   display: inline-block !important;
 }
 
-.label-wrap .dx-field-item-content.dx-field-item-content-location-right {
+/deep/ .label-wrap .dx-field-item-content.dx-field-item-content-location-right {
   width: initial !important;
   display: inline-block;
 }
 
-.label-wrap .dx-item-content .dx-box-item-content {
+/deep/ .label-wrap .dx-item-content .dx-box-item-content {
   display: -webkit-inline-box;
 }
 
-.label-wrap .dx-field-item-label-content {
+/deep/ .label-wrap .dx-field-item-label-content {
   max-width: 220px;
   white-space: pre;
   display: inline-block;   // Ho dovuto toglierla per allineare l'asterisco del required alla label
 }
 
-.label-wrap .dx-field-item-label-text {
+/deep/ .label-wrap .dx-field-item-label-text {
   max-width: 220px;
   white-space: pre;
   display: inline-block;   // Ho dovuto toglierla per allineare l'asterisco del required alla label
