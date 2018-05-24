@@ -57,7 +57,7 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
       this.dataIniziale = new Date();
     }
   }
-  public someTextTesto: string = "Documento associato all'iter con ";
+  public someTextTesto: string = "Il documento è inserito nell'iter come ";
 
   constructor(private odataContextFactory: OdataContextFactory,
     private http: HttpClient, 
