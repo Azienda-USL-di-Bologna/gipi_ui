@@ -35,7 +35,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
   public dataIniziale: Date;
   public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}; });
   public arrayRiassunto: PopupRow[];
-  public someTextTesto: string = "Documento associato all'iter con ";
+  public someTextTesto: string = "Il documento è inserito nell'iter come ";
   public loadingVisible: boolean = false;
   public obbligoEsitoMotivazione: boolean = false;
 
