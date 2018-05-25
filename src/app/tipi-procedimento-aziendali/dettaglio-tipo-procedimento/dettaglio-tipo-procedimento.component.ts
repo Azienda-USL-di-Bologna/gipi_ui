@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import {AziendaTipoProcedimento, Titolo, bAzienda, bUtente} from "@bds/nt-entities";
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from "@angular/core";
+import {AziendaTipoProcedimento, Titolo, bAzienda, bUtente, TipoProcedimento} from "@bds/nt-entities";
 import DataSource from "devextreme/data/data_source";
 import { CustomLoadingFilterParams, OdataContextFactory, GlobalContextService, OdataContextDefinition } from "@bds/nt-context";
 import { LoggedUser } from "@bds/nt-login";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
+import { DxFormComponent } from "devextreme-angular";
 
 
 @Component({
@@ -17,13 +18,19 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
 
   private odataContextDefinition: OdataContextDefinition;
   private loaded: boolean = false;
+  private dataInizio: Date;
+  private dataFine: Date;
 
   public idProcedimentoInput: number;
   public proc: AziendaTipoProcedimento = new AziendaTipoProcedimento();
   public dataSourceTitoli: DataSource;
   public dataSourceAziendaTipoProcedimento: DataSource;
   public loggedUser: LoggedUser;
-  public pattern: any = "^[1-9][0-9]*$";
+  public patternGreaterZero: any = "^[1-9][0-9]*$";
+  public patternGreaterEqualZero: any = "^[0-9][0-9]*$";
+  public dataInizioTipoProcedimento: Date = new Date();
+  public dataFineTipoProcedimento: Date = new Date();
+  public messaggioData: string;
 
   @Input()
   set procedimento(procedimento: number) {
@@ -33,6 +40,8 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
   }
 
   @Output() messageEvent: EventEmitter<any>= new EventEmitter();
+
+  @ViewChild("myForm") public myForm: DxFormComponent;
 
   constructor(private odataContextFactory: OdataContextFactory, private globalContextService: GlobalContextService, private http: HttpClient) {
     console.log("dettaglio-tipo-procedimento CONSTRUCTOR");
@@ -56,6 +65,18 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
         }
         return item;
       }
+    });
+    this.checkDataInizio = this.checkDataInizio.bind(this);
+    this.checkDataFine = this.checkDataFine.bind(this);
+  }
+
+  private showStatusOperation(message: string, type: string) {
+    notify({
+      message: message,
+        type: type,
+        displayTime: 2100,
+        position: TOAST_POSITION,
+        width: TOAST_WIDTH
     });
   }
 
@@ -83,28 +104,20 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
       }
   }
 
+  validaForm = () => {
+    console.log("Valido");
+    this.myForm.instance.validate();
+  }
+
   public save() {
     this.dataSourceAziendaTipoProcedimento.store().update(this.proc.id, this.proc).then( 
       res => {
-        notify({
-          message: "Salvataggio effettuato con successo!",
-          type: "success",
-          displayTime: 2100,
-          position: TOAST_POSITION,
-          width: TOAST_WIDTH
-        });
+        this.showStatusOperation("Salvataggio effettuato con successo!", "success");
         this.caricaDataSource(true);
-        
       },
       err => {
         console.log("--> ERR", err);
-        notify({
-          message: "Problemi nel salvataggio del dettaglio. Se il problema persiste contattare BabelCare.",
-          type: "error",
-          displayTime: 2100,
-          position: TOAST_POSITION,
-          width: TOAST_WIDTH
-        });
+        this.showStatusOperation("Problemi nel salvataggio del dettaglio. Se il problema persiste contattare BabelCare.", "error");
       }
     );
   }
@@ -123,14 +136,22 @@ export class DettaglioTipoProcedimentoComponent implements OnInit {
       }
     });
     this.dataSourceAziendaTipoProcedimento.load().then((res) => { 
-      this.proc.build(res[0]); 
+      this.proc.build(res[0]);
+      this.dataInizioTipoProcedimento = res[0].idTipoProcedimento.dataInizioValidita;
+      this.dataFineTipoProcedimento = res[0].idTipoProcedimento.dataFineValidita;
       if (chiudi)
         this.close(true);
     });
   }
 
-  public checkData(event: any) {
-    if (event.value instanceof Date || event.value === null) { // La data di fine validità può essere nulla
+  public checkDataFine(event: any) {
+    if ((event.value instanceof Date && event.value >= this.proc.dataInizio) || event.value === null) { // La data di fine validità può essere nulla
+      return true;
+    } else return false;
+  }  
+
+  public checkDataInizio(event: any) {
+    if (event.value <= this.proc.dataFine || this.proc.dataFine === null) {
       return true;
     } else return false;
   }

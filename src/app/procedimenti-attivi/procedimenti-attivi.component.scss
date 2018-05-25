@@ -105,15 +105,15 @@
   display: inline-block;   // Ho dovuto toglierla per allineare l'asterisco del required alla label
 }
 
-/deep/ .label-wrap-date > label {
-  max-width: 110px;
-}
+// /deep/ .label-wrap-date > label {
+//   max-width: 110px;
+// }
 
-/deep/ .label-wrap-date .dx-field-item-label-content {
-  max-width: 110px;
-  white-space: pre;
-  display: inline-block;
-}
+// /deep/ .label-wrap-date .dx-field-item-label-content {
+//   max-width: 110px;
+//   white-space: pre;
+//   display: inline-block;
+// }
 
 /deep/ .dx-layout-manager .dx-label-h-align.dx-flex-layout {
   display: -webkit-box;

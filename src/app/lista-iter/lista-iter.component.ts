@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextDefinition, GlobalContextService } from "@bds/nt-context";
+import { OdataContextDefinition, GlobalContextService, CustomLoadingFilterParams } from "@bds/nt-context";
 import { OdataContextFactory } from "@bds/nt-context";
 import { Router } from "@angular/router";
 import {Iter, bAzienda, bUtente} from "@bds/nt-entities";
@@ -41,9 +41,18 @@ export class ListaIterComponent implements OnInit {
               this.idAzienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
           }
       )
-  );
+    );
+    const filterParameters: any[] = ["tolower(${target})", "contains", "${value.tolower}"];
+    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
+    customLoadingFilterParams.addFilter("idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome", filterParameters);
+    customLoadingFilterParams.addFilter("oggetto", filterParameters);
+    customLoadingFilterParams.addFilter("idResponsabileProcedimento.idPersona.descrizione", filterParameters);
+    customLoadingFilterParams.addFilter("idStato.descrizione", filterParameters);
     this.dataSource = new DataSource({
-      store: this.odataContextDefinition.getContext()[new Iter().getName()],
+      store: this.odataContextDefinition.getContext()[new Iter().getName()].on("loading", (loadOptions) => {
+        loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
+        this.odataContextDefinition.customLoading(loadOptions);
+      }),
       expand: [
         "idResponsabileProcedimento.idPersona", 
         "idStato",

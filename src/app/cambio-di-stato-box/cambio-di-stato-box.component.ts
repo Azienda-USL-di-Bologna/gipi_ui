@@ -4,11 +4,11 @@ import CustomStore from "devextreme/data/custom_store";
 import ArrayStore from "devextreme/data/array_store";
 import { GlobalContextService, OdataContextDefinition, OdataContextFactory, ResponseMessages, ErrorMessage } from "@bds/nt-context";
 import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
-import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
+import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
-import { Stato } from "@bds/nt-entities";
+import { Stato, Iter } from "@bds/nt-entities";
 import { Popup } from "@bds/nt-context";
 import { PopupRow } from "../classi/condivise/popup/popup-tools";
 
@@ -20,6 +20,8 @@ import { PopupRow } from "../classi/condivise/popup/popup-tools";
 export class CambioDiStatoBoxComponent implements OnInit {
 
   private FASCICOLAZIONE_ERROR: number = 0;
+  private dataSourceIter: DataSource;
+  private oataContextDefinition: OdataContextDefinition;
 
   public _sospensioneParams: CambioDiStatoParams;  
   public dataMinimaValida: Date;
@@ -33,7 +35,9 @@ export class CambioDiStatoBoxComponent implements OnInit {
   public dataIniziale: Date;
   public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}; });
   public arrayRiassunto: PopupRow[];
+  public someTextTesto: string = "Il documento è inserito nell'iter come ";
   public loadingVisible: boolean = false;
+  public obbligoEsitoMotivazione: boolean = false;
 
   @Output() out = new EventEmitter<any>();
 
@@ -43,9 +47,12 @@ export class CambioDiStatoBoxComponent implements OnInit {
   @Input()
   set sospensioneParams(value: CambioDiStatoParams) {
     this._sospensioneParams = value;
+    this.setValidazioneObbligoEsitoMotivazione();
+
     if (!this._isOpenedAsPopup && this._sospensioneParams.dataRegistrazioneDocumento && this.dataIniziale === undefined) {
       this.dataIniziale = new Date(this._sospensioneParams.dataRegistrazioneDocumento);
     }
+
     let dataRegTemp = new Date(value.dataRegistrazioneDocumento);
     this.dataMinimaValida = dataRegTemp > value.dataAvvioIter ? dataRegTemp : value.dataAvvioIter;
   }
@@ -65,9 +72,9 @@ export class CambioDiStatoBoxComponent implements OnInit {
     private globalContextService: GlobalContextService
   ) {
     // bisogna fare il datasource per la lookup dello stato
-    const oataContextDefinition: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    this.oataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.dataSourceStati = new DataSource({
-      store: oataContextDefinition.getContext()[new Stato().getName()],
+      store: this.oataContextDefinition.getContext()[new Stato().getName()],
     });
     this.statiIter = new Array();
     this.dataSourceStati.load().then(res => {
@@ -86,6 +93,12 @@ export class CambioDiStatoBoxComponent implements OnInit {
      * per dare alla procedura lo scope alle variabili e metodi del componente */
     this.validaData = this.validaData.bind(this); 
     this.reimpostaDataIniziale = this.reimpostaDataIniziale.bind(this);
+
+    this.dataSourceIter = new DataSource({
+      store: this.oataContextDefinition.getContext()[new Iter().getName()],
+      expand: ["idProcedimento/idAziendaTipoProcedimento"]/* ,
+      filter: ["id", "=", this._sospensioneParams.idIter] */
+    });
   }
 
   private showStatusOperation(message: string, type: string) {
@@ -97,68 +110,87 @@ export class CambioDiStatoBoxComponent implements OnInit {
         width: TOAST_WIDTH
     });
   }
+
+  private setValidazioneObbligoEsitoMotivazione(): void {
+    if (this._sospensioneParams.codiceStatoProssimo !== "CHIUSO") {
+      this.obbligoEsitoMotivazione = false;
+      return;
+    }
+    
+    this.dataSourceIter.filter(["id", "=", this._sospensioneParams.idIter]);
+    this.dataSourceIter.load().then(res => {
+      res.forEach(element => {
+        if (element.idProcedimento.idAziendaTipoProcedimento.obbligoEsitoConclusivo) {
+          this.obbligoEsitoMotivazione = true;
+        } else {
+          this.obbligoEsitoMotivazione = false;
+        }
+      });
+    });
+  }
+
   ngOnInit() { }
 
 
   handleSubmit(e) {
-  // e.preventDefault(); // Con l'evento onClick non dovrebbe essere necessaria
-  if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.codiceStatoCorrente) { return; }
+    // e.preventDefault(); // Con l'evento onClick non dovrebbe essere necessaria
+    if (!this._sospensioneParams.dataCambioDiStato && !this._sospensioneParams.codiceStatoCorrente) { return; }
 
-  const result = e.validationGroup.validate(); 
-  if (!result.isValid) { return; }
-    
-  let shippedParams: GestioneStatiParams = {
-    idIter : this._sospensioneParams.idIter,
-    cfAutore : this._userInfo.cf,
-    idAzienda: this._userInfo.idAzienda,
-    azione: this._sospensioneParams.azione,
-    codiceRegistroDocumento: this._sospensioneParams.codiceRegistroDocumento,
-    numeroDocumento: this._sospensioneParams.numeroDocumento,
-    annoDocumento: this._sospensioneParams.annoDocumento,
-    oggettoDocumento: this._sospensioneParams.oggettoDocumento,
-    note: this._sospensioneParams.note,
-    statoRichiesto: this._sospensioneParams.codiceStatoProssimo,
-    dataEvento: this._sospensioneParams.dataCambioDiStato,
-    esito: this._sospensioneParams.esito,
-    esitoMotivazione: this._sospensioneParams.esitoMotivazione,
-    idOggettoOrigine: this._sospensioneParams.idOggettoOrigine,
-    tipoOggettoOrigine: this._sospensioneParams.tipoOggettoOrigine,
-    descrizione: this._sospensioneParams.descrizione,
-    idApplicazione: this._sospensioneParams.idApplicazione
-  };
-  this.loadingVisible = true;
-  const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
-    .subscribe(
-      res => {
-        this.loadingVisible = false;
-        if (res["idIter"] > 0) {
-          this.showStatusOperation("Salvataggio effettuato con successo!", "success");
-          this.updateArrayRiassunto();
-          this.showPopupRiassunto = true;
-        }
-        else {
-          this.showStatusOperation("Salvataggio non riuscito: è già presente un'associazione all'iter con questa bozza di documento.", "warning");
-        }
-      },
-      err => {
-        this.loadingVisible = false;
-        // console.log("err: ", err);
-        if (err.error && err.error.httpCode && err.error.isBdsException) {
-          const responseMessages: ResponseMessages = err.error;
-          const errorMessages: ErrorMessage[] = responseMessages.errorMessages;
-          const errorCode = errorMessages[0].code;
-          switch (errorCode) {
-            case this.FASCICOLAZIONE_ERROR:
-              this.showStatusOperation(errorMessages[0].message, "error");
-              break;
-            default: // caso generale
+    const result = e.validationGroup.validate(); 
+    if (!result.isValid) { return; }
+      
+    let shippedParams: GestioneStatiParams = {
+      idIter : this._sospensioneParams.idIter,
+      cfAutore : this._userInfo.cf,
+      idAzienda: this._userInfo.idAzienda,
+      azione: this._sospensioneParams.azione,
+      codiceRegistroDocumento: this._sospensioneParams.codiceRegistroDocumento,
+      numeroDocumento: this._sospensioneParams.numeroDocumento,
+      annoDocumento: this._sospensioneParams.annoDocumento,
+      oggettoDocumento: this._sospensioneParams.oggettoDocumento,
+      note: this._sospensioneParams.note,
+      statoRichiesto: this._sospensioneParams.codiceStatoProssimo,
+      dataEvento: this._sospensioneParams.dataCambioDiStato,
+      esito: this._sospensioneParams.esito,
+      esitoMotivazione: this._sospensioneParams.esitoMotivazione,
+      idOggettoOrigine: this._sospensioneParams.idOggettoOrigine,
+      tipoOggettoOrigine: this._sospensioneParams.tipoOggettoOrigine,
+      descrizione: this._sospensioneParams.descrizione,
+      idApplicazione: this._sospensioneParams.idApplicazione
+    };
+    this.loadingVisible = true;
+    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
+      .subscribe(
+        res => {
+          this.loadingVisible = false;
+          if (res["idIter"] > 0) {
+            this.showStatusOperation("Salvataggio effettuato con successo!", "success");
+            this.updateArrayRiassunto();
+            this.showPopupRiassunto = true;
+          }
+          else {
+            this.showStatusOperation("Salvataggio non riuscito: è già presente un'associazione all'iter con questa bozza di documento.", "warning");
+          }
+        },
+        err => {
+          this.loadingVisible = false;
+          // console.log("err: ", err);
+          if (err.error && err.error.httpCode && err.error.isBdsException) {
+            const responseMessages: ResponseMessages = err.error;
+            const errorMessages: ErrorMessage[] = responseMessages.errorMessages;
+            const errorCode = errorMessages[0].code;
+            switch (errorCode) {
+              case this.FASCICOLAZIONE_ERROR:
+                this.showStatusOperation(errorMessages[0].message, "error");
+                break;
+              default: // caso generale
+                this.showStatusOperation("Errore durante il salvataggio!", "error");
+            }
+          } else { // se l'errore non è del tipo ResponseMessage, allora mostro un errore generico
               this.showStatusOperation("Errore durante il salvataggio!", "error");
           }
-        } else { // se l'errore non è del tipo ResponseMessage, allora mostro un errore generico
-            this.showStatusOperation("Errore durante il salvataggio!", "error");
         }
-      }
-    );
+      );
   }
 
   handleClose() {
@@ -189,6 +221,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
       let stato = value as any;
       objStati[stato.codice] = stato.descrizione;
     });
+    this.someTextTesto += STATI[this._sospensioneParams.codiceStatoProssimo];
     this.arrayRiassunto = [];
     // this.arrayRiassunto.push(new PopupRow("codiceRegistroDocumento","Registro", this._sospensioneParams.codiceRegistroDocumento))
     this.arrayRiassunto.push(new PopupRow("oggettoIter", "Oggetto", this._sospensioneParams.oggettoIter));
@@ -244,8 +277,8 @@ interface UserInfo{
   idAzienda: number;
 }
 
-const ESITI = {
-  ACCOLTO: "Accolto",
-  RIFIUTO_TOTALE: "Rifiuto totale",
-  RIFIUTO_PARZIALE: "Rifiuto parziale"
+const STATI = {
+  SOSPESO: "sospensione",
+  IN_CORSO: "riattivazione",
+  CHIUSO: "chiusura"
 };

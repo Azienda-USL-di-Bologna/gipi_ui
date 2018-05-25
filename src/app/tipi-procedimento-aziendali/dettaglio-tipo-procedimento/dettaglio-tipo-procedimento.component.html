@@ -1,5 +1,5 @@
 <div class="conainer fluid" style="padding: 5px">
-  <dx-form
+  <dx-form #myForm
   [(formData)]="proc" validationGroup="validationDettaglioTipoProcedimento" [showValidationSummary]="true">
     <dxi-item itemType="group" [colCount]="12">
       <dxi-item dataField="idAzienda.descrizione" [colSpan]="6"  [label]="{text: 'Azienda'}" [editorOptions]="{ disabled: true }"></dxi-item>
@@ -16,11 +16,11 @@
     <dxi-item itemType="group" [colCount]="12">
         <dxi-item dataField="durataMassimaProcedimento" [colSpan]="6" editorType="dxNumberBox" [label]="{text: 'Durata massima dell\'iter'}" [editorOptions]="{ disabled: false}">
             <dxi-validation-rule type="required" message="la durata massima dell'iter è obbligatoria"></dxi-validation-rule>
-            <dxi-validation-rule type="pattern" [pattern]="pattern" message="la durata massima di procedimento deve avere un valore positivo"></dxi-validation-rule>
+            <dxi-validation-rule type="pattern" [pattern]="patternGreaterZero" message="la durata massima di procedimento deve avere un valore positivo"></dxi-validation-rule>
         </dxi-item>
         <dxi-item dataField="durataMassimaSospensione" [colSpan]="6" editorType="dxNumberBox" [label]="{text: 'Durata massima di sospensione'}" [editorOptions]="{ disabled: false}">
                 <dxi-validation-rule type="required" message="la durata massima di sospensione è obbligatoria"></dxi-validation-rule>
-                <dxi-validation-rule type="pattern" [pattern]="pattern" message="la durata massima di sospensione deve avere un valore positivo"></dxi-validation-rule>
+                <dxi-validation-rule type="pattern" [pattern]="patternGreaterEqualZero" message="la durata massima di sospensione non può essere negativa"></dxi-validation-rule>
         </dxi-item>
     </dxi-item>
     <dxi-item itemType="group">
@@ -43,15 +43,22 @@
 
 
     <dxi-item itemType="group" [colCount]="12">
-      <dxi-item dataField="dataInizio" [colSpan]="3" editorType="dxDateBox" dataType="date" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita', location:'top'}" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy', max: proc.dataFine, invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy' }">
-        <dxi-validation-rule type="required" message="la data di inizio validità è obbligatoria"></dxi-validation-rule>
+      <dxi-item dataField="dataInizio" [colSpan]="3" editorType="dxDateBox" dataType="date" format="dd/MM/yyyy" [label]="{text: 'Data inizio validita', location:'top'}"
+        [editorOptions]="{ disabled: false, onClosed: validaForm, displayFormat: 'dd/MM/yyyy', min: dataInizioTipoProcedimento, 
+          max: dataFineTipoProcedimento, invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy',
+          dateOutOfRangeMessage:'Data inizio non coerente con le date del tipo procedimento'}">
+        <dxi-validation-rule type="required" message="la data di inizio validità è obbligatoria"></dxi-validation-rule>            
+        <dxi-validation-rule type="custom" [reevaluate]="true" [validationCallback]="checkDataInizio" message="Inserire una data di inizio corretta minore della data di fine validità"></dxi-validation-rule>
       </dxi-item>
-      <dxi-item dataField="dataFine" [colSpan]="3" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data fine validita', location:'top'}" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy', min: proc.dataInizio , invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy' }">
-        <dxi-validation-rule type="custom" [validationCallback]="checkData"></dxi-validation-rule>       
+      <dxi-item dataField="dataFine" [colSpan]="3" editorType="dxDateBox" format="dd/MM/yyyy" [label]="{text: 'Data fine validita', location:'top'}"
+        [editorOptions]="{ disabled: false, onChange: validaForm, onClosed: validaForm, displayFormat: 'dd/MM/yyyy', min: dataInizioTipoProcedimento,
+          max: dataFineTipoProcedimento, invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy',
+          dateOutOfRangeMessage:'Data fine non coerente con le date del tipo procedimento' }">
+        <dxi-validation-rule type="custom" [reevaluate]="true" [validationCallback]="checkDataFine" message="Inserire una data di fine corretta maggiore della data di inizio validità"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="giorniPreavvisoScadenzaTermini" [colSpan]="3" editorType="dxNumberBox" [label]="{text: 'Preavviso scadenza termini (gg)', location:'top'}" [editorOptions]="{ disabled: false}">
           <dxi-validation-rule type="required" message="inserire i giorni di preavviso scadenza dei termini"></dxi-validation-rule>
-          <dxi-validation-rule type="pattern" [pattern]="pattern" message="giorni di preavviso scadenza dei termini deve avere valore positivo"></dxi-validation-rule>
+          <dxi-validation-rule type="pattern" [pattern]="patternGreaterZero" message="giorni di preavviso scadenza dei termini deve avere valore positivo"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="3"  editorType="dxCheckBox" [label]="{text: 'Obbligo esito conclusivo e motivazione', location:'top'}" [editorOptions]="{ disabled: false}"></dxi-item>
     </dxi-item>

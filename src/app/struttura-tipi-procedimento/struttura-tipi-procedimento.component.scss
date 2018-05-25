@@ -115,11 +115,11 @@
     color: lightslategrey !important;
 }
 
-/deep/ .label-wrap > label {
+/deep/ .str-proced-label-wrap > label {
     max-width: 300px;
 }
 
-/deep/ .label-wrap .dx-field-item-label-text {
+/deep/ .str-proced-label-wrap .dx-field-item-label-text {
     max-width: 300px;
     white-space: normal;
     display: inline-block;

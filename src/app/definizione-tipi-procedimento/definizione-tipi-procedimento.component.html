@@ -58,33 +58,33 @@
         </dxo-popup>
         <dxo-form colCount="2" validationGroup="validationDefinizioneTipiProcedimento" [showValidationSummary]="true" [colCount]="2">
             <!--<dxi-item dataField="codice" [editorOptions]="{ format: '#####' }" [colSpan]="2"></dxi-item>-->
-            <dxi-item dataField="nome" [colSpan]="2">
+            <dxi-item dataField="nome"  cssClass="label-wrap" [colSpan]="2">
                 <dxi-validation-rule type="required" message="inserire il nome"></dxi-validation-rule>
             </dxi-item>
-            <dxi-item dataField="descrizioneDefault" [colSpan]="2" >
+            <dxi-item dataField="descrizioneDefault"  cssClass="label-wrap" [colSpan]="2" >
                 <dxi-validation-rule type="required" message="inserire la descrizione di default"></dxi-validation-rule>
             </dxi-item>
-            <dxi-item dataField="modoApertura" [colSpan]="2">
+            <dxi-item dataField="modoApertura"  cssClass="label-wrap" [colSpan]="2">
                 <dxi-validation-rule type="required" message="scegliere la modalità di apertura"></dxi-validation-rule>
             </dxi-item>
-            <dxi-item dataField="normaRiferimento" [colSpan]="2">
+            <dxi-item dataField="normaRiferimento"  cssClass="label-wrap" [colSpan]="2">
                 <dxi-validation-rule type="required" message="inserire la norma di riferimento"></dxi-validation-rule>
             </dxi-item>
-            <dxi-item dataField="dataInizioValidita" [colSpan]="1">
+            <dxi-item dataField="dataInizioValidita"  cssClass="label-wrap" [colSpan]="1">
                 <dxi-validation-rule type="required" message="la data inizio validità è obbligatoria"></dxi-validation-rule>
             </dxi-item>
             <dxi-item dataField="dataFineValidita" [colSpan]="1">
 
             </dxi-item>
-            <dxi-item dataField="durataMassimaIter" [editorOptions]="{onInput:onInputNumberBox}" editorType="dxNumberBox" [colSpan]="1">
+            <dxi-item dataField="durataMassimaIter"  cssClass="label-wrap" [editorOptions]="{onInput:onInputNumberBox}" editorType="dxNumberBox" [colSpan]="1">
                 <dxi-validation-rule type="required" message="la durata massima dell'iter è obbligatoria"></dxi-validation-rule>
-                <dxi-validation-rule type="pattern" [pattern]="pattern" message="la durata massima di procedimento deve avere un valore positivo"></dxi-validation-rule>
+                <dxi-validation-rule type="pattern" [pattern]="patternGreaterZero" message="la durata massima di procedimento deve avere un valore positivo"></dxi-validation-rule>
             </dxi-item>
             <dxi-item  dataField="durataMassimaSospensione" [editorOptions]="{onInput:onInputNumberBox}" [colSpan]="1">
                 <dxi-validation-rule type="required" message="la durata massima di sospensione è obbligatoria"></dxi-validation-rule>
-                <dxi-validation-rule type="pattern" [pattern]="pattern" message="la durata massima di sospensione deve avere un valore positivo"></dxi-validation-rule>
+                <dxi-validation-rule type="pattern" [pattern]="patternGreaterEqualZero" message="la durata massima di sospensione non può essere negativa"></dxi-validation-rule>
             </dxi-item>
-            <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="1"></dxi-item>
+            <dxi-item dataField="obbligoEsitoConclusivo" [label]="{text: 'Obbligo esito conclusivo e motivazione'}"  cssClass="label-wrap" [colSpan]="1"></dxi-item>
             <dxi-item dataField="pubblicazioneRegistroAccessi" [colSpan]="1"></dxi-item>
         </dxo-form>
     </dxo-editing>
