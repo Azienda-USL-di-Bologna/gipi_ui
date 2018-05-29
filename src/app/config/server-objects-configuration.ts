@@ -1,7 +1,7 @@
 import {
     Azienda, Utente, Struttura, UtenteStruttura, AziendaTipoProcedimento, TipoProcedimento, AfferenzaStruttura,
     Ruolo, Iter, FaseIter, Fase, Titolo, Procedimento, Evento, EventoIter, DocumentoIter, ProcedimentoCache,
-    GetStruttureByTipoProcedimento, GetIterUtente, GetUtentiGerarchiaStruttura, Stato
+    GetStruttureByTipoProcedimento, GetIterUtente, GetUtentiGerarchiaStruttura, Stato, GetTipiProcedimento
 } from "@bds/nt-entities";
 import {ServerObject, ServerObjectsDescriptor, ServerObjectsConfiguration} from "@bds/nt-context";
 // import * as ServerObjectConfiguration from "@bds/nt-context";
@@ -36,7 +36,8 @@ export function getFunctionsImportConfiguration(): ServerObjectsConfiguration {
     const functionsImport: ServerObjectsDescriptor = {
         GetStruttureByTipoProcedimento: new GetStruttureByTipoProcedimento(),
         GetIterUtente: new GetIterUtente(),
-        GetUtentiGerarchiaStruttura: new GetUtentiGerarchiaStruttura()
+        GetUtentiGerarchiaStruttura: new GetUtentiGerarchiaStruttura(),
+        GetTipiProcedimento: new GetTipiProcedimento()
     };
 
     return new ServerObjectsConfiguration(functionsImport);

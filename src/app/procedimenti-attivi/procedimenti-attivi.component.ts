@@ -1,12 +1,12 @@
 import {Component, ViewChild, Input, Output, EventEmitter, OnInit} from "@angular/core";
 import {DxDataGridComponent, DxFormComponent} from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import {OdataContextFactory, OdataContextDefinition} from "@bds/nt-context";
+import {OdataContextFactory, OdataContextDefinition, OdataUtilities} from "@bds/nt-context";
 import {Router} from "@angular/router";
 import {LoggedUser} from "@bds/nt-login";
 import {GlobalContextService} from "@bds/nt-context";
 import {UtilityFunctions} from "app/utility-functions";
-import {bAzienda, bStruttura, bUtente, Procedimento, Titolo} from "@bds/nt-entities";
+import {bAzienda, bStruttura, bUtente, Procedimento, Titolo, GetTipiProcedimento} from "@bds/nt-entities";
 import {forEach} from "@angular/router/src/utils/collection";
 import {AppConfiguration} from "../config/app-configuration";
 
@@ -18,6 +18,7 @@ import {AppConfiguration} from "../config/app-configuration";
 export class ProcedimentiAttiviComponent implements OnInit {
 
     private odataContextDefinition: OdataContextDefinition;
+    private odataContextDefinitionFunctionImport: OdataContextDefinition;
     private rigaSelezionata: any;
     private idStruttureUtente: number[];
     private utility: UtilityFunctions = new UtilityFunctions();
@@ -48,7 +49,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
     public loggedUser: LoggedUser;
 
     constructor(private odataContextFactory: OdataContextFactory,
-                public router: Router,
+                public router: Router, private odataUtilities: OdataUtilities,
                 private globalContextService: GlobalContextService) {
         console.log("file: app/procedimenti-attivi/procedimenti-attivi.components.ts");
         console.log("procedimenti-attivi (constructor)");
@@ -62,19 +63,18 @@ export class ProcedimentiAttiviComponent implements OnInit {
         this.idStruttureUtente = this.getIdStruttureUtente();
 
         // this.idAzienda = JSON.parse(sessionStorage.getItem("userInfoMap")).aziende.id;
-        const now = new Date();
+        // const now = new Date();
 
         this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+
+        this.odataContextDefinitionFunctionImport = this.odataContextFactory.buildOdataFunctionsImportDefinition();
         this.dataSourceProcedimenti = new DataSource({
-            store: this.odataContextDefinition.getContext()[new Procedimento().getName()].on("loaded", (res: any) => {
-                // for (let i = 0; i < res.length; i++) {
-                //     if (i < 100)
-                //         res.pop();
-                // }
-                
-            }),
-            // paginate: true,
-            // pageSize: 20,
+            store: this.odataContextDefinitionFunctionImport.getContext()[new GetTipiProcedimento().getName()]
+                .on("loading", (loadOptions) => {
+                this.odataUtilities.filterToCustomQueryParams(["idStruttura.nome", "idAziendaTipoProcedimento.idTipoProcedimento.nome",
+                        "idTitolarePotereSostitutivo.idPersona.descrizione"], loadOptions);   
+                }),
+            customQueryParams: {}, // Deve starci anche se non passa parametri fissi, verranno aggiunti i filtri
             expand: [
                 "idStruttura",
                 "idTitolarePotereSostitutivo/idPersona",
@@ -83,18 +83,6 @@ export class ProcedimentiAttiviComponent implements OnInit {
                 "idAziendaTipoProcedimento/idTipoProcedimento",
                 "idResponsabileAdozioneAttoFinale/idPersona",
                 "idStrutturaResponsabileAdozioneAttoFinale"
-
-            ],
-            filter: [
-                ["completo", "=", true],
-                ["idAziendaTipoProcedimento.idAzienda.id", "=", this.idAzienda],
-                this.utility.buildMultipleFilterForArray("idStruttura.id", this.idStruttureUtente),
-                ["dataInizio", "<=", now],
-                [
-                    ["dataFine", ">", now],
-                    "or",
-                    ["dataFine", "=", null]
-                ]
             ],
             map: (item) => {
                 if (item) {
@@ -108,7 +96,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
                     }
                     return item;
                 }
-            }
+            }        
         });
         
         this.itemClear = this.itemClear.bind(this);
@@ -193,6 +181,7 @@ export class ProcedimentiAttiviComponent implements OnInit {
     }
 
     // Aggiungo l'ignore case per tutte le colonne non lookup
+    /* non più utilizzata con la function import */
     customizeColumns(columns: any) {
         columns.forEach(column => {
             const defaultCalculateFilterExpression = column.calculateFilterExpression;
