@@ -150,9 +150,11 @@ export class AssociazioneAziendeComponent implements OnInit, OnDestroy {
                 const aziendaTipoProcedimentoToInsert: AziendaTipoProcedimento = new AziendaTipoProcedimento();
 
                 aziendaTipoProcedimentoToInsert.descrizioneTipoProcedimento = this.procedimento.descrizioneDefault;
+                aziendaTipoProcedimentoToInsert.durataMassimaProcedimento = this.procedimento.durataMassimaIter;
                 aziendaTipoProcedimentoToInsert.durataMassimaSospensione = this.procedimento.durataMassimaSospensione;
                 aziendaTipoProcedimentoToInsert.obbligoEsitoConclusivo = false;
                 aziendaTipoProcedimentoToInsert.idAzienda = azienda;
+                aziendaTipoProcedimentoToInsert.dataInizio = new Date();
                 aziendaTipoProcedimentoToInsert.idTipoProcedimento = this.procedimento;
                 console.log(aziendaTipoProcedimentoToInsert);
                 this.datasourceAziendaTipoProcedimento.store().insert(aziendaTipoProcedimentoToInsert).done(res => {
