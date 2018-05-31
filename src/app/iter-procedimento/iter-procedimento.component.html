@@ -41,12 +41,12 @@
 
                     <!-- <dxi-item [colSpan]="4" dataField="promotore" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
-                        <dxi-item [colSpan]="4" dataField="presenzaControinteressati" editorType="dxCheckBox" [editorOptions]="{ disabled: true}">
-                            <dxo-label text="Controinteressati"></dxo-label>
+                        <dxi-item [colSpan]="1" dataField="presenzaControinteressati" editorType="dxCheckBox" [editorOptions]="{ disabled: inSolaLettura}">
+                            <dxo-label text="Presenza controinteressati"></dxo-label>
                         </dxi-item>
 
-                        <dxi-item [colSpan]="2">
-                            <button class="btn button-azioni" id="note" type="button" (click)="updateNoteControInteressati()" [disabled]="inSolaLettura()">Note</button>
+                        <dxi-item [colSpan]="5">
+                            <button class="btn button-azioni" id="note" type="button" (click)="updateNoteControInteressati()" [disabled]="">Note <img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                             <!-- <dx-button text="Note controinteressati" type="default" (onClick)="updateNoteControInteressati()"></dx-button> -->
                         </dxi-item>
 
@@ -146,14 +146,22 @@
 
 </div>
 
-<dx-popup class="popup" [width]="500" [height]="300" [showTitle]="true" [title]="popupData.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
+<dx-popup class="popup" [width]="500" [height]="310" [showTitle]="true" [title]="popupData.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
     [(visible)]="popupData.visible">
     <div *dxTemplate="let data of 'content'">
         <dx-text-area [height]="150" [(value)]="popupData.fieldValue">
         </dx-text-area>
+        <div *ngIf="popupData.field === 'noteControInteressati'">
+            <dx-check-box
+                text="Presenza controinteressati"
+                hint="Abilita/Disabilita la presenza dei controinteressati"
+                [(value)]="popupData.checkInteressati">
+            </dx-check-box>
+        </div>
         <div class="wrapperPulsantiPopup">
-            <dx-button text="Annulla" type="normal" (click)="closePopupNote()"></dx-button>
-            <dx-button text="Salva" (click)="updateIter()" type="default"></dx-button>
+            <dx-button class="button-css" text="OK" (click)="updateIter()" type="default"></dx-button>
+            <span class="btn-space"></span>
+            <dx-button class="button-css" text="Annulla" type="normal" (click)="closePopupNote()"></dx-button>
         </div>
     </div>
 </dx-popup>

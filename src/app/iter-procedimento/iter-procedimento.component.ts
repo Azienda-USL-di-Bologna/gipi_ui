@@ -54,7 +54,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     visible: false,
     title: "titolo",
     field: "nome campo",
-    fieldValue: "valore"
+    fieldValue: "valore",
+    checkInteressati: false
   };
   public perFigliParteDestra: Object;
 
@@ -225,6 +226,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupData.title = "Note controinteressati";
     this.popupData.field = "noteControInteressati";
     this.popupData.fieldValue = this.iter.noteControinteressati;
+    this.popupData.checkInteressati = this.iter.presenzaControinteressati;
     this.popupData.visible = true;
   }
 
@@ -243,8 +245,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         doUpdate = true;
       }
     } else {
-      if (this.iter.noteControinteressati !== this.popupData.fieldValue) {
+      if (this.iter.noteControinteressati !== this.popupData.fieldValue || this.iter.presenzaControinteressati !== this.popupData.checkInteressati) {
         this.iter.noteControinteressati = this.popupData.fieldValue;
+        this.iter.presenzaControinteressati = this.popupData.checkInteressati;
         doUpdate = true;
       }
     }
