@@ -41,12 +41,12 @@
 
                     <!-- <dxi-item [colSpan]="4" dataField="promotore" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
-                        <dxi-item [colSpan]="1" dataField="presenzaControinteressati" editorType="dxCheckBox" [editorOptions]="{ disabled: inSolaLettura}">
+                        <dxi-item [colSpan]="1" dataField="presenzaControinteressati" editorType="dxCheckBox" [editorOptions]="{ disabled: true}">
                             <dxo-label text="Presenza controinteressati"></dxo-label>
                         </dxi-item>
 
                         <dxi-item [colSpan]="5">
-                            <button class="btn button-azioni" id="note" type="button" (click)="updateNoteControInteressati()" [disabled]="">Note <img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                            <button class="btn button-azioni" id="note" type="button" (click)="updateNoteControInteressati()" [disabled]="inSolaLettura()">Note <img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                             <!-- <dx-button text="Note controinteressati" type="default" (onClick)="updateNoteControInteressati()"></dx-button> -->
                         </dxi-item>
 
