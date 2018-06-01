@@ -196,6 +196,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO;
   }
 
+  disableAreaTextNote() {
+    return this.inSolaLettura() || !this.popupData.checkInteressati;
+  }
+
   /* 
   Non cancellare, potrebbe tornare utile in futuro
   generateCustomButtons() {
