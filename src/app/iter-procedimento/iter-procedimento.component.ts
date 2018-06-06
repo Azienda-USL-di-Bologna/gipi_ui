@@ -52,10 +52,17 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   };
   public popupData: any = {
     visible: false,
-    title: "titolo",
-    field: "nome campo",
-    fieldValue: "valore",
+    title: "",
+    field: "",
+    fieldValue: "",
     checkInteressati: false
+  };
+  public popupDatiTemporali: any = {
+    visible: false,
+    title: "",
+    fieldDays: 0,
+    fieldMotivation: "",
+    action: ""
   };
   public perFigliParteDestra: Object;
 
@@ -123,6 +130,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
             item.procedimentoCache.nomeVisualResponsabileProcedimento = item.procedimentoCache.idResponsabileProcedimento.idPersona.descrizione +
               " (" + item.procedimentoCache.idStrutturaResponsabileProcedimento.nome + ")";
           }
+          
           return item;
         }
       }
@@ -216,14 +224,23 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.iter.build(res[0]);
       // this.generateCustomButtons(); Non cancellare, potrebbe tornare utile in futuro
       this.calculateIodaPermissionAndSetButton();
-      this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
-      this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + this.iter.procedimentoCache.durataMassimaProcedimento);
+      this.updateDataChiusuraPrevista();
       this.buildTitoloDatiGenerali();
-
       this.setParametriSospensione();
       this.infoGeneriche.struttura = this.iter.procedimentoCache.idStruttura.nome;
       this.infoGeneriche.tipoProcedimento = this.iter.procedimentoCache.nomeTipoProcedimento;
+
+      let oggi = new Date();
+      let utc1 = Date.UTC(oggi.getFullYear(), oggi.getMonth(), oggi.getDate());
+      let utc2 = Date.UTC(this.iter.dataAvvio.getFullYear(), this.iter.dataAvvio.getMonth(), this.iter.dataAvvio.getDate());
+      this.iter.giorniDurataTrascorsi = Math.abs(Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24)));
     });
+  }
+
+  updateDataChiusuraPrevista(){
+    this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
+    let giorniAllaChiusura = this.iter.procedimentoCache.durataMassimaSospensione + this.iter.derogaDurata + this.iter.giorniSospensioneTrascorsi;
+    this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + giorniAllaChiusura);
   }
 
   updateNoteControInteressati() {
@@ -241,25 +258,63 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupData.visible = true;
   }
 
+  updateMotivazioneDeroga() {
+    this.popupDatiTemporali.title = "Modifica deroga durata";
+    this.popupDatiTemporali.action = "durata"
+    this.popupDatiTemporali.fieldDays = this.iter.derogaDurata;
+    this.popupDatiTemporali.fieldMotivation = this.iter.motivoDerogaDurata;
+    this.popupDatiTemporali.visible = true;
+  }
+
+  updateMotivazioneSospensione() {
+    this.popupDatiTemporali.title = "Modifica deroga sospensione";
+    this.popupDatiTemporali.action = "sospensione"
+    this.popupDatiTemporali.fieldDays = this.iter.derogaSospensione;
+    this.popupDatiTemporali.fieldMotivation = this.iter.motivoDerogaSospensione;
+    this.popupDatiTemporali.visible = true;
+  }
+
   updateIter() {
     let doUpdate: boolean = false;
-    if (this.popupData.field === "esitoMotivazione") {
-      if (this.iter.esitoMotivazione !== this.popupData.fieldValue) {
-        this.iter.esitoMotivazione = this.popupData.fieldValue;
-        doUpdate = true;
+    if(this.popupData.field){
+      if (this.popupData.field === "esitoMotivazione") {
+        if (this.iter.esitoMotivazione !== this.popupData.fieldValue) {
+          this.iter.esitoMotivazione = this.popupData.fieldValue;
+          doUpdate = true;
+        }
+      } else {
+        if (this.iter.noteControinteressati !== this.popupData.fieldValue || this.iter.presenzaControinteressati !== this.popupData.checkInteressati) {
+          this.iter.noteControinteressati = this.popupData.fieldValue;
+          this.iter.presenzaControinteressati = this.popupData.checkInteressati;
+          doUpdate = true;
+        }
       }
-    } else {
-      if (this.iter.noteControinteressati !== this.popupData.fieldValue || this.iter.presenzaControinteressati !== this.popupData.checkInteressati) {
-        this.iter.noteControinteressati = this.popupData.fieldValue;
-        this.iter.presenzaControinteressati = this.popupData.checkInteressati;
-        doUpdate = true;
+    }else if(this.popupDatiTemporali.action && this.popupDatiTemporali.fieldDays && this.popupDatiTemporali.fieldMotivation){
+      if(this.popupDatiTemporali.action === "durata"){
+        if(this.popupDatiTemporali.fieldDays != this.iter.derogaDurata && this.popupDatiTemporali.fieldMotivation != this.iter.motivoDerogaDurata){
+            this.iter.derogaDurata = this.popupDatiTemporali.fieldDays;
+            this.iter.motivoDerogaDurata = this.popupDatiTemporali.fieldMotivation;
+            doUpdate = true;
+          } 
+      }else{
+        if(this.popupDatiTemporali.fieldDays != this.iter.derogaSospensione && this.popupDatiTemporali.fieldMotivation != this.iter.motivoDerogaSospensione){
+          this.iter.derogaSospensione = this.popupDatiTemporali.fieldDays;
+          this.iter.motivoDerogaSospensione = this.popupDatiTemporali.fieldMotivation;
+          doUpdate = true;
+        }
       }
     }
+    
     if (doUpdate) {
       let iterClonato = Entity.cloneObject(this.iter);
       this.dataSourceIter.store().update(this.iter.id, iterClonato);
+      if(this.popupDatiTemporali.action){
+        this.updateDataChiusuraPrevista();
+        this.closePopupDeroga();
+      }else{
+        this.closePopupNote();
+      }
     }
-    this.closePopupNote();
   }
 
   closePopupNote() {
@@ -267,6 +322,14 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupData.field = "";
     this.popupData.fieldValue = "";
     this.popupData.visible = false;
+  }
+
+  closePopupDeroga(){
+    this.popupDatiTemporali.visible = false;
+    this.popupDatiTemporali.title = "";
+    this.popupDatiTemporali.fieldDays = 0;
+    this.popupDatiTemporali.fieldMotivation = "";
+    this.popupDatiTemporali.action = "";
   }
 
   public passaggioDiFase() {

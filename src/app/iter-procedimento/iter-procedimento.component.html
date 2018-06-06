@@ -79,17 +79,52 @@
                 </dxi-item>
 
                 <dxi-item itemType="group" [colCount]="1" caption="Dati temporali">
-                    <dxi-item dataField="dataAvvio" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
-
-                    <dxi-item dataField="dataChiusuraPrevista" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }">
-                        <dxo-label text="Data chiusura prevista"></dxo-label>
+                    <dxi-item dataField="dataAvvio" [label]="{text: 'Data avvio iter'}" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+                    
+                    <dxi-item itemType="group" [colCount]="10" caption="Durata" cssClass="meVedi">
+                        <dxi-item [colSpan]="5" dataField="procedimentoCache.durataMassimaProcedimento" [editorOptions]="{ disabled: true}">
+                            <dxo-label text="Durata prevista (gg)"></dxo-label>
+                        </dxi-item>
+                        <dxi-item [colSpan]="5" dataField="giorniDurataTrascorsi" [editorOptions]="{ disabled: true}">
+                            <dxo-label text="Giorni trascorsi"></dxo-label>
+                        </dxi-item>
+                        <dxi-item [colSpan]="5" dataField="derogaDurata" [editorOptions]="{ disabled: true}">
+                            <dxo-label text="Deroga durata (gg)"></dxo-label>
+                        </dxi-item>
+                        <dxi-item [colSpan]="4" dataField="motivoDerogaDurata" [editorOptions]="{ disabled: true}">
+                            <dxo-label text="Motivazione deroga"></dxo-label>
+                        </dxi-item>
+                        <dxi-item [colSpan]="1">
+                            <button class="btn button-azioni" type="button" (click)="updateMotivazioneDeroga()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                        </dxi-item>
                     </dxi-item>
 
-                    <dxi-item dataField="dataChiusura" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+                    <dxi-item itemType="group" [colCount]="10" caption="Sospensioni" cssClass="meVedi">
+                        <dxi-item [colSpan]="5" dataField="procedimentoCache.durataMassimaSospensione" [editorOptions]="{ disabled: true}">
+                            <dxo-label text="Massima sospensione (gg)"></dxo-label>
+                        </dxi-item>
+                        <dxi-item [colSpan]="5" dataField="giorniSospensioneTrascorsi" [editorOptions]="{ disabled: true}">
+                            <dxo-label text="Giorni sospensione trascorsi"></dxo-label>
+                        </dxi-item>
+                        <dxi-item [colSpan]="5" dataField="derogaSospensione" [editorOptions]="{ disabled: true}">
+                            <dxo-label text="Deroga sospensione (gg)"></dxo-label>
+                        </dxi-item>
+                        <dxi-item [colSpan]="4" dataField="motivoDerogaSospensione" [editorOptions]="{ disabled: true}">
+                            <dxo-label text="Motivazione deroga"></dxo-label>
+                        </dxi-item>
+                        <dxi-item [colSpan]="1">
+                            <button class="btn button-azioni" type="button" (click)="updateMotivazioneSospensione()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                        </dxi-item>
+                    </dxi-item>
 
-                    <dxi-item dataField="derogaSospensione" [editorOptions]="{ disabled: true }"></dxi-item>
-
-                    <dxi-item dataField="Durata dell'iter" [editorOptions]="{ disabled: true }"></dxi-item>
+                    <dxi-item itemType="group" [colCount]="2" caption="Chiusura" cssClass="meVedi">
+                        <dxi-item dataField="dataChiusuraPrevista" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }">
+                            <dxo-label text="Data chiusura prevista"></dxo-label>
+                        </dxi-item>
+                        <dxi-item dataField="dataChiusura" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }">
+                            <dxo-label text="Data chiusura effettiva"></dxo-label>
+                        </dxi-item>
+                    </dxi-item>
                 </dxi-item>
 
                 <dxi-item itemType="group" caption="Dati di archivio">
@@ -162,6 +197,25 @@
             <dx-button class="button-css" text="OK" (click)="updateIter()" type="default"></dx-button>
             <span class="btn-space"></span>
             <dx-button class="button-css" text="Annulla" type="normal" (click)="closePopupNote()"></dx-button>
+        </div>
+    </div>
+</dx-popup>
+
+<dx-popup class="popup" [width]="500" [height]="310" [showTitle]="true" [title]="popupDatiTemporali.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
+    [(visible)]="popupDatiTemporali.visible">
+    <div *dxTemplate="let data of 'content'">
+        <div class="dx-field">
+            <div class="dx-field-label">Deroga {{popupDatiTemporali.action}} (gg):</div>
+            <div class="dx-field-value">
+                <dx-number-box [(value)]="popupDatiTemporali.fieldDays"></dx-number-box>
+            </div>
+        </div>
+        
+        <dx-text-area [height]="120" [(value)]="popupDatiTemporali.fieldMotivation"></dx-text-area>
+        <div class="wrapperPulsantiPopup">
+            <dx-button class="button-css" text="OK" (click)="updateIter()" type="default"></dx-button>
+            <span class="btn-space"></span>
+            <dx-button class="button-css" text="Annulla" type="normal" (click)="closePopupDeroga()"></dx-button>
         </div>
     </div>
 </dx-popup>
