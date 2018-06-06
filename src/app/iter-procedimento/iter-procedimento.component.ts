@@ -299,8 +299,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         }
       }
     }else if(this.popupDatiTemporali.action){
-      let result = params.validationGroup.validate();
-      if (result.isValid) {
+      if (this.popupDatiTemporali.fieldDays && this.popupDatiTemporali.fieldMotivation) {
         if(this.popupDatiTemporali.action === "durata"){
           this.iter.derogaDurata = this.popupDatiTemporali.fieldDays;
           this.iter.motivoDerogaDurata = this.popupDatiTemporali.fieldMotivation;
