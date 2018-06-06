@@ -239,7 +239,16 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   updateDataChiusuraPrevista(){
     this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
-    let giorniAllaChiusura = this.iter.procedimentoCache.durataMassimaSospensione + this.iter.derogaDurata + this.iter.giorniSospensioneTrascorsi;
+    let giorniAllaChiusura = 0;
+    if(this.iter.procedimentoCache.durataMassimaSospensione){
+      giorniAllaChiusura += this.iter.procedimentoCache.durataMassimaSospensione;
+    }
+    if(this.iter.derogaDurata){
+      giorniAllaChiusura += this.iter.derogaDurata;
+    }
+    if(this.iter.giorniSospensioneTrascorsi){
+      giorniAllaChiusura += this.iter.giorniSospensioneTrascorsi;
+    }
     this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + giorniAllaChiusura);
   }
 
