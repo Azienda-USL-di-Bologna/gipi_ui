@@ -283,7 +283,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupDatiTemporali.visible = true;
   }
 
-  updateIter() {
+  updateIter(params) {
     let doUpdate: boolean = false;
     if(this.popupData.field){
       if (this.popupData.field === "esitoMotivazione") {
@@ -298,18 +298,21 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           doUpdate = true;
         }
       }
-    }else if(this.popupDatiTemporali.action && this.popupDatiTemporali.fieldDays && this.popupDatiTemporali.fieldMotivation){
-      if(this.popupDatiTemporali.action === "durata"){
-        if(this.popupDatiTemporali.fieldDays != this.iter.derogaDurata && this.popupDatiTemporali.fieldMotivation != this.iter.motivoDerogaDurata){
-            this.iter.derogaDurata = this.popupDatiTemporali.fieldDays;
-            this.iter.motivoDerogaDurata = this.popupDatiTemporali.fieldMotivation;
-            doUpdate = true;
-          } 
-      }else{
-        if(this.popupDatiTemporali.fieldDays != this.iter.derogaSospensione && this.popupDatiTemporali.fieldMotivation != this.iter.motivoDerogaSospensione){
+    }else if(this.popupDatiTemporali.action){
+      let result = params.validationGroup.validate();
+      if (result.isValid) {
+        if(this.popupDatiTemporali.action === "durata"){
+          this.iter.derogaDurata = this.popupDatiTemporali.fieldDays;
+          this.iter.motivoDerogaDurata = this.popupDatiTemporali.fieldMotivation;
+          doUpdate = true;
+        // if(this.popupDatiTemporali.fieldDays != this.iter.derogaDurata && this.popupDatiTemporali.fieldMotivation != this.iter.motivoDerogaDurata){    
+        // } 
+        }else{
           this.iter.derogaSospensione = this.popupDatiTemporali.fieldDays;
           this.iter.motivoDerogaSospensione = this.popupDatiTemporali.fieldMotivation;
           doUpdate = true;
+          // if(this.popupDatiTemporali.fieldDays != this.iter.derogaSospensione && this.popupDatiTemporali.fieldMotivation != this.iter.motivoDerogaSospensione){ 
+          // }
         }
       }
     }

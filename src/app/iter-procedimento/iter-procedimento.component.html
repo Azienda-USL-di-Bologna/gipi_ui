@@ -194,7 +194,7 @@
         </div>
         <dx-text-area [height]="150" [(value)]="popupData.fieldValue" [disabled]="disableAreaTextNote()"></dx-text-area>
         <div class="wrapperPulsantiPopup">
-            <dx-button class="button-css" text="OK" (click)="updateIter()" type="default"></dx-button>
+            <dx-button class="button-css" text="OK" (click)="updateIter($event)" type="default"></dx-button>
             <span class="btn-space"></span>
             <dx-button class="button-css" text="Annulla" type="normal" (click)="closePopupNote()"></dx-button>
         </div>
@@ -204,16 +204,18 @@
 <dx-popup class="popup" [width]="500" [height]="310" [showTitle]="true" [title]="popupDatiTemporali.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
     [(visible)]="popupDatiTemporali.visible">
     <div *dxTemplate="let data of 'content'">
-        <div class="dx-field">
-            <div class="dx-field-label">Deroga {{popupDatiTemporali.action}} (gg):</div>
-            <div class="dx-field-value">
-                <dx-number-box [(value)]="popupDatiTemporali.fieldDays"></dx-number-box>
-            </div>
-        </div>
-        
-        <dx-text-area [height]="120" [(value)]="popupDatiTemporali.fieldMotivation"></dx-text-area>
+            <dx-form #formPopupDatiTemporali
+                [(formData)]="popupDatiTemporali" validationGroup="validationDettaglioTipoProcedimento" [showValidationSummary]="true">
+                <dxi-item dataField="fieldDays" editorType="dxNumberBox" [editorOptions]="{ disabled: false }">
+                    <dxo-label text="Deroga {{popupDatiTemporali.action}} (gg)"></dxo-label>
+                    <dxi-validation-rule type="required" message="Il numero di giorni di deroga è obbligatorio"></dxi-validation-rule>
+                </dxi-item>
+                <dxi-item dataField="fieldMotivation"[label]="{text: 'Motivazione'}" editorType="dxTextArea" [editorOptions]="{ disabled: false, height: 120 }" >
+                    <dxi-validation-rule type="required" message="La motivazione è obbligatoria"></dxi-validation-rule>
+                </dxi-item>
+    </dx-form>
         <div class="wrapperPulsantiPopup">
-            <dx-button class="button-css" text="OK" (click)="updateIter()" type="default"></dx-button>
+            <dx-button class="button-css" text="OK" (click)="updateIter($event)" validationGroup="validationDettaglioTipoProcedimento" type="default"></dx-button>
             <span class="btn-space"></span>
             <dx-button class="button-css" text="Annulla" type="normal" (click)="closePopupDeroga()"></dx-button>
         </div>
