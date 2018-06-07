@@ -13,7 +13,8 @@ import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stat
 import { LoggedUser } from "@bds/nt-login";
 import { Observable, Subscription } from "rxjs";
 import { HttpHeaders } from "@angular/common/http";
-import {  STATI } from "@bds/nt-entities";
+import { STATI } from "@bds/nt-entities";
+import { DxFormComponent } from "devextreme-angular";
 
 
 
@@ -24,7 +25,7 @@ import {  STATI } from "@bds/nt-entities";
   encapsulation: ViewEncapsulation.None
 })
 export class IterProcedimentoComponent implements OnInit, AfterViewInit {
-  
+
   private subscriptions: Subscription[] = [];
 
   public iter: Iter = new Iter();
@@ -38,6 +39,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public passaggioDiFaseVisible: boolean = false;
   public sospensioneIterVisible: boolean = false;
   public genericButtons: ButtonAppearance[];
+
+  @ViewChild("myForm1") myForm1: DxFormComponent;
 
 
   // pulsanti custom aggiunti alla button bar
@@ -74,17 +77,25 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public userInfo: UserInfo;
   public iodaPermission: boolean;
   public hasPermissionOnFascicolo: boolean = false;
+  public colCountGroup: number;
+
+  private initialWidth: number = window.innerWidth;
+  private threshold: number = 1500;
+  private previousWidth: number = this.initialWidth;
   // public soloEditing: boolean = false;
 
 
   public dataSourceClassificazione: DataSource;
-  public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}; });
+  public arrayEsiti: any[] = Object.keys(ESITI).map(key => { return { "codice": key, "descrizione": ESITI[key] }; });
 
   constructor(
     private odataContextFactory: OdataContextFactory,
     private http: HttpClient, private activatedRoute: ActivatedRoute,
     private globalContextService: GlobalContextService
   ) {
+
+    // gestione resize window (pessime prestazioni)
+   /*  this.screen = this.screen.bind(this); */
 
     console.log("iter-procedimento-component (constructor)");
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
@@ -93,6 +104,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         this.idIter = +idIter;
       }
     });
+
 
     const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
@@ -111,8 +123,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "procedimentoCache.idStrutturaTitolarePotereSostitutivo",
         "procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona",
         "procedimentoCache.idStrutturaResponsabileAdozioneAttoFinale",
-        "procedimentoCache.idResponsabileProcedimento.idPersona",        
-        "procedimentoCache.idStrutturaResponsabileProcedimento",        
+        "procedimentoCache.idResponsabileProcedimento.idPersona",
+        "procedimentoCache.idStrutturaResponsabileProcedimento",
         "procedimentoCache.idStruttura"
       ],
       filter: [["id", "=", this.idIter]],
@@ -130,13 +142,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
             item.procedimentoCache.nomeVisualResponsabileProcedimento = item.procedimentoCache.idResponsabileProcedimento.idPersona.descrizione +
               " (" + item.procedimentoCache.idStrutturaResponsabileProcedimento.nome + ")";
           }
-          
+
           return item;
         }
       }
     });
     this.buildIter();
-    
+
     this.perFigliParteDestra = {
       idIter: this.idIter,
       ricarica: false  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore
@@ -147,9 +159,40 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       store: oataContextDefinitionTitolo.getContext()[new Titolo().getName()],
       filter: [["idAzienda", "=", this.userInfo.idAzienda]] // questo non so se ci vuole in realtà, la classificazione non è sceglibile
     });
+
+    if (this.initialWidth >= this.threshold) {
+      this.colCountGroup = 5;
+    }
+    else {
+      this.colCountGroup = 10;
+    }
+    console.log("colCount", this.colCountGroup, this.initialWidth);
+
   }
 
-  ngAfterViewInit() {}
+// gestione resize window (pessime prestazioni)
+/*   public screen(width) {
+    console.log("Screen", width);
+    console.log("Previous width", this.previousWidth);
+    if (this.myForm1 && this.myForm1.instance) {
+      if (width >= this.threshold && this.previousWidth < this.threshold) {
+        this.colCountGroup = 5;
+        console.log("superata soglia", width, this.myForm1);
+        this.previousWidth = width;
+        this.myForm1.instance.repaint();
+      } else if (width <= this.threshold && this.previousWidth > this.threshold) {
+
+        this.colCountGroup = 10;
+        console.log("andati sotto soglia", width, this.previousWidth);
+        this.previousWidth = width;
+        this.myForm1.instance.repaint();
+      } else {
+        this.previousWidth = width;
+      }
+    }
+  } */
+
+  ngAfterViewInit() { }
 
   recuperaUserInfo() {
     this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
@@ -237,16 +280,16 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     });
   }
 
-  updateDataChiusuraPrevista(){
+  updateDataChiusuraPrevista() {
     this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
     let giorniAllaChiusura = 0;
-    if(this.iter.procedimentoCache.durataMassimaSospensione){
+    if (this.iter.procedimentoCache.durataMassimaSospensione) {
       giorniAllaChiusura += this.iter.procedimentoCache.durataMassimaSospensione;
     }
-    if(this.iter.derogaDurata){
+    if (this.iter.derogaDurata) {
       giorniAllaChiusura += this.iter.derogaDurata;
     }
-    if(this.iter.giorniSospensioneTrascorsi){
+    if (this.iter.giorniSospensioneTrascorsi) {
       giorniAllaChiusura += this.iter.giorniSospensioneTrascorsi;
     }
     this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + giorniAllaChiusura);
@@ -285,7 +328,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   updateIter(params) {
     let doUpdate: boolean = false;
-    if(this.popupData.field){
+    if (this.popupData.field) {
       if (this.popupData.field === "esitoMotivazione") {
         if (this.iter.esitoMotivazione !== this.popupData.fieldValue) {
           this.iter.esitoMotivazione = this.popupData.fieldValue;
@@ -298,15 +341,15 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           doUpdate = true;
         }
       }
-    }else if(this.popupDatiTemporali.action){
-      if (this.popupDatiTemporali.fieldDays && this.popupDatiTemporali.fieldMotivation) {
-        if(this.popupDatiTemporali.action === "durata"){
+    } else if (this.popupDatiTemporali.action) {
+      if (this.popupDatiTemporali.fieldDays != undefined && this.popupDatiTemporali.fieldDays >= 0 && this.popupDatiTemporali.fieldMotivation) {
+        if (this.popupDatiTemporali.action === "durata") {
           this.iter.derogaDurata = this.popupDatiTemporali.fieldDays;
           this.iter.motivoDerogaDurata = this.popupDatiTemporali.fieldMotivation;
           doUpdate = true;
-        // if(this.popupDatiTemporali.fieldDays != this.iter.derogaDurata && this.popupDatiTemporali.fieldMotivation != this.iter.motivoDerogaDurata){    
-        // } 
-        }else{
+          // if(this.popupDatiTemporali.fieldDays != this.iter.derogaDurata && this.popupDatiTemporali.fieldMotivation != this.iter.motivoDerogaDurata){    
+          // } 
+        } else {
           this.iter.derogaSospensione = this.popupDatiTemporali.fieldDays;
           this.iter.motivoDerogaSospensione = this.popupDatiTemporali.fieldMotivation;
           doUpdate = true;
@@ -315,18 +358,20 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         }
       }
     }
-    
+
     if (doUpdate) {
       let iterClonato = Entity.cloneObject(this.iter);
       this.dataSourceIter.store().update(this.iter.id, iterClonato);
-      if(this.popupDatiTemporali.action){
+      if (this.popupDatiTemporali.action) {
         this.updateDataChiusuraPrevista();
         this.closePopupDeroga();
-      }else{
+      } else {
         this.closePopupNote();
       }
     }
   }
+
+
 
   closePopupNote() {
     this.popupData.title = "";
@@ -335,7 +380,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupData.visible = false;
   }
 
-  closePopupDeroga(){
+  closePopupDeroga() {
     this.popupDatiTemporali.visible = false;
     this.popupDatiTemporali.title = "";
     this.popupDatiTemporali.fieldDays = 0;
