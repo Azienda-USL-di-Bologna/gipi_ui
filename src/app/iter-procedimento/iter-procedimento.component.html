@@ -206,7 +206,7 @@
     <div *dxTemplate="let data of 'content'">
         
         <dx-form #formPopupDatiTemporali
-            [(formData)]="popupDatiTemporali" validationGroup="validationDettaglioTipoProcedimento" [showValidationSummary]="true">
+            [(formData)]="popupDatiTemporali" validationGroup="validaDatiTemporali" [showValidationSummary]="true">
 
             <dxi-item dataField="fieldDays" editorType="dxNumberBox" [editorOptions]="{ disabled: false }">
                 <dxo-label text="Deroga {{popupDatiTemporali.action}} (gg)"></dxo-label>
@@ -219,9 +219,9 @@
         </dx-form>
         <dx-validation-summary id="summary"></dx-validation-summary>
         <div class="wrapperPulsantiPopup">
-            <dx-button class="button-css" text="OK" (click)="updateIter($event)" [useSubmitBehavior]="true" validationGroup="validationDettaglioTipoProcedimento" type="default"></dx-button>
+            <dx-button class="button-css" text="OK" (onClick)="updateIter($event)" [useSubmitBehavior]="true" [validationGroup]="'validaDatiTemporali'"></dx-button>
             <span class="btn-space"></span>
-            <dx-button class="button-css" text="Annulla" type="normal" (click)="closePopupDeroga()"></dx-button>
+            <dx-button class="button-css" text="Annulla" type="normal" (onClick)="closePopupDeroga($event)"></dx-button>
         </div>
     </div>
 </dx-popup>

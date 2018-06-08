@@ -326,7 +326,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupDatiTemporali.visible = true;
   }
 
-  updateIter(params) {
+  updateIter(validationParams: any) {
+    const validator = validationParams.validationGroup.validate();
+    console.log("Validation params ", validationParams)
     let doUpdate: boolean = false;
     if (this.popupData.field) {
       if (this.popupData.field === "esitoMotivazione") {
@@ -342,7 +344,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         }
       }
     } else if (this.popupDatiTemporali.action) {
-      if (this.popupDatiTemporali.fieldDays != undefined && this.popupDatiTemporali.fieldDays >= 0 && this.popupDatiTemporali.fieldMotivation) {
+      // if (this.popupDatiTemporali.fieldDays != undefined && this.popupDatiTemporali.fieldDays >= 0 && this.popupDatiTemporali.fieldMotivation) {
+      if(validator.isValid){
         if (this.popupDatiTemporali.action === "durata") {
           this.iter.derogaDurata = this.popupDatiTemporali.fieldDays;
           this.iter.motivoDerogaDurata = this.popupDatiTemporali.fieldMotivation;
@@ -364,7 +367,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.dataSourceIter.store().update(this.iter.id, iterClonato);
       if (this.popupDatiTemporali.action) {
         this.updateDataChiusuraPrevista();
-        this.closePopupDeroga();
+        this.closePopupDeroga(validationParams);
       } else {
         this.closePopupNote();
       }
@@ -380,12 +383,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupData.visible = false;
   }
 
-  closePopupDeroga() {
+  closePopupDeroga(validationParams: any) {
     this.popupDatiTemporali.visible = false;
     this.popupDatiTemporali.title = "";
     this.popupDatiTemporali.fieldDays = 0;
     this.popupDatiTemporali.fieldMotivation = "";
     this.popupDatiTemporali.action = "";
+    validationParams.validationGroup.reset();
   }
 
   public passaggioDiFase() {
