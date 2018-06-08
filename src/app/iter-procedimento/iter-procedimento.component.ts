@@ -13,7 +13,8 @@ import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stat
 import { LoggedUser } from "@bds/nt-login";
 import { Observable, Subscription } from "rxjs";
 import { HttpHeaders } from "@angular/common/http";
-import {  STATI } from "@bds/nt-entities";
+import { STATI } from "@bds/nt-entities";
+import { DxFormComponent } from "devextreme-angular";
 
 
 
@@ -24,7 +25,7 @@ import {  STATI } from "@bds/nt-entities";
   encapsulation: ViewEncapsulation.None
 })
 export class IterProcedimentoComponent implements OnInit, AfterViewInit {
-  
+
   private subscriptions: Subscription[] = [];
 
   public iter: Iter = new Iter();
@@ -39,6 +40,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public sospensioneIterVisible: boolean = false;
   public genericButtons: ButtonAppearance[];
 
+  @ViewChild("myForm1") myForm1: DxFormComponent;
+
 
   // pulsanti custom aggiunti alla button bar
   public procediButton: ButtonAppearance;
@@ -52,9 +55,17 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   };
   public popupData: any = {
     visible: false,
-    title: "titolo",
-    field: "nome campo",
-    fieldValue: "valore"
+    title: "",
+    field: "",
+    fieldValue: "",
+    checkInteressati: false
+  };
+  public popupDatiTemporali: any = {
+    visible: false,
+    title: "",
+    fieldDays: 0,
+    fieldMotivation: "",
+    action: ""
   };
   public perFigliParteDestra: Object;
 
@@ -66,17 +77,25 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public userInfo: UserInfo;
   public iodaPermission: boolean;
   public hasPermissionOnFascicolo: boolean = false;
+  public colCountGroup: number;
+
+  private initialWidth: number = window.innerWidth;
+  private threshold: number = 1500;
+  private previousWidth: number = this.initialWidth;
   // public soloEditing: boolean = false;
 
 
   public dataSourceClassificazione: DataSource;
-  public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}; });
+  public arrayEsiti: any[] = Object.keys(ESITI).map(key => { return { "codice": key, "descrizione": ESITI[key] }; });
 
   constructor(
     private odataContextFactory: OdataContextFactory,
     private http: HttpClient, private activatedRoute: ActivatedRoute,
     private globalContextService: GlobalContextService
   ) {
+
+    // gestione resize window (pessime prestazioni)
+   /*  this.screen = this.screen.bind(this); */
 
     console.log("iter-procedimento-component (constructor)");
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
@@ -85,6 +104,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         this.idIter = +idIter;
       }
     });
+
 
     const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
@@ -103,8 +123,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "procedimentoCache.idStrutturaTitolarePotereSostitutivo",
         "procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona",
         "procedimentoCache.idStrutturaResponsabileAdozioneAttoFinale",
-        "procedimentoCache.idResponsabileProcedimento.idPersona",        
-        "procedimentoCache.idStrutturaResponsabileProcedimento",        
+        "procedimentoCache.idResponsabileProcedimento.idPersona",
+        "procedimentoCache.idStrutturaResponsabileProcedimento",
         "procedimentoCache.idStruttura"
       ],
       filter: [["id", "=", this.idIter]],
@@ -122,12 +142,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
             item.procedimentoCache.nomeVisualResponsabileProcedimento = item.procedimentoCache.idResponsabileProcedimento.idPersona.descrizione +
               " (" + item.procedimentoCache.idStrutturaResponsabileProcedimento.nome + ")";
           }
+
           return item;
         }
       }
     });
     this.buildIter();
-    
+
     this.perFigliParteDestra = {
       idIter: this.idIter,
       ricarica: false  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore
@@ -138,9 +159,40 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       store: oataContextDefinitionTitolo.getContext()[new Titolo().getName()],
       filter: [["idAzienda", "=", this.userInfo.idAzienda]] // questo non so se ci vuole in realtà, la classificazione non è sceglibile
     });
+
+    if (this.initialWidth >= this.threshold) {
+      this.colCountGroup = 5;
+    }
+    else {
+      this.colCountGroup = 10;
+    }
+    console.log("colCount", this.colCountGroup, this.initialWidth);
+
   }
 
-  ngAfterViewInit() {}
+// gestione resize window (pessime prestazioni)
+/*   public screen(width) {
+    console.log("Screen", width);
+    console.log("Previous width", this.previousWidth);
+    if (this.myForm1 && this.myForm1.instance) {
+      if (width >= this.threshold && this.previousWidth < this.threshold) {
+        this.colCountGroup = 5;
+        console.log("superata soglia", width, this.myForm1);
+        this.previousWidth = width;
+        this.myForm1.instance.repaint();
+      } else if (width <= this.threshold && this.previousWidth > this.threshold) {
+
+        this.colCountGroup = 10;
+        console.log("andati sotto soglia", width, this.previousWidth);
+        this.previousWidth = width;
+        this.myForm1.instance.repaint();
+      } else {
+        this.previousWidth = width;
+      }
+    }
+  } */
+
+  ngAfterViewInit() { }
 
   recuperaUserInfo() {
     this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
@@ -195,6 +247,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO;
   }
 
+  disableAreaTextNote() {
+    return this.inSolaLettura() || !this.popupData.checkInteressati;
+  }
+
   /* 
   Non cancellare, potrebbe tornare utile in futuro
   generateCustomButtons() {
@@ -211,20 +267,39 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.iter.build(res[0]);
       // this.generateCustomButtons(); Non cancellare, potrebbe tornare utile in futuro
       this.calculateIodaPermissionAndSetButton();
-      this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
-      this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + this.iter.procedimentoCache.durataMassimaProcedimento);
+      this.updateDataChiusuraPrevista();
       this.buildTitoloDatiGenerali();
-
       this.setParametriSospensione();
       this.infoGeneriche.struttura = this.iter.procedimentoCache.idStruttura.nome;
       this.infoGeneriche.tipoProcedimento = this.iter.procedimentoCache.nomeTipoProcedimento;
+
+      let oggi = new Date();
+      let utc1 = Date.UTC(oggi.getFullYear(), oggi.getMonth(), oggi.getDate());
+      let utc2 = Date.UTC(this.iter.dataAvvio.getFullYear(), this.iter.dataAvvio.getMonth(), this.iter.dataAvvio.getDate());
+      this.iter.giorniDurataTrascorsi = Math.abs(Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24)));
     });
+  }
+
+  updateDataChiusuraPrevista() {
+    this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
+    let giorniAllaChiusura = 0;
+    if (this.iter.procedimentoCache.durataMassimaSospensione) {
+      giorniAllaChiusura += this.iter.procedimentoCache.durataMassimaSospensione;
+    }
+    if (this.iter.derogaDurata) {
+      giorniAllaChiusura += this.iter.derogaDurata;
+    }
+    if (this.iter.giorniSospensioneTrascorsi) {
+      giorniAllaChiusura += this.iter.giorniSospensioneTrascorsi;
+    }
+    this.iter.dataChiusuraPrevista.setDate(this.iter.dataChiusuraPrevista.getDate() + giorniAllaChiusura);
   }
 
   updateNoteControInteressati() {
     this.popupData.title = "Note controinteressati";
     this.popupData.field = "noteControInteressati";
     this.popupData.fieldValue = this.iter.noteControinteressati;
+    this.popupData.checkInteressati = this.iter.presenzaControinteressati;
     this.popupData.visible = true;
   }
 
@@ -235,31 +310,90 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupData.visible = true;
   }
 
-  updateIter() {
+  updateMotivazioneDeroga() {
+    this.popupDatiTemporali.title = "Modifica deroga durata";
+    this.popupDatiTemporali.action = "durata"
+    this.popupDatiTemporali.fieldDays = this.iter.derogaDurata;
+    this.popupDatiTemporali.fieldMotivation = this.iter.motivoDerogaDurata;
+    this.popupDatiTemporali.visible = true;
+  }
+
+  updateMotivazioneSospensione() {
+    this.popupDatiTemporali.title = "Modifica deroga sospensione";
+    this.popupDatiTemporali.action = "sospensione"
+    this.popupDatiTemporali.fieldDays = this.iter.derogaSospensione;
+    this.popupDatiTemporali.fieldMotivation = this.iter.motivoDerogaSospensione;
+    this.popupDatiTemporali.visible = true;
+  }
+
+  updateIter(validationParams: any) {
+    const validator = validationParams.validationGroup.validate();
     let doUpdate: boolean = false;
-    if (this.popupData.field === "esitoMotivazione") {
-      if (this.iter.esitoMotivazione !== this.popupData.fieldValue) {
-        this.iter.esitoMotivazione = this.popupData.fieldValue;
-        doUpdate = true;
+    if (this.popupData.field) {
+      if (this.popupData.field === "esitoMotivazione") {
+        if (this.iter.esitoMotivazione !== this.popupData.fieldValue) {
+          this.iter.esitoMotivazione = this.popupData.fieldValue;
+          doUpdate = true;
+        }
+      } else {
+        if (this.iter.noteControinteressati !== this.popupData.fieldValue || this.iter.presenzaControinteressati !== this.popupData.checkInteressati) {
+          this.iter.noteControinteressati = this.popupData.fieldValue;
+          this.iter.presenzaControinteressati = this.popupData.checkInteressati;
+          doUpdate = true;
+        }
       }
-    } else {
-      if (this.iter.noteControinteressati !== this.popupData.fieldValue) {
-        this.iter.noteControinteressati = this.popupData.fieldValue;
-        doUpdate = true;
+    } else if (this.popupDatiTemporali.action) {
+      // Adottata questa soluzione punk perchè l'isValid ritornava false la seconda volta anche se tutti i capi sono compilati
+      let b = (this.popupDatiTemporali.fieldDays != undefined && this.popupDatiTemporali.fieldDays >= 0 && this.popupDatiTemporali.fieldMotivation)
+      console.log("eSPRESSIONE:", this.popupDatiTemporali.fieldDays, this.popupDatiTemporali.fieldMotivation)
+      if (this.popupDatiTemporali.action === "durata") {
+        if(validator.isValid){
+          this.iter.derogaDurata = this.popupDatiTemporali.fieldDays;
+          this.iter.motivoDerogaDurata = this.popupDatiTemporali.fieldMotivation;
+          doUpdate = true;
+        }else if(this.iter.derogaDurata === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaDurata === this.popupDatiTemporali.fieldMotivation){
+          this.closePopupDeroga(validationParams);
+        } 
+      } else {
+        if(validator.isValid){
+          this.iter.derogaSospensione = this.popupDatiTemporali.fieldDays;
+          this.iter.motivoDerogaSospensione = this.popupDatiTemporali.fieldMotivation;
+          doUpdate = true;
+        }else if(this.iter.derogaSospensione === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaSospensione === this.popupDatiTemporali.fieldMotivation){
+          this.closePopupDeroga(validationParams);
+        } 
       }
     }
+
     if (doUpdate) {
       let iterClonato = Entity.cloneObject(this.iter);
       this.dataSourceIter.store().update(this.iter.id, iterClonato);
+      if (this.popupDatiTemporali.action) {
+        this.updateDataChiusuraPrevista();
+        this.closePopupDeroga(validationParams);
+      } else {
+        this.closePopupNote();
+      }
     }
-    this.closePopupNote();
   }
+
+
 
   closePopupNote() {
     this.popupData.title = "";
     this.popupData.field = "";
     this.popupData.fieldValue = "";
     this.popupData.visible = false;
+  }
+
+  closePopupDeroga(validationParams: any) {
+    this.popupDatiTemporali.visible = false;
+    validationParams.validationGroup.reset();
+    
+    this.popupDatiTemporali.title = "";
+    this.popupDatiTemporali.fieldDays = 0;
+    this.popupDatiTemporali.fieldMotivation = "";
+    this.popupDatiTemporali.action = "";
   }
 
   public passaggioDiFase() {
