@@ -166,8 +166,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     else {
       this.colCountGroup = 10;
     }
-    console.log("colCount", this.colCountGroup, this.initialWidth);
-
   }
 
 // gestione resize window (pessime prestazioni)
