@@ -24,7 +24,7 @@
     <div class="row">
         <div class="col-lg-6 col-md-12">
             <dx-form id="form" [colCount]="1" [formData]="iter"    #myForm1> <!-- [screenByWidth]="screen"-->
-                <dxi-item itemType="group" [colCount]="6" [caption]="datiGenerali">
+                <dxi-item itemType="group" [colCount]="6" [caption]="datiGenerali" [cssClass]="classeDiHighlight">
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
                     <dxi-item [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }"></dxi-item>

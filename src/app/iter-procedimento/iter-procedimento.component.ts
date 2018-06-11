@@ -39,6 +39,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public passaggioDiFaseVisible: boolean = false;
   public sospensioneIterVisible: boolean = false;
   public genericButtons: ButtonAppearance[];
+  public classeDiHighlight = "";
+
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
 
@@ -148,6 +150,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       }
     });
     this.buildIter();
+
+    this.classeDiHighlight = "hightlightClass";
 
     this.perFigliParteDestra = {
       idIter: this.idIter,
@@ -312,7 +316,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   updateMotivazioneDeroga() {
     this.popupDatiTemporali.title = "Modifica deroga durata";
-    this.popupDatiTemporali.action = "durata"
+    this.popupDatiTemporali.action = "durata";
     this.popupDatiTemporali.fieldDays = this.iter.derogaDurata;
     this.popupDatiTemporali.fieldMotivation = this.iter.motivoDerogaDurata;
     this.popupDatiTemporali.visible = true;
@@ -320,7 +324,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   updateMotivazioneSospensione() {
     this.popupDatiTemporali.title = "Modifica deroga sospensione";
-    this.popupDatiTemporali.action = "sospensione"
+    this.popupDatiTemporali.action = "sospensione";
     this.popupDatiTemporali.fieldDays = this.iter.derogaSospensione;
     this.popupDatiTemporali.fieldMotivation = this.iter.motivoDerogaSospensione;
     this.popupDatiTemporali.visible = true;
@@ -344,22 +348,22 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       }
     } else if (this.popupDatiTemporali.action) {
       // Adottata questa soluzione punk perchè l'isValid ritornava false la seconda volta anche se tutti i capi sono compilati
-      let b = (this.popupDatiTemporali.fieldDays != undefined && this.popupDatiTemporali.fieldDays >= 0 && this.popupDatiTemporali.fieldMotivation)
-      console.log("eSPRESSIONE:", this.popupDatiTemporali.fieldDays, this.popupDatiTemporali.fieldMotivation)
+      let b = (this.popupDatiTemporali.fieldDays != undefined && this.popupDatiTemporali.fieldDays >= 0 && this.popupDatiTemporali.fieldMotivation);
+      console.log("eSPRESSIONE:", this.popupDatiTemporali.fieldDays, this.popupDatiTemporali.fieldMotivation);
       if (this.popupDatiTemporali.action === "durata") {
-        if(validator.isValid){
+        if (validator.isValid) {
           this.iter.derogaDurata = this.popupDatiTemporali.fieldDays;
           this.iter.motivoDerogaDurata = this.popupDatiTemporali.fieldMotivation;
           doUpdate = true;
-        }else if(this.iter.derogaDurata === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaDurata === this.popupDatiTemporali.fieldMotivation){
+        }else if (this.iter.derogaDurata === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaDurata === this.popupDatiTemporali.fieldMotivation) {
           this.closePopupDeroga(validationParams);
         } 
       } else {
-        if(validator.isValid){
+        if (validator.isValid) {
           this.iter.derogaSospensione = this.popupDatiTemporali.fieldDays;
           this.iter.motivoDerogaSospensione = this.popupDatiTemporali.fieldMotivation;
           doUpdate = true;
-        }else if(this.iter.derogaSospensione === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaSospensione === this.popupDatiTemporali.fieldMotivation){
+        }else if (this.iter.derogaSospensione === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaSospensione === this.popupDatiTemporali.fieldMotivation) {
           this.closePopupDeroga(validationParams);
         } 
       }
