@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextDefinition, GlobalContextService, CustomLoadingFilterParams } from "@bds/nt-context";
+import { OdataContextDefinition, GlobalContextService, CustomLoadingFilterParams, OdataUtilities } from "@bds/nt-context";
 import { OdataContextFactory } from "@bds/nt-context";
 import { Router } from "@angular/router";
-import {Iter, bAzienda, bUtente} from "@bds/nt-entities";
+import {Iter, bAzienda, bUtente, GetIterUtente} from "@bds/nt-entities";
 import { Subscription } from "rxjs";
 import { Observable } from "rxjs/Observable";
 import { LoggedUser } from "@bds/nt-login";
@@ -17,8 +17,9 @@ export class ListaIterComponent implements OnInit {
 
   private odataContextDefinition: OdataContextDefinition;
   private subscriptions: Subscription[] = [];
+  private cfUtente: string;
+
   public dataSource: DataSource;
-  
   public loggedUser$: Observable<LoggedUser>;
   public idAzienda: number;
 
@@ -28,8 +29,9 @@ export class ListaIterComponent implements OnInit {
     procedimento: "Procedimento A"
   }; */
 
-  constructor(private odataContextFactory: OdataContextFactory, private router: Router, private globalContextService: GlobalContextService) {
-    this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+  constructor(private odataContextFactory: OdataContextFactory, private router: Router, private globalContextService: GlobalContextService,
+    private odataUtilities: OdataUtilities) {
+    this.odataContextDefinition = this.odataContextFactory.buildOdataFunctionsImportDefinition();
   }
 
   ngOnInit() {
@@ -37,28 +39,28 @@ export class ListaIterComponent implements OnInit {
     this.subscriptions.push(
       this.loggedUser$.subscribe(
           (loggedUser: LoggedUser) => {
-            if (loggedUser)
+            if (loggedUser) {
               this.idAzienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
+              this.cfUtente = loggedUser.getField(bUtente.codiceFiscale);
+            }  
           }
       )
     );
-    const filterParameters: any[] = ["tolower(${target})", "contains", "${value.tolower}"];
-    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
-    customLoadingFilterParams.addFilter("idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome", filterParameters);
-    customLoadingFilterParams.addFilter("oggetto", filterParameters);
-    customLoadingFilterParams.addFilter("idResponsabileProcedimento.idPersona.descrizione", filterParameters);
-    customLoadingFilterParams.addFilter("idStato.descrizione", filterParameters);
+
     this.dataSource = new DataSource({
-      store: this.odataContextDefinition.getContext()[new Iter().getName()].on("loading", (loadOptions) => {
-        loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
-        this.odataContextDefinition.customLoading(loadOptions);
-      }),
-      expand: [
-        "idResponsabileProcedimento.idPersona", 
-        "idStato",
-        "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento"
-      ],
-      filter: ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id", "=", this.idAzienda],
+      store: this.odataContextDefinition.getContext()[new GetIterUtente().getName()]
+      .on("loading", (loadOptions) => {
+        // console.log("loadOptions_prima", loadOptions);
+        this.odataUtilities.filterToCustomQueryParams(["oggetto", "numero", "idStato.descrizione",
+          "idResponsabileProcedimento.idPersona.descrizione", "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome"], loadOptions);
+        // console.log("loadOptions_dopo", loadOptions);
+        }),
+      customQueryParams: {
+        cf: this.cfUtente,
+        idAzienda: this.idAzienda
+      },
+      expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona",
+        "idFaseCorrente", "idStato", "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento"],
       sort: [{ field: "numero", desc: true }]
     });
   }

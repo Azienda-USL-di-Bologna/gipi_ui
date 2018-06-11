@@ -331,7 +331,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   updateIter(validationParams: any) {
-    const validator = validationParams.validationGroup.validate();
     let doUpdate: boolean = false;
     if (this.popupData.field) {
       if (this.popupData.field === "esitoMotivazione") {
@@ -348,14 +347,15 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       }
     } else if (this.popupDatiTemporali.action) {
       // Adottata questa soluzione punk perchè l'isValid ritornava false la seconda volta anche se tutti i capi sono compilati
-      let b = (this.popupDatiTemporali.fieldDays != undefined && this.popupDatiTemporali.fieldDays >= 0 && this.popupDatiTemporali.fieldMotivation);
+      let b = (this.popupDatiTemporali.fieldDays != undefined && this.popupDatiTemporali.fieldDays >= 0 && this.popupDatiTemporali.fieldMotivation)
       console.log("eSPRESSIONE:", this.popupDatiTemporali.fieldDays, this.popupDatiTemporali.fieldMotivation);
+      const validator = validationParams.validationGroup.validate();
       if (this.popupDatiTemporali.action === "durata") {
         if (validator.isValid) {
           this.iter.derogaDurata = this.popupDatiTemporali.fieldDays;
           this.iter.motivoDerogaDurata = this.popupDatiTemporali.fieldMotivation;
           doUpdate = true;
-        }else if (this.iter.derogaDurata === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaDurata === this.popupDatiTemporali.fieldMotivation) {
+        }else if (this.iter.derogaDurata === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaDurata === this.popupDatiTemporali.fieldMotivation){
           this.closePopupDeroga(validationParams);
         } 
       } else {
