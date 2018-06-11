@@ -170,8 +170,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     else {
       this.colCountGroup = 10;
     }
-    console.log("colCount", this.colCountGroup, this.initialWidth);
-
   }
 
 // gestione resize window (pessime prestazioni)
@@ -287,8 +285,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   updateDataChiusuraPrevista() {
     this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
     let giorniAllaChiusura = 0;
-    if (this.iter.procedimentoCache.durataMassimaSospensione) {
-      giorniAllaChiusura += this.iter.procedimentoCache.durataMassimaSospensione;
+    if (this.iter.procedimentoCache.durataMassimaProcedimento) {
+      giorniAllaChiusura += this.iter.procedimentoCache.durataMassimaProcedimento;
     }
     if (this.iter.derogaDurata) {
       giorniAllaChiusura += this.iter.derogaDurata;
