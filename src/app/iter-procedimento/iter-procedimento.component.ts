@@ -166,7 +166,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     else {
       this.colCountGroup = 10;
     }
-    console.log("colCount", this.colCountGroup, this.initialWidth);
+																   
 
   }
 
@@ -283,8 +283,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   updateDataChiusuraPrevista() {
     this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
     let giorniAllaChiusura = 0;
-    if (this.iter.procedimentoCache.durataMassimaSospensione) {
-      giorniAllaChiusura += this.iter.procedimentoCache.durataMassimaSospensione;
+    if (this.iter.procedimentoCache.durataMassimaProcedimento) {
+      giorniAllaChiusura += this.iter.procedimentoCache.durataMassimaProcedimento;
     }
     if (this.iter.derogaDurata) {
       giorniAllaChiusura += this.iter.derogaDurata;
@@ -327,7 +327,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   updateIter(validationParams: any) {
-    const validator = validationParams.validationGroup.validate();
+																  
     let doUpdate: boolean = false;
     if (this.popupData.field) {
       if (this.popupData.field === "esitoMotivazione") {
@@ -344,22 +344,23 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       }
     } else if (this.popupDatiTemporali.action) {
       // Adottata questa soluzione punk perchè l'isValid ritornava false la seconda volta anche se tutti i capi sono compilati
-      let b = (this.popupDatiTemporali.fieldDays != undefined && this.popupDatiTemporali.fieldDays >= 0 && this.popupDatiTemporali.fieldMotivation)
+																																				   
       console.log("eSPRESSIONE:", this.popupDatiTemporali.fieldDays, this.popupDatiTemporali.fieldMotivation)
+      const validator = validationParams.validationGroup.validate();
       if (this.popupDatiTemporali.action === "durata") {
-        if(validator.isValid){
+        if (validator.isValid) {
           this.iter.derogaDurata = this.popupDatiTemporali.fieldDays;
           this.iter.motivoDerogaDurata = this.popupDatiTemporali.fieldMotivation;
           doUpdate = true;
-        }else if(this.iter.derogaDurata === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaDurata === this.popupDatiTemporali.fieldMotivation){
+        }else if (this.iter.derogaDurata === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaDurata === this.popupDatiTemporali.fieldMotivation){
           this.closePopupDeroga(validationParams);
         } 
       } else {
-        if(validator.isValid){
+        if (validator.isValid) {
           this.iter.derogaSospensione = this.popupDatiTemporali.fieldDays;
           this.iter.motivoDerogaSospensione = this.popupDatiTemporali.fieldMotivation;
           doUpdate = true;
-        }else if(this.iter.derogaSospensione === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaSospensione === this.popupDatiTemporali.fieldMotivation){
+        }else if (this.iter.derogaSospensione === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaSospensione === this.popupDatiTemporali.fieldMotivation){
           this.closePopupDeroga(validationParams);
         } 
       }
