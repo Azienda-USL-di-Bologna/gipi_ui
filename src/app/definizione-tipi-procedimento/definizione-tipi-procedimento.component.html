@@ -49,9 +49,7 @@
     <dxi-column dataField="durataMassimaSospensione" [visible]="false"></dxi-column>
     <dxi-column dataField="normaRiferimento" [visible]="false"></dxi-column>
     <dxi-column dataField="obbligoEsitoConclusivo" [visible]="false"></dxi-column>
-    <dxi-column dataField="pubblicazioneRegistroAccessi" [visible]="false"></dxi-column>
     <dxi-column dataField="durataMassimaIter" [visible]="false"  editorType="dxNumberBox"></dxi-column>
-
     <dxo-editing mode="popup" cellTemplate="Modifica" title="Modifica" style="align-content: center; justify-content: center"
         [allowUpdating]="false" [allowDeleting]="false" [allowAdding]="true" [texts]="texts" #pippo>
         <dxo-popup id="erPopuppe" [maxWidth]="800" [minWidth]="500" [maxHeight]="600" [showTitle]="true" [toolbarItems]="popupButtons">
@@ -80,12 +78,20 @@
                 <dxi-validation-rule type="required" message="la durata massima dell'iter è obbligatoria"></dxi-validation-rule>
                 <dxi-validation-rule type="pattern" [pattern]="patternGreaterZero" message="la durata massima di procedimento deve avere un valore positivo"></dxi-validation-rule>
             </dxi-item>
-            <dxi-item  dataField="durataMassimaSospensione" [editorOptions]="{onInput:onInputNumberBox}" [colSpan]="1">
+            <dxi-item  dataField="durataMassimaSospensione" cssClass="label-wrap" [editorOptions]="{onInput:onInputNumberBox}" [colSpan]="1">
                 <dxi-validation-rule type="required" message="la durata massima di sospensione è obbligatoria"></dxi-validation-rule>
                 <dxi-validation-rule type="pattern" [pattern]="patternGreaterEqualZero" message="la durata massima di sospensione non può essere negativa"></dxi-validation-rule>
             </dxi-item>
-            <dxi-item dataField="obbligoEsitoConclusivo" [label]="{text: 'Obbligo esito conclusivo e motivazione'}"  cssClass="label-wrap" [colSpan]="1"></dxi-item>
-            <dxi-item dataField="pubblicazioneRegistroAccessi" [colSpan]="1"></dxi-item>
+            <dxi-item dataField="obbligoEsitoConclusivo" [label]="{text: 'Obbligo esito conclusivo e motivazione'}"  cssClass="label-wrap" [colSpan]="2"></dxi-item>
+            <dxi-item [label]="{text: 'Pubblicazione sui registri'}" cssClass="label-wrap" [colSpan]="2">
+                <dx-tag-box #tag_pubblicazione
+                    *ngIf="showTagBox"
+                    [dataSource]="dataSourceRegistri"
+                    [value]="registri"
+                    displayExpr="descrizione"
+                    placeholder="Seleziona...">
+                </dx-tag-box>     
+            </dxi-item>
         </dxo-form>
     </dxo-editing>
 </dx-data-grid>
