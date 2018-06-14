@@ -29,10 +29,12 @@ export class CronologiaEventiComponent implements OnInit {
     this.dataSourceEventoIter = new DataSource({
       store: this.odataContextDefinition.getContext()[new EventoIter().getName()],
       expand: ["idEvento", "idIter", "idFaseIter.idFase", "autore.idPersona", "idDocumentoIter"],
+      // tslint:disable-next-line:radix
       filter: ["idIter.id", "=", parseInt(this.daPadre["idIter"])]
     });
   }
 
+  // tslint:disable-next-line:use-life-cycle-interface
   ngOnChanges(changes: SimpleChanges) {
     if (this.dataSourceEventoIter !== undefined) {
       this.dataSourceEventoIter.load();
@@ -58,7 +60,7 @@ export class CronologiaEventiComponent implements OnInit {
   onCellPrepared(e) {
     let self = this;
     if (e.rowType === "data" && e.column.dataField === "idDocumentoIter") {
-      if((e.data.idEvento.codice === "avvio_iter" || e.data.idEvento.codice === "chiusura_iter") && this.classeDiHighlight!= "") {
+      if ((e.data.idEvento.codice === "avvio_iter" || e.data.idEvento.codice === "chiusura_iter") && this.classeDiHighlight !== "") {
         e.cellElement.classList.add(this.classeDiHighlight);
       }
       e.cellElement.onmouseover = function () {
