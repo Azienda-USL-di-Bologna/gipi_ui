@@ -1,10 +1,11 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import { DxDataGridComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxTagBoxComponent } from "devextreme-angular";
 import { DefinizioneTipiProcedimentoService } from "./definizione-tipi-procedimento.service";
-import { TipoProcedimento } from "@bds/nt-entities";
+import { TipoProcedimento, Registro, RegistroTipoProcedimento, bUtente, Utente } from "@bds/nt-entities";
 import { OdataContextDefinition, GlobalContextService, OdataContextFactory, CustomLoadingFilterParams } from "@bds/nt-context";
 import { ActivatedRoute, Router } from "@angular/router";
+import { LoggedUser } from "@bds/nt-login";
 
 
 @Component({
@@ -15,18 +16,24 @@ import { ActivatedRoute, Router } from "@angular/router";
 export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
   private odataContextDefinition: OdataContextDefinition;
-
+  
   // questa proprietà serve per capire che pulsante è stato cliccato
   private comando: any;
   private selectedRow: any;
+  private tipoProcedimento: TipoProcedimento;
+  private loggedUser: LoggedUser;
+  private registriTipo: RegistroTipoProcedimento[];
 
   @ViewChild("definizione_tipi_procedimento") public grid: DxDataGridComponent;
+  @ViewChild("tag_pubblicazione") public tagPubblicazione: DxTagBoxComponent;
 
   @Input("refreshButton") public refreshButton;
 
   public patternGreaterZero: any =  "^[1-9]+[0-9]*$";
   public patternGreaterEqualZero: any =  "^[0-9]+[0-9]*$";
   public dataSource: DataSource;
+  public dataSourceRegistri: DataSource;
+  public dataSourceRegistriProcedimento: DataSource;
   public tipiProcedimento: TipoProcedimento[] = new Array<TipoProcedimento>();
   public texts: Object = {
     editRow: "Modifica",
@@ -36,7 +43,8 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
     confirmDeleteMessage: "Stai per cancellare il tipo di procedimento: procedere?"
   };
   public popupButtons: any[];
-
+  public registri: any[];
+  showTagBox = true;
   constructor(private odataContexFactory: OdataContextFactory,
     private service: DefinizioneTipiProcedimentoService,
     private router: Router,
@@ -77,6 +85,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
         text: "Chiudi",
         onClick: () => {
           this.grid.instance.cancelEditData();
+          this.showTagBox = false;
         }
       }
     },
@@ -88,34 +97,15 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
         type: "normal",
         text: "Salva",
         onClick: (params) => {
-            // let result = false;
-            // console.log(this.selectedRow.data.dataInizioValidita);
-            //
-            // let d1 = new Date(this.selectedRow.data.dataInizioValidita);
-            // console.log(d1);
-            //
-            // let d2 = new Date(this.selectedRow.data.dataFineValidita);
-            // console.log(d2);
-            //
-            // debugger;
-            //
-            // if (d1 <= d2) {
-            //     result = true;
-            // } else {
-            //
-            // }
-            //
-
-
            let result = params.validationGroup.validate();
-
           // console.log("RESULT: ", result);
-
           if (result.isValid) {
-              this.grid.instance.saveEditData();
+            this.gestisciPubblicazioni();
+            this.grid.instance.saveEditData();
           } else {
               // params.validator.reset();
           }
+          this.showTagBox = false;
         }
       }
     }];
@@ -140,8 +130,34 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
   }
 
+  private gestisciPubblicazioni() {
+    if (this.registri !== this.tagPubblicazione.value) {
+      this.processDelete(this.registriTipo);
+      this.processInsert(this.tagPubblicazione.value);
+    }
+  }
+
+  async processInsert(arrayRegistriFinale) {
+    let utente = new Utente();
+    utente.id = this.loggedUser.getField(bUtente.id);
+    let regTipoProc: RegistroTipoProcedimento;
+    for (const item of arrayRegistriFinale) {
+      regTipoProc = new RegistroTipoProcedimento();
+      regTipoProc.idRegistro = item;
+      regTipoProc.idTipoProcedimento = this.tipoProcedimento;
+      regTipoProc.idUtente = utente;
+      await this.dataSourceRegistriProcedimento.store().insert(regTipoProc);
+    }
+  }
+  
+  async processDelete(arrayRegistriIniziale) {
+    for (const item of arrayRegistriIniziale) {
+      await this.dataSourceRegistriProcedimento.store().remove(item.id);
+    }
+  }
+
   public handleEvent(name: String, event: any) {
-   console.log("EVENTO "+name, event);
+   // console.log("EVENTO " + name, event);
     switch (name) {
       // Questo evento scatta al cliccare di qualsiasi cella: se però siamo sulla 5 colonna e si è cliccato un pulsante viene gestito
       case "CellClick":
@@ -186,6 +202,10 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
       // Ho cliccato sul pulsante per modificare la riga: quindi faccio diventare il comando "edita"
       case "editClicked":
         this.comando = "edita";
+        this.showTagBox = true;
+        this.dataSourceRegistri = new DataSource({
+          store: this.odataContextDefinition.getContext()[new Registro().getName()]
+        });
         break;
 
       // Ho cliccato sul pulsante per modificare la riga: quindi faccio diventare il comando "cancella"
@@ -234,7 +254,26 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
         return;
 
       case "EditingStart":
-        this.grid.editing.popup.title =  "Modifica Tipo Procedimento";
+        this.grid.editing.popup.title = "Modifica Tipo Procedimento";
+        this.registri = [];
+        this.registriTipo = [];
+        this.tipoProcedimento = event.data;
+        this.dataSourceRegistriProcedimento = new DataSource({
+          store: this.odataContextDefinition.getContext()[new RegistroTipoProcedimento().getName()],
+          expand: [
+            "idTipoProcedimento",
+            "idRegistro"
+          ],
+          filter: ["idTipoProcedimento.id", "=", this.tipoProcedimento.id]
+        });
+        this.dataSourceRegistriProcedimento.load().then(
+          (res) => {
+            for (let r of res) {
+              this.registri.push(r.idRegistro);
+            }
+            this.registriTipo = res;
+          }
+        );
         break;  
 
       default:
@@ -244,6 +283,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // this.globalContext.setButtonBarVisible(false);
+    this.loggedUser = this.globalContextService.getInnerSharedObject("loggedUser");
   }
 
   ngOnDestroy() {
