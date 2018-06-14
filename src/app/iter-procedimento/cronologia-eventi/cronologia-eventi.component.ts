@@ -71,6 +71,6 @@ export class CronologiaEventiComponent implements OnInit {
       e.cellElement.onmouseout = function () {
         self.tooltip.instance.hide();
       };
-    }  
+    } 
   }
 }

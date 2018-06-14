@@ -25,6 +25,9 @@
         <div class="col-lg-6 col-md-12">
             <dx-form id="form" [colCount]="1" [formData]="iter"    #myForm1> <!-- [screenByWidth]="screen"-->
                 <dxi-item itemType="group" [colCount]="6" [caption]="datiGenerali" [cssClass]="classeDiHighlight">
+                    <dxi-item [colSpan]="6" *ngIf="classeDiHighlight!==''"><p id="infoPubblicazioneAlbo">
+                        <b><i>I campi evidenziati verranno esposti nella pubblicazione dell'iter</i></b></p>
+                    </dxi-item>
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
                     <dxi-item [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }"></dxi-item>
@@ -82,7 +85,7 @@
                 </dxi-item>
 
                 <dxi-item [colCount]="1" itemType="group" caption="Dati temporali">
-                    <dxi-item [colSpan]="1" dataField="dataAvvio" [label]="{text: 'Data avvio iter'}" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+                    <dxi-item [colSpan]="1" dataField="dataAvvio" [label]="{text: 'Data avvio iter'}" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }" [cssClass]="classeDiHighlight"></dxi-item >
                     
                     <dxi-item itemType="group" [colCount]="10" caption="Durata" cssClass="meVedi">
                         <dxi-item [colSpan]="colCountGroup" dataField="procedimentoCache.durataMassimaProcedimento" [editorOptions]="{ disabled: true}">
@@ -124,7 +127,7 @@
                         <dxi-item [colSpan]="colCountGroup" dataField="dataChiusuraPrevista" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }">
                             <dxo-label text="Data chiusura prevista"></dxo-label>
                         </dxi-item>
-                        <dxi-item [colSpan]="colCountGroup" dataField="dataChiusura" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }">
+                        <dxi-item [colSpan]="colCountGroup" dataField="dataChiusura" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }" [cssClass]="classeDiHighlight">
                             <dxo-label text="Data chiusura effettiva"></dxo-label>
                         </dxi-item>
                     </dxi-item>
