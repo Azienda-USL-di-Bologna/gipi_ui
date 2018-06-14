@@ -130,10 +130,10 @@
                 </dxi-item>
 
                 <dxi-item itemType="group" caption="Dati di archivio">
-                    <dxi-item dataField="idIterPrecedente.numero" [editorOptions]="{ disabled: true }">
+                    <dxi-item dataField="idIterPrecedente.numero" [editorOptions]="{ disabled: true }" [cssClass]="classeDiHighlight">
                         <dxo-label text="Coll. precedente"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }">
+                    <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }" [cssClass]="classeDiHighlight">
                         <dxo-label text="Motivo collegamento"></dxo-label>
                     </dxi-item>
                     <dxi-item dataField="idFascicolo" [editorOptions]="{ disabled: true }">

@@ -3,7 +3,7 @@ import { DxDataGridComponent, DxTooltipComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition } from "@bds/nt-context";
 import { OdataContextFactory } from "@bds/nt-context";
-import {EventoIter} from "@bds/nt-entities";
+import {EventoIter, Evento} from "@bds/nt-entities";
 
 @Component({
   selector: "app-cronologia-eventi",
@@ -16,6 +16,7 @@ export class CronologiaEventiComponent implements OnInit {
   public dataSourceEventoIter: DataSource;
   @ViewChild(DxTooltipComponent) tooltip: DxTooltipComponent;
   public oggettoDocumento: string = "";
+  public classeDiHighlight = "";
 
   // @Input("idIter") idIter: string;
   @Input("daPadre") daPadre: Object;
@@ -36,6 +37,10 @@ export class CronologiaEventiComponent implements OnInit {
     if (this.dataSourceEventoIter !== undefined) {
       this.dataSourceEventoIter.load();
     }
+    if (this.daPadre["classeCSS"] !== "") {
+      this.classeDiHighlight = "cronologiaEventihightlightClass"; 
+    }
+      
   }
 
   customizeColumns(columns: any) {
@@ -52,8 +57,10 @@ export class CronologiaEventiComponent implements OnInit {
 
   onCellPrepared(e) {
     let self = this;
-
     if (e.rowType === "data" && e.column.dataField === "idDocumentoIter") {
+      if((e.data.idEvento.codice === "avvio_iter" || e.data.idEvento.codice === "chiusura_iter") && this.classeDiHighlight!= "") {
+        e.cellElement.classList.add(this.classeDiHighlight);
+      }
       e.cellElement.onmouseover = function () {
         self.tooltip.instance.option("target", e.cellElement);
         self.oggettoDocumento = e.row.data.idDocumentoIter.oggetto;

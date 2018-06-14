@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
-import { Iter, Utente, Fase, FaseIter, ProcedimentoCache, bUtente, bAzienda, Titolo } from "@bds/nt-entities";
+import { Iter, Utente, Fase, FaseIter, AziendaTipoProcedimento, TipoProcedimento, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento } from "@bds/nt-entities";
 import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
@@ -40,6 +40,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public sospensioneIterVisible: boolean = false;
   public genericButtons: ButtonAppearance[];
   public classeDiHighlight = "";
+  public pubblicazioneAllAlbo: boolean = false;
 
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
@@ -127,7 +128,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "procedimentoCache.idStrutturaResponsabileAdozioneAttoFinale",
         "procedimentoCache.idResponsabileProcedimento.idPersona",
         "procedimentoCache.idStrutturaResponsabileProcedimento",
-        "procedimentoCache.idStruttura"
+        "procedimentoCache.idStruttura",
+        "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento"
       ],
       filter: [["id", "=", this.idIter]],
       map: (item) => {
@@ -145,18 +147,18 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
               " (" + item.procedimentoCache.idStrutturaResponsabileProcedimento.nome + ")";
           }
 
+          this.calcolaSePubblicabileAllAlboAndSetClasseCss(item.idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.id);
+
           return item;
         }
       }
     });
     this.buildIter();
 
-    const pubblicazioneAllAlbo: boolean = true;
-    this.classeDiHighlight = pubblicazioneAllAlbo ? "hightlightClass" : "";
-
     this.perFigliParteDestra = {
       idIter: this.idIter,
-      ricarica: false  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore
+      ricarica: false,  // ricarica è un flag, se modificato ricarica (ngOnChange). Non importa il valore
+      classeCSS: this.classeDiHighlight
     };
     this.recuperaUserInfo();
 
@@ -347,7 +349,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     } else if (this.popupDatiTemporali.action) {
       // Adottata questa soluzione punk perchè l'isValid ritornava false la seconda volta anche se tutti i capi sono compilati
       let b = (this.popupDatiTemporali.fieldDays != undefined && this.popupDatiTemporali.fieldDays >= 0 && this.popupDatiTemporali.fieldMotivation);
-      console.log("eSPRESSIONE:", this.popupDatiTemporali.fieldDays, this.popupDatiTemporali.fieldMotivation);
       const validator = validationParams.validationGroup.validate();
       if (this.popupDatiTemporali.action === "durata") {
         if (validator.isValid) {
@@ -447,16 +448,15 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   receiveMessage($event) {
     this.passaggioDiFaseVisible = $event["visible"];
     if ($event["proceduto"]) {
-      let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"] };
+      let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"]};
       this.perFigliParteDestra = perFigliNew;
       this.buildIter();
     }
   }
 
   receiveMessageFromSospensione($event) {
-    console.log("Evento emesso da sospenisone: ", $event);
     this.sospensioneIterVisible = $event["visible"];
-    let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"] };
+    let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"]};
     this.perFigliParteDestra = perFigliNew;
     this.buildIter();
   }
@@ -532,6 +532,22 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       displayExpression = "[" + data.classificazione + "] " + data.nome;
     }
     return displayExpression;
+  }
+
+  calcolaSePubblicabileAllAlboAndSetClasseCss(idTipoProcedimento: number) {
+    const oataContextDefinitionTemp: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    let dataSourceTemp = new DataSource({
+      store: oataContextDefinitionTemp.getContext()[new RegistroTipoProcedimento().getName()],
+      expand: ["idRegistro", "idTipoProcedimento"],
+      filter: [["idTipoProcedimento.id", "=", idTipoProcedimento]],
+    });
+    dataSourceTemp.load().then(
+      (res) => {
+        this.classeDiHighlight = res.length > 0 ? "hightlightClass" : "";
+        let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"], classeCSS: this.classeDiHighlight};
+        this.perFigliParteDestra = perFigliNew;
+      }
+    );
   }
 
 }
