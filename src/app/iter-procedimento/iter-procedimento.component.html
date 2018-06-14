@@ -222,13 +222,15 @@
             <dxi-item dataField="fieldMotivation"[label]="{text: 'Motivazione'}" editorType="dxTextArea" [editorOptions]="{ disabled: false, height: 120 }" >
                 <dxi-validation-rule type="required" message="La motivazione è obbligatoria"></dxi-validation-rule>
             </dxi-item>
+            <dxi-item>
+                <div *dxTemplate="let data of 'content'" class="wrapperPulsantiPopup">
+                    <dx-button class="button-css" text="OK" (onClick)="updateIter($event)" [validationGroup]="'validaDatiTemporali'"></dx-button>
+                    <span class="btn-space"></span>
+                    <dx-button class="button-css" text="Annulla" type="normal" (onClick)="closePopupDeroga($event)"></dx-button>
+                </div>
+            </dxi-item>
+            <dx-validation-summary id="summary"></dx-validation-summary>
         </dx-form>
-        <dx-validation-summary id="summary"></dx-validation-summary>
-        <div class="wrapperPulsantiPopup">
-            <dx-button class="button-css" text="OK" (onClick)="updateIter($event)" [validationGroup]="'validaDatiTemporali'"></dx-button>
-            <span class="btn-space"></span>
-            <dx-button class="button-css" text="Annulla" type="normal" (onClick)="closePopupDeroga($event)"></dx-button>
-        </div>
     </div>
 </dx-popup>
 
