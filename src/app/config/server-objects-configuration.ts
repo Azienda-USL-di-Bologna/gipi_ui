@@ -1,7 +1,7 @@
 import {
     Azienda, Utente, Struttura, UtenteStruttura, AziendaTipoProcedimento, TipoProcedimento, AfferenzaStruttura,
     Ruolo, Iter, FaseIter, Fase, Titolo, Procedimento, Evento, EventoIter, DocumentoIter, ProcedimentoCache,
-    GetStruttureByTipoProcedimento, GetIterUtente, GetUtentiGerarchiaStruttura, Stato, GetTipiProcedimento
+    GetStruttureByTipoProcedimento, GetIterUtente, GetUtentiGerarchiaStruttura, Stato, GetTipiProcedimento, Registro, RegistroTipoProcedimento
 } from "@bds/nt-entities";
 import {ServerObject, ServerObjectsDescriptor, ServerObjectsConfiguration} from "@bds/nt-context";
 // import * as ServerObjectConfiguration from "@bds/nt-context";
@@ -26,7 +26,9 @@ export function getEntitiesConfiguration(): ServerObjectsConfiguration {
         EventoIter: new EventoIter(),
         ProcedimentoCache:  new ProcedimentoCache(),
         DocumentoIter: new DocumentoIter(),
-        Stato: new Stato()
+        Stato: new Stato(),
+        Registro: new Registro(),
+        RegistroTipoProcedimento: new RegistroTipoProcedimento()
     };
     return  new ServerObjectsConfiguration(entities);
 }
