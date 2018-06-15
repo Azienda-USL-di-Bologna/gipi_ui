@@ -3,13 +3,13 @@ import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
 import { Iter, Utente, Fase, FaseIter, AziendaTipoProcedimento, TipoProcedimento, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento } from "@bds/nt-entities";
-import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
+// import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params, Resolve } from "@angular/router";
 import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
-import * as moment from "moment";
-import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stato-box.component";
+// import * as moment from "moment";
+// import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stato-box.component";
 import { LoggedUser } from "@bds/nt-login";
 import { Observable, Subscription } from "rxjs";
 import { HttpHeaders } from "@angular/common/http";
@@ -27,6 +27,9 @@ import { DxFormComponent } from "devextreme-angular";
 export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   private subscriptions: Subscription[] = [];
+  private initialWidth: number = window.innerWidth;
+  private threshold: number = 1500;
+  private previousWidth: number = this.initialWidth;
 
   public iter: Iter = new Iter();
   public idIterArray: Object;
@@ -37,18 +40,20 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   public popupVisible: boolean = false;
   public passaggioDiFaseVisible: boolean = false;
-  public sospensioneIterVisible: boolean = false;
+  // public sospensioneIterVisible: boolean = false;
   public genericButtons: ButtonAppearance[];
   public classeDiHighlight = "";
   public pubblicazioneAllAlbo: boolean = false;
-
+  public popupRiattivaIterVisibile: boolean = false;
+  public datiRiattivazioneIter: any = {note: "", idIter: null};
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
 
 
   // pulsanti custom aggiunti alla button bar
-  public procediButton: ButtonAppearance;
-  public sospendiButton: ButtonAppearance;
+  // public procediButton: ButtonAppearance;
+  // public sospendiButton: ButtonAppearance;
+  public riattivaButton: ButtonAppearance;
 
   public datiGenerali = "";
   // Dati che verranno ricevuti dall'interfaccia chiamante
@@ -74,22 +79,20 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   public perFiglioPassaggioFase: Object;
 
-  public paramsPerSospensione: Object;
-  public sospensioneParams: CambioDiStatoParams = new CambioDiStatoParams();
+  // public paramsPerSospensione: Object;
+  // public sospensioneParams: CambioDiStatoParams = new CambioDiStatoParams();
   public loggedUser$: Observable<LoggedUser>;
   public userInfo: UserInfo;
   public iodaPermission: boolean;
   public hasPermissionOnFascicolo: boolean = false;
   public colCountGroup: number;
 
-  private initialWidth: number = window.innerWidth;
-  private threshold: number = 1500;
-  private previousWidth: number = this.initialWidth;
+  
   // public soloEditing: boolean = false;
 
 
   public dataSourceClassificazione: DataSource;
-  public arrayEsiti: any[] = Object.keys(ESITI).map(key => { return { "codice": key, "descrizione": ESITI[key] }; });
+  public arrayEsiti: any[] = Object.keys(ESITI).map(key => ({ "codice": key, "descrizione": ESITI[key] }));
 
   constructor(
     private odataContextFactory: OdataContextFactory,
@@ -229,7 +232,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       return false;
   }
 
-  setNomeBottoneSospensione() {
+  /* setNomeBottoneSospensione() {
     this.sospendiButton.label = this.getNomeBottoneSospensione();
   }
 
@@ -238,7 +241,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       return "Termina Sospensione";
     else
       return "Sospendi";
-  }
+  } */
 
   disableProcedi() {
     return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO;
@@ -256,16 +259,20 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     return this.inSolaLettura() || !this.popupData.checkInteressati;
   }
 
-  /* 
-  Non cancellare, potrebbe tornare utile in futuro
+  
   generateCustomButtons() {
-    this.genericButtons = new Array<ButtonAppearance>();
-    this.procediButton = new ButtonAppearance("Procedi", "", false, this.disableProcedi());
-    this.sospendiButton = new ButtonAppearance("Gestisci stato", "", false, this.disableSospendi());
-    this.setNomeBottoneSospensione();
-    this.genericButtons.push(this.procediButton, this.sospendiButton);
-    this.soloEditing = this.disableSospendi();
-  } */
+    
+    // this.procediButton = new ButtonAppearance("Procedi", "", false, this.disableProcedi());
+    // this.sospendiButton = new ButtonAppearance("Gestisci stato", "", false, this.disableSospendi());
+    if (this.isSospeso()) {
+      this.genericButtons = new Array<ButtonAppearance>();
+      this.riattivaButton = new ButtonAppearance("Riattiva Iter", "", false, false);
+      this.genericButtons.push(this.riattivaButton);
+    }
+    // this.setNomeBottoneSospensione();
+    
+    // this.soloEditing = this.disableSospendi();
+  }
 
   buildIter() {
     this.dataSourceIter.load().then(res => {
@@ -274,7 +281,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.calculateIodaPermissionAndSetButton();
       this.updateDataChiusuraPrevista();
       this.buildTitoloDatiGenerali();
-      this.setParametriSospensione();
+      // this.setParametriSospensione();
       this.infoGeneriche.struttura = this.iter.procedimentoCache.idStruttura.nome;
       this.infoGeneriche.tipoProcedimento = this.iter.procedimentoCache.nomeTipoProcedimento;
 
@@ -348,7 +355,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       }
     } else if (this.popupDatiTemporali.action) {
       // Adottata questa soluzione punk perchè l'isValid ritornava false la seconda volta anche se tutti i capi sono compilati
-      let b = (this.popupDatiTemporali.fieldDays != undefined && this.popupDatiTemporali.fieldDays >= 0 && this.popupDatiTemporali.fieldMotivation);
+      let b = (this.popupDatiTemporali.fieldDays !== undefined && this.popupDatiTemporali.fieldDays >= 0 && this.popupDatiTemporali.fieldMotivation);
       const validator = validationParams.validationGroup.validate();
       if (this.popupDatiTemporali.action === "durata") {
         if (validator.isValid) {
@@ -381,8 +388,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     }
   }
 
-
-
   closePopupNote() {
     this.popupData.title = "";
     this.popupData.field = "";
@@ -398,6 +403,34 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupDatiTemporali.fieldDays = 0;
     this.popupDatiTemporali.fieldMotivation = "";
     this.popupDatiTemporali.action = "";
+  }
+
+  public riattivaIter() {
+    this.datiRiattivazioneIter.idIter = this.iter.id;
+    console.log("voglio riattivare l'iter", this.datiRiattivazioneIter);
+    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/riattivaIterSenzaDocumento", this.datiRiattivazioneIter, { headers: new HttpHeaders().set("content-type", "application/json") })
+        .subscribe(
+          res => {
+            this.iter.idStato.codice = STATI.IN_CORSO;
+            this.refresh();
+            this.genericButtons = null;
+            notify({
+              message: "Iter riattivato con successo",
+              type: "success",
+              position: TOAST_POSITION,
+              width: TOAST_WIDTH
+            });
+            this.popupRiattivaIterVisibile = false;
+          },
+          err => {
+            notify({
+              message: "Qualcosa è andato storto. Contattare BabelCare",
+              type: "error",
+              position: TOAST_POSITION,
+              width: TOAST_WIDTH
+            });
+          }
+        );
   }
 
   public passaggioDiFase() {
@@ -427,15 +460,15 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         });
   }
 
-  public setParametriSospensione() {
+  /* public setParametriSospensione() {
     this.paramsPerSospensione = {
       iter: this.iter,
       stato: this.iter.idStato,
       dataSospensione: this.iter.idStato.codice === STATI.SOSPESO ? this.getDataUltimaSospensione() : null
     };
-  }
+  } */
 
-  public sospensioneIter() {
+  /* public sospensioneIter() {
     this.sospensioneParams = new CambioDiStatoParams();
     this.sospensioneParams.idIter = this.idIter;
     this.sospensioneParams.numeroIter = this.iter.numero;
@@ -443,40 +476,45 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.sospensioneParams.codiceStatoCorrente = this.iter.idStato.codice;
     this.popupData.title = "Cambia stato iter";
     this.sospensioneIterVisible = true;
-  }
+  } */
 
   receiveMessage($event) {
     this.passaggioDiFaseVisible = $event["visible"];
     if ($event["proceduto"]) {
-      let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"]};
-      this.perFigliParteDestra = perFigliNew;
-      this.buildIter();
+      this.refresh();
     }
   }
 
-  receiveMessageFromSospensione($event) {
-    this.sospensioneIterVisible = $event["visible"];
+  refresh() {
     let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"]};
     this.perFigliParteDestra = perFigliNew;
     this.buildIter();
   }
+  /* receiveMessageFromSospensione($event) {
+    this.sospensioneIterVisible = $event["visible"];
+    let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"]};
+    this.perFigliParteDestra = perFigliNew;
+    this.buildIter();
+  } */
 
-  /* 
-  Non cancellare. Potrebbe tornare utile in futuro
+
   onGenericButtonClick(buttonName: string) {
     switch (buttonName) {
-      case "Termina Sospensione":
+      case "Riattiva Iter":
+        this.popupRiattivaIterVisibile = true;
+        break;
+      /* case "Termina Sospensione":
       case "Sospendi":
         this.sospensioneIter();
         break;
 
       case "Procedi":
         this.passaggioDiFase();
-        break;
+        break; */
     }
-  } */
+  }
 
-  getDataUltimaSospensione() {
+  /* getDataUltimaSospensione() {
     let date;
     const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getUltimaSospensione" + "?idIter=" + this.iter.id)
       .subscribe(
@@ -489,9 +527,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           // this.showStatusOperation("L'avvio del nuovo iter è fallito. Contattare Babelcare", "error");
         }
       );
-  }
+  } */
 
-  isIterFinito() {
+  /* isIterFinito() {
     let b: boolean;
     const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.iter.id)
       .subscribe(
@@ -506,7 +544,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           b = true;
         });
     return b;
-  }
+  } */
 
   public calculateIodaPermissionAndSetButton() {
     let x;
@@ -517,7 +555,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         .subscribe(
           res => {
             this.hasPermissionOnFascicolo = res["hasPermission"] === "true";
-            // this.generateCustomButtons(); // ora che ho i permessi mi posso creare i bottoni
+            this.generateCustomButtons(); // ora che ho i permessi mi posso creare i bottoni
           },
           err => {
             // this.generateCustomButtons();

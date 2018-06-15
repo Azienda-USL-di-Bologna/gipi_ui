@@ -1,7 +1,7 @@
 <div class="container-fluid iter-procedimento">
-    <!-- Non cancellare. Potrenne tornare utile in futuro 
-        <app-buttons-bar (onGenericButtonClick)="onGenericButtonClick($event)" [genericButtons]="genericButtons">
-    </app-buttons-bar> -->
+    
+    <app-buttons-bar (onGenericButtonClick)="onGenericButtonClick($event)" [genericButtons]="genericButtons"></app-buttons-bar>
+    
     <div class="col header-font">
         <h3>
             <span class="header-font">Struttura procedente:</span>
@@ -234,7 +234,37 @@
     </div>
 </dx-popup>
 
+<!-- Popup per la riattivazione dell'iter senza documento -->
+<dx-popup
+    [width]="500"
+    [height]="280"
+    [showTitle]="true"
+    title="Riattiva iter"
+    [(visible)]="popupRiattivaIterVisibile">
+    <div *dxTemplate="let data of 'content'">
+        <dx-form
+            [(formData)]="datiRiattivazioneIter">
+            <dxi-item
+                dataField="note"
+                editorType="dxTextArea"
+                [label]="{text: 'Note'}"
+                [editorOptions]="{
+                    disabled: false,
+                    height: 120
+                }">
+            </dxi-item>
+            <dxi-item>
+                <div *dxTemplate="let data of 'content'" class="wrapperPulsantiPopup">
+                    <dx-button class="button-css" text="Ok" (onClick)="riattivaIter()"></dx-button>
+                    <span class="btn-space"></span>
+                    <dx-button class="button-css" text="Annulla" type="normal" (onClick)="popupRiattivaIterVisibile = false"></dx-button>
+                </div>
+            </dxi-item>
+        </dx-form>
+    </div>
+</dx-popup>
 
+<!-- 
 <dx-popup class="passaggioFase" [width]="700" [showTitle]="true" [title]="popupData.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
     [(visible)]="passaggioDiFaseVisible">
     <div *dxTemplate="let data of 'content'">
@@ -246,6 +276,7 @@
     [(visible)]="sospensioneIterVisible">
     <div *dxTemplate="let data of 'content'">
         <app-cambio-di-stato-box *ngIf="sospensioneIterVisible" [sospensioneParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="true" (out)="receiveMessageFromSospensione($event)"></app-cambio-di-stato-box>
-        <!-- <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter> -->
+        
     </div>
-</dx-popup>
+</dx-popup> -->
+<!-- <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter> -->

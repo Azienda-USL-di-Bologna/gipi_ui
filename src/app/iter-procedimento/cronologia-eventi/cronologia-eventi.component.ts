@@ -64,9 +64,11 @@ export class CronologiaEventiComponent implements OnInit {
         e.cellElement.classList.add(this.classeDiHighlight);
       }
       e.cellElement.onmouseover = function () {
-        self.tooltip.instance.option("target", e.cellElement);
-        self.oggettoDocumento = e.row.data.idDocumentoIter.oggetto;
-        self.tooltip.instance.show();
+        if (e.row.data && e.row.data.idDocumentoIter && e.row.data.idDocumentoIter.oggetto) {
+          self.tooltip.instance.option("target", e.cellElement);
+          self.oggettoDocumento = e.row.data.idDocumentoIter.oggetto;
+          self.tooltip.instance.show();
+        }
       };
       e.cellElement.onmouseout = function () {
         self.tooltip.instance.hide();
