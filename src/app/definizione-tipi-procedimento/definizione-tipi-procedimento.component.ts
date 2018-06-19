@@ -192,6 +192,17 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
         // console.log(event);
         break;
+      case "onContentReady":
+        /* Tutto queste istruzioni servono per reimpostare la variabile showTagBox e reistanziare il TagBox 
+         * Se la X di chiusura della popup è abilitata bisogna decommentare il codice per evitare il bug di caricamento della TagBox*/
+        let columnChooserView = event.component.getView("columnChooserView");
+        if (!columnChooserView._popupContainer) {
+          columnChooserView._initializePopupContainer();
+          columnChooserView.render();
+        } else if (columnChooserView._popupContainer._isHidden) {
+          this.showTagBox = false;
+        }
+        break;
 
       case "associaClicked":
         // console.log("entrato in associaClicked");
