@@ -109,9 +109,12 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
       idOggettoOrigine: this.associazionePrams.idOggettoOrigine,
       tipoOggettoOrigine: this.associazionePrams.tipoOggettoOrigine,
       descrizione: this.associazionePrams.descrizione,
-      idApplicazione: this.associazionePrams.idApplicazione
+      idApplicazione: this.associazionePrams.idApplicazione,
+      glogParams: this.associazionePrams.glogParams
     };
     this.loadingVisible = true;
+
+    console.log("Mo vediamo...", this.associaParams);
     // const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
     .subscribe(
@@ -223,6 +226,7 @@ interface GestioneStatiParams {
   descrizione: string;
   azione: string;
   idApplicazione: string;
+  glogParams: string;
 }
 
 interface UserInfo{

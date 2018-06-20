@@ -34,7 +34,8 @@ export class AvviaNuovoIterDaDocumentoComponent {
         oggetto: decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " ")),
         dataRegistrazione: queryParams["dataRegistrazione"],
         promotore: decodeURIComponent(queryParams["promotore"].replace(/\+/g, " ")),
-        idApplicazione: decodeURIComponent(queryParams["idApplicazione"].replace(/\+/g, " "))
+        idApplicazione: decodeURIComponent(queryParams["idApplicazione"].replace(/\+/g, " ")),
+        glogParams: queryParams["glogParams"]
       };
     });
   }

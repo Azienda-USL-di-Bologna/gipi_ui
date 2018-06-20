@@ -23,4 +23,5 @@ export class CambioDiStatoParams {
   public dataAvvioIter: Date;
   public idApplicazione: string;
   public oggettoIter: string;
+  public glogParams: string;
 }
