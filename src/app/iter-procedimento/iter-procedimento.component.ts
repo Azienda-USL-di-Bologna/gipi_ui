@@ -323,19 +323,23 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   updateMotivazioneDeroga() {
-    this.popupDatiTemporali.title = "Modifica deroga durata";
-    this.popupDatiTemporali.action = "durata";
-    this.popupDatiTemporali.fieldDays = this.iter.derogaDurata;
-    this.popupDatiTemporali.fieldMotivation = this.iter.motivoDerogaDurata;
-    this.popupDatiTemporali.visible = true;
+    this.popupDatiTemporali = {
+      visible: true,
+      title: "Modifica deroga durata",
+      fieldDays: this.iter.derogaDurata,
+      fieldMotivation: this.iter.motivoDerogaDurata,
+      action: "durata"
+    };
   }
 
   updateMotivazioneSospensione() {
-    this.popupDatiTemporali.title = "Modifica deroga sospensione";
-    this.popupDatiTemporali.action = "sospensione";
-    this.popupDatiTemporali.fieldDays = this.iter.derogaSospensione;
-    this.popupDatiTemporali.fieldMotivation = this.iter.motivoDerogaSospensione;
-    this.popupDatiTemporali.visible = true;
+    this.popupDatiTemporali = {
+      visible: true,
+      title: "Modifica deroga sospensione",
+      fieldDays: this.iter.derogaSospensione,
+      fieldMotivation: this.iter.motivoDerogaSospensione,
+      action: "sospensione"
+    };
   }
 
   updateIter(validationParams: any) {
@@ -356,7 +360,16 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     } else if (this.popupDatiTemporali.action) {
       // Adottata questa soluzione punk perchè l'isValid ritornava false la seconda volta anche se tutti i capi sono compilati
       let b = (this.popupDatiTemporali.fieldDays !== undefined && this.popupDatiTemporali.fieldDays >= 0 && this.popupDatiTemporali.fieldMotivation);
+
+      // Questa sozzeria serve perché se l'utente cambia vari iter e apre questo form i validatori si sommano invece di resettarsi.
+      if (validationParams.validationGroup.validators.length > 2) {
+        let arrayTemp = [validationParams.validationGroup.validators.pop()];
+        arrayTemp.push(validationParams.validationGroup.validators.pop());
+        validationParams.validationGroup.validators = arrayTemp;
+      }
+
       const validator = validationParams.validationGroup.validate();
+
       if (this.popupDatiTemporali.action === "durata") {
         if (validator.isValid) {
           this.iter.derogaDurata = this.popupDatiTemporali.fieldDays;
@@ -364,7 +377,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           doUpdate = true;
         }else if (this.iter.derogaDurata === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaDurata === this.popupDatiTemporali.fieldMotivation) {
           this.closePopupDeroga(validationParams);
-        } 
+        }
       } else {
         if (validator.isValid) {
           this.iter.derogaSospensione = this.popupDatiTemporali.fieldDays;
@@ -372,7 +385,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           doUpdate = true;
         }else if (this.iter.derogaSospensione === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaSospensione === this.popupDatiTemporali.fieldMotivation) {
           this.closePopupDeroga(validationParams);
-        } 
+        }
       }
     }
 
@@ -396,18 +409,25 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   closePopupDeroga(validationParams: any) {
-    this.popupDatiTemporali.visible = false;
+    this.popupDatiTemporali = {
+      visible: false,
+      title: "",
+      fieldDays: 0,
+      fieldMotivation: "",
+      action: ""
+    };
+
+    // this.popupDatiTemporali.visible = false;
     validationParams.validationGroup.reset();
-    
-    this.popupDatiTemporali.title = "";
+    // validationParams.validationGroup.validators = null;
+    /* this.popupDatiTemporali.title = "";
     this.popupDatiTemporali.fieldDays = 0;
     this.popupDatiTemporali.fieldMotivation = "";
-    this.popupDatiTemporali.action = "";
+    this.popupDatiTemporali.action = ""; */
   }
 
   public riattivaIter() {
     this.datiRiattivazioneIter.idIter = this.iter.id;
-    console.log("voglio riattivare l'iter", this.datiRiattivazioneIter);
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/riattivaIterSenzaDocumento", this.datiRiattivazioneIter, { headers: new HttpHeaders().set("content-type", "application/json") })
         .subscribe(
           res => {
