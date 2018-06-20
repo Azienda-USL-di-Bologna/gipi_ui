@@ -23,6 +23,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
   private tipoProcedimento: TipoProcedimento;
   private loggedUser: LoggedUser;
   private registriTipo: RegistroTipoProcedimento[];
+  private isNewRow = false;
 
   @ViewChild("definizione_tipi_procedimento") public grid: DxDataGridComponent;
   @ViewChild("tag_pubblicazione") public tagPubblicazione: DxTagBoxComponent;
@@ -100,12 +101,15 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
            let result = params.validationGroup.validate();
           // console.log("RESULT: ", result);
           if (result.isValid) {
-            this.gestisciPubblicazioni();
-            this.grid.instance.saveEditData();
+            if (this.isNewRow) {
+              this.grid.instance.saveEditData();
+            } else {
+              this.grid.instance.saveEditData();
+              this.gestisciPubblicazioni();
+            }
           } else {
               // params.validator.reset();
           }
-          this.showTagBox = false;
         }
       }
     }];
@@ -124,6 +128,11 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
     this.comando = null; // rimetto il comando a null così non c'è pericolo di fare cose sulla riga selezionata
   }
 
+  private getRegistri(): DataSource {
+    return new DataSource({
+      store: this.odataContextDefinition.getContext()[new Registro().getName()]
+    });
+  }
 
   private cellClick(e: any) {
     this.service.valorizzaSelectedRow(e.data);
@@ -135,6 +144,43 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
       this.processDelete(this.registriTipo);
       this.processInsert(this.tagPubblicazione.value);
     }
+    this.showTagBox = false;  // Setto qui la variabile in modo che viene eseguita dopo tutte le operazioni
+  }
+
+  private onInitRow() {
+    this.registri = [];
+    this.registriTipo = [];
+    this.showTagBox = true;
+    this.isNewRow = true;
+    this.dataSourceRegistri = this.getRegistri();
+    this.dataSourceRegistriProcedimento = new DataSource({
+      store: this.odataContextDefinition.getContext()[new RegistroTipoProcedimento().getName()],
+      expand: [
+        "idTipoProcedimento",
+        "idRegistro"
+      ]
+    });
+  }
+
+  private onEditingStart() {
+    this.registri = [];
+    this.registriTipo = [];
+    this.dataSourceRegistriProcedimento = new DataSource({
+      store: this.odataContextDefinition.getContext()[new RegistroTipoProcedimento().getName()],
+      expand: [
+        "idTipoProcedimento",
+        "idRegistro"
+      ],
+      filter: ["idTipoProcedimento.id", "=", this.tipoProcedimento.id]
+    });
+    this.dataSourceRegistriProcedimento.load().then(
+      (res) => {
+        for (let r of res) {
+          this.registri.push(r.idRegistro);
+        }
+        this.registriTipo = res;
+      }
+    );
   }
 
   async processInsert(arrayRegistriFinale) {
@@ -193,15 +239,6 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
         // console.log(event);
         break;
       case "onContentReady":
-        /* Tutto queste istruzioni servono per reimpostare la variabile showTagBox e reistanziare il TagBox 
-         * Se la X di chiusura della popup è abilitata bisogna decommentare il codice per evitare il bug di caricamento della TagBox*/
-        let columnChooserView = event.component.getView("columnChooserView");
-        if (!columnChooserView._popupContainer) {
-          columnChooserView._initializePopupContainer();
-          columnChooserView.render();
-        } else if (columnChooserView._popupContainer._isHidden) {
-          this.showTagBox = false;
-        }
         break;
 
       case "associaClicked":
@@ -214,9 +251,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
       case "editClicked":
         this.comando = "edita";
         this.showTagBox = true;
-        this.dataSourceRegistri = new DataSource({
-          store: this.odataContextDefinition.getContext()[new Registro().getName()]
-        });
+        this.dataSourceRegistri = this.getRegistri();
         break;
 
       // Ho cliccato sul pulsante per modificare la riga: quindi faccio diventare il comando "cancella"
@@ -259,32 +294,22 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
         event.data.obbligoEsitoConclusivo = false;
         event.data.pubblicazioneRegistroAccessi = false;
         this.grid.editing.popup.title = "Aggiungi Nuovo Tipo Procedimento";
+        this.onInitRow();
         break;
       
       case "RowUpdating":
         return;
-
+      
+      case "RowInserted":
+        this.isNewRow = false;
+        this.tipoProcedimento = event.data;
+        this.tipoProcedimento.id = event.key;
+        this.processInsert(this.tagPubblicazione.value).then(() => this.showTagBox = false);
+        break;
       case "EditingStart":
         this.grid.editing.popup.title = "Modifica Tipo Procedimento";
-        this.registri = [];
-        this.registriTipo = [];
         this.tipoProcedimento = event.data;
-        this.dataSourceRegistriProcedimento = new DataSource({
-          store: this.odataContextDefinition.getContext()[new RegistroTipoProcedimento().getName()],
-          expand: [
-            "idTipoProcedimento",
-            "idRegistro"
-          ],
-          filter: ["idTipoProcedimento.id", "=", this.tipoProcedimento.id]
-        });
-        this.dataSourceRegistriProcedimento.load().then(
-          (res) => {
-            for (let r of res) {
-              this.registri.push(r.idRegistro);
-            }
-            this.registriTipo = res;
-          }
-        );
+        this.onEditingStart();
         break;  
 
       default:
