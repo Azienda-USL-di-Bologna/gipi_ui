@@ -114,7 +114,7 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
     };
     this.loadingVisible = true;
 
-    console.log("Mo vediamo...", this.associaParams);
+    console.log("Mo vediamo...", shippedParams);
     // const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
     .subscribe(
