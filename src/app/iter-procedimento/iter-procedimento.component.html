@@ -73,14 +73,14 @@
                         showCancelButton: false,
                         placeholder: '-',
                         searchEnabled: false
-                      }">
+                      }" [cssClass]="classeDiHighlight">
                       <dxo-label text="Esito"></dxo-label>
                     </dxi-item>
 
                     <!-- <dxi-item [colSpan]="1">
                         <button class="btn button-azioni" id="motivazione" type="button" (click)="updateEsitoMotivazione()" [disabled]="inSolaLettura()">Motivazione</button>
                     </dxi-item> -->
-                    <dxi-item [colSpan]="6" dataField="esitoMotivazione"[label]="{text: 'Motivazione esito'}" editorType="dxTextArea" [editorOptions]="{ disabled: true, height: 55 }" >
+                    <dxi-item [colSpan]="6" dataField="esitoMotivazione"[label]="{text: 'Motivazione esito'}" editorType="dxTextArea" [editorOptions]="{ disabled: true, height: 55 }" [cssClass]="classeDiHighlight">
                     </dxi-item>
                 </dxi-item>
 
