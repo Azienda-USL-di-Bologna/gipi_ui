@@ -24,13 +24,13 @@
     <div class="row">
         <div class="col-lg-6 col-md-12">
             <dx-form id="form" [colCount]="1" [formData]="iter"    #myForm1> <!-- [screenByWidth]="screen"-->
-                <dxi-item itemType="group" [colCount]="6" [caption]="datiGenerali" [cssClass]="classeDiHighlight">
+                <dxi-item itemType="group" [colCount]="6" [caption]="datiGenerali" >
                     <dxi-item [colSpan]="6" *ngIf="classeDiHighlight!==''"><p id="infoPubblicazioneAlbo">
                         <b><i>I campi evidenziati verranno esposti nella pubblicazione dell'iter</i></b></p>
                     </dxi-item>
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
-                    <dxi-item [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }"></dxi-item>
+                    <dxi-item [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }" [cssClass]="classeDiHighlight"></dxi-item>
 
                     <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. procedimento"></dxo-label>
@@ -44,7 +44,7 @@
 
                     <!-- <dxi-item [colSpan]="4" dataField="promotore" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
-                        <dxi-item [colSpan]="1" dataField="presenzaControinteressati" editorType="dxCheckBox" [editorOptions]="{ disabled: true}">
+                        <dxi-item [colSpan]="1" dataField="presenzaControinteressati" editorType="dxCheckBox" [editorOptions]="{ disabled: true}" [cssClass]="classeDiHighlight">
                             <dxo-label text="Controinteressati"></dxo-label>
                         </dxi-item>
 
@@ -137,7 +137,7 @@
                     <dxi-item dataField="idIterPrecedente.numero" [editorOptions]="{ disabled: true }" [cssClass]="classeDiHighlight">
                         <dxo-label text="Coll. precedente"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }" [cssClass]="classeDiHighlight">
+                    <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Motivo collegamento"></dxo-label>
                     </dxi-item>
                     <dxi-item dataField="idFascicolo" [editorOptions]="{ disabled: true }">
