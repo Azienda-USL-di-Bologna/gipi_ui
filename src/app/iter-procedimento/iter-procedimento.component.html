@@ -5,11 +5,11 @@
     <div class="col header-font">
         <h3>
             <span class="header-font">Struttura procedente:</span>
-            <i>{{infoGeneriche.struttura}}</i>
+            <i [ngClass]="classeDiHighlight">{{infoGeneriche.struttura}}</i>
         </h3>
         <h3>
             <span class="header-font">Tipo procedimento:</span>
-            <i>{{infoGeneriche.tipoProcedimento}}</i>
+            <i [ngClass]="classeDiHighlight">{{infoGeneriche.tipoProcedimento}}</i>
         </h3>
 
         <!-- <div>
@@ -45,7 +45,7 @@
                     <!-- <dxi-item [colSpan]="4" dataField="promotore" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
                         <dxi-item [colSpan]="1" dataField="presenzaControinteressati" editorType="dxCheckBox" [editorOptions]="{ disabled: true}">
-                            <dxo-label text="Presenza controinteressati"></dxo-label>
+                            <dxo-label text="Controinteressati"></dxo-label>
                         </dxi-item>
 
                         <dxi-item [colSpan]="5">

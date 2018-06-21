@@ -128,14 +128,20 @@ dx-form .dx-form-group-with-caption {
 
 /*REGOLE PER I CAMPI DA EVIDENZIARE IN CASO DI PUBBLICAZIONE ALL'ALBO*/
 dx-form .hightlightClass .dx-form-group-caption{
-    background-color: #fff2ac;
-}
-
-dx-form .hightlightClass .dx-field-item-content.dx-field-item-content-location-right textarea {
     color: black;
-    background-color: #fff2ac;
+    font-weight: bold;
+    font-style: italic;
 }
 
+ 
+
+dx-form .hightlightClass label.dx-field-item-label.dx-field-item-label-location-left {
+    color: black;
+    font-weight: bold;
+    font-style: italic;
+}
+
+/*
 dx-form .hightlightClass .dx-field-item-content.dx-field-item-content-location-right input {
     color: black;
     background-color: #fff2ac;
@@ -151,8 +157,16 @@ dx-form .hightlightClass .btn.button-azioni#note {
     background-color: #fff2ac;
     background:  #fff2ac;
 }
-
+*/
 dx-form .hightlightClass #infoPubblicazioneAlbo {
-    color: #337ab7;
+    // color: #337ab7;
     text-align: right;
+    color: black;
+    font-weight: bold;
+    font-style: italic;
+}
+
+i.hightlightClass {
+    color: black;
+    font-weight: bold;
 }
