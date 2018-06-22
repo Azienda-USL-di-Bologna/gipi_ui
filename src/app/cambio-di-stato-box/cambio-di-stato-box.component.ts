@@ -46,8 +46,10 @@ export class CambioDiStatoBoxComponent implements OnInit {
   }
   @Input()
   set sospensioneParams(value: CambioDiStatoParams) {
+    console.log("entrato in set sospensioneParams");
     this._sospensioneParams = value;
     this.setValidazioneObbligoEsitoMotivazione();
+    console.log("sosepnsioneParams", this._sospensioneParams);
 
     if (!this._isOpenedAsPopup && this._sospensioneParams.dataRegistrazioneDocumento && this.dataIniziale === undefined) {
       this.dataIniziale = new Date(this._sospensioneParams.dataRegistrazioneDocumento);
@@ -156,9 +158,13 @@ export class CambioDiStatoBoxComponent implements OnInit {
       idOggettoOrigine: this._sospensioneParams.idOggettoOrigine,
       tipoOggettoOrigine: this._sospensioneParams.tipoOggettoOrigine,
       descrizione: this._sospensioneParams.descrizione,
-      idApplicazione: this._sospensioneParams.idApplicazione
+      idApplicazione: this._sospensioneParams.idApplicazione,
+      glogParams: this._sospensioneParams.glogParams
     };
     this.loadingVisible = true;
+
+    console.log("PRIMA DI SHIPPARE", shippedParams);
+
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/gestisciStatoIter", shippedParams, {headers: new HttpHeaders().set("content-type", "application/json")})
       .subscribe(
         res => {
@@ -269,6 +275,7 @@ interface GestioneStatiParams {
   descrizione: string;
   azione: string;
   idApplicazione: string;
+  glogParams: string;
 }
 
 interface UserInfo{

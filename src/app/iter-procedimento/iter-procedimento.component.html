@@ -1,15 +1,15 @@
 <div class="container-fluid iter-procedimento">
-    <!-- Non cancellare. Potrenne tornare utile in futuro 
-        <app-buttons-bar (onGenericButtonClick)="onGenericButtonClick($event)" [genericButtons]="genericButtons">
-    </app-buttons-bar> -->
+    
+    <app-buttons-bar (onGenericButtonClick)="onGenericButtonClick($event)" [genericButtons]="genericButtons"></app-buttons-bar>
+    
     <div class="col header-font">
         <h3>
             <span class="header-font">Struttura procedente:</span>
-            <i>{{infoGeneriche.struttura}}</i>
+            <i [ngClass]="classeDiHighlight">{{infoGeneriche.struttura}}</i>
         </h3>
         <h3>
             <span class="header-font">Tipo procedimento:</span>
-            <i>{{infoGeneriche.tipoProcedimento}}</i>
+            <i [ngClass]="classeDiHighlight">{{infoGeneriche.tipoProcedimento}}</i>
         </h3>
 
         <!-- <div>
@@ -24,10 +24,13 @@
     <div class="row">
         <div class="col-lg-6 col-md-12">
             <dx-form id="form" [colCount]="1" [formData]="iter"    #myForm1> <!-- [screenByWidth]="screen"-->
-                <dxi-item itemType="group" [colCount]="6" [caption]="datiGenerali">
+                <dxi-item itemType="group" [colCount]="6" [caption]="datiGenerali" >
+                    <dxi-item [colSpan]="6" *ngIf="classeDiHighlight!==''"><p id="infoPubblicazioneAlbo">
+                        <b><i>I campi evidenziati verranno esposti nella pubblicazione dell'iter</i></b></p>
+                    </dxi-item>
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
-                    <dxi-item [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }"></dxi-item>
+                    <dxi-item [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }" [cssClass]="classeDiHighlight"></dxi-item>
 
                     <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. procedimento"></dxo-label>
@@ -41,8 +44,8 @@
 
                     <!-- <dxi-item [colSpan]="4" dataField="promotore" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
-                        <dxi-item [colSpan]="1" dataField="presenzaControinteressati" editorType="dxCheckBox" [editorOptions]="{ disabled: true}">
-                            <dxo-label text="Presenza controinteressati"></dxo-label>
+                        <dxi-item [colSpan]="1" dataField="presenzaControinteressati" editorType="dxCheckBox" [editorOptions]="{ disabled: true}" [cssClass]="classeDiHighlight">
+                            <dxo-label text="Controinteressati"></dxo-label>
                         </dxi-item>
 
                         <dxi-item [colSpan]="5">
@@ -58,7 +61,7 @@
                     <!-- <dxi-item [colSpan]="4" dataField="esito" cssClass="fix-bug-dx" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Esito"></dxo-label>
                     </dxi-item> -->
-                    <dxi-item dataField="esito" [colSpan]="4" cssClass="fix-bug-dx" editorType="dxLookup" [label]="{text: 'Esito'}" [editorOptions]="{ 
+                    <dxi-item dataField="esito" [colSpan]="6" cssClass="fix-bug-dx" editorType="dxLookup" [editorOptions]="{ 
                         disabled: true,
                         items: arrayEsiti,
                         displayExpr: 'descrizione',
@@ -70,16 +73,19 @@
                         showCancelButton: false,
                         placeholder: '-',
                         searchEnabled: false
-                      }"></dxi-item>
+                      }" [cssClass]="classeDiHighlight">
+                      <dxo-label text="Esito"></dxo-label>
+                    </dxi-item>
 
-                    <dxi-item [colSpan]="2">
+                    <!-- <dxi-item [colSpan]="1">
                         <button class="btn button-azioni" id="motivazione" type="button" (click)="updateEsitoMotivazione()" [disabled]="inSolaLettura()">Motivazione</button>
-                        <!-- <dx-button text="Motivazione" type="default" (onClick)="updateEsitoMotivazione()"></dx-button> -->
+                    </dxi-item> -->
+                    <dxi-item [colSpan]="6" dataField="esitoMotivazione"[label]="{text: 'Motivazione esito'}" editorType="dxTextArea" [editorOptions]="{ disabled: true, height: 55 }" [cssClass]="classeDiHighlight">
                     </dxi-item>
                 </dxi-item>
 
                 <dxi-item [colCount]="1" itemType="group" caption="Dati temporali">
-                    <dxi-item [colSpan]="1" dataField="dataAvvio" [label]="{text: 'Data avvio iter'}" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+                    <dxi-item [colSpan]="1" dataField="dataAvvio" [label]="{text: 'Data avvio iter'}" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }" [cssClass]="classeDiHighlight"></dxi-item >
                     
                     <dxi-item itemType="group" [colCount]="10" caption="Durata" cssClass="meVedi">
                         <dxi-item [colSpan]="colCountGroup" dataField="procedimentoCache.durataMassimaProcedimento" [editorOptions]="{ disabled: true}">
@@ -121,14 +127,14 @@
                         <dxi-item [colSpan]="colCountGroup" dataField="dataChiusuraPrevista" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }">
                             <dxo-label text="Data chiusura prevista"></dxo-label>
                         </dxi-item>
-                        <dxi-item [colSpan]="colCountGroup" dataField="dataChiusura" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }">
+                        <dxi-item [colSpan]="colCountGroup" dataField="dataChiusura" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }" [cssClass]="classeDiHighlight">
                             <dxo-label text="Data chiusura effettiva"></dxo-label>
                         </dxi-item>
                     </dxi-item>
                 </dxi-item>
 
                 <dxi-item itemType="group" caption="Dati di archivio">
-                    <dxi-item dataField="idIterPrecedente.numero" [editorOptions]="{ disabled: true }">
+                    <dxi-item dataField="idIterPrecedente.numero" [editorOptions]="{ disabled: true }" [cssClass]="classeDiHighlight">
                         <dxo-label text="Coll. precedente"></dxo-label>
                     </dxi-item>
                     <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }">
@@ -204,29 +210,65 @@
 <dx-popup class="popup" [width]="500" [height]="335" [showTitle]="true" [title]="popupDatiTemporali.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
     [(visible)]="popupDatiTemporali.visible">
     <div *dxTemplate="let data of 'content'">
-        
         <dx-form #formPopupDatiTemporali
-            [(formData)]="popupDatiTemporali" validationGroup="validaDatiTemporali" [showValidationSummary]="true">
+            [(formData)]="popupDatiTemporali" 
+            validationGroup="validaDatiTemporali" 
+            [showValidationSummary]="true">
 
             <dxi-item dataField="fieldDays" editorType="dxNumberBox" [editorOptions]="{ disabled: false }">
                 <dxo-label text="Deroga {{popupDatiTemporali.action}} (gg)"></dxo-label>
                 <dxi-validation-rule type="required" message="Il numero di giorni di deroga è obbligatorio"></dxi-validation-rule>
             </dxi-item>
             
-            <dxi-item dataField="fieldMotivation"[label]="{text: 'Motivazione'}" editorType="dxTextArea" [editorOptions]="{ disabled: false, height: 120 }" >
+            <dxi-item dataField="fieldMotivation" [label]="{text: 'Motivazione'}" editorType="dxTextArea" [editorOptions]="{ disabled: false, height: 120 }" >
                 <dxi-validation-rule type="required" message="La motivazione è obbligatoria"></dxi-validation-rule>
             </dxi-item>
+            <dxi-item>
+                <div *dxTemplate="let data of 'content'" class="wrapperPulsantiPopup">
+                    <dx-button class="button-css" text="OK" 
+                        (onClick)="updateIter($event)" 
+                        [validationGroup]="'validaDatiTemporali'"
+                        [useSubmitBehavior]="true">                        
+                    </dx-button>
+                    <span class="btn-space"></span>
+                    <dx-button class="button-css" text="Annulla" type="normal" (onClick)="closePopupDeroga($event)"></dx-button>
+                </div>
+            </dxi-item>
         </dx-form>
-        <dx-validation-summary id="summary"></dx-validation-summary>
-        <div class="wrapperPulsantiPopup">
-            <dx-button class="button-css" text="OK" (onClick)="updateIter($event)" [validationGroup]="'validaDatiTemporali'"></dx-button>
-            <span class="btn-space"></span>
-            <dx-button class="button-css" text="Annulla" type="normal" (onClick)="closePopupDeroga($event)"></dx-button>
-        </div>
     </div>
 </dx-popup>
 
+<!-- Popup per la riattivazione dell'iter senza documento -->
+<dx-popup
+    [width]="500"
+    [height]="280"
+    [showTitle]="true"
+    title="Riattiva iter"
+    [(visible)]="popupRiattivaIterVisibile">
+    <div *dxTemplate="let data of 'content'">
+        <dx-form
+            [(formData)]="datiRiattivazioneIter">
+            <dxi-item
+                dataField="note"
+                editorType="dxTextArea"
+                [label]="{text: 'Note'}"
+                [editorOptions]="{
+                    disabled: false,
+                    height: 120
+                }">
+            </dxi-item>
+            <dxi-item>
+                <div *dxTemplate="let data of 'content'" class="wrapperPulsantiPopup">
+                    <dx-button class="button-css" text="Ok" (onClick)="riattivaIter()"></dx-button>
+                    <span class="btn-space"></span>
+                    <dx-button class="button-css" text="Annulla" type="normal" (onClick)="popupRiattivaIterVisibile = false"></dx-button>
+                </div>
+            </dxi-item>
+        </dx-form>
+    </div>
+</dx-popup>
 
+<!-- 
 <dx-popup class="passaggioFase" [width]="700" [showTitle]="true" [title]="popupData.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
     [(visible)]="passaggioDiFaseVisible">
     <div *dxTemplate="let data of 'content'">
@@ -238,6 +280,7 @@
     [(visible)]="sospensioneIterVisible">
     <div *dxTemplate="let data of 'content'">
         <app-cambio-di-stato-box *ngIf="sospensioneIterVisible" [sospensioneParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="true" (out)="receiveMessageFromSospensione($event)"></app-cambio-di-stato-box>
-        <!-- <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter> -->
+        
     </div>
-</dx-popup>
+</dx-popup> -->
+<!-- <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter> -->

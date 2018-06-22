@@ -64,6 +64,10 @@ export class CambioDiStatoComponent implements OnInit {
         this.sospensioneParams.idApplicazione = decodeURIComponent(queryParams["idApplicazione"].replace(/\+/g, " "));
       }
       const noBars: boolean = queryParams["nobars"];
+
+      console.log("MO VEDIAMO...");
+      console.log("glogParams", queryParams["glogParams"]);
+      this.sospensioneParams.glogParams = queryParams["glogParams"];
     });
   }
 

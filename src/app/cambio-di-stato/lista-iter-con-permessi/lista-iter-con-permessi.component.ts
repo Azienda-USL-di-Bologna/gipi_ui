@@ -59,7 +59,8 @@ export class ListaIterConPermessiComponent implements OnInit {
       expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona", "idFaseCorrente", "idStato"]/* ,
       sort: [{ field: "oggetto", desc: true }] */
     });
-    this.dataSource.load().then(res => { console.log("LISTA RES: ", res); });
+    /* Commento perché questa istruzione lanciava un'altra richiesta al server */
+    // this.dataSource.load().then(res => { console.log("LISTA RES: ", res); }); 
   }
 
   selectedRowChanged(e) {

@@ -21,6 +21,7 @@ export class DocumentiIterComponent {
   }
 
   ngOnInit() {
+    console.log("DOCUMENTI-ITER.NGONINIT", this.daPadre);
     this.dataSourceDocumentiIter = new DataSource({
       store: this.odataContextDefinition.getContext()[new DocumentoIter().getName()],
       expand: ["eventoIterList/idEvento"],
@@ -28,10 +29,9 @@ export class DocumentiIterComponent {
     });
    }
 
-     ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges) {
     if (this.dataSourceDocumentiIter !== undefined) {
       this.dataSourceDocumentiIter.load();
     }
-
   }
 }

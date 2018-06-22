@@ -18,4 +18,5 @@ export class SospensioneParams {
     public azione: string; // Passaggio di fase o Cambio di stato
     public idOggettoOrigine: string;
     public dataAvvioIter: Date; 
+    public glogParams: string;
   }

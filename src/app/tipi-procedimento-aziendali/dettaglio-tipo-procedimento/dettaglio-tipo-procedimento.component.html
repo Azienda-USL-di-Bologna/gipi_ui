@@ -56,13 +56,17 @@
           dateOutOfRangeMessage:'Data fine non coerente con le date del tipo procedimento' }">
         <dxi-validation-rule type="custom" [reevaluate]="true" [validationCallback]="checkDataFine" message="Inserire una data di fine corretta maggiore della data di inizio validità"></dxi-validation-rule>
       </dxi-item>
+      
+      <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="3"  editorType="dxCheckBox" [label]="{text: 'Obbligo esito conclusivo e motivazione', location:'top'}" [editorOptions]="{ disabled: false}"></dxi-item>
+    </dxi-item>
+
+    <!-- 
+    Campo giorniPreavvisoScadenzaTermini, è stato chiesto di eliminarlo in data 11/06/2018. Se passi di qui ed è passato 1-2 mesi cancella pure
       <dxi-item dataField="giorniPreavvisoScadenzaTermini" [colSpan]="3" editorType="dxNumberBox" [label]="{text: 'Preavviso scadenza termini (gg)', location:'top'}" [editorOptions]="{ disabled: false}">
           <dxi-validation-rule type="required" message="inserire i giorni di preavviso scadenza dei termini"></dxi-validation-rule>
           <dxi-validation-rule type="pattern" [pattern]="patternGreaterZero" message="giorni di preavviso scadenza dei termini deve avere valore positivo"></dxi-validation-rule>
       </dxi-item>
-      <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="3"  editorType="dxCheckBox" [label]="{text: 'Obbligo esito conclusivo e motivazione', location:'top'}" [editorOptions]="{ disabled: false}"></dxi-item>
-    </dxi-item>
-
+     -->
     
 <!--     <dxi-item itemType="group" [colCount]="12">
       <dxi-item [colSpan]="4"></dxi-item>
