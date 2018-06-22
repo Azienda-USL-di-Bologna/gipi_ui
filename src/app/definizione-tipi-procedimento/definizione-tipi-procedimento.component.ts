@@ -139,14 +139,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
 
   }
 
-  private gestisciPubblicazioni() {
-    if (this.registri !== this.tagPubblicazione.value) {
-      this.processDelete(this.registriTipo);
-      this.processInsert(this.tagPubblicazione.value);
-    }
-    this.showTagBox = false;  // Setto qui la variabile in modo che viene eseguita dopo tutte le operazioni
-  }
-
+  
   private onInitRow() {
     this.registri = [];
     this.registriTipo = [];
@@ -161,7 +154,7 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
       ]
     });
   }
-
+  
   private onEditingStart() {
     this.registri = [];
     this.registriTipo = [];
@@ -183,6 +176,15 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
     );
   }
 
+  async gestisciPubblicazioni() {
+    if (this.registri !== this.tagPubblicazione.value) {
+      await this.processDelete(this.registriTipo);
+      await this.processInsert(this.tagPubblicazione.value);
+    }
+    // console.log("Esco dalla gestisci pubblicazioni");
+    this.showTagBox = false;  // Setto qui la variabile in modo che viene eseguita dopo tutte le operazioni
+  }
+  
   async processInsert(arrayRegistriFinale) {
     let utente = new Utente();
     utente.id = this.loggedUser.getField(bUtente.id);
@@ -192,12 +194,14 @@ export class DefinizioneTipiProcedimentoComponent implements OnInit, OnDestroy {
       regTipoProc.idRegistro = item;
       regTipoProc.idTipoProcedimento = this.tipoProcedimento;
       regTipoProc.idUtente = utente;
+      // console.log("Inserisco -> ", item);
       await this.dataSourceRegistriProcedimento.store().insert(regTipoProc);
     }
   }
   
   async processDelete(arrayRegistriIniziale) {
     for (const item of arrayRegistriIniziale) {
+      // console.log("Elimino -> ", item);
       await this.dataSourceRegistriProcedimento.store().remove(item.id);
     }
   }
