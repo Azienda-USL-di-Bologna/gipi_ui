@@ -16,6 +16,10 @@
     <dxi-column dataField="autore.idPersona.descrizione" caption="Autore" [dataType]="'string'" alignment="center" [allowSorting]="false"></dxi-column>
     <dxi-column dataField="idEvento.nome" caption="Evento" [dataType]="'string'" alignment="center" [allowSorting]="false"></dxi-column>
     <dxi-column dataField="idDocumentoIter" caption="Documento" [dataType]="'string'" alignment="center" [allowSorting]="false"></dxi-column>
+    <dxi-column dataField="note" cellTemplate="noteCellTemplate" caption="Note" width="auto" [dataType]="'icon'" alignment="center" [allowSorting]="false"></dxi-column>
+    <div *dxTemplate="let d of 'noteCellTemplate'" class="app-azioni">
+      <dx-button *ngIf="d.value" type="default" text="" hint="Mostra note" icon='doc' (onClick)="showNotes(d)"></dx-button>
+    </div>
   </dx-data-grid>
 </div>
 
@@ -26,3 +30,20 @@
     <b>{{oggettoDocumento}}</b>
   </div>
 </dx-tooltip>
+<dx-popup
+  class="popup"
+  minWidth="200"
+  minHeight="100"
+  maxWidth= "800"
+  maxHeight= "800"
+  width="auto"
+  height="auto"
+  [showTitle]="true"
+  title="Note"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="true"
+  [(visible)]="popupVisible">
+  <div *dxTemplate="let data of 'content'">
+    <p><span>{{ nota }}</span></p>
+  </div>
+</dx-popup>
