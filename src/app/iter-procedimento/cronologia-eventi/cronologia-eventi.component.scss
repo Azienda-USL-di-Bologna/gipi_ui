@@ -42,3 +42,7 @@ hr{
   font-weight: bold;
   font-style: italic;
 }
+
+::ng-deep tr.dx-row.dx-data-row.dx-column-lines {
+  height: 51px;
+}

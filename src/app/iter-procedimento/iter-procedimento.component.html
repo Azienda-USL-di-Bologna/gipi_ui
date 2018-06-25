@@ -113,10 +113,10 @@
                             <dxo-label text="Giorni sospensione trascorsi"></dxo-label>
                         </dxi-item>
                         <dxi-item [colSpan]="colCountGroup" dataField="derogaSospensione" [editorOptions]="{ disabled: true}">
-                            <dxo-label text="Deroga sospensione (gg)"></dxo-label>
+                            <dxo-label text="Proroga sospensione (gg)"></dxo-label>
                         </dxi-item>
                         <dxi-item [colSpan]="colCountGroup - 1" dataField="motivoDerogaSospensione" [editorOptions]="{ disabled: true}">
-                            <dxo-label text="Motivazione deroga"></dxo-label>
+                            <dxo-label text="Motivazione proroga"></dxo-label>
                         </dxi-item>
                         <dxi-item [colSpan]="1">
                             <button class="btn button-azioni" type="button" (click)="updateMotivazioneSospensione()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
@@ -216,7 +216,7 @@
             [showValidationSummary]="true">
 
             <dxi-item dataField="fieldDays" editorType="dxNumberBox" [editorOptions]="{ disabled: false }">
-                <dxo-label text="Deroga {{popupDatiTemporali.action}} (gg)"></dxo-label>
+                <dxo-label text="{{popupDatiTemporali.label}}"></dxo-label>
                 <dxi-validation-rule type="required" message="Il numero di giorni di deroga è obbligatorio"></dxi-validation-rule>
             </dxi-item>
             
