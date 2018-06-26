@@ -80,6 +80,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.odataContextDefinitionFunctionImport = this.odataContextFactory.buildOdataFunctionsImportDefinition();
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     this.getInfoSessionStorage();
+    this.buildDataSourceUtenti();
     this.setUtenteResponsabile = this.setUtenteResponsabile.bind(this);
     this.reloadResponsabile = this.reloadResponsabile.bind(this);
   }
@@ -95,7 +96,7 @@ export class AvviaNuovoIterComponent implements OnInit {
       this.iterParams.idProcedimento = procedimento.procedimento.id;
       this.iterParams.procedimento = procedimento.procedimento;
       this.durataMassimaProcedimentoDaProcedimento = procedimento.procedimento.idAziendaTipoProcedimento.durataMassimaProcedimento;
-      this.buildDataSourceUtenti(procedimento.procedimento.idStruttura.id);
+      // this.buildDataSourceUtenti();
 
       if (this.iterParams.procedimento.idResponsabileAdozioneAttoFinale &&  this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale) {
         this.iterParams.responsabileAdozioneAttoFinaleDesc = this.iterParams.procedimento.idResponsabileAdozioneAttoFinale.idPersona.descrizione
@@ -109,7 +110,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     }
   }
 
-  private buildDataSourceUtenti(idStruttura: number): void {
+  private buildDataSourceUtenti(): void {
     /*
       Il caricamento del datasource per la lookup ha un problema. E' paginato. 
       Se l'utente loggato, che deve essere impostato come utente default, non è presente nella prima tranche di dati
@@ -122,7 +123,6 @@ export class AvviaNuovoIterComponent implements OnInit {
         this.odataUtilities.filterToCustomQueryParams(["searchString"], loadOptions);
       }),
       customQueryParams: {
-        idStruttura: idStruttura,
         // searchString: ""
       },
       expand: [
@@ -140,8 +140,7 @@ export class AvviaNuovoIterComponent implements OnInit {
         "idAfferenzaStruttura"
       ],
       filter: [
-        ["idUtente.id", "=", this.loggedUser.getField(bUtente.id)],
-        ["idStruttura.id", "=", idStruttura]
+        ["idUtente.id", "=", this.loggedUser.getField(bUtente.id)]
       ]
     });
 
