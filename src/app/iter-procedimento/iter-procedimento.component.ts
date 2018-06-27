@@ -73,6 +73,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     title: "",
     fieldDays: 0,
     fieldMotivation: "",
+    label: "",
     action: ""
   };
   public perFigliParteDestra: Object;
@@ -328,6 +329,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       title: "Modifica deroga durata",
       fieldDays: this.iter.derogaDurata,
       fieldMotivation: this.iter.motivoDerogaDurata,
+      label: "Deroga durata (gg)",
       action: "durata"
     };
   }
@@ -335,9 +337,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   updateMotivazioneSospensione() {
     this.popupDatiTemporali = {
       visible: true,
-      title: "Modifica deroga sospensione",
+      title: "Modifica proroga sospensione",
       fieldDays: this.iter.derogaSospensione,
       fieldMotivation: this.iter.motivoDerogaSospensione,
+      label: "Proroga sospensione (gg)",
       action: "sospensione"
     };
   }
@@ -415,6 +418,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       title: "",
       fieldDays: 0,
       fieldMotivation: "",
+      label: "",
       action: ""
     };
 

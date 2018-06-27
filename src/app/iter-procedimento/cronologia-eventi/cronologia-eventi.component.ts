@@ -17,6 +17,8 @@ export class CronologiaEventiComponent implements OnInit {
   @ViewChild(DxTooltipComponent) tooltip: DxTooltipComponent;
   public oggettoDocumento: string = "";
   public classeDiHighlight = "";
+  public popupVisible = false;
+  public nota: String;
 
   // @Input("idIter") idIter: string;
   @Input("daPadre") daPadre: Object;
@@ -43,6 +45,11 @@ export class CronologiaEventiComponent implements OnInit {
       this.classeDiHighlight = "cronologiaEventihightlightClass"; 
     }
       
+  }
+
+  showNotes(noteValue) {
+    this.popupVisible = true;
+    this.nota = noteValue.value;
   }
 
   customizeColumns(columns: any) {

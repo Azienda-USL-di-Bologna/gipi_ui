@@ -31,11 +31,18 @@ hr{
 //   height: 100px;
 // }
 
-
+::ng-deep .popup p {
+  margin-bottom: 10px;
+  margin-top: 0;
+}
 
 /deep/tr.dx-row.dx-data-row.dx-column-lines td.cronologiaEventihightlightClass {
   // background-color: #fff2ac;
   color: black;
   font-weight: bold;
   font-style: italic;
+}
+
+::ng-deep tr.dx-row.dx-data-row.dx-column-lines {
+  height: 51px;
 }

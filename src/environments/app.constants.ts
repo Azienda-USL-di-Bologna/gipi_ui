@@ -70,6 +70,7 @@ export const TOAST_POSITION = { my: "center", at: "center", of: window };
 export const ESITI = {
     ACCOLTO: "Accolto",
     RIFIUTO_TOTALE: "Rifiuto totale",
-    RIFIUTO_PARZIALE: "Rifiuto parziale"
+    RIFIUTO_PARZIALE: "Rifiuto parziale",
+    RITIRATO: "Ritirato"
   };
 
