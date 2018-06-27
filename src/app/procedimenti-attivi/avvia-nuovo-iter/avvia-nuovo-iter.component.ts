@@ -308,11 +308,16 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   public setUtenteResponsabile(item: any): void {
-    this.iterParams.idUtenteResponsabile = item ? item.itemData.idUtente.id : null;
+    /* this.iterParams.idUtenteResponsabile = item ? item.itemData.idUtente.id : null;
     this.idUtenteDefault = item ? item.itemData.id : null;
     this.descrizioneUtenteResponsabile = item ? item.itemData.idUtente.idPersona.descrizione 
       + " (" + item.itemData.idStruttura.nome
-      + " - " + item.itemData.idAfferenzaStruttura.descrizione + ")" : null;
+      + " - " + item.itemData.idAfferenzaStruttura.descrizione + ")" : null; */
+    this.iterParams.idUtenteResponsabile = item ? item.component._options.selectedItem.idUtente.id : null;
+    this.idUtenteDefault = item ? item.component._options.selectedItem.id : null;
+    this.descrizioneUtenteResponsabile = item ? item.component._options.selectedItem.idUtente.idPersona.descrizione 
+      + " (" + item.component._options.selectedItem.idStruttura.nome
+      + " - " + item.component._options.selectedItem.idAfferenzaStruttura.descrizione + ")" : null;
   }
 
   public reloadResponsabile(): void {
