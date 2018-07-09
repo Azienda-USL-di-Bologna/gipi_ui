@@ -2,9 +2,47 @@
   //margin: 32px 0 16px;
   font-size: 20px;
   display: block;
-  padding-top: 6px;
+  // padding-top: 6px;
 }
-dx-data-grid {
-  max-height: 300px;
+dx-data-grid{
   min-width: 100%;
+  // max-height: 260px;
+}
+// dx-data-grid{
+//   overflow-y: hidden;
+// }
+// #gridContainerB{
+//   color: red;
+// }
+// /deep/ #gridContainerB .dx-datagrid {
+//   height: 100px;
+// }
+// /deep/ .dx-datagrid-rowsview{
+//   height: inherit !important;
+// }
+// /deep/ .dx-scrollable-container{
+//   overflow-y: scroll;
+// }
+hr{
+  margin: 8px 0 15px;
+  border-top: 1px solid #ddd;
+}
+// #gridID{
+//   height: 100px;
+// }
+
+::ng-deep .popup p {
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+/deep/tr.dx-row.dx-data-row.dx-column-lines td.cronologiaEventihightlightClass {
+  // background-color: #fff2ac;
+  color: black;
+  font-weight: bold;
+  font-style: italic;
+}
+
+::ng-deep tr.dx-row.dx-data-row.dx-column-lines {
+  height: 51px;
 }

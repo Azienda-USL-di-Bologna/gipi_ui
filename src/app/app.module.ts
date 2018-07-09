@@ -24,7 +24,15 @@ import {
     DxContextMenuModule,
     DxLookupModule,
     DxValidatorModule,
-    DxValidationSummaryModule, DxSlideOutModule, DxToolbarModule, DxSwitchModule
+    DxValidationSummaryModule, 
+    DxSlideOutModule, 
+    DxToolbarModule, 
+    DxSwitchModule,
+    DxScrollViewModule,
+    DxNumberBoxModule,
+    DxValidationGroupModule,
+    DxTooltipModule,
+    DxLoadPanelModule
 } from "devextreme-angular";
 
 import {RouterModule} from "@angular/router";
@@ -42,18 +50,15 @@ import { AssociaDirective } from "./associazioni/directives/associa.directive";
 import { AlberoStruttureComponent } from "./associazioni/sub-view/albero-strutture/albero-strutture.component";
 import { StrutturaTipiProcedimentoComponent } from "./struttura-tipi-procedimento/struttura-tipi-procedimento.component";
 
-import {AuthenticationJwtModule} from "./authentication-jwt/authentication-jwt.module";
-import { LoginComponent } from "./login/login.component";
-import {NoLoginGuard} from "./authorization/guards/no-login.guard";
-import {LoginGuard} from "./authorization/guards/login.guard";
+// import {NoLoginGuard} from "./authorization/guards/no-login.guard";
+// import {LoginGuard} from "./authorization/guards/login.guard";
+import {RoleGuard} from "./authorization/guards/role.guard";
 
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
-import {MomentModule} from "angular2-moment";
-import {NgIdleKeepaliveModule} from "@ng-idle/keepalive";
-import {SessionManager} from "./login/session-manager";
-import {ContextModule} from "@bds/nt-angular-context/context.module";
-import {contextModuleConfig} from "./module-configurations";
+// import {MomentModule} from "angular2-moment";
+ import {NgIdleKeepaliveModule} from "@ng-idle/keepalive";
+import {ContextModule} from "@bds/nt-context";
+import {contextModuleConfig, loginModuleConfig} from "./config/module-configurations";
 import { StruttureTreeComponent } from "./reusable-component/strutture-tree/strutture-tree.component";
 import { ProcedimentiAttiviComponent } from "./procedimenti-attivi/procedimenti-attivi.component";
 import { PopupStrutturaTipiProcedimentoComponent } from "./popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component";
@@ -66,8 +71,18 @@ import { TestTreeComponent } from "./test/test-tree/test-tree.component";
 import {PassaggioDiFaseComponent} from "./iter-procedimento/passaggio-di-fase/passaggio-di-fase.component";
 import { SospensioneIterComponent } from "./iter-procedimento/sospensione-iter/sospensione-iter.component";
 import { ListaIterComponent } from "./lista-iter/lista-iter.component";
-import { AfterLoginComponent } from "./after-login/after-login.component";
-
+// import { AfterLoginComponent } from "./after-login/after-login.component";
+import { EntitiesModule } from "@bds/nt-entities";
+import { AvviaNuovoIterDaDocumentoComponent } from "./procedimenti-attivi/avvia-nuovo-iter-da-documento/avvia-nuovo-iter-da-documento.component";
+import { ListaIterConPermessiComponent } from "./cambio-di-stato/lista-iter-con-permessi/lista-iter-con-permessi.component";
+import { CambioDiStatoBoxComponent } from "./cambio-di-stato-box/cambio-di-stato-box.component";
+import { CambioDiStatoComponent } from "./cambio-di-stato/cambio-di-stato.component";
+import { TipiProcedimentoAziendaliComponent } from "./tipi-procedimento-aziendali/tipi-procedimento-aziendali.component";
+import { DettaglioTipoProcedimentoComponent } from "./tipi-procedimento-aziendali/dettaglio-tipo-procedimento/dettaglio-tipo-procedimento.component";
+import {LoginModule} from "@bds/nt-login";
+import { TestGridComponent } from "./test/test-grid/test-grid.component";
+import {AppConfiguration} from "./config/app-configuration";
+import { DocumentoIterAssociazioneSempliceComponent } from "./documento-iter-associazione-semplice/documento-iter-associazione-semplice.component";
 
 @NgModule({
     declarations: [
@@ -83,7 +98,6 @@ import { AfterLoginComponent } from "./after-login/after-login.component";
         AssociazioniComponent,
         AlberoStruttureComponent,
         StrutturaTipiProcedimentoComponent,
-        LoginComponent,
         StruttureTreeComponent,
         ProcedimentiAttiviComponent,
         PopupStrutturaTipiProcedimentoComponent,
@@ -96,7 +110,15 @@ import { AfterLoginComponent } from "./after-login/after-login.component";
         PassaggioDiFaseComponent,
         SospensioneIterComponent,
         ListaIterComponent,
-        AfterLoginComponent,
+        // AfterLoginComponent,
+        AvviaNuovoIterDaDocumentoComponent,
+        ListaIterConPermessiComponent,
+        CambioDiStatoBoxComponent,
+        CambioDiStatoComponent,
+        TipiProcedimentoAziendaliComponent,
+        DettaglioTipoProcedimentoComponent,
+        TestGridComponent,
+        DocumentoIterAssociazioneSempliceComponent
     ],
     imports: [
         BrowserModule,
@@ -118,19 +140,24 @@ import { AfterLoginComponent } from "./after-login/after-login.component";
         HttpModule,
         DxTreeViewModule,
         DxContextMenuModule,
-        AuthenticationJwtModule,
         FormsModule,
-        HttpClientModule,
-        MomentModule,
+        // MomentModule,
         DxValidatorModule,
         DxValidationSummaryModule,
         NgIdleKeepaliveModule.forRoot(),
         DxSlideOutModule,
         DxToolbarModule,
         DxSwitchModule,
+        DxScrollViewModule,
         ContextModule.forRoot(contextModuleConfig),
+        LoginModule.forRoot(loginModuleConfig),
+        EntitiesModule.forRoot(null),
+        DxNumberBoxModule,
+        DxValidationGroupModule,
+        DxTooltipModule,
+        DxLoadPanelModule
     ],
-    providers: [DefinizioneTipiProcedimentoService, SessionManager, LoginGuard, NoLoginGuard,
+    providers: [DefinizioneTipiProcedimentoService, RoleGuard, AppConfiguration
         // NavbarService
     ],
     bootstrap: [AppComponent],

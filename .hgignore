@@ -5,3 +5,5 @@ node_modules
 package-lock.json
 dist
 debug.log
+builda_gdml.sh
+yarn.lock

@@ -1,23 +1,16 @@
-import {Component, OnInit, ViewChild, AfterViewInit, Input} from "@angular/core";
+import { Component, OnInit, ViewChild, AfterViewInit, Input } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { Router } from "@angular/router";
-import {AziendaTipoProcedimento} from "../classi/server-objects/entities/azienda-tipo-procedimento";
-import {DxFormComponent} from "devextreme-angular";
-import {TipoProcedimento} from "../classi/server-objects/entities/tipo-procedimento";
-import {OdataContextDefinition} from "@bds/nt-angular-context/odata-context-definition";
-import {Azienda} from "../classi/server-objects/entities/azienda";
+import { AziendaTipoProcedimento, TipoProcedimento, Azienda, Titolo } from "@bds/nt-entities";
+import { DxFormComponent } from "devextreme-angular";
+import { GlobalContextService, OdataContextFactory, OdataContextDefinition, OdataCustomStore, Entity, CustomLoadingFilterParams, ButtonAppearance } from "@bds/nt-context";
 import notify from "devextreme/ui/notify";
-import {Entities} from "../../environments/app.constants";
-import {Entity} from "@bds/nt-angular-context/entity";
-import {custom} from "devextreme/ui/dialog";
-import {OdataContextFactory} from "@bds/nt-angular-context/odata-context-factory";
-import { CustomLoadingFilterParams } from "@bds/nt-angular-context/custom-loading-filter-params";
-import {GlobalContextService} from "@bds/nt-angular-context/global-context.service";
-import {ButtonAppearance} from "@bds/nt-angular-context/templates/buttons-bar/buttons-bar.component";
+import { custom } from "devextreme/ui/dialog";
+import { TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 
 
 @Component({
-    selector: "app-gestione-associazione-azienda",
+    selector: "gestione-associazione-azienda",
     templateUrl: "./gestione-associazione-azienda.component.html",
     styleUrls: ["./gestione-associazione-azienda.component.scss"]
 })
@@ -63,8 +56,10 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
 
 
     constructor(private odataContextFactory: OdataContextFactory,
-                private router: Router,
-                private globalContextService: GlobalContextService) {
+        private router: Router,
+        private globalContextService: GlobalContextService) {
+
+        console.log("gestione-associazione-azienda CONSTRUCTOR");
 
         this.labelLocation = "left";
         this.readOnly = false;
@@ -75,14 +70,14 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
 
         this.backBtn = new ButtonAppearance("indietro", "back", true, false);
         this.saveBtn = new ButtonAppearance("salva", "save", true, false);
-        this.reloadBtn = new ButtonAppearance("refresh", "refresh", true, false);
+        this.reloadBtn = new ButtonAppearance("aggiorna", "refresh", true, false);
         this.restoreBtn = new ButtonAppearance("ripristina", "revert", true, false);
 
         this.odataContextEntitiesAziendaTipoProcedimento = this.odataContextFactory.buildOdataContextEntitiesDefinition();
         this.datasource = new DataSource({
-            store: this.odataContextEntitiesAziendaTipoProcedimento.getContext()[Entities.AziendaTipoProcedimento.name]
-                .on("modifying", () => {console.log("modified"); })
-                .on("modified", () => {console.log("modified"); }),
+            store: this.odataContextEntitiesAziendaTipoProcedimento.getContext()[new AziendaTipoProcedimento().getName()]
+                .on("modifying", () => { console.log("modified"); })
+                .on("modified", () => { console.log("modified"); }),
             expand: ["idAzienda", "idTipoProcedimento", "idTitolo"],
             // filter: [['idTipoProcedimento.idTipoProcedimento', '=', this.sharedData.getSharedObject().procedimento.idAziendaTipoProcedimento], ['idAzienda.id', '=', this.sharedData.getSharedObject().azienda.id]],
         });
@@ -91,26 +86,16 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
         this.buildAziendaTipoProcedimento(true);
 
         const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
-        const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams("nomeTitolo");
-        customLoadingFilterParams.addFilter(["tolower(${target})", "contains", "${value.tolower}"]);
+        const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
+        customLoadingFilterParams.addFilter("nomeTitolo", ["tolower(${target})", "contains", "${value.tolower}"]);
 
         this.dataSourceClassificazione = new DataSource({
-            store: oataContextDefinitionTitolo.getContext()[Entities.Titolo.name].on("loading", (loadOptions) => {
+            store: oataContextDefinitionTitolo.getContext()[new Titolo().getName()].on("loading", (loadOptions) => {
                 loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
                 oataContextDefinitionTitolo.customLoading(loadOptions);
             }),
             filter: [["idAzienda", "=", this.dataFromDettaglioProcedimentoComponent.azienda.id]]
         });
-        // this.dataSourceClassificazione.load();
-
-        /*
-            this.dataSourceClassificazione = new DataSource({
-                store: this.odataContextEntitiesDefinition.getContext()[Entities.Titolo.name],
-                filter: [['idAzienda', '=', this.sharedData.getSharedObject()["DettaglioProcedimentoComponent"]["azienda"]["id"]]]
-            })
-            this.dataSourceClassificazione.load();
-        */
-        // LE INFO NECESSARIE A POPOLARE QUESTI DUE HEADER VENGONO SCRITTE NELLO SharedData DALLA VIDEATA dettaglio-procedimento
     }
 
 
@@ -149,7 +134,6 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
     }
 
     setInitialValues() {
-        console.log("onInitialized");
         this.initialAziendaTipoProcedimento = Object.assign({}, this.aziendaTipoProcedimento);
     }
 
@@ -179,7 +163,8 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
                 ["idAzienda.id", "=", azienda.id]]);
             this.datasource.load().then(res => {
                 // this.aziendaTipoProcedimento = res[0] as AziendaTipoProcedimento;
-                this.aziendaTipoProcedimento.build(res[0], AziendaTipoProcedimento);
+                // this.aziendaTipoProcedimento.build(res[0], AziendaTipoProcedimento);
+                this.aziendaTipoProcedimento.build(res[0]);
                 this.setFields(tipoProcedimentoDefault);
                 if (setInitialValues) {
                     this.setInitialValues();
@@ -189,13 +174,9 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
     }
 
     public formFieldDataChanged(event) {
-        console.log("dataChanged: ", Entity.isEquals(this.aziendaTipoProcedimento, this.initialAziendaTipoProcedimento));
-        console.log("Event object: ", event);
+        // console.log("dataChanged: ", Entity.isEquals(this.aziendaTipoProcedimento, this.initialAziendaTipoProcedimento));
+        // console.log("Event object: ", event);
         this.datiModificati = !Entity.isEquals(this.aziendaTipoProcedimento, this.initialAziendaTipoProcedimento);
-        // if (this.datiModificati)
-        //     this.testoBottoneAnnulla = "Annulla";
-        // else
-        //     this.testoBottoneAnnulla = "Indietro";
     }
 
     public buttonAnnullaClicked(event) {
@@ -224,31 +205,25 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
         else {
             this.router.navigate(["/associazione-aziende"]);
         }
-        // Saving data
-        // this.datasource.store().update(this.aziendaProcedimento.id, this.aziendaProcedimento);
     }
 
     public buttonConfermaClicked(event) {
         // Saving data
         if (this.nuovaAssociazione) {
             this.statusPage = "insert-status";
-            this.datasource.store().insert(this.aziendaTipoProcedimento).done(res => {this.buildAziendaTipoProcedimento(true); });
+            this.datasource.store().insert(this.aziendaTipoProcedimento).done(res => { this.buildAziendaTipoProcedimento(true); });
             this.nuovaAssociazione = false;
         }
         else {
             this.statusPage = "modify-status";
-            // this.datasource.store().update(this.aziendaTipoProcedimento.id, this.aziendaTipoProcedimento).done(res => (this.setFields(this.dataFromDettaglioProcedimentoComponent["tipoProcedimento"])));
             this.datasource.store().update(this.aziendaTipoProcedimento.id, this.aziendaTipoProcedimento).done(res => (this.buildAziendaTipoProcedimento(true)));
         }
-        notify( {
-            message: "salvataggio effettuato con successo",
+        notify({
+            message: "Salvataggio effettuato con successo",
             type: "success",
             displayTime: 1200,
-            position: {
-                my: "bottom",
-                at: "top",
-                of: "#button-row-2"
-            }
+            position: TOAST_POSITION,
+            width: TOAST_WIDTH
         });
     }
 
@@ -257,7 +232,6 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
         console.log(this.aziendaTipoProcedimento);
 
         if (Entity.isEquals(this.aziendaTipoProcedimento, this.initialAziendaTipoProcedimento)) {
-            console.log("UGUALI");
         } else {
             console.log("DIVERSI");
         }
@@ -271,21 +245,13 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
     }
 
     public buttonVediAssociazioni(azienda) {
-        // const obj = {
-        //     AziendeTipiProcedimentoComponent: {
-        //         aziendaTipoProcedimento: azienda
-        //     },
-        //     headerAzienda: this.testoHeaderAzienda,
-        //     headerTipoProcedimento: this.testoHeaderTipoProcedimento
-        // };
-        const obj = {
-            aziendaTipoProcedimento: azienda,
-            headerAzienda: this.testoHeaderAzienda,
-            headerTipoProcedimento: this.testoHeaderTipoProcedimento
-        };
-        this.globalContextService.setInnerSharedObject("GestioneAssociazioneAziendaComponent", obj);
-        // this.sharedData.setSharedObject(obj);
-        this.router.navigate(["/struttura-tipi-procedimento"]);
+        this.router.navigate(["/struttura-tipi-procedimento"], {
+            queryParams: {
+                aziendaTipoProcedimento: this.aziendaTipoProcedimento.id,
+                azienda: this.aziendaTipoProcedimento.idAzienda.id,
+                tipoProcedimento: this.aziendaTipoProcedimento.idTipoProcedimento.nome
+            }
+        });
     }
 
     public valueTitoloChanged(e) {
@@ -318,12 +284,9 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
         else {
             this.router.navigate(["/associazione-aziende"]);
         }
-        // CustomReuseStrategy.componentsReuseList.push("*");
-        // this.router.navigate(["/app-dettaglio-procedimento"]);
     }
 
     public onReload() {
-        console.log("onReload");
         this.buildAziendaTipoProcedimento(true);
     }
 
@@ -331,6 +294,17 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
     }
 
     public onRestore() {
-        this.aziendaTipoProcedimento = Object.assign( {}, this.initialAziendaTipoProcedimento );
+        this.aziendaTipoProcedimento = Object.assign({}, this.initialAziendaTipoProcedimento);
     }
+
+    customDisplayExprClassificazione(data: Titolo) {
+        let displayExpression: string = "";
+
+        if (data) {
+            displayExpression = "[" + data.classificazione + "] " + data.nome;
+        }
+        return displayExpression;
+
+    }
+
 }

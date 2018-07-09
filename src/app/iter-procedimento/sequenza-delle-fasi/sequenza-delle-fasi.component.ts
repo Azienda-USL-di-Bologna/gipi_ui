@@ -1,29 +1,33 @@
 import DataSource from "devextreme/data/data_source";
-import { Component, Input, ViewEncapsulation, OnInit, SimpleChanges } from '@angular/core';
-import { DxDataGridComponent } from 'devextreme-angular';
-import { FaseIter } from '../../classi/server-objects/entities/fase-iter';
-import { Fase } from '../../classi/server-objects/entities/fase';
-import { Iter } from '../../classi/server-objects/entities/iter';
-import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
-import { OdataContextDefinition } from '@bds/nt-angular-context/odata-context-definition';
-import { Entities } from "environments/app.constants";
-import { isUndefined } from "util";
+import { Component, Input, ViewEncapsulation, OnInit, SimpleChanges } from "@angular/core";
+import { FaseIter, Fase, Iter } from "@bds/nt-entities";
+import { OdataContextFactory } from "@bds/nt-context";
+import { OdataContextDefinition } from "@bds/nt-context";
 
 
 @Component({
-  selector: 'app-sequenza-delle-fasi',
-  templateUrl: './sequenza-delle-fasi.component.html',
-  styleUrls: ['./sequenza-delle-fasi.component.scss']
+  selector: "app-sequenza-delle-fasi",
+  templateUrl: "./sequenza-delle-fasi.component.html",
+  styleUrls: ["./sequenza-delle-fasi.component.scss"]
 })
 export class SequenzaDelleFasiComponent implements OnInit {
 
   public datasource: DataSource;
+  public idIter: number;
+  public statoAttuale: string;
 
-  //qua devo prendermi poi il parametro dell'oggetto Iter che mi passa la videata
-  //@Input("idIter") idIter: string;
-  @Input("daPadre") daPadre: Object;
-
-
+  @Input() set daPadre(value: any){
+    this.idIter = parseInt(value["idIter"]);
+    let _that = this;
+    this.datasource = new DataSource({
+      store: this.odataContextDefinition.getContext()[new FaseIter().getName()],
+      expand: ["idFase", "idIter"],
+      filter: ["idIter.id", "=", this.idIter],
+      onChanged: function(){
+        _that.statoAttuale = "(" + this.items()[0].idFase.nome + ")";
+      }
+    });
+  };
 
   public faseIter: FaseIter = new FaseIter;
   public iter: Iter = new Iter();
@@ -32,32 +36,9 @@ export class SequenzaDelleFasiComponent implements OnInit {
 
   constructor(private odataContextFactory: OdataContextFactory) {
     this.odataContextDefinition = odataContextFactory.buildOdataContextEntitiesDefinition();
-
-    // this.datasource = new DataSource({
-    //   store: this.odataContextDefinition.getContext()[Entities.FaseIter.name],
-    //   expand: ['idFase'],
-    //   filter: ['FK_id_iter', '=', this.idIter]
-    //   //sort: ['dataInizioFase']
-    // });
-    // this.datasource.sort({ getter: "dataInizioFase", desc: true });
   }
 
-  ngOnInit() {
-    this.datasource = new DataSource({
-      store: this.odataContextDefinition.getContext()[Entities.FaseIter.name],
-      expand: ['idFase', 'idIter'],
-      filter: ['idIter.id', '=', parseInt(this.daPadre['idIter'])]
-      //sort: ['dataInizioFase']
-    });
-    this.datasource.sort({ getter: "idFase", desc: true });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.datasource != undefined) {
-      this.datasource.load();
-    }
-
-  }
+  ngOnInit() { }
 
 
 }

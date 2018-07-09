@@ -1,85 +1,99 @@
 <h3 class="intestazione" style="text-align: center">Tipi di procedimento</h3>
 
-<dx-data-grid #definizione_tipi_procedimento
-    id="gridContainer"
-    [dataSource]="dataSource"
-    [allowColumnReordering]="true"
-    [columnAutoWidth]="true"
-    [paging]="false"
-    (onEditingStart)="handleEvent('EditingStart',$event)"
+<dx-data-grid #definizione_tipi_procedimento wordWrapEnabled="true" id="gridContainer" [dataSource]="dataSource" [allowColumnReordering]="true"
+    [columnAutoWidth]="true" [paging]="false" 
+    (onEditingStart)="handleEvent('EditingStart',$event)" 
     (onInitNewRow)="handleEvent('InitNewRow',$event)"
-    (onRowInserting)="handleEvent('RowInserting',$event)"
-    (onRowInserted)="handleEvent('RowInserted',$event)"
+    (onRowInserting)="handleEvent('RowInserting',$event)" 
+    (onContentReady)="handleEvent('onContentReady',$event)" 
+    (onRowInserted)="handleEvent('RowInserted',$event)" 
     (onRowUpdating)="handleEvent('RowUpdating',$event)"
-    (onRowUpdated)="handleEvent('RowUpdated',$event)"
-    (onRowRemoving)="handleEvent('RowRemoving',$event)"
+    (onRowUpdated)="handleEvent('RowUpdated',$event)" 
+    (onRowRemoving)="handleEvent('RowRemoving',$event)" 
     (onRowRemoved)="handleEvent('RowRemoved',$event)"
-    (onRowClick)="handleEvent('RowClick',$event)"
-    (onSelectionChanged)="handleEvent('SelectionChanged',$event)"
+    (onRowClick)="handleEvent('RowClick',$event)" 
+    (onSelectionChanged)="handleEvent('SelectionChanged',$event)" 
     (onCellClick)="handleEvent('CellClick',$event)"
-    (onToolbarPreparing)="onToolbarPreparing($event)"
-    (onCellPrepared)="onCellPrepared($event)"
+    (onToolbarPreparing)="onToolbarPreparing($event)" 
+    (onCellPrepared)="onCellPrepared($event)" 
     (onButtonClick)="handleEvent('ButtonClick',$event)"
-    (onEditorPreparing)="handleEvent('onEditorPreparing',$event)">
+    (onEditorPreparing)="handleEvent('onEditorPreparing',$event)"
+    (onRowValidating)= "handleEvent('rowValidating',$event)">
 
-    <dxo-filter-row [visible]="true" [operationDescriptions]="filterOperationDescriptions"></dxo-filter-row>
-    
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+
     <dxi-column dataField="codice" caption="Codice" alignment="center" sortOrder="asc" width="auto"></dxi-column>
     <dxi-column dataField="nome"></dxi-column>
-    <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva" [allowSorting]="true" alignment="center" [allowFiltering]="true" width="auto"></dxi-column>
-    <dxi-column dataField="dataInizioValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true" width="auto"></dxi-column>
-    <dxi-column dataField="dataFineValidita" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center" [allowFiltering]="true" width="auto"></dxi-column>
+    <dxi-column caption="Attivo" [calculateCellValue]="calcolaSeAttiva" [allowSorting]="true" alignment="center" [allowFiltering]="true"
+        width="auto"></dxi-column>
+    <dxi-column dataField="dataInizioValidita" caption="Data Inizio Validità" [dataType]="'date'" [format]="'dd/MM/yyyy'" alignment="center"
+        [allowFiltering]="true">
+        <!--<dxi-validation-rule type="required" message="la data inizio validità è obbligatoria"></dxi-validation-rule>-->
+        <!--<dxi-validation-rule-->
+                <!--type="custom" [validationCallback] = "validazione" message="La data di inizio validità deve essere precedente a quella di fine">-->
+        <!--</dxi-validation-rule>-->
+    </dxi-column>
+    <dxi-column dataField="dataFineValidita"  caption="Data Fine Validità" caption="Data Fine Validità" [dataType]="'date'" [format]="'dd/MM/yyyy'"
+        alignment="center" [allowFiltering]="true">
+        <!--<dxi-validation-rule-->
+                <!--type="custom" [validationCallback] = "validazione" message="La data di fine validità deve essere successiva a quella di inizio">-->
+        <!--</dxi-validation-rule>-->
+    </dxi-column>
     <dxi-column dataField="modoApertura" [visible]="false"></dxi-column>
-    <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
+    <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="100"></dxi-column>
     <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni">
-        <a routerLink="/associazione-aziende" routerLinkActive="active">
-            <dx-button text="" hint="Associazione alle Aziende" icon='preferences' (onClick)="handleEvent('associaClicked', $event)" ></dx-button>
-        </a>
+
+        <dx-button text="" hint="Associazione alle Aziende" icon='preferences' (onClick)="handleEvent('associaClicked', $event)"></dx-button>
         <dx-button text="" hint="Modifica dettagli tipo procedimento" icon='edit' (onClick)="handleEvent('editClicked', $event)"></dx-button>
     </div>
     <dxi-column dataField="descrizioneDefault" [visible]="false"></dxi-column>
     <dxi-column dataField="durataMassimaSospensione" [visible]="false"></dxi-column>
     <dxi-column dataField="normaRiferimento" [visible]="false"></dxi-column>
     <dxi-column dataField="obbligoEsitoConclusivo" [visible]="false"></dxi-column>
-    <dxi-column dataField="pubblicazioneRegistroAccessi" [visible]="false"></dxi-column>
-    <dxi-column dataField="durataMassimaIter" [visible]="false"></dxi-column>
-
-    <dxo-editing 
-        mode="popup"
-        cellTemplate="Modifica"
-        title="Modifica"
-        style="align-content: center; justify-content: center"
-        [allowUpdating]="false"
-        [allowDeleting]="false"
-        [allowAdding]="true"
-        [texts]="texts">
-        <dxo-popup
-            [maxWidth]="800"
-            [minWidth]="500"
-            [maxHeight]="600"
-            title="Modifica Tipo Procedimento"
-            [showTitle]="true"
-            [toolbarItems]="popupButtons">
+    <dxi-column dataField="durataMassimaIter" [visible]="false"  editorType="dxNumberBox"></dxi-column>
+    <dxo-editing mode="popup" cellTemplate="Modifica" title="Modifica" style="align-content: center; justify-content: center"
+        [allowUpdating]="false" [allowDeleting]="false" [allowAdding]="true" [texts]="texts" #pippo>
+        <dxo-popup id="erPopuppe" [maxWidth]="800" [minWidth]="500" [maxHeight]="600" [showTitle]="true" [toolbarItems]="popupButtons"
+            [showCloseButton]="false">
         </dxo-popup>
-        <dxo-form colCount="2">
-            <dxi-item dataField="codice" [colSpan]="2"></dxi-item>
-            <dxi-item dataField="nome" [colSpan]="2"></dxi-item>
-            <dxi-item dataField="descrizioneDefault" [colSpan]="2"></dxi-item>
-            <dxi-item dataField="modoApertura" [colSpan]="2"></dxi-item>
-            <dxi-item dataField="normaRiferimento" [colSpan]="2"></dxi-item>
-            <dxi-item dataField="dataInizioValidita" [colSpan]="1"></dxi-item>
-            <dxi-item dataField="dataFineValidita" [colSpan]="1"></dxi-item>
-            <dxi-item dataField="durataMassimaIter" [colSpan]="1"></dxi-item>
-            <dxi-item dataField="durataMassimaSospensione" [colSpan]="1"></dxi-item>
-            <dxi-item dataField="obbligoEsitoConclusivo" [colSpan]="1"></dxi-item>
-            <dxi-item dataField="pubblicazioneRegistroAccessi" [colSpan]="1"></dxi-item>
+        <dxo-form colCount="2" validationGroup="validationDefinizioneTipiProcedimento" [showValidationSummary]="true" [colCount]="2">
+            <!--<dxi-item dataField="codice" [editorOptions]="{ format: '#####' }" [colSpan]="2"></dxi-item>-->
+            <dxi-item dataField="nome"  cssClass="label-wrap" [colSpan]="2">
+                <dxi-validation-rule type="required" message="inserire il nome"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="descrizioneDefault"  cssClass="label-wrap" [colSpan]="2" >
+                <dxi-validation-rule type="required" message="inserire la descrizione di default"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="modoApertura"  cssClass="label-wrap" [colSpan]="2">
+                <dxi-validation-rule type="required" message="scegliere la modalità di apertura"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="normaRiferimento"  cssClass="label-wrap" [colSpan]="2">
+                <dxi-validation-rule type="required" message="inserire la norma di riferimento"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="dataInizioValidita"  cssClass="label-wrap" [colSpan]="1">
+                <dxi-validation-rule type="required" message="la data inizio validità è obbligatoria"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="dataFineValidita" [colSpan]="1">
+
+            </dxi-item>
+            <dxi-item dataField="durataMassimaIter"  cssClass="label-wrap" [editorOptions]="{onInput:onInputNumberBox}" editorType="dxNumberBox" [colSpan]="1">
+                <dxi-validation-rule type="required" message="la durata massima dell'iter è obbligatoria"></dxi-validation-rule>
+                <dxi-validation-rule type="pattern" [pattern]="patternGreaterZero" message="la durata massima di procedimento deve avere un valore positivo"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item  dataField="durataMassimaSospensione" cssClass="label-wrap" [editorOptions]="{onInput:onInputNumberBox}" [colSpan]="1">
+                <dxi-validation-rule type="required" message="la durata massima di sospensione è obbligatoria"></dxi-validation-rule>
+                <dxi-validation-rule type="pattern" [pattern]="patternGreaterEqualZero" message="la durata massima di sospensione non può essere negativa"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="obbligoEsitoConclusivo" [label]="{text: 'Obbligo esito conclusivo e motivazione'}"  cssClass="label-wrap" [colSpan]="2"></dxi-item>
+            <dxi-item [label]="{text: 'Pubblicazione sui registri'}" cssClass="label-wrap" [colSpan]="2">
+                <dx-tag-box #tag_pubblicazione
+                    *ngIf="showTagBox"
+                    [dataSource]="dataSourceRegistri"
+                    [value]="registri"
+                    displayExpr="descrizione"
+                    placeholder="Seleziona...">
+                </dx-tag-box>     
+            </dxi-item>
         </dxo-form>
     </dxo-editing>
 </dx-data-grid>
-
-
-
-
-
-
-

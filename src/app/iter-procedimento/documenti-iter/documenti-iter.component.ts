@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, SimpleChanges } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
-import { Entities } from "environments/app.constants";
-import { OdataContextFactory } from "@bds/nt-angular-context";
+import { OdataContextDefinition } from "@bds/nt-context";
+import { OdataContextFactory } from "@bds/nt-context";
+import {DocumentoIter} from "@bds/nt-entities";
 
 @Component({
   selector: "documenti-iter",
@@ -21,18 +21,17 @@ export class DocumentiIterComponent {
   }
 
   ngOnInit() {
+    console.log("DOCUMENTI-ITER.NGONINIT", this.daPadre);
     this.dataSourceDocumentiIter = new DataSource({
-      store: this.odataContextDefinition.getContext()[Entities.DocumentoIter.name],
+      store: this.odataContextDefinition.getContext()[new DocumentoIter().getName()],
       expand: ["eventoIterList/idEvento"],
-      filter: ['idIter.id', '=', parseInt(this.daPadre['idIter'])]
+      filter: [["idIter.id", "=", parseInt(this.daPadre["idIter"])], ["parziale", "=", false]]
     });
    }
 
-     ngOnChanges(changes: SimpleChanges) {
-    if (this.dataSourceDocumentiIter != undefined) {
-      //debugger;
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.dataSourceDocumentiIter !== undefined) {
       this.dataSourceDocumentiIter.load();
     }
-
   }
 }

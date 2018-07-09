@@ -1,9 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextDefinition } from "@bds/nt-angular-context/odata-context-definition";
-import { OdataContextFactory } from "@bds/nt-angular-context/odata-context-factory";
-import { Entities } from "environments/app.constants";
+import { OdataContextDefinition, GlobalContextService, CustomLoadingFilterParams, OdataUtilities } from "@bds/nt-context";
+import { OdataContextFactory } from "@bds/nt-context";
 import { Router } from "@angular/router";
+import {Iter, bAzienda, bUtente, GetIterUtente} from "@bds/nt-entities";
+import { Subscription } from "rxjs";
+import { Observable } from "rxjs/Observable";
+import { LoggedUser } from "@bds/nt-login";
 
 @Component({
   selector: "app-lista-iter",
@@ -13,21 +16,52 @@ import { Router } from "@angular/router";
 export class ListaIterComponent implements OnInit {
 
   private odataContextDefinition: OdataContextDefinition;
+  private subscriptions: Subscription[] = [];
+  private cfUtente: string;
+
   public dataSource: DataSource;
-  public infoGeneriche: any = {
-    azienda: "AOSP-BO",
+  public loggedUser$: Observable<LoggedUser>;
+  public idAzienda: number;
+
+  /* public infoGeneriche: any = {
+    azienda: "Caricamento...",
     struttura: "UO DaTer",
     procedimento: "Procedimento A"
-  };
+  }; */
 
-  constructor(private odataContextFactory: OdataContextFactory, private router: Router) {
-    this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+  constructor(private odataContextFactory: OdataContextFactory, private router: Router, private globalContextService: GlobalContextService,
+    private odataUtilities: OdataUtilities) {
+    this.odataContextDefinition = this.odataContextFactory.buildOdataFunctionsImportDefinition();
   }
 
   ngOnInit() {
+    this.loggedUser$ = this.globalContextService.getSubjectInnerSharedObject("loggedUser");
+    this.subscriptions.push(
+      this.loggedUser$.subscribe(
+          (loggedUser: LoggedUser) => {
+            if (loggedUser) {
+              this.idAzienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id];
+              this.cfUtente = loggedUser.getField(bUtente.codiceFiscale);
+            }  
+          }
+      )
+    );
+
     this.dataSource = new DataSource({
-      store: this.odataContextDefinition.getContext()[Entities.Iter.name],
-      expand: ["idResponsabileProcedimento.idPersona"],
+      store: this.odataContextDefinition.getContext()[new GetIterUtente().getName()]
+      .on("loading", (loadOptions) => {
+        // console.log("loadOptions_prima", loadOptions);
+        this.odataUtilities.filterToCustomQueryParams(["oggetto", "numero", "idStato.descrizione",
+          "idResponsabileProcedimento.idPersona.descrizione", "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome"], loadOptions);
+        // console.log("loadOptions_dopo", loadOptions);
+        }),
+      customQueryParams: {
+        cf: this.cfUtente,
+        idAzienda: this.idAzienda
+      },
+      expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona",
+        "idFaseCorrente", "idStato", "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento"],
+      sort: [{ field: "numero", desc: true }]
     });
   }
 

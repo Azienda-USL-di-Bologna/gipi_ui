@@ -15,9 +15,20 @@
 
 }
 
-.btn {
-  color: white;
+// questo è per il grigio del back-ground delle popup
+/deep/ .dx-popup-normal, /deep/ .dx-popup-content {
+  background-color: #f1f1f3 !important;
 }
+
+/deep/.dx-icon.dx-icon-close{
+  color: white !important;
+}
+/deep/.dx-icon.dx-icon-close:hover{
+  color:black !important;
+}
+
+
+
 
 .dropdown-menu {
   box-shadow: 0 0 3px rgba(0,0,0,.15);
@@ -26,10 +37,10 @@
 
 /deep/ .navbar-login
 {
-  width: 305px;
-  padding: 10px;
+  //width: px;
+  //padding: 10px;
   padding-bottom: 0px;
-  
+
 }
 
 /deep/ .test {
@@ -37,13 +48,19 @@
 }
 
 /deep/ .dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title {
-  background-color:  #FFC057 !important;
+  // background-color:  #FFC057 !important;
+  background-color:  #993366 !important;
+  color: white;
 }
 
+/* /deep/ .dx-popup-content {
+  background-color: #f1f1f3 !important;
+}
+ */
 // BOTTONI
 // escludo quelli con icone
 /deep/ .dx-button-has-text:not(.dx-button-has-icon) {
-  background-color: #337ab7;  
+  background-color: #337ab7;
   border-color: #2d6da3;
   color: #fff;
   border-radius: 4px;
@@ -63,7 +80,7 @@
   border-width: 1px;
   border-style: solid;
   padding: 7px 18px 8px;
-  cursor: pointer;
+  // cursor: pointer;
 }
 
 /deep/ .button-azioni:hover {
@@ -71,9 +88,11 @@
   border-color: #265a87;
 }
 
-/deep/ .button-azioni :hover {
-  background-color: #285f8f;
-  border-color: #265a87;
+/deep/ .button-azioni:disabled:hover {
+  /* background-color: #285f8f;
+  border-color: #265a87; */
+  background-color: #337ab7;
+  border-color: #2d6da3;
 }
 
 
@@ -108,6 +127,10 @@
 
 /deep/ .dx-field-label {
   white-space: initial;
+}
+
+/deep/ .fix-bug-dx .dx-field-item-label-content {
+  width: initial;
 }
 
 /* SE VOGLIO COLORE RIGHE ALTERNATE ALTERNATO: **/
@@ -168,13 +191,20 @@
 //   width:100%;
 //   height:100%
 // }
+
+.clEmptyHeader {
+  // padding-bottom: 200px;
+  margin-bottom: 10px;
+}
+
 .clHeader {
   display: table;
-  padding: 0 32px;
+  padding: 0 20px;
   height: 64px;
-  background-color: #fff;
+  // background-color: #fff;
+  background-color: #993366;
   box-shadow: 0 0 1px rgba(0,0,0,.15);
-  margin-bottom: 30px;
+  margin-bottom: 5px;
 }
 .clContentBody {
   height: 100%;
@@ -191,15 +221,21 @@
 //   left: 0;
 //   right: 0;
 // }
+
 .clFooter {
-  display: table-footer-group
-}
+  //  display: table-footer-group
+    position: auto;
+    left: 0;
+    bottom: 15px;
+    width: 100%;
+  }
 #sidebar-toggle-button {
   height: 36px;
   width: 36px;
   //padding: 4px;
   background-color: #993366;
-  border-color: #791c4a;
+  //border-color: #791c4a;
+  border-color: #993366;
 }
 #sidebar-toggle-button:hover {
   background-color: #791c4a;
@@ -210,6 +246,11 @@
 .heightCPC{
   height: 100%;
 }
+
+/deep/ .background-darker {
+  background-color: #d9d9e0 !important;
+}
+
 .clRightSide{
   display: table;
   height: 100%;
@@ -219,11 +260,11 @@
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
-.sidebar-style {
+/deep/ .sidebar-style {
   top: 0;
   left: 0;
   height: 100%;
-  z-index: 999;
+  z-index: 999 !important;
   transition: all 0.3s;
   position: fixed;
   padding: 0 5px 0 0;
@@ -231,7 +272,8 @@
 /deep/ .sidebar-style .main-menu{
   background-color: rgba(32, 50, 68, 0.9803921568627451) !important;
   border: none !important;
-  box-shadow: 0 0 5px rgba(0,0,0,.7); 
+  box-shadow: 0 0 5px rgba(0,0,0,.7);
+  min-width: 160px;
 }
 /deep/ .sidebar-style .main-menu li{
   color: rgba(255,255,255,.87) !important;
@@ -261,36 +303,92 @@
   font-size: 87px;
 }
 
-#userProfile {
-  float: right;
-  margin-right: 8px;
-}
 // /deep/ dx-data-grid > .dx-datagrid{
-//   box-shadow: 0 0 1px rgba(0,0,0,.15); 
-//   background-color: #fff; 
+//   box-shadow: 0 0 1px rgba(0,0,0,.15);
+//   background-color: #fff;
 //   border-radius: 2px;
 // }
 /deep/ .dx-datagrid-header-panel{
   border-bottom: none;
 }
-/deep/ dx-form > div > div > div > .dx-box-item{
-  box-shadow: 0 0 1px rgba(0,0,0,.15); 
-  padding: 15px; 
-  background-color: #fff; 
-  border-radius: 2px;
-  margin-bottom: 8px;
-}
+// /deep/ dx-form > div > div > div > .dx-box-item{
+//   box-shadow: 0 0 1px rgba(0,0,0,.15);
+//   padding: 15px;
+//   background-color: #fff;
+//   border-radius: 2px;
+//   margin-bottom: 8px;
+// }
+// /deep/ dx-form .dx-form-group{
+//   box-shadow: 0 0 1px rgba(0,0,0,.15); 
+//   padding: 15px; 
+//   background-color: #fff; 
+//   border-radius: 2px;
+//   margin-bottom: 8px;
+// }
 /deep/ .whitePanel{
-  box-shadow: 0 0 1px rgba(0,0,0,.15); 
-  padding: 15px; 
+  box-shadow: 0 0 1px rgba(0,0,0,.15);
+  padding: 15px;
   background-color: #fff;
 }
-.floatRight{
-  float: right;
+
+/deep/ .griginoPanel{
+  box-shadow: 0 0 1px rgba(0,0,0,.15);
+  padding: 15px;
+  background-color: #f1f1f3;
 }
-.logout{
-  cursor: pointer;
+
+/deep/ .grigionePanel{
+  box-shadow: 0 0 1px rgba(0,0,0,.15);
+  padding: 15px;
+  background-color: #c3c3cb;
 }
+
 .dropdown-toggle::after{
   border: none;
 }
+
+.btn, .toggle, .logout {
+  cursor: pointer;
+}
+
+#userDropdownToggle {
+  width: 25px;
+  height: 25px;
+}
+
+#userDropdown {
+  left: -150px;
+   top: 40px;
+}
+
+//.image-btn {
+//  background-image: attr(data-btn-bgimage);
+//}
+
+.userInformationBox{
+  height: 38px;
+}
+
+.tableUserInformation{
+  height: 100%;
+}
+
+.dimBoxImageSignOut{
+  width: 25px;
+  height: 25px;
+}
+
+.boxNomeCognome{
+  font-weight: bold;
+  color: white;
+}
+
+.boxAzienda {
+  color: white;
+  font-weight: normal;
+}
+
+/* Dimensione di default per il toast in tutta l'app */
+/* /deep/ .dx-toast-content {
+  width: 300px!important;
+} */

@@ -1,0 +1,58 @@
+<h3 class="intestazione" style="text-align: center">Tipi procedimento aziendale di {{descAzienda}}</h3>
+
+<div class="col-10 offset-1 whitePanel">
+
+     <dx-data-grid #tipi_procedimento_aziendale
+      style="align-content: center"
+      [dataSource]="dataSourceProcedimenti"
+      columnResizingMode="nextColumn"
+      hoverStateEnabled="checkBoxState"
+      noDataText="Non ci sono procedimenti attivi">
+  
+      <dxo-paging [pageSize]="10"></dxo-paging>
+      
+      <!-- Qui cominciano i dati -->
+      <dxi-column dataField="idTipoProcedimento.nome" caption="Tipo Procedimento" ></dxi-column>
+      <!-- <dxi-column dataField="descrizioneDefault" caption="Descrizione"></dxi-column> -->
+      <dxi-column dataField="dataInizio" caption="Valido dal" alignment="center" [dataType]="'date'" [format]="'dd/MM/yyyy'"></dxi-column>
+      <dxi-column dataField="durataMassimaProcedimento" caption="Durata massima iter (gg)" alignment="center" ></dxi-column>
+      <dxi-column dataField="durataMassimaSospensione" caption="Durata massima della sospensione (gg)" alignment="center">
+
+      </dxi-column>
+      <dxi-column caption="Azioni" cellTemplate="buttonCellTemplate" id="Azioni" width="auto"></dxi-column>
+      <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni" width="auto">
+        <dx-button id="modifica" text="" hint="Modifica dettagli tipo procedimento" icon='edit' (onClick)="modificaDettagli($event, d)"></dx-button>
+        <dx-button text="" hint="Associa con Organigramma" icon='assets/images/organigramma2.png' (onClick)="associaOrganigramma(d)"></dx-button>
+        <dx-button id="associa" text="" hint="Gestisci Associazioni" icon='preferences' (onClick)="gestisciAssociazioni(d)"></dx-button>
+      </div>
+    </dx-data-grid>
+  
+
+  <dx-popup *ngIf="popupVisible"
+    id="popupDettaglioTipoProcedimento"
+    style="overflow: auto;"
+    title="Dettaglio tipo procedimento"
+    (onHiding) = "caricaDataSource()"
+    [maxWidth]="getWidth()*2/3"
+    [height]="'auto'"
+    [showTitle]="true"
+    [closeOnOutsideClick]="true"
+    [(visible)]="popupVisible">
+    <div *dxTemplate="let data of 'content'">
+      <dettaglio-tipo-procedimento [procedimento]="procedimentoDaPassare.id" (messageEvent)="receiveMessage($event)"></dettaglio-tipo-procedimento>
+    </div>
+ </dx-popup>
+</div>
+
+<dx-popup class="popup" [width]="600" [height]="670" [showTitle]="true" title="Associa a strutture" [dragEnabled]="false"
+  [closeOnOutsideClick]="false" [(visible)]="popupOrganigrammaVisible">
+  <div *dxTemplate="let data of 'content'">
+    <popup-struttura-tipi-procedimento
+      [readOnly]="false" 
+      [enableCheckRecursively]="false" 
+      [aziendaTipoProcedimentoObj]="aziendaTipiProcedimentoData"
+      [lanciaRefreshAlPadre]="false"
+      (closePopup)="closePopup()">
+    </popup-struttura-tipi-procedimento>
+  </div>
+</dx-popup>

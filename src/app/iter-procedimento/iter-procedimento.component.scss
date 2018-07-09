@@ -1,16 +1,25 @@
 .header-font{
     font-weight: bold;
- }
- .header-font h3{
-     text-align: center;
- }
- .footerDiv{
+}
+.header-font h3{
+    text-align: center;
+}
+.footerDiv{
     // position: fixed;
     // bottom: 0;
     text-align: right;
-    margin: 64px 0 16px 0;
+    margin: 14px 0 16px 0;
     padding: 0 96px;
- }
+}
+.fixHeight{
+    height: 340px;
+}
+
+.iter-procedimento .dx-state-disabled.dx-widget, .iter-procedimento .dx-state-disabled.dx-checkbox .dx-checkbox-icon{
+    opacity: 0.8 !important;
+    color: black !important;
+}
+
 /*  .footerDiv > dx-button{
     display: inline-block;
     padding: 2px 8px;
@@ -39,7 +48,7 @@ label{
 }
 .wrapperPulsantiPopup{
     margin-top: 16px;
-    text-align: right;
+    text-align: center;
 }
 /* button{
     background-color: #337ab7;
@@ -71,7 +80,93 @@ label{
 #gridContainer .dx-scrollable-scroll {
     width: 15px;
 }
+// /deep/ dx-form .dx-form-group{
+//   box-shadow: 0 0 1px rgba(0,0,0,.15); 
+//   padding: 15px; 
+//   background-color: #fff; 
+//   border-radius: 2px;
+//   margin-bottom: 8px;
+// }
 
-.fix-bug-dx .dx-field-item-label-content {
-    width: initial !important;
+dx-form .dx-form-group-with-caption {
+  box-shadow: 0 0 1px rgba(0,0,0,.15);
+  padding: 15px;
+  background-color: #f1f1f3;
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
+
+.icon-margin {
+    margin-left: 10%;
+    margin-top: -5px;
+}
+
+.button-css {
+    width: 100px;
+}
+
+.btn-space {
+    margin: 35px;
+}
+
+.box-margin {
+    margin-top: -8px;
+    margin-bottom: 8px;
+}
+.meVedi .dx-form-group-with-caption{
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding: 0 !important;
+}
+.meVedi .dx-form-group-caption{
+    font-size: 18px;
+}
+.button-azioni{
+    padding: 5px 8px;
+}
+
+
+/*REGOLE PER I CAMPI DA EVIDENZIARE IN CASO DI PUBBLICAZIONE ALL'ALBO*/
+dx-form .hightlightClass .dx-form-group-caption{
+    color: black;
+    font-weight: bold;
+    font-style: italic;
+}
+
+ 
+
+dx-form .hightlightClass label.dx-field-item-label.dx-field-item-label-location-left {
+    color: black;
+    font-weight: bold;
+    font-style: italic;
+}
+
+/*
+dx-form .hightlightClass .dx-field-item-content.dx-field-item-content-location-right input {
+    color: black;
+    background-color: #fff2ac;
+}
+
+dx-form .hightlightClass .dx-field-item-content.dx-field-item-content-location-right .dx-lookup-field-wrapper {
+    color: black;
+    background-color: #fff2ac;
+}
+
+dx-form .hightlightClass .btn.button-azioni#note {
+    color: black;
+    background-color: #fff2ac;
+    background:  #fff2ac;
+}
+*/
+dx-form .hightlightClass #infoPubblicazioneAlbo {
+    // color: #337ab7;
+    text-align: right;
+    color: black;
+    font-weight: bold;
+    font-style: italic;
+}
+
+i.hightlightClass {
+    color: black;
+    font-weight: bold;
 }

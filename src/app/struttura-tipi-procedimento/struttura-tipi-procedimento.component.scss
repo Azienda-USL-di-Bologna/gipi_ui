@@ -4,7 +4,6 @@
 }
 
 .padding-button {
-    margin-top: 5px;
     margin-left: 15%;
     margin-right: 15%;
     margin-bottom: 5px;
@@ -14,15 +13,43 @@
     margin-top:10px;
 }
 
+.padding-bottom {
+    margin-bottom: 15px;
+}
+
+.margine-sinistro {
+    margin-left: 25%;
+}
+
+.buttons-form {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    margin-right: 15%;
+    width: 120px;
+}
+
+@media (max-width: 1090px) {
+    .custom-sm-col {
+      margin-left: 10%;
+    }
+}
+
+@media (max-width: 960px) {
+    .custom-sm-col {
+      margin-left: 5%;
+    }
+}
+
 .allinea-a-sinistra{
     margin-left: 0px;
 }
 
-.center-div {
-    margin-top: 2%;
+#center-div {
+    margin-bottom: 30px;
+    /* margin-top: 2%;
     margin-left: 5%;
     margin-right: 5%;
-    height: 100%;
+    height: 100%; */
 }
 
 //.status-page {
@@ -82,4 +109,36 @@
 
  .dx-popup-content{
     padding:0px;
+}
+
+/deep/ .tree-readonly .dx-checkbox-checked .dx-checkbox-icon, .tree-readonly span {
+    color: lightslategrey !important;
+}
+
+/deep/ .str-proced-label-wrap > label {
+    max-width: 300px;
+}
+
+/deep/ .str-proced-label-wrap .dx-field-item-label-text {
+    max-width: 300px;
+    white-space: normal;
+    display: inline-block;
+}
+
+/deep/ .dx-layout-manager .dx-label-h-align.dx-flex-layout:not(.dx-field-item-label-align) {
+    align-items: initial;
+}
+
+#bottoneModifica {
+    width: 100%;
+}
+
+/deep/ .lookup-wrap .dx-field-item-content.dx-field-item-content-location-right {
+    width: 0px!important;
+    overflow: auto;
+}
+
+.notice{
+  color: #ea4444;
+  font-size: x-small;
 }

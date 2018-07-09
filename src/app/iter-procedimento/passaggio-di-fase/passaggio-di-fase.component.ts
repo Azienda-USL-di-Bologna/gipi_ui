@@ -1,18 +1,14 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from "@angular/core";
-import { Iter } from "app/classi/server-objects/entities/iter";
+import { Fase, Iter, DocumentoIter } from "@bds/nt-entities";
 import DataSource from "devextreme/data/data_source";
-import { Entities, CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
+import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 import { log } from "util";
-import { OdataContextFactory } from "@bds/nt-angular-context";
-import { DocumentoIter } from "app/classi/server-objects/entities/documento-iter";
-import { Fase } from "app/classi/server-objects/entities/fase";
+import { OdataContextFactory } from "@bds/nt-context";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { element } from "protractor";
-import { forEach } from "@angular/router/src/utils/collection";
-import { Subscription } from "rxjs/Subscription";
-import { Subscriber } from "rxjs/Subscriber";
+import { Subscription, Subscriber } from "rxjs";
 import { confirm } from "devextreme/ui/dialog";
-
+import notify from "devextreme/ui/notify";
+import { ActivatedRoute, Params } from "@angular/router";
 
 @Component({
   selector: "app-passaggio-di-fase",
@@ -26,88 +22,121 @@ export class PassaggioDiFaseComponent implements OnInit {
   public iterParams: IterParams = new IterParams();
   public visibile: boolean = false;
   public fase: Fase = new Fase();
-  public currentFaseName: string = "";
-  public nextFaseName: string = "";
-  public isNextFaseDiChiusura: boolean;
+  public passaggioFaseParams: PassaggioFaseParams;
+  public showPopupAnnullamento : boolean = false;
+  public messaggioAnnullamento : string;
+  public dataIniziale: Date;
 
-  @Input("daPadre") daPadre: any;
+  @Input() set idIter(value: number) {
+    this.iterParams.idIter = value;
+    const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.iterParams.idIter)
+    .subscribe(
+    res => {
+      this.passaggioFaseParams = {
+        currentFaseName : JSON.parse(res["currentFase"]).nomeFase,
+        nextFaseName : JSON.parse(res["nextFase"]).nomeFase,
+        isNextFaseDiChiusura : JSON.parse(res["nextFase"]).faseDiChiusura,
 
-  @Output() messageEvent = new EventEmitter<Object>();
 
-
-  constructor(private http: HttpClient) {
+      }
+    },
+    err => {
+      notify({
+        message: "Non esiste la fase successiva",
+        type: "error",
+        position: TOAST_POSITION,
+        width: TOAST_WIDTH
+      });
+    });
   }
+
+  @Input("isOpenedAsPopup") isOpenedAsPopup?: boolean;
+
+
+
+
+  @Output() out = new EventEmitter<any>();
+
+
+  constructor(private http: HttpClient, private activatedRoute: ActivatedRoute) {}
 
   showStatusOperation(arg0: any, arg1: any): any {
     throw new Error("Method not implemented.");
   }
   
   ngOnInit() {
-    this.iterParams.idIter = this.daPadre["idIter"];
-    this.currentFaseName = this.daPadre["currentFaseName"];
-    this.nextFaseName = this.daPadre["nextFaseName"];
-    this.isNextFaseDiChiusura = this.daPadre["isNextFaseDiChiusura"];
+    this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
+      this.iterParams.codiceRegistroDocumento = queryParams["registro"];
+      this.iterParams.numeroDocumento = queryParams["numero"];
+      this.iterParams.annoDocumento = queryParams["anno"];
+      this.iterParams.oggettoDocumento = decodeURIComponent(queryParams["oggetto"].replace(/\+/g, " "));
+      if (queryParams["dataRegistrazione"]) {
+          this.dataIniziale = queryParams["dataRegistrazione"];
+      } else {
+          this.dataIniziale = new Date();
+      }
 
- 
 
-
-    // customizzazione per filtri sulla data INIZIO
-
-    /*    console.log("STO A LOGGAAAAAA!!!")
-        console.log(this.iterParams)
-        const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.iterParams.idIter)
-        .subscribe(
-          res => {
-            console.log(res);
-            let o: any = res;
-            var current = JSON.parse(o.currentFase);
-            var next = JSON.parse(o.nextFase);
-            this.faseAttuale = current.nomeFase;
-            this.faseSuccessiva = next.nomeFase;    
-            this.isNextFaseCloser = next.faseDiChiusura;
-          },
-          err => {
-            this.sendMessage(false);
-            this.showStatusOperation("Boh, che sarà successo", "error");
-          }
-        );
+    });
     
-    */
+    this.passaggioFaseParams = {
+      currentFaseName : "",
+      nextFaseName : "",
+      isNextFaseDiChiusura : false
+    }
   }
-
-  ngOnChanges(changes: SimpleChanges) {
-
-    this.iterParams = new IterParams();
-    this.iterParams.idIter = this.daPadre["idIter"];
-    this.currentFaseName = this.daPadre["currentFaseName"];
-    this.nextFaseName = this.daPadre["nextFaseName"];
-    this.isNextFaseDiChiusura = this.daPadre["isNextFaseDiChiusura"];
-  }
-
-  /*  onShowing(event:Event){
-      debugger;
-      this.iterParams.idIter = this.daPadre['idIter'];
-      this.currentFaseName = this.daPadre['currentFaseName'];
-      this.nextFaseName = this.daPadre['nextFaseName'];
-      this.isNextFaseDiChiusura = this.daPadre['isNextFaseDiChiusura'];
-  }*/
-
-
 
   procedi() {
-    console.log("PROCEDI");
+    if (!this.isOpenedAsPopup) {
+      if (!this.iterParams.idIter) {
+        notify({
+          message: "Selezionare un iter per poter procedere!",
+          type: "warning",
+          displayTime: 2100,
+          position: TOAST_POSITION,
+          width: TOAST_WIDTH
+        });
+        return;
+      }
+    }
     console.log(this.iterParams);
-
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/stepOn", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({},)
       .subscribe(
       res => {
-        console.log("Mandato iterParams a Guido!");
-        console.log(res);
-        this.sendMessage(true);
+        notify({
+          message: "Proceduto con successo",
+          type: "success",
+          displayTime: 3000,
+          position: TOAST_POSITION,
+          width: TOAST_WIDTH
+        }); 
+        if (!this.isOpenedAsPopup) { 
+          setTimeout(() => { window.close(); }, 4000);
+        } else {
+          this.out.emit({ visible: false, proceduto: true });
+        }
       },
       err => {
-        this.showStatusOperation("Boh, che sarà successo", "error");
-        this.sendMessage(false);
+        if (!this.isOpenedAsPopup) {
+          notify({
+            message: "Si è verificato un errore durante il procedi",
+            type: "error",
+            displayTime: 2000,
+            position: TOAST_POSITION,
+            width: TOAST_WIDTH
+          });
+          console.error("Errore:", err);
+        } else {
+          this.out.emit({ visible: false, proceduto: false });
+          notify({
+            message: "Si è verificato un errore durante il procedi",
+            type: "error",
+            displayTime: 2000,
+            position: TOAST_POSITION,
+            width: TOAST_WIDTH
+          });
+          console.error("Errore:", err);
+        }
       });
   }
 
@@ -122,21 +151,33 @@ export class PassaggioDiFaseComponent implements OnInit {
 
 
 
-  annulla() {
-    console.log("ANNULLA");
-    this.iterParams = undefined;
-    this.sendMessage(false);
+  handleAnnulla(e) {
+      this.showPopupAnnullamento = !this.showPopupAnnullamento;
+  }
+
+  handleClose() {
+    if (!this.isOpenedAsPopup) {
+      window.close();
+    }else {
+      this.showPopupAnnullamento = !this.showPopupAnnullamento;
+      this.out.emit({ visible: false, proceduto: false });
+    }
   }
 
   sendMessage(proceduto: boolean) {
     this.visibile = false;
-    this.messageEvent.emit({ visible: false, proceduto: proceduto });
   }
 
-  onFormSubmit(event: Event){
-    
-  }
+  onFormSubmit(event: Event) {}
 
+
+
+}
+
+interface PassaggioFaseParams{
+  currentFaseName: string;
+  nextFaseName: string;
+  isNextFaseDiChiusura: boolean;
 }
 
 export class IterParams {
@@ -145,8 +186,10 @@ export class IterParams {
   codiceRegistroDocumento: string;
   numeroDocumento: string;
   annoDocumento: number;
+  oggettoDocumento: string;
   notePassaggio: string;
   esito: string;
   motivazioneEsito: string;
-
+  idOggettoOrigine: string;
+  descrizione: string;
 }

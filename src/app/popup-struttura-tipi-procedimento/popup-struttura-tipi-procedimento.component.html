@@ -5,18 +5,25 @@
         <span class="header-font">Tipo procedimento:</span>
         <i>{{testoHeaderTipoProcedimento}}</i>
       </h5>
-      <h5>
+      <!-- <h5>
         <span class="header-font">Azienda:</span>
         <i>{{testoHeaderAzienda}}</i>
-      </h5>
+      </h5> -->
     </div>
   </div>
 
   <div class="row">
     <div class="col-12">
-      <strutture-tree #treeView [idAzienda]="idAzienda" [idAziendaTipoProcedimento]="idAziendaTipoProcedimento" [readOnly]="readOnly"
-        [enableCheckRecursively]="enableCheckRecursively" (refreshAfterChange)="refresh($event)">
-      </strutture-tree>
+      
+        <strutture-tree #treeView 
+          [idAzienda]="idAzienda" 
+          [idAziendaTipoProcedimento]="idAziendaTipoProcedimento" 
+          [ricarica]="ricarica" 
+          [readOnly]="readOnly"
+          [enableCheckRecursively]="enableCheckRecursively" 
+          (refreshAfterChange)="refresh($event)">
+        </strutture-tree>
+      
     </div>
   </div>
 
