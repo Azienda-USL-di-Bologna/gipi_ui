@@ -2,21 +2,17 @@ import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity, OdataUtilities } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
-import { Iter, Utente, Fase, FaseIter, AziendaTipoProcedimento, TipoProcedimento, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura } from "@bds/nt-entities";
-// import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
+import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura } from "@bds/nt-entities";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
-import { ActivatedRoute, Params, Resolve } from "@angular/router";
+import { ActivatedRoute, Params } from "@angular/router";
 import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
-// import * as moment from "moment";
-// import { CambioDiStatoBoxComponent } from "../cambio-di-stato-box/cambio-di-stato-box.component";
 import { LoggedUser } from "@bds/nt-login";
 import { Observable, Subscription } from "rxjs";
 import { HttpHeaders } from "@angular/common/http";
 import { STATI } from "@bds/nt-entities";
 import { DxFormComponent } from "devextreme-angular";
-
-
+import { IterProcedimentoFascicoloUtilsClass, PERMESSI } from "./iter-procedimento-fascicolo-utils.class";
 
 @Component({
   selector: "app-iter-procedimento",
@@ -29,7 +25,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   private subscriptions: Subscription[] = [];
   private initialWidth: number = window.innerWidth;
   private threshold: number = 1500;
-  private previousWidth: number = this.initialWidth;
+  // private previousWidth: number = this.initialWidth;
   private odataContextDefinitionFunctionImport: OdataContextDefinition;
   private odataContextDefinition: OdataContextDefinition;
   
@@ -49,6 +45,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public popupRiattivaIterVisibile: boolean = false;
   public datiRiattivazioneIter: any = { note: "", idIter: null };
   public nuovoUtenteResponsabile: Utente;
+
+  public popupVicariVisibile: boolean = false;
+  public dataSourceVicari: DataSource;
+
+  public fascicoloIter: any;
+  public permessoUtenteLoggato: number;
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
 
@@ -94,7 +96,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public loggedUser$: Observable<LoggedUser>;
   public userInfo: UserInfo;
   public iodaPermission: boolean;
-  public hasPermissionOnFascicolo: boolean = false;
+  // public hasPermissionOnFascicolo: boolean = false;
   public colCountGroup: number;
 
   
@@ -107,6 +109,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public newIdRespDefault = "";
   public descrizioneUtenteResponsabile: string;
   public arrayEsiti: any[] = Object.keys(ESITI).map(key => ({ "codice": key, "descrizione": ESITI[key] }));
+
+  
 
   constructor(
     private odataContextFactory: OdataContextFactory,
@@ -330,15 +334,15 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   } */
 
   disableProcedi() {
-    return this.hasPermissionOnFascicolo !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO;
+    return (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) !== true || this.isSospeso() || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO;
   }
 
   disableSospendi() {
-    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO;
+    return (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO;
   }
 
   inSolaLettura() {
-    return this.hasPermissionOnFascicolo !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO;
+    return (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO;
   }
 
   disableAreaTextNote() {
@@ -705,23 +709,24 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     return b;
   } */
 
-  public calculateIodaPermissionAndSetButton() {
-    let x;
-    if (this.iter.idFascicolo) {
-      let data = new Map<String, Object>();
-      data.set("numerazioneGerarchica", this.iter.idFascicolo);
-      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/hasPermissionOnFascicolo", this.iter.idFascicolo, { headers: new HttpHeaders().set("content-type", "application/json") })
-        .subscribe(
-        res => {
-          console.log("RESSSS = ", res);
-            this.hasPermissionOnFascicolo = res["hasPermission"] === "true";
-            this.generateCustomButtons(); // ora che ho i permessi mi posso creare i bottoni
-          },
-          err => {
-            // this.generateCustomButtons();
-          }
-        );
-    }
+  public calculateIodaPermissionAndSetButton(): void {
+    IterProcedimentoFascicoloUtilsClass.getFascicoloIter(this.http, this.iter.idFascicolo)
+    .subscribe(
+      res => {
+        this.fascicoloIter = res;
+        this.settaVariabiliPermessi();
+        if (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) {
+          this.generateCustomButtons();
+        }
+      },
+      err => {
+        console.log("Errore nel recupero del fascicolo iter", err);
+      }
+    );    
+  }
+
+  public settaVariabiliPermessi() {
+    this.permessoUtenteLoggato = +PERMESSI[this.fascicoloIter.permessi[this.userInfo.cf]];
   }
 
   customDisplayExprClassificazione(data: Titolo) {
@@ -748,6 +753,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     );
   }
 
+  public apriPopupVicari(): void {
+    this.popupVicariVisibile = true;
+    if (this.dataSourceVicari === undefined) {
+      
+    }
+  }
 }
 
 interface UserInfo {

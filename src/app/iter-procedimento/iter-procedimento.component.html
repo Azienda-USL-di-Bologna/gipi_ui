@@ -31,13 +31,13 @@
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
                     <dxi-item [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }" [cssClass]="classeDiHighlight"></dxi-item>
-                    <dxi-item *ngIf="!hasPermissionOnFascicolo" [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                    <dxi-item *ngIf="!(permessoUtenteLoggato >= 2)" [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. procedimento"></dxo-label>
                     </dxi-item>
-                    <dxi-item *ngIf="hasPermissionOnFascicolo" [colSpan]="5" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                    <dxi-item *ngIf="(permessoUtenteLoggato >= 2)" [colSpan]="5" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. procedimento"></dxo-label>
                     </dxi-item>
-                    <dxi-item *ngIf="hasPermissionOnFascicolo" [colSpan]="1">
+                    <dxi-item *ngIf="(permessoUtenteLoggato >= 2)" [colSpan]="1">
                         <button class="btn button-azioni margine-sx" 
                             (click)="openCambiaResponsabile(iter)"
                             data-toggle="tooltip" data-placement="right" title="Cambia responsabile procedimento"
@@ -110,7 +110,7 @@
                             <dxo-label text="Motivazione deroga"></dxo-label>
                         </dxi-item>
                         <dxi-item [colSpan]="1" >
-                            <button [disabled]="!hasPermissionOnFascicolo" class="btn button-azioni" type="button" (click)="updateMotivazioneDeroga()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                            <button [disabled]="!(permessoUtenteLoggato >= 2)" class="btn button-azioni" type="button" (click)="updateMotivazioneDeroga()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                         </dxi-item>
                     </dxi-item>
 
@@ -128,7 +128,7 @@
                             <dxo-label text="Motivazione proroga"></dxo-label>
                         </dxi-item>
                         <dxi-item [colSpan]="1">
-                            <button [disabled]="!hasPermissionOnFascicolo" class="btn button-azioni" type="button" (click)="updateMotivazioneSospensione()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                            <button [disabled]="!(permessoUtenteLoggato >= 2)" class="btn button-azioni" type="button" (click)="updateMotivazioneSospensione()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                         </dxi-item>
                     </dxi-item>
 
@@ -142,17 +142,22 @@
                     </dxi-item>
                 </dxi-item>
 
-                <dxi-item itemType="group" caption="Dati di archivio">
-                    <dxi-item dataField="idIterPrecedente.numero" [editorOptions]="{ disabled: true }" [cssClass]="classeDiHighlight">
+                <dxi-item itemType="group" [colCount]="6" caption="Dati di archivio">
+                    <dxi-item dataField="idIterPrecedente.numero" [editorOptions]="{ disabled: true }" [cssClass]="classeDiHighlight" [colSpan]="6">
                         <dxo-label text="Coll. precedente"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }">
+                    <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }" [colSpan]="6">
                         <dxo-label text="Motivo collegamento"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="idFascicolo" [editorOptions]="{ disabled: true }">
+                    <dxi-item dataField="idFascicolo" [editorOptions]="{ disabled: true }" [colSpan]="5">
                         <dxo-label text="Fascicolo dell'iter"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [editorOptions]="{
+                    <dxi-item [colSpan]="1">
+                        <button class="btn button-azioni" type="button" 
+                            (click)="apriPopupVicari()">Vicari fascicolo
+                        </button>
+                    </dxi-item>
+                    <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [colSpan]="1" [editorOptions]="{
                         disabled: true,
                         dataSource: dataSourceClassificazione,
                         displayExpr: customDisplayExprClassificazione,
@@ -334,3 +339,18 @@
     </div>
 </dx-popup> -->
 <!-- <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter> -->
+
+<dx-popup
+    [width]="600"
+    
+    [showTitle]="true"
+    title="Responsabile e vicari del fascicolo"
+    [(visible)]="popupVicariVisibile">
+    <div *dxTemplate="let data of 'content'">
+        <dx-data-grid
+            [dataSource]="dataSourceVicari">
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+        </dx-data-grid>
+    </div>
+</dx-popup>
