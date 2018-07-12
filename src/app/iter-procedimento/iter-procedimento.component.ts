@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
-import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity } from "@bds/nt-context";
+import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity, OdataUtilities } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
-import { Iter, Utente, Fase, FaseIter, AziendaTipoProcedimento, TipoProcedimento, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento } from "@bds/nt-entities";
+import { Iter, Utente, Fase, FaseIter, AziendaTipoProcedimento, TipoProcedimento, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura } from "@bds/nt-entities";
 // import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
@@ -30,7 +30,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   private initialWidth: number = window.innerWidth;
   private threshold: number = 1500;
   private previousWidth: number = this.initialWidth;
-
+  private odataContextDefinitionFunctionImport: OdataContextDefinition;
+  private odataContextDefinition: OdataContextDefinition;
+  
   public iter: Iter = new Iter();
   public idIterArray: Object;
   public procedimentoCache = new ProcedimentoCache;
@@ -45,7 +47,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public classeDiHighlight = "";
   public pubblicazioneAllAlbo: boolean = false;
   public popupRiattivaIterVisibile: boolean = false;
-  public datiRiattivazioneIter: any = {note: "", idIter: null};
+  public datiRiattivazioneIter: any = { note: "", idIter: null };
+  public nuovoUtenteResponsabile: Utente;
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
 
@@ -76,6 +79,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     label: "",
     action: ""
   };
+  
+  public popupCambioResp: any = {
+    visible: false,
+    title: "",
+    respAttuale: ""
+  };
   public perFigliParteDestra: Object;
 
   public perFiglioPassaggioFase: Object;
@@ -91,14 +100,19 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   
   // public soloEditing: boolean = false;
 
-
+  public dataSourceUtenti: DataSource;
+  public dataSourceUtenteLoggato: DataSource;
   public dataSourceClassificazione: DataSource;
+  public idUtenteDefault: number;
+  public newIdRespDefault = "";
+  public descrizioneUtenteResponsabile: string;
   public arrayEsiti: any[] = Object.keys(ESITI).map(key => ({ "codice": key, "descrizione": ESITI[key] }));
 
   constructor(
     private odataContextFactory: OdataContextFactory,
     private http: HttpClient, private activatedRoute: ActivatedRoute,
-    private globalContextService: GlobalContextService
+    private globalContextService: GlobalContextService,
+    private odataUtilities: OdataUtilities
   ) {
 
     // gestione resize window (pessime prestazioni)
@@ -112,7 +126,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       }
     });
 
-
+    this.odataContextDefinitionFunctionImport = this.odataContextFactory.buildOdataFunctionsImportDefinition();
+    this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    
     const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
     customLoadingFilterParams.addFilter("nomeTitolo", ["tolower(${target})", "contains", "${value.tolower}"]);
@@ -177,6 +193,75 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     else {
       this.colCountGroup = 10;
     }
+  }
+
+   private buildDataSourceUtenti(): void {
+    /*
+      Il caricamento del datasource per la lookup ha un problema. E' paginato. 
+      Se l'utente loggato, che deve essere impostato come utente default, non è presente nella prima tranche di dati
+      che il datasource tira su, allora non si riuscirà ad impostare l'utente default.
+      Il workaraound consiste nel caricare l'utente loggato ed aggiungerlo qualora non fosse già presente.
+    */
+    this.dataSourceUtenti = new DataSource({
+      store: this.odataContextDefinitionFunctionImport.getContext()[new GetUtentiGerarchiaStruttura().getName()]
+      .on("loading", (loadOptions) => {
+        this.odataUtilities.filterToCustomQueryParams(["searchString"], loadOptions);
+      }),
+      customQueryParams: {
+        // searchString: ""
+      },
+      expand: [
+        "idUtente/idPersona",
+        "idStruttura",
+        "idAfferenzaStruttura"
+      ]
+    });
+
+    this.dataSourceUtenteLoggato = new DataSource({
+      store: this.odataContextDefinition.getContext()[new UtenteStruttura().getName()],
+      expand: [
+        "idUtente.idPersona", 
+        "idStruttura", 
+        "idAfferenzaStruttura"
+      ],
+      filter: [
+        ["idUtente.id", "=", this.userInfo.idUtente]
+      ]
+    });
+
+    // Ora faccio le load dell'utente loggato, e quando ce l'ho faccio la load del datasource.
+    // A quel punto a seconda che ci sia o meno aggiungo l'utente loggato al datasource
+    this.dataSourceUtenteLoggato.load().then(re => {
+      let usLogged = re[0];
+      this.dataSourceUtenti.load().then(res => {
+        let ciSonoGià = false;
+        for (let e of res) {
+          if (e.idUtente.id === this.userInfo.idUtente && e.idStruttura.id === this.iter.idProcedimento.idStruttura.id) {
+            ciSonoGià = true;
+            break;
+          }
+        }
+        if (!ciSonoGià) {
+          res.push(usLogged);
+        }
+        this.idUtenteDefault = re[0].id;
+        this.descrizioneUtenteResponsabile = re[0].idUtente.idPersona.descrizione 
+          + " (" + re[0].idStruttura.nome
+          + " - " + re[0].idAfferenzaStruttura.descrizione + ")";
+      });
+    });
+   }
+  public getDescrizioneUtente(item: any): string {
+    return item ? item.idUtente.idPersona.descrizione 
+        + " (" + item.idStruttura.nome
+        + " - " + item.idAfferenzaStruttura.descrizione + ")" : null;
+  }
+
+  onValueChanged(e: any) {
+    console.log("ACCIDENTI = ", e);
+    this.nuovoUtenteResponsabile = e.value.idUtente;
+    this.newIdRespDefault = e.value;
+    console.log("UTENTE = ", this.nuovoUtenteResponsabile);
   }
 
 // gestione resize window (pessime prestazioni)
@@ -404,6 +489,25 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     }
   }
 
+  public openCambiaResponsabile(e: any) {
+    console.log("E = ", e);
+    this.nuovoUtenteResponsabile = null;
+    this.popupCambioResp.title = "Cambia responsabile procedimento";
+    this.popupCambioResp.visible = true;
+    this.popupCambioResp.respAttuale = e.procedimentoCache.nomeVisualResponsabileProcedimento;
+    this.newIdRespDefault = "";
+    if (!this.dataSourceUtenti) this.buildDataSourceUtenti();
+  }
+
+  closePopupResp() {
+    console.log("NABBBB");
+    this.popupCambioResp.visible = false;
+    this.popupCambioResp.title = "";
+    this.popupCambioResp.respAttuale = "";
+    this.nuovoUtenteResponsabile = null;
+    this.newIdRespDefault = "";
+  }
+
   closePopupNote() {
     this.popupData.title = "";
     this.popupData.field = "";
@@ -428,6 +532,37 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupDatiTemporali.fieldDays = 0;
     this.popupDatiTemporali.fieldMotivation = "";
     this.popupDatiTemporali.action = ""; */
+  }
+
+  public cambiaResponsabileProcedimento() {
+    console.log("EEE2 = ", this.nuovoUtenteResponsabile);
+    const params = {
+      idIter: this.iter.id,
+      idFascicolo: this.iter.idFascicolo,
+      cfResponsabile: this.nuovoUtenteResponsabile.idPersona.codiceFiscale
+    };
+    console.log("MAKEEE = ", params);
+    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/cambiaResponsabileProcedimento", params, { headers: new HttpHeaders().set("content-type", "application/json") })
+        .subscribe(
+          res => {
+            console.log("CIAOOO = ", res);
+            notify({
+              message: "Iter riattivato con successo",
+              type: "success",
+              position: TOAST_POSITION,
+              width: TOAST_WIDTH
+            });
+            
+          },
+          err => {
+            notify({
+              message: "Qualcosa è andato storto. Contattare BabelCare",
+              type: "error",
+              position: TOAST_POSITION,
+              width: TOAST_WIDTH
+            });
+          }
+        );
   }
 
   public riattivaIter() {
@@ -577,7 +712,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       data.set("numerazioneGerarchica", this.iter.idFascicolo);
       const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/hasPermissionOnFascicolo", this.iter.idFascicolo, { headers: new HttpHeaders().set("content-type", "application/json") })
         .subscribe(
-          res => {
+        res => {
+          console.log("RESSSS = ", res);
             this.hasPermissionOnFascicolo = res["hasPermission"] === "true";
             this.generateCustomButtons(); // ora che ho i permessi mi posso creare i bottoni
           },

@@ -31,9 +31,18 @@
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
                     <dxi-item [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }" [cssClass]="classeDiHighlight"></dxi-item>
-
-                    <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                    <dxi-item *ngIf="!hasPermissionOnFascicolo" [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. procedimento"></dxo-label>
+                    </dxi-item>
+                    <dxi-item *ngIf="hasPermissionOnFascicolo" [colSpan]="5" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                        <dxo-label text="Resp. procedimento"></dxo-label>
+                    </dxi-item>
+                    <dxi-item *ngIf="hasPermissionOnFascicolo" [colSpan]="1">
+                        <button class="btn button-azioni margine-sx" 
+                            (click)="openCambiaResponsabile(iter)"
+                            data-toggle="tooltip" data-placement="right" title="Cambia responsabile procedimento"
+                        >Cambia <img class="icon-margin" src="assets/images/edit-white-3.png">
+                        </button>
                     </dxi-item>
                     <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileAttoFinale" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. adozione atto finale"></dxo-label>
@@ -268,6 +277,47 @@
     </div>
 </dx-popup>
 
+<dx-popup class="popup" [width]="800" [height]="230" [showTitle]="true" title="Cambia responsabile procedimento" [dragEnabled]="false" [closeOnOutsideClick]="true"
+    [(visible)]="popupCambioResp.visible">
+    <div *dxTemplate="let data of 'content'">
+        <div class="form">
+            <div class="div dx-field-set">
+                <div class="dx-field box-margin">
+                    <div class="dx-field-label" style="width: 25%;">Responsabile attuale</div>
+                    <div class="dx-field-value" style="width: 75%;">
+                        <dx-text-box
+                            [value]="popupCambioResp.respAttuale"
+                            [hint]="popupCambioResp.respAttuale"
+                            [readOnly]="true"
+                            [focusStateEnabled]="false"
+                            [hoverStateEnabled]="false"
+                            [inputAttr]="{style: 'background:#dedede'}">
+                        </dx-text-box>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label" style="width: 25%;">Scegli nuovo responsabile</div>
+                    <div class="dx-field-value" style="width: 75%;">
+                        <dx-lookup
+                            [dataSource]="dataSourceUtenti"
+                            [value]="newIdRespDefault"
+                            [displayExpr]="getDescrizioneUtente"
+                            (onValueChanged)="onValueChanged($event)"
+                            [closeOnOutsideClick]="true"
+                            [showPopupTitle]="false"
+                            cancelButtonText="Chiudi">
+                        </dx-lookup>
+                    </div>
+                </div>
+                <div class="wrapperPulsantiPopup margine-top">
+                    <dx-button class="button-css" [disabled]="!nuovoUtenteResponsabile" text="OK" type="default" (click)="cambiaResponsabileProcedimento()"></dx-button>
+                    <span class="btn-space"></span>
+                    <dx-button class="button-css" text="Annulla" type="normal" (click)="closePopupResp()" ></dx-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</dx-popup>
 <!-- 
 <dx-popup class="passaggioFase" [width]="700" [showTitle]="true" [title]="popupData.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
     [(visible)]="passaggioDiFaseVisible">
