@@ -100,8 +100,8 @@
                         <dxi-item [colSpan]="colCountGroup - 1" dataField="motivoDerogaDurata" [editorOptions]="{ disabled: true}">
                             <dxo-label text="Motivazione deroga"></dxo-label>
                         </dxi-item>
-                        <dxi-item [colSpan]="1">
-                            <button class="btn button-azioni" type="button" (click)="updateMotivazioneDeroga()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                        <dxi-item [colSpan]="1" >
+                            <button [disabled]="!hasPermissionOnFascicolo" class="btn button-azioni" type="button" (click)="updateMotivazioneDeroga()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                         </dxi-item>
                     </dxi-item>
 
@@ -119,7 +119,7 @@
                             <dxo-label text="Motivazione proroga"></dxo-label>
                         </dxi-item>
                         <dxi-item [colSpan]="1">
-                            <button class="btn button-azioni" type="button" (click)="updateMotivazioneSospensione()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                            <button [disabled]="!hasPermissionOnFascicolo" class="btn button-azioni" type="button" (click)="updateMotivazioneSospensione()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                         </dxi-item>
                     </dxi-item>
 
