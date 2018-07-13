@@ -29,7 +29,7 @@
     <b>{{oggettoDocumento}}</b>
   </div>
 </dx-tooltip>
-<dx-popup
+<dx-popup *ngIf="enablePopup"
   class="popup"
   minWidth="200"
   minHeight="100"
@@ -41,6 +41,7 @@
   title="Note"
   [dragEnabled]="false"
   [closeOnOutsideClick]="true"
+  (onHidden)="disablePopup()"
   [(visible)]="popupVisible">
   <div *dxTemplate="let data of 'content'">
     <p><span>{{ nota }}</span></p>
