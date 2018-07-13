@@ -118,9 +118,9 @@ export class ModificaDocumentoIterComponent implements OnInit {
       this.sospensioneParams.isFaseDiChiusura = this.sospensioneParams.codiceStatoProssimo === STATI.CHIUSO;
       this.sospensioneParams.idOggettoOrigine = queryParams["idOggettoOrigine"];
       this.sospensioneParams.tipoOggettoOrigine = queryParams["tipoOggettoOrigine"];
-      this.sospensioneParams.note = queryParams["note"];
+      this.sospensioneParams.note = decodeURIComponent(queryParams["note"]).replace(/\+/g, " ");
       this.sospensioneParams.esito = queryParams["esito"];
-      this.sospensioneParams.esitoMotivazione = queryParams["esitoMotivazione"];
+      this.sospensioneParams.esitoMotivazione = decodeURIComponent(queryParams["esitoMotivazione"]).replace(/\+/g, " ");
       if (queryParams["descrizione"]) {
         this.sospensioneParams.descrizione = decodeURIComponent(queryParams["descrizione"].replace(/\+/g, " "));
       }
