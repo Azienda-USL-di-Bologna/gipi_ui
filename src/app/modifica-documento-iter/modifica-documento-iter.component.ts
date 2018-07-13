@@ -96,6 +96,7 @@ export class ModificaDocumentoIterComponent implements OnInit {
     this.sospensioneParams.annoIter = this.iter.anno;
     this.sospensioneParams.oggettoIter = this.iter.oggetto;
     await this.setAzioni(this.sospensioneParams.azione, this.sospensioneParams.codiceStatoProssimo);
+    await this.setAzioneCorrente();
   }
 
   async readParams() {
@@ -116,6 +117,9 @@ export class ModificaDocumentoIterComponent implements OnInit {
       this.sospensioneParams.isFaseDiChiusura = this.sospensioneParams.codiceStatoProssimo === STATI.CHIUSO;
       this.sospensioneParams.idOggettoOrigine = queryParams["idOggettoOrigine"];
       this.sospensioneParams.tipoOggettoOrigine = queryParams["tipoOggettoOrigine"];
+      this.sospensioneParams.note = queryParams["note"];
+      this.sospensioneParams.esito = queryParams["esito"];
+      this.sospensioneParams.esitoMotivazione = queryParams["esitoMotivazione"];
       if (queryParams["descrizione"]) {
         this.sospensioneParams.descrizione = decodeURIComponent(queryParams["descrizione"].replace(/\+/g, " "));
       }
@@ -124,7 +128,7 @@ export class ModificaDocumentoIterComponent implements OnInit {
       }
       const noBars: boolean = queryParams["nobars"];
       this.sospensioneParams.glogParams = queryParams["glogParams"];
-
+            
       console.log("this.sospensioneParams", this.sospensioneParams);
     });
   }
@@ -155,6 +159,30 @@ export class ModificaDocumentoIterComponent implements OnInit {
       }
     };
     console.log(this.azioniArray);
+  }
+
+  async setAzioneCorrente() {
+    if(this.iter && this.iter.idStato.codice !== STATI.CHIUSO) {
+      console.log("this.sospensioneParams.azione", this.sospensioneParams.azione);
+      console.log("this.sospensioneParams.codiceStatoProssimo", this.sospensioneParams.codiceStatoProssimo);
+      if(this.sospensioneParams.azione === "associazione"){
+        this.azioneRichiesta = "Associa";
+        this.action = "associazione"
+      }
+      else if(this.sospensioneParams.azione === "cambio_di_stato" && this.sospensioneParams.codiceStatoProssimo === STATI.SOSPESO){
+        this.azioneRichiesta = "Sospendi";
+        this.action = "cambio_di_stato"
+      }
+      else if(this.sospensioneParams.azione === "cambio_di_stato" && this.sospensioneParams.codiceStatoProssimo === STATI.CHIUSO){
+        this.azioneRichiesta = "Chiudi";
+        this.action = "cambio_di_stato"
+      }
+      else if(this.sospensioneParams.azione === "cambio_di_stato" && this.sospensioneParams.codiceStatoProssimo === STATI.IN_CORSO){
+        this.azioneRichiesta = "Riattiva";
+        this.action = "cambio_di_stato"
+      }
+    }
+
   }
 
   recuperaUserInfo() {
