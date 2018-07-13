@@ -95,6 +95,7 @@ export class ModificaDocumentoIterComponent implements OnInit {
     this.sospensioneParams.numeroIter = this.iter.numero;
     this.sospensioneParams.annoIter = this.iter.anno;
     this.sospensioneParams.oggettoIter = this.iter.oggetto;
+    this.sospensioneParams.codiceStatoCorrente = this.iter.idStato.codice;
     await this.setAzioni(this.sospensioneParams.azione, this.sospensioneParams.codiceStatoProssimo);
     await this.setAzioneCorrente();
   }
