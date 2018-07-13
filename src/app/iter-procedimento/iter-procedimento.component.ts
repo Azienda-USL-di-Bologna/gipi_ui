@@ -264,11 +264,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   onValueChanged(e: any) {
-    console.log("ACCIDENTI = ", e);
     this.nuovoUtenteResponsabile = e.value.idUtente;
     this.nuovaStrutturaUtenteResp = e.value.idStruttura;
     this.newIdRespDefault = e.value;
-    console.log("UTENTE = ", this.nuovoUtenteResponsabile);
   }
 
 // gestione resize window (pessime prestazioni)
@@ -500,7 +498,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public openCambiaResponsabile(e: any) {
-    console.log("E = ", e);
     this.nuovoUtenteResponsabile = null;
     this.nuovaStrutturaUtenteResp = null;
     this.popupCambioResp.title = "Cambia responsabile procedimento";
@@ -511,7 +508,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   closePopupResp() {
-    console.log("NABBBB");
     this.popupCambioResp.visible = false;
     this.popupCambioResp.title = "";
     this.popupCambioResp.respAttuale = "";
@@ -556,27 +552,26 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       cfResponsabile: this.nuovoUtenteResponsabile.idPersona.codiceFiscale
     };
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/cambiaResponsabileProcedimento", params, { headers: new HttpHeaders().set("content-type", "application/json") })
-        .subscribe(
-          res => {
-            notify({
-              message: "Responsabile del procedimento cambiato con successo!",
-              type: "success",
-              position: TOAST_POSITION,
-              width: TOAST_WIDTH
-            });
-            this.refresh();
-            this.closePopupResp();
-            
-          },
-          err => {
-            notify({
-              message: "Qualcosa è andato storto. Contattare BabelCare",
-              type: "error",
-              position: TOAST_POSITION,
-              width: TOAST_WIDTH
-            });
-          }
-        );
+      .subscribe(
+        res => {
+          notify({
+            message: "Responsabile del procedimento cambiato con successo!",
+            type: "success",
+            position: TOAST_POSITION,
+            width: TOAST_WIDTH
+          });
+          this.refresh(); // Aggiorno l'iter per visualizzare il nuovo responsabile
+        },
+        err => {
+          notify({
+            message: "Qualcosa è andato storto. Contattare BabelCare",
+            type: "error",
+            position: TOAST_POSITION,
+            width: TOAST_WIDTH
+          });
+        }
+      );
+    this.closePopupResp();
   }
 
   public riattivaIter() {
