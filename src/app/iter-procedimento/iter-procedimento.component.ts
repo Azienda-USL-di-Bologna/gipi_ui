@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity, OdataUtilities } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
-import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura } from "@bds/nt-entities";
+import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura } from "@bds/nt-entities";
 import { HttpClient } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
@@ -45,6 +45,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public popupRiattivaIterVisibile: boolean = false;
   public datiRiattivazioneIter: any = { note: "", idIter: null };
   public nuovoUtenteResponsabile: Utente;
+  public nuovaStrutturaUtenteResp: Struttura;
+  public mostraCambioResponsabile = false;
 
   public popupVicariVisibile: boolean = false;
   public dataSourceVicari: DataSource;
@@ -102,7 +104,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   
   // public soloEditing: boolean = false;
 
-  public dataSourceUtenti: DataSource;
+  public dataSourceUtentiCugini: DataSource;
   public dataSourceUtenteLoggato: DataSource;
   public dataSourceClassificazione: DataSource;
   public idUtenteDefault: number;
@@ -199,14 +201,14 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     }
   }
 
-   private buildDataSourceUtenti(): void {
+   private buildDataSourceUtentiCugini(): void {
     /*
       Il caricamento del datasource per la lookup ha un problema. E' paginato. 
       Se l'utente loggato, che deve essere impostato come utente default, non è presente nella prima tranche di dati
       che il datasource tira su, allora non si riuscirà ad impostare l'utente default.
       Il workaraound consiste nel caricare l'utente loggato ed aggiungerlo qualora non fosse già presente.
     */
-    this.dataSourceUtenti = new DataSource({
+    this.dataSourceUtentiCugini = new DataSource({
       store: this.odataContextDefinitionFunctionImport.getContext()[new GetUtentiGerarchiaStruttura().getName()]
       .on("loading", (loadOptions) => {
         this.odataUtilities.filterToCustomQueryParams(["searchString"], loadOptions);
@@ -237,7 +239,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     // A quel punto a seconda che ci sia o meno aggiungo l'utente loggato al datasource
     this.dataSourceUtenteLoggato.load().then(re => {
       let usLogged = re[0];
-      this.dataSourceUtenti.load().then(res => {
+      this.dataSourceUtentiCugini.load().then(res => {
         let ciSonoGià = false;
         for (let e of res) {
           if (e.idUtente.id === this.userInfo.idUtente && e.idStruttura.id === this.iter.idProcedimento.idStruttura.id) {
@@ -264,6 +266,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   onValueChanged(e: any) {
     console.log("ACCIDENTI = ", e);
     this.nuovoUtenteResponsabile = e.value.idUtente;
+    this.nuovaStrutturaUtenteResp = e.value.idStruttura;
     this.newIdRespDefault = e.value;
     console.log("UTENTE = ", this.nuovoUtenteResponsabile);
   }
@@ -322,6 +325,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       return false;
   }
 
+  isChiuso() {
+    return this.iter.idStato.codice === STATI.CHIUSO;
+  }
   /* setNomeBottoneSospensione() {
     this.sospendiButton.label = this.getNomeBottoneSospensione();
   }
@@ -496,11 +502,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public openCambiaResponsabile(e: any) {
     console.log("E = ", e);
     this.nuovoUtenteResponsabile = null;
+    this.nuovaStrutturaUtenteResp = null;
     this.popupCambioResp.title = "Cambia responsabile procedimento";
     this.popupCambioResp.visible = true;
     this.popupCambioResp.respAttuale = e.procedimentoCache.nomeVisualResponsabileProcedimento;
     this.newIdRespDefault = "";
-    if (!this.dataSourceUtenti) this.buildDataSourceUtenti();
+    if (!this.dataSourceUtentiCugini) this.buildDataSourceUtentiCugini();
   }
 
   closePopupResp() {
@@ -509,6 +516,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupCambioResp.title = "";
     this.popupCambioResp.respAttuale = "";
     this.nuovoUtenteResponsabile = null;
+    this.nuovaStrutturaUtenteResp = null;
     this.newIdRespDefault = "";
   }
 
@@ -539,23 +547,25 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public cambiaResponsabileProcedimento() {
-    console.log("EEE2 = ", this.nuovoUtenteResponsabile);
     const params = {
       idIter: this.iter.id,
       idFascicolo: this.iter.idFascicolo,
+      idUtenteLoggato: this.userInfo.idUtente,
+      idUtenteResponsabile: this.nuovoUtenteResponsabile.id,
+      idStrutturaResponsabile: this.nuovaStrutturaUtenteResp.id,
       cfResponsabile: this.nuovoUtenteResponsabile.idPersona.codiceFiscale
     };
-    console.log("MAKEEE = ", params);
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/cambiaResponsabileProcedimento", params, { headers: new HttpHeaders().set("content-type", "application/json") })
         .subscribe(
           res => {
-            console.log("CIAOOO = ", res);
             notify({
-              message: "Iter riattivato con successo",
+              message: "Responsabile del procedimento cambiato con successo!",
               type: "success",
               position: TOAST_POSITION,
               width: TOAST_WIDTH
             });
+            this.refresh();
+            this.closePopupResp();
             
           },
           err => {
@@ -715,6 +725,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       res => {
         this.fascicoloIter = res;
         this.settaVariabiliPermessi();
+        if (!this.isChiuso() && this.permessoUtenteLoggato >= +PERMESSI.VICARIO) {
+          this.mostraCambioResponsabile = true;
+        } 
         if (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) {
           this.generateCustomButtons();
         }

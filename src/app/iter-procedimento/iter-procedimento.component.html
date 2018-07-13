@@ -31,13 +31,13 @@
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
                     <dxi-item [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }" [cssClass]="classeDiHighlight"></dxi-item>
-                    <dxi-item *ngIf="!(permessoUtenteLoggato >= 2)" [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                    <dxi-item *ngIf="!mostraCambioResponsabile" [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. procedimento"></dxo-label>
                     </dxi-item>
-                    <dxi-item *ngIf="(permessoUtenteLoggato >= 2)" [colSpan]="5" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                    <dxi-item *ngIf="mostraCambioResponsabile" [colSpan]="5" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. procedimento"></dxo-label>
                     </dxi-item>
-                    <dxi-item *ngIf="(permessoUtenteLoggato >= 2)" [colSpan]="1">
+                    <dxi-item *ngIf="mostraCambioResponsabile" [colSpan]="1">
                         <button class="btn button-azioni margine-sx" 
                             (click)="openCambiaResponsabile(iter)"
                             data-toggle="tooltip" data-placement="right" title="Cambia responsabile procedimento"
@@ -304,7 +304,9 @@
                     <div class="dx-field-label" style="width: 25%;">Scegli nuovo responsabile</div>
                     <div class="dx-field-value" style="width: 75%;">
                         <dx-lookup
-                            [dataSource]="dataSourceUtenti"
+                            [dataSource]="dataSourceUtentiCugini"
+                            [searchExpr]="['searchString']"
+                            [searchEnabled]= "true"
                             [value]="newIdRespDefault"
                             [displayExpr]="getDescrizioneUtente"
                             (onValueChanged)="onValueChanged($event)"
