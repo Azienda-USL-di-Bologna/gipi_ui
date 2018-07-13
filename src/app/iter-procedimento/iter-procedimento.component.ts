@@ -47,6 +47,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public nuovoUtenteResponsabile: Utente;
   public nuovaStrutturaUtenteResp: Struttura;
   public mostraCambioResponsabile = false;
+  public creatoreIterDescription: string;
 
   public popupVicariVisibile: boolean = false;
   public dataSourceVicari: DataSource;
@@ -155,10 +156,14 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "procedimentoCache.idResponsabileProcedimento.idPersona",
         "procedimentoCache.idStrutturaResponsabileProcedimento",
         "procedimentoCache.idStruttura",
-        "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento"
+        "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento",
+        "idUtenteCreazione.idPersona",
+        "idUtenteCreazione.utenteStrutturaList.idStruttura",
+        "idUtenteCreazione.utenteStrutturaList.idAfferenzaStruttura"
       ],
       filter: [["id", "=", this.idIter]],
       map: (item) => {
+        console.log(item);
         if (item) {
           if (item.procedimentoCache.idTitolarePotereSostitutivo && item.procedimentoCache.idStrutturaTitolarePotereSostitutivo) {
             item.procedimentoCache.nomeVisualTitolare = item.procedimentoCache.idTitolarePotereSostitutivo.idPersona.descrizione +
@@ -171,6 +176,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           if (item.procedimentoCache.idResponsabileProcedimento && item.procedimentoCache.idStrutturaResponsabileProcedimento) {
             item.procedimentoCache.nomeVisualResponsabileProcedimento = item.procedimentoCache.idResponsabileProcedimento.idPersona.descrizione +
               " (" + item.procedimentoCache.idStrutturaResponsabileProcedimento.nome + ")";
+          }
+          // ora mi creo giusto il valore da mostrare nel campo dell'utente creatore iter
+          if(item.idUtenteCreazione && item.idUtenteCreazione.utenteStrutturaList){
+            item.idUtenteCreazione.utenteStrutturaList.forEach(element => {
+              if(element.idAfferenzaStruttura.codice === "DIRETTA")
+              this.creatoreIterDescription = item.idUtenteCreazione.idPersona.descrizione + " (" + element.idStruttura.nome +")";
+            });
           }
 
           this.calcolaSePubblicabileAllAlboAndSetClasseCss(item.idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.id);

@@ -50,6 +50,10 @@
                     <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualTitolare" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Tit. potere sostitutivo"></dxo-label>
                     </dxi-item>
+                    
+                    <dxi-item [colSpan]="6" dataField="idUtenteCreazione.idPersona.descrizione" [editorOptions]="{ disabled: true, value:creatoreIterDescription}">
+                        <dxo-label text="Utente creatore iter"></dxo-label>
+                    </dxi-item>
 
                     <!-- <dxi-item [colSpan]="4" dataField="promotore" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
