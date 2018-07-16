@@ -158,8 +158,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "procedimentoCache.idStruttura",
         "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento",
         "idUtenteCreazione.idPersona",
-        "idUtenteCreazione.utenteStrutturaList.idStruttura",
-        "idUtenteCreazione.utenteStrutturaList.idAfferenzaStruttura"
+        "idStrutturaUtenteCreazione"
       ],
       filter: [["id", "=", this.idIter]],
       map: (item) => {
@@ -178,11 +177,15 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
               " (" + item.procedimentoCache.idStrutturaResponsabileProcedimento.nome + ")";
           }
           // ora mi creo giusto il valore da mostrare nel campo dell'utente creatore iter
-          if(item.idUtenteCreazione && item.idUtenteCreazione.utenteStrutturaList){
-            item.idUtenteCreazione.utenteStrutturaList.forEach(element => {
+          console.log("AHHHHHH!!!")
+          if(item.idUtenteCreazione.idPersona && item.idStrutturaUtenteCreazione){
+            console.log("item.idUtenteCreazione.idPersona", item.idUtenteCreazione.idPersona);
+            console.log("item.idStrutturaUtenteCreazione", item.idStrutturaUtenteCreazione);
+            /* item.idUtenteCreazione.utenteStrutturaList.forEach(element => {
               if(element.idAfferenzaStruttura.codice === "DIRETTA")
               this.creatoreIterDescription = item.idUtenteCreazione.idPersona.descrizione + " (" + element.idStruttura.nome +")";
-            });
+            }); */
+            this.creatoreIterDescription = item.idUtenteCreazione.idPersona.descrizione + " (" + item.idStrutturaUtenteCreazione.nome +")";
           }
 
           this.calcolaSePubblicabileAllAlboAndSetClasseCss(item.idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.id);
