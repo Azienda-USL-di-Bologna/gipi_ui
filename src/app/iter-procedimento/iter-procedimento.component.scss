@@ -127,8 +127,10 @@ dx-form .dx-form-group-with-caption {
 .button-azioni{
     padding: 5px 8px;
 }
-.margine-sx {
+.buttons-modifica {
     margin-left: 7px;
+    width: calc(100% - 8px);
+    max-width: 125px;
 }
 
 /*REGOLE PER I CAMPI DA EVIDENZIARE IN CASO DI PUBBLICAZIONE ALL'ALBO*/

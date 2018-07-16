@@ -46,7 +46,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public datiRiattivazioneIter: any = { note: "", idIter: null };
   public nuovoUtenteResponsabile: Utente;
   public nuovaStrutturaUtenteResp: Struttura;
-  public mostraCambioResponsabile = false;
+  public mostraPulsantiVicResp = false;
   public creatoreIterDescription: string;
 
   public popupVicariVisibile: boolean = false;
@@ -89,6 +89,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     visible: false,
     title: "",
     respAttuale: ""
+  };
+  public popupModificaOggetto: any = {
+    visible: false,
+    title: "",
+    fieldValue: "",
+    label: ""
   };
   public perFigliParteDestra: Object;
 
@@ -272,6 +278,17 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       });
     });
    }
+  
+   private showStatusOperation(message: string, type: string) {
+    notify({
+      message: message,
+        type: type,
+        displayTime: 2100,
+        position: TOAST_POSITION,
+        width: TOAST_WIDTH
+    });
+  }
+  
   public getDescrizioneUtente(item: any): string {
     return item ? item.idUtente.idPersona.descrizione 
         + " (" + item.idStruttura.nome
@@ -512,6 +529,23 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     }
   }
 
+  public updateOggetto() {
+    if (this.iter.oggetto !== this.popupModificaOggetto.fieldValue) {
+      this.iter.oggetto = this.popupModificaOggetto.fieldValue;
+      let iterClonato = Entity.cloneObject(this.iter);
+      this.dataSourceIter.store().update(this.iter.id, iterClonato).then(
+        res => {
+          this.showStatusOperation("Modifica dell'oggetto effettuata.", "success");
+          this.refresh();
+        },
+        err => {
+          this.showStatusOperation("Modifica dell'oggetto fallita. Contattare BabelCare", "error");
+        }
+      );
+    }
+    this.closePopupModificaOggetto();
+  }
+
   public openCambiaResponsabile(e: any) {
     this.nuovoUtenteResponsabile = null;
     this.nuovaStrutturaUtenteResp = null;
@@ -520,6 +554,18 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupCambioResp.respAttuale = e.procedimentoCache.nomeVisualResponsabileProcedimento;
     this.newIdRespDefault = "";
     if (!this.dataSourceUtentiCugini) this.buildDataSourceUtentiCugini();
+  }
+
+  public openModificaOggetto(e: any) {
+    this.popupModificaOggetto.title = "Modifica oggetto";
+    this.popupModificaOggetto.visible = true;
+    this.popupModificaOggetto.fieldValue = e.oggetto;
+  }
+
+  closePopupModificaOggetto() {
+    this.popupModificaOggetto.title = "";
+    this.popupModificaOggetto.visible = false;
+    this.popupModificaOggetto.fieldValue = "";
   }
 
   closePopupResp() {
@@ -566,54 +612,37 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       idStrutturaResponsabile: this.nuovaStrutturaUtenteResp.id,
       cfResponsabile: this.nuovoUtenteResponsabile.idPersona.codiceFiscale
     };
-    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/cambiaResponsabileProcedimento", params, { headers: new HttpHeaders().set("content-type", "application/json") })
-      .subscribe(
-        res => {
-          notify({
-            message: "Responsabile del procedimento cambiato con successo!",
-            type: "success",
-            position: TOAST_POSITION,
-            width: TOAST_WIDTH
-          });
-          this.refresh(); // Aggiorno l'iter per visualizzare il nuovo responsabile
-        },
-        err => {
-          notify({
-            message: "Qualcosa è andato storto. Contattare BabelCare",
-            type: "error",
-            position: TOAST_POSITION,
-            width: TOAST_WIDTH
-          });
-        }
+    if (this.iter.procedimentoCache.idResponsabileProcedimento.id !== this.nuovoUtenteResponsabile.id &&
+      this.iter.procedimentoCache.idStrutturaResponsabileProcedimento.id !== this.nuovaStrutturaUtenteResp.id) {
+      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/cambiaResponsabileProcedimento", params, { headers: new HttpHeaders().set("content-type", "application/json") })
+          .subscribe(
+          res => {
+            this.showStatusOperation("Responsabile del procedimento cambiato con successo!", "success");
+            this.refresh(); // Aggiorno l'iter per visualizzare il nuovo responsabile
+            },
+          err => {
+            this.showStatusOperation("Modifica non andata a buon fine. Contattare BabelCare", "error");
+            }
       );
+    }
     this.closePopupResp();
   }
 
   public riattivaIter() {
     this.datiRiattivazioneIter.idIter = this.iter.id;
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/riattivaIterSenzaDocumento", this.datiRiattivazioneIter, { headers: new HttpHeaders().set("content-type", "application/json") })
-        .subscribe(
-          res => {
-            this.iter.idStato.codice = STATI.IN_CORSO;
-            this.refresh();
-            this.genericButtons = null;
-            notify({
-              message: "Iter riattivato con successo",
-              type: "success",
-              position: TOAST_POSITION,
-              width: TOAST_WIDTH
-            });
-            this.popupRiattivaIterVisibile = false;
-          },
-          err => {
-            notify({
-              message: "Qualcosa è andato storto. Contattare BabelCare",
-              type: "error",
-              position: TOAST_POSITION,
-              width: TOAST_WIDTH
-            });
-          }
-        );
+      .subscribe(
+        res => {
+          this.iter.idStato.codice = STATI.IN_CORSO;
+          this.refresh();
+          this.genericButtons = null;
+          this.showStatusOperation("Iter riattivato con successo", "success");
+          this.popupRiattivaIterVisibile = false;
+        },
+      err => {
+        this.showStatusOperation("Qualcosa è andato storto. Contattare BabelCare", "error");
+      }
+    );
   }
 
   public passaggioDiFase() {
@@ -633,14 +662,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           this.popupData.title = "Passaggio Di Fase";
           this.passaggioDiFaseVisible = true;
         },
-        err => {
-          notify({
-            message: "Non esiste la fase successiva",
-            type: "error",
-            position: TOAST_POSITION,
-            width: TOAST_WIDTH
-          });
-        });
+      err => {
+        this.showStatusOperation("Non esiste la fase successiva", "error");
+      });
   }
 
   /* public setParametriSospensione() {
@@ -736,7 +760,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         this.fascicoloIter = res;
         this.settaVariabiliPermessi();
         if (!this.isChiuso() && this.permessoUtenteLoggato >= +PERMESSI.VICARIO) {
-          this.mostraCambioResponsabile = true;
+          this.mostraPulsantiVicResp = true;
         } 
         if (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) {
           this.generateCustomButtons();

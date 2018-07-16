@@ -30,18 +30,26 @@
                     </dxi-item>
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
-                    <dxi-item [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }" [cssClass]="classeDiHighlight"></dxi-item>
-                    <dxi-item *ngIf="!mostraCambioResponsabile" [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }" [cssClass]="classeDiHighlight"></dxi-item>
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="5" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }" [cssClass]="classeDiHighlight"></dxi-item>
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="1">
+                        <button class="btn button-azioni buttons-modifica float-right" 
+                            (click)="openModificaOggetto(iter)"
+                            data-toggle="tooltip" data-placement="right" title="Modifica oggetto"
+                        ><div class="d-inline-block">Modifica</div> <img class="float-right" src="assets/images/edit-white-3.png">
+                        </button>
+                        </dxi-item>
+                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. procedimento"></dxo-label>
                     </dxi-item>
-                    <dxi-item *ngIf="mostraCambioResponsabile" [colSpan]="5" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="5" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. procedimento"></dxo-label>
                     </dxi-item>
-                    <dxi-item *ngIf="mostraCambioResponsabile" [colSpan]="1">
-                        <button class="btn button-azioni margine-sx" 
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="1">
+                        <button class="btn button-azioni buttons-modifica float-right" 
                             (click)="openCambiaResponsabile(iter)"
                             data-toggle="tooltip" data-placement="right" title="Cambia responsabile procedimento"
-                        >Cambia <img class="icon-margin" src="assets/images/edit-white-3.png">
+                        ><div class="d-inline-block">Cambia</div> <img class="float-right" src="assets/images/edit-white-3.png">
                         </button>
                     </dxi-item>
                     <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileAttoFinale" [editorOptions]="{ disabled: true }">
@@ -286,7 +294,22 @@
     </div>
 </dx-popup>
 
-<dx-popup class="popup" [width]="800" [height]="230" [showTitle]="true" title="Cambia responsabile procedimento" [dragEnabled]="false" [closeOnOutsideClick]="true"
+<dx-popup *ngIf="mostraPulsantiVicResp" class="popup" [width]="500" [height]="310" [showTitle]="true" [title]="popupModificaOggetto.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
+    [(visible)]="popupModificaOggetto.visible" (onHidden)="closePopupModificaOggetto()" >
+    <div *dxTemplate="let data of 'content'">
+        <div class="box-margin">
+        <h4>Oggetto: </h4>
+        <dx-text-area [height]="150" [(value)]="popupModificaOggetto.fieldValue"></dx-text-area>
+        <div class="wrapperPulsantiPopup">
+            <dx-button class="button-css" text="OK" (click)="updateOggetto()" type="default"></dx-button>
+            <span class="btn-space"></span>
+            <dx-button class="button-css" text="Annulla" (click)="closePopupModificaOggetto()" type="normal"></dx-button>
+        </div>
+    </div>
+    </div>
+</dx-popup>
+
+<dx-popup *ngIf="mostraPulsantiVicResp" class="popup" [width]="800" [height]="230" [showTitle]="true" [title]="popupCambioResp.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
     [(visible)]="popupCambioResp.visible">
     <div *dxTemplate="let data of 'content'">
         <div class="form">
