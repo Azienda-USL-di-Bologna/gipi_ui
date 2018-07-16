@@ -162,7 +162,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       ],
       filter: [["id", "=", this.idIter]],
       map: (item) => {
-        console.log(item);
+        console.log("ITEM", item);
         if (item) {
           if (item.procedimentoCache.idTitolarePotereSostitutivo && item.procedimentoCache.idStrutturaTitolarePotereSostitutivo) {
             item.procedimentoCache.nomeVisualTitolare = item.procedimentoCache.idTitolarePotereSostitutivo.idPersona.descrizione +
@@ -178,7 +178,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           }
           // ora mi creo giusto il valore da mostrare nel campo dell'utente creatore iter
           console.log("AHHHHHH!!!")
-          if(item.idUtenteCreazione.idPersona && item.idStrutturaUtenteCreazione){
+          if(item.idUtenteCreazione && item.idUtenteCreazione.idPersona && item.idStrutturaUtenteCreazione){
             console.log("item.idUtenteCreazione.idPersona", item.idUtenteCreazione.idPersona);
             console.log("item.idStrutturaUtenteCreazione", item.idStrutturaUtenteCreazione);
             /* item.idUtenteCreazione.utenteStrutturaList.forEach(element => {
