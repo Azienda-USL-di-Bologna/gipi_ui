@@ -47,7 +47,9 @@ export class ModificaDocumentoIterComponent implements OnInit {
     switch(selection){
       case "Associa":
         this.sospensioneParams.azione = 'associazione';
-        this.sospensioneParams.codiceStatoProssimo = this.sospensioneParams.codiceStatoCorrente
+        this.sospensioneParams.codiceStatoProssimo = this.sospensioneParams.codiceStatoCorrente;
+        this.sospensioneParams.esito = null;
+        this.sospensioneParams.esitoMotivazione = null;
       break;
 
       case "Chiudi":
@@ -58,11 +60,15 @@ export class ModificaDocumentoIterComponent implements OnInit {
       case "Riattiva":
         this.sospensioneParams.azione = 'cambio_di_stato';
         this.sospensioneParams.codiceStatoProssimo = STATI.IN_CORSO
+        this.sospensioneParams.esito = null;
+        this.sospensioneParams.esitoMotivazione = null;
       break;
       
       case "Sospendi":
         this.sospensioneParams.azione = 'cambio_di_stato';
         this.sospensioneParams.codiceStatoProssimo = STATI.SOSPESO
+        this.sospensioneParams.esito = null;
+        this.sospensioneParams.esitoMotivazione = null;
       break;
     }
     this.action = this.sospensioneParams.azione;
