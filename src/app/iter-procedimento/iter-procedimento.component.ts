@@ -159,9 +159,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "procedimentoCache.idStrutturaTitolarePotereSostitutivo",
         "procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona",
         "procedimentoCache.idStrutturaResponsabileAdozioneAttoFinale",
-        "procedimentoCache.idResponsabileProcedimento.idPersona",
-        "procedimentoCache.idStrutturaResponsabileProcedimento",
         "procedimentoCache.idStruttura",
+        "idResponsabileProcedimento.idPersona",
+        "idStrutturaResponsabileProcedimento",
         "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento",
         "idUtenteCreazione.idPersona",
         "idStrutturaUtenteCreazione"
@@ -178,9 +178,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
             item.procedimentoCache.nomeVisualResponsabileAttoFinale = item.procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona.descrizione +
               " (" + item.procedimentoCache.idStrutturaResponsabileAdozioneAttoFinale.nome + ")";
           }
-          if (item.procedimentoCache.idResponsabileProcedimento && item.procedimentoCache.idStrutturaResponsabileProcedimento) {
-            item.procedimentoCache.nomeVisualResponsabileProcedimento = item.procedimentoCache.idResponsabileProcedimento.idPersona.descrizione +
-              " (" + item.procedimentoCache.idStrutturaResponsabileProcedimento.nome + ")";
+          if (item.idResponsabileProcedimento && item.idStrutturaResponsabileProcedimento) {
+            item.idResponsabileProcedimento.nomeVisualResponsabileProcedimento = item.idResponsabileProcedimento.idPersona.descrizione +
+              " (" + item.idStrutturaResponsabileProcedimento.nome + ")";
           }
           // ora mi creo giusto il valore da mostrare nel campo dell'utente creatore iter
           console.log("AHHHHHH!!!")
@@ -551,7 +551,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.nuovaStrutturaUtenteResp = null;
     this.popupCambioResp.title = "Cambia responsabile procedimento";
     this.popupCambioResp.visible = true;
-    this.popupCambioResp.respAttuale = e.procedimentoCache.nomeVisualResponsabileProcedimento;
+    this.popupCambioResp.respAttuale = e.idResponsabileProcedimento.nomeVisualResponsabileProcedimento;
     this.newIdRespDefault = "";
     if (!this.dataSourceUtentiCugini) this.buildDataSourceUtentiCugini();
   }
@@ -612,8 +612,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       idStrutturaResponsabile: this.nuovaStrutturaUtenteResp.id,
       cfResponsabile: this.nuovoUtenteResponsabile.idPersona.codiceFiscale
     };
-    if (this.iter.procedimentoCache.idResponsabileProcedimento.id !== this.nuovoUtenteResponsabile.id &&
-      this.iter.procedimentoCache.idStrutturaResponsabileProcedimento.id !== this.nuovaStrutturaUtenteResp.id) {
+    if (this.iter.idResponsabileProcedimento.id !== this.nuovoUtenteResponsabile.id ||
+      this.iter.idStrutturaResponsabileProcedimento.id !== this.nuovaStrutturaUtenteResp.id) {
       const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/cambiaResponsabileProcedimento", params, { headers: new HttpHeaders().set("content-type", "application/json") })
           .subscribe(
           res => {
