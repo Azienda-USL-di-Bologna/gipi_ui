@@ -36,7 +36,7 @@
                         <button class="btn button-azioni buttons-modifica float-right" 
                             (click)="openModificaOggetto(iter)"
                             data-toggle="tooltip" data-placement="right" title="Modifica oggetto"
-                        ><div class="d-inline-block">Modifica</div> <img class="float-right" src="assets/images/edit-white-3.png">
+                        ><div class="d-inline-block float-left">Modifica</div> <img class="float-right" src="assets/images/edit-white-3.png">
                         </button>
                         </dxi-item>
                     <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="6" dataField="idResponsabileProcedimento.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
@@ -49,7 +49,7 @@
                         <button class="btn button-azioni buttons-modifica float-right" 
                             (click)="openCambiaResponsabile(iter)"
                             data-toggle="tooltip" data-placement="right" title="Cambia responsabile procedimento"
-                        ><div class="d-inline-block">Cambia</div> <img class="float-right" src="assets/images/edit-white-3.png">
+                        ><div class="d-inline-block float-left">Cambia</div> <img class="float-right" src="assets/images/edit-white-3.png">
                         </button>
                     </dxi-item>
                     <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileAttoFinale" [editorOptions]="{ disabled: true }">
