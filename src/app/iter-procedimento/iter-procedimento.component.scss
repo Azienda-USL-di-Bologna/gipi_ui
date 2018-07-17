@@ -15,6 +15,13 @@
     height: 340px;
 }
 
+.read-only-field .dx-texteditor-input {
+    background-color: #ffffff !important;
+    color: #4e4e4e !important;
+    border-radius: 4px !important;
+    border: 1px solid #ddd !important;
+    caret-color: transparent !important;
+}
 .iter-procedimento .dx-state-disabled.dx-widget, .iter-procedimento .dx-state-disabled.dx-checkbox .dx-checkbox-icon{
     opacity: 0.8 !important;
     color: black !important;
@@ -139,8 +146,6 @@ dx-form .hightlightClass .dx-form-group-caption{
     font-weight: bold;
     font-style: italic;
 }
-
- 
 
 dx-form .hightlightClass label.dx-field-item-label.dx-field-item-label-location-left {
     color: black;

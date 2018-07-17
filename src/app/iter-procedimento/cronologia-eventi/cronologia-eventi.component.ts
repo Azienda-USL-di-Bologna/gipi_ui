@@ -42,7 +42,7 @@ export class CronologiaEventiComponent implements OnInit {
     if (this.dataSourceEventoIter !== undefined) {
       this.dataSourceEventoIter.load();
     }
-    if (this.daPadre["classeCSS"] !== "") {
+    if (this.daPadre["classeCSS"] !== "read-only-field ") {
       this.classeDiHighlight = "cronologiaEventihightlightClass"; 
     }
       
