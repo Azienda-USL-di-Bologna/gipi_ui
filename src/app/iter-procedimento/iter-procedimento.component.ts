@@ -58,6 +58,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   public fascicoloIter: any;
   public permessoUtenteLoggato: number;
+  public customLoadingFilterParamsLookup: CustomLoadingFilterParams = new CustomLoadingFilterParams();
+    
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
 
@@ -224,6 +226,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.colCountGroup = 10;
     }
     
+    this.customLoadingFilterParamsLookup.addFilter("idUtente.idPersona.descrizione", ["tolower(${target})", "contains", "${value.tolower}"]);
     this.buildDataSourceUtentiTutti = this.buildDataSourceUtentiTutti.bind(this);
     this.setCellValue = this.setCellValue.bind(this);
     
@@ -414,7 +417,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.iter.build(res[0]);
       // this.generateCustomButtons(); Non cancellare, potrebbe tornare utile in futuro
       this.calculateIodaPermissionAndSetButton();
-      //this.updateDataChiusuraPrevista();
+      // this.updateDataChiusuraPrevista();
       this.buildTitoloDatiGenerali();
       // this.setParametriSospensione();
       this.infoGeneriche.struttura = this.iter.procedimentoCache.idStruttura.nome;
@@ -856,16 +859,48 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.popupVicariVisibile = true;
   }
 
-  public buildDataSourceUtentiTutti(options) {
+  public buildDataSourceUtentiTutti() {
+    let self = this;
     return {
-      store: this.odataContextDefinition.getContext()[new Utente().getName()],
-      expand: ["idPersona", "idAzienda"],
-      // filter: options.data ? ["idPersona.id", "=", options.data.id] : null,
+      store: this.odataContextDefinition.getContext()[new UtenteStruttura().getName()].on("loading", (loadOptions) => {
+        loadOptions.userData["customLoadingFilterParams"] = this.customLoadingFilterParamsLookup;
+        this.odataContextDefinition.customLoading(loadOptions);
+        console.log("entro", loadOptions);
+        if (loadOptions.filter) {
+          loadOptions.filter.forEach(element => {
+            if (element[0][0] === "descrizioneCalcolata") {
+              element[0][0] = "idUtente.idPersona.descrizione";
+            }
+          });
+        }
+      }),
+      expand: ["idUtente.idPersona", "idUtente.idAzienda", "idStruttura"],
       paginate: true,
       pageSize: 15,
-      filter: [["idAzienda.id", "=", this.userInfo.idAzienda], ["attivo", "=", true]]
+      filter: [
+        ["idUtente.idAzienda.id", "=", this.userInfo.idAzienda],
+        ["idUtente.attivo", "=", true],
+        ["!", 
+          [
+            self.utility.buildMultipleFilterForArray("idUtente.idPersona.codiceFiscale", Object.assign([], self.arrayCfVicari)), 
+            "or",
+            ["idUtente.idPersona.codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]
+          ]
+        ]
+      ],
+      map: function (item) {
+        item.descrizioneCalcolata = item.idUtente.idPersona.descrizione + " (" + item.idStruttura.nome + ")";
+        return item;
+      }/* ,
+      searchExpr: function (dataItem) {
+        console.log("seraexp entro?");
+        return dataItem.idUtente.idPersona.descrizione;
+      } */
     };
   }
+
+  /* self.utility.buildMultipleFilterForArray("codiceFiscale", Object.assign([], self.arrayCfVicari)), 
+  "or",  */
 
   onEditorPrepared(e) {
     // debugger;
@@ -878,7 +913,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   setCellValue(rowData, value, currentData, componentInstance) {
-    console.log("setCellValue", rowData, value, currentData, componentInstance);
     let tempSource = new DataSource({
       store: this.odataContextDefinition.getContext()[new Persona().getName()],
       filter: ["id", "=", value]
@@ -887,28 +921,30 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       (res) => {
         this.arrayCfVicari.push(res[0].codiceFiscale);
         this.filtraDataSourceVicari();
-      });
+      }
+    );
   }
 
   onOptionChanged(e) {
-    console.log("onOptionChanged", e);
+    // console.log("onOptionChanged", e);
   }
 
   onEditingStart(e) {
     // console.log("onEditingStart", e);
+    // e.cancel = true;
   }
 
   onRowInserting(e) {
-    console.log("inserting", e);
-    e.cancel = true; // Cancello l'inserimento perché voglio gestirlo io
+    // console.log("inserting", e);
+    // e.cancel = true; // Cancello l'inserimento perché voglio gestirlo io
   }
 
   valueChanged(e) {
-    console.log("valueChanged ", e);
+    // console.log("valueChanged ", e);
   }
 
   onRowInserted(e) {
-    console.log("inserted ", e);
+    // console.log("inserted ", e);
   }
 
   onToolbarPreparing(e) {
@@ -920,16 +956,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   onCellPrepared(e) {
-     console.log("cell ", e);
-    /* if (e.rowType === "data" && e.column.command === "edit") {                
-        var $links = e.cellElement.find(".dx-link");
-        if(e.row.data.YourFieldName == true)
-            $links.filter(".dx-link-edit").remove();
-
-    } */
+    /*  console.log("cell ", e);
     if (e.data && !e.data.cancellabile) {
-      // e.cellElement.firstChild.hidden = true;
-    }
+      let editLink = e.cellElement.querySelector(".dx-template-wrapper");           
+      if (editLink) {
+          editLink.remove();
+      }
+    } */
   }
 
   salvaVicari() {
@@ -944,9 +977,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     ).subscribe(
       res => {
         // Per il momento mi faccio ridare il fascicolo e lo risetto in modo che sia sempre bello aggiornato.
-        console.log(this.fascicoloIter);
         this.fascicoloIter = res;
-        console.log(this.fascicoloIter);
         // Notifico l'utente
         this.showStatusOperation("Vicari salvati con successo", "success");
       },
@@ -985,6 +1016,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       "or", 
       ["codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]]);
     this.dataSourceVicari.load();
+  }
+
+  filtraDataSourceUtentiTutti() {
+    
   }
   // *************************
   // FINE GESTIONE POPUP VICARI
