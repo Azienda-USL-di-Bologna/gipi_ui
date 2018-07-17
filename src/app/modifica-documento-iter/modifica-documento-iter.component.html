@@ -1,0 +1,25 @@
+<div class="container whitePanel clModDocIter">
+    <h2 class="text-center mb-3">Modifica Associazione Parziale</h2>
+    <h2 class="text-center mb-3">{{sospensioneParams.descrizione}}</h2>  
+    <h2 *ngIf="iter" class="text-center mb-3">Iter {{iter.numero}}/{{iter.anno}} </h2>
+    <br>
+    <h3 class="text-center mb-3" *ngIf="iter && iter.idStato.codice==='CHIUSO'">Attenzione! L'iter è già in stato Chiuso: non è possibile svolgere alcuna funzione di associazione.<br> Si consiglia pertanto di eliminare l'associazione dal documento.</h3>
+
+    <dx-select-box class="combobox" *ngIf="azioniArray.length > 0" 
+        [dataSource]="azioniArray"
+        [searchEnabled]="false"
+        [(value)]="azioneRichiesta"
+        [noDataText]="'Non è possibile cambiare associazione perché l\'iter è chiuso.'"
+        [placeholder]="'Seleziona un\'azione'"
+        (onItemClick)="onSelectionChange(azioneRichiesta)">
+    </dx-select-box>
+    <br>
+    <app-cambio-di-stato-box  *ngIf="sospensioneParams.idIter && action === 'cambio_di_stato'"
+        [sospensioneParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="false">
+    </app-cambio-di-stato-box>
+
+    <app-documento-iter-associazione-semplice *ngIf="sospensioneParams.idIter && action === 'associazione'"
+        [associaParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="false">
+    </app-documento-iter-associazione-semplice>
+    
+</div>

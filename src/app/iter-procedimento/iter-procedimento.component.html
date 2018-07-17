@@ -30,16 +30,37 @@
                     </dxi-item>
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
-                    <dxi-item [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }" [cssClass]="classeDiHighlight"></dxi-item>
-
-                    <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }" [cssClass]="classeDiHighlight"></dxi-item>
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="5" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 70, disabled: true }" [cssClass]="classeDiHighlight"></dxi-item>
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="1">
+                        <button class="btn button-azioni buttons-modifica float-right" 
+                            (click)="openModificaOggetto(iter)"
+                            data-toggle="tooltip" data-placement="right" title="Modifica oggetto"
+                        ><div class="d-inline-block float-left">Modifica</div> <img class="float-right" src="assets/images/edit-white-3.png">
+                        </button>
+                        </dxi-item>
+                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="6" dataField="idResponsabileProcedimento.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. procedimento"></dxo-label>
+                    </dxi-item>
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="5" dataField="idResponsabileProcedimento.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                        <dxo-label text="Resp. procedimento"></dxo-label>
+                    </dxi-item>
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="1">
+                        <button class="btn button-azioni buttons-modifica float-right" 
+                            (click)="openCambiaResponsabile(iter)"
+                            data-toggle="tooltip" data-placement="right" title="Cambia responsabile procedimento"
+                        ><div class="d-inline-block float-left">Cambia</div> <img class="float-right" src="assets/images/edit-white-3.png">
+                        </button>
                     </dxi-item>
                     <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileAttoFinale" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. adozione atto finale"></dxo-label>
                     </dxi-item>
                     <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualTitolare" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Tit. potere sostitutivo"></dxo-label>
+                    </dxi-item>
+                    
+                    <dxi-item [colSpan]="6" dataField="idUtenteCreazione.idPersona.descrizione" [editorOptions]="{ disabled: true, value:creatoreIterDescription}">
+                        <dxo-label text="Utente creatore iter"></dxo-label>
                     </dxi-item>
 
                     <!-- <dxi-item [colSpan]="4" dataField="promotore" [editorOptions]="{ disabled: true }"></dxi-item> -->
@@ -100,8 +121,8 @@
                         <dxi-item [colSpan]="colCountGroup - 1" dataField="motivoDerogaDurata" [editorOptions]="{ disabled: true}">
                             <dxo-label text="Motivazione deroga"></dxo-label>
                         </dxi-item>
-                        <dxi-item [colSpan]="1">
-                            <button class="btn button-azioni" type="button" (click)="updateMotivazioneDeroga()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                        <dxi-item [colSpan]="1" >
+                            <button [disabled]="!(permessoUtenteLoggato >= 2)" class="btn button-azioni" type="button" (click)="updateMotivazioneDeroga()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                         </dxi-item>
                     </dxi-item>
 
@@ -119,7 +140,7 @@
                             <dxo-label text="Motivazione proroga"></dxo-label>
                         </dxi-item>
                         <dxi-item [colSpan]="1">
-                            <button class="btn button-azioni" type="button" (click)="updateMotivazioneSospensione()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                            <button [disabled]="!(permessoUtenteLoggato >= 2)" class="btn button-azioni" type="button" (click)="updateMotivazioneSospensione()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                         </dxi-item>
                     </dxi-item>
 
@@ -133,17 +154,22 @@
                     </dxi-item>
                 </dxi-item>
 
-                <dxi-item itemType="group" caption="Dati di archivio">
-                    <dxi-item dataField="idIterPrecedente.numero" [editorOptions]="{ disabled: true }" [cssClass]="classeDiHighlight">
+                <dxi-item itemType="group" [colCount]="6" caption="Dati di archivio">
+                    <dxi-item dataField="idIterPrecedente.numero" [editorOptions]="{ disabled: true }" [cssClass]="classeDiHighlight" [colSpan]="6">
                         <dxo-label text="Coll. precedente"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }">
+                    <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }" [colSpan]="6">
                         <dxo-label text="Motivo collegamento"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="idFascicolo" [editorOptions]="{ disabled: true }">
+                    <dxi-item dataField="idFascicolo" [editorOptions]="{ disabled: true }" [colSpan]="5">
                         <dxo-label text="Fascicolo dell'iter"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [editorOptions]="{
+                    <dxi-item [colSpan]="1">
+                        <button class="btn button-azioni" type="button" 
+                            (click)="apriPopupVicari()">Vicari fascicolo
+                        </button>
+                    </dxi-item>
+                    <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [colSpan]="1" [editorOptions]="{
                         disabled: true,
                         dataSource: dataSourceClassificazione,
                         displayExpr: customDisplayExprClassificazione,
@@ -268,6 +294,64 @@
     </div>
 </dx-popup>
 
+<dx-popup *ngIf="mostraPulsantiVicResp" class="popup" [width]="500" [height]="310" [showTitle]="true" [title]="popupModificaOggetto.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
+    [(visible)]="popupModificaOggetto.visible" (onHidden)="closePopupModificaOggetto()" >
+    <div *dxTemplate="let data of 'content'">
+        <div class="box-margin">
+        <h4>Oggetto: </h4>
+        <dx-text-area [height]="150" [(value)]="popupModificaOggetto.fieldValue"></dx-text-area>
+        <div class="wrapperPulsantiPopup">
+            <dx-button class="button-css" text="OK" (click)="updateOggetto()" type="default"></dx-button>
+            <span class="btn-space"></span>
+            <dx-button class="button-css" text="Annulla" (click)="closePopupModificaOggetto()" type="normal"></dx-button>
+        </div>
+    </div>
+    </div>
+</dx-popup>
+
+<dx-popup *ngIf="mostraPulsantiVicResp" class="popup" [width]="800" [height]="230" [showTitle]="true" [title]="popupCambioResp.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
+    [(visible)]="popupCambioResp.visible">
+    <div *dxTemplate="let data of 'content'">
+        <div class="form">
+            <div class="div dx-field-set">
+                <div class="dx-field box-margin">
+                    <div class="dx-field-label" style="width: 25%;">Responsabile attuale</div>
+                    <div class="dx-field-value" style="width: 75%;">
+                        <dx-text-box
+                            [value]="popupCambioResp.respAttuale"
+                            [hint]="popupCambioResp.respAttuale"
+                            [readOnly]="true"
+                            [focusStateEnabled]="false"
+                            [hoverStateEnabled]="false"
+                            [inputAttr]="{style: 'background:#dedede'}">
+                        </dx-text-box>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label" style="width: 25%;">Scegli nuovo responsabile</div>
+                    <div class="dx-field-value" style="width: 75%;">
+                        <dx-lookup
+                            [dataSource]="dataSourceUtentiCugini"
+                            [searchExpr]="['searchString']"
+                            [searchEnabled]= "true"
+                            [value]="newIdRespDefault"
+                            [displayExpr]="getDescrizioneUtente"
+                            (onValueChanged)="onValueChanged($event)"
+                            [closeOnOutsideClick]="true"
+                            [showPopupTitle]="false"
+                            cancelButtonText="Chiudi">
+                        </dx-lookup>
+                    </div>
+                </div>
+                <div class="wrapperPulsantiPopup margine-top">
+                    <dx-button class="button-css" [disabled]="!nuovoUtenteResponsabile" text="OK" type="default" (click)="cambiaResponsabileProcedimento()"></dx-button>
+                    <span class="btn-space"></span>
+                    <dx-button class="button-css" text="Annulla" type="normal" (click)="closePopupResp()" ></dx-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</dx-popup>
 <!-- 
 <dx-popup class="passaggioFase" [width]="700" [showTitle]="true" [title]="popupData.title" [dragEnabled]="false" [closeOnOutsideClick]="true"
     [(visible)]="passaggioDiFaseVisible">
@@ -284,3 +368,18 @@
     </div>
 </dx-popup> -->
 <!-- <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter> -->
+
+<dx-popup
+    [width]="600"
+    
+    [showTitle]="true"
+    title="Responsabile e vicari del fascicolo"
+    [(visible)]="popupVicariVisibile">
+    <div *dxTemplate="let data of 'content'">
+        <dx-data-grid
+            [dataSource]="dataSourceVicari">
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+        </dx-data-grid>
+    </div>
+</dx-popup>
