@@ -280,7 +280,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.iter.build(res[0]);
       // this.generateCustomButtons(); Non cancellare, potrebbe tornare utile in futuro
       this.calculateIodaPermissionAndSetButton();
-      this.updateDataChiusuraPrevista();
+      //this.updateDataChiusuraPrevista();
       this.buildTitoloDatiGenerali();
       // this.setParametriSospensione();
       this.infoGeneriche.struttura = this.iter.procedimentoCache.idStruttura.nome;
@@ -377,6 +377,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         if (validator.isValid) {
           this.iter.derogaDurata = this.popupDatiTemporali.fieldDays;
           this.iter.motivoDerogaDurata = this.popupDatiTemporali.fieldMotivation;
+          this.updateDataChiusuraPrevista();
           doUpdate = true;
         }else if (this.iter.derogaDurata === this.popupDatiTemporali.fieldDays && this.iter.motivoDerogaDurata === this.popupDatiTemporali.fieldMotivation) {
           this.closePopupDeroga(validationParams);
@@ -396,7 +397,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       let iterClonato = Entity.cloneObject(this.iter);
       this.dataSourceIter.store().update(this.iter.id, iterClonato);
       if (this.popupDatiTemporali.action) {
-        this.updateDataChiusuraPrevista();
         this.closePopupDeroga(validationParams);
       } else {
         this.closePopupNote();
