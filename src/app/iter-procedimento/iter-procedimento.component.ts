@@ -2,8 +2,8 @@ import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity, OdataUtilities } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
-import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura } from "@bds/nt-entities";
-import { HttpClient } from "@angular/common/http";
+import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura, Persona } from "@bds/nt-entities";
+import { HttpClient  } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
 import { AfterViewInit } from "@angular/core/src/metadata/lifecycle_hooks";
@@ -13,6 +13,7 @@ import { HttpHeaders } from "@angular/common/http";
 import { STATI } from "@bds/nt-entities";
 import { DxFormComponent } from "devextreme-angular";
 import { IterProcedimentoFascicoloUtilsClass, PERMESSI } from "./iter-procedimento-fascicolo-utils.class";
+import { UtilityFunctions } from "app/utility-functions";
 
 @Component({
   selector: "app-iter-procedimento",
@@ -28,6 +29,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   // private previousWidth: number = this.initialWidth;
   private odataContextDefinitionFunctionImport: OdataContextDefinition;
   private odataContextDefinition: OdataContextDefinition;
+  private utility: UtilityFunctions = new UtilityFunctions();
+  private arrayCfVicari: string[];
+  private arrayCfVicariNonCancellabili;
   
   public iter: Iter = new Iter();
   public idIterArray: Object;
@@ -110,8 +114,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   
   // public soloEditing: boolean = false;
-
-  public dataSourceUtentiCugini: DataSource;
+    public dataSourceUtentiCugini: DataSource;
   public dataSourceUtenteLoggato: DataSource;
   public dataSourceClassificazione: DataSource;
   public idUtenteDefault: number;
@@ -119,7 +122,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public descrizioneUtenteResponsabile: string;
   public arrayEsiti: any[] = Object.keys(ESITI).map(key => ({ "codice": key, "descrizione": ESITI[key] }));
 
-  
+  public dataSourceUtentiTutti;
 
   constructor(
     private odataContextFactory: OdataContextFactory,
@@ -184,14 +187,14 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           }
           // ora mi creo giusto il valore da mostrare nel campo dell'utente creatore iter
           console.log("AHHHHHH!!!")
-          if(item.idUtenteCreazione && item.idUtenteCreazione.idPersona && item.idStrutturaUtenteCreazione){
+          if (item.idUtenteCreazione && item.idUtenteCreazione.idPersona && item.idStrutturaUtenteCreazione) {
             console.log("item.idUtenteCreazione.idPersona", item.idUtenteCreazione.idPersona);
             console.log("item.idStrutturaUtenteCreazione", item.idStrutturaUtenteCreazione);
             /* item.idUtenteCreazione.utenteStrutturaList.forEach(element => {
-              if(element.idAfferenzaStruttura.codice === "DIRETTA")
-              this.creatoreIterDescription = item.idUtenteCreazione.idPersona.descrizione + " (" + element.idStruttura.nome +")";
+              if (element.idAfferenzaStruttura.codice === "DIRETTA")
+              this.creatoreIterDescription = item.idUtenteCreazione.idPersona.descrizione + " (" + element.idStruttura.nome + ")";
             }); */
-            this.creatoreIterDescription = item.idUtenteCreazione.idPersona.descrizione + " (" + item.idStrutturaUtenteCreazione.nome +")";
+            this.creatoreIterDescription = item.idUtenteCreazione.idPersona.descrizione + " (" + item.idStrutturaUtenteCreazione.nome + ")";
           }
 
           this.calcolaSePubblicabileAllAlboAndSetClasseCss(item.idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.id);
@@ -220,6 +223,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     else {
       this.colCountGroup = 10;
     }
+    
+    this.buildDataSourceUtentiTutti = this.buildDataSourceUtentiTutti.bind(this);
+    this.setCellValue = this.setCellValue.bind(this);
+    
   }
 
    private buildDataSourceUtentiCugini(): void {
@@ -243,6 +250,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "idAfferenzaStruttura"
       ]
     });
+
+    
 
     this.dataSourceUtenteLoggato = new DataSource({
       store: this.odataContextDefinition.getContext()[new UtenteStruttura().getName()],
@@ -800,12 +809,186 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     );
   }
 
+
+  // *************************
+  // GESTIONE POPUP VICARI
+  // *************************
   public apriPopupVicari(): void {
+    if (!this.arrayCfVicari) {
+      this.arrayCfVicari = IterProcedimentoFascicoloUtilsClass.calcolaArrayCfVicari(this.fascicoloIter.permessi);
+    }
+    
+    let iter = this.iter;
+
+    // Carico i vicari
+    if (!this.dataSourceVicari) {
+      this.dataSourceVicari = new DataSource({
+        store: this.odataContextDefinition.getContext()[new Persona().getName()],
+        filter: [this.utility.buildMultipleFilterForArray(
+          "codiceFiscale", 
+          Object.assign([], this.arrayCfVicari)
+          ), 
+          "or", 
+          ["codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]],
+          map: function (item) {
+            if (item.id === iter.idResponsabileProcedimento.idPersona.id) {
+              item.descrizioneCalcolata = item.descrizione + " - Responsabile del procedimento";
+              item.cancellabile = false;
+            } else if (item.id === iter.procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona.id) {
+              item.descrizioneCalcolata = item.descrizione + " - Resp. adozione dell'atto finale";
+              item.cancellabile = false;
+            } else if (item.id === iter.procedimentoCache.idTitolarePotereSostitutivo.idPersona.id) {
+              item.descrizioneCalcolata = item.descrizione + " - Titolare potere sostitutivo";
+              item.cancellabile = false;
+            } else if (iter.idUtenteCreazione && item.id === iter.idUtenteCreazione.idPersona.id) {
+              item.descrizioneCalcolata = item.descrizione + " - Creatore dell'iter";
+              item.cancellabile = true;
+            } else {
+              item.descrizioneCalcolata = item.descrizione;
+              item.cancellabile = true;
+            }
+            return item;
+          }
+      });
+    }
+    this.dataSourceVicari.load();
+
     this.popupVicariVisibile = true;
-    if (this.dataSourceVicari === undefined) {
-      
+  }
+
+  public buildDataSourceUtentiTutti(options) {
+    return {
+      store: this.odataContextDefinition.getContext()[new Utente().getName()],
+      expand: ["idPersona", "idAzienda"],
+      // filter: options.data ? ["idPersona.id", "=", options.data.id] : null,
+      paginate: true,
+      pageSize: 15,
+      filter: [["idAzienda.id", "=", this.userInfo.idAzienda], ["attivo", "=", true]]
+    };
+  }
+
+  onEditorPrepared(e) {
+    // debugger;
+    /* console.log("onEditorPrepared", e);
+    if (e.dataField === "id") {
+      // let lookup = e.editorElement.dxSelectBox("instance");
+      e.component.on("valueChanged", function(a) {console.log("valore cambaito"); });
+
+    } */
+  }
+
+  setCellValue(rowData, value, currentData, componentInstance) {
+    console.log("setCellValue", rowData, value, currentData, componentInstance);
+    let tempSource = new DataSource({
+      store: this.odataContextDefinition.getContext()[new Persona().getName()],
+      filter: ["id", "=", value]
+    });
+    tempSource.load().then(
+      (res) => {
+        this.arrayCfVicari.push(res[0].codiceFiscale);
+        this.filtraDataSourceVicari();
+      });
+  }
+
+  onOptionChanged(e) {
+    console.log("onOptionChanged", e);
+  }
+
+  onEditingStart(e) {
+    // console.log("onEditingStart", e);
+  }
+
+  onRowInserting(e) {
+    console.log("inserting", e);
+    e.cancel = true; // Cancello l'inserimento perché voglio gestirlo io
+  }
+
+  valueChanged(e) {
+    console.log("valueChanged ", e);
+  }
+
+  onRowInserted(e) {
+    console.log("inserted ", e);
+  }
+
+  onToolbarPreparing(e) {
+    e.toolbarOptions.items.forEach(element => {
+      if (element.name === "saveButton" || element.name === "revertButton") {
+        element.visible = false;
+      }
+    });
+  }
+
+  onCellPrepared(e) {
+     console.log("cell ", e);
+    /* if (e.rowType === "data" && e.column.command === "edit") {                
+        var $links = e.cellElement.find(".dx-link");
+        if(e.row.data.YourFieldName == true)
+            $links.filter(".dx-link-edit").remove();
+
+    } */
+    if (e.data && !e.data.cancellabile) {
+      // e.cellElement.firstChild.hidden = true;
     }
   }
+
+  salvaVicari() {
+    let params = {
+      "numerazioneGerarchica": this.iter.idFascicolo,
+      "vicari": this.arrayCfVicari
+    };
+    const call = this.http.post(
+      CUSTOM_RESOURCES_BASE_URL + "iter/aggiornaVicariDelFascicolo", 
+      params, 
+      { headers: new HttpHeaders().set("content-type", "application/json") }
+    ).subscribe(
+      res => {
+        // Per il momento mi faccio ridare il fascicolo e lo risetto in modo che sia sempre bello aggiornato.
+        console.log(this.fascicoloIter);
+        this.fascicoloIter = res;
+        console.log(this.fascicoloIter);
+        // Notifico l'utente
+        this.showStatusOperation("Vicari salvati con successo", "success");
+      },
+      err => {
+        this.showStatusOperation("C'è stato un errore nel salvataggio dei vicari. Se il problema persiste contattare babelcare.", "error");
+      }
+    );  
+  }
+
+  closePopupVicari() {
+    this.popupVicariVisibile = false;
+  }
+
+  onHidden() {
+    this.arrayCfVicari = IterProcedimentoFascicoloUtilsClass.calcolaArrayCfVicari(this.fascicoloIter.permessi);
+    this.filtraDataSourceVicari();
+  }
+  
+  eliminaVicario(e) {
+    if (e.data && !e.data.cancellabile) {
+      this.showStatusOperation("Non puoi cancellare questo vicario", "warning");
+    } else {
+      this.arrayCfVicari.forEach(function(element, index, object) {
+        if (element === e.data.codiceFiscale) {
+          object.splice(index, 1);
+        }
+      });
+      this.filtraDataSourceVicari();
+    }
+  }
+
+  filtraDataSourceVicari() {
+    this.dataSourceVicari.filter([this.utility.buildMultipleFilterForArray(
+      "codiceFiscale", 
+      Object.assign([], this.arrayCfVicari)), 
+      "or", 
+      ["codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]]);
+    this.dataSourceVicari.load();
+  }
+  // *************************
+  // FINE GESTIONE POPUP VICARI
+  // *************************
 }
 
 interface UserInfo {

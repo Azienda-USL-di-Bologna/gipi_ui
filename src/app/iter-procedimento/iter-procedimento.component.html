@@ -371,15 +371,59 @@
 
 <dx-popup
     [width]="600"
-    
+    (onHidden)="onHidden()"
     [showTitle]="true"
     title="Responsabile e vicari del fascicolo"
     [(visible)]="popupVicariVisibile">
     <div *dxTemplate="let data of 'content'">
         <dx-data-grid
-            [dataSource]="dataSourceVicari">
-            <dxo-paging [enabled]="false"></dxo-paging>
-            <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+            [dataSource]="dataSourceVicari"
+            (onEditorPrepared)="onEditorPrepared($event)"
+            (onRowInserting)="onRowInserting($event)"
+            (onToolbarPreparing)="onToolbarPreparing($event)"
+            (onCellPrepared)="onCellPrepared($event)"
+            (onEditingStart)="onEditingStart($event)"
+            (onOptionChanged)="onOptionChanged($event)">
+            <dxo-paging [enabled]="true" [pageSize]="20"></dxo-paging>
+            <dxo-editing 
+                mode="batch"
+                [allowAdding]="true">
+            </dxo-editing>
+
+            <dxi-column
+                dataField="id" 
+                caption="Vicario/Responsabile"
+                calculateDisplayValue="descrizioneCalcolata"
+                [setCellValue]="setCellValue">
+                <dxo-lookup
+                    [dataSource]="buildDataSourceUtentiTutti" 
+                    displayExpr="idPersona.descrizione" 
+                    valueExpr="idPersona.id">
+                </dxo-lookup>
+            </dxi-column>
+            <dxi-column 
+                datafield="cancellabile"
+                caption="Elimina" 
+                cellTemplate="buttonActions"
+                [width]="80"
+                alignment="center">
+                <div *dxTemplate="let element of 'buttonActions'">
+                    <dx-button 
+                        *ngIf="cancellabile === true" 
+                        text="" 
+                        hint="Elimina vicario" 
+                        icon='trash'
+                        (onClick)="eliminaVicario(element)">
+                    </dx-button>
+                </div>
+            </dxi-column>
+            
+            
         </dx-data-grid>
+        <div class="wrapperPulsantiPopup margine-top">
+            <dx-button class="button-css" text="Salva" type="default" (click)="salvaVicari()"></dx-button>
+            <span class="btn-space"></span>
+            <dx-button class="button-css" text="Annulla" type="normal" (click)="closePopupVicari()" ></dx-button>
+        </div>
     </div>
 </dx-popup>

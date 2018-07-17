@@ -5,8 +5,8 @@ export class IterProcedimentoFascicoloUtilsClass {
     
   public static getFascicoloIter(http, numerazioneGerarchica): any {
     if (numerazioneGerarchica) {
-      let data = new Map<String, Object>();
-      data.set("numerazioneGerarchica", numerazioneGerarchica);
+      /* let data = new Map<String, Object>();
+      data.set("numerazioneGerarchica", numerazioneGerarchica); */
       return http.post(
         CUSTOM_RESOURCES_BASE_URL + "iter/getFascicoloConPermessi", 
         numerazioneGerarchica, 
@@ -16,6 +16,27 @@ export class IterProcedimentoFascicoloUtilsClass {
       console.log("Sembra che l'iter non abbia l'idFascicolo. Questo non va bene.");
     }
   }
+
+  public static calcolaArrayCfVicari(permessi): any {
+    let vicari: string[] = [];
+
+    for (let key in permessi) {
+      if (permessi[key] === "VICARIO") {
+        vicari.push(key);   
+      }
+    }
+
+    return vicari;
+  }
+
+  /* public static dammiCfResponsabile(permessi): string {
+    for (let key in permessi) {
+      if (permessi[key] === "RESPONSABILE") {
+        return key; 
+      }
+    }
+    return "";
+  } */
 }
 
 export enum PERMESSI {
