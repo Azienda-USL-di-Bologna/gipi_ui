@@ -402,14 +402,14 @@
                 </dxo-lookup>
             </dxi-column>
             <dxi-column 
-                datafield="cancellabile"
+                dataField="cancellabile"
                 caption="Elimina" 
                 cellTemplate="buttonActions"
                 [width]="80"
                 alignment="center">
                 <div *dxTemplate="let element of 'buttonActions'">
                     <dx-button 
-                        *ngIf="cancellabile === true" 
+                        [visible]="element.value" 
                         text="" 
                         hint="Elimina vicario" 
                         icon='trash'
