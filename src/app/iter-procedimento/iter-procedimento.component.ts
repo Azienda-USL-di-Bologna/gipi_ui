@@ -227,7 +227,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.colCountGroup = 10;
     }
     
-    this.customLoadingFilterParamsLookup.addFilter("idUtente.idPersona.descrizione", ["tolower(${target})", "contains", "${value.tolower}"]);
+    // this.customLoadingFilterParamsLookup.addFilter("idUtente.idPersona.descrizione", ["tolower(${target})", "contains", "${value.tolower}"]);
+    this.customLoadingFilterParamsLookup.addFilter("descrizioneCalcolata", ["tolower(idUtente.idPersona.descrizione)", "contains", "${value.tolower}"]);
     this.buildDataSourceUtentiTutti = this.buildDataSourceUtentiTutti.bind(this);
     this.setCellValue = this.setCellValue.bind(this);
     
@@ -869,14 +870,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         this.odataContextDefinition.customLoading(loadOptions);
         // debugger;
         console.log("entro", loadOptions);
-        if (loadOptions.filter) {
+        /* if (loadOptions.filter) {
           loadOptions.filter.forEach(element => {
-            console.log("ciao", element);
             if (element[0] && element[0][0] && element[0][0] === "descrizioneCalcolata") {
               element[0][0] = "idUtente.idPersona.descrizione";
             }
           });
-        }
+        } */
       }),
       expand: ["idUtente.idPersona", "idUtente.idAzienda", "idStruttura"],
       paginate: true,
