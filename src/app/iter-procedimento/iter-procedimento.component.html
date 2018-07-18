@@ -25,13 +25,13 @@
         <div class="col-lg-6 col-md-12">
             <dx-form id="form" [colCount]="1" [formData]="iter"    #myForm1> <!-- [screenByWidth]="screen"-->
                 <dxi-item itemType="group" [colCount]="6" [caption]="datiGenerali" >
-                    <dxi-item [colSpan]="6" *ngIf="classeDiHighlight!=='read-only-field '"><p id="infoPubblicazioneAlbo">
+                    <dxi-item [colSpan]="6" *ngIf="classeDiHighlight!==''"><p id="infoPubblicazioneAlbo">
                         <b><i>I campi evidenziati verranno esposti nella pubblicazione dell'iter</i></b></p>
                     </dxi-item>
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
-                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlight"></dxi-item>
-                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="5" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlight"></dxi-item>
+                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightOggetto"></dxi-item>
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="5" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightOggetto"></dxi-item>
                     <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="1">
                         <button class="btn button-azioni buttons-modifica float-right" 
                             (click)="openModificaOggetto(iter)"
@@ -299,7 +299,7 @@
     <div *dxTemplate="let data of 'content'">
         <div class="box-margin">
         <h4>Oggetto: </h4>
-        <dx-text-area [height]="150" [(value)]="popupModificaOggetto.fieldValue"></dx-text-area>
+        <dx-text-area [height]="150" [(value)]="popupModificaOggetto.fieldValue" maxLength="1024"></dx-text-area>
         <div class="wrapperPulsantiPopup">
             <dx-button class="button-css" text="OK" (click)="updateOggetto()" type="default"></dx-button>
             <span class="btn-space"></span>

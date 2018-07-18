@@ -16,11 +16,12 @@
 }
 
 .read-only-field .dx-texteditor-input {
-    background-color: #ffffff !important;
-    color: #4e4e4e !important;
-    border-radius: 4px !important;
-    border: 1px solid #ddd !important;
-    caret-color: transparent !important;
+    background-color: #fcfcfd;
+    color: #333;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    caret-color: transparent;
+    opacity: 0.8;
 }
 .iter-procedimento .dx-state-disabled.dx-widget, .iter-procedimento .dx-state-disabled.dx-checkbox .dx-checkbox-icon{
     opacity: 0.8 !important;
