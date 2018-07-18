@@ -807,7 +807,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     dataSourceTemp.load().then(
       (res) => {
         this.classeDiHighlight = res.length > 0 ? "hightlightClass" : "";
-        this.classeDiHighlightOggetto += res.length > 0 ? "hightlightClass" : "";
+        this.classeDiHighlightOggetto = res.length > 0 ? "read-only-field hightlightClass" : "read-only-field";
         let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"], classeCSS: this.classeDiHighlight};
         this.perFigliParteDestra = perFigliNew;
       }
