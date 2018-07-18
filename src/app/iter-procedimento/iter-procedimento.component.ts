@@ -867,10 +867,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       store: this.odataContextDefinition.getContext()[new UtenteStruttura().getName()].on("loading", (loadOptions) => {
         loadOptions.userData["customLoadingFilterParams"] = this.customLoadingFilterParamsLookup;
         this.odataContextDefinition.customLoading(loadOptions);
+        // debugger;
         console.log("entro", loadOptions);
         if (loadOptions.filter) {
           loadOptions.filter.forEach(element => {
-            if (element[0][0] === "descrizioneCalcolata") {
+            console.log("ciao", element);
+            if (element[0] && element[0][0] && element[0][0] === "descrizioneCalcolata") {
               element[0][0] = "idUtente.idPersona.descrizione";
             }
           });
@@ -886,7 +888,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           [
             self.utility.buildMultipleFilterForArray("idUtente.idPersona.codiceFiscale", Object.assign([], self.arrayCfVicari)), 
             "or",
-            ["idUtente.idPersona.codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]
+            ["idUtente.idPersona.codiceFiscale", "=", self.iter.idResponsabileProcedimento.idPersona.codiceFiscale]
           ]
         ]
       ],
@@ -1020,8 +1022,29 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.dataSourceVicari.load();
   }
 
-  filtraDataSourceUtentiTutti() {
+  customizeColumns(columns: any) {
     
+    columns.forEach(column => {
+        /* const defaultCalculateFilterExpression = column.calculateFilterExpression;
+        column.calculateFilterExpression = function (value, selectedFilterOperation) {
+          debugger;
+            if (this.dataType === "string" && !this.lookup && value) {
+                return ["tolower(" + this.dataField + ")",
+                    selectedFilterOperation || "contains",
+                    value.toLowerCase()];
+            } else {
+                return defaultCalculateFilterExpression.apply(this, arguments);
+            }
+        }; */
+     
+        /* if (column.dataField === "idAziendaTipoProcedimento.idTitolo.nome") {
+            column.calculateCellValue = function (value, parametroInutile) {
+                if (value && value.idAziendaTipoProcedimento && value.idAziendaTipoProcedimento.idTitolo) {
+                    return "[" + value.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + value.idAziendaTipoProcedimento.idTitolo.nome;
+                }
+            };                
+        } */
+    });
   }
   // *************************
   // FINE GESTIONE POPUP VICARI

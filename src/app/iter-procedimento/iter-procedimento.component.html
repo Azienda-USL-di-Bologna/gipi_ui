@@ -166,6 +166,7 @@
                     </dxi-item>
                     <dxi-item [colSpan]="1">
                         <button class="btn button-azioni" type="button" 
+                            [disabled]="!(permessoUtenteLoggato >= 4)"
                             (click)="apriPopupVicari()">Vicari fascicolo
                         </button>
                     </dxi-item>
@@ -385,7 +386,8 @@
             (onToolbarPreparing)="onToolbarPreparing($event)"
             (onCellPrepared)="onCellPrepared($event)"
             (onEditingStart)="onEditingStart($event)"
-            (onOptionChanged)="onOptionChanged($event)">
+            (onOptionChanged)="onOptionChanged($event)"
+            [customizeColumns]="customizeColumns">
             
             <dxo-editing mode="batch" [allowAdding]="true"></dxo-editing>
             <dxo-scrolling mode="standard" [useNative]="false"
