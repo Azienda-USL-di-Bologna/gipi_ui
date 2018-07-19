@@ -227,7 +227,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.colCountGroup = 10;
     }
     
-    // this.customLoadingFilterParamsLookup.addFilter("idUtente.idPersona.descrizione", ["tolower(${target})", "contains", "${value.tolower}"]);
     this.customLoadingFilterParamsLookup.addFilter("descrizioneCalcolata", ["tolower(idUtente.idPersona.descrizione)", "contains", "${value.tolower}"]);
     this.buildDataSourceUtentiTutti = this.buildDataSourceUtentiTutti.bind(this);
     this.setCellValue = this.setCellValue.bind(this);
@@ -868,15 +867,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       store: this.odataContextDefinition.getContext()[new UtenteStruttura().getName()].on("loading", (loadOptions) => {
         loadOptions.userData["customLoadingFilterParams"] = this.customLoadingFilterParamsLookup;
         this.odataContextDefinition.customLoading(loadOptions);
-        // debugger;
-        console.log("entro", loadOptions);
-        /* if (loadOptions.filter) {
-          loadOptions.filter.forEach(element => {
-            if (element[0] && element[0][0] && element[0][0] === "descrizioneCalcolata") {
-              element[0][0] = "idUtente.idPersona.descrizione";
-            }
-          });
-        } */
       }),
       expand: ["idUtente.idPersona", "idUtente.idAzienda", "idStruttura"],
       paginate: true,
@@ -895,16 +885,11 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       map: function (item) {
         item.descrizioneCalcolata = item.idUtente.idPersona.descrizione + " (" + item.idStruttura.nome + ")";
         return item;
-      }/* ,
-      searchExpr: function (dataItem) {
-        console.log("seraexp entro?");
-        return dataItem.idUtente.idPersona.descrizione;
-      } */
+      }
     };
   }
 
-  /* self.utility.buildMultipleFilterForArray("codiceFiscale", Object.assign([], self.arrayCfVicari)), 
-  "or",  */
+
 
   onEditorPrepared(e) {
     // debugger;
@@ -1022,30 +1007,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.dataSourceVicari.load();
   }
 
-  customizeColumns(columns: any) {
-    
-    columns.forEach(column => {
-        /* const defaultCalculateFilterExpression = column.calculateFilterExpression;
-        column.calculateFilterExpression = function (value, selectedFilterOperation) {
-          debugger;
-            if (this.dataType === "string" && !this.lookup && value) {
-                return ["tolower(" + this.dataField + ")",
-                    selectedFilterOperation || "contains",
-                    value.toLowerCase()];
-            } else {
-                return defaultCalculateFilterExpression.apply(this, arguments);
-            }
-        }; */
-     
-        /* if (column.dataField === "idAziendaTipoProcedimento.idTitolo.nome") {
-            column.calculateCellValue = function (value, parametroInutile) {
-                if (value && value.idAziendaTipoProcedimento && value.idAziendaTipoProcedimento.idTitolo) {
-                    return "[" + value.idAziendaTipoProcedimento.idTitolo.classificazione + "] " + value.idAziendaTipoProcedimento.idTitolo.nome;
-                }
-            };                
-        } */
-    });
-  }
   // *************************
   // FINE GESTIONE POPUP VICARI
   // *************************
