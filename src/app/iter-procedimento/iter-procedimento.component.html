@@ -24,42 +24,42 @@
     <div class="row">
         <div class="col-lg-6 col-md-12">
             <dx-form id="form" [colCount]="1" [formData]="iter"    #myForm1> <!-- [screenByWidth]="screen"-->
-                <dxi-item itemType="group" [colCount]="6" [caption]="datiGenerali" >
-                    <dxi-item [colSpan]="6" *ngIf="classeDiHighlight!==''"><p id="infoPubblicazioneAlbo">
+                <dxi-item itemType="group" [colCount]="12" [caption]="datiGenerali" >
+                    <dxi-item [colSpan]="12" *ngIf="classeDiHighlight!==''"><p id="infoPubblicazioneAlbo">
                         <b><i>I campi evidenziati verranno esposti nella pubblicazione dell'iter</i></b></p>
                     </dxi-item>
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
-                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="6" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightOggetto"></dxi-item>
-                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="5" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightOggetto"></dxi-item>
+                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="12" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightOggetto"></dxi-item>
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="11" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightOggetto"></dxi-item>
                     <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="1">
-                        <button class="btn button-azioni buttons-modifica float-right" 
+                        <button class="btn button-azioni float-right" 
                             (click)="openModificaOggetto(iter)"
                             data-toggle="tooltip" data-placement="right" title="Modifica oggetto"
-                        ><div class="d-inline-block float-left">Modifica</div> <img class="float-right" src="assets/images/edit-white-3.png">
+                        ><img src="assets/images/edit-white-3.png">
                         </button>
                         </dxi-item>
-                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="6" dataField="idResponsabileProcedimento.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="12" dataField="idResponsabileProcedimento.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. procedimento"></dxo-label>
                     </dxi-item>
-                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="5" dataField="idResponsabileProcedimento.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="11" dataField="idResponsabileProcedimento.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. procedimento"></dxo-label>
                     </dxi-item>
                     <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="1">
-                        <button class="btn button-azioni buttons-modifica float-right" 
+                        <button class="btn button-azioni float-right" 
                             (click)="openCambiaResponsabile(iter)"
                             data-toggle="tooltip" data-placement="right" title="Cambia responsabile procedimento"
-                        ><div class="d-inline-block float-left">Cambia</div> <img class="float-right" src="assets/images/edit-white-3.png">
+                        ><img src="assets/images/edit-white-3.png">
                         </button>
                     </dxi-item>
-                    <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualResponsabileAttoFinale" [editorOptions]="{ disabled: true }">
+                    <dxi-item [colSpan]="12" dataField="procedimentoCache.nomeVisualResponsabileAttoFinale" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Resp. adozione atto finale"></dxo-label>
                     </dxi-item>
-                    <dxi-item [colSpan]="6" dataField="procedimentoCache.nomeVisualTitolare" [editorOptions]="{ disabled: true }">
+                    <dxi-item [colSpan]="12" dataField="procedimentoCache.nomeVisualTitolare" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Tit. potere sostitutivo"></dxo-label>
                     </dxi-item>
                     
-                    <dxi-item [colSpan]="6" dataField="idUtenteCreazione.idPersona.descrizione" [editorOptions]="{ disabled: true, value:creatoreIterDescription}">
+                    <dxi-item [colSpan]="12" dataField="idUtenteCreazione.idPersona.descrizione" [editorOptions]="{ disabled: true, value:creatoreIterDescription}">
                         <dxo-label text="Utente creatore iter"></dxo-label>
                     </dxi-item>
 
@@ -69,7 +69,7 @@
                             <dxo-label text="Controinteressati"></dxo-label>
                         </dxi-item>
 
-                        <dxi-item [colSpan]="5">
+                        <dxi-item [colSpan]="11">
                             <button class="btn button-azioni" id="note" type="button" (click)="updateNoteControInteressati()">Note <img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                             <!-- <dx-button text="Note controinteressati" type="default" (onClick)="updateNoteControInteressati()"></dx-button> -->
                         </dxi-item>
@@ -82,7 +82,7 @@
                     <!-- <dxi-item [colSpan]="4" dataField="esito" cssClass="fix-bug-dx" [editorOptions]="{ disabled: true }">
                         <dxo-label text="Esito"></dxo-label>
                     </dxi-item> -->
-                    <dxi-item dataField="esito" [colSpan]="6" cssClass="fix-bug-dx" editorType="dxLookup" [editorOptions]="{ 
+                    <dxi-item dataField="esito" [colSpan]="12" cssClass="fix-bug-dx" editorType="dxLookup" [editorOptions]="{ 
                         disabled: true,
                         items: arrayEsiti,
                         displayExpr: 'descrizione',
@@ -101,7 +101,7 @@
                     <!-- <dxi-item [colSpan]="1">
                         <button class="btn button-azioni" id="motivazione" type="button" (click)="updateEsitoMotivazione()" [disabled]="inSolaLettura()">Motivazione</button>
                     </dxi-item> -->
-                    <dxi-item [colSpan]="6" dataField="esitoMotivazione"[label]="{text: 'Motivazione esito'}" editorType="dxTextArea" [editorOptions]="{ disabled: true, height: 55 }" [cssClass]="classeDiHighlight">
+                    <dxi-item [colSpan]="12" dataField="esitoMotivazione"[label]="{text: 'Motivazione esito'}" editorType="dxTextArea" [editorOptions]="{ disabled: true, height: 55 }" [cssClass]="classeDiHighlight">
                     </dxi-item>
                 </dxi-item>
 
@@ -316,8 +316,8 @@
         <div class="form">
             <div class="div dx-field-set">
                 <div class="dx-field box-margin">
-                    <div class="dx-field-label" style="width: 25%;">Responsabile attuale</div>
-                    <div class="dx-field-value" style="width: 75%;">
+                    <div class="dx-field-label" style="width: 20%;">Attuale responsabile:</div>
+                    <div class="dx-field-value" style="width: 80%;">
                         <dx-text-box
                             [value]="popupCambioResp.respAttuale"
                             [hint]="popupCambioResp.respAttuale"
@@ -329,8 +329,8 @@
                     </div>
                 </div>
                 <div class="dx-field">
-                    <div class="dx-field-label" style="width: 25%;">Scegli nuovo responsabile</div>
-                    <div class="dx-field-value" style="width: 75%;">
+                    <div class="dx-field-label" style="width: 20%;">Nuovo responsabile:</div>
+                    <div class="dx-field-value" style="width: 80%;">
                         <dx-lookup
                             [dataSource]="dataSourceUtentiCugini"
                             [searchExpr]="['searchString']"
@@ -340,6 +340,7 @@
                             (onValueChanged)="onValueChanged($event)"
                             [closeOnOutsideClick]="true"
                             [showPopupTitle]="false"
+                            placeholder="Seleziona..."
                             cancelButtonText="Chiudi">
                         </dx-lookup>
                     </div>

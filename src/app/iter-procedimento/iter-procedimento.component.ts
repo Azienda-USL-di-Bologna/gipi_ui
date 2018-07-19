@@ -562,7 +562,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public openCambiaResponsabile(e: any) {
     this.nuovoUtenteResponsabile = null;
     this.nuovaStrutturaUtenteResp = null;
-    this.popupCambioResp.title = "Cambia responsabile procedimento";
+    this.popupCambioResp.title = "Cambia responsabile procedimento amministrativo";
     this.popupCambioResp.visible = true;
     this.popupCambioResp.respAttuale = e.idResponsabileProcedimento.nomeVisualResponsabileProcedimento;
     this.newIdRespDefault = "";
