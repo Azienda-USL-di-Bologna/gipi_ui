@@ -2,6 +2,7 @@
     <h2 class="text-center mb-3">Modifica Associazione Parziale</h2>
     <h2 class="text-center mb-3">{{sospensioneParams.descrizione}}</h2>  
     <h2 *ngIf="iter" class="text-center mb-3">Iter {{iter.numero}}/{{iter.anno}} </h2>
+    <h2 *ngIf="iter" class="text-center mb-3">( {{iter.idStato.descrizione}} )</h2>
     <br>
     <h3 class="text-center mb-3" *ngIf="iter && iter.idStato.codice==='CHIUSO'">Attenzione! L'iter è già in stato Chiuso: non è possibile svolgere alcuna funzione di associazione.<br> Si consiglia pertanto di eliminare l'associazione dal documento.</h3>
 
