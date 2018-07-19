@@ -125,10 +125,10 @@ class="popup"
 [closeOnOutsideClick]="false"
 [(visible)]="showPopupAnnullamento">
   <div *dxTemplate="let data of 'content'">
-      <h3>Le modifiche non verranno salvate. Ok?</h3> 
+      <h3>Le modifiche verranno annullate</h3> 
       <div class="text-center mt-4">
-          <dx-button class="d-inline-block" text="No" (click)="handleAnnulla($event)"></dx-button>
-          <dx-button class="d-inline-block" text="Si" (click)="handleClose($event)"></dx-button>
+        <dx-button class="d-inline-block" text="Procedi" (click)="handleClose($event)"></dx-button>
+        <dx-button class="d-inline-block" text="Annulla" (click)="handleAnnulla($event)"></dx-button>
       </div>
   </div>
 </dx-popup>
