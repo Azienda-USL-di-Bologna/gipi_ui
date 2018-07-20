@@ -117,7 +117,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   
   // public soloEditing: boolean = false;
-    public dataSourceUtentiCugini: DataSource;
+  public dataSourceUtentiCugini: DataSource;
   public dataSourceUtenteLoggato: DataSource;
   public dataSourceClassificazione: DataSource;
   public idUtenteDefault: number;
@@ -189,7 +189,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
               " (" + item.idStrutturaResponsabileProcedimento.nome + ")";
           }
           // ora mi creo giusto il valore da mostrare nel campo dell'utente creatore iter
-          console.log("AHHHHHH!!!")
           if (item.idUtenteCreazione && item.idUtenteCreazione.idPersona && item.idStrutturaUtenteCreazione) {
             console.log("item.idUtenteCreazione.idPersona", item.idUtenteCreazione.idPersona);
             console.log("item.idStrutturaUtenteCreazione", item.idStrutturaUtenteCreazione);
@@ -233,7 +232,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     
   }
 
-   private buildDataSourceUtentiCugini(): void {
+  private buildDataSourceUtentiCugini(): void {
     /*
       Il caricamento del datasource per la lookup ha un problema. E' paginato. 
       Se l'utente loggato, che deve essere impostato come utente default, non è presente nella prima tranche di dati
@@ -246,6 +245,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         this.odataUtilities.filterToCustomQueryParams(["searchString"], loadOptions);
       }),
       customQueryParams: {
+        idStruttura: this.iter.procedimentoCache.idStruttura.id
         // searchString: ""
       },
       expand: [
@@ -254,9 +254,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "idAfferenzaStruttura"
       ]
     });
-
-    
-
     this.dataSourceUtenteLoggato = new DataSource({
       store: this.odataContextDefinition.getContext()[new UtenteStruttura().getName()],
       expand: [
@@ -268,7 +265,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         ["idUtente.id", "=", this.userInfo.idUtente]
       ]
     });
-
     // Ora faccio le load dell'utente loggato, e quando ce l'ho faccio la load del datasource.
     // A quel punto a seconda che ci sia o meno aggiungo l'utente loggato al datasource
     this.dataSourceUtenteLoggato.load().then(re => {
@@ -290,9 +286,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           + " - " + re[0].idAfferenzaStruttura.descrizione + ")";
       });
     });
-   }
+  }
   
-   private showStatusOperation(message: string, type: string) {
+  private showStatusOperation(message: string, type: string) {
     notify({
       message: message,
         type: type,
