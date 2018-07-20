@@ -18,6 +18,7 @@ export class CronologiaEventiComponent implements OnInit {
   public oggettoDocumento: string = "";
   public classeDiHighlight = "";
   public popupVisible = false;
+  public enablePopup = false;
   public nota: String;
 
   // @Input("idIter") idIter: string;
@@ -48,8 +49,13 @@ export class CronologiaEventiComponent implements OnInit {
   }
 
   showNotes(noteValue) {
+    this.enablePopup = true;
     this.popupVisible = true;
     this.nota = noteValue.value;
+  }
+
+  disablePopup() {
+    this.enablePopup = false;
   }
 
   customizeColumns(columns: any) {
