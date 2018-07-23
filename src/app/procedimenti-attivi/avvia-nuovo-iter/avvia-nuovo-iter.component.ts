@@ -313,6 +313,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.descrizioneUtenteResponsabile = item ? item.itemData.idUtente.idPersona.descrizione 
       + " (" + item.itemData.idStruttura.nome
       + " - " + item.itemData.idAfferenzaStruttura.descrizione + ")" : null; */
+    console.log("ITEM = ", item);
     this.iterParams.idUtenteResponsabile = item ? item.component._options.selectedItem.idUtente.id : null;
     this.idUtenteDefault = item ? item.component._options.selectedItem.id : null;
     this.descrizioneUtenteResponsabile = item ? item.component._options.selectedItem.idUtente.idPersona.descrizione 
