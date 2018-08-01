@@ -58,6 +58,24 @@ label{
     margin-top: 16px;
     text-align: center;
 }
+
+.label-bold {
+    font-weight: bold;
+}
+
+.wrapperPulsantiPopupTop {
+    margin-bottom: 16px;
+    text-align: right;
+}
+
+.gridContainerDiv {
+    max-height: 400px !important;
+}
+
+.gridContainerDiv dx-data-grid{
+    height: 400px !important;
+}
+
 .margine-top {
     margin-top: 35px;
 }
