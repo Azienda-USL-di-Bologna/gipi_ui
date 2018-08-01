@@ -815,8 +815,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     if (!this.arrayCfVicari) {
       this.arrayCfVicari = IterProcedimentoFascicoloUtilsClass.calcolaArrayCfVicari(this.fascicoloIter.permessi);
     }
-   
-    console.log("VICARI = ", this.arrayCfVicari);
     let iter = this.iter;
     // Carico i vicari - Ogni volta altrimenti bisogna riapplicare il filtro 
     this.dataSourceVicari = new DataSource({
@@ -830,6 +828,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         map: function (item) {
           if (item.id === iter.idResponsabileProcedimento.idPersona.id) {
             item.descrizioneCalcolata = item.descrizione + " - Responsabile del procedimento";
+            item.cancellabile = false;
+          } else if (item.id === iter.procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona.id &&
+                    item.id === iter.procedimentoCache.idTitolarePotereSostitutivo.idPersona.id) {
+            item.descrizioneCalcolata = item.descrizione + " - Resp. adozione dell'atto finale - Titolare potere sostitutivo";
             item.cancellabile = false;
           } else if (item.id === iter.procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona.id) {
             item.descrizioneCalcolata = item.descrizione + " - Resp. adozione dell'atto finale";
@@ -861,13 +863,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
             this.listaVicariPopup.splice(0, 0, vicario);
             break;
           case iter.procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona.id:
-            this.listaVicariPopup.splice(i++, 0, vicario);
+            this.listaVicariPopup.splice(1, 0, vicario);
             break;
           case iter.procedimentoCache.idTitolarePotereSostitutivo.idPersona.id:
-            this.listaVicariPopup.splice(i, 0, vicario);
+            this.listaVicariPopup.splice(i++, 0, vicario);
             break;
           case iter.idUtenteCreazione ? iter.idUtenteCreazione.idPersona.id : "":
-            this.listaVicariPopup.splice(3, 0, vicario);
+            this.listaVicariPopup.splice(i >= 2 ? 3 : i, 0, vicario);
             break;
           default:
             this.listaVicariPopup.push(vicario);
