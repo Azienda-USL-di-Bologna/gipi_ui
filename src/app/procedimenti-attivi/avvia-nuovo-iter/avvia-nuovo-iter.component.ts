@@ -70,6 +70,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams.idApplicazione = doc.idApplicazione;
     this.iterParams.glogParams = doc.glogParams;
     this.iterParams.dataRegistrazioneDocumento = this.dataRegistrazioneDocumento;
+    this.dataMassimaConclusione = this.getDataMax();
   }
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
@@ -83,6 +84,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.buildDataSourceUtenti();
     this.setUtenteResponsabile = this.setUtenteResponsabile.bind(this);
     this.reloadResponsabile = this.reloadResponsabile.bind(this);
+    this.setDataMax = this.setDataMax.bind(this);
   }
 
   private getInfoSessionStorage(): void {
@@ -251,7 +253,7 @@ export class AvviaNuovoIterComponent implements OnInit {
       + "<br><b>Tramite il documento:</b> " + this.iterParams.codiceRegistroDocumento + " " + this.iterParams.numeroDocumento + "/" + this.iterParams.annoDocumento
       + "<br><b>Responsabilie procedimento amministrativo:</b> " + this.descrizioneUtenteResponsabile
       + "<br><b>Data avvio iter:</b> " + UtilityFunctions.formatDateToString(this.iterParams.dataAvvioIter)
-      + "<br><b>Data massima conclusione:</b> " + UtilityFunctions.formatDateToString(this.dataMassimaConclusione)
+      + "<br><b>Data massima conclusione:</b> " + this.dataMassimaConclusione.toLocaleDateString()
       + "<br><b>Promotore:</b> " + this.iterParams.promotoreIter
       + "<br><b>Oggetto:</b> " + this.iterParams.oggettoIter;
   }
@@ -293,15 +295,14 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   public setDataMax(): void {
-    if (this.durataMassimaProcedimentoDaProcedimento && this.dataRegistrazioneDocumento) {
-      this.dataMassimaConclusione = new Date();
-      // debugger;
-      this.dataMassimaConclusione.setDate(this.dataRegistrazioneDocumento.getDate() + this.durataMassimaProcedimentoDaProcedimento);
-    }
-    
+    if (this.durataMassimaProcedimentoDaProcedimento && (this.dataRegistrazioneDocumento || this.iterParams.dataAvvioIter)) {
+      this.dataMassimaConclusione = new Date(this.iterParams.dataAvvioIter);
+      this.dataMassimaConclusione.setDate(this.dataMassimaConclusione.getDate() + this.durataMassimaProcedimentoDaProcedimento);
+    } 
   }
 
   public getDataMax(): Date {
+    console.log("QUANTE VOLTE ?");
     this.setDataMax();
     return this.dataMassimaConclusione;
   }

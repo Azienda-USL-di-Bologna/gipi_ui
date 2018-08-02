@@ -61,7 +61,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   public fascicoloIter: any;
   public permessoUtenteLoggato: number;
-  public customLoadingFilterParamsLookup: CustomLoadingFilterParams = new CustomLoadingFilterParams();
     
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
@@ -224,8 +223,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     else {
       this.colCountGroup = 10;
     }
-    
-    this.customLoadingFilterParamsLookup.addFilter("descrizione", ["tolower(${target})", "contains", "${value.tolower}"]);
     this.setCellValue = this.setCellValue.bind(this);
   }
 
@@ -851,41 +848,40 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     });
     this.dataSourceVicari.load().then(res => {
       this.listaVicariPopup = [];
-      let i = 1;  // Indice per ordinare i responsabili del fascicolo
+      let vicariTemp: Vicario[] = [];
       res.forEach(element => {
-        let vicario = new Vicario();
-        vicario.id = element.id;
-        vicario.cf = element.codiceFiscale;
-        vicario.descrizione = element.descrizioneCalcolata;
-        vicario.cancellabile = element.cancellabile;
+        let vicario = new Vicario(element.id, element.codiceFiscale, element.descrizioneCalcolata, element.cancellabile);
         switch (vicario.id) {
           case iter.idResponsabileProcedimento.idPersona.id:
-            this.listaVicariPopup.splice(0, 0, vicario);
+            vicariTemp.splice(0, 0, vicario);
             break;
           case iter.procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona.id:
-            this.listaVicariPopup.splice(1, 0, vicario);
+            vicariTemp.splice(1, 0, vicario);
             break;
           case iter.procedimentoCache.idTitolarePotereSostitutivo.idPersona.id:
-            this.listaVicariPopup.splice(i++, 0, vicario);
+            vicariTemp.splice(2, 0, vicario);            
             break;
           case iter.idUtenteCreazione ? iter.idUtenteCreazione.idPersona.id : "":
-            this.listaVicariPopup.splice(i >= 2 ? 3 : i, 0, vicario);
+            vicariTemp.splice(3, 0, vicario);
             break;
           default:
             this.listaVicariPopup.push(vicario);
             break;
         }
       });
+      this.listaVicariPopup = vicariTemp.concat(this.listaVicariPopup);
     });
     this.buildLookupUtenti();
     this.popupVicariVisibile = true;
   }
 
   public buildLookupUtenti() {
+    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
+    customLoadingFilterParams.addFilter("idUtente.idPersona.descrizione", ["tolower(${target})", "contains", "${value.tolower}"]);
     if (!this.dataSourceUtentiTutti) {
       this.dataSourceUtentiTutti = new DataSource({
         store: this.odataContextDefinition.getContext()[new UtenteStruttura().getName()].on("loading", (loadOptions) => {
-          loadOptions.userData["customLoadingFilterParams"] = this.customLoadingFilterParamsLookup;
+          loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
           this.odataContextDefinition.customLoading(loadOptions);
         }),
         expand: ["idUtente.idPersona", "idUtente.idAzienda", "idStruttura"],
@@ -1048,6 +1044,14 @@ class Vicario {
   cf: string;
   descrizione: string;
   cancellabile: boolean;
+  constructor()
+  constructor(id: number, cf: string, descrizione: string, cancellabile: boolean)
+  constructor(id?: number, cf?: string, descrizione?: string, cancellabile?: boolean) {
+    this.id = id;
+    this.cf = cf;
+    this.descrizione = descrizione;
+    this.cancellabile = cancellabile;
+  }
 }
 
 interface UserInfo {
