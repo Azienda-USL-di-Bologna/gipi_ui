@@ -22,6 +22,7 @@ import {TipiProcedimentoAziendaliComponent} from "./tipi-procedimento-aziendali/
 import {DettaglioTipoProcedimentoComponent} from "./tipi-procedimento-aziendali/dettaglio-tipo-procedimento/dettaglio-tipo-procedimento.component";
 import {RoleGuard} from "./authorization/guards/role.guard";
 import {TestGridComponent} from "./test/test-grid/test-grid.component";
+import {ModificaDocumentoIterComponent} from "./modifica-documento-iter/modifica-documento-iter.component";
 
 export const rootRouterConfig: Routes = [
 
@@ -55,5 +56,6 @@ export const rootRouterConfig: Routes = [
     {path: "app-cambio-di-stato", component: CambioDiStatoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Cambio di stato"}},
     {path: "tipi-procedimento-aziendali", component: TipiProcedimentoAziendaliComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard, RoleGuard], data: {breadcrumb: "Tipi di Procedimento Aziendali", ruoliConcessi: ["CA"]}},
     {path: "dettaglio-tipo-procedimento", component: DettaglioTipoProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Dettaglio Tipo Procedimento"}},
-    {path: "app-test-grid", component: TestGridComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Test"}}
+    {path: "app-test-grid", component: TestGridComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Test"}},
+    {path: "app-modifica-documento-iter", component: ModificaDocumentoIterComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Modifica documento iter"}}
 ];

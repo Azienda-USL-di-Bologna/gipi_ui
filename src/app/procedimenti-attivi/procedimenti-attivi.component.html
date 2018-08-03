@@ -11,7 +11,7 @@
             <!-- [customizeColumns]="customizeColumns" non necessaria con la function import-->
             <!--<dxo-paging [pageSize]="154"></dxo-paging>-->
 
-            <dxo-scrolling mode="virtual" preloadEnabled="true"></dxo-scrolling>
+            <dxo-scrolling mode="virtual" preloadEnabled="true" useNative="true"></dxo-scrolling>
 
             <dxo-filter-row [visible]="true" showAllText=' '></dxo-filter-row>
             <dxo-search-panel *ngIf="!daDocumento" [visible]="true" [width]="calcWidth(3)" placeholder="Cerca.."

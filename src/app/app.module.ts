@@ -83,6 +83,7 @@ import {LoginModule} from "@bds/nt-login";
 import { TestGridComponent } from "./test/test-grid/test-grid.component";
 import {AppConfiguration} from "./config/app-configuration";
 import { DocumentoIterAssociazioneSempliceComponent } from "./documento-iter-associazione-semplice/documento-iter-associazione-semplice.component";
+import { ModificaDocumentoIterComponent } from './modifica-documento-iter/modifica-documento-iter.component';
 
 @NgModule({
     declarations: [
@@ -118,7 +119,8 @@ import { DocumentoIterAssociazioneSempliceComponent } from "./documento-iter-ass
         TipiProcedimentoAziendaliComponent,
         DettaglioTipoProcedimentoComponent,
         TestGridComponent,
-        DocumentoIterAssociazioneSempliceComponent
+        DocumentoIterAssociazioneSempliceComponent,
+        ModificaDocumentoIterComponent
     ],
     imports: [
         BrowserModule,

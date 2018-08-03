@@ -148,22 +148,27 @@ export class AvviaNuovoIterComponent implements OnInit {
     // A quel punto a seconda che ci sia o meno aggiungo l'utente loggato al datasource
     this.dataSourceUtenteLoggato.load().then(re => {
       let usLogged = re[0];
-      this.dataSourceUtenti.load().then(res => {
-        let ciSonoGià = false;
-        for (let e of res) {
-          if (e.idUtente.id === this.loggedUser.getField(bUtente.id) && e.idStruttura.id === this.iterParams.procedimento.idStruttura.id) {
-            ciSonoGià = true;
-            break;
+      if (re.length > 1) {
+        for (let r of re) {
+          if (r.idAfferenzaStruttura.id === 1) { // Afferenza diretta
+            usLogged = r;
           }
         }
-        if (!ciSonoGià) {
-          res.push(usLogged);
+      }
+      this.dataSourceUtenti.load().then(res => {
+        for (let e of res) {
+          if (e.idUtente.id === this.loggedUser.getField(bUtente.id)) {
+            res.pop(e);
+          }
         }
-        this.idUtenteDefault = re[0].id;
+        for (let r of re) {
+          res.push(r);
+        }
+        this.idUtenteDefault = usLogged.id;
         this.iterParams.idUtenteResponsabile = this.loggedUser.getField(bUtente.id);
-        this.descrizioneUtenteResponsabile = re[0].idUtente.idPersona.descrizione 
-          + " (" + re[0].idStruttura.nome
-          + " - " + re[0].idAfferenzaStruttura.descrizione + ")";
+        this.descrizioneUtenteResponsabile = usLogged.idUtente.idPersona.descrizione 
+          + " (" + usLogged.idStruttura.nome
+          + " - " + usLogged.idAfferenzaStruttura.descrizione + ")";
       });
     });
   }
