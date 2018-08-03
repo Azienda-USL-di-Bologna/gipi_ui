@@ -51,6 +51,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   @Input()
   set procedimentoSelezionatoDaDocumento(procedimento: any) {
     this.buildProcedimento(procedimento);
+    this.dataMassimaConclusione = this.getDataMax();
     this.avviaIterDaDocumento = true;
   }
 
@@ -302,7 +303,6 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   public getDataMax(): Date {
-    console.log("QUANTE VOLTE ?");
     this.setDataMax();
     return this.dataMassimaConclusione;
   }
