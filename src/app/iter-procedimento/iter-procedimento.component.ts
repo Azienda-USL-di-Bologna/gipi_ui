@@ -138,7 +138,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     // gestione resize window (pessime prestazioni)
    /*  this.screen = this.screen.bind(this); */
 
-    console.log("iter-procedimento-component (constructor)");
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
       const idIter: string = queryParams["idIter"];
       if (idIter) {
@@ -550,6 +549,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public openCambiaResponsabile(e: any) {
+    let cfResponsabile = this.iter.idResponsabileProcedimento.idPersona.codiceFiscale;
     this.nuovoUtenteResponsabile = null;
     this.nuovaStrutturaUtenteResp = null;
     this.popupCambioResp.title = "Cambia responsabile procedimento amministrativo";
@@ -607,13 +607,20 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public cambiaResponsabileProcedimento() {
+    let cfResponsabile = this.iter.idResponsabileProcedimento.idPersona.codiceFiscale;
+    let vicars;
+    if(!this.arrayCfVicari.includes(cfResponsabile)){
+      vicars = this.arrayCfVicari.slice();
+      vicars.push(cfResponsabile);
+    }
     const params = {
       idIter: this.iter.id,
       idFascicolo: this.iter.idFascicolo,
       idUtenteLoggato: this.userInfo.idUtente,
       idUtenteResponsabile: this.nuovoUtenteResponsabile.id,
       idStrutturaResponsabile: this.nuovaStrutturaUtenteResp.id,
-      cfResponsabile: this.nuovoUtenteResponsabile.idPersona.codiceFiscale
+      cfResponsabile: this.nuovoUtenteResponsabile.idPersona.codiceFiscale,
+      vicari: vicars
     };
     if (this.iter.idResponsabileProcedimento.id !== this.nuovoUtenteResponsabile.id ||
       this.iter.idStrutturaResponsabileProcedimento.id !== this.nuovaStrutturaUtenteResp.id) {
@@ -621,14 +628,18 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           .subscribe(
           res => {
             this.showStatusOperation("Responsabile del procedimento cambiato con successo!", "success");
+            this.arrayCfVicari.push(cfResponsabile);
+            //debugger;
+            this.fascicoloIter.permessi = Object.assign(this.fascicoloIter.permessi,{[cfResponsabile]: "VICARIO"});
             this.refresh(); // Aggiorno l'iter per visualizzare il nuovo responsabile
+            this.closePopupResp();
             },
           err => {
             this.showStatusOperation("Modifica non andata a buon fine. Contattare BabelCare", "error");
             }
       );
     }
-    this.closePopupResp();
+    
   }
 
   public riattivaIter() {
@@ -757,22 +768,25 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   } */
 
   public calculateIodaPermissionAndSetButton(): void {
-    IterProcedimentoFascicoloUtilsClass.getFascicoloIter(this.http, this.iter.idFascicolo)
-    .subscribe(
-      res => {
-        this.fascicoloIter = res;
-        this.settaVariabiliPermessi();
-        if (!this.isChiuso() && this.permessoUtenteLoggato >= +PERMESSI.VICARIO) {
-          this.mostraPulsantiVicResp = true;
-        } 
-        if (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) {
-          this.generateCustomButtons();
+    if(!this.fascicoloIter){
+      IterProcedimentoFascicoloUtilsClass.getFascicoloIter(this.http, this.iter.idFascicolo)
+      .subscribe(
+        res => {
+          this.fascicoloIter = res;
+          this.settaVariabiliPermessi();
+          if (!this.isChiuso() && this.permessoUtenteLoggato >= +PERMESSI.VICARIO) {
+            this.mostraPulsantiVicResp = true;
+          } 
+          if (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) {
+            this.generateCustomButtons();
+          }
+          this.arrayCfVicari = IterProcedimentoFascicoloUtilsClass.calcolaArrayCfVicari(this.fascicoloIter.permessi);
+        },
+        err => {
+          console.log("Errore nel recupero del fascicolo iter", err);
         }
-      },
-      err => {
-        console.log("Errore nel recupero del fascicolo iter", err);
-      }
-    );    
+      );    
+    }
   }
 
   public settaVariabiliPermessi() {
