@@ -609,7 +609,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public cambiaResponsabileProcedimento() {
     let cfResponsabile = this.iter.idResponsabileProcedimento.idPersona.codiceFiscale;
     let vicars;
-    if(!this.arrayCfVicari.includes(cfResponsabile)){
+    if(this.arrayCfVicari.indexOf(cfResponsabile)==-1){ // LO SO CHE FA SCHIFO MA LA FUNZIONE INCLUDES LANCIA ERRORE!!!!
       vicars = this.arrayCfVicari.slice();
       vicars.push(cfResponsabile);
     }
