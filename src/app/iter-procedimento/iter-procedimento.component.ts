@@ -413,7 +413,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.infoGeneriche.struttura = this.iter.procedimentoCache.idStruttura.nome;
       this.infoGeneriche.tipoProcedimento = this.iter.procedimentoCache.nomeTipoProcedimento;
 
-      let oggi = new Date();
+      let oggi = this.isChiuso() ? this.iter.dataChiusura : new Date();
       let utc1 = Date.UTC(oggi.getFullYear(), oggi.getMonth(), oggi.getDate());
       let utc2 = Date.UTC(this.iter.dataAvvio.getFullYear(), this.iter.dataAvvio.getMonth(), this.iter.dataAvvio.getDate());
       this.iter.giorniDurataTrascorsi = Math.abs(Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24)));
