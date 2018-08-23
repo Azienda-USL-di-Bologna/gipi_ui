@@ -30,8 +30,8 @@
                     </dxi-item>
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
-                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="12" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightOggetto"></dxi-item>
-                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="11" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightOggetto"></dxi-item>
+                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="12" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightForScroll"></dxi-item>
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="11" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightForScroll"></dxi-item>
                     <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="1">
                         <button class="btn button-azioni float-right" 
                             (click)="openModificaOggetto(iter)"
@@ -101,7 +101,7 @@
                     <!-- <dxi-item [colSpan]="1">
                         <button class="btn button-azioni" id="motivazione" type="button" (click)="updateEsitoMotivazione()" [disabled]="inSolaLettura()">Motivazione</button>
                     </dxi-item> -->
-                    <dxi-item [colSpan]="12" dataField="esitoMotivazione"[label]="{text: 'Motivazione esito'}" editorType="dxTextArea" [editorOptions]="{ disabled: true, height: 55 }" [cssClass]="classeDiHighlight">
+                    <dxi-item [colSpan]="12" dataField="esitoMotivazione"[label]="{text: 'Motivazione esito'}" editorType="dxTextArea" [editorOptions]="{ readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false, height: 55 }" [cssClass]="classeDiHighlightForScroll">
                     </dxi-item>
                 </dxi-item>
 
