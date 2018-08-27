@@ -23,6 +23,9 @@
     caret-color: transparent;
     opacity: 0.8;
 }
+.read-only-field .dx-texteditor {
+    border: 0px;
+}
 .iter-procedimento .dx-state-disabled.dx-widget, .iter-procedimento .dx-state-disabled.dx-checkbox .dx-checkbox-icon{
     opacity: 0.8 !important;
     color: black !important;
