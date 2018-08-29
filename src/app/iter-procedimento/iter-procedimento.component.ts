@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity, OdataUtilities } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
-import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura, Persona } from "@bds/nt-entities";
+import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura, Persona, RegistroIter, Registro } from "@bds/nt-entities";
 import { HttpClient  } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
@@ -61,6 +61,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   public fascicoloIter: any;
   public permessoUtenteLoggato: number;
+
+  public stringaRegistroAccessi: String;
     
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
@@ -175,6 +177,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       filter: [["id", "=", this.idIter]],
       map: (item) => {
         if (item) {
+          // carico il dataSource dei Registri Iter (mi serve farlo una sola volta)
+          if(item.idStato.codice!==STATI.CHIUSO)
+            this.loadAndBuildRegistriIterByIdTipoProcedimento(item.idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento);
+          else
+            this.loadRegistriIter();
+
           if (item.procedimentoCache.idTitolarePotereSostitutivo && item.procedimentoCache.idStrutturaTitolarePotereSostitutivo) {
             item.procedimentoCache.nomeVisualTitolare = item.procedimentoCache.idTitolarePotereSostitutivo.idPersona.descrizione +
               " (" + item.procedimentoCache.idStrutturaTitolarePotereSostitutivo.nome + ")";
@@ -202,7 +210,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         }
       }
     });
+    
     this.buildIter();
+
+    
 
     this.perFigliParteDestra = {
       idIter: this.idIter,
@@ -420,6 +431,54 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     });
   }
 
+  loadAndBuildRegistriIterByIdTipoProcedimento(idTipoProcedimento: any){
+    console.log("loadAndBuildRegistriIterByIdTipoProcedimento()");
+    console.log("idTipoProcedimento", idTipoProcedimento);
+    console.log("this.idIter", this.idIter);
+    const oCDRIBITP: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    let dsRegistriIter = new DataSource({
+      store: oCDRIBITP.getContext()[new RegistroTipoProcedimento().getName()],
+      expand: [
+        "idTipoProcedimento",
+        "idRegistro"
+      ],
+      filter: [["idTipoProcedimento.id", "=", idTipoProcedimento.id]]
+    });
+    dsRegistriIter.load().then(res => {
+      res.forEach(element => {
+        let registro = element.idRegistro;
+        console.log(registro.descrizione);
+        if(!this.stringaRegistroAccessi)
+          this.stringaRegistroAccessi = "I campi evidenziati verranno esposti nella pubblicazione dell'iter su: " + registro.descrizione;
+        else
+          this.stringaRegistroAccessi = this.stringaRegistroAccessi +", " + registro.descrizione;
+      });
+    })
+  }
+
+  public loadRegistriIter(){
+    console.log("loadRegistriIter()");
+    console.log("this.idIter", this.idIter);
+    const oCDRI: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    let dsRegistriIter = new DataSource({
+      store: oCDRI.getContext()[new RegistroIter().getName()],
+      expand: ["idIter", "idRegistro"],
+      filter: [["idIter.id", "=", +this.idIter]]
+    });
+    console.log("Mo faccio la load");
+    dsRegistriIter.load().then(res => {
+      res.forEach(element => {
+        let registro = element.idRegistro;
+        console.log(registro.descrizione);
+        if(!this.stringaRegistroAccessi)
+          this.stringaRegistroAccessi = "I campi evidenziati sono esposti nella pubblicazione dell'iter su: " + registro.descrizione;
+        else
+          this.stringaRegistroAccessi = this.stringaRegistroAccessi +", " + registro.descrizione;
+        
+      });
+    })
+  }
+
   updateDataChiusuraPrevista() {
     this.iter.dataChiusuraPrevista = new Date(this.iter.dataAvvio.getTime());
     let giorniAllaChiusura = 0;
@@ -609,7 +668,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public cambiaResponsabileProcedimento() {
     let cfResponsabile = this.iter.idResponsabileProcedimento.idPersona.codiceFiscale;
     let vicars;
-    if(this.arrayCfVicari.indexOf(cfResponsabile)==-1){ // LO SO CHE FA SCHIFO MA LA FUNZIONE INCLUDES LANCIA ERRORE!!!!
+    if(this.arrayCfVicari.indexOf(cfResponsabile)==-1){ // LO SO CHE FA SCHIFO MA LA FUNZIONE INCLUDES LANCIA ERRORE!!!! (non è supportata in firefox vecchio)
       vicars = this.arrayCfVicari.slice();
       vicars.push(cfResponsabile);
     }
