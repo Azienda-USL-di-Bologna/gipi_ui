@@ -11,7 +11,6 @@
             <span class="header-font">Tipo procedimento:</span>
             <i [ngClass]="classeDiHighlight">{{infoGeneriche.tipoProcedimento}}</i>
         </h3>
-
         <!-- <div>
             <dx-button [text]="'Procedi'" (onClick)="passaggioDiFase()"></dx-button>
         </div>
@@ -26,12 +25,12 @@
             <dx-form id="form" [colCount]="1" [formData]="iter"    #myForm1> <!-- [screenByWidth]="screen"-->
                 <dxi-item itemType="group" [colCount]="12" [caption]="datiGenerali" >
                     <dxi-item [colSpan]="12" *ngIf="classeDiHighlight!==''"><p id="infoPubblicazioneAlbo">
-                        <b><i>I campi evidenziati verranno esposti nella pubblicazione dell'iter</i></b></p>
+                        <b><i>{{stringaRegistroAccessi}}</i></b></p>
                     </dxi-item>
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
-                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="12" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightOggetto"></dxi-item>
-                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="11" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightOggetto"></dxi-item>
+                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="12" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightForScroll"></dxi-item>
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="11" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightForScroll"></dxi-item>
                     <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="1">
                         <button class="btn button-azioni float-right" 
                             (click)="openModificaOggetto(iter)"
@@ -39,10 +38,14 @@
                         ><img src="assets/images/edit-white-3.png">
                         </button>
                         </dxi-item>
-                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="12" dataField="idResponsabileProcedimento.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                    <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="12" dataField="idResponsabileProcedimento.nomeVisualResponsabileProcedimento" 
+                        [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                        cssClass="read-only-field">
                         <dxo-label text="Resp. procedimento"></dxo-label>
                     </dxi-item>
-                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="11" dataField="idResponsabileProcedimento.nomeVisualResponsabileProcedimento" [editorOptions]="{ disabled: true }">
+                    <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="11" dataField="idResponsabileProcedimento.nomeVisualResponsabileProcedimento"
+                        [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                        cssClass="read-only-field">
                         <dxo-label text="Resp. procedimento"></dxo-label>
                     </dxi-item>
                     <dxi-item *ngIf="mostraPulsantiVicResp" [colSpan]="1">
@@ -52,14 +55,21 @@
                         ><img src="assets/images/edit-white-3.png">
                         </button>
                     </dxi-item>
-                    <dxi-item [colSpan]="12" dataField="procedimentoCache.nomeVisualResponsabileAttoFinale" [editorOptions]="{ disabled: true }">
+                    <dxi-item [colSpan]="12" dataField="procedimentoCache.nomeVisualResponsabileAttoFinale" 
+                        [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                        cssClass="read-only-field">
                         <dxo-label text="Resp. adozione atto finale"></dxo-label>
                     </dxi-item>
-                    <dxi-item [colSpan]="12" dataField="procedimentoCache.nomeVisualTitolare" [editorOptions]="{ disabled: true }">
+                    <dxi-item [colSpan]="12" dataField="procedimentoCache.nomeVisualTitolare"
+                        [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                        cssClass="read-only-field">
                         <dxo-label text="Tit. potere sostitutivo"></dxo-label>
                     </dxi-item>
                     
-                    <dxi-item [colSpan]="12" dataField="idUtenteCreazione.idPersona.descrizione" [editorOptions]="{ disabled: true, value:creatoreIterDescription}">
+                    <dxi-item [colSpan]="12" dataField="idUtenteCreazione.idPersona.descrizione"
+                        [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false,
+                        value:creatoreIterDescription}"
+                        cssClass="read-only-field">
                         <dxo-label text="Utente creatore iter"></dxo-label>
                     </dxi-item>
 
@@ -101,74 +111,103 @@
                     <!-- <dxi-item [colSpan]="1">
                         <button class="btn button-azioni" id="motivazione" type="button" (click)="updateEsitoMotivazione()" [disabled]="inSolaLettura()">Motivazione</button>
                     </dxi-item> -->
-                    <dxi-item [colSpan]="12" dataField="esitoMotivazione"[label]="{text: 'Motivazione esito'}" editorType="dxTextArea" [editorOptions]="{ disabled: true, height: 55 }" [cssClass]="classeDiHighlight">
+                    <dxi-item [colSpan]="12" dataField="esitoMotivazione"[label]="{text: 'Motivazione esito'}" editorType="dxTextArea" [editorOptions]="{ readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false, height: 55 }" [cssClass]="classeDiHighlightForScroll">
                     </dxi-item>
                 </dxi-item>
 
                 <dxi-item [colCount]="1" itemType="group" caption="Dati temporali">
-                    <dxi-item [colSpan]="1" dataField="dataAvvio" [label]="{text: 'Data avvio iter'}" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }" [cssClass]="classeDiHighlight"></dxi-item >
-                    
+                    <dxi-item [colSpan]="1" dataField="dataAvvio" [label]="{text: 'Data avvio iter'}" editorType="dxDateBox" 
+                        [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false, displayFormat: 'dd/MM/yyyy' }"
+                        [cssClass]="classeDiHighlightForScroll">
+                    </dxi-item >
                     <dxi-item itemType="group" [colCount]="10" caption="Durata" cssClass="meVedi">
-                        <dxi-item [colSpan]="colCountGroup" dataField="procedimentoCache.durataMassimaProcedimento" [editorOptions]="{ disabled: true}">
+                        <dxi-item [colSpan]="colCountGroup" dataField="procedimentoCache.durataMassimaProcedimento" 
+                            [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                            cssClass="read-only-field">
                             <dxo-label text="Durata prevista (gg)"></dxo-label>
                         </dxi-item>
-                        <dxi-item [colSpan]="colCountGroup" dataField="giorniDurataTrascorsi" [editorOptions]="{ disabled: true}">
+                        <dxi-item [colSpan]="colCountGroup" dataField="giorniDurataTrascorsi" 
+                            [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                            cssClass="read-only-field">
                             <dxo-label text="Giorni trascorsi"></dxo-label>
                         </dxi-item>
-                        <dxi-item [colSpan]="colCountGroup" dataField="derogaDurata" [editorOptions]="{ disabled: true}">
+                        <dxi-item [colSpan]="colCountGroup" dataField="derogaDurata"
+                            [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                            cssClass="read-only-field">
                             <dxo-label text="Deroga durata (gg)"></dxo-label>
                         </dxi-item>
-                        <dxi-item [colSpan]="colCountGroup - 1" dataField="motivoDerogaDurata" [editorOptions]="{ disabled: true}">
+                        <dxi-item [colSpan]="colCountGroup - 1" dataField="motivoDerogaDurata"
+                            [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                            cssClass="read-only-field">
                             <dxo-label text="Motivazione deroga"></dxo-label>
                         </dxi-item>
                         <dxi-item [colSpan]="1" >
-                            <button [disabled]="!(permessoUtenteLoggato >= 2)" class="btn button-azioni" type="button" (click)="updateMotivazioneDeroga()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                            <button [disabled]="!(permessoUtenteLoggato >= 2) || isChiuso()" class="btn button-azioni" type="button" (click)="updateMotivazioneDeroga()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                         </dxi-item>
                     </dxi-item>
 
                     <dxi-item itemType="group" [colCount]="10" caption="Sospensioni" cssClass="meVedi">
-                        <dxi-item [colSpan]="colCountGroup" dataField="procedimentoCache.durataMassimaSospensione" [editorOptions]="{ disabled: true}">
+                        <dxi-item [colSpan]="colCountGroup" dataField="procedimentoCache.durataMassimaSospensione" 
+                            [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                            cssClass="read-only-field">
                             <dxo-label text="Massima sospensione (gg)"></dxo-label>
                         </dxi-item>
-                        <dxi-item [colSpan]="colCountGroup" dataField="giorniSospensioneTrascorsi" [editorOptions]="{ disabled: true}">
+                        <dxi-item [colSpan]="colCountGroup" dataField="giorniSospensioneTrascorsi" 
+                            [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                            cssClass="read-only-field">
                             <dxo-label text="Giorni sospensione trascorsi"></dxo-label>
                         </dxi-item>
-                        <dxi-item [colSpan]="colCountGroup" dataField="derogaSospensione" [editorOptions]="{ disabled: true}">
+                        <dxi-item [colSpan]="colCountGroup" dataField="derogaSospensione"
+                            [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                            cssClass="read-only-field">
                             <dxo-label text="Proroga sospensione (gg)"></dxo-label>
                         </dxi-item>
-                        <dxi-item [colSpan]="colCountGroup - 1" dataField="motivoDerogaSospensione" [editorOptions]="{ disabled: true}">
+                        <dxi-item [colSpan]="colCountGroup - 1" dataField="motivoDerogaSospensione"
+                            [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                            cssClass="read-only-field">
                             <dxo-label text="Motivazione proroga"></dxo-label>
                         </dxi-item>
                         <dxi-item [colSpan]="1">
-                            <button [disabled]="!(permessoUtenteLoggato >= 2)" class="btn button-azioni" type="button" (click)="updateMotivazioneSospensione()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                            <button [disabled]="!(permessoUtenteLoggato >= 2) || isChiuso()" class="btn button-azioni" type="button" (click)="updateMotivazioneSospensione()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                         </dxi-item>
                     </dxi-item>
 
                     <dxi-item itemType="group" [colCount]="10" caption="Chiusura" cssClass="meVedi">
-                        <dxi-item [colSpan]="colCountGroup" dataField="dataChiusuraPrevista" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }">
+                        <dxi-item [colSpan]="colCountGroup" dataField="dataChiusuraPrevista" editorType="dxDateBox" 
+                            [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false, displayFormat: 'dd/MM/yyyy' }"
+                            cssClass="read-only-field">
                             <dxo-label text="Data chiusura prevista"></dxo-label>
                         </dxi-item>
-                        <dxi-item [colSpan]="colCountGroup" dataField="dataChiusura" editorType="dxDateBox" [editorOptions]="{ disabled: true, displayFormat: 'dd/MM/yyyy' }" [cssClass]="classeDiHighlight">
+                        <dxi-item [colSpan]="colCountGroup" dataField="dataChiusura" editorType="dxDateBox"
+                            [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false, displayFormat: 'dd/MM/yyyy' }"
+                            [cssClass]="classeDiHighlightForScroll">
                             <dxo-label text="Data chiusura effettiva"></dxo-label>
                         </dxi-item>
                     </dxi-item>
                 </dxi-item>
 
                 <dxi-item itemType="group" [colCount]="6" caption="Dati di archivio">
-                    <dxi-item dataField="idIterPrecedente.numero" [editorOptions]="{ disabled: true }" [cssClass]="classeDiHighlight" [colSpan]="6">
+                    <dxi-item dataField="idIterPrecedente.numero"
+                        [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                        [cssClass]="classeDiHighlight" [colSpan]="6">
                         <dxo-label text="Coll. precedente"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="modalitaCollegamentoPrecedente" [editorOptions]="{ disabled: true }" [colSpan]="6">
+                    <dxi-item dataField="modalitaCollegamentoPrecedente"
+                        [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                        cssClass="read-only-field" [colSpan]="6">
                         <dxo-label text="Motivo collegamento"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="idFascicolo" [editorOptions]="{ disabled: true }" [colSpan]="5">
+                    <dxi-item dataField="idFascicolo"
+                        [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                        cssClass="read-only-field" [colSpan]="5">
                         <dxo-label text="Fascicolo dell'iter"></dxo-label>
                     </dxi-item>
                     <dxi-item [colSpan]="1">
-                        <!-- <button class="btn button-azioni" type="button" 
+                        <button class="btn button-azioni" type="button" 
                             [disabled]="!(permessoUtenteLoggato >= 4)"
+                            data-toggle="tooltip" data-placement="right" title="Responsabili e vicari del fascicolo"
                             (click)="apriPopupVicari()">Vicari fascicolo
-                        </button> -->
+                        </button>
                     </dxi-item>
                     <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [colSpan]="1" [editorOptions]="{
                         disabled: true,
@@ -372,60 +411,64 @@
 <!-- <sospensione-iter [params]="paramsPerSospensione" (messageEvent)="receiveMessageFromSospensione($event)"></sospensione-iter> -->
 
 <dx-popup
-    [width]="600"
-    [maxHeight]="800"
-    (onHidden)="onHidden()"
+    #popupVicari
+    [width]="700"
+    height="auto"
+    [maxHeight]="700"
     [showTitle]="true"
     title="Responsabile e vicari del fascicolo"
+    (onHidden)="onHidden()"
     [(visible)]="popupVicariVisibile">
     <div *dxTemplate="let data of 'content'">
-        <dx-data-grid
-            [dataSource]="dataSourceVicari"
-            [height]="'80%'"
-            (onEditorPrepared)="onEditorPrepared($event)"
-            (onRowInserting)="onRowInserting($event)"
-            (onToolbarPreparing)="onToolbarPreparing($event)"
-            (onCellPrepared)="onCellPrepared($event)"
-            (onEditingStart)="onEditingStart($event)"
-            (onOptionChanged)="onOptionChanged($event)"
-            [customizeColumns]="customizeColumns">
-            
-            <dxo-editing mode="batch" [allowAdding]="true"></dxo-editing>
-            <dxo-scrolling mode="standard" [useNative]="false"
-                [scrollByContent]="true"
-                [scrollByThumb]="true"
-                showScrollbar="onScrolling"
-                rowRenderingMode="virtual" ></dxo-scrolling>
-            <dxo-sorting mode="none"></dxo-sorting>
-            <dxi-column
-                dataField="id" 
-                caption="Vicario/Responsabile"
-                calculateDisplayValue="descrizioneCalcolata"
-                [setCellValue]="setCellValue">
-                <dxo-lookup
-                    [dataSource]="buildDataSourceUtentiTutti" 
-                    displayExpr="descrizioneCalcolata" 
-                    valueExpr="idUtente.idPersona.id">
-                </dxo-lookup>
-            </dxi-column>
-            <dxi-column 
-                dataField="cancellabile"
-                caption="Elimina"
-                [allowEditing]="false"
-                cellTemplate="buttonActions"
-                [width]="80"
-                alignment="center">
-                <div *dxTemplate="let element of 'buttonActions'">
-                    <dx-button 
-                        [visible]="element.value===true" 
-                        text="" 
-                        hint="Elimina vicario" 
-                        icon='trash'
-                        (onClick)="eliminaVicario(element)">
-                    </dx-button>
-                </div>
-            </dxi-column>
-        </dx-data-grid>
+        <div class="wrapperPulsantiPopupTop">    
+            <dx-button text="Aggiungi" type="normal" (click)="aggiungiVicario()"></dx-button>
+        </div>
+        <div class="dx-field gridContainerDiv">
+            <dx-data-grid
+                [dataSource]="listaVicariPopup"
+                (onContentReady)="onContentReady($event)"
+                (onToolbarPreparing)="onToolbarPreparing($event)">
+                <dxo-sorting mode="none"></dxo-sorting>
+                <dxo-scrolling mode="virtual" preloadEnabled="true" useNative="true"></dxo-scrolling>
+                <dxi-column
+                    dataField="descrizione" 
+                    caption="Responsabile/Vicari">
+                </dxi-column>
+                <dxi-column 
+                    dataField="cancellabile"
+                    caption="Elimina"
+                    [allowEditing]="false"
+                    cellTemplate="buttonActions"
+                    [width]="80"
+                    alignment="center">
+                    <div *dxTemplate="let element of 'buttonActions'">
+                        <dx-button 
+                            [visible]="element.value===true" 
+                            text="" 
+                            hint="Elimina vicario" 
+                            icon='trash'
+                            (onClick)="eliminaVicario(element)">
+                        </dx-button>
+                    </div>
+                </dxi-column>
+            </dx-data-grid>
+        </div>
+        <div class="dx-field">
+            <div *ngIf="mostraLookupVicari" class="dx-field-label label-bold" style="width: 22%;">Aggiungi vicario:</div>
+            <div *ngIf="mostraLookupVicari" class="dx-field-value" style="width: 78%;">
+                <dx-lookup
+                    [dataSource]="dataSourceUtentiTutti"
+                    [elementAttr]="{ class: 'dx-state-focused' }"
+                    searchExpr="idUtente.idPersona.descrizione"
+                    (onValueChanged)="onUtenteSelected($event)"
+                    displayExpr="descrizioneCalcolata"
+                    [closeOnOutsideClick]="true"
+                    [showPopupTitle]="false"
+                    placeholder="Seleziona..."
+                    cancelButtonText="Chiudi">
+                </dx-lookup>
+            </div>
+        </div>
         <div class="wrapperPulsantiPopup margine-top">
             <dx-button class="button-css" text="Salva" type="default" (click)="salvaVicari()"></dx-button>
             <span class="btn-space"></span>

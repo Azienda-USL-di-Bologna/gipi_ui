@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { Utente, bUtente, bAzienda, Procedimento, GetUtentiGerarchiaStruttura, Persona, Struttura, UtenteStruttura } from "@bds/nt-entities";
 import { OdataContextFactory } from "@bds/nt-context";
 import { OdataContextDefinition } from "@bds/nt-context";
@@ -14,6 +14,7 @@ import { confirm, custom } from "devextreme/ui/dialog";
 import DataSource from "devextreme/data/data_source";
 import {OdataUtilities} from "@bds/nt-context";
 import { UtilityFunctions } from "../../utility-functions";
+import { DxCheckBoxComponent } from "devextreme-angular";
 
 @Component({
   selector: "avvia-nuovo-iter",
@@ -40,6 +41,8 @@ export class AvviaNuovoIterComponent implements OnInit {
   public dataRegistrazioneDocumento: Date;
   public durataMassimaProcedimentoDaProcedimento: number;
 
+  @ViewChild("check_box") public checkBoxVisibile: DxCheckBoxComponent;
+  
   @Input()
   set procedimentoSelezionato(procedimento: any) {
     this.iterParams = new IterParams();
@@ -51,6 +54,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   @Input()
   set procedimentoSelezionatoDaDocumento(procedimento: any) {
     this.buildProcedimento(procedimento);
+    this.dataMassimaConclusione = this.getDataMax();
     this.avviaIterDaDocumento = true;
   }
 
@@ -70,6 +74,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams.idApplicazione = doc.idApplicazione;
     this.iterParams.glogParams = doc.glogParams;
     this.iterParams.dataRegistrazioneDocumento = this.dataRegistrazioneDocumento;
+    this.dataMassimaConclusione = this.getDataMax();
   }
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
@@ -83,6 +88,8 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.buildDataSourceUtenti();
     this.setUtenteResponsabile = this.setUtenteResponsabile.bind(this);
     this.reloadResponsabile = this.reloadResponsabile.bind(this);
+    this.setDataMax = this.setDataMax.bind(this);
+    this.checkBoxToggled = this.checkBoxToggled.bind(this);
   }
 
   private getInfoSessionStorage(): void {
@@ -107,6 +114,8 @@ export class AvviaNuovoIterComponent implements OnInit {
         this.iterParams.titolarePotereSostitutivoDesc = this.iterParams.procedimento.idTitolarePotereSostitutivo.idPersona.descrizione
           + " (" + this.iterParams.procedimento.idStrutturaTitolarePotereSostitutivo.nome + ")";
       }
+      this.iterParams.visibile = -1;  // Di default il fascicolo è visibile...
+      this.checkBoxVisibile.value = false;  // E il checkbox deve essere non flaggato
     }
   }
 
@@ -247,13 +256,15 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   private buildMessaggioRiepilogativo(res: any): string {
+    let visibile: string = this.iterParams.visibile === 0 ? "Sì" : "No";
     return "<b>E' stato creato l'iter numero:</b> " + res["numero"]
       + "<br><b>Tramite il documento:</b> " + this.iterParams.codiceRegistroDocumento + " " + this.iterParams.numeroDocumento + "/" + this.iterParams.annoDocumento
       + "<br><b>Responsabilie procedimento amministrativo:</b> " + this.descrizioneUtenteResponsabile
       + "<br><b>Data avvio iter:</b> " + UtilityFunctions.formatDateToString(this.iterParams.dataAvvioIter)
-      + "<br><b>Data massima conclusione:</b> " + UtilityFunctions.formatDateToString(this.dataMassimaConclusione)
+      + "<br><b>Data massima conclusione:</b> " +  UtilityFunctions.formatDateToString(this.dataMassimaConclusione)
       + "<br><b>Promotore:</b> " + this.iterParams.promotoreIter
-      + "<br><b>Oggetto:</b> " + this.iterParams.oggettoIter;
+      + "<br><b>Oggetto:</b> " + this.iterParams.oggettoIter
+      + "<br><b>Fascicolo riservato:</b> " + visibile;
   }
 
   ngOnInit() {
@@ -293,12 +304,10 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   public setDataMax(): void {
-    if (this.durataMassimaProcedimentoDaProcedimento && this.dataRegistrazioneDocumento) {
-      this.dataMassimaConclusione = new Date();
-      // debugger;
-      this.dataMassimaConclusione.setDate(this.dataRegistrazioneDocumento.getDate() + this.durataMassimaProcedimentoDaProcedimento);
-    }
-    
+    if (this.durataMassimaProcedimentoDaProcedimento && (this.dataRegistrazioneDocumento || this.iterParams.dataAvvioIter)) {
+      this.dataMassimaConclusione = new Date(this.iterParams.dataAvvioIter);
+      this.dataMassimaConclusione.setDate(this.dataMassimaConclusione.getDate() + this.durataMassimaProcedimentoDaProcedimento);
+    } 
   }
 
   public getDataMax(): Date {
@@ -329,6 +338,14 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.dataSourceUtenti.filter(null);
     this.dataSourceUtenti.load();
   }
+
+  public checkBoxToggled(e: any) {
+    if (e.value === false) {
+      this.iterParams.visibile = -1;  // La semantica del check è inversa, disabilitato è visibile
+    } else {
+      this.iterParams.visibile = 0;   // Abilitato invece non è visibile
+    }
+  }
 }
 
 class IterParams {
@@ -351,4 +368,5 @@ class IterParams {
   public idApplicazione: string;
   public glogParams: string;
   public dataRegistrazioneDocumento: Date;
+  public visibile: number;
 }

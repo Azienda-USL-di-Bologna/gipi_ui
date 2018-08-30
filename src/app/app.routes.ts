@@ -23,6 +23,7 @@ import {DettaglioTipoProcedimentoComponent} from "./tipi-procedimento-aziendali/
 import {RoleGuard} from "./authorization/guards/role.guard";
 import {TestGridComponent} from "./test/test-grid/test-grid.component";
 import {ModificaDocumentoIterComponent} from "./modifica-documento-iter/modifica-documento-iter.component";
+import { ListaIterPerDemiurgoComponent } from './lista-iter-per-demiurgo/lista-iter-per-demiurgo.component';
 
 export const rootRouterConfig: Routes = [
 
@@ -57,5 +58,6 @@ export const rootRouterConfig: Routes = [
     {path: "tipi-procedimento-aziendali", component: TipiProcedimentoAziendaliComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard, RoleGuard], data: {breadcrumb: "Tipi di Procedimento Aziendali", ruoliConcessi: ["CA"]}},
     {path: "dettaglio-tipo-procedimento", component: DettaglioTipoProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Dettaglio Tipo Procedimento"}},
     {path: "app-test-grid", component: TestGridComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Test"}},
-    {path: "app-modifica-documento-iter", component: ModificaDocumentoIterComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Modifica documento iter"}}
+    {path: "app-modifica-documento-iter", component: ModificaDocumentoIterComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Modifica documento iter"}},
+    {path: "lista-iter-per-demiurgo", component: ListaIterPerDemiurgoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard, RoleGuard], data: {breadcrumb: "Lista Iter Per Demiurghi", ruoliConcessi: ["SD"]}}
 ];

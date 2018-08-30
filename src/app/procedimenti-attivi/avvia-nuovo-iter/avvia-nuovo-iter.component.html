@@ -17,13 +17,13 @@
         </dxi-item>
         <dxi-item dataField="dataAvvioIter" 
           [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data avvio'}" 
-          [editorOptions]="{ disabled: false, max: now, displayFormat: 'dd/MM/yyyy', invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy' }"
+          [editorOptions]="{ onValueChanged: setDataMax, disabled: false, max: now, displayFormat: 'dd/MM/yyyy', invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy' }"
           cssClass="label-wrap-date">
           <dxi-validation-rule type="required" message="la data di avvio iter è obbligatoria"></dxi-validation-rule>
         </dxi-item>
         <dxi-item dataField="dataMassimaConclusione" 
           [colSpan]="2" editorType="dxDateBox" [label]="{text: 'Data massima\nconclusione'}" 
-          [editorOptions]="{ disabled: true, value: getDataMax(), displayFormat: 'dd/MM/yyyy' }"
+          [editorOptions]="{ disabled: true, value: dataMassimaConclusione, displayFormat: 'dd/MM/yyyy' }"
           cssClass="label-wrap-date no-baseline">
         </dxi-item>
       <dxi-item itemType="group" [colCount]="3" [colSpan]="6" cssClass="label-wrap no-baseline" [label]="{text: 'Documento'}">
@@ -59,12 +59,15 @@
         }">
         <dxi-validation-rule type="required" message="il responsabile del procedimento amministrativo è obbligatorio"></dxi-validation-rule>
       </dxi-item>
-        <dxi-item dataField="promotoreIter" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: false }"></dxi-item>
-        <dxi-item dataField="oggettoIter" [colSpan]="6" cssClass="label-wrap" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false, maxLength: 1024 }">
-            <dxi-validation-rule type="required" message="l'oggetto è obbligatorio"></dxi-validation-rule>
-        </dxi-item>
-        <dxi-item dataField="responsabileAdozioneAttoFinaleDesc" [colSpan]="6" cssClass="label-wrap textbox-position" [label]="{text: 'Responsabile adozione\natto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
-        <dxi-item dataField="titolarePotereSostitutivoDesc" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item dataField="promotoreIter" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item dataField="oggettoIter" [colSpan]="6" cssClass="label-wrap" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false, maxLength: 1024 }">
+          <dxi-validation-rule type="required" message="l'oggetto è obbligatorio"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="responsabileAdozioneAttoFinaleDesc" [colSpan]="4" cssClass="label-wrap textbox-position" [label]="{text: 'Responsabile adozione\natto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
+      <dxi-item [colSpan]="2" [label]="{text: 'Fascicolo riservato'}">
+        <dx-check-box #check_box [value]="false" hint="Se selezioni il nome del fascicolo sarà visibile solo a chi avrà permessi sullo stesso" (onValueChanged)="checkBoxToggled($event)"></dx-check-box>
+      </dxi-item>
+      <dxi-item dataField="titolarePotereSostitutivoDesc" [colSpan]="4" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>      
     </dx-form>
 
     <br>
