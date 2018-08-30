@@ -114,8 +114,8 @@ export class AvviaNuovoIterComponent implements OnInit {
         this.iterParams.titolarePotereSostitutivoDesc = this.iterParams.procedimento.idTitolarePotereSostitutivo.idPersona.descrizione
           + " (" + this.iterParams.procedimento.idStrutturaTitolarePotereSostitutivo.nome + ")";
       }
-      this.iterParams.visibile = -1;
-      this.checkBoxVisibile.value = false;
+      this.iterParams.visibile = -1;  // Di default il fascicolo è visibile...
+      this.checkBoxVisibile.value = false;  // E il checkbox deve essere non flaggato
     }
   }
 
