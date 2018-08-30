@@ -64,8 +64,8 @@
           <dxi-validation-rule type="required" message="l'oggetto è obbligatorio"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="responsabileAdozioneAttoFinaleDesc" [colSpan]="4" cssClass="label-wrap textbox-position" [label]="{text: 'Responsabile adozione\natto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
-      <dxi-item [colSpan]="2" [label]="{text: 'Visibilità fascicolo'}">
-        <dx-check-box #check_box [value]="true" hint="Abilita/Disabilita la visibilità del fascicolo dell'iter" [text]="testoCheck" (onValueChanged)="checkBoxToggled($event)"></dx-check-box>
+      <dxi-item [colSpan]="2" [label]="{text: 'Fascicolo riservato'}">
+        <dx-check-box #check_box [value]="false" hint="Se selezioni il nome del fascicolo sarà visibile solo a chi avrà permessi sullo stesso" (onValueChanged)="checkBoxToggled($event)"></dx-check-box>
       </dxi-item>
       <dxi-item dataField="titolarePotereSostitutivoDesc" [colSpan]="4" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>      
     </dx-form>

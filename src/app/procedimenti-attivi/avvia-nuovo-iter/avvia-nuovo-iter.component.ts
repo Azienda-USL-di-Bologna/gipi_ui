@@ -40,7 +40,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   public loadingVisible: boolean = false;
   public dataRegistrazioneDocumento: Date;
   public durataMassimaProcedimentoDaProcedimento: number;
-  public testoCheck: string;
+
   @ViewChild("check_box") public checkBoxVisibile: DxCheckBoxComponent;
   
   @Input()
@@ -115,8 +115,7 @@ export class AvviaNuovoIterComponent implements OnInit {
           + " (" + this.iterParams.procedimento.idStrutturaTitolarePotereSostitutivo.nome + ")";
       }
       this.iterParams.visibile = -1;
-      this.checkBoxVisibile.value = true;
-      this.testoCheck = "Visibile";
+      this.checkBoxVisibile.value = false;
     }
   }
 
@@ -257,7 +256,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   private buildMessaggioRiepilogativo(res: any): string {
-    let visibile: string = this.iterParams.visibile === -1 ? "Visibile" : "Non visibile";
+    let visibile: string = this.iterParams.visibile === 0 ? "Sì" : "No";
     return "<b>E' stato creato l'iter numero:</b> " + res["numero"]
       + "<br><b>Tramite il documento:</b> " + this.iterParams.codiceRegistroDocumento + " " + this.iterParams.numeroDocumento + "/" + this.iterParams.annoDocumento
       + "<br><b>Responsabilie procedimento amministrativo:</b> " + this.descrizioneUtenteResponsabile
@@ -265,7 +264,7 @@ export class AvviaNuovoIterComponent implements OnInit {
       + "<br><b>Data massima conclusione:</b> " +  UtilityFunctions.formatDateToString(this.dataMassimaConclusione)
       + "<br><b>Promotore:</b> " + this.iterParams.promotoreIter
       + "<br><b>Oggetto:</b> " + this.iterParams.oggettoIter
-      + "<br><b>Visibilità fascicolo:</b> " + visibile;
+      + "<br><b>Fascicolo riservato:</b> " + visibile;
   }
 
   ngOnInit() {
@@ -342,11 +341,9 @@ export class AvviaNuovoIterComponent implements OnInit {
 
   public checkBoxToggled(e: any) {
     if (e.value === false) {
-      this.iterParams.visibile = 0;
-      this.testoCheck = "Non visibile";  
+      this.iterParams.visibile = -1;  // La semantica del check è inversa, disabilitato è visibile
     } else {
-      this.iterParams.visibile = -1;
-      this.testoCheck = "Visibile";  
+      this.iterParams.visibile = 0;   // Abilitato invece non è visibile
     }
   }
 }
