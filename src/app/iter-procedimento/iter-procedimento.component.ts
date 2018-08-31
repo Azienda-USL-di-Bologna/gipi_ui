@@ -61,6 +61,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   public fascicoloIter: any;
   public permessoUtenteLoggato: number;
+  public possoCorreggereAssociazioni: boolean;
 
   public stringaRegistroAccessi: String;
     
@@ -852,6 +853,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   public settaVariabiliPermessi() {
     this.permessoUtenteLoggato = +PERMESSI[this.fascicoloIter.permessi[this.userInfo.cf]];
+    this.possoCorreggereAssociazioni = !this.isChiuso() && this.permessoUtenteLoggato >= +PERMESSI.MODIFICA;
+    console.log("settaVariabiliPermessi -> this.possoCorreggereAssociazioni", this.possoCorreggereAssociazioni)
   }
 
   customDisplayExprClassificazione(data: Titolo) {

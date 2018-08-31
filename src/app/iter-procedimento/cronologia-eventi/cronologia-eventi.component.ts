@@ -20,20 +20,28 @@ export class CronologiaEventiComponent implements OnInit {
   public popupVisible = false;
   public enablePopup = false;
   public nota: String;
+  public possoCancellare: boolean;
 
   // @Input("idIter") idIter: string;
   @Input("daPadre") daPadre: Object;
+  @Input("possoCorreggereAssociazioni") canDelete: boolean;
 
   constructor(private odataContextFactory: OdataContextFactory) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
   }
 
   ngOnInit() {
+    console.log("this.canDelete", this.canDelete)
+    this.possoCancellare = this.canDelete;
     this.dataSourceEventoIter = new DataSource({
       store: this.odataContextDefinition.getContext()[new EventoIter().getName()],
       expand: ["idEvento", "idIter", "idFaseIter.idFase", "autore.idPersona", "idDocumentoIter"],
       // tslint:disable-next-line:radix
-      filter: ["idIter.id", "=", parseInt(this.daPadre["idIter"])]
+      filter: ["idIter.id", "=", parseInt(this.daPadre["idIter"])],
+      map: (item) => {
+        item.canDelete = false;
+        return item;
+      }
     });
   }
 
@@ -45,6 +53,9 @@ export class CronologiaEventiComponent implements OnInit {
     if (this.daPadre["classeCSS"] !== "") {
       this.classeDiHighlight = "cronologiaEventihightlightClass"; 
     }
+
+    if(this.canDelete)
+      this.possoCancellare = this.canDelete;
       
   }
 
@@ -70,6 +81,17 @@ export class CronologiaEventiComponent implements OnInit {
     });
   }
 
+  onRowPrepared(e){
+    // Qui dentro setto la variabile canDelete
+    /* if(e.rowType=== "data" && e.rowIndex === this.dataSourceEventoIter.totalCount() - 1){
+      let evento = e.data.idEvento;
+      console.log("EVVAI!", evento)
+      if(evento.codice !== "avvio_iter" && evento.codice !== "chiusura_iter" && evento.codice !== "modifica_iter")
+        e.data.canDelete = true;
+    }
+    console.log(e.data) */
+  }
+
   onCellPrepared(e) {
     let self = this;
     if (e.rowType === "data" && e.column.dataField === "idDocumentoIter") {
@@ -86,6 +108,18 @@ export class CronologiaEventiComponent implements OnInit {
       e.cellElement.onmouseout = function () {
         self.tooltip.instance.hide();
       };
-    } 
+    }
+    else if (e.rowType === "data" && e.column.dataField === "canDelete"){
+        if(e.rowIndex > 0 && e.rowIndex === this.dataSourceEventoIter.totalCount() - 1){
+          if(e.data.idEvento.codice !== "avvio_iter" && e.data.idEvento.codice !== "chiusura_iter")
+            e.data.canDelete = true;
+        }
+    }
   }
+
+
+  cancellaEvento(e: any){
+    console.log("cancellaEvento(e: any) > ", e)
+  }
+  
 }
