@@ -178,10 +178,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       map: (item) => {
         if (item) {
           // carico il dataSource dei Registri Iter (mi serve farlo una sola volta)
-          if(item.idStato.codice!==STATI.CHIUSO)
-            this.loadAndBuildRegistriIterByIdTipoProcedimento(item.idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento);
-          else
-            this.loadRegistriIter();
+          if(!this.stringaRegistroAccessi){
+            if(item.idStato.codice!==STATI.CHIUSO)
+              this.loadAndBuildRegistriIterByIdTipoProcedimento(item.idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento);
+            else
+              this.loadRegistriIter();
+          }
 
           if (item.procedimentoCache.idTitolarePotereSostitutivo && item.procedimentoCache.idStrutturaTitolarePotereSostitutivo) {
             item.procedimentoCache.nomeVisualTitolare = item.procedimentoCache.idTitolarePotereSostitutivo.idPersona.descrizione +
