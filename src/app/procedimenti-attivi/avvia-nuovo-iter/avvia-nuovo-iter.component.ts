@@ -40,8 +40,10 @@ export class AvviaNuovoIterComponent implements OnInit {
   public loadingVisible: boolean = false;
   public dataRegistrazioneDocumento: Date;
   public durataMassimaProcedimentoDaProcedimento: number;
+  public showBoxAcip: Boolean = false;
 
-  @ViewChild("check_box") public checkBoxVisibile: DxCheckBoxComponent;
+  @ViewChild("check_box_fasc") public checkBoxFasc: DxCheckBoxComponent;
+  @ViewChild("check_box_acip") public checkBoxAcip: DxCheckBoxComponent;
   
   @Input()
   set procedimentoSelezionato(procedimento: any) {
@@ -72,9 +74,11 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams.dataCreazioneIter = new Date();
     this.iterParams.promotoreIter = doc.promotore;
     this.iterParams.idApplicazione = doc.idApplicazione;
+    this.iterParams.sendAcip = -1;  // di default è sempre true
     this.iterParams.glogParams = doc.glogParams;
     this.iterParams.dataRegistrazioneDocumento = this.dataRegistrazioneDocumento;
     this.dataMassimaConclusione = this.getDataMax();
+    this.showBoxAcip = this.primitiveToBoolean(doc.optionalAcip);
   }
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
@@ -89,7 +93,8 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.setUtenteResponsabile = this.setUtenteResponsabile.bind(this);
     this.reloadResponsabile = this.reloadResponsabile.bind(this);
     this.setDataMax = this.setDataMax.bind(this);
-    this.checkBoxToggled = this.checkBoxToggled.bind(this);
+    this.onChangeCheckFascicolo = this.onChangeCheckFascicolo.bind(this);
+    this.onChangeCheckAcip = this.onChangeCheckAcip.bind(this);
   }
 
   private getInfoSessionStorage(): void {
@@ -115,7 +120,9 @@ export class AvviaNuovoIterComponent implements OnInit {
           + " (" + this.iterParams.procedimento.idStrutturaTitolarePotereSostitutivo.nome + ")";
       }
       this.iterParams.visibile = -1;  // Di default il fascicolo è visibile...
-      this.checkBoxVisibile.value = false;  // E il checkbox deve essere non flaggato
+      this.checkBoxFasc.value = false;  // E il checkbox deve essere non flaggato
+      if (this.showBoxAcip)
+      this.checkBoxAcip.value = true;   // default per l'invio della mail dell'acip
     }
   }
 
@@ -339,12 +346,25 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.dataSourceUtenti.load();
   }
 
-  public checkBoxToggled(e: any) {
-    if (e.value === false) {
-      this.iterParams.visibile = -1;  // La semantica del check è inversa, disabilitato è visibile
-    } else {
-      this.iterParams.visibile = 0;   // Abilitato invece non è visibile
+  public onChangeCheckFascicolo(e: any) {
+    e.value === false
+      ? this.iterParams.visibile = -1 // La semantica del check è inversa, disabilitato è visibile
+      : this.iterParams.visibile = 0; // Abilitato invece non è visibile
+  }
+
+  public onChangeCheckAcip(e: any) {
+    e.value === false
+      ? this.iterParams.sendAcip = 0
+      : this.iterParams.sendAcip = -1;
+  }
+  /* Converte un valore primitivo in Boolean */
+  public primitiveToBoolean(value?: string | number | boolean | null): boolean {
+    if (value === "true") {
+      return true;
     }
+    return typeof value === "string"
+      ? !!+value   // we parse string to number first
+      : !!value;
   }
 }
 
@@ -368,5 +388,6 @@ class IterParams {
   public idApplicazione: string;
   public glogParams: string;
   public dataRegistrazioneDocumento: Date;
+  public sendAcip: number;
   public visibile: number;
 }

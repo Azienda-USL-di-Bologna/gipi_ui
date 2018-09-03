@@ -65,9 +65,12 @@
       </dxi-item>
       <dxi-item dataField="responsabileAdozioneAttoFinaleDesc" [colSpan]="4" cssClass="label-wrap textbox-position" [label]="{text: 'Responsabile adozione\natto finale'}" [editorOptions]="{ disabled: true }"></dxi-item>
       <dxi-item [colSpan]="2" [label]="{text: 'Fascicolo riservato'}">
-        <dx-check-box #check_box [value]="false" hint="Se selezioni il nome del fascicolo sarà visibile solo a chi avrà permessi sullo stesso" (onValueChanged)="checkBoxToggled($event)"></dx-check-box>
+        <dx-check-box #check_box_fasc [value]="false" hint="Se selezioni il nome del fascicolo sarà visibile solo a chi avrà permessi sullo stesso" (onValueChanged)="onChangeCheckFascicolo($event)"></dx-check-box>
       </dxi-item>
       <dxi-item dataField="titolarePotereSostitutivoDesc" [colSpan]="4" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>      
+      <dxi-item *ngIf="showBoxAcip" [colSpan]="2" [label]="{text: 'Invia il CAP al promotore in modo automatico'}">
+        <dx-check-box #check_box_acip [value]="true" hint="Se selezioni verrà inviato in automatico il CAP via email al promotore" (onValueChanged)="onChangeCheckAcip($event)"></dx-check-box>
+      </dxi-item>
     </dx-form>
 
     <br>
