@@ -74,7 +74,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams.dataCreazioneIter = new Date();
     this.iterParams.promotoreIter = doc.promotore;
     this.iterParams.idApplicazione = doc.idApplicazione;
-    this.iterParams.sendAcip = -1;  // di default è sempre true
+    this.iterParams.sendAcipByEmail = -1;  // di default è sempre true
     this.iterParams.glogParams = doc.glogParams;
     this.iterParams.dataRegistrazioneDocumento = this.dataRegistrazioneDocumento;
     this.dataMassimaConclusione = this.getDataMax();
@@ -121,8 +121,8 @@ export class AvviaNuovoIterComponent implements OnInit {
       }
       this.iterParams.visibile = -1;  // Di default il fascicolo è visibile...
       this.checkBoxFasc.value = false;  // E il checkbox deve essere non flaggato
-      if (this.showBoxAcip)
-      this.checkBoxAcip.value = true;   // default per l'invio della mail dell'acip
+      this.iterParams.sendAcipByEmail = -1; // default per l'invio della mail dell'acip
+      if (this.showBoxAcip) this.checkBoxAcip.value = true; // uguale^
     }
   }
 
@@ -354,8 +354,8 @@ export class AvviaNuovoIterComponent implements OnInit {
 
   public onChangeCheckAcip(e: any) {
     e.value === false
-      ? this.iterParams.sendAcip = 0
-      : this.iterParams.sendAcip = -1;
+      ? this.iterParams.sendAcipByEmail = 0
+      : this.iterParams.sendAcipByEmail = -1;
   }
   /* Converte un valore primitivo in Boolean */
   public primitiveToBoolean(value?: string | number | boolean | null): boolean {
@@ -388,6 +388,6 @@ class IterParams {
   public idApplicazione: string;
   public glogParams: string;
   public dataRegistrazioneDocumento: Date;
-  public sendAcip: number;
+  public sendAcipByEmail: number;
   public visibile: number;
 }
