@@ -264,14 +264,20 @@ export class AvviaNuovoIterComponent implements OnInit {
 
   private buildMessaggioRiepilogativo(res: any): string {
     let visibile: string = this.iterParams.visibile === 0 ? "Sì" : "No";
-    return "<b>E' stato creato l'iter numero:</b> " + res["numero"]
+    
+    let messaggio = "<b>E' stato creato l'iter numero:</b> " + res["numero"]
       + "<br><b>Tramite il documento:</b> " + this.iterParams.codiceRegistroDocumento + " " + this.iterParams.numeroDocumento + "/" + this.iterParams.annoDocumento
       + "<br><b>Responsabilie procedimento amministrativo:</b> " + this.descrizioneUtenteResponsabile
       + "<br><b>Data avvio iter:</b> " + UtilityFunctions.formatDateToString(this.iterParams.dataAvvioIter)
-      + "<br><b>Data massima conclusione:</b> " +  UtilityFunctions.formatDateToString(this.dataMassimaConclusione)
+      + "<br><b>Data massima conclusione:</b> " + UtilityFunctions.formatDateToString(this.dataMassimaConclusione)
       + "<br><b>Promotore:</b> " + this.iterParams.promotoreIter
       + "<br><b>Oggetto:</b> " + this.iterParams.oggettoIter
       + "<br><b>Fascicolo riservato:</b> " + visibile;
+    if (this.showBoxAcip) {
+      let inviaAcip: string = this.iterParams.sendAcipByEmail === -1 ? "Sì" : "No";
+      messaggio += "<br><b>Invia CAP al promotore:</b> " + inviaAcip;
+    }
+    return messaggio;
   }
 
   ngOnInit() {
