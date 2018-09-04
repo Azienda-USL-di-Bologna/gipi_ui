@@ -69,7 +69,7 @@
       </dxi-item>
       <dxi-item dataField="titolarePotereSostitutivoDesc" [colSpan]="4" cssClass="label-wrap" [label]="{text: 'Titolare del potere sostitutivo'}" [editorOptions]="{ disabled: true }"></dxi-item>      
       <dxi-item *ngIf="showBoxAcip" [colSpan]="2" [label]="{text: 'Invia il CAP al promotore in modo automatico'}">
-        <dx-check-box #check_box_acip [value]="true" hint="Se selezioni verrà inviato in automatico il CAP via email al promotore" (onValueChanged)="onChangeCheckAcip($event)"></dx-check-box>
+        <dx-check-box #check_box_acip [value]="true" hint="Se il promotore ha un indirizzo email verrà inviato in automatico l'avviso di creazione dell'iter" (onValueChanged)="onChangeCheckAcip($event)"></dx-check-box>
       </dxi-item>
     </dx-form>
 
