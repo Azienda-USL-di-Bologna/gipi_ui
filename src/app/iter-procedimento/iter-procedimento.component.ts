@@ -770,6 +770,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     if ($event["proceduto"]) {
       this.refresh();
     }
+
+    if($event["cancellatoDocIter"])
+      this.refresh();
   }
 
   refresh() {
