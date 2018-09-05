@@ -35,7 +35,6 @@ export class AvviaNuovoIterDaDocumentoComponent {
         dataRegistrazione: queryParams["dataRegistrazione"],
         promotore: decodeURIComponent(queryParams["promotore"].replace(/\+/g, " ")),
         idApplicazione: decodeURIComponent(queryParams["idApplicazione"].replace(/\+/g, " ")),
-        optionalAcip: queryParams["optionalAcip"],
         glogParams: queryParams["glogParams"]
       };
     });

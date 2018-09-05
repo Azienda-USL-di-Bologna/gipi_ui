@@ -40,7 +40,6 @@ export class AvviaNuovoIterComponent implements OnInit {
   public loadingVisible: boolean = false;
   public dataRegistrazioneDocumento: Date;
   public durataMassimaProcedimentoDaProcedimento: number;
-  public showBoxAcip: Boolean = false;
 
   @ViewChild("check_box_fasc") public checkBoxFasc: DxCheckBoxComponent;
   @ViewChild("check_box_acip") public checkBoxAcip: DxCheckBoxComponent;
@@ -78,7 +77,6 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams.glogParams = doc.glogParams;
     this.iterParams.dataRegistrazioneDocumento = this.dataRegistrazioneDocumento;
     this.dataMassimaConclusione = this.getDataMax();
-    this.showBoxAcip = this.primitiveToBoolean(doc.optionalAcip);
   }
 
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
@@ -122,7 +120,7 @@ export class AvviaNuovoIterComponent implements OnInit {
       this.iterParams.visibile = -1;  // Di default il fascicolo è visibile...
       this.checkBoxFasc.value = false;  // E il checkbox deve essere non flaggato
       this.iterParams.sendAcipByEmail = -1; // default per l'invio della mail dell'acip
-      if (this.showBoxAcip) this.checkBoxAcip.value = true; // uguale^
+      this.checkBoxAcip.value = true; // Da rifattorizzare caricando il valore dai parametri Internauta
     }
   }
 
@@ -264,7 +262,7 @@ export class AvviaNuovoIterComponent implements OnInit {
 
   private buildMessaggioRiepilogativo(res: any): string {
     let visibile: string = this.iterParams.visibile === 0 ? "Sì" : "No";
-    
+    let inviaAcip: string = this.iterParams.sendAcipByEmail === -1 ? "Sì" : "No";
     let messaggio = "<b>E' stato creato l'iter numero:</b> " + res["numero"]
       + "<br><b>Tramite il documento:</b> " + this.iterParams.codiceRegistroDocumento + " " + this.iterParams.numeroDocumento + "/" + this.iterParams.annoDocumento
       + "<br><b>Responsabilie procedimento amministrativo:</b> " + this.descrizioneUtenteResponsabile
@@ -272,11 +270,8 @@ export class AvviaNuovoIterComponent implements OnInit {
       + "<br><b>Data massima conclusione:</b> " + UtilityFunctions.formatDateToString(this.dataMassimaConclusione)
       + "<br><b>Promotore:</b> " + this.iterParams.promotoreIter
       + "<br><b>Oggetto:</b> " + this.iterParams.oggettoIter
-      + "<br><b>Fascicolo riservato:</b> " + visibile;
-    if (this.showBoxAcip) {
-      let inviaAcip: string = this.iterParams.sendAcipByEmail === -1 ? "Sì" : "No";
-      messaggio += "<br><b>Invia CAP al promotore:</b> " + inviaAcip;
-    }
+      + "<br><b>Fascicolo riservato:</b> " + visibile
+      + "<br><b>Invia CAP al promotore:</b> " + inviaAcip;
     return messaggio;
   }
 
