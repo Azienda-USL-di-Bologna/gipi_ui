@@ -30,7 +30,7 @@ export class CronologiaEventiComponent implements OnInit {
   @Input("daPadre") daPadre: Object;
   @Input("possoCorreggereAssociazioni") canDelete: boolean;
 
-  @Output() messageEvent = new EventEmitter<Object>();
+  @Output() messageEvent: EventEmitter<any>= new EventEmitter();
 
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -142,8 +142,8 @@ export class CronologiaEventiComponent implements OnInit {
               position: TOAST_POSITION,
               width: TOAST_WIDTH
             });
-            this.messageEvent.emit("cancellatoDocIter");
-            this.dataSourceEventoIter.load();
+            this.messageEvent.emit({cancellatoDocIter: true});
+            // this.dataSourceEventoIter.load();
           },
           err => {
             console.log(err);
@@ -154,7 +154,7 @@ export class CronologiaEventiComponent implements OnInit {
               position: TOAST_POSITION,
               width: TOAST_WIDTH
             });
-            this.messageEvent.emit("cancellatoDocIter");
+            this.messageEvent.emit({cancellatoDocIter: false});
             this.dataSourceEventoIter.load();
           }
       );

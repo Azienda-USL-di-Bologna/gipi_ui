@@ -368,6 +368,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   isSospeso() {
+    console.log("isSospeso()")
+    console.log("this.iter.idStato.codice ", this.iter.idStato.codice)
     if (this.iter.idStato.codice === STATI.SOSPESO) // 2 --> SOSPESO
       return true;
     else
@@ -406,7 +408,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   
   generateCustomButtons() {
-    
+    console.log("generateCustomButtons")
     // this.procediButton = new ButtonAppearance("Procedi", "", false, this.disableProcedi());
     // this.sospendiButton = new ButtonAppearance("Gestisci stato", "", false, this.disableSospendi());
     if (this.isSospeso()) {
@@ -420,6 +422,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   buildIter() {
+    console.log("buildIter(): faccio la load")
     this.dataSourceIter.load().then(res => {
       this.iter.build(res[0]);
       // this.generateCustomButtons(); Non cancellare, potrebbe tornare utile in futuro
@@ -766,18 +769,24 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   } */
 
   receiveMessage($event) {
+    console.log("receiveMessage ", $event)
     this.passaggioDiFaseVisible = $event["visible"];
     if ($event["proceduto"]) {
       this.refresh();
     }
 
-    if($event["cancellatoDocIter"])
+    if($event["cancellatoDocIter"]){
+      console.log("cancellatoDocIter ", $event["cancellatoDocIter"])
+      this.fascicoloIter = null;  // lo so che non è il massimo, ma è l'unico modo per ricalcolare tutti i pulsanti DOPO il ricaricamento dell'iter
       this.refresh();
+    }
   }
 
   refresh() {
+    console.log("refresh() ");
     let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"]};
     this.perFigliParteDestra = perFigliNew;
+    console.log("nuovi perFigliParteDestra ", this.perFigliParteDestra);
     this.buildIter();
   }
   /* receiveMessageFromSospensione($event) {
@@ -837,7 +846,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   } */
 
   public calculateIodaPermissionAndSetButton(): void {
+    console.log("calculateIodaPermissionAndSetButton()")
     if (!this.fascicoloIter) {
+      console.log("!this.fascicoloIter ---> getFascicoloIetr()")
       IterProcedimentoFascicoloUtilsClass.getFascicoloIter(this.http, this.iter.idFascicolo)
       .subscribe(
         res => {

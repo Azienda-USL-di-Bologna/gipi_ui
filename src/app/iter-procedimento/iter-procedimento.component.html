@@ -237,7 +237,7 @@
                 <app-sequenza-delle-fasi [daPadre]="perFigliParteDestra"></app-sequenza-delle-fasi>
             </div> -->
             <div class="griginoPanel mb-3 "> <!-- fixHeight -->
-                <app-cronologia-eventi [daPadre]="perFigliParteDestra" [(possoCorreggereAssociazioni)]="possoCorreggereAssociazioni"></app-cronologia-eventi>
+                <app-cronologia-eventi [daPadre]="perFigliParteDestra" [(possoCorreggereAssociazioni)]="possoCorreggereAssociazioni" (messageEvent)="receiveMessage($event)"></app-cronologia-eventi>
             </div>
             <!-- Non cancellare. Torneremo ad utilizzarlo 
                 <div class="whitePanel fixHeight">

@@ -30,7 +30,7 @@
     "bootstrap": "4.0.0-beta.2",
     "copy-webpack-plugin": "^4.5.1",
     "core-js": "^2.4.1",
-    "devextreme": "^17.2.9",
+    "devextreme": "^17.2.10",
     "devextreme-angular": "^17.2.9",
     "globalize": "^1.4.0",
     "jquery": "^3.3.1",
