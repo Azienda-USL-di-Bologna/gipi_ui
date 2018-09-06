@@ -777,6 +777,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
     if($event["cancellatoDocIter"]){
       console.log("cancellatoDocIter ", $event["cancellatoDocIter"])
+      this.genericButtons = null;
       this.fascicoloIter = null;  // lo so che non è il massimo, ma è l'unico modo per ricalcolare tutti i pulsanti DOPO il ricaricamento dell'iter
       this.refresh();
     }
