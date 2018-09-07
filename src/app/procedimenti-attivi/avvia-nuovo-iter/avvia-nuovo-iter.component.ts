@@ -15,6 +15,7 @@ import DataSource from "devextreme/data/data_source";
 import {OdataUtilities} from "@bds/nt-context";
 import { UtilityFunctions } from "../../utility-functions";
 import { DxCheckBoxComponent } from "devextreme-angular";
+import { ParametriAziendaService } from "../../services/parametri-azienda.service";
 
 @Component({
   selector: "avvia-nuovo-iter",
@@ -40,6 +41,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   public loadingVisible: boolean = false;
   public dataRegistrazioneDocumento: Date;
   public durataMassimaProcedimentoDaProcedimento: number;
+  public defaultAcipValue: boolean;
 
   @ViewChild("check_box_fasc") public checkBoxFasc: DxCheckBoxComponent;
   @ViewChild("check_box_acip") public checkBoxAcip: DxCheckBoxComponent;
@@ -73,7 +75,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.iterParams.dataCreazioneIter = new Date();
     this.iterParams.promotoreIter = doc.promotore;
     this.iterParams.idApplicazione = doc.idApplicazione;
-    this.iterParams.sendAcipByEmail = -1;  // di default è sempre true
+    this.iterParams.sendAcipByEmail = this.defaultAcipValue ? -1 : 0;
     this.iterParams.glogParams = doc.glogParams;
     this.iterParams.dataRegistrazioneDocumento = this.dataRegistrazioneDocumento;
     this.dataMassimaConclusione = this.getDataMax();
@@ -82,7 +84,8 @@ export class AvviaNuovoIterComponent implements OnInit {
   @Output("messageEvent") messageEvent = new EventEmitter<any>();
 
   constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient,
-              private globalContextService: GlobalContextService, private odataUtilities: OdataUtilities) {
+              private globalContextService: GlobalContextService, private odataUtilities: OdataUtilities,
+              private parametriAziendaService: ParametriAziendaService) {
     console.log("avvia-nuovo-iter (constructor)");
     this.odataContextDefinitionFunctionImport = this.odataContextFactory.buildOdataFunctionsImportDefinition();
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -93,6 +96,7 @@ export class AvviaNuovoIterComponent implements OnInit {
     this.setDataMax = this.setDataMax.bind(this);
     this.onChangeCheckFascicolo = this.onChangeCheckFascicolo.bind(this);
     this.onChangeCheckAcip = this.onChangeCheckAcip.bind(this);
+    this.defaultAcipValue = this.parametriAziendaService.getParametroBooleanByKey("sendAcipByDefault");
   }
 
   private getInfoSessionStorage(): void {
@@ -119,8 +123,7 @@ export class AvviaNuovoIterComponent implements OnInit {
       }
       this.iterParams.visibile = -1;  // Di default il fascicolo è visibile...
       this.checkBoxFasc.value = false;  // E il checkbox deve essere non flaggato
-      this.iterParams.sendAcipByEmail = -1; // default per l'invio della mail dell'acip
-      this.checkBoxAcip.value = true; // Da rifattorizzare caricando il valore dai parametri Internauta
+      this.iterParams.sendAcipByEmail = this.defaultAcipValue ? -1 : 0; // default per l'invio della mail dell'acip
     }
   }
 
