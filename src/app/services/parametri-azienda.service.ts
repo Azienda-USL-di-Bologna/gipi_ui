@@ -44,7 +44,7 @@ export class ParametriAziendaService {
    * @param {string} key Nome del parametro sul database
    * @return {any} Il valore del parametro richiesto
   */
-  getParametroByKey(key: string): boolean {
+  getParametroByKey(key: string): any {
     return this.parametriAzienda.get(key);
   }
 

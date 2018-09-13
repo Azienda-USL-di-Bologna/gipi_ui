@@ -7,6 +7,7 @@ import { OdataContextDefinition } from "@bds/nt-context";
 import { OdataContextFactory } from "@bds/nt-context";
 import {EventoIter, Evento} from "@bds/nt-entities";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { confirm } from "devextreme/ui/dialog";
 
 @Component({
   selector: "app-cronologia-eventi",
@@ -44,7 +45,7 @@ export class CronologiaEventiComponent implements OnInit {
       // tslint:disable-next-line:radix
       filter: ["idIter.id", "=", parseInt(this.daPadre["idIter"])],
       map: (item) => {
-        if(item.idEvento.codice==="chiusura_sospensione" || (item.idDocumentoIter && item.idEvento.codice!="chiusura_iter" && item.idEvento.codice!="avvio_iter" && item.idEvento.codice!="modifica_iter"))
+        if (item.idEvento.codice === "chiusura_sospensione" || (item.idDocumentoIter && item.idEvento.codice !== "chiusura_iter" && item.idEvento.codice !== "avvio_iter" && item.idEvento.codice !== "modifica_iter"))
           this.arrayEventiIterCancellabili.push(item);
         item.canDelete = false;
         return item;
@@ -62,7 +63,7 @@ export class CronologiaEventiComponent implements OnInit {
       this.classeDiHighlight = "cronologiaEventihightlightClass"; 
     }
 
-    if(this.canDelete)
+    if (this.canDelete)
       this.possoCancellare = this.canDelete;
       
   }
@@ -89,7 +90,7 @@ export class CronologiaEventiComponent implements OnInit {
     });
   }
 
-  onRowPrepared(e){
+  onRowPrepared(e) {
     // Qui dentro setto la variabile canDelete
     /* if(e.rowType=== "data" && e.rowIndex === this.dataSourceEventoIter.totalCount() - 1){
       let evento = e.data.idEvento;
@@ -117,10 +118,10 @@ export class CronologiaEventiComponent implements OnInit {
         self.tooltip.instance.hide();
       };
     }
-    else if (e.rowType === "data" && e.column.dataField === "canDelete"){
-        if(e.rowIndex > 0){
-          if(e.data.idEvento.codice !== "avvio_iter" && e.data.idEvento.codice !== "chiusura_iter" && e.data.idEvento.codice !== "modifica_iter"){
-            if(this.arrayEventiIterCancellabili.lastIndexOf(e.data) == this.arrayEventiIterCancellabili.length - 1)
+    else if (e.rowType === "data" && e.column.dataField === "canDelete") {
+        if (e.rowIndex > 0) {
+          if (e.data.idEvento.codice !== "avvio_iter" && e.data.idEvento.codice !== "chiusura_iter" && e.data.idEvento.codice !== "modifica_iter") {
+            if (this.arrayEventiIterCancellabili.lastIndexOf(e.data) === this.arrayEventiIterCancellabili.length - 1)
               e.data.canDelete = true;
           }
         }
@@ -128,10 +129,12 @@ export class CronologiaEventiComponent implements OnInit {
   }
 
 
-  cancellaEvento(e: any){
-    console.log("cancellaEvento(e: any) > ", e)
-    let idEventoIter = +e.data.id
-    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/rollbackEventoIterById", idEventoIter, { headers: new HttpHeaders().set("content-type", "application/json") })
+  cancellaEvento(e: any) {
+    // console.log("cancellaEvento(e: any) > ", e);
+    confirm("Sei sicuro di voler eliminare l'ultima associazione?", "Conferma").then(dialogResult => {
+      if (dialogResult) {
+        let idEventoIter = +e.data.id;
+        const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/rollbackEventoIterById", idEventoIter, { headers: new HttpHeaders().set("content-type", "application/json") })
           .subscribe(
           res => {
             console.log(res);
@@ -157,7 +160,9 @@ export class CronologiaEventiComponent implements OnInit {
             this.messageEvent.emit({cancellatoDocIter: false});
             this.dataSourceEventoIter.load();
           }
-      );
+        );
+      }
+    });
   }
   
 }
