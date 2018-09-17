@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, ViewChild, HostListener } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity, OdataUtilities } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
@@ -24,8 +24,6 @@ import { UtilityFunctions } from "app/utility-functions";
 export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   private subscriptions: Subscription[] = [];
-  private initialWidth: number = window.innerWidth;
-  private threshold: number = 1500;
   // private previousWidth: number = this.initialWidth;
   private odataContextDefinitionFunctionImport: OdataContextDefinition;
   private odataContextDefinition: OdataContextDefinition;
@@ -33,6 +31,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   private arrayCfVicari: string[];
   private arrayCfVicariNonCancellabili;
   
+  public initialWidth: number = window.innerWidth;
+  public threshold: number = 1500;
   public iter: Iter = new Iter();
   public idIterArray: Object;
   public procedimentoCache = new ProcedimentoCache;
@@ -61,6 +61,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   public fascicoloIter: any;
   public permessoUtenteLoggato: number;
+  public possoCorreggereAssociazioni: boolean;
 
   public stringaRegistroAccessi: String;
     
@@ -178,8 +179,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       map: (item) => {
         if (item) {
           // carico il dataSource dei Registri Iter (mi serve farlo una sola volta)
-          if(!this.stringaRegistroAccessi){
-            if(item.idStato.codice!==STATI.CHIUSO)
+          if (!this.stringaRegistroAccessi) {
+            if (item.idStato.codice !== STATI.CHIUSO)
               this.loadAndBuildRegistriIterByIdTipoProcedimento(item.idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento);
             else
               this.loadRegistriIter();
@@ -303,7 +304,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         width: TOAST_WIDTH
     });
   }
-  
+  @HostListener("window:resize", ["$event"])
+    onResize(event) {
+    this.initialWidth = window.innerWidth;
+  }
   public getDescrizioneUtente(item: any): string {
     return item ? item.idUtente.idPersona.descrizione 
         + " (" + item.idStruttura.nome
@@ -364,6 +368,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   isSospeso() {
+    console.log("isSospeso()")
+    console.log("this.iter.idStato.codice ", this.iter.idStato.codice)
     if (this.iter.idStato.codice === STATI.SOSPESO) // 2 --> SOSPESO
       return true;
     else
@@ -402,7 +408,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   
   generateCustomButtons() {
-    
+    console.log("generateCustomButtons")
     // this.procediButton = new ButtonAppearance("Procedi", "", false, this.disableProcedi());
     // this.sospendiButton = new ButtonAppearance("Gestisci stato", "", false, this.disableSospendi());
     if (this.isSospeso()) {
@@ -416,6 +422,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   buildIter() {
+    console.log("buildIter(): faccio la load")
     this.dataSourceIter.load().then(res => {
       this.iter.build(res[0]);
       // this.generateCustomButtons(); Non cancellare, potrebbe tornare utile in futuro
@@ -430,10 +437,11 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       let utc1 = Date.UTC(oggi.getFullYear(), oggi.getMonth(), oggi.getDate());
       let utc2 = Date.UTC(this.iter.dataAvvio.getFullYear(), this.iter.dataAvvio.getMonth(), this.iter.dataAvvio.getDate());
       this.iter.giorniDurataTrascorsi = Math.abs(Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24)));
+      this.iter.giorniEffettiviTrascorsi = Math.abs(Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24))) - this.iter.giorniSospensioneTrascorsi;
     });
   }
 
-  loadAndBuildRegistriIterByIdTipoProcedimento(idTipoProcedimento: any){
+  loadAndBuildRegistriIterByIdTipoProcedimento(idTipoProcedimento: any) {
     console.log("loadAndBuildRegistriIterByIdTipoProcedimento()");
     console.log("idTipoProcedimento", idTipoProcedimento);
     console.log("this.idIter", this.idIter);
@@ -450,15 +458,15 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       res.forEach(element => {
         let registro = element.idRegistro;
         console.log(registro.descrizione);
-        if(!this.stringaRegistroAccessi)
+        if (!this.stringaRegistroAccessi)
           this.stringaRegistroAccessi = "I campi evidenziati verranno esposti nella pubblicazione dell'iter su: " + registro.descrizione;
         else
-          this.stringaRegistroAccessi = this.stringaRegistroAccessi +", " + registro.descrizione;
+          this.stringaRegistroAccessi = this.stringaRegistroAccessi + ", " + registro.descrizione;
       });
-    })
+    });
   }
 
-  public loadRegistriIter(){
+  public loadRegistriIter() {
     console.log("loadRegistriIter()");
     console.log("this.idIter", this.idIter);
     const oCDRI: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
@@ -472,13 +480,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       res.forEach(element => {
         let registro = element.idRegistro;
         console.log(registro.descrizione);
-        if(!this.stringaRegistroAccessi)
+        if (!this.stringaRegistroAccessi)
           this.stringaRegistroAccessi = "I campi evidenziati sono esposti nella pubblicazione dell'iter su: " + registro.descrizione;
         else
-          this.stringaRegistroAccessi = this.stringaRegistroAccessi +", " + registro.descrizione;
+          this.stringaRegistroAccessi = this.stringaRegistroAccessi + ", " + registro.descrizione;
         
       });
-    })
+    });
   }
 
   updateDataChiusuraPrevista() {
@@ -671,7 +679,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public cambiaResponsabileProcedimento() {
     let cfResponsabile = this.iter.idResponsabileProcedimento.idPersona.codiceFiscale;
     let vicars;
-    if(this.arrayCfVicari.indexOf(cfResponsabile)==-1){ // LO SO CHE FA SCHIFO MA LA FUNZIONE INCLUDES LANCIA ERRORE!!!! (non è supportata in firefox vecchio)
+    if (this.arrayCfVicari.indexOf(cfResponsabile) === -1) { // LO SO CHE FA SCHIFO MA LA FUNZIONE INCLUDES LANCIA ERRORE!!!! (non è supportata in firefox vecchio)
       vicars = this.arrayCfVicari.slice();
       vicars.push(cfResponsabile);
     }
@@ -691,8 +699,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           res => {
             this.showStatusOperation("Responsabile del procedimento cambiato con successo!", "success");
             this.arrayCfVicari.push(cfResponsabile);
-            //debugger;
-            this.fascicoloIter.permessi = Object.assign(this.fascicoloIter.permessi,{[cfResponsabile]: "VICARIO"});
+            // debugger;
+            this.fascicoloIter.permessi = Object.assign(this.fascicoloIter.permessi, {[cfResponsabile]: "VICARIO"});
             this.refresh(); // Aggiorno l'iter per visualizzare il nuovo responsabile
             this.closePopupResp();
             },
@@ -762,15 +770,25 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   } */
 
   receiveMessage($event) {
+    console.log("receiveMessage ", $event)
     this.passaggioDiFaseVisible = $event["visible"];
     if ($event["proceduto"]) {
+      this.refresh();
+    }
+
+    if($event["cancellatoDocIter"]){
+      console.log("cancellatoDocIter ", $event["cancellatoDocIter"])
+      this.genericButtons = null;
+      this.fascicoloIter = null;  // lo so che non è il massimo, ma è l'unico modo per ricalcolare tutti i pulsanti DOPO il ricaricamento dell'iter
       this.refresh();
     }
   }
 
   refresh() {
+    console.log("refresh() ");
     let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"]};
     this.perFigliParteDestra = perFigliNew;
+    console.log("nuovi perFigliParteDestra ", this.perFigliParteDestra);
     this.buildIter();
   }
   /* receiveMessageFromSospensione($event) {
@@ -830,7 +848,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   } */
 
   public calculateIodaPermissionAndSetButton(): void {
-    if(!this.fascicoloIter){
+    console.log("calculateIodaPermissionAndSetButton()")
+    if (!this.fascicoloIter) {
+      console.log("!this.fascicoloIter ---> getFascicoloIetr()")
       IterProcedimentoFascicoloUtilsClass.getFascicoloIter(this.http, this.iter.idFascicolo)
       .subscribe(
         res => {
@@ -853,6 +873,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   public settaVariabiliPermessi() {
     this.permessoUtenteLoggato = +PERMESSI[this.fascicoloIter.permessi[this.userInfo.cf]];
+    this.possoCorreggereAssociazioni = !this.isChiuso() && this.permessoUtenteLoggato >= +PERMESSI.MODIFICA;
+    console.log("settaVariabiliPermessi -> this.possoCorreggereAssociazioni", this.possoCorreggereAssociazioni)
   }
 
   customDisplayExprClassificazione(data: Titolo) {

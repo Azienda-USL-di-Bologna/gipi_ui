@@ -7,6 +7,7 @@
         noDataText="Non ci sono dati da visualizzare"
         hoverStateEnabled="true"
         [customizeColumns]="customizeColumns"
+        (onRowPrepared)="onRowPrepared($event)"
         (onCellPrepared)="onCellPrepared($event)">
     <dxo-sorting ascendingText="Ordine crescente" descendingText="Orine discendente" clearText="Togli ordinamento"></dxo-sorting>
     <dxo-scrolling mode="virtual"></dxo-scrolling>
@@ -16,8 +17,12 @@
     <dxi-column dataField="idEvento.nome" caption="Evento" [dataType]="'string'" alignment="center" [allowSorting]="false"></dxi-column>
     <dxi-column dataField="idDocumentoIter" caption="Documento" [dataType]="'string'" alignment="center" [allowSorting]="false"></dxi-column>
     <dxi-column dataField="note" cellTemplate="noteCellTemplate" caption="Note" width="auto" alignment="center" [allowSorting]="false"></dxi-column>
+    <dxi-column *ngIf= "possoCancellare" dataField="canDelete" cellTemplate="canDeleteTemplate" caption="Elimina" width="auto" alignment="center" [allowSorting]="false"></dxi-column>
     <div *dxTemplate="let d of 'noteCellTemplate'">
       <dx-button *ngIf="d.value" type="default" text="" hint="Mostra note" icon='doc' (onClick)="showNotes(d)"></dx-button>
+    </div>
+    <div *dxTemplate="let x of 'canDeleteTemplate'">
+      <dx-button *ngIf="x.value" type="default" text="" hint="Elimina ultima associazione" icon='revert' (onClick)="cancellaEvento(x)"></dx-button>
     </div>
   </dx-data-grid>
 </div>

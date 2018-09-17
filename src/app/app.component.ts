@@ -12,6 +12,7 @@ import {LoggedUser} from "@bds/nt-login";
 import * as $ from "jquery";
 import * as deLocalization from "devextreme/localization";
 import {AppConfiguration} from "./config/app-configuration";
+import { ParametriAziendaService } from "./services/parametri-azienda.service";
 
 
 @Component({
@@ -52,7 +53,8 @@ export class AppComponent implements OnInit, OnDestroy {
     constructor(private location: Location, public router: Router, private activatedRoute: ActivatedRoute,
                 private globalContextService: GlobalContextService,
                 private odataContextFactory: OdataContextFactory, public appConfig: AppConfiguration,
-                private navbarService: NavbarService) {
+                private navbarService: NavbarService,
+                private parametriAziendaService: ParametriAziendaService) {
         this.odataContextFactory.setOdataBaseUrl(ODATA_BASE_URL);
         console.log("hostname", window.location.hostname);
         console.log("host", window.location.host);
@@ -219,6 +221,7 @@ export class AppComponent implements OnInit, OnDestroy {
                             }
                             this.ruolo += element[bRuolo.nomeBreve] + " ";
                         });
+                        this.parametriAziendaService.getParametri("gipi", loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id]);
                         if (this.enableSidebarByRole) {
                             this.buildSideBar(loggedUser);
                         }

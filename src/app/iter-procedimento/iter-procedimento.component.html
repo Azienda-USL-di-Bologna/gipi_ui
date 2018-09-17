@@ -126,11 +126,17 @@
                             cssClass="read-only-field">
                             <dxo-label text="Durata prevista (gg)"></dxo-label>
                         </dxi-item>
+                        <dxi-item [colSpan]="colCountGroup" dataField="giorniEffettiviTrascorsi" 
+                            [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false, hint: 'Giorni trascorsi dalla data di avvio escluse le sospensioni' }"
+                            cssClass="read-only-field">
+                            <dxo-label text="Giorni effettivi"></dxo-label>
+                        </dxi-item>
                         <dxi-item [colSpan]="colCountGroup" dataField="giorniDurataTrascorsi" 
                             [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
                             cssClass="read-only-field">
-                            <dxo-label text="Giorni trascorsi"></dxo-label>
+                            <dxo-label text="Giorni dall'avvio"></dxo-label>
                         </dxi-item>
+                        <dxi-item *ngIf="initialWidth >= 770" [colSpan]="colCountGroup"></dxi-item> <!-- Segnaposto che scompare in base alla dimensione della finestra -->
                         <dxi-item [colSpan]="colCountGroup" dataField="derogaDurata"
                             [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
                             cssClass="read-only-field">
@@ -231,7 +237,7 @@
                 <app-sequenza-delle-fasi [daPadre]="perFigliParteDestra"></app-sequenza-delle-fasi>
             </div> -->
             <div class="griginoPanel mb-3 "> <!-- fixHeight -->
-                <app-cronologia-eventi [daPadre]="perFigliParteDestra"></app-cronologia-eventi>
+                <app-cronologia-eventi [daPadre]="perFigliParteDestra" [(possoCorreggereAssociazioni)]="possoCorreggereAssociazioni" (messageEvent)="receiveMessage($event)"></app-cronologia-eventi>
             </div>
             <!-- Non cancellare. Torneremo ad utilizzarlo 
                 <div class="whitePanel fixHeight">
