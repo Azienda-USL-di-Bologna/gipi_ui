@@ -54,7 +54,7 @@ export class ListaIterPerDemiurgoComponent implements OnInit {
   }
 
   public cliccalo(e){
-    console.log(e);
+    //  console.log(e);
     notify({
       message: "Funzione ancora da implementare",
         type: "warning",

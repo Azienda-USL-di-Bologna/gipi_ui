@@ -86,6 +86,7 @@ import {AppConfiguration} from "./config/app-configuration";
 import { DocumentoIterAssociazioneSempliceComponent } from "./documento-iter-associazione-semplice/documento-iter-associazione-semplice.component";
 import { ModificaDocumentoIterComponent } from "./modifica-documento-iter/modifica-documento-iter.component";
 import { ListaIterPerDemiurgoComponent } from "./lista-iter-per-demiurgo/lista-iter-per-demiurgo.component";
+import { ListaIterAziendaliComponent } from "./lista-iter-aziendali/lista-iter-aziendali.component";
 
 @NgModule({
     declarations: [
@@ -123,7 +124,8 @@ import { ListaIterPerDemiurgoComponent } from "./lista-iter-per-demiurgo/lista-i
         TestGridComponent,
         DocumentoIterAssociazioneSempliceComponent,
         ModificaDocumentoIterComponent,
-        ListaIterPerDemiurgoComponent
+        ListaIterPerDemiurgoComponent,
+        ListaIterAziendaliComponent
     ],
     imports: [
         BrowserModule,
