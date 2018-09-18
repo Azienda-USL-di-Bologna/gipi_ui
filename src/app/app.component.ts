@@ -149,7 +149,7 @@ export class AppComponent implements OnInit, OnDestroy {
         if (loggedUser.isSD())
             this.sidebarItems.push(new SidebarItem("Lista Iter Per Demiurghi", "lista-iter-per-demiurgo"));
         if (loggedUser.isOS())
-            this.sidebarItems.push(new SidebarItem("Lista Iter Aziendali", "lista-iter-aziendali"));
+            this.sidebarItems.push(new SidebarItem("Elenco Iter Aziendali", "lista-iter-aziendali"));
 
         this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
         this.sidebarItems.push(new SidebarItem("Elenco iter", "app-lista-iter"));
