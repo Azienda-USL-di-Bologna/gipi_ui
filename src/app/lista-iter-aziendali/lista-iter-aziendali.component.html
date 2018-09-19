@@ -19,13 +19,9 @@
         placeholder="Cerca.." >
       </dxo-search-panel>
         <dxi-column dataField="numero" [width]="100"></dxi-column>
-        <dxi-column dataField="idProcedimento.idAziendaTipoProcedimento.idAzienda.nome" [width]="100" caption="Azienda"></dxi-column>
         <dxi-column dataField="idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome" caption="Tipo procedimento"></dxi-column>
-        <dxi-column dataField="idUtenteCreazione.idPersona.descrizione" caption="Creato da" [minWidth]="200"></dxi-column>
-        <dxi-column dataField="idStrutturaUtenteCreazione.nome" caption="Struttura Creatore" [minWidth]="200"></dxi-column>
         <dxi-column dataField="oggetto" [minWidth]="200"></dxi-column>
         <dxi-column dataField="idResponsabileProcedimento.idPersona.descrizione" caption="Responsabile procedimento" [minWidth]="200"></dxi-column>
-        <dxi-column dataField="idStrutturaResponsabileProcedimento.nome" caption="Struttura Responsabile" [minWidth]="200"></dxi-column>
         <dxi-column dataField="idStato.descrizione"[width]="100" caption="Stato"></dxi-column>
         <dxi-column dataField="dataAvvio" caption="Aperto il" [width]="100" format="dd/MM/yyyy" [allowSearch]=false></dxi-column>
         <dxi-column dataField="dataChiusura" caption="Chiuso il" [width]="100" format="dd/MM/yyyy"  [allowSearch]=false></dxi-column>

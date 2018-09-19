@@ -145,13 +145,13 @@ export class AppComponent implements OnInit, OnDestroy {
         if (loggedUser.isCA()) {
             this.sidebarItems.push(new SidebarItem("Tipi Procedimento Aziendale", "tipi-procedimento-aziendali"));
         }
+        this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
         // console.log("IS SD???", loggedUser.isSD())
         if (loggedUser.isSD())
             this.sidebarItems.push(new SidebarItem("Lista Iter Per Demiurghi", "lista-iter-per-demiurgo"));
         if (loggedUser.isOS())
             this.sidebarItems.push(new SidebarItem("Elenco Iter Aziendali", "lista-iter-aziendali"));
 
-        this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
         this.sidebarItems.push(new SidebarItem("Elenco iter", "app-lista-iter"));
         // this.sidebarItems.push(new SidebarItem("Test", "", this.sidebarItems2));
     }
