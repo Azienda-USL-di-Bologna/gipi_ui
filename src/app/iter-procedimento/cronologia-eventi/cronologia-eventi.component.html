@@ -29,9 +29,14 @@
 
 <!-- <dxi-column dataField="idFaseIter.idFase.nome" caption="Fase" [dataType]="'string'" alignment="center" [allowSorting]="false"></dxi-column> -->
 
-<dx-tooltip>
+<dx-tooltip #tooltip>
   <div *dxTemplate="let data = data of 'content'">
     <b>{{oggettoDocumento}}</b>
+  </div>
+</dx-tooltip>
+<dx-tooltip #tooltipDataReg>
+  <div *dxTemplate="let data = data of 'content'">
+    {{dataRegistrazioneEvento}}
   </div>
 </dx-tooltip>
 <dx-popup *ngIf="enablePopup"

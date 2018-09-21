@@ -18,8 +18,10 @@ export class CronologiaEventiComponent implements OnInit {
 
   private odataContextDefinition: OdataContextDefinition;  
   public dataSourceEventoIter: DataSource;
-  @ViewChild(DxTooltipComponent) tooltip: DxTooltipComponent;
+  @ViewChild("tooltip") tooltip: DxTooltipComponent;
+  @ViewChild("tooltipDataReg") tooltipDataReg: DxTooltipComponent;
   public oggettoDocumento: String = "";
+  public dataRegistrazioneEvento: String = "";
   public classeDiHighlight = "";
   public popupVisible = false;
   public enablePopup = false;
@@ -103,6 +105,18 @@ export class CronologiaEventiComponent implements OnInit {
 
   onCellPrepared(e) {
     let self = this;
+    if (e.rowType === "data" && e.column.dataField === "dataOraEvento") {
+      e.cellElement.onmouseover = () => {
+        if (e.row.data && e.row.data.dataOraEvento && e.row.data.dataRegistrazioneEvento) {
+          self.tooltipDataReg.instance.option("target", e.cellElement);
+          self.dataRegistrazioneEvento = "Evento registrato il " + e.row.data.dataRegistrazioneEvento.toLocaleDateString();
+          self.tooltipDataReg.instance.show();
+        }
+      };
+      e.cellElement.onmouseout = () => {
+        self.tooltipDataReg.instance.hide();
+      };
+    }
     if (e.rowType === "data" && e.column.dataField === "idDocumentoIter") {
       if ((e.data.idEvento.codice === "avvio_iter" || e.data.idEvento.codice === "chiusura_iter") && this.classeDiHighlight !== "") {
         e.cellElement.classList.add(this.classeDiHighlight);
