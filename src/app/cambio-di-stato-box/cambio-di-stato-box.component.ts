@@ -281,7 +281,7 @@ export class CambioDiStatoBoxComponent implements OnInit {
 
       for (let eventoIter of res){
         console.log("eventoIter.idEvento", eventoIter.idEvento)
-        if(dataRegistrazione.getTime() < eventoIter.dataOraEvento.getTime() && (eventoIter.idEvento.codice === "avvio_iter" || eventoIter.idEvento.codice === "apertura_sospensione" || eventoIter.idEvento.codice === "chiusura_sospensione")){
+        if(dataRegistrazione.getTime() < eventoIter.dataOraEvento.getTime()){
           console.log("eventoIter", eventoIter);
           console.log("RITORNO ", eventoIter.dataOraEvento.getTime() > dataRegistrazione.getTime() ? eventoIter.dataOraEvento : dataRegistrazione)
           this.dataIniziale = eventoIter.dataOraEvento.getTime() > dataRegistrazione.getTime() ? eventoIter.dataOraEvento : dataRegistrazione;
