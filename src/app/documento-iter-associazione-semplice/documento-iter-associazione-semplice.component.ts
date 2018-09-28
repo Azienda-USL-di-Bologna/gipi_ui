@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, Input } from "@angular/core";
+import DataSource from "devextreme/data/data_source";
 import { EventEmitter } from "events";
 import { CambioDiStatoParams } from "../classi/condivise/sospensione/gestione-stato-params";
 import { OdataContextFactory, GlobalContextService, OdataContextDefinition, ResponseMessages, ErrorMessage } from "@bds/nt-context";
@@ -8,6 +9,7 @@ import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 import notify from "devextreme/ui/notify";
 import { PopupRow } from "../classi/condivise/popup/popup-tools";
+import { EventoIter } from "@bds/nt-entities";
 
 
 @Component({
@@ -19,6 +21,9 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
 
   private FASCICOLAZIONE_ERROR: number = 0;
 
+  public dataDiOggi: Date = new Date();
+  public dataSourceEventiIter: DataSource;
+  private oataContextDefinition: OdataContextDefinition;
   showPopupAnnullamento: boolean;
   arrayRiassunto: any[];
   showPopupRiassunto: boolean;
@@ -28,6 +33,7 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
   dataIniziale: Date;
   _isOpenedAsPopup: any;
   associazionePrams: CambioDiStatoParams;
+
   @Output() out = new EventEmitter<any>();
 
   @Input() set userInfo(value: UserInfo) {
@@ -45,6 +51,8 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
     }
     let dataRegTemp = new Date(value.dataRegistrazioneDocumento);
     this.dataMinimaValida = dataRegTemp > value.dataAvvioIter ? dataRegTemp : value.dataAvvioIter;
+
+    this.setDataIniziale(new Date(this.associazionePrams.dataRegistrazioneDocumento));
   }
   get dataMinima(): Date {   
     return this.dataMinimaValida;
@@ -60,16 +68,17 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
   public someTextTesto: string = "Il documento è inserito nell'iter come ";
 
   constructor(private odataContextFactory: OdataContextFactory,
-    private http: HttpClient, 
-    private activatedRoute: ActivatedRoute,
-    private globalContextService: GlobalContextService) {
-      const oataContextDefinition: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+      private http: HttpClient, 
+      private activatedRoute: ActivatedRoute,
+      private globalContextService: GlobalContextService) {
+    
+    this.oataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
 
     /* Esplicita il bind della callback del widget sul componente
-     * per dare alla procedura lo scope alle variabili e metodi del componente */
+    * per dare alla procedura lo scope alle variabili e metodi del componente */
     this.validaData = this.validaData.bind(this); 
     this.reimpostaDataIniziale = this.reimpostaDataIniziale.bind(this);
-     }
+  }
 
   private showStatusOperation(message: string, type: string) {
     notify({
@@ -205,6 +214,32 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
       return dataAvvio.value < this.dataMinimaValida ? false : true;
     }
 
+
+  setDataIniziale(dataRegistrazione: Date) {
+    console.log("setDataIniziale --> dataRegistrazione", dataRegistrazione)
+    // carico il dataSource di EventiIter
+    this.dataSourceEventiIter = new DataSource({
+      store: this.oataContextDefinition.getContext()[new EventoIter().getName()],
+      expand: ["idEvento"],
+      filter: ["idIter.id", "=", this.associazionePrams.idIter],
+      sort: [{field: "dataOraEvento", desc: true}]
+    });
+    
+    // prendo l'ultimo evento utile tra avvio/sospensione/de-sospensione
+    this.dataSourceEventiIter.load().then(res => {
+      console.log("res",res)
+
+      for (let eventoIter of res){
+        console.log("eventoIter.idEvento", eventoIter.idEvento)
+        if(dataRegistrazione.getTime() < eventoIter.dataOraEvento.getTime()){
+          console.log("eventoIter", eventoIter);
+          console.log("RITORNO ", eventoIter.dataOraEvento.getTime() > dataRegistrazione.getTime() ? eventoIter.dataOraEvento : dataRegistrazione)
+          this.dataIniziale = eventoIter.dataOraEvento.getTime() > dataRegistrazione.getTime() ? eventoIter.dataOraEvento : dataRegistrazione;
+          break;
+        }
+      }
+    });
+  }
 
 }
 

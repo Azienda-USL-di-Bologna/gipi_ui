@@ -8,7 +8,7 @@ import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "e
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ActivatedRoute, Params } from "@angular/router";
 import notify from "devextreme/ui/notify";
-import { Stato, Iter } from "@bds/nt-entities";
+import { Stato, Iter, EventoIter } from "@bds/nt-entities";
 import { Popup } from "@bds/nt-context";
 import { PopupRow } from "../classi/condivise/popup/popup-tools";
 
@@ -33,11 +33,13 @@ export class CambioDiStatoBoxComponent implements OnInit {
   public showPopupAnnullamento: boolean = false;
   public dataSourceStati: DataSource;
   public dataIniziale: Date;
+  public dataDiOggi: Date = new Date();
   public arrayEsiti: any[] = Object.keys(ESITI).map(key => {return {"codice": key, "descrizione": ESITI[key]}; });
   public arrayRiassunto: PopupRow[];
   public someTextTesto: string = "Il documento è inserito nell'iter come ";
   public loadingVisible: boolean = false;
   public obbligoEsitoMotivazione: boolean = false;
+  public dataSourceEventiIter: DataSource;
 
   @Output() out = new EventEmitter<any>();
 
@@ -52,11 +54,15 @@ export class CambioDiStatoBoxComponent implements OnInit {
     console.log("sosepnsioneParams", this._sospensioneParams);
 
     if (!this._isOpenedAsPopup && this._sospensioneParams.dataRegistrazioneDocumento && this.dataIniziale === undefined) {
-      this.dataIniziale = new Date(this._sospensioneParams.dataRegistrazioneDocumento);
+      let dataRegistrazione = new Date(this._sospensioneParams.dataRegistrazioneDocumento);
+      let dataAvviamentoIter = new Date(value.dataAvvioIter);
+
+      this.dataIniziale = dataRegistrazione > dataAvviamentoIter ? dataRegistrazione : dataAvviamentoIter;
     }
 
     let dataRegTemp = new Date(value.dataRegistrazioneDocumento);
     this.dataMinimaValida = dataRegTemp > value.dataAvvioIter ? dataRegTemp : value.dataAvvioIter;
+    this.setDataIniziale(new Date(this._sospensioneParams.dataRegistrazioneDocumento));
   }
   get dataMinima(): Date {   
     return this.dataMinimaValida;
@@ -131,7 +137,11 @@ export class CambioDiStatoBoxComponent implements OnInit {
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log("ON INIT")
+    /* if(this._sospensioneParams.dataRegistrazioneDocumento)
+      this.setDataIniziale(this._sospensioneParams.dataRegistrazioneDocumento); */
+   }
 
 
   handleSubmit(e) {
@@ -252,6 +262,33 @@ export class CambioDiStatoBoxComponent implements OnInit {
 
   validaData(dataAvvio: any): boolean {
     return dataAvvio.value < this.dataMinimaValida ? false : true;
+  }
+
+
+  setDataIniziale(dataRegistrazione: Date) {
+    console.log("setDataIniziale --> dataRegistrazione", dataRegistrazione)
+    // carico il dataSource di EventiIter
+    this.dataSourceEventiIter = new DataSource({
+      store: this.oataContextDefinition.getContext()[new EventoIter().getName()],
+      expand: ["idEvento"],
+      filter: ["idIter.id", "=", this._sospensioneParams.idIter],
+      sort: [{field: "dataOraEvento", desc: true}]
+    });
+    
+    // prendo l'ultimo evento utile tra avvio/sospensione/de-sospensione
+    this.dataSourceEventiIter.load().then(res => {
+      console.log("res",res)
+
+      for (let eventoIter of res){
+        console.log("eventoIter.idEvento", eventoIter.idEvento)
+        if(dataRegistrazione.getTime() < eventoIter.dataOraEvento.getTime()){
+          console.log("eventoIter", eventoIter);
+          console.log("RITORNO ", eventoIter.dataOraEvento.getTime() > dataRegistrazione.getTime() ? eventoIter.dataOraEvento : dataRegistrazione)
+          this.dataIniziale = eventoIter.dataOraEvento.getTime() > dataRegistrazione.getTime() ? eventoIter.dataOraEvento : dataRegistrazione;
+          break;
+        }
+      }
+    });
   }
 
 }

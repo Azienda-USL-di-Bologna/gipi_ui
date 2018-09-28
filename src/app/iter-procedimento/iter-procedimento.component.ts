@@ -368,8 +368,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   isSospeso() {
-    console.log("isSospeso()")
-    console.log("this.iter.idStato.codice ", this.iter.idStato.codice)
+    // console.log("isSospeso()")
+    // console.log("this.iter.idStato.codice ", this.iter.idStato.codice)
     if (this.iter.idStato.codice === STATI.SOSPESO) // 2 --> SOSPESO
       return true;
     else
@@ -408,7 +408,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   
   generateCustomButtons() {
-    console.log("generateCustomButtons")
+    // console.log("generateCustomButtons")
     // this.procediButton = new ButtonAppearance("Procedi", "", false, this.disableProcedi());
     // this.sospendiButton = new ButtonAppearance("Gestisci stato", "", false, this.disableSospendi());
     if (this.isSospeso()) {
@@ -422,7 +422,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   buildIter() {
-    console.log("buildIter(): faccio la load")
+    // console.log("buildIter(): faccio la load")
     this.dataSourceIter.load().then(res => {
       this.iter.build(res[0]);
       // this.generateCustomButtons(); Non cancellare, potrebbe tornare utile in futuro
@@ -442,9 +442,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   loadAndBuildRegistriIterByIdTipoProcedimento(idTipoProcedimento: any) {
-    console.log("loadAndBuildRegistriIterByIdTipoProcedimento()");
-    console.log("idTipoProcedimento", idTipoProcedimento);
-    console.log("this.idIter", this.idIter);
+    // console.log("loadAndBuildRegistriIterByIdTipoProcedimento()");
+    // console.log("idTipoProcedimento", idTipoProcedimento);
+    // console.log("this.idIter", this.idIter);
     const oCDRIBITP: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     let dsRegistriIter = new DataSource({
       store: oCDRIBITP.getContext()[new RegistroTipoProcedimento().getName()],
@@ -457,7 +457,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     dsRegistriIter.load().then(res => {
       res.forEach(element => {
         let registro = element.idRegistro;
-        console.log(registro.descrizione);
+        // console.log(registro.descrizione);
         if (!this.stringaRegistroAccessi)
           this.stringaRegistroAccessi = "I campi evidenziati verranno esposti nella pubblicazione dell'iter su: " + registro.descrizione;
         else
@@ -467,19 +467,19 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public loadRegistriIter() {
-    console.log("loadRegistriIter()");
-    console.log("this.idIter", this.idIter);
+    // console.log("loadRegistriIter()");
+    // console.log("this.idIter", this.idIter);
     const oCDRI: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     let dsRegistriIter = new DataSource({
       store: oCDRI.getContext()[new RegistroIter().getName()],
       expand: ["idIter", "idRegistro"],
       filter: [["idIter.id", "=", +this.idIter]]
     });
-    console.log("Mo faccio la load");
+    // console.log("Mo faccio la load");
     dsRegistriIter.load().then(res => {
       res.forEach(element => {
         let registro = element.idRegistro;
-        console.log(registro.descrizione);
+        // console.log(registro.descrizione);
         if (!this.stringaRegistroAccessi)
           this.stringaRegistroAccessi = "I campi evidenziati sono esposti nella pubblicazione dell'iter su: " + registro.descrizione;
         else
@@ -541,8 +541,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     };
   }
 
-  updateIter(validationParams: any) {
-																  
+  updateIter(validationParams: any) {												  
     let doUpdate: boolean = false;
     if (this.popupData.field) {
       if (this.popupData.field === "esitoMotivazione") {
@@ -785,10 +784,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   refresh() {
-    console.log("refresh() ");
     let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"]};
     this.perFigliParteDestra = perFigliNew;
-    console.log("nuovi perFigliParteDestra ", this.perFigliParteDestra);
+    // console.log("nuovi perFigliParteDestra ", this.perFigliParteDestra);
     this.buildIter();
   }
   /* receiveMessageFromSospensione($event) {
@@ -848,9 +846,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   } */
 
   public calculateIodaPermissionAndSetButton(): void {
-    console.log("calculateIodaPermissionAndSetButton()")
+    // console.log("calculateIodaPermissionAndSetButton()")
     if (!this.fascicoloIter) {
-      console.log("!this.fascicoloIter ---> getFascicoloIetr()")
+      // console.log("!this.fascicoloIter ---> getFascicoloIetr()")
       IterProcedimentoFascicoloUtilsClass.getFascicoloIter(this.http, this.iter.idFascicolo)
       .subscribe(
         res => {
@@ -865,7 +863,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           this.arrayCfVicari = IterProcedimentoFascicoloUtilsClass.calcolaArrayCfVicari(this.fascicoloIter.permessi);
         },
         err => {
-          console.log("Errore nel recupero del fascicolo iter", err);
+          // console.log("Errore nel recupero del fascicolo iter", err);
         }
       );    
     }
@@ -874,7 +872,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public settaVariabiliPermessi() {
     this.permessoUtenteLoggato = +PERMESSI[this.fascicoloIter.permessi[this.userInfo.cf]];
     this.possoCorreggereAssociazioni = !this.isChiuso() && this.permessoUtenteLoggato >= +PERMESSI.MODIFICA;
-    console.log("settaVariabiliPermessi -> this.possoCorreggereAssociazioni", this.possoCorreggereAssociazioni)
+    // console.log("settaVariabiliPermessi -> this.possoCorreggereAssociazioni", this.possoCorreggereAssociazioni)
   }
 
   customDisplayExprClassificazione(data: Titolo) {
