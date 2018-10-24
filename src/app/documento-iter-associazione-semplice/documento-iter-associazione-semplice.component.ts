@@ -204,7 +204,7 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
       console.log("reimpostaDataIniziale(e: any)");
       console.log("this.dataIniziale", this.dataIniziale);
       console.log("e.component._options.value", e.component._options.value);
-      this.dataIniziale = e.component._options.value;
+      // this.dataIniziale = e.component._options.value;
     }
   
     validaData(dataAvvio: any): boolean {
@@ -227,11 +227,11 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
     
     // prendo l'ultimo evento utile tra avvio/sospensione/de-sospensione
     this.dataSourceEventiIter.load().then(res => {
-      console.log("res",res)
+      console.log("res", res)
 
-      for (let eventoIter of res){
+      for (let eventoIter of res) {
         console.log("eventoIter.idEvento", eventoIter.idEvento)
-        if(dataRegistrazione.getTime() < eventoIter.dataOraEvento.getTime()){
+        if (dataRegistrazione.getTime() < eventoIter.dataOraEvento.getTime()) {
           console.log("eventoIter", eventoIter);
           console.log("RITORNO ", eventoIter.dataOraEvento.getTime() > dataRegistrazione.getTime() ? eventoIter.dataOraEvento : dataRegistrazione)
           this.dataIniziale = eventoIter.dataOraEvento.getTime() > dataRegistrazione.getTime() ? eventoIter.dataOraEvento : dataRegistrazione;
