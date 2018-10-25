@@ -9,7 +9,7 @@ import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 import notify from "devextreme/ui/notify";
 import { PopupRow } from "../classi/condivise/popup/popup-tools";
-import { EventoIter } from "@bds/nt-entities";
+import { EventoIter, Evento } from "@bds/nt-entities";
 
 
 @Component({
@@ -221,7 +221,7 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
     this.dataSourceEventiIter = new DataSource({
       store: this.oataContextDefinition.getContext()[new EventoIter().getName()],
       expand: ["idEvento"],
-      filter: ["idIter.id", "=", this.associazionePrams.idIter],
+      filter: [["idIter.id", "=", this.associazionePrams.idIter], ["idEvento.codice", "!=", "aggiunta_documento"]],
       sort: [{field: "dataOraEvento", desc: true}]
     });
     
