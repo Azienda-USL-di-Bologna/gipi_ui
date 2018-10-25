@@ -51,8 +51,9 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
     }
     let dataRegTemp = new Date(value.dataRegistrazioneDocumento);
     this.dataMinimaValida = dataRegTemp > value.dataAvvioIter ? dataRegTemp : value.dataAvvioIter;
+    this.dataIniziale = this.dataMinimaValida;
 
-    this.setDataIniziale(new Date(this.associazionePrams.dataRegistrazioneDocumento));
+    // this.setDataIniziale(new Date(this.associazionePrams.dataRegistrazioneDocumento));
   }
   get dataMinima(): Date {   
     return this.dataMinimaValida;
