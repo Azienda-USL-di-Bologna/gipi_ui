@@ -9,7 +9,7 @@ import { CUSTOM_RESOURCES_BASE_URL } from "environments/app.constants";
 import { TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 import notify from "devextreme/ui/notify";
 import { PopupRow } from "../classi/condivise/popup/popup-tools";
-import { EventoIter } from "@bds/nt-entities";
+import { EventoIter, Evento } from "@bds/nt-entities";
 
 
 @Component({
@@ -51,8 +51,9 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
     }
     let dataRegTemp = new Date(value.dataRegistrazioneDocumento);
     this.dataMinimaValida = dataRegTemp > value.dataAvvioIter ? dataRegTemp : value.dataAvvioIter;
+    this.dataIniziale = this.dataMinimaValida;
 
-    this.setDataIniziale(new Date(this.associazionePrams.dataRegistrazioneDocumento));
+    // this.setDataIniziale(new Date(this.associazionePrams.dataRegistrazioneDocumento));
   }
   get dataMinima(): Date {   
     return this.dataMinimaValida;
@@ -204,7 +205,7 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
       console.log("reimpostaDataIniziale(e: any)");
       console.log("this.dataIniziale", this.dataIniziale);
       console.log("e.component._options.value", e.component._options.value);
-      this.dataIniziale = e.component._options.value;
+      // this.dataIniziale = e.component._options.value;
     }
   
     validaData(dataAvvio: any): boolean {
@@ -221,17 +222,17 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
     this.dataSourceEventiIter = new DataSource({
       store: this.oataContextDefinition.getContext()[new EventoIter().getName()],
       expand: ["idEvento"],
-      filter: ["idIter.id", "=", this.associazionePrams.idIter],
+      filter: [["idIter.id", "=", this.associazionePrams.idIter], ["idEvento.codice", "!=", "aggiunta_documento"]],
       sort: [{field: "dataOraEvento", desc: true}]
     });
     
     // prendo l'ultimo evento utile tra avvio/sospensione/de-sospensione
     this.dataSourceEventiIter.load().then(res => {
-      console.log("res",res)
+      console.log("res", res)
 
-      for (let eventoIter of res){
+      for (let eventoIter of res) {
         console.log("eventoIter.idEvento", eventoIter.idEvento)
-        if(dataRegistrazione.getTime() < eventoIter.dataOraEvento.getTime()){
+        if (dataRegistrazione.getTime() < eventoIter.dataOraEvento.getTime()) {
           console.log("eventoIter", eventoIter);
           console.log("RITORNO ", eventoIter.dataOraEvento.getTime() > dataRegistrazione.getTime() ? eventoIter.dataOraEvento : dataRegistrazione)
           this.dataIniziale = eventoIter.dataOraEvento.getTime() > dataRegistrazione.getTime() ? eventoIter.dataOraEvento : dataRegistrazione;
