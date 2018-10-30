@@ -50,8 +50,10 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
       this.dataIniziale = new Date(this.associazionePrams.dataRegistrazioneDocumento);
     }
     let dataRegTemp = new Date(value.dataRegistrazioneDocumento);
+    // posso associarlo prima di creare l'iter? No. Posso prima di protocollarlo? No. Qual è la maggiore delle due? quella è la data minima
     this.dataMinimaValida = dataRegTemp > value.dataAvvioIter ? dataRegTemp : value.dataAvvioIter;
-    this.dataIniziale = this.dataMinimaValida;
+    // Cosa faccio comparire nel box? La maggiore tra le due date.
+    this.dataIniziale = dataRegTemp > value.dataAvvioIter ? dataRegTemp : value.dataAvvioIter;
 
     // this.setDataIniziale(new Date(this.associazionePrams.dataRegistrazioneDocumento));
   }
