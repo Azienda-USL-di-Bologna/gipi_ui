@@ -173,12 +173,22 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "idStrutturaResponsabileProcedimento",
         "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento",
         "idUtenteCreazione.idPersona",
-        "idStrutturaUtenteCreazione"
+        "idStrutturaUtenteCreazione",
+        "idMotivoPrecedente"
       ],
       filter: [["id", "=", this.idIter]],
       map: (item) => {
         if (item) {
           // carico il dataSource dei Registri Iter (mi serve farlo una sola volta)
+          if(item.idIterPrecedente){
+            item.idIterPrecedente.customDescription = item.idIterPrecedente.numero + '/'+ item.idIterPrecedente.anno + ' - ' + item.idIterPrecedente.oggetto
+          }
+
+          if(item.idMotivoPrecedente){
+            console.log("MOTIVO PRECEDENTE!!!!", item.idMotivoPrecedente)
+            // questo non riesco a mostrarlo finché non mi creo l'entità
+          }
+
           if (!this.stringaRegistroAccessi) {
             if (item.idStato.codice !== STATI.CHIUSO)
               this.loadAndBuildRegistriIterByIdTipoProcedimento(item.idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento);
@@ -1133,6 +1143,26 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   // *************************
   // FINE GESTIONE POPUP VICARI
   // *************************
+
+  // *************************
+  // GESTIONE DEI PRECEDENTI
+  // *************************
+  deletePrecedente(){
+    this.showStatusOperation("Cancellazione: funzione ancora da implementare", "success");
+  }
+
+  openPopupPrecedente(){
+    this.showStatusOperation("Selezione Precedente: funzione ancora da implementare", "success");
+  }
+
+  precedenteClicks(){
+    if(!this.iter.idIterPrecedente)
+      this.openPopupPrecedente();
+    else
+      this.deletePrecedente();
+  }
+
+
 }
 
 class Vicario {

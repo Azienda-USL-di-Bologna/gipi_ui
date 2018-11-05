@@ -22,7 +22,7 @@
 
     <div class="row">
         <div class="col-lg-6 col-md-12">
-            <dx-form id="form" [colCount]="1" [formData]="iter"    #myForm1> <!-- [screenByWidth]="screen"-->
+            <dx-form id="form" [colCount]="1" [formData]="iter" #myForm1> <!-- [screenByWidth]="screen"-->
                 <dxi-item itemType="group" [colCount]="12" [caption]="datiGenerali" >
                     <dxi-item [colSpan]="12" *ngIf="classeDiHighlight!==''"><p id="infoPubblicazioneAlbo">
                         <b><i>{{stringaRegistroAccessi}}</i></b></p>
@@ -193,15 +193,32 @@
                 </dxi-item>
 
                 <dxi-item itemType="group" [colCount]="6" caption="Dati di archivio">
-                    <dxi-item dataField="idIterPrecedente.numero"
+                    <dxi-item dataField="idIterPrecedente.customDescription"
                         [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
                         [cssClass]="classeDiHighlight" [colSpan]="6">
                         <dxo-label text="Coll. precedente"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="modalitaCollegamentoPrecedente"
+                    <dxi-item dataField="idMotivoPrecedente.descrizione"
                         [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
-                        cssClass="read-only-field" [colSpan]="6">
+                        cssClass="read-only-field" [colSpan]="2">
                         <dxo-label text="Motivo collegamento"></dxo-label>
+                    </dxi-item>
+                    <dxi-item dataField="noteMotivoPrecedente"
+                        [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                        cssClass="read-only-field" [colSpan]="3">
+                        <dxo-label text="Note"></dxo-label>
+                    </dxi-item>
+                    <dxi-item [colSpan]="1">
+                        <button *ngIf="!iter.idIterPrecedente" class="btn button-azioni" type="button" 
+                            [disabled]="!(permessoUtenteLoggato >= 4)"
+                            data-toggle="tooltip"  title="Edita collegamento a Iter Precedente"
+                            (click)="precedenteClicks()"><img class="icon-margin" src="assets/images/edit-white-3.png">
+                        </button>
+                        <button *ngIf="iter.idIterPrecedente" class="btn button-azioni" type="button" 
+                            [disabled]="!(permessoUtenteLoggato >= 4)"
+                            data-toggle="tooltip"  title="Cancella collegamento a Iter Precedente"
+                            (click)="precedenteClicks()">Cancella
+                        </button>
                     </dxi-item>
                     <dxi-item dataField="idFascicolo"
                         [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
