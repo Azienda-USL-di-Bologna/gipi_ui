@@ -10,6 +10,7 @@ import { TOAST_WIDTH, TOAST_POSITION } from "environments/app.constants";
 import notify from "devextreme/ui/notify";
 import { PopupRow } from "../classi/condivise/popup/popup-tools";
 import { EventoIter, Evento } from "@bds/nt-entities";
+import * as $ from 'jquery';
 
 
 @Component({
@@ -97,6 +98,7 @@ export class DocumentoIterAssociazioneSempliceComponent implements OnInit {
     
   }
 
+  
   handleSubmit(e) {
     // e.preventDefault(); // Con l'evento onClick non dovrebbe essere necessaria
     if (!this.associazionePrams.dataCambioDiStato && this.associazionePrams.numeroDocumento) { return; }
