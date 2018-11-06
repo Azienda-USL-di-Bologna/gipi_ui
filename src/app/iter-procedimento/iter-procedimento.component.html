@@ -192,47 +192,50 @@
                     </dxi-item>
                 </dxi-item>
 
-                <dxi-item itemType="group" [colCount]="6" caption="Dati di archivio">
+                <dxi-item itemType="group" [colCount]="12" caption="Dati di archivio">
+                    <!-- PRECEDENTE -->
                     <dxi-item dataField="idIterPrecedente.customDescription"
                         [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
-                        [cssClass]="classeDiHighlight" [colSpan]="6">
+                        [cssClass]="classeDiHighlight" [colSpan]="12">
                         <dxo-label text="Coll. precedente"></dxo-label>
                     </dxi-item>
                     <dxi-item dataField="idMotivoPrecedente.descrizione"
                         [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
-                        cssClass="read-only-field" [colSpan]="2">
+                        cssClass="read-only-field" [colSpan]="5">
                         <dxo-label text="Motivo collegamento"></dxo-label>
                     </dxi-item>
                     <dxi-item dataField="noteMotivoPrecedente"
                         [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
-                        cssClass="read-only-field" [colSpan]="3">
+                        cssClass="read-only-field" [colSpan]="6">
                         <dxo-label text="Note"></dxo-label>
                     </dxi-item>
                     <dxi-item [colSpan]="1">
                         <button *ngIf="!iter.idIterPrecedente" class="btn button-azioni" type="button" 
                             [disabled]="!(permessoUtenteLoggato >= 4)"
-                            data-toggle="tooltip"  title="Edita collegamento a Iter Precedente"
-                            (click)="precedenteClicks()"><img class="icon-margin" src="assets/images/edit-white-3.png">
+                            data-toggle="tooltip"  title="Edita collegamento a Iter Precedente" style="text-align: center"
+                            (click)="precedenteClicks()"><img class="icon-center" src="assets/images/edit-white-3.png">
                         </button>
                         <button *ngIf="iter.idIterPrecedente" class="btn button-azioni" type="button" 
                             [disabled]="!(permessoUtenteLoggato >= 4)"
                             data-toggle="tooltip"  title="Cancella collegamento a Iter Precedente"
-                            (click)="precedenteClicks()">Cancella
+                            (click)="precedenteClicks()">
+                            <img class="icon-center" src="assets/images/x-cancel-25.png">
                         </button>
                     </dxi-item>
+                    <!-- FASCICOLO -->
                     <dxi-item dataField="idFascicolo"
                         [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
-                        cssClass="read-only-field" [colSpan]="5">
+                        cssClass="read-only-field" [colSpan]="10">
                         <dxo-label text="Fascicolo dell'iter"></dxo-label>
                     </dxi-item>
-                    <dxi-item [colSpan]="1">
+                    <dxi-item [colSpan]="2">
                         <button class="btn button-azioni" type="button" 
                             [disabled]="!(permessoUtenteLoggato >= 4)"
                             data-toggle="tooltip" data-placement="right" title="Responsabili e vicari del fascicolo"
                             (click)="apriPopupVicari()">Vicari fascicolo
                         </button>
                     </dxi-item>
-                    <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [colSpan]="1" [editorOptions]="{
+                    <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [colSpan]="2" [editorOptions]="{
                         disabled: true,
                         dataSource: dataSourceClassificazione,
                         displayExpr: customDisplayExprClassificazione,

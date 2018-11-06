@@ -1149,12 +1149,17 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   // *************************
   deletePrecedente(){
     this.showStatusOperation("Cancellazione: funzione ancora da implementare", "success");
+    // Aprire popup
   }
 
   openPopupPrecedente(){
     this.showStatusOperation("Selezione Precedente: funzione ancora da implementare", "success");
+    // Eliminare precedente & salvare sul db
+    // [aggiornare la catena precedente]
+    // buildare this.iter
   }
 
+  // a seconda del bottone funzione diversa
   precedenteClicks(){
     if(!this.iter.idIterPrecedente)
       this.openPopupPrecedente();
