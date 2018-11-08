@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation, ViewChild, HostListener } from "@
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity, OdataUtilities } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
-import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura, Persona, RegistroIter, Registro } from "@bds/nt-entities";
+import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura, Persona, RegistroIter, Registro, MotivoPrecedente } from "@bds/nt-entities";
 import { HttpClient  } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
@@ -11,7 +11,7 @@ import { LoggedUser } from "@bds/nt-login";
 import { Observable, Subscription } from "rxjs";
 import { HttpHeaders } from "@angular/common/http";
 import { STATI } from "@bds/nt-entities";
-import { DxFormComponent, DxPopupComponent } from "devextreme-angular";
+import { DxFormComponent, DxPopupComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { IterProcedimentoFascicoloUtilsClass, PERMESSI } from "./iter-procedimento-fascicolo-utils.class";
 import { UtilityFunctions } from "app/utility-functions";
 
@@ -57,6 +57,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   public popupVicariVisibile: boolean = false;
   public dataSourceVicari: DataSource;
+  public dataSourceIterPrecedenti: DataSource;
   public listaVicariPopup: Vicario[];
 
   public fascicoloIter: any;
@@ -64,10 +65,21 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public possoCorreggereAssociazioni: boolean;
 
   public stringaRegistroAccessi: String;
+  public popupPrecedenteVisible: boolean = false;
+  public selectedPrecedente: Iter;
+  public dataSourceMotiviCollegamento: any= [
+    {codice: "riesame", descrizione:"Riesame"},{codice: "ricorso", descrizione:"Ricorso"},{codice: "altro", descrizione:"Altro"}
+  ];
+  public codiceMotivoSelezionato = null;
+  public noteMotivoPrecedente;
     
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
   @ViewChild("popupVicari") popupVicari: DxPopupComponent;
+  @ViewChild("popupPrecedenti") popupPrecedenti: DxPopupComponent;
+  @ViewChild("gridPrecedenti") gridPrecedenti: DxDataGridComponent;
+  @ViewChild("motivoSelecdBox") motivoSelecdBox: DxSelectBoxComponent;
+  
 
   // pulsanti custom aggiunti alla button bar
   // public procediButton: ButtonAppearance;
@@ -371,7 +383,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.popupPrecedenti.closeOnBackButton = false;
+    this.popupPrecedenti.showCloseButton = false;
+    this.popupPrecedenti.closeOnOutsideClick = false;
+
+  }
 
   public buildTitoloDatiGenerali() {
     this.datiGenerali = "Iter n." + this.iter.numero + "/" + this.iter.anno + " (" + this.iter.idStato.descrizione + ")";
@@ -1144,19 +1161,64 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   // FINE GESTIONE POPUP VICARI
   // *************************
 
+
+
+
   // *************************
   // GESTIONE DEI PRECEDENTI
   // *************************
   deletePrecedente(){
-    this.showStatusOperation("Cancellazione: funzione ancora da implementare", "success");
+    //this.showStatusOperation("Cancellazione: funzione ancora da implementare", "success");
     // Aprire popup
+    let params = {
+      azione: "DEL",
+      idIter: this.iter.id,
+    }
+
+    this.setPrecedente(params);
+      
+  }
+
+
+  setPrecedente(params: any){
+    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/setPrecedente", params, { headers: new HttpHeaders().set("content-type", "application/json") })
+    .subscribe(
+      res => {
+        console.log(res);
+        if(this.popupPrecedenteVisible)
+          this.popupPrecedenteVisible = false;
+      },
+      err => {
+        this.showStatusOperation("Modifica non andata a buon fine. Contattare BabelCare", "error");
+        }
+    )
   }
 
   openPopupPrecedente(){
-    this.showStatusOperation("Selezione Precedente: funzione ancora da implementare", "success");
-    // Eliminare precedente & salvare sul db
-    // [aggiornare la catena precedente]
-    // buildare this.iter
+    console.log("this.dataSourceIterPrecedenti", this.dataSourceIterPrecedenti)
+    if(!this.dataSourceIterPrecedenti){
+      this.dataSourceIterPrecedenti = new DataSource({
+          store: this.odataContextDefinition.getContext()[new Iter().getName()],
+          expand: ["idProcedimento.idAziendaTipoProcedimento.idAzienda"],
+          filter: [
+            ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id","=",this.userInfo.idAzienda]
+          ],
+          sort: [{ field: "numero", desc: true }]
+        });
+        this.dataSourceIterPrecedenti.load().then(
+            res => {
+          console.log("Res", res)
+          this.popupPrecedenteVisible = true;
+          
+          },
+          err => {
+            console.log("!!!ERRORE", err)
+      });
+    }
+    else{
+      this.gridPrecedenti.instance.pageIndex(0);
+      this.popupPrecedenteVisible = true;
+    }
   }
 
   // a seconda del bottone funzione diversa
@@ -1167,6 +1229,51 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.deletePrecedente();
   }
 
+  onPrecedenteSelected(selectedItems: any){
+    console.log("this.dataSourceMotiviCollegamento", this.dataSourceMotiviCollegamento)
+    this.selectedPrecedente = selectedItems.selectedRowsData[0];
+  }
+
+  chiudiPopupPrecedente(){
+    console.log(this.codiceMotivoSelezionato);
+    return
+    /* this.gridPrecedenti.instance.deselectAll();
+    this.gridPrecedenti.instance.clearSelection();
+    this.popupPrecedenteVisible = false;
+    this.codiceMotivoSelezionato = null;
+    this.selectedPrecedente = null; */
+  }
+
+  selectedMotivo(selezionato){
+    if(selezionato){
+
+      //console.log("PRIMA this.codiceMotivoSelezionato", this.codiceMotivoSelezionato)
+      this.codiceMotivoSelezionato = selezionato.itemData.codice;
+      console.log("selectedMotivo", this.codiceMotivoSelezionato)
+    }
+  }
+
+  onSelectionChangedMotivo(selezionato){
+    if(selezionato){
+      //console.log("PRIMA this.codiceMotivoSelezionato", this.codiceMotivoSelezionato)
+      this.codiceMotivoSelezionato = selezionato.selectedItem.codice;
+      console.log("onSelectionChangedMotivo", this.codiceMotivoSelezionato)
+    }
+  }
+
+  associa(e){
+    console.log("ASSOCIA", e)
+    if(!this.codiceMotivoSelezionato || !this.selectedPrecedente){
+      console.log("this.codiceMotivoSelezionato", this.codiceMotivoSelezionato)
+      console.log("this.selectedPrecedente", this.selectedPrecedente)
+      this.showStatusOperation("E' necessario selezionare sia un iter precedente che una motivazione", "Error");
+    }
+  }
+
+
+  // *****************************
+  // FINE GESTIONE DEI PRECEDENTI
+  // *****************************
 
 }
 
