@@ -67,11 +67,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public stringaRegistroAccessi: String;
   public popupPrecedenteVisible: boolean = false;
   public selectedPrecedente: Iter;
-  public dataSourceMotiviCollegamento: any= [
-    {codice: "riesame", descrizione:"Riesame"},{codice: "ricorso", descrizione:"Ricorso"},{codice: "altro", descrizione:"Altro"}
-  ];
+  public dataSourceMotiviCollegamento: any = [{codice: "RIESAME", descrizione:"Riesame"},{codice: "RICORSO", descrizione:"Ricorso"},{codice: "ALTRO", descrizione:"Altro"}];
   public codiceMotivoSelezionato = null;
   public noteMotivoPrecedente;
+  public $this = this
     
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
@@ -190,6 +189,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       ],
       filter: [["id", "=", this.idIter]],
       map: (item) => {
+        console.log("***ITEM***", item)
         if (item) {
           // carico il dataSource dei Registri Iter (mi serve farlo una sola volta)
           if(item.idIterPrecedente){
@@ -395,8 +395,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   isSospeso() {
-    // console.log("isSospeso()")
-    // console.log("this.iter.idStato.codice ", this.iter.idStato.codice)
     if (this.iter.idStato.codice === STATI.SOSPESO) // 2 --> SOSPESO
       return true;
     else
@@ -435,9 +433,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   
   generateCustomButtons() {
-    // console.log("generateCustomButtons")
-    // this.procediButton = new ButtonAppearance("Procedi", "", false, this.disableProcedi());
-    // this.sospendiButton = new ButtonAppearance("Gestisci stato", "", false, this.disableSospendi());
     if (this.isSospeso()) {
       this.genericButtons = new Array<ButtonAppearance>();
       this.riattivaButton = new ButtonAppearance("Riattiva Iter", "", false, false);
@@ -1185,6 +1180,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     .subscribe(
       res => {
         console.log(res);
+        this.showStatusOperation("Cancellazione precedente avvenuta con successo", "success");
+        this.refresh();
         if(this.popupPrecedenteVisible)
           this.popupPrecedenteVisible = false;
       },
@@ -1195,7 +1192,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   openPopupPrecedente(){
-    console.log("this.dataSourceIterPrecedenti", this.dataSourceIterPrecedenti)
     if(!this.dataSourceIterPrecedenti){
       this.dataSourceIterPrecedenti = new DataSource({
           store: this.odataContextDefinition.getContext()[new Iter().getName()],
@@ -1206,10 +1202,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           sort: [{ field: "numero", desc: true }]
         });
         this.dataSourceIterPrecedenti.load().then(
-            res => {
-          console.log("Res", res)
-          this.popupPrecedenteVisible = true;
-          
+          res => {
+            this.popupPrecedenteVisible = true;
           },
           err => {
             console.log("!!!ERRORE", err)
@@ -1219,6 +1213,29 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.gridPrecedenti.instance.pageIndex(0);
       this.popupPrecedenteVisible = true;
     }
+
+    /* // Qua sotto provo a caricare il datasource dei MotiviCollegamento, ma a quanto pare la chiamata non restituisce nulla... da indagare
+    console.log("dataSourceMotiviCollegamento", this.dataSourceMotiviCollegamento);
+    let dsmp = new DataSource({
+      store: this.odataContextDefinition.getContext()[new MotivoPrecedente().getName()]
+    });
+    dsmp.load().then(
+      res => {
+        console.log("Res", res)
+        if(!this.dataSourceMotiviCollegamento){
+          res.forEach(element => {
+            console.log(element);
+            this.dataSourceMotiviCollegamento.push(element);
+          });
+        }
+          
+        
+      },
+      err => {
+        console.log("!!!ERRORE", err)
+      }
+    ); */
+    
   }
 
   // a seconda del bottone funzione diversa
@@ -1230,43 +1247,48 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   onPrecedenteSelected(selectedItems: any){
-    console.log("this.dataSourceMotiviCollegamento", this.dataSourceMotiviCollegamento)
     this.selectedPrecedente = selectedItems.selectedRowsData[0];
   }
 
   chiudiPopupPrecedente(){
-    console.log(this.codiceMotivoSelezionato);
-    return
-    /* this.gridPrecedenti.instance.deselectAll();
+    this.gridPrecedenti.instance.deselectAll();
     this.gridPrecedenti.instance.clearSelection();
     this.popupPrecedenteVisible = false;
     this.codiceMotivoSelezionato = null;
-    this.selectedPrecedente = null; */
+    this.selectedPrecedente = null;
+    this.noteMotivoPrecedente = null;
   }
 
   selectedMotivo(selezionato){
     if(selezionato){
-
-      //console.log("PRIMA this.codiceMotivoSelezionato", this.codiceMotivoSelezionato)
       this.codiceMotivoSelezionato = selezionato.itemData.codice;
-      console.log("selectedMotivo", this.codiceMotivoSelezionato)
     }
   }
 
   onSelectionChangedMotivo(selezionato){
     if(selezionato){
-      //console.log("PRIMA this.codiceMotivoSelezionato", this.codiceMotivoSelezionato)
       this.codiceMotivoSelezionato = selezionato.selectedItem.codice;
-      console.log("onSelectionChangedMotivo", this.codiceMotivoSelezionato)
     }
   }
 
   associa(e){
-    console.log("ASSOCIA", e)
     if(!this.codiceMotivoSelezionato || !this.selectedPrecedente){
-      console.log("this.codiceMotivoSelezionato", this.codiceMotivoSelezionato)
-      console.log("this.selectedPrecedente", this.selectedPrecedente)
-      this.showStatusOperation("E' necessario selezionare sia un iter precedente che una motivazione", "Error");
+      this.showStatusOperation("E' necessario selezionare sia un iter precedente che una motivazione", "warning");
+      return;
+    }
+    else{
+      let params = {idIter:this.iter.id, azione:"ADD", idIterPrecedente: this.selectedPrecedente.id, codiceMotivo: this.codiceMotivoSelezionato, noteMotivoPrecedente: this.noteMotivoPrecedente}
+      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/setPrecedente", params, { headers: new HttpHeaders().set("content-type", "application/json") })
+          .subscribe(
+            res => {
+              this.refresh(); // Aggiorno l'iter
+              this.showStatusOperation("Associazione a precedente avvenuta con successo", "success");
+              this.chiudiPopupPrecedente();
+              },
+            err => {
+              this.showStatusOperation("Associazione a precedente non andata a buon fine. Contattare BabelCare", "error");
+            }
+          );
     }
   }
 
