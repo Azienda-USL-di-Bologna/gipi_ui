@@ -22,11 +22,12 @@
 
     <div class="row">
         <div class="col-lg-6 col-md-12">
-            <dx-form id="form" [colCount]="1" [formData]="iter"    #myForm1> <!-- [screenByWidth]="screen"-->
+            <dx-form id="form" [colCount]="1" [formData]="iter" #myForm1> <!-- [screenByWidth]="screen"-->
                 <dxi-item itemType="group" [colCount]="12" [caption]="datiGenerali" >
                     <dxi-item [colSpan]="12" *ngIf="classeDiHighlight!==''"><p id="infoPubblicazioneAlbo">
                         <b><i>{{stringaRegistroAccessi}}</i></b></p>
                     </dxi-item>
+                    
                     <!-- <dxi-item [colSpan]="2" dataField="id" [editorOptions]="{ disabled: true }"></dxi-item> -->
 
                     <dxi-item *ngIf="!mostraPulsantiVicResp" [colSpan]="12" dataField="oggetto" editorType="dxTextArea" [editorOptions]="{ height: 76, readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }" [cssClass]="classeDiHighlightForScroll"></dxi-item>
@@ -192,30 +193,50 @@
                     </dxi-item>
                 </dxi-item>
 
-                <dxi-item itemType="group" [colCount]="6" caption="Dati di archivio">
-                    <dxi-item dataField="idIterPrecedente.numero"
+                <dxi-item itemType="group" [colCount]="12" caption="Dati di archivio">
+                    <!-- PRECEDENTE -->
+                    <dxi-item dataField="idIterPrecedente.customDescription"
                         [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
-                        [cssClass]="classeDiHighlight" [colSpan]="6">
+                        [cssClass]="classeDiHighlight" [colSpan]="12">
                         <dxo-label text="Coll. precedente"></dxo-label>
                     </dxi-item>
-                    <dxi-item dataField="modalitaCollegamentoPrecedente"
-                        [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
-                        cssClass="read-only-field" [colSpan]="6">
-                        <dxo-label text="Motivo collegamento"></dxo-label>
-                    </dxi-item>
-                    <dxi-item dataField="idFascicolo"
+                    <dxi-item dataField="idMotivoPrecedente.descrizione"
                         [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
                         cssClass="read-only-field" [colSpan]="5">
-                        <dxo-label text="Fascicolo dell'iter"></dxo-label>
+                        <dxo-label text="Motivo collegamento"></dxo-label>
+                    </dxi-item>
+                    <dxi-item dataField="noteMotivoPrecedente"
+                        [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                        cssClass="read-only-field" [colSpan]="6">
+                        <dxo-label text="Note"></dxo-label>
                     </dxi-item>
                     <dxi-item [colSpan]="1">
+                        <button *ngIf="!iter.idIterPrecedente" class="btn button-azioni" type="button" 
+                            [disabled]="!(permessoUtenteLoggato >= 4)"
+                            data-toggle="tooltip"  title="Edita collegamento a Iter Precedente" style="text-align: center"
+                            (click)="precedenteClicks()"><img class="icon-center" src="assets/images/edit-white-3.png">
+                        </button>
+                        <button *ngIf="iter.idIterPrecedente" class="btn button-azioni" type="button" 
+                            [disabled]="!(permessoUtenteLoggato >= 4)"
+                            data-toggle="tooltip"  title="Cancella collegamento a Iter Precedente"
+                            (click)="precedenteClicks()">
+                            <img class="icon-center" src="assets/images/x-cancel-25.png">
+                        </button>
+                    </dxi-item>
+                    <!-- FASCICOLO -->
+                    <dxi-item dataField="idFascicolo"
+                        [editorOptions]="{readOnly: true, activeStateEnabled: false, focusStateEnabled: false, hoverStateEnabled: false }"
+                        cssClass="read-only-field" [colSpan]="10">
+                        <dxo-label text="Fascicolo dell'iter"></dxo-label>
+                    </dxi-item>
+                    <dxi-item [colSpan]="2">
                         <button class="btn button-azioni" type="button" 
                             [disabled]="!(permessoUtenteLoggato >= 4)"
                             data-toggle="tooltip" data-placement="right" title="Responsabili e vicari del fascicolo"
                             (click)="apriPopupVicari()">Vicari fascicolo
                         </button>
                     </dxi-item>
-                    <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [colSpan]="1" [editorOptions]="{
+                    <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [colSpan]="2" [editorOptions]="{
                         disabled: true,
                         dataSource: dataSourceClassificazione,
                         displayExpr: customDisplayExprClassificazione,
@@ -479,6 +500,76 @@
             <dx-button class="button-css" text="Salva" type="default" (click)="salvaVicari()"></dx-button>
             <span class="btn-space"></span>
             <dx-button class="button-css" text="Annulla" type="normal" (click)="closePopupVicari()" ></dx-button>
+        </div>
+    </div>
+</dx-popup>
+
+<dx-popup
+    #popupPrecedenti
+    [width]="700"
+    height="auto"
+    [maxHeight]="'100%'"
+    [showTitle]="true"
+    title="Elenco degli iter per scelta del precedente"
+    activeStateEnabled="true"
+    [(visible)]="popupPrecedenteVisible">
+    <div *dxTemplate="let data of 'content'">
+
+        <div class="gridContainerDiv" style="height: auto; margin-bottom: 0%">
+            <dx-data-grid 
+            #gridPrecedenti
+            noDataText="Non ci sono iter selezionabili come precedenti"
+            [dataSource]="dataSourceIterPrecedenti"
+            (onSelectionChanged)="onPrecedenteSelected($event)"
+            [paging]="{enabled:true, pageSize:5}">
+                <dxo-selection mode="single"></dxo-selection>
+                <dxo-filter-row [visible]="true" ></dxo-filter-row>
+                <dxo-paging [pageSize]="5"></dxo-paging>
+                <dxi-column dataField="numero" [width]="100" [dataType]="'number'"></dxi-column>
+                <dxi-column dataField="oggetto" [minWidth]="200" [dataType]="'string'" [selectedFilterOperation]="'contains'"></dxi-column>
+                <dxi-column dataField="anno" [width]="80" [dataType]="'number'"></dxi-column>
+            </dx-data-grid>
+        </div>
+        <!-- Campi da compilare -->
+        <div class="conatiner">
+            <div class="row">
+                <div class="col">
+                    <div class="dx-field" style="height: auto;">
+                        <div class="dx-field-label" style="width: 100%;">Motivo</div>
+                        <div class="dx-field-value" style="width: 100%;">
+                            <dx-select-box #motivoSelecdBox 
+                                openOnFieldClick="false"
+                                [searchEnabled]="false"
+                                [dataSource]="dataSourceMotiviCollegamento"
+                                [disabled]="selectedPrecedente==null || selectedPrecedente==undefined"
+                                [acceptCustomValue] = "false"
+                                [elementAttr]="{ class: 'dx-state-focused' }"
+                                displayExpr="descrizione"
+                                valueExpr="codice"
+                                (onItemClick)="selectedMotivo($event)"
+                                placeholder="Seleziona..."
+                                title="Motivo precedente">
+                            </dx-select-box>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="dx-field" style="height: auto; ">
+                        <div class="dx-field-label" style="width: 100%;">Note motivo precedente</div>
+                        <div class="dx-field-value" style="width: 100%;">
+                            <dx-text-area [(value)]="noteMotivoPrecedente"></dx-text-area>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Qua sotto i dati specifici e i pulsanti -->
+        <div class="wrapperPulsantiPopup">
+            <dx-button class="button-css" text="Associa" type="normal" (onClick)="associa($event)"></dx-button>
+            <span class="btn-space"></span>
+            <dx-button class="button-css" text="Annulla" type="normal" (onClick)="chiudiPopupPrecedente()" ></dx-button>
         </div>
     </div>
 </dx-popup>

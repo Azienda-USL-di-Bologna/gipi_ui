@@ -134,7 +134,8 @@ export class CronologiaEventiComponent implements OnInit {
     }
     else if (e.rowType === "data" && e.column.dataField === "canDelete") {
         if (e.rowIndex > 0) {
-          if (e.data.idEvento.codice !== "avvio_iter" && e.data.idEvento.codice !== "chiusura_iter" && e.data.idEvento.codice !== "modifica_iter") {
+          if (e.data.idEvento.codice !== "avvio_iter" && e.data.idEvento.codice !== "chiusura_iter" && e.data.idEvento.codice !== "modifica_iter" 
+              && e.data.idEvento.codice !== "aggiunta_precedente" && e.data.idEvento.codice !== "cancellazione_precedente") {
             if (this.arrayEventiIterCancellabili.lastIndexOf(e.data) === this.arrayEventiIterCancellabili.length - 1)
               e.data.canDelete = true;
           }

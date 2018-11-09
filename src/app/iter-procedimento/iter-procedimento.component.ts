@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation, ViewChild, HostListener } from "@
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity, OdataUtilities } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
-import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura, Persona, RegistroIter, Registro } from "@bds/nt-entities";
+import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura, Persona, RegistroIter, Registro, MotivoPrecedente } from "@bds/nt-entities";
 import { HttpClient  } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
@@ -11,9 +11,10 @@ import { LoggedUser } from "@bds/nt-login";
 import { Observable, Subscription } from "rxjs";
 import { HttpHeaders } from "@angular/common/http";
 import { STATI } from "@bds/nt-entities";
-import { DxFormComponent, DxPopupComponent } from "devextreme-angular";
+import { DxFormComponent, DxPopupComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { IterProcedimentoFascicoloUtilsClass, PERMESSI } from "./iter-procedimento-fascicolo-utils.class";
 import { UtilityFunctions } from "app/utility-functions";
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-iter-procedimento",
@@ -57,6 +58,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   public popupVicariVisibile: boolean = false;
   public dataSourceVicari: DataSource;
+  public dataSourceIterPrecedenti: DataSource;
   public listaVicariPopup: Vicario[];
 
   public fascicoloIter: any;
@@ -64,10 +66,20 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public possoCorreggereAssociazioni: boolean;
 
   public stringaRegistroAccessi: String;
+  public popupPrecedenteVisible: boolean = false;
+  public selectedPrecedente: Iter;
+  public dataSourceMotiviCollegamento: any;
+  public codiceMotivoSelezionato = null;
+  public noteMotivoPrecedente;
+  public $this = this
     
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
   @ViewChild("popupVicari") popupVicari: DxPopupComponent;
+  @ViewChild("popupPrecedenti") popupPrecedenti: DxPopupComponent;
+  @ViewChild("gridPrecedenti") gridPrecedenti: DxDataGridComponent;
+  @ViewChild("motivoSelecdBox") motivoSelecdBox: DxSelectBoxComponent;
+  
 
   // pulsanti custom aggiunti alla button bar
   // public procediButton: ButtonAppearance;
@@ -173,12 +185,23 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "idStrutturaResponsabileProcedimento",
         "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento",
         "idUtenteCreazione.idPersona",
-        "idStrutturaUtenteCreazione"
+        "idStrutturaUtenteCreazione",
+        "idMotivoPrecedente"
       ],
       filter: [["id", "=", this.idIter]],
       map: (item) => {
+        console.log("***ITEM***", item)
         if (item) {
           // carico il dataSource dei Registri Iter (mi serve farlo una sola volta)
+          if(item.idIterPrecedente){
+            item.idIterPrecedente.customDescription = item.idIterPrecedente.numero + '/'+ item.idIterPrecedente.anno + ' - ' + item.idIterPrecedente.oggetto
+          }
+
+          if(item.idMotivoPrecedente){
+            console.log("MOTIVO PRECEDENTE!!!!", item.idMotivoPrecedente)
+            // questo non riesco a mostrarlo finché non mi creo l'entità
+          }
+
           if (!this.stringaRegistroAccessi) {
             if (item.idStato.codice !== STATI.CHIUSO)
               this.loadAndBuildRegistriIterByIdTipoProcedimento(item.idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento);
@@ -361,15 +384,18 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.popupPrecedenti.closeOnBackButton = false;
+    this.popupPrecedenti.showCloseButton = false;
+    this.popupPrecedenti.closeOnOutsideClick = false;
+
+  }
 
   public buildTitoloDatiGenerali() {
     this.datiGenerali = "Iter n." + this.iter.numero + "/" + this.iter.anno + " (" + this.iter.idStato.descrizione + ")";
   }
 
   isSospeso() {
-    // console.log("isSospeso()")
-    // console.log("this.iter.idStato.codice ", this.iter.idStato.codice)
     if (this.iter.idStato.codice === STATI.SOSPESO) // 2 --> SOSPESO
       return true;
     else
@@ -408,9 +434,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   
   generateCustomButtons() {
-    // console.log("generateCustomButtons")
-    // this.procediButton = new ButtonAppearance("Procedi", "", false, this.disableProcedi());
-    // this.sospendiButton = new ButtonAppearance("Gestisci stato", "", false, this.disableSospendi());
     if (this.isSospeso()) {
       this.genericButtons = new Array<ButtonAppearance>();
       this.riattivaButton = new ButtonAppearance("Riattiva Iter", "", false, false);
@@ -1133,6 +1156,157 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   // *************************
   // FINE GESTIONE POPUP VICARI
   // *************************
+
+
+
+
+  // *************************
+  // GESTIONE DEI PRECEDENTI
+  // *************************
+  deletePrecedente(){
+    //this.showStatusOperation("Cancellazione: funzione ancora da implementare", "success");
+    // Aprire popup
+    let params = {
+      azione: "DEL",
+      idIter: this.iter.id,
+    }
+
+    this.setPrecedente(params);
+      
+  }
+
+
+  setPrecedente(params: any){
+    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/setPrecedente", params, { headers: new HttpHeaders().set("content-type", "application/json") })
+    .subscribe(
+      res => {
+        console.log(res);
+        this.showStatusOperation("Cancellazione precedente avvenuta con successo", "success");
+        this.refresh();
+        if(this.popupPrecedenteVisible)
+          this.popupPrecedenteVisible = false;
+      },
+      err => {
+        this.showStatusOperation("Modifica non andata a buon fine. Contattare BabelCare", "error");
+        }
+    )
+  }
+
+  openPopupPrecedente(){
+    this.dataSourceMotiviCollegamento = [{codice: "RIESAME", descrizione:"Riesame"},{codice: "RICORSO", descrizione:"Ricorso"},{codice: "ALTRO", descrizione:"Altro"}];
+    let filtroCatena = ["1","=",1];
+    if(this.iter.idCatena)
+     filtroCatena = ["idCatena","<>", this.iter.idCatena]
+    if(!this.dataSourceIterPrecedenti){
+      this.dataSourceIterPrecedenti = new DataSource({
+          store: this.odataContextDefinition.getContext()[new Iter().getName()],
+          expand: ["idProcedimento.idAziendaTipoProcedimento.idAzienda"],
+          filter: [
+            ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id","=",this.userInfo.idAzienda],
+            ["id","<",this.iter.id],
+            filtroCatena
+          ],
+          sort: [{ field: "numero", desc: true }]
+        });
+        this.dataSourceIterPrecedenti.load().then(
+          res => {
+            console.log("GLI ITERS", res)
+            this.popupPrecedenteVisible = true;
+          },
+          err => {
+            console.log("!!!ERRORE", err)
+      });
+    }
+    else{
+      this.gridPrecedenti.instance.pageIndex(0);
+      this.popupPrecedenteVisible = true;
+    }
+
+    /* // Qua sotto provo a caricare il datasource dei MotiviCollegamento, ma a quanto pare la chiamata non restituisce nulla... da indagare
+    console.log("dataSourceMotiviCollegamento", this.dataSourceMotiviCollegamento);
+    let dsmp = new DataSource({
+      store: this.odataContextDefinition.getContext()[new MotivoPrecedente().getName()]
+    });
+    dsmp.load().then(
+      res => {
+        console.log("Res", res)
+        if(!this.dataSourceMotiviCollegamento){
+          res.forEach(element => {
+            console.log(element);
+            this.dataSourceMotiviCollegamento.push(element);
+          });
+        }
+          
+        
+      },
+      err => {
+        console.log("!!!ERRORE", err)
+      }
+    ); */
+    
+  }
+
+  // a seconda del bottone funzione diversa
+  precedenteClicks(){
+    if(!this.iter.idIterPrecedente)
+      this.openPopupPrecedente();
+    else
+      this.deletePrecedente();
+  }
+
+  onPrecedenteSelected(selectedItems: any){
+    this.selectedPrecedente = selectedItems.selectedRowsData[0];
+  }
+
+  chiudiPopupPrecedente(){
+    this.gridPrecedenti.instance.deselectAll();
+    this.gridPrecedenti.instance.clearSelection();
+    this.motivoSelecdBox.instance.reset();
+    this.dataSourceMotiviCollegamento = null;
+    this.codiceMotivoSelezionato = null;
+    this.selectedPrecedente = null;
+    this.noteMotivoPrecedente = null;
+    this.popupPrecedenteVisible = false;
+  }
+
+  selectedMotivo(selezionato){
+    if(selezionato){
+      this.codiceMotivoSelezionato = selezionato.itemData.codice;
+    }
+  }
+
+  onSelectionChangedMotivo(selezionato){
+    if(selezionato){
+      this.codiceMotivoSelezionato = selezionato.selectedItem.codice;
+    }
+  }
+
+  associa(e){
+    if(!this.codiceMotivoSelezionato || !this.selectedPrecedente){
+      this.showStatusOperation("E' necessario selezionare sia un iter precedente che una motivazione", "warning");
+      return;
+    }
+    else{
+      let params = {idIter:this.iter.id, azione:"ADD", idIterPrecedente: this.selectedPrecedente.id, codiceMotivo: this.codiceMotivoSelezionato, noteMotivoPrecedente: this.noteMotivoPrecedente}
+      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/setPrecedente", params, { headers: new HttpHeaders().set("content-type", "application/json") })
+          .subscribe(
+            res => {
+              this.refresh(); // Aggiorno l'iter
+              this.showStatusOperation("Associazione a precedente avvenuta con successo", "success");
+              this.chiudiPopupPrecedente();
+              },
+            err => {
+              this.showStatusOperation("Associazione a precedente non andata a buon fine. Contattare BabelCare", "error");
+            }
+          );
+    }
+  }
+
+
+  // *****************************
+  // FINE GESTIONE DEI PRECEDENTI
+  // *****************************
+
 }
 
 class Vicario {
