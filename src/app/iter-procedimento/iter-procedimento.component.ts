@@ -1192,17 +1192,23 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   openPopupPrecedente(){
+    let filtroCatena = ["1","=",1];
+    if(this.iter.idCatena)
+     filtroCatena = ["idCatena","<>", this.iter.idCatena]
     if(!this.dataSourceIterPrecedenti){
       this.dataSourceIterPrecedenti = new DataSource({
           store: this.odataContextDefinition.getContext()[new Iter().getName()],
           expand: ["idProcedimento.idAziendaTipoProcedimento.idAzienda"],
           filter: [
-            ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id","=",this.userInfo.idAzienda]
+            ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id","=",this.userInfo.idAzienda],
+            ["id","<",this.iter.id],
+            filtroCatena
           ],
           sort: [{ field: "numero", desc: true }]
         });
         this.dataSourceIterPrecedenti.load().then(
           res => {
+            console.log("GLI ITERS", res)
             this.popupPrecedenteVisible = true;
           },
           err => {
