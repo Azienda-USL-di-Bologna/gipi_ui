@@ -507,55 +507,69 @@
 <dx-popup
     #popupPrecedenti
     [width]="700"
-    height="75%"
+    height="auto"
+    [maxHeight]="'100%'"
     [showTitle]="true"
     title="Elenco degli iter per scelta del precedente"
     activeStateEnabled="true"
     [(visible)]="popupPrecedenteVisible">
     <div *dxTemplate="let data of 'content'">
 
-            <div class="gridContainerDiv">
-                <dx-data-grid 
-                #gridPrecedenti
-                height="auto"
-                [dataSource]="dataSourceIterPrecedenti"
-                (onSelectionChanged)="onPrecedenteSelected($event)"
-                [paging]="{enabled:true, pageSize:5}">
-                    <dxo-selection mode="single"></dxo-selection>
-                    <dxi-column dataField="numero" caption="Numero" [width]="100"></dxi-column>
-                    <dxi-column dataField="oggetto"caption="Oggetto"></dxi-column>
-                    <dxi-column dataField="anno"caption="Anno" [width]="80"></dxi-column>
-                </dx-data-grid>
-                <!-- Campi da compilare -->
-                <div class="dx-field">
-                    <div class="dx-field-label">Motivo</div>
-                    <div class="dx-field-value">
-                        <dx-select-box #motivoSelecdBox
-                            [dataSource]="dataSourceMotiviCollegamento"
-                            [disabled]="selectedPrecedente==null || selectedPrecedente==undefined"
-                            acceptCustomValue = "false"
-                            [elementAttr]="{ class: 'dx-state-focused' }"
-                            displayExpr="descrizione"
-                            valueExpr="codice"
-                            (onItemClick)="selectedMotivo($event)"
-                            placeholder="Seleziona..."
-                            title="Motivo precedente">
-                        </dx-select-box>
-                    </div>
-                    <span class="btn-space"></span>
-                    <div class="dx-field-label">Note motivo precedente</div>
-                    <div class="dx-field-value">
-                        <dx-text-area [(value)]="noteMotivoPrecedente"></dx-text-area>
+        <div class="gridContainerDiv" style="height: auto; margin-bottom: 0%">
+            <dx-data-grid 
+            #gridPrecedenti
+            noDataText="Non ci sono iter selezionabili come precedenti"
+            [dataSource]="dataSourceIterPrecedenti"
+            (onSelectionChanged)="onPrecedenteSelected($event)"
+            [paging]="{enabled:true, pageSize:5}">
+                <dxo-selection mode="single"></dxo-selection>
+                <dxo-filter-row [visible]="true" ></dxo-filter-row>
+                <dxo-paging [pageSize]="5"></dxo-paging>
+                <dxi-column dataField="numero" [width]="100" [dataType]="'number'"></dxi-column>
+                <dxi-column dataField="oggetto" [minWidth]="200" [dataType]="'string'" [selectedFilterOperation]="'contains'"></dxi-column>
+                <dxi-column dataField="anno" [width]="80" [dataType]="'number'"></dxi-column>
+            </dx-data-grid>
+        </div>
+        <!-- Campi da compilare -->
+        <div class="conatiner">
+            <div class="row">
+                <div class="col">
+                    <div class="dx-field" style="height: auto;">
+                        <div class="dx-field-label" style="width: 100%;">Motivo</div>
+                        <div class="dx-field-value" style="width: 100%;">
+                            <dx-select-box #motivoSelecdBox 
+                                openOnFieldClick="false"
+                                [searchEnabled]="false"
+                                [dataSource]="dataSourceMotiviCollegamento"
+                                [disabled]="selectedPrecedente==null || selectedPrecedente==undefined"
+                                [acceptCustomValue] = "false"
+                                [elementAttr]="{ class: 'dx-state-focused' }"
+                                displayExpr="descrizione"
+                                valueExpr="codice"
+                                (onItemClick)="selectedMotivo($event)"
+                                placeholder="Seleziona..."
+                                title="Motivo precedente">
+                            </dx-select-box>
+                        </div>
                     </div>
                 </div>
-                <!-- Qua sotto i dati specifici e i pulsanti -->
-                <div class="wrapperPulsantiPopup margine-top">
-                    <dx-button class="button-css" text="Associa" type="normal" (onClick)="associa($event)"></dx-button>
-                    <span class="btn-space"></span>
-                    <dx-button class="button-css" text="Annulla" type="normal" (onClick)="chiudiPopupPrecedente()" ></dx-button>
-                </div>
-                
-            
             </div>
+            <div class="row">
+                <div class="col">
+                    <div class="dx-field" style="height: auto; ">
+                        <div class="dx-field-label" style="width: 100%;">Note motivo precedente</div>
+                        <div class="dx-field-value" style="width: 100%;">
+                            <dx-text-area [(value)]="noteMotivoPrecedente"></dx-text-area>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Qua sotto i dati specifici e i pulsanti -->
+        <div class="wrapperPulsantiPopup">
+            <dx-button class="button-css" text="Associa" type="normal" (onClick)="associa($event)"></dx-button>
+            <span class="btn-space"></span>
+            <dx-button class="button-css" text="Annulla" type="normal" (onClick)="chiudiPopupPrecedente()" ></dx-button>
+        </div>
     </div>
 </dx-popup>

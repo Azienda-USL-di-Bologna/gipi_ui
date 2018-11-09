@@ -14,6 +14,7 @@ import { STATI } from "@bds/nt-entities";
 import { DxFormComponent, DxPopupComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { IterProcedimentoFascicoloUtilsClass, PERMESSI } from "./iter-procedimento-fascicolo-utils.class";
 import { UtilityFunctions } from "app/utility-functions";
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-iter-procedimento",
@@ -67,7 +68,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public stringaRegistroAccessi: String;
   public popupPrecedenteVisible: boolean = false;
   public selectedPrecedente: Iter;
-  public dataSourceMotiviCollegamento: any = [{codice: "RIESAME", descrizione:"Riesame"},{codice: "RICORSO", descrizione:"Ricorso"},{codice: "ALTRO", descrizione:"Altro"}];
+  public dataSourceMotiviCollegamento: any;
   public codiceMotivoSelezionato = null;
   public noteMotivoPrecedente;
   public $this = this
@@ -1192,6 +1193,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   openPopupPrecedente(){
+    this.dataSourceMotiviCollegamento = [{codice: "RIESAME", descrizione:"Riesame"},{codice: "RICORSO", descrizione:"Ricorso"},{codice: "ALTRO", descrizione:"Altro"}];
     let filtroCatena = ["1","=",1];
     if(this.iter.idCatena)
      filtroCatena = ["idCatena","<>", this.iter.idCatena]
@@ -1259,10 +1261,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   chiudiPopupPrecedente(){
     this.gridPrecedenti.instance.deselectAll();
     this.gridPrecedenti.instance.clearSelection();
-    this.popupPrecedenteVisible = false;
+    this.motivoSelecdBox.instance.reset();
+    this.dataSourceMotiviCollegamento = null;
     this.codiceMotivoSelezionato = null;
     this.selectedPrecedente = null;
     this.noteMotivoPrecedente = null;
+    this.popupPrecedenteVisible = false;
   }
 
   selectedMotivo(selezionato){
