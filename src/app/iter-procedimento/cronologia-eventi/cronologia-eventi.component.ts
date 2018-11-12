@@ -152,7 +152,6 @@ export class CronologiaEventiComponent implements OnInit {
         const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/rollbackEventoIterById", idEventoIter, { headers: new HttpHeaders().set("content-type", "application/json") })
           .subscribe(
           res => {
-            console.log(res);
             notify({
               message: "Cancellazione dell'operazione avvenuta con successo",
               type: "success",
