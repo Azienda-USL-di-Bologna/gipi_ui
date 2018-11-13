@@ -14,6 +14,7 @@ import { STATI } from "@bds/nt-entities";
 import { DxFormComponent, DxPopupComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { IterProcedimentoFascicoloUtilsClass, PERMESSI } from "./iter-procedimento-fascicolo-utils.class";
 import { UtilityFunctions } from "app/utility-functions";
+import { confirm } from "devextreme/ui/dialog";
 import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
@@ -71,7 +72,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public dataSourceMotiviCollegamento: any;
   public codiceMotivoSelezionato = null;
   public noteMotivoPrecedente;
-  public $this = this
     
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
@@ -142,6 +142,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public arrayEsiti: any[] = Object.keys(ESITI).map(key => ({ "codice": key, "descrizione": ESITI[key] }));
 
   public dataSourceUtentiTutti;
+  public annullaIterButton: ButtonAppearance;
 
   constructor(
     private odataContextFactory: OdataContextFactory,
@@ -437,7 +438,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     if (this.isSospeso()) {
       this.genericButtons = new Array<ButtonAppearance>();
       this.riattivaButton = new ButtonAppearance("Riattiva Iter", "", false, false);
+      this.annullaIterButton = new ButtonAppearance("Annulla Iter", "", false, false);
       this.genericButtons.push(this.riattivaButton);
+      this.genericButtons.push(this.annullaIterButton);
     }
     // this.setNomeBottoneSospensione();
     
@@ -751,6 +754,24 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     );
   }
 
+  public gestisciAnnullamentoIter(): any {
+    confirm("<b>Attenzione stai per Annullare l'iter</b>:<br/> " 
+    + "l'iter verrà chiuso e non sarà più collegato ad altri iter con catena di precedenza, <br/>" 
+    + "il fascicolo verrà declassato ad 'Affare',<br/> " 
+    + "i documenti verranno rimossi sia dall'iter che dal fascicolo, <br/>" +
+      "<b>l'operazione non può essere annullata.<b/>", "Conferma").then(dialogResult => {
+        if (dialogResult){
+          notify({
+            message: "Implementare la funzione",
+            type: "warning",
+            displayTime: 4000,
+            position: TOAST_POSITION,
+            width: TOAST_WIDTH
+          });
+        }
+      });
+  }
+
   public passaggioDiFase() {
     const req = this.http.get(CUSTOM_RESOURCES_BASE_URL + "iter/getProcessStatus" + "?idIter=" + this.idIter)
       .subscribe(
@@ -833,8 +854,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       case "Procedi":
         this.passaggioDiFase();
         break; */
+
+      case "Annulla Iter":
+        this.gestisciAnnullamentoIter();
+        break;
     }
   }
+  
 
   /* getDataUltimaSospensione() {
     let date;
