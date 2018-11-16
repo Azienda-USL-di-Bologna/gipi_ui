@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation, ViewChild, HostListener } from "@
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity, OdataUtilities } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
-import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura, Persona, RegistroIter, Registro, MotivoPrecedente } from "@bds/nt-entities";
+import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura, Persona, RegistroIter, Registro, MotivoPrecedente, Stato } from "@bds/nt-entities";
 import { HttpClient  } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
@@ -85,6 +85,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   // public procediButton: ButtonAppearance;
   // public sospendiButton: ButtonAppearance;
   public riattivaButton: ButtonAppearance;
+  public annullaIterButton: ButtonAppearance;
 
   public datiGenerali = "";
   // Dati che verranno ricevuti dall'interfaccia chiamante
@@ -142,7 +143,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public arrayEsiti: any[] = Object.keys(ESITI).map(key => ({ "codice": key, "descrizione": ESITI[key] }));
 
   public dataSourceUtentiTutti;
-  public annullaIterButton: ButtonAppearance;
 
   constructor(
     private odataContextFactory: OdataContextFactory,
@@ -403,8 +403,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       return false;
   }
 
-  isChiuso() {
+  public isChiuso() {
     return this.iter.idStato.codice === STATI.CHIUSO;
+  }
+
+  public isAnnullato(){
+    return this.iter.annullato;
   }
   /* setNomeBottoneSospensione() {
     this.sospendiButton.label = this.getNomeBottoneSospensione();
@@ -435,13 +439,27 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   
   generateCustomButtons() {
+    console.log("generateCustomButtons()");
+    
     if (this.isSospeso()) {
       this.genericButtons = new Array<ButtonAppearance>();
       this.riattivaButton = new ButtonAppearance("Riattiva Iter", "", false, false);
-      this.annullaIterButton = new ButtonAppearance("Annulla Iter", "", false, false);
       this.genericButtons.push(this.riattivaButton);
-      this.genericButtons.push(this.annullaIterButton);
+      console.log(this.iter.idStato);
+      console.log(this.iter.annullato);
+      
     }
+    if(this.iter.idStato.codice !== "CHIUSO" && !this.iter.annullato){
+      console.log("!this.isChiuso && !this.isAnnullato");
+      if(!this.genericButtons)
+        this.genericButtons = new Array<ButtonAppearance>();
+      this.annullaIterButton = new ButtonAppearance("Annulla Iter", "", false, false);
+      this.genericButtons.push(this.annullaIterButton);
+      console.log("this.genericButtons", this.genericButtons);
+      
+    }
+
+
     // this.setNomeBottoneSospensione();
     
     // this.soloEditing = this.disableSospendi();
@@ -761,13 +779,36 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     + "i documenti verranno rimossi sia dall'iter che dal fascicolo, <br/>" +
       "<b>l'operazione non può essere annullata.<b/>", "Conferma").then(dialogResult => {
         if (dialogResult){
-          notify({
-            message: "Implementare la funzione",
+          /* notify({            message: "Implementare la funzione",
             type: "warning",
             displayTime: 4000,
             position: TOAST_POSITION,
             width: TOAST_WIDTH
-          });
+           */
+
+          const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/annullaIter", this.iter.id, { headers: new HttpHeaders().set("content-type", "application/json") })
+          .subscribe(
+            res => {
+              console.log(res);
+              notify({ message: "OK!",
+                type: "success",
+                displayTime: 4000,
+                position: TOAST_POSITION,
+                width: TOAST_WIDTH
+              });
+            },
+            err => {
+              notify({ message: "OHHHH NOOOOO!",
+                type: "error",
+                displayTime: 4000,
+                position: TOAST_POSITION,
+                width: TOAST_WIDTH
+              });
+            }
+
+          )
+
+          
         }
       });
   }
@@ -907,6 +948,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
             this.mostraPulsantiVicResp = true;
           } 
           if (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) {
+            console.log("this.permessoUtenteLoggato", this.permessoUtenteLoggato);
+            console.log("+PERMESSI.MODIFICA", +PERMESSI.MODIFICA);
             this.generateCustomButtons();
           }
           this.arrayCfVicari = IterProcedimentoFascicoloUtilsClass.calcolaArrayCfVicari(this.fascicoloIter.permessi);
