@@ -36,6 +36,7 @@
                         <button class="btn button-azioni float-right" 
                             (click)="openModificaOggetto(iter)"
                             data-toggle="tooltip" data-placement="right" title="Modifica oggetto"
+                            [attr.disabled]="iter.annullato ? '' : null"
                         ><img src="assets/images/edit-white-3.png">
                         </button>
                         </dxi-item>
@@ -53,6 +54,7 @@
                         <button class="btn button-azioni float-right" 
                             (click)="openCambiaResponsabile(iter)"
                             data-toggle="tooltip" data-placement="right" title="Cambia responsabile procedimento"
+                            [attr.disabled]="iter.annullato ? '' : null"
                         ><img src="assets/images/edit-white-3.png">
                         </button>
                     </dxi-item>
@@ -81,7 +83,7 @@
                         </dxi-item>
 
                         <dxi-item [colSpan]="11">
-                            <button class="btn button-azioni" id="note" type="button" (click)="updateNoteControInteressati()">Note <img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                            <button class="btn button-azioni" id="note" type="button" (click)="updateNoteControInteressati()" [attr.disabled]="iter.annullato ? '' : null">Note <img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                             <!-- <dx-button text="Note controinteressati" type="default" (onClick)="updateNoteControInteressati()"></dx-button> -->
                         </dxi-item>
 
@@ -149,7 +151,7 @@
                             <dxo-label text="Motivazione deroga"></dxo-label>
                         </dxi-item>
                         <dxi-item [colSpan]="1" >
-                            <button [disabled]="!(permessoUtenteLoggato >= 2) || isChiuso()" class="btn button-azioni" type="button" (click)="updateMotivazioneDeroga()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                            <button [disabled]="!(permessoUtenteLoggato >= 2) || isChiuso()|| isAnnullato()" class="btn button-azioni" type="button" (click)="updateMotivazioneDeroga()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                         </dxi-item>
                     </dxi-item>
 
@@ -175,7 +177,7 @@
                             <dxo-label text="Motivazione proroga"></dxo-label>
                         </dxi-item>
                         <dxi-item [colSpan]="1">
-                            <button [disabled]="!(permessoUtenteLoggato >= 2) || isChiuso()" class="btn button-azioni" type="button" (click)="updateMotivazioneSospensione()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
+                            <button [disabled]="!(permessoUtenteLoggato >= 2) || isChiuso() || isAnnullato()" class="btn button-azioni" type="button" (click)="updateMotivazioneSospensione()"><img class="icon-margin" src="assets/images/clipboard-with-pencil.png"></button>
                         </dxi-item>
                     </dxi-item>
 
@@ -212,12 +214,12 @@
                     </dxi-item>
                     <dxi-item [colSpan]="1">
                         <button *ngIf="!iter.idIterPrecedente" class="btn button-azioni" type="button" 
-                            [disabled]="!(permessoUtenteLoggato >= 4)"
+                            [disabled]="!(permessoUtenteLoggato >= 4) || iter.annullato"
                             data-toggle="tooltip"  title="Edita collegamento a Iter Precedente" style="text-align: center"
                             (click)="precedenteClicks()"><img class="icon-center" src="assets/images/edit-white-3.png">
                         </button>
                         <button *ngIf="iter.idIterPrecedente" class="btn button-azioni" type="button" 
-                            [disabled]="!(permessoUtenteLoggato >= 4)"
+                            [disabled]="!(permessoUtenteLoggato >= 4) || iter.annullato"
                             data-toggle="tooltip"  title="Cancella collegamento a Iter Precedente"
                             (click)="precedenteClicks()">
                             <img class="icon-center" src="assets/images/x-cancel-25.png">
@@ -231,7 +233,7 @@
                     </dxi-item>
                     <dxi-item [colSpan]="2">
                         <button class="btn button-azioni" type="button" 
-                            [disabled]="!(permessoUtenteLoggato >= 4)"
+                            [disabled]="!(permessoUtenteLoggato >= 4) || iter.annullato"
                             data-toggle="tooltip" data-placement="right" title="Responsabili e vicari del fascicolo"
                             (click)="apriPopupVicari()">Vicari fascicolo
                         </button>
@@ -461,7 +463,7 @@
                     dataField="descrizione" 
                     caption="Responsabile/Vicari">
                 </dxi-column>
-                <dxi-column 
+                <dxi-column
                     dataField="cancellabile"
                     caption="Elimina"
                     [allowEditing]="false"
