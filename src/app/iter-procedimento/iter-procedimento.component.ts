@@ -790,7 +790,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           .subscribe(
             res => {
               console.log("YESSSS ITER ANNULLATO", res);
-              notify({ message: "OK!",
+              let messaggio = "L'iter è stato annullato con successo.";
+              notify({ message: messaggio,
                 type: "success",
                 displayTime: 4000,
                 position: TOAST_POSITION,
@@ -800,7 +801,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
               this.genericButtons = null; // questo non fa vedere i bottoni (NON VANNO MAI PIU' VISTI)
             },
             err => {
-              notify({ message: "OHHHH NOOOOO!",
+              notify({ message: "ERRORE: è stato riscontrato un problema, contattare BabelCare",
                 type: "error",
                 displayTime: 4000,
                 position: TOAST_POSITION,
