@@ -789,13 +789,15 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/annullaIter", this.iter.id, { headers: new HttpHeaders().set("content-type", "application/json") })
           .subscribe(
             res => {
-              console.log(res);
+              console.log("YESSSS ITER ANNULLATO", res);
               notify({ message: "OK!",
                 type: "success",
                 displayTime: 4000,
                 position: TOAST_POSITION,
                 width: TOAST_WIDTH
               });
+              this.refresh();   // questo rinfresca l'interfaccia
+              this.genericButtons = null; // questo non fa vedere i bottoni (NON VANNO MAI PIU' VISTI)
             },
             err => {
               notify({ message: "OHHHH NOOOOO!",
