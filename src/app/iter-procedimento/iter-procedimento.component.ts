@@ -393,7 +393,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public buildTitoloDatiGenerali() {
-    this.datiGenerali = "Iter n." + this.iter.numero + "/" + this.iter.anno + " (" + this.iter.idStato.descrizione + ")";
+    this.datiGenerali = "Iter n." + this.iter.numero + "/" + this.iter.anno + " (" + (this.iter.annullato ? 'Annullato' : this.iter.idStato.descrizione) + ")";
   }
 
   isSospeso() {
@@ -430,7 +430,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   inSolaLettura() {
-    return (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO;
+    return (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO || this.iter.annullato;
   }
 
   disableAreaTextNote() {
