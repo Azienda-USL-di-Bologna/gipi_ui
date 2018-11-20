@@ -20,8 +20,10 @@ export class CronologiaEventiComponent implements OnInit {
   public dataSourceEventoIter: DataSource;
   @ViewChild("tooltip") tooltip: DxTooltipComponent;
   @ViewChild("tooltipDataReg") tooltipDataReg: DxTooltipComponent;
+  @ViewChild("tooltipDettagliEvento") tooltipDettagliEvento: DxTooltipComponent;
   public oggettoDocumento: String = "";
   public dataRegistrazioneEvento: String = "";
+  public dettagliEvento: String = "";
   public classeDiHighlight = "";
   public popupVisible = false;
   public enablePopup = false;
@@ -140,6 +142,18 @@ export class CronologiaEventiComponent implements OnInit {
               e.data.canDelete = true;
           }
         }
+    } // dettagli dell'evento
+    else if (e.rowType === "data" && e.column.dataField === "idEvento.nome"){
+      e.cellElement.onmouseover = function () {
+        if (e.row.data && e.row.data.idEvento && e.row.data.idEvento.dettagli) {
+          self.tooltipDettagliEvento.instance.option("target", e.cellElement);
+          self.dettagliEvento = e.row.data.idEvento.dettagli;
+          self.tooltipDettagliEvento.instance.show();
+        }
+      };
+      e.cellElement.onmouseout = function () {
+        self.tooltip.instance.hide();
+      };
     }
   }
 
