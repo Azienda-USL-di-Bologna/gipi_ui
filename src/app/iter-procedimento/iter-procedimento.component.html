@@ -576,6 +576,33 @@
     </div>
 </dx-popup>
 
+<dx-popup #noteAnnullamentoIter
+  [showTitle]="true"
+  [closeOnBackButton]="true"
+  [closeOnOutsideClick]="true"
+  class="popup" [width]="'auto'" [height]="'auto'" [title]="'Note Annullamento Iter'">
+  <div *dxTemplate="let data of 'content'">
+
+    <dx-text-area
+        [(ngModel)]="this.stringNoteAnnullamentoIter"
+        [value]="''"
+        [readOnly]="false"
+        [focusStateEnabled]="false"
+        [hoverStateEnabled]="false"
+        [width]="'300px'"
+        [height]="'150px'"
+        [inputAttr]="{style: 'background:#dedede'}">
+    </dx-text-area>
+    <div class="wrapperPulsantiPopup">
+        <dx-button class="button-css" text="Conferma" type="normal" (onClick)="execGestioneAnnullamentoIter()"></dx-button>
+        <span class="btn-space"></span>
+        <dx-button class="button-css" text="Annulla" type="normal" (onClick)="chiudiPopupNoteAnnullamentoIter()" ></dx-button>
+    </div>
+
+  </div>
+</dx-popup>
+
+
 <dx-popup #attenderePrego
     [showTitle]="false"
     [closeOnBackButton]="false"
