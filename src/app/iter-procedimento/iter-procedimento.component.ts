@@ -72,6 +72,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public dataSourceMotiviCollegamento: any;
   public codiceMotivoSelezionato = null;
   public noteMotivoPrecedente;
+  public attenterePregoVisible = false;
     
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
@@ -773,19 +774,14 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public gestisciAnnullamentoIter(): any {
+    this.attenterePregoVisible = true;
     confirm("<b>Attenzione stai per Annullare l'iter</b>:<br/> " 
     + "l'iter verrà chiuso e non sarà più collegato ad altri iter con catena di precedenza, <br/>" 
     + "il fascicolo verrà declassato ad 'Affare',<br/> " 
-    + "i documenti verranno rimossi sia dall'iter che dal fascicolo, <br/>" +
-      "<b>l'operazione non può essere annullata.<b/>", "Conferma").then(dialogResult => {
+    /* + "i documenti verranno rimossi sia dall'iter che dal fascicolo, <br/>" */
+    +  "<b>l'operazione non può essere annullata.<b/>", "Conferma").then(dialogResult => {
         if (dialogResult){
-          /* notify({            message: "Implementare la funzione",
-            type: "warning",
-            displayTime: 4000,
-            position: TOAST_POSITION,
-            width: TOAST_WIDTH
-           */
-
+          
           const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/annullaIter", this.iter.id, { headers: new HttpHeaders().set("content-type", "application/json") })
           .subscribe(
             res => {
