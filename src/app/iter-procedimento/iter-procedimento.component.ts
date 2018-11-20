@@ -1293,6 +1293,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           filter: [
             ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id","=",this.userInfo.idAzienda],
             ["id","<",this.iter.id],
+            ["annullato","=",false],
             filtroCatena
           ],
           sort: [{ field: "numero", desc: true }]
