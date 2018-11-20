@@ -39,12 +39,18 @@
     {{dataRegistrazioneEvento}}
   </div>
 </dx-tooltip>
-<dx-tooltip #tooltipDettagliEvento 
+<dx-tooltip #tooltipDettagliEvento
   [deferRendering]="true"
   [position]="'left'">
   <div *dxTemplate="let data = data of 'content'">
       <p style="width: 25%; font-size: 110%">
-        <b><span [innerHTML]="dettagliEvento | keepHtml"></span></b>
+        <!-- <b><span [innerHTML]="dettagliEvento | keepHtml"></span></b> -->
+        <b><span>
+          <ng-container *ngFor="let item of this.dettagliEventoTooltip">
+            {{item}}
+            <br/>
+          </ng-container>
+        </span></b>
       </p>
   </div>
 </dx-tooltip>

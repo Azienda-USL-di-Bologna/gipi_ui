@@ -17,14 +17,14 @@ import { HtmlParser } from "@angular/compiler";
 })
 export class CronologiaEventiComponent implements OnInit {
 
-  private odataContextDefinition: OdataContextDefinition;  
+  private odataContextDefinition: OdataContextDefinition;
   public dataSourceEventoIter: DataSource;
   @ViewChild("tooltip") tooltip: DxTooltipComponent;
   @ViewChild("tooltipDataReg") tooltipDataReg: DxTooltipComponent;
   @ViewChild("tooltipDettagliEvento") tooltipDettagliEvento: DxTooltipComponent;
   public oggettoDocumento: String = "";
   public dataRegistrazioneEvento: String = "";
-  public dettagliEvento: String = "";
+  public dettagliEventoTooltip: Array<string> = [];
   public classeDiHighlight = "";
   public popupVisible = false;
   public enablePopup = false;
@@ -51,7 +51,9 @@ export class CronologiaEventiComponent implements OnInit {
       filter: ["idIter.id", "=", parseInt(this.daPadre["idIter"])],
       map: (item) => {
         if (item.idEvento.codice === "chiusura_sospensione" || (item.idDocumentoIter && item.idEvento.codice !== "chiusura_iter" && item.idEvento.codice !== "avvio_iter" && item.idEvento.codice !== "modifica_iter"))
+        {
           this.arrayEventiIterCancellabili.push(item);
+        }
         item.canDelete = false;
         return item;
       }
@@ -65,12 +67,12 @@ export class CronologiaEventiComponent implements OnInit {
       this.dataSourceEventoIter.load();
     }
     if (this.daPadre["classeCSS"] !== "") {
-      this.classeDiHighlight = "cronologiaEventihightlightClass"; 
+      this.classeDiHighlight = "cronologiaEventihightlightClass";
     }
 
     if (this.canDelete)
       this.possoCancellare = this.canDelete;
-      
+
   }
 
   showNotes(noteValue) {
@@ -90,7 +92,7 @@ export class CronologiaEventiComponent implements OnInit {
                 if (value && value.idDocumentoIter) {
                     return value.idDocumentoIter.registro + " " + value.idDocumentoIter.numeroRegistro + "/" + value.idDocumentoIter.anno;
                 }
-            };                
+            };
         }
     });
   }
@@ -137,7 +139,7 @@ export class CronologiaEventiComponent implements OnInit {
     }
     else if (e.rowType === "data" && e.column.dataField === "canDelete") {
         if (e.rowIndex > 0) {
-          if (e.data.idEvento.codice !== "avvio_iter" && e.data.idEvento.codice !== "chiusura_iter" && e.data.idEvento.codice !== "modifica_iter" 
+          if (e.data.idEvento.codice !== "avvio_iter" && e.data.idEvento.codice !== "chiusura_iter" && e.data.idEvento.codice !== "modifica_iter"
               && e.data.idEvento.codice !== "aggiunta_precedente" && e.data.idEvento.codice !== "cancellazione_precedente") {
             if (this.arrayEventiIterCancellabili.lastIndexOf(e.data) === this.arrayEventiIterCancellabili.length - 1)
               e.data.canDelete = true;
@@ -148,10 +150,13 @@ export class CronologiaEventiComponent implements OnInit {
       e.cellElement.onmouseover = function () {
         if (e.row.data && e.row.data.idEvento && e.row.data.dettagli) {
           self.tooltipDettagliEvento.instance.option("target", e.cellElement);
-          console.log(e.row.data.dettagli)
+          /*console.log(e.row.data.dettagli)
           let x: string = e.row.data.dettagli;
           x = x.replace("\n", "</br>");
-          self.dettagliEvento = x;
+          self.dettagliEvento = x;*/
+
+          self.dettagliEventoTooltip = e.row.data.dettagli.split('\n');
+
           self.tooltipDettagliEvento.instance.show();
         }
       };
@@ -196,5 +201,5 @@ export class CronologiaEventiComponent implements OnInit {
       }
     });
   }
-  
+
 }
