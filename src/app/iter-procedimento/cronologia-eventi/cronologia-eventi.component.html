@@ -39,9 +39,13 @@
     {{dataRegistrazioneEvento}}
   </div>
 </dx-tooltip>
-<dx-tooltip #tooltipDettagliEvento>
+<dx-tooltip #tooltipDettagliEvento 
+  [deferRendering]="true"
+  [position]="'left'">
   <div *dxTemplate="let data = data of 'content'">
-    {{dettagliEvento}}
+      <p style="width: 25%; font-size: 110%">
+        <b><span [innerHTML]="dettagliEvento | keepHtml"></span></b>
+      </p>
   </div>
 </dx-tooltip>
 <dx-popup *ngIf="enablePopup"

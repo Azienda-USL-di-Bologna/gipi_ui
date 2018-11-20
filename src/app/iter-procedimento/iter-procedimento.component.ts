@@ -785,17 +785,18 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   public execGestioneAnnullamentoIter(): any {
     this.chiudiPopupNoteAnnullamentoIter();
-    let note: string = this.stringNoteAnnullamentoIter;
+    let noteDaPassare: string = this.stringNoteAnnullamentoIter;
     this.stringNoteAnnullamentoIter = '';
     confirm("<b>Attenzione stai per Annullare l'iter</b>:<br/> "
     + "l'iter verrà chiuso e non sarà più collegato ad altri iter con catena di precedenza, <br/>"
     + "il fascicolo verrà declassato ad 'Affare',<br/> "
     /* + "i documenti verranno rimossi sia dall'iter che dal fascicolo, <br/>" */
     +  "<b>l'operazione non può essere annullata.<b/><br/>"
-    +  "<b>Note:</b>" + note, "Conferma").then(dialogResult => {
+    +  "<b>Note:</b>" + noteDaPassare, "Conferma").then(dialogResult => {
         if (dialogResult) {
+          const params = {idIter: this.iter.id, note: noteDaPassare}
           this.attenterePregoVisible = true;
-          const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/annullaIter", this.iter.id, { headers: new HttpHeaders().set("content-type", "application/json") })
+          const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/annullaIter", params, { headers: new HttpHeaders().set("content-type", "application/json") })
           .subscribe(
             res => {
               this.attenterePregoVisible = false;

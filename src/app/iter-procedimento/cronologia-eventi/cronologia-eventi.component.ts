@@ -8,6 +8,7 @@ import { OdataContextFactory } from "@bds/nt-context";
 import {EventoIter, Evento} from "@bds/nt-entities";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { confirm } from "devextreme/ui/dialog";
+import { HtmlParser } from "@angular/compiler";
 
 @Component({
   selector: "app-cronologia-eventi",
@@ -145,14 +146,17 @@ export class CronologiaEventiComponent implements OnInit {
     } // dettagli dell'evento
     else if (e.rowType === "data" && e.column.dataField === "idEvento.nome"){
       e.cellElement.onmouseover = function () {
-        if (e.row.data && e.row.data.idEvento && e.row.data.idEvento.dettagli) {
+        if (e.row.data && e.row.data.idEvento && e.row.data.dettagli) {
           self.tooltipDettagliEvento.instance.option("target", e.cellElement);
-          self.dettagliEvento = e.row.data.idEvento.dettagli;
+          console.log(e.row.data.dettagli)
+          let x: string = e.row.data.dettagli;
+          x = x.replace("\n", "</br>");
+          self.dettagliEvento = x;
           self.tooltipDettagliEvento.instance.show();
         }
       };
       e.cellElement.onmouseout = function () {
-        self.tooltip.instance.hide();
+        self.tooltipDettagliEvento.instance.hide();
       };
     }
   }

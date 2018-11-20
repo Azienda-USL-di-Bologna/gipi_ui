@@ -87,6 +87,7 @@ import { DocumentoIterAssociazioneSempliceComponent } from "./documento-iter-ass
 import { ModificaDocumentoIterComponent } from "./modifica-documento-iter/modifica-documento-iter.component";
 import { ListaIterPerDemiurgoComponent } from "./lista-iter-per-demiurgo/lista-iter-per-demiurgo.component";
 import { ListaIterAziendaliComponent } from "./lista-iter-aziendali/lista-iter-aziendali.component";
+import { EscapeHtmlPipe } from "./pipes/keep-html.pipe";
 
 @NgModule({
     declarations: [
@@ -125,7 +126,8 @@ import { ListaIterAziendaliComponent } from "./lista-iter-aziendali/lista-iter-a
         DocumentoIterAssociazioneSempliceComponent,
         ModificaDocumentoIterComponent,
         ListaIterPerDemiurgoComponent,
-        ListaIterAziendaliComponent
+        ListaIterAziendaliComponent,
+        EscapeHtmlPipe
     ],
     imports: [
         BrowserModule,
