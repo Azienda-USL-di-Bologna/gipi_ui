@@ -73,6 +73,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public codiceMotivoSelezionato = null;
   public noteMotivoPrecedente;
   public attenterePregoVisible = false;
+  public stringNoteAnnullamentoIter: string = '';
 
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
@@ -80,6 +81,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   @ViewChild("popupPrecedenti") popupPrecedenti: DxPopupComponent;
   @ViewChild("gridPrecedenti") gridPrecedenti: DxDataGridComponent;
   @ViewChild("motivoSelecdBox") motivoSelecdBox: DxSelectBoxComponent;
+  @ViewChild("noteAnnullamentoIter") noteAnnullamentoIter: DxPopupComponent;
 
 
   // pulsanti custom aggiunti alla button bar
@@ -773,12 +775,24 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     );
   }
 
-  public gestisciAnnullamentoIter(): any {
+  public chiudiPopupNoteAnnullamentoIter(): any {
+    this.noteAnnullamentoIter.instance.hide();
+  }
+
+  public preGestioneAnnullamentoIter(): any {
+    this.noteAnnullamentoIter.instance.show();
+  }
+
+  public execGestioneAnnullamentoIter(): any {
+    this.chiudiPopupNoteAnnullamentoIter();
+    let note: string = this.stringNoteAnnullamentoIter;
+    this.stringNoteAnnullamentoIter = '';
     confirm("<b>Attenzione stai per Annullare l'iter</b>:<br/> "
     + "l'iter verrà chiuso e non sarà più collegato ad altri iter con catena di precedenza, <br/>"
     + "il fascicolo verrà declassato ad 'Affare',<br/> "
     /* + "i documenti verranno rimossi sia dall'iter che dal fascicolo, <br/>" */
-    +  "<b>l'operazione non può essere annullata.<b/>", "Conferma").then(dialogResult => {
+    +  "<b>l'operazione non può essere annullata.<b/><br/>"
+    +  "<b>Note:</b>" + note, "Conferma").then(dialogResult => {
         if (dialogResult) {
           this.attenterePregoVisible = true;
           const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/annullaIter", this.iter.id, { headers: new HttpHeaders().set("content-type", "application/json") })
@@ -811,6 +825,11 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
         }
       });
+  }
+
+  public gestisciAnnullamentoIter(): any {
+    this.preGestioneAnnullamentoIter();
+
   }
 
   public passaggioDiFase() {
