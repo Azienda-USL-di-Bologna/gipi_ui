@@ -25,9 +25,9 @@
         <dxi-column dataField="oggetto" [minWidth]="200" [dataType]="'string'"></dxi-column>
         <dxi-column dataField="idResponsabileProcedimento.idPersona.descrizione" [dataType]="'string'" caption="Responsabile procedimento" [minWidth]="200"></dxi-column>
         <dxi-column dataField="idStato.descrizione"[width]="100" [dataType]="'string'" caption="Stato"></dxi-column>
+        <dxi-column dataField="annullato" [width]="85" [allowFiltering]="false" [dataType]="'boolean'"></dxi-column>
         <dxi-column dataField="dataAvvio" caption="Aperto il" [width]="100" format="dd/MM/yyyy" [allowSearch]=false></dxi-column>
         <dxi-column dataField="dataChiusura" caption="Chiuso il" [width]="100" format="dd/MM/yyyy"  [allowSearch]=false></dxi-column>
-
         <dxi-column caption="Apri" cellTemplate="buttonCellTemplate" [width]="60"></dxi-column>
         <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni">
           <dx-button hint="Vedi dettaglio iter" icon="chevronnext" (onClick)="vaiAlDettaglio(d)"></dx-button>
