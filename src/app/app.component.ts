@@ -250,7 +250,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.slide(true); // Chiudo la sidebar se è aperta
 
         sessionStorage.removeItem("gipi_token");
-        sessionStorage.removeItem("gipi_userInfo");
+        sessionStorage.removeItem("gipi_loggedUser");
         sessionStorage.removeItem("gipi_loginMethod");
         if (loginMethod !== "sso") {
             console.log(loginMethod);
