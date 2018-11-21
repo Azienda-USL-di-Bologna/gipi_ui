@@ -238,12 +238,6 @@ export class GestioneAssociazioneAziendaComponent implements OnInit {
         this.statusPage = "delete-status";
     }
 
-
-    public buttonAssociaClicked(event) {
-        console.log(sessionStorage.getItem("gdm"));
-        console.log(localStorage.getItem("gdm"));
-    }
-
     public buttonVediAssociazioni(azienda) {
         this.router.navigate(["/struttura-tipi-procedimento"], {
             queryParams: {
