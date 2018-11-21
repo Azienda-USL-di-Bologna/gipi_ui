@@ -370,9 +370,9 @@
         <h4>Oggetto: </h4>
         <dx-text-area [height]="150" [(value)]="popupModificaOggetto.fieldValue" maxLength="1024"></dx-text-area>
         <div class="wrapperPulsantiPopup">
-            <dx-button class="button-css" text="OK" (click)="updateOggetto()" type="default"></dx-button>
+            <dx-button class="button-css" text="OK" (onClick)="updateOggetto()" type="default"></dx-button>
             <span class="btn-space"></span>
-            <dx-button class="button-css" text="Annulla" (click)="closePopupModificaOggetto()" type="normal"></dx-button>
+            <dx-button class="button-css" text="Annulla" (onClick)="closePopupModificaOggetto()" type="normal"></dx-button>
         </div>
     </div>
     </div>

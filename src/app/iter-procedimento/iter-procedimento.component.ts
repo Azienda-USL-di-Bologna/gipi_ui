@@ -190,7 +190,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento",
         "idUtenteCreazione.idPersona",
         "idStrutturaUtenteCreazione",
-        "idMotivoPrecedente"
+        "idMotivoPrecedente",
+        "idSpettanzaAnnullamento"
       ],
       filter: [["id", "=", this.idIter]],
       map: (item) => {
