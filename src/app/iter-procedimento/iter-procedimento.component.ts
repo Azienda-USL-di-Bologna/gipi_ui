@@ -789,9 +789,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     let noteDaPassare: string = this.stringNoteAnnullamentoIter;
     this.stringNoteAnnullamentoIter = '';
     confirm("<b>Attenzione stai per Annullare l'iter</b>:<br/> "
-    + "l'iter verrà chiuso e non sarà più collegato ad altri iter con catena di precedenza, <br/>"
+    + "l'iter verrà chiuso e non sarà più collegato ad altri iter, <br/>"
     + "il fascicolo verrà declassato ad 'Affare',<br/> "
-    + "i documenti verranno rimossi sia dall'iter che dal fascicolo, <br/>"
+    + "i documenti verranno scollegati dall'iter, <br/>"
     +  "<b>l'operazione non può essere annullata.<b/><br/>"
     +  "<b>Note:</b>" + noteDaPassare, "Conferma").then(dialogResult => {
         if (dialogResult) {
