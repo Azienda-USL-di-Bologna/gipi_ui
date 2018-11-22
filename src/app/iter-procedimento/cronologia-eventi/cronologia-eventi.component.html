@@ -22,7 +22,7 @@
       <dx-button *ngIf="d.value" type="default" text="" hint="Mostra note" icon='doc' (onClick)="showNotes(d)"></dx-button>
     </div>
     <div *dxTemplate="let x of 'canDeleteTemplate'">
-      <dx-button *ngIf="x.value" type="default" text="" hint="Elimina ultima associazione" icon='revert' (onClick)="cancellaEvento(x)"></dx-button>
+      <dx-button *ngIf="x.value && x.value.annullato" type="default" text="" hint="Elimina ultima associazione" icon='revert' (onClick)="cancellaEvento(x)"></dx-button>
     </div>
   </dx-data-grid>
 </div>
@@ -37,6 +37,21 @@
 <dx-tooltip #tooltipDataReg>
   <div *dxTemplate="let data = data of 'content'">
     {{dataRegistrazioneEvento}}
+  </div>
+</dx-tooltip>
+<dx-tooltip #tooltipDettagliEvento
+  [deferRendering]="true"
+  [position]="'left'">
+  <div *dxTemplate="let data = data of 'content'">
+      <p style="width: 25%; font-size: 110%">
+        <!-- <b><span [innerHTML]="dettagliEvento | keepHtml"></span></b> -->
+        <b><span>
+          <ng-container *ngFor="let item of this.dettagliEventoTooltip">
+            {{item}}
+            <br/>
+          </ng-container>
+        </span></b>
+      </p>
   </div>
 </dx-tooltip>
 <dx-popup *ngIf="enablePopup"

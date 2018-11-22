@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation, ViewChild, HostListener } from "@
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity, OdataUtilities } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
-import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura, Persona, RegistroIter, Registro, MotivoPrecedente } from "@bds/nt-entities";
+import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura, Persona, RegistroIter, Registro, MotivoPrecedente, Stato } from "@bds/nt-entities";
 import { HttpClient  } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
@@ -14,6 +14,7 @@ import { STATI } from "@bds/nt-entities";
 import { DxFormComponent, DxPopupComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { IterProcedimentoFascicoloUtilsClass, PERMESSI } from "./iter-procedimento-fascicolo-utils.class";
 import { UtilityFunctions } from "app/utility-functions";
+import { confirm } from "devextreme/ui/dialog";
 import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
@@ -31,7 +32,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   private utility: UtilityFunctions = new UtilityFunctions();
   private arrayCfVicari: string[];
   private arrayCfVicariNonCancellabili;
-  
+
   public initialWidth: number = window.innerWidth;
   public threshold: number = 1500;
   public iter: Iter = new Iter();
@@ -71,20 +72,23 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   public dataSourceMotiviCollegamento: any;
   public codiceMotivoSelezionato = null;
   public noteMotivoPrecedente;
-  public $this = this
-    
+  public attenterePregoVisible = false;
+  public stringNoteAnnullamentoIter: string = '';
+
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
   @ViewChild("popupVicari") popupVicari: DxPopupComponent;
   @ViewChild("popupPrecedenti") popupPrecedenti: DxPopupComponent;
   @ViewChild("gridPrecedenti") gridPrecedenti: DxDataGridComponent;
   @ViewChild("motivoSelecdBox") motivoSelecdBox: DxSelectBoxComponent;
-  
+  @ViewChild("noteAnnullamentoIter") noteAnnullamentoIter: DxPopupComponent;
+
 
   // pulsanti custom aggiunti alla button bar
   // public procediButton: ButtonAppearance;
   // public sospendiButton: ButtonAppearance;
   public riattivaButton: ButtonAppearance;
+  public annullaIterButton: ButtonAppearance;
 
   public datiGenerali = "";
   // Dati che verranno ricevuti dall'interfaccia chiamante
@@ -107,7 +111,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     label: "",
     action: ""
   };
-  
+
   public popupCambioResp: any = {
     visible: false,
     title: "",
@@ -131,7 +135,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   // public hasPermissionOnFascicolo: boolean = false;
   public colCountGroup: number;
 
-  
+
   // public soloEditing: boolean = false;
   public dataSourceUtentiCugini: DataSource;
   public dataSourceUtenteLoggato: DataSource;
@@ -162,7 +166,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
     this.odataContextDefinitionFunctionImport = this.odataContextFactory.buildOdataFunctionsImportDefinition();
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
-    
+
     const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
     customLoadingFilterParams.addFilter("nomeTitolo", ["tolower(${target})", "contains", "${value.tolower}"]);
@@ -186,7 +190,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento",
         "idUtenteCreazione.idPersona",
         "idStrutturaUtenteCreazione",
-        "idMotivoPrecedente"
+        "idMotivoPrecedente",
+        "idSpettanzaAnnullamento"
       ],
       filter: [["id", "=", this.idIter]],
       map: (item) => {
@@ -236,10 +241,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         }
       }
     });
-    
+
     this.buildIter();
 
-    
+
 
     this.perFigliParteDestra = {
       idIter: this.idIter,
@@ -264,7 +269,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   private buildDataSourceUtentiCugini(): void {
     /*
-      Il caricamento del datasource per la lookup ha un problema. E' paginato. 
+      Il caricamento del datasource per la lookup ha un problema. E' paginato.
       Se l'utente loggato, che deve essere impostato come utente default, non è presente nella prima tranche di dati
       che il datasource tira su, allora non si riuscirà ad impostare l'utente default.
       Il workaraound consiste nel caricare l'utente loggato ed aggiungerlo qualora non fosse già presente.
@@ -287,8 +292,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.dataSourceUtenteLoggato = new DataSource({
       store: this.odataContextDefinition.getContext()[new UtenteStruttura().getName()],
       expand: [
-        "idUtente.idPersona", 
-        "idStruttura", 
+        "idUtente.idPersona",
+        "idStruttura",
         "idAfferenzaStruttura"
       ],
       filter: [
@@ -311,13 +316,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           res.push(usLogged);
         }
         this.idUtenteDefault = re[0].id;
-        this.descrizioneUtenteResponsabile = re[0].idUtente.idPersona.descrizione 
+        this.descrizioneUtenteResponsabile = re[0].idUtente.idPersona.descrizione
           + " (" + re[0].idStruttura.nome
           + " - " + re[0].idAfferenzaStruttura.descrizione + ")";
       });
     });
   }
-  
+
   private showStatusOperation(message: string, type: string) {
     notify({
       message: message,
@@ -332,7 +337,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.initialWidth = window.innerWidth;
   }
   public getDescrizioneUtente(item: any): string {
-    return item ? item.idUtente.idPersona.descrizione 
+    return item ? item.idUtente.idPersona.descrizione
         + " (" + item.idStruttura.nome
         + " - " + item.idAfferenzaStruttura.descrizione + ")" : null;
   }
@@ -384,7 +389,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     );
   }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.popupPrecedenti.closeOnBackButton = false;
     this.popupPrecedenti.showCloseButton = false;
     this.popupPrecedenti.closeOnOutsideClick = false;
@@ -392,7 +397,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public buildTitoloDatiGenerali() {
-    this.datiGenerali = "Iter n." + this.iter.numero + "/" + this.iter.anno + " (" + this.iter.idStato.descrizione + ")";
+    this.datiGenerali = "Iter n." + this.iter.numero + "/" + this.iter.anno + " (" + (this.iter.annullato ? 'Annullato' : this.iter.idStato.descrizione) + ")";
   }
 
   isSospeso() {
@@ -402,8 +407,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       return false;
   }
 
-  isChiuso() {
+  public isChiuso() {
     return this.iter.idStato.codice === STATI.CHIUSO;
+  }
+
+  public isAnnullato(){
+    return this.iter.annullato;
   }
   /* setNomeBottoneSospensione() {
     this.sospendiButton.label = this.getNomeBottoneSospensione();
@@ -425,22 +434,38 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   inSolaLettura() {
-    return (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO;
+    return (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO || this.iter.annullato;
   }
 
   disableAreaTextNote() {
     return this.inSolaLettura() || !this.popupData.checkInteressati;
   }
 
-  
+
   generateCustomButtons() {
+    console.log("generateCustomButtons()");
+
     if (this.isSospeso()) {
       this.genericButtons = new Array<ButtonAppearance>();
       this.riattivaButton = new ButtonAppearance("Riattiva Iter", "", false, false);
       this.genericButtons.push(this.riattivaButton);
+      console.log(this.iter.idStato);
+      console.log(this.iter.annullato);
+
     }
+    if(this.iter.idStato.codice !== "CHIUSO" && !this.iter.annullato){
+      console.log("!this.isChiuso && !this.isAnnullato");
+      if(!this.genericButtons)
+        this.genericButtons = new Array<ButtonAppearance>();
+      this.annullaIterButton = new ButtonAppearance("Annulla Iter", "", false, false);
+      this.genericButtons.push(this.annullaIterButton);
+      console.log("this.genericButtons", this.genericButtons);
+
+    }
+
+
     // this.setNomeBottoneSospensione();
-    
+
     // this.soloEditing = this.disableSospendi();
   }
 
@@ -507,7 +532,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           this.stringaRegistroAccessi = "I campi evidenziati sono esposti nella pubblicazione dell'iter su: " + registro.descrizione;
         else
           this.stringaRegistroAccessi = this.stringaRegistroAccessi + ", " + registro.descrizione;
-        
+
       });
     });
   }
@@ -564,7 +589,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     };
   }
 
-  updateIter(validationParams: any) {												  
+  updateIter(validationParams: any) {
     let doUpdate: boolean = false;
     if (this.popupData.field) {
       if (this.popupData.field === "esitoMotivazione") {
@@ -731,7 +756,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
             }
       );
     }
-    
+
   }
 
   public riattivaIter() {
@@ -749,6 +774,64 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         this.showStatusOperation("Qualcosa è andato storto. Contattare BabelCare", "error");
       }
     );
+  }
+
+  public chiudiPopupNoteAnnullamentoIter(): any {
+    this.noteAnnullamentoIter.instance.hide();
+  }
+
+  public preGestioneAnnullamentoIter(): any {
+    this.noteAnnullamentoIter.instance.show();
+  }
+
+  public execGestioneAnnullamentoIter(): any {
+    this.chiudiPopupNoteAnnullamentoIter();
+    let noteDaPassare: string = this.stringNoteAnnullamentoIter;
+    this.stringNoteAnnullamentoIter = '';
+    confirm("<b>Attenzione stai per Annullare l'iter</b>:<br/> "
+    + "l'iter verrà chiuso e non sarà più collegato ad altri iter, <br/>"
+    + "il fascicolo verrà declassato ad 'Affare',<br/> "
+    + "i documenti verranno scollegati dall'iter, <br/>"
+    +  "<b>l'operazione non può essere annullata.<b/><br/>"
+    +  "<b>Note:</b>" + noteDaPassare, "Conferma").then(dialogResult => {
+        if (dialogResult) {
+          const params = {idIter: this.iter.id, note: noteDaPassare}
+          this.attenterePregoVisible = true;
+          const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/annullaIter", params, { headers: new HttpHeaders().set("content-type", "application/json") })
+          .subscribe(
+            res => {
+              this.attenterePregoVisible = false;
+              console.log("YESSSS ITER ANNULLATO", res);
+              let messaggio = "L'iter è stato annullato con successo.";
+              notify({ message: messaggio,
+                type: "success",
+                displayTime: 4000,
+                position: TOAST_POSITION,
+                width: TOAST_WIDTH
+              });
+              this.refresh();   // questo rinfresca l'interfaccia
+              this.genericButtons = null; // questo non fa vedere i bottoni (NON VANNO MAI PIU' VISTI)
+            },
+            err => {
+              this.attenterePregoVisible = false;
+              notify({ message: "ERRORE: è stato riscontrato un problema, contattare BabelCare",
+                type: "error",
+                displayTime: 4000,
+                position: TOAST_POSITION,
+                width: TOAST_WIDTH
+              });
+            }
+
+          )
+
+
+        }
+      });
+  }
+
+  public gestisciAnnullamentoIter(): any {
+    this.preGestioneAnnullamentoIter();
+
   }
 
   public passaggioDiFase() {
@@ -833,8 +916,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       case "Procedi":
         this.passaggioDiFase();
         break; */
+
+      case "Annulla Iter":
+        this.gestisciAnnullamentoIter();
+        break;
     }
   }
+
 
   /* getDataUltimaSospensione() {
     let date;
@@ -879,8 +967,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           this.settaVariabiliPermessi();
           if (!this.isChiuso() && this.permessoUtenteLoggato >= +PERMESSI.VICARIO) {
             this.mostraPulsantiVicResp = true;
-          } 
+          }
           if (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) {
+            console.log("this.permessoUtenteLoggato", this.permessoUtenteLoggato);
+            console.log("+PERMESSI.MODIFICA", +PERMESSI.MODIFICA);
             this.generateCustomButtons();
           }
           this.arrayCfVicari = IterProcedimentoFascicoloUtilsClass.calcolaArrayCfVicari(this.fascicoloIter.permessi);
@@ -888,7 +978,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         err => {
           // console.log("Errore nel recupero del fascicolo iter", err);
         }
-      );    
+      );
     }
   }
 
@@ -932,14 +1022,14 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.arrayCfVicari = IterProcedimentoFascicoloUtilsClass.calcolaArrayCfVicari(this.fascicoloIter.permessi);
     }
     let iter = this.iter;
-    // Carico i vicari - Ogni volta altrimenti bisogna riapplicare il filtro 
+    // Carico i vicari - Ogni volta altrimenti bisogna riapplicare il filtro
     this.dataSourceVicari = new DataSource({
       store: this.odataContextDefinition.getContext()[new Persona().getName()],
       filter: [this.utility.buildMultipleFilterForArray(
-        "codiceFiscale", 
+        "codiceFiscale",
         Object.assign([], this.arrayCfVicari)
-        ), 
-        "or", 
+        ),
+        "or",
         ["codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]],
         map: function (item) {
           if (item.id === iter.idResponsabileProcedimento.idPersona.id) {
@@ -978,7 +1068,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
             vicariTemp.splice(1, 0, vicario);
             break;
           case iter.procedimentoCache.idTitolarePotereSostitutivo.idPersona.id:
-            vicariTemp.splice(2, 0, vicario);            
+            vicariTemp.splice(2, 0, vicario);
             break;
           case iter.idUtenteCreazione ? iter.idUtenteCreazione.idPersona.id : "":
             vicariTemp.splice(3, 0, vicario);
@@ -1007,9 +1097,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         filter: [
           ["idUtente.idAzienda.id", "=", this.userInfo.idAzienda],
           ["idUtente.attivo", "=", true],
-          ["!", 
+          ["!",
             [
-              this.utility.buildMultipleFilterForArray("idUtente.idPersona.codiceFiscale", Object.assign([], this.arrayCfVicari)), 
+              this.utility.buildMultipleFilterForArray("idUtente.idPersona.codiceFiscale", Object.assign([], this.arrayCfVicari)),
               "or",
               ["idUtente.idPersona.codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]
             ]
@@ -1058,9 +1148,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.dataSourceUtentiTutti.filter([
       ["idUtente.idAzienda.id", "=", this.userInfo.idAzienda],
       ["idUtente.attivo", "=", true],
-      ["!", 
+      ["!",
         [
-          this.utility.buildMultipleFilterForArray("idUtente.idPersona.codiceFiscale", Object.assign([], arrayTemp)), 
+          this.utility.buildMultipleFilterForArray("idUtente.idPersona.codiceFiscale", Object.assign([], arrayTemp)),
           "or",
           ["idUtente.idPersona.codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]
         ]
@@ -1107,8 +1197,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       "vicari": this.arrayCfVicari
     };
     const call = this.http.post(
-      CUSTOM_RESOURCES_BASE_URL + "iter/aggiornaVicariDelFascicolo", 
-      params, 
+      CUSTOM_RESOURCES_BASE_URL + "iter/aggiornaVicariDelFascicolo",
+      params,
       { headers: new HttpHeaders().set("content-type", "application/json") }
     ).subscribe(
       res => {
@@ -1120,7 +1210,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       err => {
         this.showStatusOperation("C'è stato un errore nel salvataggio dei vicari. Se il problema persiste contattare babelcare.", "error");
       }
-    );  
+    );
   }
 
   closePopupVicari() {
@@ -1146,9 +1236,9 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   filtraDataSourceVicari() {
     this.dataSourceVicari.filter([this.utility.buildMultipleFilterForArray(
-      "codiceFiscale", 
-      Object.assign([], this.arrayCfVicari)), 
-      "or", 
+      "codiceFiscale",
+      Object.assign([], this.arrayCfVicari)),
+      "or",
       ["codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]]);
     this.dataSourceVicari.load();
   }
@@ -1172,7 +1262,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     }
 
     this.setPrecedente(params);
-      
+
   }
 
 
@@ -1204,6 +1294,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           filter: [
             ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id","=",this.userInfo.idAzienda],
             ["id","<",this.iter.id],
+            ["annullato","=",false],
             filtroCatena
           ],
           sort: [{ field: "numero", desc: true }]
@@ -1236,14 +1327,14 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
             this.dataSourceMotiviCollegamento.push(element);
           });
         }
-          
-        
+
+
       },
       err => {
         console.log("!!!ERRORE", err)
       }
     ); */
-    
+
   }
 
   // a seconda del bottone funzione diversa

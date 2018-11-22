@@ -245,13 +245,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
     onLogout() {
 
-        const loginMethod = sessionStorage.getItem("loginMethod");
+        const loginMethod = sessionStorage.getItem("gipi_loginMethod");
 
         this.slide(true); // Chiudo la sidebar se è aperta
 
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("userInfo");
-        sessionStorage.removeItem("loginMethod");
+        sessionStorage.removeItem("gipi_token");
+        sessionStorage.removeItem("gipi_loggedUser");
+        sessionStorage.removeItem("gipi_loginMethod");
         if (loginMethod !== "sso") {
             console.log(loginMethod);
             this.router.navigate(["/login"]);
