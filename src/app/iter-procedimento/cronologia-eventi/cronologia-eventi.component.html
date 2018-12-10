@@ -22,7 +22,7 @@
       <dx-button *ngIf="d.value" type="default" text="" hint="Mostra note" icon='doc' (onClick)="showNotes(d)"></dx-button>
     </div>
     <div *dxTemplate="let x of 'canDeleteTemplate'">
-      <dx-button *ngIf="x.value && x.value.annullato" type="default" text="" hint="Elimina ultima associazione" icon='revert' (onClick)="cancellaEvento(x)"></dx-button>
+      <dx-button *ngIf="x.value && !x.value.annullato" type="default" text="" hint="Elimina ultima associazione" icon='revert' (onClick)="cancellaEvento(x)"></dx-button>
     </div>
   </dx-data-grid>
 </div>
