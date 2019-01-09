@@ -131,7 +131,7 @@ import { EscapeHtmlPipe } from "./pipes/keep-html.pipe";
     ],
     imports: [
         BrowserModule,
-        RouterModule.forRoot(rootRouterConfig, { useHash: true }),
+        RouterModule.forRoot(rootRouterConfig, { useHash: false }),
         DxDataGridModule,
         DxFormModule,
         DxButtonModule,
