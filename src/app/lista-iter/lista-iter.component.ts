@@ -61,7 +61,7 @@ export class ListaIterComponent implements OnInit {
       },
       expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona",
         "idFaseCorrente", "idStato", "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento"],
-      sort: [{ field: "numero", desc: true }]
+      sort: [{ field: "id", desc: true }]
     });
   }
 

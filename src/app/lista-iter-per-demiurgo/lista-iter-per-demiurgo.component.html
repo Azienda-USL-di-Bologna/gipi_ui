@@ -20,6 +20,7 @@
         placeholder="Cerca.." >
       </dxo-search-panel>
       
+        <dxi-column dataField="id" [width]="100" [visible]="false"></dxi-column>
         <dxi-column dataField="numero" [width]="100"></dxi-column>
         <dxi-column dataField="idProcedimento.idAziendaTipoProcedimento.idAzienda.nome" [width]="100" caption="Azienda"></dxi-column>
         <dxi-column dataField="idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome" caption="Tipo procedimento"></dxi-column>
