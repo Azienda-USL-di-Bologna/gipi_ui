@@ -22,6 +22,7 @@
       
         <dxi-column dataField="id" [width]="100" [visible]="false"></dxi-column>
         <dxi-column dataField="numero" [width]="100"></dxi-column>
+        <dxi-column dataField="anno" [width]="100" [dataType]="'number'"></dxi-column>
         <dxi-column dataField="idProcedimento.idAziendaTipoProcedimento.idAzienda.nome" [width]="100" caption="Azienda"></dxi-column>
         <dxi-column dataField="idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome" caption="Tipo procedimento"></dxi-column>
         <dxi-column dataField="idUtenteCreazione.idPersona.descrizione" caption="Creato da" [minWidth]="200"></dxi-column>
