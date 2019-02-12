@@ -44,7 +44,7 @@ export class ListaIterAziendaliComponent implements OnInit {
         "idUtenteCreazione.idPersona", "idStrutturaUtenteCreazione",
         "idFaseCorrente", "idStato", "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento"],
       filter: ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id", "=", this.idAzienda],
-      sort: [{ field: "numero", desc: true }]
+      sort: [{ field: "id", desc: true }]
     });
   }
 

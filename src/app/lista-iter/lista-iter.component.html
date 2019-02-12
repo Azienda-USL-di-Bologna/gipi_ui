@@ -19,8 +19,9 @@
         [width]="240" 
         placeholder="Cerca.." >
       </dxo-search-panel>
-      
+        <dxi-column dataField="id" [width]="100" [visible]="false"></dxi-column>
         <dxi-column dataField="numero" [width]="100" [dataType]="'number'"></dxi-column>
+        <dxi-column dataField="anno" [width]="100" [dataType]="'number'"></dxi-column>
         <dxi-column dataField="idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome" [dataType]="'string'" caption="Tipo procedimento"></dxi-column>
         <dxi-column dataField="oggetto" [minWidth]="200" [dataType]="'string'"></dxi-column>
         <dxi-column dataField="idResponsabileProcedimento.idPersona.descrizione" [dataType]="'string'" caption="Responsabile procedimento" [minWidth]="200"></dxi-column>
