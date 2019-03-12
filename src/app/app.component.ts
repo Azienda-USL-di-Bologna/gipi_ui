@@ -217,14 +217,9 @@ export class AppComponent implements OnInit, OnDestroy {
                         this.descrizioneAzienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.descrizione];
                         this.nomeUtente = loggedUser.getField(bUtente.nome);
                         this.cognomeUtente = loggedUser.getField(bUtente.cognome);
-
-                        if (this.descrizioneAzienda.includes("Azienda")) {
-                            let title = this.descrizioneAzienda.replace("zienda ", "");
-                            title = title.replace("Ospedaliera ", "OSP ");
-                            this.titleService.setTitle("Gipi - " + title);
-                        } else {
-                            this.titleService.setTitle("Gipi - " + this.azienda);
-                        }
+                        /* Set del titolo preso dai parametri dell'azienda */
+                        const jsonParametri = JSON.parse(loggedUser.getField(bUtente.aziendaLogin)[bAzienda.parametri]);
+                        this.titleService.setTitle("Gipi - " + jsonParametri.descBreve);
 
                         this.enableSidebarByRole = false;
                         this.ruoli.forEach(element => {
