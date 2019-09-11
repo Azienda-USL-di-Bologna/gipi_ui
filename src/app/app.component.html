@@ -45,8 +45,9 @@
                                         <!--alt="Profilo" (click)="onProfileBtnClick($event)">-->
                                         <!--</div>-->
                                     </div>
-                                    <img *ngIf="(!!!(appConfig.appBarSimple | async))" src="assets/images/signout.svg" (click)="onLogout()" class="dimBoxImageSignOut d-inline-block logout ml-1" alt="logout">
-                                    <img *ngIf="(!!(appConfig.appBarSimple | async))" [src]="closeIcon" (click)="onClose()" class="dimBoxImageSignOut d-inline-block logout ml-1" alt="logout">
+                                    <!-- <img *ngIf="(!!!(appConfig.appBarSimple | async))" src="assets/images/signout.svg" (click)="onLogout()" class="dimBoxImageSignOut d-inline-block logout ml-1" alt="logout"> -->
+                                    <!-- <img *ngIf="(!!(appConfig.appBarSimple | async))" [src]="closeIcon" (click)="onClose()" class="dimBoxImageSignOut d-inline-block logout ml-1" alt="logout"> -->
+                                    <img [src]="closeIcon" (click)="onClose()" class="dimBoxImageSignOut d-inline-block logout ml-1" alt="logout">
                                 </div>
                             </div>
                         </div>
