@@ -13,6 +13,7 @@ import * as $ from "jquery";
 import * as deLocalization from "devextreme/localization";
 import {AppConfiguration} from "./config/app-configuration";
 import { ParametriAziendaService } from "./services/parametri-azienda.service";
+import { Title } from "@angular/platform-browser";
 
 
 @Component({
@@ -54,7 +55,8 @@ export class AppComponent implements OnInit, OnDestroy {
                 private globalContextService: GlobalContextService,
                 private odataContextFactory: OdataContextFactory, public appConfig: AppConfiguration,
                 private navbarService: NavbarService,
-                private parametriAziendaService: ParametriAziendaService) {
+                private parametriAziendaService: ParametriAziendaService,
+                private titleService: Title) {
         this.odataContextFactory.setOdataBaseUrl(ODATA_BASE_URL);
         console.log("hostname", window.location.hostname);
         console.log("host", window.location.host);
@@ -215,6 +217,9 @@ export class AppComponent implements OnInit, OnDestroy {
                         this.descrizioneAzienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.descrizione];
                         this.nomeUtente = loggedUser.getField(bUtente.nome);
                         this.cognomeUtente = loggedUser.getField(bUtente.cognome);
+                        /* Set del titolo preso dai parametri dell'azienda */
+                        const jsonParametri = JSON.parse(loggedUser.getField(bUtente.aziendaLogin)[bAzienda.parametri]);
+                        this.titleService.setTitle("Gipi - " + jsonParametri.descBreve);
 
                         this.enableSidebarByRole = false;
                         this.ruoli.forEach(element => {

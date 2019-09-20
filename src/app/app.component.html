@@ -45,8 +45,11 @@
                                         <!--alt="Profilo" (click)="onProfileBtnClick($event)">-->
                                         <!--</div>-->
                                     </div>
-                                    <img *ngIf="(!!!(appConfig.appBarSimple | async))" src="assets/images/signout.svg" (click)="onLogout()" class="dimBoxImageSignOut d-inline-block logout ml-1" alt="logout">
-                                    <img *ngIf="(!!(appConfig.appBarSimple | async))" [src]="closeIcon" (click)="onClose()" class="dimBoxImageSignOut d-inline-block logout ml-1" alt="logout">
+                                    <!-- RM #35280: no logout, solo chiusura: quindi questa alternativa è inutile
+                                        <img *ngIf="(!!!(appConfig.appBarSimple | async))" src="assets/images/signout.svg" (click)="onLogout()" class="dimBoxImageSignOut d-inline-block logout ml-1" alt="logout">
+                                        <img *ngIf="(!!(appConfig.appBarSimple | async))" [src]="closeIcon" (click)="onClose()" class="dimBoxImageSignOut d-inline-block logout ml-1" alt="logout"> 
+                                    -->
+                                    <img [src]="closeIcon" (click)="onClose()" class="dimBoxImageSignOut d-inline-block logout ml-1" alt="logout">
                                 </div>
                             </div>
                         </div>
