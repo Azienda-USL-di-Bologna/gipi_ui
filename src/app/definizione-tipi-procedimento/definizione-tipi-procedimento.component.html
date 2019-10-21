@@ -50,6 +50,7 @@
     <dxi-column dataField="durataMassimaSospensione" [visible]="false"></dxi-column>
     <dxi-column dataField="normaRiferimento" [visible]="false"></dxi-column>
     <dxi-column dataField="obbligoEsitoConclusivo" [visible]="false"></dxi-column>
+    <dxi-column dataField="richiedePrecedente" [visible]="false"></dxi-column>
     <dxi-column dataField="durataMassimaIter" [visible]="false"  editorType="dxNumberBox"></dxi-column>
     <dxo-editing mode="popup" cellTemplate="Modifica" title="Modifica" style="align-content: center; justify-content: center"
         [allowUpdating]="false" [allowDeleting]="false" [allowAdding]="true" [texts]="texts" #pippo>
@@ -84,7 +85,8 @@
                 <dxi-validation-rule type="required" message="la durata massima di sospensione è obbligatoria"></dxi-validation-rule>
                 <dxi-validation-rule type="pattern" [pattern]="patternGreaterEqualZero" message="la durata massima di sospensione non può essere negativa"></dxi-validation-rule>
             </dxi-item>
-            <dxi-item dataField="obbligoEsitoConclusivo" [label]="{text: 'Obbligo esito conclusivo e motivazione'}"  cssClass="label-wrap" [colSpan]="2"></dxi-item>
+            <dxi-item dataField="obbligoEsitoConclusivo" [label]="{text: 'Obbligo esito conclusivo e motivazione'}"  cssClass="label-wrap" [colSpan]="1"></dxi-item>
+            <dxi-item dataField="richiedePrecedente" [label]="{text: 'Richiede iter precedente'}"  cssClass="label-wrap" [colSpan]="1"></dxi-item>
             <dxi-item [label]="{text: 'Pubblicazione sui registri'}" cssClass="label-wrap" [colSpan]="2">
                 <dx-tag-box #tag_pubblicazione
                     *ngIf="showTagBox"
