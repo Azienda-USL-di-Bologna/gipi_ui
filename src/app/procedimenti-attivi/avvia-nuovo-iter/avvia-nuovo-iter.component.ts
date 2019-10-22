@@ -42,6 +42,9 @@ export class AvviaNuovoIterComponent implements OnInit {
   public dataRegistrazioneDocumento: Date;
   public durataMassimaProcedimentoDaProcedimento: number;
   public defaultAcipValue: boolean;
+  
+  /* PER LA GESTIONE DEL PRECEDENTE */
+  public precedenteRequired: boolean = false;
 
   @ViewChild("check_box_fasc") public checkBoxFasc: DxCheckBoxComponent;
   @ViewChild("check_box_acip") public checkBoxAcip: DxCheckBoxComponent;
@@ -110,6 +113,7 @@ export class AvviaNuovoIterComponent implements OnInit {
       this.iterParams.idProcedimento = procedimento.procedimento.id;
       this.iterParams.procedimento = procedimento.procedimento;
       this.durataMassimaProcedimentoDaProcedimento = procedimento.procedimento.idAziendaTipoProcedimento.durataMassimaProcedimento;
+      this.precedenteRequired = procedimento.procedimento.idAziendaTipoProcedimento.idTipoProcedimento.richiedePrecedente;
       // this.buildDataSourceUtenti();
 
       if (this.iterParams.procedimento.idResponsabileAdozioneAttoFinale &&  this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale) {
