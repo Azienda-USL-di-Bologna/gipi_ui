@@ -60,10 +60,11 @@
         <dxi-validation-rule type="required" message="il responsabile del procedimento amministrativo è obbligatorio"></dxi-validation-rule>
       </dxi-item>
       <dxi-item dataField="promotoreIter" [colSpan]="6" cssClass="label-wrap" [label]="{text: 'Promotore'}" [editorOptions]="{ disabled: true }"></dxi-item>
-      <!-- PER LA GESTIONE DEL PRECEDENTE -->
       
-        <div *ngIf="precedenteRequired">
-        </div>
+      <!-- PER LA GESTIONE DEL PRECEDENTE -->
+      <div *ngIf="precedenteRequired">
+
+      </div>
       
       <dxi-item dataField="oggettoIter" [colSpan]="6" cssClass="label-wrap" editorType="dxTextArea" [label]="{text: 'Oggetto'}" [editorOptions]="{ disabled: false, maxLength: 1024 }">
           <dxi-validation-rule type="required" message="l'oggetto è obbligatorio"></dxi-validation-rule>

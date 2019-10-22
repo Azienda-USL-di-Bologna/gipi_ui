@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
-import { Utente, bUtente, bAzienda, Procedimento, GetUtentiGerarchiaStruttura, Persona, Struttura, UtenteStruttura } from "@bds/nt-entities";
+import { Utente, bUtente, bAzienda, Procedimento, GetUtentiGerarchiaStruttura, Persona, Struttura, UtenteStruttura, Iter } from "@bds/nt-entities";
 import { OdataContextFactory } from "@bds/nt-context";
 import { OdataContextDefinition } from "@bds/nt-context";
 import { CustomLoadingFilterParams } from "@bds/nt-context";
@@ -45,6 +45,7 @@ export class AvviaNuovoIterComponent implements OnInit {
   
   /* PER LA GESTIONE DEL PRECEDENTE */
   public precedenteRequired: boolean = false;
+  public dataSourceIterPrecedenti: DataSource = null;
 
   @ViewChild("check_box_fasc") public checkBoxFasc: DxCheckBoxComponent;
   @ViewChild("check_box_acip") public checkBoxAcip: DxCheckBoxComponent;
@@ -107,6 +108,8 @@ export class AvviaNuovoIterComponent implements OnInit {
   }
 
   private buildProcedimento(procedimento: any): void {
+    console.log("procedimento", procedimento);
+    
     if (procedimento != null) {
       this.nomeProcedimento = procedimento.procedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome
         + " (" + procedimento.procedimento.idStruttura.nome + ")";
@@ -114,6 +117,7 @@ export class AvviaNuovoIterComponent implements OnInit {
       this.iterParams.procedimento = procedimento.procedimento;
       this.durataMassimaProcedimentoDaProcedimento = procedimento.procedimento.idAziendaTipoProcedimento.durataMassimaProcedimento;
       this.precedenteRequired = procedimento.procedimento.idAziendaTipoProcedimento.idTipoProcedimento.richiedePrecedente;
+      
       // this.buildDataSourceUtenti();
 
       if (this.iterParams.procedimento.idResponsabileAdozioneAttoFinale &&  this.iterParams.procedimento.idStrutturaResponsabileAdozioneAttoFinale) {
@@ -128,6 +132,11 @@ export class AvviaNuovoIterComponent implements OnInit {
       this.iterParams.visibile = -1;  // Di default il fascicolo è visibile...
       this.checkBoxFasc.value = false;  // E il checkbox deve essere non flaggato
       this.iterParams.sendAcipByEmail = this.defaultAcipValue ? -1 : 0; // default per l'invio della mail dell'acip
+    }
+    
+    if(this.precedenteRequired){
+      console.log("Richiesto Precedente, carico i dati")
+      this.buildDatiIterPrecedente();
     }
   }
 
@@ -374,6 +383,29 @@ export class AvviaNuovoIterComponent implements OnInit {
       ? !!+value   // we parse string to number first
       : !!value;
   }
+
+  public buildDatiIterPrecedente(){
+    console.log("buildDatiIterPrecedente()");
+    let filtroCatena = ["1","=",1];
+    this.dataSourceIterPrecedenti = new DataSource({
+      store: this.odataContextDefinition.getContext()[new Iter().getName()],
+          expand: ["idProcedimento.idAziendaTipoProcedimento.idAzienda"],
+          filter: [
+            ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id","=",this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id]],
+            ["annullato","=",false],
+            filtroCatena
+          ],
+          sort: [{ field: "numero", desc: true }]
+    })
+    this.dataSourceIterPrecedenti.load().then(
+      res => {
+        console.log("GLI ITERS", res)
+      },
+      err => {
+        console.log("!!!ERRORE", err)
+    });
+  }
+
 }
 
 class IterParams {
