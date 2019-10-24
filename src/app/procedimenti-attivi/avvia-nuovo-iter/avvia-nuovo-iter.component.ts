@@ -14,8 +14,10 @@ import { confirm, custom } from "devextreme/ui/dialog";
 import DataSource from "devextreme/data/data_source";
 import {OdataUtilities} from "@bds/nt-context";
 import { UtilityFunctions } from "../../utility-functions";
-import { DxCheckBoxComponent } from "devextreme-angular";
+import { DxCheckBoxComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { ParametriAziendaService } from "../../services/parametri-azienda.service";
+import { DxiConstantLineModule } from "devextreme-angular/ui/nested/constant-line-dxi";
+
 
 @Component({
   selector: "avvia-nuovo-iter",
@@ -46,9 +48,16 @@ export class AvviaNuovoIterComponent implements OnInit {
   /* PER LA GESTIONE DEL PRECEDENTE */
   public precedenteRequired: boolean = false;
   public dataSourceIterPrecedenti: DataSource = null;
+  public dataSourceMotiviCollegamento: any;
+  public popupPrecedenteVisible: boolean = false;
+  public selectedPrecedente: Iter;
+  public codiceMotivoSelezionato = null;
+  public noteMotivoPrecedente;
 
   @ViewChild("check_box_fasc") public checkBoxFasc: DxCheckBoxComponent;
   @ViewChild("check_box_acip") public checkBoxAcip: DxCheckBoxComponent;
+  @ViewChild("gridPrecedenti") gridPrecedenti: DxDataGridComponent;
+  @ViewChild("motivoSelecdBox") motivoSelecdBox: DxSelectBoxComponent;
   
   @Input()
   set procedimentoSelezionato(procedimento: any) {
@@ -133,11 +142,8 @@ export class AvviaNuovoIterComponent implements OnInit {
       this.checkBoxFasc.value = false;  // E il checkbox deve essere non flaggato
       this.iterParams.sendAcipByEmail = this.defaultAcipValue ? -1 : 0; // default per l'invio della mail dell'acip
     }
-    
-    if(this.precedenteRequired){
-      console.log("Richiesto Precedente, carico i dati")
-      this.buildDatiIterPrecedente();
-    }
+    this.iterParams.iterPrecedente = null;
+    this.iterParams.iterPrecedenteString = null;
   }
 
   private buildDataSourceUtenti(): void {
@@ -220,6 +226,9 @@ export class AvviaNuovoIterComponent implements OnInit {
 
   private avviaIter(): void {
     this.loadingVisible = true;
+    if(this.iterParams.iterPrecedente)
+      this.iterParams.iterPrecedenteString = JSON.stringify(this.iterParams.iterPrecedente);
+    console.log("PARAMS", this.iterParams);
     const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/avviaNuovoIter", this.iterParams, { headers: new HttpHeaders().set("content-type", "application/json") }) // Object.assign({}, this.iterParams))
       .subscribe(
       res => {
@@ -384,27 +393,115 @@ export class AvviaNuovoIterComponent implements OnInit {
       : !!value;
   }
 
-  public buildDatiIterPrecedente(){
-    console.log("buildDatiIterPrecedente()");
-    let filtroCatena = ["1","=",1];
-    this.dataSourceIterPrecedenti = new DataSource({
-      store: this.odataContextDefinition.getContext()[new Iter().getName()],
-          expand: ["idProcedimento.idAziendaTipoProcedimento.idAzienda"],
-          filter: [
-            ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id","=",this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id]],
-            ["annullato","=",false],
-            filtroCatena
-          ],
-          sort: [{ field: "numero", desc: true }]
-    })
-    this.dataSourceIterPrecedenti.load().then(
-      res => {
-        console.log("GLI ITERS", res)
-      },
-      err => {
-        console.log("!!!ERRORE", err)
+
+  /** GESTIONE ITER PRECEDENTE */
+  private getMotivoDescrizioneByCodice(cod: string){
+    let description;
+    this.dataSourceMotiviCollegamento.forEach(element => {
+      if(element.codice === cod)
+        description =  element.descrizione;
     });
+    return description;
   }
+
+  public buildDatiIterPrecedenteThenShow(){
+    console.log("buildDatiIterPrecedente()");
+    this.dataSourceMotiviCollegamento = [{codice: "RIESAME", descrizione:"Riesame"},{codice: "RICORSO", descrizione:"Ricorso"},{codice: "ALTRO", descrizione:"Altro"}];
+    let filtroCatena = ["1","=",1];
+    if(!this.dataSourceIterPrecedenti){
+      this.dataSourceIterPrecedenti = new DataSource({
+        store: this.odataContextDefinition.getContext()[new Iter().getName()],
+            expand: ["idProcedimento.idAziendaTipoProcedimento.idAzienda"],
+            filter: [
+              ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id","=",this.loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id]],
+              ["annullato","=",false],
+              filtroCatena
+            ],
+            sort: [{ field: "anno", desc: true }, { field: "numero", desc: true }]
+      })
+      this.dataSourceIterPrecedenti.load().then(
+        res => {
+          console.log("GLI ITERS", res)
+          this.popupPrecedenteVisible = true;
+        },
+        err => {
+          console.log("!!!ERRORE", err)
+      });
+    }
+    else{
+      this.gridPrecedenti.instance.pageIndex(0);
+      this.popupPrecedenteVisible = true;
+    }
+  }
+
+  public openPopupPrecedente(){
+    this.buildDatiIterPrecedenteThenShow()
+  }
+
+  public deletePrecedente(){
+    this.iterParams.iterPrecedente = null;
+  }
+
+  public precedenteClicks(){
+    console.log("precedenteClicks()!!!!")
+    if(!this.iterParams.iterPrecedente)
+      this.openPopupPrecedente();
+    else
+      this.deletePrecedente();
+  }
+
+  onPrecedenteSelected(selectedItems: any){
+    this.selectedPrecedente = selectedItems.selectedRowsData[0];
+    console.log("onPrecedenteSelected", this.selectedPrecedente)
+  }
+
+  chiudiPopupPrecedente(){
+    this.gridPrecedenti.instance.deselectAll();
+    this.gridPrecedenti.instance.clearSelection();
+    this.motivoSelecdBox.instance.reset();
+    this.dataSourceMotiviCollegamento = null;
+    this.codiceMotivoSelezionato = null;
+    this.selectedPrecedente = null;
+    this.noteMotivoPrecedente = null;
+    this.popupPrecedenteVisible = false;
+  }
+
+  selectedMotivo(selezionato){
+    console.log("selectedMotivo(selezionato)");
+    
+    if(selezionato){
+      this.codiceMotivoSelezionato = selezionato.itemData.codice;
+    }
+  }
+
+  onSelectionChangedMotivo(selezionato){
+    console.log("onSelectionChangedMotivo(selezionato)");
+    if(selezionato){
+      this.codiceMotivoSelezionato = selezionato.selectedItem.codice;
+    }
+  }
+
+  public associa(e){
+    console.log("associa")
+    if(!this.codiceMotivoSelezionato || !this.selectedPrecedente){
+      this.showStatusOperation("E' necessario selezionare sia un iter precedente che una motivazione", "warning");
+      return;
+    }
+    else{
+      let jsonOb:any = {
+        'idIterPrecedente': this.selectedPrecedente.id,
+        'customDescription': this.selectedPrecedente.numero + "/" + this.selectedPrecedente.anno + " - " + this.selectedPrecedente.oggetto,
+        'motivoPrecedente': {
+          'codice': this.codiceMotivoSelezionato,
+          'descrizioneMotivo': this.getMotivoDescrizioneByCodice(this.codiceMotivoSelezionato)
+        },
+        'noteMotivoPrecedente': this.noteMotivoPrecedente
+      };
+      this.iterParams.iterPrecedente = <JSON> jsonOb;
+      this.chiudiPopupPrecedente();
+    }
+  }
+
 
 }
 
@@ -430,4 +527,6 @@ class IterParams {
   public dataRegistrazioneDocumento: Date;
   public sendAcipByEmail: number;
   public visibile: number;
+  public iterPrecedente: any;
+  public iterPrecedenteString: string;
 }
