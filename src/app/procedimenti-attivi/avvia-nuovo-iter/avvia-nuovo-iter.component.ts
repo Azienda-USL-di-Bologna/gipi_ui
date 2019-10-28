@@ -296,6 +296,7 @@ export class AvviaNuovoIterComponent implements OnInit {
       + "<br><b>Promotore:</b> " + this.iterParams.promotoreIter
       + "<br><b>Oggetto:</b> " + this.iterParams.oggettoIter
       + "<br><b>Fascicolo riservato:</b> " + visibile
+      + (this.iterParams.iterPrecedente!=null ? "<br><b>Iter precedente:</b> " + this.iterParams.iterPrecedente.customDescription : "")
       + "<br><b>Invia CAP al promotore:</b> " + inviaAcip;
     return messaggio;
   }
