@@ -1297,7 +1297,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
             ["annullato","=",false],
             filtroCatena
           ],
-          sort: [{ field: "numero", desc: true }]
+          sort: [{ field: "anno", desc: true }, { field: "numero", desc: true }]
         });
         this.dataSourceIterPrecedenti.load().then(
           res => {
