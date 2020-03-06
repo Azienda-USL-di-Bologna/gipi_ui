@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, ViewChild, HostListener } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition, CustomLoadingFilterParams, OdataContextFactory, ButtonAppearance, GlobalContextService, Entity, OdataUtilities } from "@bds/nt-context";
 import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
-import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura, Persona } from "@bds/nt-entities";
+import { Iter, Utente, ProcedimentoCache, bUtente, bAzienda, Titolo, RegistroTipoProcedimento, UtenteStruttura, GetUtentiGerarchiaStruttura, Struttura, Persona, RegistroIter, Registro, MotivoPrecedente, Stato } from "@bds/nt-entities";
 import { HttpClient  } from "@angular/common/http";
 import notify from "devextreme/ui/notify";
 import { ActivatedRoute, Params } from "@angular/router";
@@ -11,9 +11,11 @@ import { LoggedUser } from "@bds/nt-login";
 import { Observable, Subscription } from "rxjs";
 import { HttpHeaders } from "@angular/common/http";
 import { STATI } from "@bds/nt-entities";
-import { DxFormComponent } from "devextreme-angular";
+import { DxFormComponent, DxPopupComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { IterProcedimentoFascicoloUtilsClass, PERMESSI } from "./iter-procedimento-fascicolo-utils.class";
 import { UtilityFunctions } from "app/utility-functions";
+import { confirm } from "devextreme/ui/dialog";
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-iter-procedimento",
@@ -24,15 +26,15 @@ import { UtilityFunctions } from "app/utility-functions";
 export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
   private subscriptions: Subscription[] = [];
-  private initialWidth: number = window.innerWidth;
-  private threshold: number = 1500;
   // private previousWidth: number = this.initialWidth;
   private odataContextDefinitionFunctionImport: OdataContextDefinition;
   private odataContextDefinition: OdataContextDefinition;
   private utility: UtilityFunctions = new UtilityFunctions();
   private arrayCfVicari: string[];
   private arrayCfVicariNonCancellabili;
-  
+
+  public initialWidth: number = window.innerWidth;
+  public threshold: number = 1500;
   public iter: Iter = new Iter();
   public idIterArray: Object;
   public procedimentoCache = new ProcedimentoCache;
@@ -45,30 +47,48 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   // public sospensioneIterVisible: boolean = false;
   public genericButtons: ButtonAppearance[];
   public classeDiHighlight = "";
-  public classeDiHighlightOggetto = "read-only-field ";
+  public classeDiHighlightForScroll = "read-only-field ";
   public pubblicazioneAllAlbo: boolean = false;
   public popupRiattivaIterVisibile: boolean = false;
   public datiRiattivazioneIter: any = { note: "", idIter: null };
   public nuovoUtenteResponsabile: Utente;
   public nuovaStrutturaUtenteResp: Struttura;
   public mostraPulsantiVicResp = false;
+  public mostraLookupVicari = false;
   public creatoreIterDescription: string;
 
   public popupVicariVisibile: boolean = false;
   public dataSourceVicari: DataSource;
+  public dataSourceIterPrecedenti: DataSource;
+  public listaVicariPopup: Vicario[];
 
   public fascicoloIter: any;
   public permessoUtenteLoggato: number;
-  public customLoadingFilterParamsLookup: CustomLoadingFilterParams = new CustomLoadingFilterParams();
-    
+  public possoCorreggereAssociazioni: boolean;
+
+  public stringaRegistroAccessi: String;
+  public popupPrecedenteVisible: boolean = false;
+  public selectedPrecedente: Iter;
+  public dataSourceMotiviCollegamento: any;
+  public codiceMotivoSelezionato = null;
+  public noteMotivoPrecedente;
+  public attenterePregoVisible = false;
+  public stringNoteAnnullamentoIter: string = '';
+
 
   @ViewChild("myForm1") myForm1: DxFormComponent;
+  @ViewChild("popupVicari") popupVicari: DxPopupComponent;
+  @ViewChild("popupPrecedenti") popupPrecedenti: DxPopupComponent;
+  @ViewChild("gridPrecedenti") gridPrecedenti: DxDataGridComponent;
+  @ViewChild("motivoSelecdBox") motivoSelecdBox: DxSelectBoxComponent;
+  @ViewChild("noteAnnullamentoIter") noteAnnullamentoIter: DxPopupComponent;
 
 
   // pulsanti custom aggiunti alla button bar
   // public procediButton: ButtonAppearance;
   // public sospendiButton: ButtonAppearance;
   public riattivaButton: ButtonAppearance;
+  public annullaIterButton: ButtonAppearance;
 
   public datiGenerali = "";
   // Dati che verranno ricevuti dall'interfaccia chiamante
@@ -91,7 +111,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     label: "",
     action: ""
   };
-  
+
   public popupCambioResp: any = {
     visible: false,
     title: "",
@@ -115,7 +135,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   // public hasPermissionOnFascicolo: boolean = false;
   public colCountGroup: number;
 
-  
+
   // public soloEditing: boolean = false;
   public dataSourceUtentiCugini: DataSource;
   public dataSourceUtenteLoggato: DataSource;
@@ -137,7 +157,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     // gestione resize window (pessime prestazioni)
    /*  this.screen = this.screen.bind(this); */
 
-    console.log("iter-procedimento-component (constructor)");
     this.activatedRoute.queryParams.subscribe((queryParams: Params) => {
       const idIter: string = queryParams["idIter"];
       if (idIter) {
@@ -147,7 +166,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
 
     this.odataContextDefinitionFunctionImport = this.odataContextFactory.buildOdataFunctionsImportDefinition();
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
-    
+
     const oataContextDefinitionTitolo: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
     const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
     customLoadingFilterParams.addFilter("nomeTitolo", ["tolower(${target})", "contains", "${value.tolower}"]);
@@ -170,12 +189,31 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         "idStrutturaResponsabileProcedimento",
         "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento",
         "idUtenteCreazione.idPersona",
-        "idStrutturaUtenteCreazione"
+        "idStrutturaUtenteCreazione",
+        "idMotivoPrecedente",
+        "idSpettanzaAnnullamento"
       ],
       filter: [["id", "=", this.idIter]],
       map: (item) => {
-        console.log("ITEM", item);
+        console.log("***ITEM***", item)
         if (item) {
+          // carico il dataSource dei Registri Iter (mi serve farlo una sola volta)
+          if(item.idIterPrecedente){
+            item.idIterPrecedente.customDescription = item.idIterPrecedente.numero + '/'+ item.idIterPrecedente.anno + ' - ' + item.idIterPrecedente.oggetto
+          }
+
+          if(item.idMotivoPrecedente){
+            console.log("MOTIVO PRECEDENTE!!!!", item.idMotivoPrecedente)
+            // questo non riesco a mostrarlo finché non mi creo l'entità
+          }
+
+          if (!this.stringaRegistroAccessi) {
+            if (item.idStato.codice !== STATI.CHIUSO)
+              this.loadAndBuildRegistriIterByIdTipoProcedimento(item.idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento);
+            else
+              this.loadRegistriIter();
+          }
+
           if (item.procedimentoCache.idTitolarePotereSostitutivo && item.procedimentoCache.idStrutturaTitolarePotereSostitutivo) {
             item.procedimentoCache.nomeVisualTitolare = item.procedimentoCache.idTitolarePotereSostitutivo.idPersona.descrizione +
               " (" + item.procedimentoCache.idStrutturaTitolarePotereSostitutivo.nome + ")";
@@ -190,8 +228,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           }
           // ora mi creo giusto il valore da mostrare nel campo dell'utente creatore iter
           if (item.idUtenteCreazione && item.idUtenteCreazione.idPersona && item.idStrutturaUtenteCreazione) {
-            console.log("item.idUtenteCreazione.idPersona", item.idUtenteCreazione.idPersona);
-            console.log("item.idStrutturaUtenteCreazione", item.idStrutturaUtenteCreazione);
             /* item.idUtenteCreazione.utenteStrutturaList.forEach(element => {
               if (element.idAfferenzaStruttura.codice === "DIRETTA")
               this.creatoreIterDescription = item.idUtenteCreazione.idPersona.descrizione + " (" + element.idStruttura.nome + ")";
@@ -205,7 +241,10 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         }
       }
     });
+
     this.buildIter();
+
+
 
     this.perFigliParteDestra = {
       idIter: this.idIter,
@@ -225,16 +264,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     else {
       this.colCountGroup = 10;
     }
-    
-    this.customLoadingFilterParamsLookup.addFilter("descrizioneCalcolata", ["tolower(idUtente.idPersona.descrizione)", "contains", "${value.tolower}"]);
-    this.buildDataSourceUtentiTutti = this.buildDataSourceUtentiTutti.bind(this);
     this.setCellValue = this.setCellValue.bind(this);
-    
   }
 
   private buildDataSourceUtentiCugini(): void {
     /*
-      Il caricamento del datasource per la lookup ha un problema. E' paginato. 
+      Il caricamento del datasource per la lookup ha un problema. E' paginato.
       Se l'utente loggato, che deve essere impostato come utente default, non è presente nella prima tranche di dati
       che il datasource tira su, allora non si riuscirà ad impostare l'utente default.
       Il workaraound consiste nel caricare l'utente loggato ed aggiungerlo qualora non fosse già presente.
@@ -257,8 +292,8 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     this.dataSourceUtenteLoggato = new DataSource({
       store: this.odataContextDefinition.getContext()[new UtenteStruttura().getName()],
       expand: [
-        "idUtente.idPersona", 
-        "idStruttura", 
+        "idUtente.idPersona",
+        "idStruttura",
         "idAfferenzaStruttura"
       ],
       filter: [
@@ -281,13 +316,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           res.push(usLogged);
         }
         this.idUtenteDefault = re[0].id;
-        this.descrizioneUtenteResponsabile = re[0].idUtente.idPersona.descrizione 
+        this.descrizioneUtenteResponsabile = re[0].idUtente.idPersona.descrizione
           + " (" + re[0].idStruttura.nome
           + " - " + re[0].idAfferenzaStruttura.descrizione + ")";
       });
     });
   }
-  
+
   private showStatusOperation(message: string, type: string) {
     notify({
       message: message,
@@ -297,9 +332,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         width: TOAST_WIDTH
     });
   }
-  
+  @HostListener("window:resize", ["$event"])
+    onResize(event) {
+    this.initialWidth = window.innerWidth;
+  }
   public getDescrizioneUtente(item: any): string {
-    return item ? item.idUtente.idPersona.descrizione 
+    return item ? item.idUtente.idPersona.descrizione
         + " (" + item.idStruttura.nome
         + " - " + item.idAfferenzaStruttura.descrizione + ")" : null;
   }
@@ -351,10 +389,15 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.popupPrecedenti.closeOnBackButton = false;
+    this.popupPrecedenti.showCloseButton = false;
+    this.popupPrecedenti.closeOnOutsideClick = false;
+
+  }
 
   public buildTitoloDatiGenerali() {
-    this.datiGenerali = "Iter n." + this.iter.numero + "/" + this.iter.anno + " (" + this.iter.idStato.descrizione + ")";
+    this.datiGenerali = "Iter n." + this.iter.numero + "/" + this.iter.anno + " (" + (this.iter.annullato ? 'Annullato' : this.iter.idStato.descrizione) + ")";
   }
 
   isSospeso() {
@@ -364,8 +407,12 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       return false;
   }
 
-  isChiuso() {
+  public isChiuso() {
     return this.iter.idStato.codice === STATI.CHIUSO;
+  }
+
+  public isAnnullato(){
+    return this.iter.annullato;
   }
   /* setNomeBottoneSospensione() {
     this.sospendiButton.label = this.getNomeBottoneSospensione();
@@ -387,29 +434,43 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   inSolaLettura() {
-    return (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO;
+    return (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) !== true || this.iter.idFaseCorrente.faseDiChiusura || this.iter.idStato.codice === STATI.CHIUSO || this.iter.annullato;
   }
 
   disableAreaTextNote() {
     return this.inSolaLettura() || !this.popupData.checkInteressati;
   }
 
-  
+
   generateCustomButtons() {
-    
-    // this.procediButton = new ButtonAppearance("Procedi", "", false, this.disableProcedi());
-    // this.sospendiButton = new ButtonAppearance("Gestisci stato", "", false, this.disableSospendi());
+    console.log("generateCustomButtons()");
+
     if (this.isSospeso()) {
       this.genericButtons = new Array<ButtonAppearance>();
       this.riattivaButton = new ButtonAppearance("Riattiva Iter", "", false, false);
       this.genericButtons.push(this.riattivaButton);
+      console.log(this.iter.idStato);
+      console.log(this.iter.annullato);
+
     }
+    if(this.iter.idStato.codice !== "CHIUSO" && !this.iter.annullato){
+      console.log("!this.isChiuso && !this.isAnnullato");
+      if(!this.genericButtons)
+        this.genericButtons = new Array<ButtonAppearance>();
+      this.annullaIterButton = new ButtonAppearance("Annulla Iter", "", false, false);
+      this.genericButtons.push(this.annullaIterButton);
+      console.log("this.genericButtons", this.genericButtons);
+
+    }
+
+
     // this.setNomeBottoneSospensione();
-    
+
     // this.soloEditing = this.disableSospendi();
   }
 
   buildIter() {
+    // console.log("buildIter(): faccio la load")
     this.dataSourceIter.load().then(res => {
       this.iter.build(res[0]);
       // this.generateCustomButtons(); Non cancellare, potrebbe tornare utile in futuro
@@ -420,10 +481,59 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       this.infoGeneriche.struttura = this.iter.procedimentoCache.idStruttura.nome;
       this.infoGeneriche.tipoProcedimento = this.iter.procedimentoCache.nomeTipoProcedimento;
 
-      let oggi = new Date();
+      let oggi = this.isChiuso() ? this.iter.dataChiusura : new Date();
       let utc1 = Date.UTC(oggi.getFullYear(), oggi.getMonth(), oggi.getDate());
       let utc2 = Date.UTC(this.iter.dataAvvio.getFullYear(), this.iter.dataAvvio.getMonth(), this.iter.dataAvvio.getDate());
       this.iter.giorniDurataTrascorsi = Math.abs(Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24)));
+      this.iter.giorniEffettiviTrascorsi = Math.abs(Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24))) - this.iter.giorniSospensioneTrascorsi;
+    });
+  }
+
+  loadAndBuildRegistriIterByIdTipoProcedimento(idTipoProcedimento: any) {
+    // console.log("loadAndBuildRegistriIterByIdTipoProcedimento()");
+    // console.log("idTipoProcedimento", idTipoProcedimento);
+    // console.log("this.idIter", this.idIter);
+    const oCDRIBITP: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    let dsRegistriIter = new DataSource({
+      store: oCDRIBITP.getContext()[new RegistroTipoProcedimento().getName()],
+      expand: [
+        "idTipoProcedimento",
+        "idRegistro"
+      ],
+      filter: [["idTipoProcedimento.id", "=", idTipoProcedimento.id]]
+    });
+    dsRegistriIter.load().then(res => {
+      res.forEach(element => {
+        let registro = element.idRegistro;
+        // console.log(registro.descrizione);
+        if (!this.stringaRegistroAccessi)
+          this.stringaRegistroAccessi = "I campi evidenziati verranno esposti nella pubblicazione dell'iter su: " + registro.descrizione;
+        else
+          this.stringaRegistroAccessi = this.stringaRegistroAccessi + ", " + registro.descrizione;
+      });
+    });
+  }
+
+  public loadRegistriIter() {
+    // console.log("loadRegistriIter()");
+    // console.log("this.idIter", this.idIter);
+    const oCDRI: OdataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
+    let dsRegistriIter = new DataSource({
+      store: oCDRI.getContext()[new RegistroIter().getName()],
+      expand: ["idIter", "idRegistro"],
+      filter: [["idIter.id", "=", +this.idIter]]
+    });
+    // console.log("Mo faccio la load");
+    dsRegistriIter.load().then(res => {
+      res.forEach(element => {
+        let registro = element.idRegistro;
+        // console.log(registro.descrizione);
+        if (!this.stringaRegistroAccessi)
+          this.stringaRegistroAccessi = "I campi evidenziati sono esposti nella pubblicazione dell'iter su: " + registro.descrizione;
+        else
+          this.stringaRegistroAccessi = this.stringaRegistroAccessi + ", " + registro.descrizione;
+
+      });
     });
   }
 
@@ -480,7 +590,6 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   updateIter(validationParams: any) {
-																  
     let doUpdate: boolean = false;
     if (this.popupData.field) {
       if (this.popupData.field === "esitoMotivazione") {
@@ -557,6 +666,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public openCambiaResponsabile(e: any) {
+    let cfResponsabile = this.iter.idResponsabileProcedimento.idPersona.codiceFiscale;
     this.nuovoUtenteResponsabile = null;
     this.nuovaStrutturaUtenteResp = null;
     this.popupCambioResp.title = "Cambia responsabile procedimento amministrativo";
@@ -614,13 +724,20 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   }
 
   public cambiaResponsabileProcedimento() {
+    let cfResponsabile = this.iter.idResponsabileProcedimento.idPersona.codiceFiscale;
+    let vicars;
+    if (this.arrayCfVicari.indexOf(cfResponsabile) === -1) { // LO SO CHE FA SCHIFO MA LA FUNZIONE INCLUDES LANCIA ERRORE!!!! (non è supportata in firefox vecchio)
+      vicars = this.arrayCfVicari.slice();
+      vicars.push(cfResponsabile);
+    }
     const params = {
       idIter: this.iter.id,
       idFascicolo: this.iter.idFascicolo,
       idUtenteLoggato: this.userInfo.idUtente,
       idUtenteResponsabile: this.nuovoUtenteResponsabile.id,
       idStrutturaResponsabile: this.nuovaStrutturaUtenteResp.id,
-      cfResponsabile: this.nuovoUtenteResponsabile.idPersona.codiceFiscale
+      cfResponsabile: this.nuovoUtenteResponsabile.idPersona.codiceFiscale,
+      vicari: vicars
     };
     if (this.iter.idResponsabileProcedimento.id !== this.nuovoUtenteResponsabile.id ||
       this.iter.idStrutturaResponsabileProcedimento.id !== this.nuovaStrutturaUtenteResp.id) {
@@ -628,14 +745,18 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
           .subscribe(
           res => {
             this.showStatusOperation("Responsabile del procedimento cambiato con successo!", "success");
+            this.arrayCfVicari.push(cfResponsabile);
+            // debugger;
+            this.fascicoloIter.permessi = Object.assign(this.fascicoloIter.permessi, {[cfResponsabile]: "VICARIO"});
             this.refresh(); // Aggiorno l'iter per visualizzare il nuovo responsabile
+            this.closePopupResp();
             },
           err => {
             this.showStatusOperation("Modifica non andata a buon fine. Contattare BabelCare", "error");
             }
       );
     }
-    this.closePopupResp();
+
   }
 
   public riattivaIter() {
@@ -653,6 +774,64 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
         this.showStatusOperation("Qualcosa è andato storto. Contattare BabelCare", "error");
       }
     );
+  }
+
+  public chiudiPopupNoteAnnullamentoIter(): any {
+    this.noteAnnullamentoIter.instance.hide();
+  }
+
+  public preGestioneAnnullamentoIter(): any {
+    this.noteAnnullamentoIter.instance.show();
+  }
+
+  public execGestioneAnnullamentoIter(): any {
+    this.chiudiPopupNoteAnnullamentoIter();
+    let noteDaPassare: string = this.stringNoteAnnullamentoIter;
+    this.stringNoteAnnullamentoIter = '';
+    confirm("<b>Attenzione stai per Annullare l'iter</b>:<br/> "
+    + "l'iter verrà chiuso e non sarà più collegato ad altri iter, <br/>"
+    + "il fascicolo verrà declassato ad 'Affare',<br/> "
+    + "i documenti verranno scollegati dall'iter, <br/>"
+    +  "<b>l'operazione non può essere annullata.<b/><br/>"
+    +  "<b>Note:</b>" + noteDaPassare, "Conferma").then(dialogResult => {
+        if (dialogResult) {
+          const params = {idIter: this.iter.id, note: noteDaPassare}
+          this.attenterePregoVisible = true;
+          const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/annullaIter", params, { headers: new HttpHeaders().set("content-type", "application/json") })
+          .subscribe(
+            res => {
+              this.attenterePregoVisible = false;
+              console.log("YESSSS ITER ANNULLATO", res);
+              let messaggio = "L'iter è stato annullato con successo.";
+              notify({ message: messaggio,
+                type: "success",
+                displayTime: 4000,
+                position: TOAST_POSITION,
+                width: TOAST_WIDTH
+              });
+              this.refresh();   // questo rinfresca l'interfaccia
+              this.genericButtons = null; // questo non fa vedere i bottoni (NON VANNO MAI PIU' VISTI)
+            },
+            err => {
+              this.attenterePregoVisible = false;
+              notify({ message: "ERRORE: è stato riscontrato un problema, contattare BabelCare",
+                type: "error",
+                displayTime: 4000,
+                position: TOAST_POSITION,
+                width: TOAST_WIDTH
+              });
+            }
+
+          )
+
+
+        }
+      });
+  }
+
+  public gestisciAnnullamentoIter(): any {
+    this.preGestioneAnnullamentoIter();
+
   }
 
   public passaggioDiFase() {
@@ -696,8 +875,16 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   } */
 
   receiveMessage($event) {
+    console.log("receiveMessage ", $event)
     this.passaggioDiFaseVisible = $event["visible"];
     if ($event["proceduto"]) {
+      this.refresh();
+    }
+
+    if($event["cancellatoDocIter"]){
+      console.log("cancellatoDocIter ", $event["cancellatoDocIter"])
+      this.genericButtons = null;
+      this.fascicoloIter = null;  // lo so che non è il massimo, ma è l'unico modo per ricalcolare tutti i pulsanti DOPO il ricaricamento dell'iter
       this.refresh();
     }
   }
@@ -705,6 +892,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   refresh() {
     let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"]};
     this.perFigliParteDestra = perFigliNew;
+    // console.log("nuovi perFigliParteDestra ", this.perFigliParteDestra);
     this.buildIter();
   }
   /* receiveMessageFromSospensione($event) {
@@ -728,8 +916,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
       case "Procedi":
         this.passaggioDiFase();
         break; */
+
+      case "Annulla Iter":
+        this.gestisciAnnullamentoIter();
+        break;
     }
   }
+
 
   /* getDataUltimaSospensione() {
     let date;
@@ -764,26 +957,35 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   } */
 
   public calculateIodaPermissionAndSetButton(): void {
-    IterProcedimentoFascicoloUtilsClass.getFascicoloIter(this.http, this.iter.idFascicolo)
-    .subscribe(
-      res => {
-        this.fascicoloIter = res;
-        this.settaVariabiliPermessi();
-        if (!this.isChiuso() && this.permessoUtenteLoggato >= +PERMESSI.VICARIO) {
-          this.mostraPulsantiVicResp = true;
-        } 
-        if (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) {
-          this.generateCustomButtons();
+    // console.log("calculateIodaPermissionAndSetButton()")
+    if (!this.fascicoloIter) {
+      // console.log("!this.fascicoloIter ---> getFascicoloIetr()")
+      IterProcedimentoFascicoloUtilsClass.getFascicoloIter(this.http, this.iter.idFascicolo)
+      .subscribe(
+        res => {
+          this.fascicoloIter = res;
+          this.settaVariabiliPermessi();
+          if (!this.isChiuso() && this.permessoUtenteLoggato >= +PERMESSI.VICARIO) {
+            this.mostraPulsantiVicResp = true;
+          }
+          if (this.permessoUtenteLoggato >= +PERMESSI.MODIFICA) {
+            console.log("this.permessoUtenteLoggato", this.permessoUtenteLoggato);
+            console.log("+PERMESSI.MODIFICA", +PERMESSI.MODIFICA);
+            this.generateCustomButtons();
+          }
+          this.arrayCfVicari = IterProcedimentoFascicoloUtilsClass.calcolaArrayCfVicari(this.fascicoloIter.permessi);
+        },
+        err => {
+          // console.log("Errore nel recupero del fascicolo iter", err);
         }
-      },
-      err => {
-        console.log("Errore nel recupero del fascicolo iter", err);
-      }
-    );    
+      );
+    }
   }
 
   public settaVariabiliPermessi() {
     this.permessoUtenteLoggato = +PERMESSI[this.fascicoloIter.permessi[this.userInfo.cf]];
+    this.possoCorreggereAssociazioni = !this.isChiuso() && this.permessoUtenteLoggato >= +PERMESSI.MODIFICA;
+    // console.log("settaVariabiliPermessi -> this.possoCorreggereAssociazioni", this.possoCorreggereAssociazioni)
   }
 
   customDisplayExprClassificazione(data: Titolo) {
@@ -804,7 +1006,7 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     dataSourceTemp.load().then(
       (res) => {
         this.classeDiHighlight = res.length > 0 ? "hightlightClass" : "";
-        this.classeDiHighlightOggetto = res.length > 0 ? "read-only-field hightlightClass" : "read-only-field";
+        this.classeDiHighlightForScroll = res.length > 0 ? "read-only-field hightlightClass" : "read-only-field";
         let perFigliNew: Object = { idIter: this.idIter, cambiato: !this.perFigliParteDestra["ricarica"], classeCSS: this.classeDiHighlight};
         this.perFigliParteDestra = perFigliNew;
       }
@@ -819,86 +1021,146 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     if (!this.arrayCfVicari) {
       this.arrayCfVicari = IterProcedimentoFascicoloUtilsClass.calcolaArrayCfVicari(this.fascicoloIter.permessi);
     }
-    
     let iter = this.iter;
-
-    // Carico i vicari
-    if (!this.dataSourceVicari) {
-      this.dataSourceVicari = new DataSource({
-        store: this.odataContextDefinition.getContext()[new Persona().getName()],
-        filter: [this.utility.buildMultipleFilterForArray(
-          "codiceFiscale", 
-          Object.assign([], this.arrayCfVicari)
-          ), 
-          "or", 
-          ["codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]],
-          map: function (item) {
-            if (item.id === iter.idResponsabileProcedimento.idPersona.id) {
-              item.descrizioneCalcolata = item.descrizione + " - Responsabile del procedimento";
-              item.cancellabile = false;
-            } else if (item.id === iter.procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona.id) {
-              item.descrizioneCalcolata = item.descrizione + " - Resp. adozione dell'atto finale";
-              item.cancellabile = false;
-            } else if (item.id === iter.procedimentoCache.idTitolarePotereSostitutivo.idPersona.id) {
-              item.descrizioneCalcolata = item.descrizione + " - Titolare potere sostitutivo";
-              item.cancellabile = false;
-            } else if (iter.idUtenteCreazione && item.id === iter.idUtenteCreazione.idPersona.id) {
-              item.descrizioneCalcolata = item.descrizione + " - Creatore dell'iter";
-              item.cancellabile = true;
-            } else {
-              item.descrizioneCalcolata = item.descrizione;
-              item.cancellabile = true;
-            }
-            return item;
+    // Carico i vicari - Ogni volta altrimenti bisogna riapplicare il filtro
+    this.dataSourceVicari = new DataSource({
+      store: this.odataContextDefinition.getContext()[new Persona().getName()],
+      filter: [this.utility.buildMultipleFilterForArray(
+        "codiceFiscale",
+        Object.assign([], this.arrayCfVicari)
+        ),
+        "or",
+        ["codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]],
+        map: function (item) {
+          if (item.id === iter.idResponsabileProcedimento.idPersona.id) {
+            item.descrizioneCalcolata = item.descrizione + " - Responsabile del procedimento";
+            item.cancellabile = false;
+          } else if (item.id === iter.procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona.id &&
+                    item.id === iter.procedimentoCache.idTitolarePotereSostitutivo.idPersona.id) {
+            item.descrizioneCalcolata = item.descrizione + " - Resp. adozione dell'atto finale - Titolare potere sostitutivo";
+            item.cancellabile = false;
+          } else if (item.id === iter.procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona.id) {
+            item.descrizioneCalcolata = item.descrizione + " - Resp. adozione dell'atto finale";
+            item.cancellabile = false;
+          } else if (item.id === iter.procedimentoCache.idTitolarePotereSostitutivo.idPersona.id) {
+            item.descrizioneCalcolata = item.descrizione + " - Titolare potere sostitutivo";
+            item.cancellabile = false;
+          } else if (iter.idUtenteCreazione && item.id === iter.idUtenteCreazione.idPersona.id) {
+            item.descrizioneCalcolata = item.descrizione + " - Creatore dell'iter";
+            item.cancellabile = true;
+          } else {
+            item.descrizioneCalcolata = item.descrizione;
+            item.cancellabile = true;
           }
+          return item;
+        }
+    });
+    this.dataSourceVicari.load().then(res => {
+      this.listaVicariPopup = [];
+      let vicariTemp: Vicario[] = [];
+      res.forEach(element => {
+        let vicario = new Vicario(element.id, element.codiceFiscale, element.descrizioneCalcolata, element.cancellabile);
+        switch (vicario.id) {
+          case iter.idResponsabileProcedimento.idPersona.id:
+            vicariTemp.splice(0, 0, vicario);
+            break;
+          case iter.procedimentoCache.idResponsabileAdozioneAttoFinale.idPersona.id:
+            vicariTemp.splice(1, 0, vicario);
+            break;
+          case iter.procedimentoCache.idTitolarePotereSostitutivo.idPersona.id:
+            vicariTemp.splice(2, 0, vicario);
+            break;
+          case iter.idUtenteCreazione ? iter.idUtenteCreazione.idPersona.id : "":
+            vicariTemp.splice(3, 0, vicario);
+            break;
+          default:
+            this.listaVicariPopup.push(vicario);
+            break;
+        }
       });
-    }
-    this.dataSourceVicari.load();
-
+      this.listaVicariPopup = vicariTemp.concat(this.listaVicariPopup);
+    });
+    this.buildLookupUtenti();
     this.popupVicariVisibile = true;
   }
 
-  public buildDataSourceUtentiTutti() {
-    let self = this;
-    return {
-      store: this.odataContextDefinition.getContext()[new UtenteStruttura().getName()].on("loading", (loadOptions) => {
-        loadOptions.userData["customLoadingFilterParams"] = this.customLoadingFilterParamsLookup;
-        this.odataContextDefinition.customLoading(loadOptions);
-      }),
-      expand: ["idUtente.idPersona", "idUtente.idAzienda", "idStruttura"],
-      paginate: true,
-      pageSize: 15,
-      filter: [
-        ["idUtente.idAzienda.id", "=", this.userInfo.idAzienda],
-        ["idUtente.attivo", "=", true],
-        ["!", 
-          [
-            self.utility.buildMultipleFilterForArray("idUtente.idPersona.codiceFiscale", Object.assign([], self.arrayCfVicari)), 
-            "or",
-            ["idUtente.idPersona.codiceFiscale", "=", self.iter.idResponsabileProcedimento.idPersona.codiceFiscale]
+  public buildLookupUtenti() {
+    const customLoadingFilterParams: CustomLoadingFilterParams = new CustomLoadingFilterParams();
+    customLoadingFilterParams.addFilter("idUtente.idPersona.descrizione", ["tolower(${target})", "contains", "${value.tolower}"]);
+    if (!this.dataSourceUtentiTutti) {
+      this.dataSourceUtentiTutti = new DataSource({
+        store: this.odataContextDefinition.getContext()[new UtenteStruttura().getName()].on("loading", (loadOptions) => {
+          loadOptions.userData["customLoadingFilterParams"] = customLoadingFilterParams;
+          this.odataContextDefinition.customLoading(loadOptions);
+        }),
+        expand: ["idUtente.idPersona", "idUtente.idAzienda", "idStruttura"],
+        filter: [
+          ["idUtente.idAzienda.id", "=", this.userInfo.idAzienda],
+          ["idUtente.attivo", "=", true],
+          ["!",
+            [
+              this.utility.buildMultipleFilterForArray("idUtente.idPersona.codiceFiscale", Object.assign([], this.arrayCfVicari)),
+              "or",
+              ["idUtente.idPersona.codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]
+            ]
           ]
-        ]
-      ],
-      map: function (item) {
-        item.descrizioneCalcolata = item.idUtente.idPersona.descrizione + " (" + item.idStruttura.nome + ")";
-        return item;
-      }
-    };
+        ],
+        map: function (item) {
+          item.descrizioneCalcolata = item.idUtente.idPersona.descrizione + " (" + item.idStruttura.nome + ")";
+          return item;
+        }
+      });
+    } else {
+      this.filtraUtenti(true);
+    }
   }
 
+  public aggiungiVicario() {
+    this.mostraLookupVicari = true;
+  }
 
+  public onUtenteSelected(e) {
+    let vicario = new Vicario();
+    vicario.id = e.value.idUtente.idPersona.id;
+    vicario.cf = e.value.idUtente.idPersona.codiceFiscale;
+    vicario.descrizione = e.value.descrizioneCalcolata;
+    vicario.cancellabile = true;
+    this.listaVicariPopup.push(vicario);
+    this.filtraUtenti(false);
+  }
+  /* Posiziono la scrollbar della table sull'ultimo utente inserito */
+  public onContentReady(e) {
+    setTimeout(function() {
+        let scrollable = e.component.getScrollable();
+        scrollable.scrollTo(scrollable.scrollHeight());
+    }, 0);
+  }
 
-  onEditorPrepared(e) {
-    // debugger;
-    /* console.log("onEditorPrepared", e);
-    if (e.dataField === "id") {
-      // let lookup = e.editorElement.dxSelectBox("instance");
-      e.component.on("valueChanged", function(a) {console.log("valore cambaito"); });
-
-    } */
+  public filtraUtenti(onCreate: boolean) {
+    let arrayTemp = [];
+    if (onCreate) {
+      arrayTemp = this.arrayCfVicari;
+    } else {
+      this.listaVicariPopup.forEach(element => {
+        arrayTemp.push(element.cf);
+      });
+    }
+    this.dataSourceUtentiTutti.filter([
+      ["idUtente.idAzienda.id", "=", this.userInfo.idAzienda],
+      ["idUtente.attivo", "=", true],
+      ["!",
+        [
+          this.utility.buildMultipleFilterForArray("idUtente.idPersona.codiceFiscale", Object.assign([], arrayTemp)),
+          "or",
+          ["idUtente.idPersona.codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]
+        ]
+      ]
+    ]);
+    this.dataSourceUtentiTutti.load();
   }
 
   setCellValue(rowData, value, currentData, componentInstance) {
+    let vicario = new Vicario();
     let tempSource = new DataSource({
       store: this.odataContextDefinition.getContext()[new Persona().getName()],
       filter: ["id", "=", value]
@@ -906,31 +1168,13 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     tempSource.load().then(
       (res) => {
         this.arrayCfVicari.push(res[0].codiceFiscale);
-        this.filtraDataSourceVicari();
+        vicario.id = res[0].id;
+        vicario.cf = res[0].codiceFiscale;
+        vicario.descrizione = res[0].descrizione;
+        vicario.cancellabile = true;
+        this.listaVicariPopup.push(vicario);
       }
     );
-  }
-
-  onOptionChanged(e) {
-    // console.log("onOptionChanged", e);
-  }
-
-  onEditingStart(e) {
-    // console.log("onEditingStart", e);
-    // e.cancel = true;
-  }
-
-  onRowInserting(e) {
-    // console.log("inserting", e);
-    // e.cancel = true; // Cancello l'inserimento perché voglio gestirlo io
-  }
-
-  valueChanged(e) {
-    // console.log("valueChanged ", e);
-  }
-
-  onRowInserted(e) {
-    // console.log("inserted ", e);
   }
 
   onToolbarPreparing(e) {
@@ -941,65 +1185,60 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onCellPrepared(e) {
-    /*  console.log("cell ", e);
-    if (e.data && !e.data.cancellabile) {
-      let editLink = e.cellElement.querySelector(".dx-template-wrapper");           
-      if (editLink) {
-          editLink.remove();
-      }
-    } */
-  }
-
   salvaVicari() {
+    this.arrayCfVicari.splice(0, this.arrayCfVicari.length);
+    this.listaVicariPopup.forEach(element => {
+      if (element.cf !== this.iter.idResponsabileProcedimento.idPersona.codiceFiscale) {
+        this.arrayCfVicari.push(element.cf);
+      }
+    });
     let params = {
       "numerazioneGerarchica": this.iter.idFascicolo,
       "vicari": this.arrayCfVicari
     };
     const call = this.http.post(
-      CUSTOM_RESOURCES_BASE_URL + "iter/aggiornaVicariDelFascicolo", 
-      params, 
+      CUSTOM_RESOURCES_BASE_URL + "iter/aggiornaVicariDelFascicolo",
+      params,
       { headers: new HttpHeaders().set("content-type", "application/json") }
     ).subscribe(
       res => {
         // Per il momento mi faccio ridare il fascicolo e lo risetto in modo che sia sempre bello aggiornato.
         this.fascicoloIter = res;
-        // Notifico l'utente
         this.showStatusOperation("Vicari salvati con successo", "success");
+        this.closePopupVicari();
       },
       err => {
         this.showStatusOperation("C'è stato un errore nel salvataggio dei vicari. Se il problema persiste contattare babelcare.", "error");
       }
-    );  
+    );
   }
 
   closePopupVicari() {
-    this.popupVicariVisibile = false;
+    this.popupVicari.instance.hide().then(r => {
+      this.onHidden();
+    });
   }
 
   onHidden() {
-    this.arrayCfVicari = IterProcedimentoFascicoloUtilsClass.calcolaArrayCfVicari(this.fascicoloIter.permessi);
-    this.filtraDataSourceVicari();
+    this.mostraLookupVicari = false;
+    this.listaVicariPopup.splice(0, this.listaVicariPopup.length);
   }
-  
+
   eliminaVicario(e) {
     if (e.data && !e.data.cancellabile) {
       this.showStatusOperation("Non puoi cancellare questo vicario", "warning");
     } else {
-      this.arrayCfVicari.forEach(function(element, index, object) {
-        if (element === e.data.codiceFiscale) {
-          object.splice(index, 1);
-        }
-      });
-      this.filtraDataSourceVicari();
+      let index = this.listaVicariPopup.findIndex(el => el === e.key);
+      this.listaVicariPopup.splice(index, 1);
+      this.filtraUtenti(false);
     }
   }
 
   filtraDataSourceVicari() {
     this.dataSourceVicari.filter([this.utility.buildMultipleFilterForArray(
-      "codiceFiscale", 
-      Object.assign([], this.arrayCfVicari)), 
-      "or", 
+      "codiceFiscale",
+      Object.assign([], this.arrayCfVicari)),
+      "or",
       ["codiceFiscale", "=", this.iter.idResponsabileProcedimento.idPersona.codiceFiscale]]);
     this.dataSourceVicari.load();
   }
@@ -1007,6 +1246,173 @@ export class IterProcedimentoComponent implements OnInit, AfterViewInit {
   // *************************
   // FINE GESTIONE POPUP VICARI
   // *************************
+
+
+
+
+  // *************************
+  // GESTIONE DEI PRECEDENTI
+  // *************************
+  deletePrecedente(){
+    //this.showStatusOperation("Cancellazione: funzione ancora da implementare", "success");
+    // Aprire popup
+    let params = {
+      azione: "DEL",
+      idIter: this.iter.id,
+    }
+
+    this.setPrecedente(params);
+
+  }
+
+
+  setPrecedente(params: any){
+    const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/setPrecedente", params, { headers: new HttpHeaders().set("content-type", "application/json") })
+    .subscribe(
+      res => {
+        console.log(res);
+        this.showStatusOperation("Cancellazione precedente avvenuta con successo", "success");
+        this.refresh();
+        if(this.popupPrecedenteVisible)
+          this.popupPrecedenteVisible = false;
+      },
+      err => {
+        this.showStatusOperation("Modifica non andata a buon fine. Contattare BabelCare", "error");
+        }
+    )
+  }
+
+  openPopupPrecedente(){
+    this.dataSourceMotiviCollegamento = [{codice: "RIESAME", descrizione:"Riesame"},{codice: "RICORSO", descrizione:"Ricorso"},{codice: "ALTRO", descrizione:"Altro"}];
+    let filtroCatena = ["1","=",1];
+    if(this.iter.idCatena)
+     filtroCatena = ["idCatena","<>", this.iter.idCatena]
+    if(!this.dataSourceIterPrecedenti){
+      this.dataSourceIterPrecedenti = new DataSource({
+          store: this.odataContextDefinition.getContext()[new Iter().getName()],
+          expand: ["idProcedimento.idAziendaTipoProcedimento.idAzienda"],
+          filter: [
+            ["idProcedimento.idAziendaTipoProcedimento.idAzienda.id","=",this.userInfo.idAzienda],
+            ["id","<",this.iter.id],
+            ["annullato","=",false],
+            filtroCatena
+          ],
+          sort: [{ field: "anno", desc: true }, { field: "numero", desc: true }]
+        });
+        this.dataSourceIterPrecedenti.load().then(
+          res => {
+            console.log("GLI ITERS", res)
+            this.popupPrecedenteVisible = true;
+          },
+          err => {
+            console.log("!!!ERRORE", err)
+      });
+    }
+    else{
+      this.gridPrecedenti.instance.pageIndex(0);
+      this.popupPrecedenteVisible = true;
+    }
+
+    /* // Qua sotto provo a caricare il datasource dei MotiviCollegamento, ma a quanto pare la chiamata non restituisce nulla... da indagare
+    console.log("dataSourceMotiviCollegamento", this.dataSourceMotiviCollegamento);
+    let dsmp = new DataSource({
+      store: this.odataContextDefinition.getContext()[new MotivoPrecedente().getName()]
+    });
+    dsmp.load().then(
+      res => {
+        console.log("Res", res)
+        if(!this.dataSourceMotiviCollegamento){
+          res.forEach(element => {
+            console.log(element);
+            this.dataSourceMotiviCollegamento.push(element);
+          });
+        }
+
+
+      },
+      err => {
+        console.log("!!!ERRORE", err)
+      }
+    ); */
+
+  }
+
+  // a seconda del bottone funzione diversa
+  precedenteClicks(){
+    if(!this.iter.idIterPrecedente)
+      this.openPopupPrecedente();
+    else
+      this.deletePrecedente();
+  }
+
+  onPrecedenteSelected(selectedItems: any){
+    this.selectedPrecedente = selectedItems.selectedRowsData[0];
+  }
+
+  chiudiPopupPrecedente(){
+    this.gridPrecedenti.instance.deselectAll();
+    this.gridPrecedenti.instance.clearSelection();
+    this.motivoSelecdBox.instance.reset();
+    this.dataSourceMotiviCollegamento = null;
+    this.codiceMotivoSelezionato = null;
+    this.selectedPrecedente = null;
+    this.noteMotivoPrecedente = null;
+    this.popupPrecedenteVisible = false;
+  }
+
+  selectedMotivo(selezionato){
+    if(selezionato){
+      this.codiceMotivoSelezionato = selezionato.itemData.codice;
+    }
+  }
+
+  onSelectionChangedMotivo(selezionato){
+    if(selezionato){
+      this.codiceMotivoSelezionato = selezionato.selectedItem.codice;
+    }
+  }
+
+  associa(e){
+    if(!this.codiceMotivoSelezionato || !this.selectedPrecedente){
+      this.showStatusOperation("E' necessario selezionare sia un iter precedente che una motivazione", "warning");
+      return;
+    }
+    else{
+      let params = {idIter:this.iter.id, azione:"ADD", idIterPrecedente: this.selectedPrecedente.id, codiceMotivo: this.codiceMotivoSelezionato, noteMotivoPrecedente: this.noteMotivoPrecedente}
+      const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/setPrecedente", params, { headers: new HttpHeaders().set("content-type", "application/json") })
+          .subscribe(
+            res => {
+              this.refresh(); // Aggiorno l'iter
+              this.showStatusOperation("Associazione a precedente avvenuta con successo", "success");
+              this.chiudiPopupPrecedente();
+              },
+            err => {
+              this.showStatusOperation("Associazione a precedente non andata a buon fine. Contattare BabelCare", "error");
+            }
+          );
+    }
+  }
+
+
+  // *****************************
+  // FINE GESTIONE DEI PRECEDENTI
+  // *****************************
+
+}
+
+class Vicario {
+  id: number;
+  cf: string;
+  descrizione: string;
+  cancellabile: boolean;
+  constructor()
+  constructor(id: number, cf: string, descrizione: string, cancellabile: boolean)
+  constructor(id?: number, cf?: string, descrizione?: string, cancellabile?: boolean) {
+    this.id = id;
+    this.cf = cf;
+    this.descrizione = descrizione;
+    this.cancellabile = cancellabile;
+  }
 }
 
 interface UserInfo {

@@ -1,28 +1,30 @@
 import {Routes} from "@angular/router";
 
-import {AppComponent} from "./app.component";
-import {HomeComponent} from "./home/home.component";
-import {DefinizioneTipiProcedimentoComponent} from "./definizione-tipi-procedimento/definizione-tipi-procedimento.component";
-import {AssociazioneAziendeComponent} from "./associazione-aziende/associazione-aziende.component";
-import {GestioneAssociazioneAziendaComponent} from "./gestione-associazione-azienda/gestione-associazione-azienda.component";
-import {AssociazioniComponent} from "./associazioni/associazioni.component";
-import {StrutturaTipiProcedimentoComponent} from "./struttura-tipi-procedimento/struttura-tipi-procedimento.component";
-import {LoginComponent} from "@bds/nt-login";
+import { AppComponent } from "./app.component";
+import { HomeComponent } from "./home/home.component";
+import { DefinizioneTipiProcedimentoComponent } from "./definizione-tipi-procedimento/definizione-tipi-procedimento.component";
+import { AssociazioneAziendeComponent } from "./associazione-aziende/associazione-aziende.component";
+import { GestioneAssociazioneAziendaComponent } from "./gestione-associazione-azienda/gestione-associazione-azienda.component";
+import { AssociazioniComponent } from "./associazioni/associazioni.component";
+import { StrutturaTipiProcedimentoComponent } from "./struttura-tipi-procedimento/struttura-tipi-procedimento.component";
+import { LoginComponent } from "@bds/nt-login";
 // import { AfterLoginComponent } from "./after-login/after-login.component";
-import {LoginGuard, NoLoginGuard} from "@bds/nt-login";
-import {RefreshLoggedUserGuard} from "@bds/nt-login";
-import {ProcedimentiAttiviComponent} from "app/procedimenti-attivi/procedimenti-attivi.component";
-import {PopupStrutturaTipiProcedimentoComponent} from "app/popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component";
-import {IterProcedimentoComponent} from "app/iter-procedimento/iter-procedimento.component";
-import {TestTreeComponent} from "./test/test-tree/test-tree.component";
-import {ListaIterComponent} from "app/lista-iter/lista-iter.component";
-import {AvviaNuovoIterDaDocumentoComponent} from "app/procedimenti-attivi/avvia-nuovo-iter-da-documento/avvia-nuovo-iter-da-documento.component";
-import {CambioDiStatoComponent} from "app/cambio-di-stato/cambio-di-stato.component";
-import {TipiProcedimentoAziendaliComponent} from "./tipi-procedimento-aziendali/tipi-procedimento-aziendali.component";
-import {DettaglioTipoProcedimentoComponent} from "./tipi-procedimento-aziendali/dettaglio-tipo-procedimento/dettaglio-tipo-procedimento.component";
-import {RoleGuard} from "./authorization/guards/role.guard";
-import {TestGridComponent} from "./test/test-grid/test-grid.component";
-import {ModificaDocumentoIterComponent} from "./modifica-documento-iter/modifica-documento-iter.component";
+import { LoginGuard, NoLoginGuard } from "@bds/nt-login";
+import { RefreshLoggedUserGuard } from "@bds/nt-login";
+import { ProcedimentiAttiviComponent } from "app/procedimenti-attivi/procedimenti-attivi.component";
+import { PopupStrutturaTipiProcedimentoComponent } from "app/popup-struttura-tipi-procedimento/popup-struttura-tipi-procedimento.component";
+import { IterProcedimentoComponent } from "app/iter-procedimento/iter-procedimento.component";
+import { TestTreeComponent } from "./test/test-tree/test-tree.component";
+import { ListaIterComponent } from "app/lista-iter/lista-iter.component";
+import { AvviaNuovoIterDaDocumentoComponent } from "app/procedimenti-attivi/avvia-nuovo-iter-da-documento/avvia-nuovo-iter-da-documento.component";
+import { CambioDiStatoComponent } from "app/cambio-di-stato/cambio-di-stato.component";
+import { TipiProcedimentoAziendaliComponent } from "./tipi-procedimento-aziendali/tipi-procedimento-aziendali.component";
+import { DettaglioTipoProcedimentoComponent } from "./tipi-procedimento-aziendali/dettaglio-tipo-procedimento/dettaglio-tipo-procedimento.component";
+import { RoleGuard } from "./authorization/guards/role.guard";
+import { TestGridComponent } from "./test/test-grid/test-grid.component";
+import { ModificaDocumentoIterComponent } from "./modifica-documento-iter/modifica-documento-iter.component";
+import { ListaIterPerDemiurgoComponent } from "./lista-iter-per-demiurgo/lista-iter-per-demiurgo.component";
+import { ListaIterAziendaliComponent } from "./lista-iter-aziendali/lista-iter-aziendali.component";
 
 export const rootRouterConfig: Routes = [
 
@@ -57,5 +59,7 @@ export const rootRouterConfig: Routes = [
     {path: "tipi-procedimento-aziendali", component: TipiProcedimentoAziendaliComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard, RoleGuard], data: {breadcrumb: "Tipi di Procedimento Aziendali", ruoliConcessi: ["CA"]}},
     {path: "dettaglio-tipo-procedimento", component: DettaglioTipoProcedimentoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Dettaglio Tipo Procedimento"}},
     {path: "app-test-grid", component: TestGridComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Test"}},
-    {path: "app-modifica-documento-iter", component: ModificaDocumentoIterComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Modifica documento iter"}}
+    {path: "app-modifica-documento-iter", component: ModificaDocumentoIterComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard], data: {breadcrumb: "Modifica documento iter"}},
+    { path: "lista-iter-per-demiurgo", component: ListaIterPerDemiurgoComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard, RoleGuard], data: { breadcrumb: "Lista Iter Per Demiurghi", ruoliConcessi: ["SD"] } },
+    { path: "lista-iter-aziendali", component: ListaIterAziendaliComponent, canActivate: [LoginGuard, RefreshLoggedUserGuard, RoleGuard], data: { breadcrumb: "Lista Iter Per Demiurghi", ruoliConcessi: ["OS"]} }
 ];

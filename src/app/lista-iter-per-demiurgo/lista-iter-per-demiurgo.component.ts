@@ -7,14 +7,16 @@ import {Iter, bAzienda, bUtente, GetIterUtente} from "@bds/nt-entities";
 import { Subscription } from "rxjs";
 import { Observable } from "rxjs/Observable";
 import { LoggedUser } from "@bds/nt-login";
+import { debug } from "util";
+import notify from "../../../node_modules/devextreme/ui/notify";
+import { TOAST_POSITION, TOAST_WIDTH } from "environments/app.constants";
 
 @Component({
-  selector: "app-lista-iter",
-  templateUrl: "./lista-iter.component.html",
-  styleUrls: ["./lista-iter.component.scss"]
+  selector: 'app-lista-iter-per-demiurgo',
+  templateUrl: './lista-iter-per-demiurgo.component.html',
+  styleUrls: ['./lista-iter-per-demiurgo.component.scss']
 })
-export class ListaIterComponent implements OnInit {
-
+export class ListaIterPerDemiurgoComponent implements OnInit {
   private odataContextDefinition: OdataContextDefinition;
   private subscriptions: Subscription[] = [];
   private cfUtente: string;
@@ -23,15 +25,9 @@ export class ListaIterComponent implements OnInit {
   public loggedUser$: Observable<LoggedUser>;
   public idAzienda: number;
 
-  /* public infoGeneriche: any = {
-    azienda: "Caricamento...",
-    struttura: "UO DaTer",
-    procedimento: "Procedimento A"
-  }; */
-
   constructor(private odataContextFactory: OdataContextFactory, private router: Router, private globalContextService: GlobalContextService,
     private odataUtilities: OdataUtilities) {
-    this.odataContextDefinition = this.odataContextFactory.buildOdataFunctionsImportDefinition();
+    this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
   }
 
   ngOnInit() {
@@ -46,27 +42,26 @@ export class ListaIterComponent implements OnInit {
           }
       )
     );
-
+    
     this.dataSource = new DataSource({
-      store: this.odataContextDefinition.getContext()[new GetIterUtente().getName()]
-      .on("loading", (loadOptions) => {
-        // console.log("loadOptions_prima", loadOptions);
-        this.odataUtilities.filterToCustomQueryParams(["oggetto", "numero", "idStato.descrizione",
-          "idResponsabileProcedimento.idPersona.descrizione", "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome"], loadOptions);
-        // console.log("loadOptions_dopo", loadOptions);
-        }),
-      customQueryParams: {
-        cf: this.cfUtente,
-        idAzienda: this.idAzienda
-      },
-      expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona",
+      store: this.odataContextDefinition.getContext()[new Iter().getName()],
+      expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona","idStrutturaResponsabileProcedimento",
+        "idProcedimento.idAziendaTipoProcedimento.idAzienda",
+        "idUtenteCreazione.idPersona", "idStrutturaUtenteCreazione",
         "idFaseCorrente", "idStato", "idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento"],
       sort: [{ field: "id", desc: true }]
     });
   }
 
-  vaiAlDettaglio(e) {
+  public cliccalo(e){
+    //  console.log(e);
+    notify({
+      message: "Funzione ancora da implementare",
+        type: "warning",
+        displayTime: 4100,
+        position: TOAST_POSITION,
+        width: TOAST_WIDTH
+    });
     this.router.navigate(["/iter-procedimento"], { queryParams: { idIter: e.data.id } });
   }
-
 }

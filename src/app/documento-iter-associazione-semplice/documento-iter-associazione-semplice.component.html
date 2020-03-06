@@ -14,8 +14,9 @@
       <dxi-item dataField="numeroDocumento" [colSpan]="1000" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: true }"></dxi-item>
       <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'Anno', showColon: true}" [editorOptions]="{disabled: true }"></dxi-item> 
     </dxi-item>
-    <dxi-item *ngIf="associazionePrams.numeroDocumento" dataField="dataCambioDiStato" editorType="dxDateBox" [label]="{text: 'Data cambio di stato'}" [editorOptions]="{value:dataIniziale, displayFormat: 'dd/MM/yyyy',
-      onValueChanged: reimpostaDataIniziale, dateOutOfRangeMessage: 'Il valore è fuori dall\'intervallo' }">
+    <dxi-item *ngIf="associazionePrams.numeroDocumento" dataField="dataCambioDiStato" editorType="dxDateBox" [label]="{text: 'Data cambio di stato'}" 
+      [editorOptions]="{value:dataIniziale, displayFormat: 'dd/MM/yyyy', onValueChanged: reimpostaDataIniziale, acceptCustomValue: false,
+      dateOutOfRangeMessage: 'Il valore è fuori dall\'intervallo', min: dataMinimaValida, max: dataDiOggi }">
         <dxi-validation-rule type="required" message="La data di cambio di stato è obbligatoria"></dxi-validation-rule>
         <dxi-validation-rule type="custom" [validationCallback]="validaData" message="La data non può essere minore della data di apertura iter o di registrazione del documento"></dxi-validation-rule>
     </dxi-item>

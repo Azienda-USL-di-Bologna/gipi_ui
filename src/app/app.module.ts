@@ -5,6 +5,7 @@ import { HttpModule } from "@angular/http";
 import "devextreme/data/odata/store";
 import "devextreme/data/odata/context";
 import { DefinizioneTipiProcedimentoService } from "./definizione-tipi-procedimento/definizione-tipi-procedimento.service";
+import { ParametriAziendaService } from "./services/parametri-azienda.service";
 
 import {
     DxDataGridModule,
@@ -83,7 +84,10 @@ import {LoginModule} from "@bds/nt-login";
 import { TestGridComponent } from "./test/test-grid/test-grid.component";
 import {AppConfiguration} from "./config/app-configuration";
 import { DocumentoIterAssociazioneSempliceComponent } from "./documento-iter-associazione-semplice/documento-iter-associazione-semplice.component";
-import { ModificaDocumentoIterComponent } from './modifica-documento-iter/modifica-documento-iter.component';
+import { ModificaDocumentoIterComponent } from "./modifica-documento-iter/modifica-documento-iter.component";
+import { ListaIterPerDemiurgoComponent } from "./lista-iter-per-demiurgo/lista-iter-per-demiurgo.component";
+import { ListaIterAziendaliComponent } from "./lista-iter-aziendali/lista-iter-aziendali.component";
+import { EscapeHtmlPipe } from "./pipes/keep-html.pipe";
 
 @NgModule({
     declarations: [
@@ -120,11 +124,14 @@ import { ModificaDocumentoIterComponent } from './modifica-documento-iter/modifi
         DettaglioTipoProcedimentoComponent,
         TestGridComponent,
         DocumentoIterAssociazioneSempliceComponent,
-        ModificaDocumentoIterComponent
+        ModificaDocumentoIterComponent,
+        ListaIterPerDemiurgoComponent,
+        ListaIterAziendaliComponent,
+        EscapeHtmlPipe
     ],
     imports: [
         BrowserModule,
-        RouterModule.forRoot(rootRouterConfig, { useHash: true }),
+        RouterModule.forRoot(rootRouterConfig, { useHash: false }),
         DxDataGridModule,
         DxFormModule,
         DxButtonModule,
@@ -159,7 +166,7 @@ import { ModificaDocumentoIterComponent } from './modifica-documento-iter/modifi
         DxTooltipModule,
         DxLoadPanelModule
     ],
-    providers: [DefinizioneTipiProcedimentoService, RoleGuard, AppConfiguration
+    providers: [DefinizioneTipiProcedimentoService, RoleGuard, AppConfiguration, ParametriAziendaService
         // NavbarService
     ],
     bootstrap: [AppComponent],

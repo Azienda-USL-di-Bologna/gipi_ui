@@ -12,6 +12,8 @@ import {LoggedUser} from "@bds/nt-login";
 import * as $ from "jquery";
 import * as deLocalization from "devextreme/localization";
 import {AppConfiguration} from "./config/app-configuration";
+import { ParametriAziendaService } from "./services/parametri-azienda.service";
+import { Title } from "@angular/platform-browser";
 
 
 @Component({
@@ -52,7 +54,9 @@ export class AppComponent implements OnInit, OnDestroy {
     constructor(private location: Location, public router: Router, private activatedRoute: ActivatedRoute,
                 private globalContextService: GlobalContextService,
                 private odataContextFactory: OdataContextFactory, public appConfig: AppConfiguration,
-                private navbarService: NavbarService) {
+                private navbarService: NavbarService,
+                private parametriAziendaService: ParametriAziendaService,
+                private titleService: Title) {
         this.odataContextFactory.setOdataBaseUrl(ODATA_BASE_URL);
         console.log("hostname", window.location.hostname);
         console.log("host", window.location.host);
@@ -143,8 +147,13 @@ export class AppComponent implements OnInit, OnDestroy {
         if (loggedUser.isCA()) {
             this.sidebarItems.push(new SidebarItem("Tipi Procedimento Aziendale", "tipi-procedimento-aziendali"));
         }
-
         this.sidebarItems.push(new SidebarItem("Procedimenti Attivi", "procedimenti-attivi"));
+        // console.log("IS SD???", loggedUser.isSD())
+        if (loggedUser.isSD())
+            this.sidebarItems.push(new SidebarItem("Lista Iter Per Demiurghi", "lista-iter-per-demiurgo"));
+        if (loggedUser.isOS())
+            this.sidebarItems.push(new SidebarItem("Elenco Iter Aziendali", "lista-iter-aziendali"));
+
         this.sidebarItems.push(new SidebarItem("Elenco iter", "app-lista-iter"));
         // this.sidebarItems.push(new SidebarItem("Test", "", this.sidebarItems2));
     }
@@ -208,6 +217,9 @@ export class AppComponent implements OnInit, OnDestroy {
                         this.descrizioneAzienda = loggedUser.getField(bUtente.aziendaLogin)[bAzienda.descrizione];
                         this.nomeUtente = loggedUser.getField(bUtente.nome);
                         this.cognomeUtente = loggedUser.getField(bUtente.cognome);
+                        /* Set del titolo preso dai parametri dell'azienda */
+                        const jsonParametri = JSON.parse(loggedUser.getField(bUtente.aziendaLogin)[bAzienda.parametri]);
+                        this.titleService.setTitle("Gipi - " + jsonParametri.descBreve);
 
                         this.enableSidebarByRole = false;
                         this.ruoli.forEach(element => {
@@ -216,6 +228,7 @@ export class AppComponent implements OnInit, OnDestroy {
                             }
                             this.ruolo += element[bRuolo.nomeBreve] + " ";
                         });
+                        this.parametriAziendaService.getParametri("gipi", loggedUser.getField(bUtente.aziendaLogin)[bAzienda.id]);
                         if (this.enableSidebarByRole) {
                             this.buildSideBar(loggedUser);
                         }
@@ -237,13 +250,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
     onLogout() {
 
-        const loginMethod = sessionStorage.getItem("loginMethod");
+        const loginMethod = sessionStorage.getItem("gipi_loginMethod");
 
         this.slide(true); // Chiudo la sidebar se è aperta
 
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("userInfo");
-        sessionStorage.removeItem("loginMethod");
+        sessionStorage.removeItem("gipi_token");
+        sessionStorage.removeItem("gipi_loggedUser");
+        sessionStorage.removeItem("gipi_loginMethod");
         if (loginMethod !== "sso") {
             console.log(loginMethod);
             this.router.navigate(["/login"]);

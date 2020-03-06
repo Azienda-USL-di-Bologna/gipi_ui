@@ -19,7 +19,9 @@
   </dxi-item>  
 
     <dxi-item itemType="group">
-      <dxi-item dataField="codiceStatoCorrente" [label]="{text: 'Stato corrente'}" editorType="dxLookup"  [editorOptions]="{ disabled: true,
+      <dxi-item dataField="codiceStatoCorrente" [label]="{text: 'Stato corrente'}" editorType="dxLookup"  
+      [editorOptions]="{ 
+        disabled: true,
         dataSource: dataSourceStati,
         displayExpr: 'descrizione',
         displayValue: 'codice',
@@ -33,25 +35,34 @@
         l'utente non seleziona manualmante un valore dalla lookup, ma visto che la lookup è stata resa non editabile, l'utente
         non riesce a vedere lo stato dentro codiceStatoProssimo e nemmeno a selezionare una voce dalla lookup.
       -->
-      <dxi-item *ngIf="statiIter && statiIter.length > 0" dataField="codiceStatoProssimo" [label]="{text: 'Prossimo stato'}" editorType="dxLookup" [editorOptions]="{
-        disabled: true, 
-        items: statiIter,
-        selectionMode: 'single',
-        showPopupTitle: false,
-        closeOnOutsideClick: 'true',
-        showCancelButton: false,
-        placeholder: 'Seleziona il prossimo stato',
-        searchEnabled: false,
-        displayExpr: 'descrizione',
-        displayValue: 'codice',
-        valueExpr: 'codice',
-        value: codiceStatoProssimo
-      }"
+      <dxi-item *ngIf="statiIter && statiIter.length > 0" dataField="codiceStatoProssimo" [label]="{text: 'Prossimo stato'}" editorType="dxLookup" 
+        [editorOptions]="{
+          disabled: true, 
+          items: statiIter,
+          selectionMode: 'single',
+          showPopupTitle: false,
+          closeOnOutsideClick: 'true',
+          showCancelButton: false,
+          placeholder: 'Seleziona il prossimo stato',
+          searchEnabled: false,
+          displayExpr: 'descrizione',
+          displayValue: 'codice',
+          valueExpr: 'codice',
+          value: codiceStatoProssimo
+        }"
         ngClass= "width100">
           <dxi-validation-rule type="required" message="Lo stato prossimo è obbligatorio"></dxi-validation-rule>
       </dxi-item>
-      <dxi-item *ngIf="_sospensioneParams.numeroDocumento" dataField="dataCambioDiStato" editorType="dxDateBox" [label]="{text: 'Data cambio di stato'}" [editorOptions]="{value:dataIniziale, displayFormat: 'dd/MM/yyyy',
-      onValueChanged: reimpostaDataIniziale, dateOutOfRangeMessage: 'Il valore è fuori dall\'intervallo' }">
+      <dxi-item *ngIf="_sospensioneParams.numeroDocumento" dataField="dataCambioDiStato" editorType="dxDateBox" [label]="{text: 'Data cambio di stato'}" 
+      [editorOptions]="{
+        disabled: true, 
+        value:dataIniziale, 
+        displayFormat: 'dd/MM/yyyy',
+        onValueChanged: reimpostaDataIniziale, 
+        dateOutOfRangeMessage: 'Il valore è fuori dall\'intervallo', 
+        min: dataIniziale, 
+        max: dataDiOggi
+        }">
         <dxi-validation-rule type="required" message="La data di cambio di stato è obbligatoria"></dxi-validation-rule>
         <dxi-validation-rule type="custom" [validationCallback]="validaData" message="La data non può essere minore della data di apertura iter o di registrazione del documento"></dxi-validation-rule>
       </dxi-item>

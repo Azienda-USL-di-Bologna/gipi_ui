@@ -9,6 +9,7 @@ import { LoggedUser } from "@bds/nt-login";
 import { GetIterUtente } from "@bds/nt-entities";
 import { SospensioneParams } from "../../classi/condivise/sospensione/sospensione-params";
 import {  STATI } from "@bds/nt-entities";
+import { now } from "moment";
 
 @Component({
   selector: "app-lista-iter-con-permessi",
@@ -54,14 +55,17 @@ export class ListaIterConPermessiComponent implements OnInit {
         numeroDocumento: this._sospensioneParams.numeroDocumento ? this._sospensioneParams.numeroDocumento : "",
         annoDocumento: this._sospensioneParams.annoDocumento ? +this._sospensioneParams.annoDocumento : 0,
         idOggettoOrigine: this._sospensioneParams.idOggettoOrigine ? this._sospensioneParams.idOggettoOrigine : "",
-        stato: this._sospensioneParams.azione === "associazione" ? STATI.IN_CORSO + ":" + STATI.SOSPESO : this.getStatoPrecedente(this._sospensioneParams.codiceStatoProssimo)
+        stato: this._sospensioneParams.azione === "associazione" ? STATI.IN_CORSO + ":" + STATI.SOSPESO : this.getStatoPrecedente(this._sospensioneParams.codiceStatoProssimo),
+        dataRegistrazione: this._sospensioneParams.dataRegistrazioneDocumento &&  !(this._sospensioneParams.azione === "associazione") ? this._sospensioneParams.dataRegistrazioneDocumento : ""
       },
+      paginate: true,
       expand: ["idResponsabileProcedimento", "idResponsabileProcedimento.idPersona", "idFaseCorrente", "idStato"]/* ,
       sort: [{ field: "oggetto", desc: true }] */
-    });
+     });
+
     /* Commento perché questa istruzione lanciava un'altra richiesta al server */
     // this.dataSource.load().then(res => { console.log("LISTA RES: ", res); }); 
-  }
+  } 
 
   selectedRowChanged(e) {
     this.selectedRow.emit(e.selectedRowsData[0]);

@@ -1,9 +1,14 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, OnInit, Input, SimpleChanges, ViewChild, Output, EventEmitter } from "@angular/core";
 import { DxDataGridComponent, DxTooltipComponent } from "devextreme-angular";
+import notify from "devextreme/ui/notify";
+import { CUSTOM_RESOURCES_BASE_URL, TOAST_WIDTH, TOAST_POSITION, ESITI } from "environments/app.constants";
 import DataSource from "devextreme/data/data_source";
 import { OdataContextDefinition } from "@bds/nt-context";
 import { OdataContextFactory } from "@bds/nt-context";
 import {EventoIter, Evento} from "@bds/nt-entities";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { confirm } from "devextreme/ui/dialog";
+import { HtmlParser } from "@angular/compiler";
 
 @Component({
   selector: "app-cronologia-eventi",
@@ -12,40 +17,62 @@ import {EventoIter, Evento} from "@bds/nt-entities";
 })
 export class CronologiaEventiComponent implements OnInit {
 
-  private odataContextDefinition: OdataContextDefinition;  
+  private odataContextDefinition: OdataContextDefinition;
   public dataSourceEventoIter: DataSource;
-  @ViewChild(DxTooltipComponent) tooltip: DxTooltipComponent;
-  public oggettoDocumento: string = "";
+  @ViewChild("tooltip") tooltip: DxTooltipComponent;
+  @ViewChild("tooltipDataReg") tooltipDataReg: DxTooltipComponent;
+  @ViewChild("tooltipDettagliEvento") tooltipDettagliEvento: DxTooltipComponent;
+  public oggettoDocumento: String = "";
+  public dataRegistrazioneEvento: String = "";
+  public dettagliEventoTooltip: Array<string> = [];
   public classeDiHighlight = "";
   public popupVisible = false;
   public enablePopup = false;
   public nota: String;
+  public possoCancellare: boolean;
+  public arrayEventiIterCancellabili: Array<EventoIter> = [];
 
   // @Input("idIter") idIter: string;
   @Input("daPadre") daPadre: Object;
+  @Input("possoCorreggereAssociazioni") canDelete: boolean;
 
-  constructor(private odataContextFactory: OdataContextFactory) {
+  @Output() messageEvent: EventEmitter<any>= new EventEmitter();
+
+  constructor(private odataContextFactory: OdataContextFactory, private http: HttpClient) {
     this.odataContextDefinition = this.odataContextFactory.buildOdataContextEntitiesDefinition();
   }
 
   ngOnInit() {
+    this.arrayEventiIterCancellabili = [];
     this.dataSourceEventoIter = new DataSource({
       store: this.odataContextDefinition.getContext()[new EventoIter().getName()],
       expand: ["idEvento", "idIter", "idFaseIter.idFase", "autore.idPersona", "idDocumentoIter"],
       // tslint:disable-next-line:radix
-      filter: ["idIter.id", "=", parseInt(this.daPadre["idIter"])]
+      filter: ["idIter.id", "=", parseInt(this.daPadre["idIter"])],
+      map: (item) => {
+        if (item.idEvento.codice === "chiusura_sospensione" || (item.idDocumentoIter && item.idEvento.codice !== "chiusura_iter" && item.idEvento.codice !== "avvio_iter" && item.idEvento.codice !== "modifica_iter"))
+        {
+          this.arrayEventiIterCancellabili.push(item);
+        }
+        item.canDelete = false;
+        return item;
+      }
     });
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnChanges(changes: SimpleChanges) {
     if (this.dataSourceEventoIter !== undefined) {
+      this.arrayEventiIterCancellabili = [];
       this.dataSourceEventoIter.load();
     }
     if (this.daPadre["classeCSS"] !== "") {
-      this.classeDiHighlight = "cronologiaEventihightlightClass"; 
+      this.classeDiHighlight = "cronologiaEventihightlightClass";
     }
-      
+
+    if (this.canDelete)
+      this.possoCancellare = this.canDelete;
+
   }
 
   showNotes(noteValue) {
@@ -65,13 +92,36 @@ export class CronologiaEventiComponent implements OnInit {
                 if (value && value.idDocumentoIter) {
                     return value.idDocumentoIter.registro + " " + value.idDocumentoIter.numeroRegistro + "/" + value.idDocumentoIter.anno;
                 }
-            };                
+            };
         }
     });
   }
 
+  onRowPrepared(e) {
+    // Qui dentro setto la variabile canDelete
+    /* if(e.rowType=== "data" && e.rowIndex === this.dataSourceEventoIter.totalCount() - 1){
+      let evento = e.data.idEvento;
+      console.log("EVVAI!", evento)
+      if(evento.codice !== "avvio_iter" && evento.codice !== "chiusura_iter" && evento.codice !== "modifica_iter")
+        e.data.canDelete = true;
+    }
+    console.log(e.data) */
+  }
+
   onCellPrepared(e) {
     let self = this;
+    if (e.rowType === "data" && e.column.dataField === "dataOraEvento") {
+      e.cellElement.onmouseover = () => {
+        if (e.row.data && e.row.data.dataOraEvento && e.row.data.dataRegistrazioneEvento) {
+          self.tooltipDataReg.instance.option("target", e.cellElement);
+          self.dataRegistrazioneEvento = "Evento registrato il " + e.row.data.dataRegistrazioneEvento.toLocaleDateString();
+          self.tooltipDataReg.instance.show();
+        }
+      };
+      e.cellElement.onmouseout = () => {
+        self.tooltipDataReg.instance.hide();
+      };
+    }
     if (e.rowType === "data" && e.column.dataField === "idDocumentoIter") {
       if ((e.data.idEvento.codice === "avvio_iter" || e.data.idEvento.codice === "chiusura_iter") && this.classeDiHighlight !== "") {
         e.cellElement.classList.add(this.classeDiHighlight);
@@ -86,6 +136,70 @@ export class CronologiaEventiComponent implements OnInit {
       e.cellElement.onmouseout = function () {
         self.tooltip.instance.hide();
       };
-    } 
+    }
+    else if (e.rowType === "data" && e.column.dataField === "canDelete") {
+        if (e.rowIndex > 0) {
+          if (e.data.idEvento.codice !== "avvio_iter" && e.data.idEvento.codice !== "chiusura_iter" && e.data.idEvento.codice !== "modifica_iter"
+              && e.data.idEvento.codice !== "aggiunta_precedente" && e.data.idEvento.codice !== "cancellazione_precedente") {
+            if (this.arrayEventiIterCancellabili.lastIndexOf(e.data) === this.arrayEventiIterCancellabili.length - 1)
+              e.data.canDelete = true;
+          }
+        }
+    } // dettagli dell'evento
+    else if (e.rowType === "data" && e.column.dataField === "idEvento.nome"){
+      e.cellElement.onmouseover = function () {
+        if (e.row.data && e.row.data.idEvento && e.row.data.dettagli) {
+          self.tooltipDettagliEvento.instance.option("target", e.cellElement);
+          /*console.log(e.row.data.dettagli)
+          let x: string = e.row.data.dettagli;
+          x = x.replace("\n", "</br>");
+          self.dettagliEvento = x;*/
+
+          self.dettagliEventoTooltip = e.row.data.dettagli.split('\n');
+
+          self.tooltipDettagliEvento.instance.show();
+        }
+      };
+      e.cellElement.onmouseout = function () {
+        self.tooltipDettagliEvento.instance.hide();
+      };
+    }
   }
+
+
+  cancellaEvento(e: any) {
+    // console.log("cancellaEvento(e: any) > ", e);
+    confirm("Sei sicuro di voler eliminare l'ultima associazione?", "Conferma").then(dialogResult => {
+      if (dialogResult) {
+        let idEventoIter = +e.data.id;
+        const req = this.http.post(CUSTOM_RESOURCES_BASE_URL + "iter/rollbackEventoIterById", idEventoIter, { headers: new HttpHeaders().set("content-type", "application/json") })
+          .subscribe(
+          res => {
+            notify({
+              message: "Cancellazione dell'operazione avvenuta con successo",
+              type: "success",
+              displayTime: 4000,
+              position: TOAST_POSITION,
+              width: TOAST_WIDTH
+            });
+            this.messageEvent.emit({cancellatoDocIter: true});
+            // this.dataSourceEventoIter.load();
+          },
+          err => {
+            console.log(err);
+            notify({
+              message: "Attenzione: errore nella cancellazione dell'operazione: contattare BabelCare",
+              type: "error",
+              displayTime: 4000,
+              position: TOAST_POSITION,
+              width: TOAST_WIDTH
+            });
+            this.messageEvent.emit({cancellatoDocIter: false});
+            this.dataSourceEventoIter.load();
+          }
+        );
+      }
+    });
+  }
+
 }
