@@ -1,0 +1,137 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <dx-button text="Indietro" type="normal" icon="back" (onClick)="goBack()"></dx-button>
+    </div>
+    <div class="col-8 center-text">
+      <h3>
+        <span class="header-font">Tipo procedimento:</span>
+          <i>{{headerTipoProcedimento}}</i>
+      </h3>
+      <h3>      
+        <span class="header-font">Struttura responsabile del procedimento:</span>
+          <i>{{strutturaSelezionata.nome}}</i>
+      </h3>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-3">
+<!--       <dx-button id="bottoneModifica" class="padding-button allinea-a-sinistra" (onClick)="showPopup()" text="Modifica associazioni alle Strutture" hint="Modifica associazioni alle Strutture"></dx-button>
+ -->      <strutture-tree #treeView [idAzienda]=idAziendaFront [nodesToCheckSelectedStatus]="nodeInvolved" [popupVisible]="popupVisible"
+        [idAziendaTipoProcedimento]=idAziendaTipoProcedimentoFront [readOnly]="true" [disabled]="possoAgireForm" focusStateEnabled="false" [enableCheckRecursively]="false" (strutturaSelezionata)="selezionaStruttura($event)"></strutture-tree>
+    </div>
+    <div class="col-8" id="center-div">
+      <dx-form id="form" #myForm [(formData)]="procedimento" requiredMark="(*)" [visible]="formVisible" validationGroup="procedimentoValGroup" showValidationSummary="true">
+          
+        <dxi-item dataField="idAziendaTipoProcedimento.descrizioneTipoProcedimento" editorType="dxTextArea" cssClass="str-proced-label-wrap" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: true }"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.modoApertura" cssClass="str-proced-label-wrap" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.idTipoProcedimento.normaRiferimento" cssClass="str-proced-label-wrap" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.regolamentiRiferimentiInterni" cssClass="str-proced-label-wrap" [label]="{text: 'Regolamenti/procedure interni'}" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="normativaDiSettore" cssClass="str-proced-label-wrap" [label]="{text: 'Normativa di settore'}" [editorOptions]="{ disabled: !possoAgireForm }"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.idTitolo.titAndClass" cssClass="str-proced-label-wrap" [label]="{text: 'Classificazione'}" [editorOptions]="{ disabled: true }"></dxi-item>
+        <dxi-item dataField="idAziendaTipoProcedimento.durataMassimaSospensione" cssClass="str-proced-label-wrap" [label]="{text: 'Durata massima sospensione'}" [editorOptions]="{ disabled: true }"></dxi-item>    
+        <dxi-item [template]="'responsabile'"  [isRequired]="true" cssClass="str-proced-label-wrap lookup-wrap" [label]="{text: 'Responsabile dell\'adozione dell\'atto finale'}" ></dxi-item>
+          <div *dxTemplate="let data of 'responsabile'">
+            <dx-lookup [dataSource]="dataSourceResponsabile"
+              [showPopupTitle]="false"
+              cancelButtonText="Chiudi"
+              closeOnOutsideClick="true"
+              placeholder= "Seleziona..."
+              searchPlaceholder= "Cerca..."
+              [disabled]="!possoAgireForm"
+              displayExpr="nomeVisualizzato"
+              searchExpr="idUtente.idPersona.descrizione"
+              [value]="defaultResponsabile"
+              (onOpened)="reloadResponsabile($event)"
+              (onSelectionChanged)="setResponsabilePlusStruttura($event)"
+              [hint]="testoTooltipResponsabile">
+                <dx-validator>
+                  <dxi-validation-rule 
+                    type="required"
+                    message="Responsabile dell'adozione dell'atto finale è obbligatorio">
+                  </dxi-validation-rule>
+                </dx-validator>
+            </dx-lookup>
+          </div>
+          <dxi-item [template]="'titolare'" [isRequired]="true" cssClass="str-proced-label-wrap lookup-wrap" [label]="{text: 'Titolare potere sostitutivo'}" [editorOptions]="{isValid: true}"></dxi-item >
+          <div *dxTemplate="let data of 'titolare'">
+            <dx-lookup [dataSource]="dataSourceTitolare"
+              [showPopupTitle]="false"
+              cancelButtonText="Chiudi"
+              closeOnOutsideClick="true"
+              placeholder= "Seleziona..."
+              searchPlaceholder= "Cerca..."
+              [disabled]="!possoAgireForm"
+              displayExpr="nomeVisualizzato"
+              searchExpr="idUtente.idPersona.descrizione"
+              [value]="defaultTitolare"
+              (onOpened)="reloadTitolare()"
+              (onSelectionChanged)="setTitolarePlusStruttura($event)"
+              [hint]="testoTooltipTitolare">
+                <dx-validator>             
+                  <dxi-validation-rule 
+                    type="required"
+                    message="Titolare potere sostitutivo è obbligatorio">
+                  </dxi-validation-rule>
+                </dx-validator>
+            </dx-lookup>
+          </div>
+          <dxi-item dataField="ufficio" cssClass="str-proced-label-wrap" [label]="{text: 'Ufficio'}" [editorOptions]="{ disabled: !possoAgireForm }">
+          </dxi-item>
+          <dxi-item dataField="strumenti" cssClass="str-proced-label-wrap" [label]="{text: 'Strumenti di tutela amministrativa e giurisdizionale riconosciuti dalla Legge'}" [editorOptions]="{ disabled: !possoAgireForm }">
+          </dxi-item>
+          <dxi-item dataField="modalitaInfo" cssClass="str-proced-label-wrap" [label]="{text: 'Modalità informativa stato iter'}" [editorOptions]="{ disabled: !possoAgireForm }" >
+          </dxi-item>
+          <dxi-item dataField="descrizioneAtti" cssClass="str-proced-label-wrap" [label]="{text: 'Descrizione atti e documenti da allegare all\'istanza'}" editorType="dxTextArea" [editorOptions]="{ height:70, disabled: !possoAgireForm }">
+          </dxi-item>
+          <div class="dx-field">
+          <dxi-item dataField="dataInizio" cssClass="str-proced-label-wrap" [label]="{text: 'Data inizio validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, onClosed: validaForm, min: dataInizioProcAzienda, max: dataFineProcAzienda, displayFormat: 'dd/MM/yyyy', invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy'}">
+            <dxi-validation-rule type="range" [min]="dataInizioProcAzienda" [max]="dataFineProcAzienda" message="Data inizio non coerente con le date del tipo procedimento aziendale"></dxi-validation-rule>
+            <dxi-validation-rule type="custom" [reevaluate]="true" [validationCallback]="checkDataInizio" message="Inserire una data di inizio corretta minore della data di fine validità"></dxi-validation-rule>
+          </dxi-item>
+          <dxi-item dataField="dataFine" cssClass="str-proced-label-wrap" [label]="{text: 'Data fine validità'}" editorType="dxDateBox" [editorOptions]="{ disabled: !possoAgireForm, onFocusOut: validaForm, onClosed: validaForm, min: dataInizioProcAzienda, max: dataFineProcAzienda, displayFormat: 'dd/MM/yyyy', 
+            invalidDateMessage:'La data deve avere il seguente formato: dd/mm/yyyy'}">
+            <dxi-validation-rule type="range" [min]="dataInizioProcAzienda" [max]="dataFineProcAzienda" message="Data inizio non coerente con le date del tipo procedimento aziendale"></dxi-validation-rule>
+            <dxi-validation-rule type="custom" [reevaluate]="true" [validationCallback]="checkDataFine" message="Inserire una data di fine corretta maggiore della data di inizio validità"></dxi-validation-rule>
+          </dxi-item>
+          </div>
+          <dxi-item [template]="'bottoneUno'"></dxi-item>
+        <div *dxTemplate="let data of 'bottoneUno'"></div>
+      </dx-form>
+
+      <label *ngIf="formVisible" class="notice">(*) campi obbligatori</label>
+
+      <dx-validation-summary id="summary"></dx-validation-summary>
+
+
+
+    <dx-button *ngIf= "possoAgireForm" class="buttons-form margine-sinistro custom-sm-col" [visible]=formVisible (onClick)="bottoneSalvaProcedimento($event)" text="Salva"
+      hint="Salva i campi" [validationGroup]="'procedimentoValGroup'" [useSubmitBehavior]="true"></dx-button>
+
+    <dx-button *ngIf= "!possoAgireForm" class="buttons-form margine-sinistro custom-sm-col" [visible]=formVisible (onClick)="bottoneModificaProcedimento()" text="Modifica"
+      hint="Modifica i campi"></dx-button>
+
+
+      <dx-button class="buttons-form" [visible]=formVisible (onClick)="bottoneAnnulla($event)" text="Annulla" hint="Annulla le modifiche"></dx-button>
+      <span *ngIf="!formVisible">
+        <h2 class="no-procedimento">Nessun procedimento associato alla struttura</h2>
+      </span>
+    </div>
+    <div class="col"></div>
+  </div>
+
+</div>
+
+
+<!-- <dx-popup class="popup" [width]="600" [height]="670" [showTitle]="true" title="Associa a strutture" [dragEnabled]="false"
+  [closeOnOutsideClick]="false" [(visible)]="popupVisible">
+  <div *dxTemplate="let data of 'content'">
+    <popup-struttura-tipi-procedimento [readOnly]="false" [enableCheckRecursively]="false" [aziendaTipoProcedimentoObj]="aziendaTipiProcedimentoData"
+      (refreshAfterChange)="refreshTreeView($event)"
+      [lanciaRefreshAlPadre]="true">
+    </popup-struttura-tipi-procedimento>
+  </div>
+</dx-popup> -->

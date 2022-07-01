@@ -1,0 +1,129 @@
+/* Intestazione, Forse futuro header?   + + */
+.intestazione {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* Datagrid + + + + + + + + + + + + + + + + + */
+/* /deep/ #gridContainer .dx-datagrid-content > .dx-datagrid-table.dx-datagrid-table-fixed {
+  width: initial !important;
+} */
+
+/* Ricerca generale */
+.dx-texteditor-buttons-container .dx-clear-button-area .dx-icon.dx-icon-clear {
+  padding: 8px 0 !important;
+  width: initial;
+}
+
+/deep/ .dx-icon-clear {
+  padding-left: 0px !important;
+  margin-left: -10px !important;
+}
+
+/* Centro verticalmente i dati delle righe */
+.column {
+  vertical-align: middle !important;
+}
+
+/* Popup + + + + + + + + + + + + + + + + + */
+.item {
+  padding: 0 15px;
+}
+
+.popup-title {
+  font-size: 22px;
+  justify-content: center;
+}
+
+.popup-title .dx-field-item-label-text {
+  font-size: 18px;
+  /*  color: #696969; */
+}
+
+.popup-title label span {
+  width: initial !important;
+}
+
+.popup-title .dx-field-item-content.dx-field-item-content-location-right {
+  width: initial !important;
+  flex: initial !important;
+  flex-grow: initial !important;
+  flex-basis: initial !important;
+}
+
+.popup-nuovo-iter div.dx-popup-content {
+  height: 100% !important;
+}
+
+@media screen and (max-width: 1280px) {
+  #gridContainer {
+    padding: 0;
+  }
+
+  .dx-widget, .dx-box-item-content {
+    font-size: 12px !important;
+  }
+
+  .dx-datagrid .dx-row > td {
+    padding: 7px 3px;
+  }
+}
+
+.gridContainerDiv {
+  height: 700px;
+  //width: 50%;
+}
+.gridContainerDiv dx-data-grid{
+  height: 700px;
+  //width: 50%;
+}
+
+
+/deep/ .label-wrap > label {
+  width: 220px;
+  display: inline-block !important;
+}
+
+/deep/ .label-wrap .dx-field-item-content.dx-field-item-content-location-right {
+  width: initial !important;
+  display: inline-block;
+}
+
+/deep/ .label-wrap .dx-item-content .dx-box-item-content {
+  display: -webkit-inline-box;
+}
+
+/deep/ .label-wrap .dx-field-item-label-content {
+  max-width: 220px;
+  white-space: pre;
+  display: inline-block;   // Ho dovuto toglierla per allineare l'asterisco del required alla label
+}
+
+/deep/ .label-wrap .dx-field-item-label-text {
+  max-width: 220px;
+  white-space: pre;
+  display: inline-block;   // Ho dovuto toglierla per allineare l'asterisco del required alla label
+}
+
+// /deep/ .label-wrap-date > label {
+//   max-width: 110px;
+// }
+
+// /deep/ .label-wrap-date .dx-field-item-label-content {
+//   max-width: 110px;
+//   white-space: pre;
+//   display: inline-block;
+// }
+
+/deep/ .dx-layout-manager .dx-label-h-align.dx-flex-layout {
+  display: -webkit-box;
+}
+
+/deep/ .label-on-top {
+  -webkit-box-align: inherit !important;
+}
+
+/deep/ .read-only-field .dx-texteditor-input {
+  background-color: #f8f8f9 !important;
+  color: #929293 !important;
+}

@@ -1,0 +1,201 @@
+.header-font{
+    font-weight: bold;
+}
+.header-font h3{
+    text-align: center;
+}
+.footerDiv{
+    // position: fixed;
+    // bottom: 0;
+    text-align: right;
+    margin: 14px 0 16px 0;
+    padding: 0 96px;
+}
+.fixHeight{
+    height: 340px;
+}
+
+.read-only-field .dx-texteditor-input {
+    background-color: #fcfcfd;
+    color: #333;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    caret-color: transparent;
+    opacity: 0.8;
+}
+.read-only-field .dx-texteditor {
+    border: 0px;
+}
+.iter-procedimento .dx-state-disabled.dx-widget, .iter-procedimento .dx-state-disabled.dx-checkbox .dx-checkbox-icon{
+    opacity: 0.8 !important;
+    color: black !important;
+}
+
+/*  .footerDiv > dx-button{
+    display: inline-block;
+    padding: 2px 8px;
+    margin-left: 8px;
+ } */
+ .contentWrapper > div{
+    //  height: auto !important;
+    padding: 32px 0;
+ }
+ .contentLeft{
+    padding: 32px 32px 0 0;
+ }
+ .contentRight{
+    padding: 32px 0 0 32px;
+ }
+
+ .headerDiv{
+     text-align: center;
+     margin: 0 0 32px 0;
+ }
+ .boxes{
+     padding: 32px;
+ }
+label{
+    font-weight: 500;
+}
+.wrapperPulsantiPopup{
+    margin-top: 16px;
+    text-align: center;
+}
+
+.label-bold {
+    font-weight: bold;
+}
+
+.wrapperPulsantiPopupTop {
+    margin-bottom: 16px;
+    text-align: right;
+}
+
+.gridContainerDiv {
+    max-height: 400px !important;
+}
+
+.gridContainerDiv dx-data-grid{
+    height: 400px !important;
+}
+
+.margine-top {
+    margin-top: 35px;
+}
+/* button{
+    background-color: #337ab7;
+    border-color: #2d6da3;
+    color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px transparent;
+    border-width: 1px;
+    border-style: solid;
+    padding: 7px 18px 8px;
+} */
+
+.passaggioFase > div{
+    height: initial !important;
+}
+
+.passaggioFase div.dx-popup-content{
+    height: 100% !important;
+}
+
+.sospensionePopup > div {
+    height: initial !important;
+}
+
+.sospensionePopup div.dx-popup-content{
+    height: 100% !important;
+}
+/* Modifica la grandezza standard della scrollbar  */
+#gridContainer .dx-scrollable-scroll {
+    width: 15px;
+}
+// /deep/ dx-form .dx-form-group{
+//   box-shadow: 0 0 1px rgba(0,0,0,.15); 
+//   padding: 15px; 
+//   background-color: #fff; 
+//   border-radius: 2px;
+//   margin-bottom: 8px;
+// }
+
+dx-form .dx-form-group-with-caption {
+  box-shadow: 0 0 1px rgba(0,0,0,.15);
+  padding: 15px;
+  background-color: #f1f1f3;
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
+
+.icon-margin {
+    margin-left: 10%;
+    margin-top: -5px;
+}
+
+.button-css {
+    width: 100px;
+}
+
+.btn-space {
+    margin: 35px;
+}
+
+.box-margin {
+    margin-top: -8px;
+    margin-bottom: 8px;
+}
+.meVedi .dx-form-group-with-caption{
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding: 0 !important;
+}
+.meVedi .dx-form-group-caption{
+    font-size: 18px;
+}
+.button-azioni{
+    padding: 5px 8px;
+}
+
+/*REGOLE PER I CAMPI DA EVIDENZIARE IN CASO DI PUBBLICAZIONE ALL'ALBO*/
+dx-form .hightlightClass .dx-form-group-caption{
+    color: black;
+    font-weight: bold;
+    font-style: italic;
+}
+
+dx-form .hightlightClass label.dx-field-item-label.dx-field-item-label-location-left {
+    color: black;
+    font-weight: bold;
+    font-style: italic;
+}
+
+/*
+dx-form .hightlightClass .dx-field-item-content.dx-field-item-content-location-right input {
+    color: black;
+    background-color: #fff2ac;
+}
+
+dx-form .hightlightClass .dx-field-item-content.dx-field-item-content-location-right .dx-lookup-field-wrapper {
+    color: black;
+    background-color: #fff2ac;
+}
+
+dx-form .hightlightClass .btn.button-azioni#note {
+    color: black;
+    background-color: #fff2ac;
+    background:  #fff2ac;
+}
+*/
+dx-form .hightlightClass #infoPubblicazioneAlbo {
+    // color: #337ab7;
+    text-align: right;
+    color: black;
+    font-weight: bold;
+    font-style: italic;
+}
+
+i.hightlightClass {
+    color: black;
+    font-weight: bold;
+}

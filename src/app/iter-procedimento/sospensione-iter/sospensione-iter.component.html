@@ -1,0 +1,46 @@
+<dx-form
+  [(formData)]="sospensioneParams"
+  validationGroup="sospensioneParams">
+  <dxi-item itemType="group">
+    <!-- ColCount e colSpan sono chiaramente esagerati. Questo perché colCount=3 e poi i 3 item con colSpa=1 non funziona.  -->
+    <dxi-item itemType="group" [colCount]="3001" [label]="{text: 'Con Documento'}">
+      <dxi-item itemType="empty" [colSpan]="1"></dxi-item>
+      <dxi-item dataField="codiceRegistroDocumento" [colSpan]="1000" [label]="{text: 'Reg.', showColon: false}" [editorOptions]="{ disabled: false }">
+        <dxi-validation-rule type="required" message="I dati del registro del documento di sospensione sono obbligatori"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="numeroDocumento" [colSpan]="1000" [label]="{text: 'N.', showColon: false}" [editorOptions]="{disabled: false }">
+        <dxi-validation-rule type="required" message="I dati del numero del documento di sospensione sono obbligatori"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="annoDocumento" editorType="dxNumberBox" [colSpan]="1000" [label]="{text: 'Anno', showColon: false}" [editorOptions]="{disabled: false}">
+        <dxi-validation-rule type="required" message="I dati dell'anno del documento di sospensione sono obbligatori"></dxi-validation-rule>
+      </dxi-item> 
+    </dxi-item>
+    <dxi-item dataField="sospesoDal" editorType="dxDateBox" [label]="{text: 'Data di Inizio Sospensione'}" [editorOptions]="{ disabled: disabilitaSospesoDal(), displayFormat: 'dd/MM/yyyy' }" style="width: 100%">
+      <div  *ngIf="!isSospeso; then thenBlock1"></div>
+      <ng-template #thenBlock1>
+        <dxi-validation-rule type="required" message="La data di inizio sospensione è obbligatoria"></dxi-validation-rule>
+      </ng-template>
+    </dxi-item>
+    <dxi-item  dataField="sospesoAl" editorType="dxDateBox" [label]="{text: 'Data di fine Sospensione'}" [editorOptions]="{ disabled: !disabilitaSospesoDal(), displayFormat: 'dd/MM/yyyy' }" style="width: 100%">
+      <div  *ngIf="isSospeso; then thenBlock2"></div>
+      <ng-template #thenBlock2>
+        <dxi-validation-rule type="required" message="La data di fine sospensione è obbligatoria"></dxi-validation-rule>
+      </ng-template>
+    </dxi-item>
+    <dxi-item dataField="note" editorType="dxTextArea" [label]="{text: 'Note'}" [editorOptions]="{ disabled: false }"></dxi-item>
+  </dxi-item>
+</dx-form>
+
+<br>
+
+<div class="buttons">
+    <dx-button
+    text="Annulla"
+    (onClick)="handleEvent('onClickAnnulla',$event)">
+  </dx-button>
+  <dx-button
+    [text]="nomeBottone()"
+    [useSubmitBehavior]="true" validationGroup="sospensioneParams"
+    (onClick)="handleEvent('onClickGestisciSospensione',$event)">
+  </dx-button>
+</div>

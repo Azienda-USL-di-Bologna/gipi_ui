@@ -1,0 +1,39 @@
+<div class="container-fluid ">
+  <div class="whitePanel mt-5">
+    <div class="col header-font">
+        <h3>Elenco Iter Aziendali</h3>
+    </div>
+    <dx-data-grid
+      allowColumnResizing="true"
+      hoverStateEnabled="true" 
+      columnResizingMode="nextColumn" 
+      wordWrapEnabled="true"
+      [dataSource] = "dataSource"
+      noDataText="Non ci sono dati da visualizzare">
+      
+    <dxo-filter-row [visible]="true" ></dxo-filter-row>
+      <dxo-paging [pageSize]="10"></dxo-paging>
+      <dxo-search-panel 
+        [visible]="true" 
+        [width]="240" 
+        placeholder="Cerca.." >
+      </dxo-search-panel>
+        <dxi-column dataField="id" [width]="100" [visible]="false"></dxi-column>
+        <dxi-column dataField="numero" [width]="100"></dxi-column>
+        <dxi-column dataField="anno" [width]="100" [dataType]="'number'"></dxi-column>
+        <dxi-column dataField="idProcedimento.idAziendaTipoProcedimento.idTipoProcedimento.nome" caption="Tipo procedimento"></dxi-column>
+        <dxi-column dataField="oggetto" [minWidth]="200"></dxi-column>
+        <dxi-column dataField="idResponsabileProcedimento.idPersona.descrizione" caption="Responsabile procedimento" [minWidth]="200"></dxi-column>
+        <dxi-column dataField="idStato.descrizione"[width]="100" caption="Stato"></dxi-column>
+        <dxi-column dataField="annullato" [width]="85" [allowFiltering]="false" [dataType]="'boolean'"></dxi-column>
+        <dxi-column dataField="dataAvvio" caption="Aperto il" [width]="100" format="dd/MM/yyyy" [allowSearch]=false></dxi-column>
+        <dxi-column dataField="dataChiusura" caption="Chiuso il" [width]="100" format="dd/MM/yyyy"  [allowSearch]=false></dxi-column>
+
+        <dxi-column caption="Apri" cellTemplate="buttonCellTemplate" [width]="60"></dxi-column>
+        <div *dxTemplate="let d of 'buttonCellTemplate'" class="app-azioni">
+          <dx-button hint="Vedi dettaglio iter" icon="chevronnext" (onClick)="goToDetail(d)"></dx-button>
+        </div>
+        <!-- <dxi-column caption="Apri" [width]="50"></dxi-column> -->
+  </dx-data-grid>
+  </div>  
+</div>

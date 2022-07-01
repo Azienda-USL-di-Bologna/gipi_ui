@@ -1,0 +1,11 @@
+<span class="first-letf-title">Sequenza delle fasi {{statoAttuale}}</span>
+<hr />
+<dx-data-grid #fasiContent
+        [dataSource]="datasource"
+    >
+    <dxo-sorting ascendingText="Ordine crescente" descendingText="Orine discendente" clearText="Togli ordinamento"></dxo-sorting>
+    <dxi-column class="fasiContentCol" dataField="idFase.nome" caption="Fase"></dxi-column>
+    <dxi-column class="fasiContentCol" dataField="dataInizioFase" format="dd/MM/yyyy" caption="Data Inizio"></dxi-column>
+    <dxi-column class="fasiContentCol" dataField="dataFineFase" format="dd/MM/yyyy" caption="Data Fine"></dxi-column>
+</dx-data-grid>
+<!-- <dx-button type="default" (click)="prova()"></dx-button> -->

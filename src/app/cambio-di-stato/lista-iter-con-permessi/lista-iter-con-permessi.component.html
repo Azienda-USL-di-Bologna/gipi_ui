@@ -1,0 +1,37 @@
+<div class="gridContainerDiv">
+      <dx-data-grid
+      allowColumnResizing="true"
+      hoverStateEnabled="true" 
+      columnResizingMode="nextColumn" 
+      wordWrapEnabled="true"
+      [dataSource]="dataSource"
+      (onSelectionChanged)="selectedRowChanged($event)"
+      noDataText="Non ci sono dati da visualizzare"
+      [allowColumnResizing]="true"
+      [allowColumnReordering]="true"
+      
+      keyExpr="ID">
+
+      <dxo-selection mode="single"></dxo-selection>
+      <dxo-paging [pageSize]="10"></dxo-paging>
+      <dxo-filter-row 
+        [visible]="true" 
+        showAllText=' '
+        [operationDescriptions] = "{'contains':'contiene'}"
+      ></dxo-filter-row>
+      <!-- <dxo-search-panel 
+        [visible]="true" 
+        [width]="240" 
+        placeholder="Cerca.." >
+      </dxo-search-panel>  -->
+
+        <!-- <dxi-column dataField="procedimento" [width]="100"></dxi-column> -->
+        <dxi-column dataField="numero" [width]="100" [filterOperations]="['contains']"></dxi-column>
+        <dxi-column dataField="idStato.descrizione" caption="Stato" [width]="100" [filterOperations]="['contains']"></dxi-column>
+        <!-- <dxi-column dataField="classificazione"[width]="150"></dxi-column> -->
+        <dxi-column dataField="oggetto" [minWidth]="200" [filterOperations]="['contains']"></dxi-column>
+        <dxi-column dataField="dataAvvio" caption="Aperto il" [width]="100" [format]="'dd/MM/yyyy'" [allowFiltering]="false"></dxi-column>
+        <dxi-column dataField="idResponsabileProcedimento.idPersona.descrizione" caption="Responsabile procedimento" [minWidth]="200" [filterOperations]="['contains']"></dxi-column>
+  </dx-data-grid>
+</div>
+

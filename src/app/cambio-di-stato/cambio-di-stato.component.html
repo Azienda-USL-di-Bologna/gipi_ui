@@ -1,0 +1,47 @@
+<div class="container whitePanel clCambioDiStato">
+    <h2 *ngIf="sospensioneParams.numeroDocumento" class="text-center mb-3">{{sospensioneParams.codiceRegistroDocumento}} {{sospensioneParams.numeroDocumento}}/{{sospensioneParams.annoDocumento}} del {{titleDataDocumento}}</h2>
+    <h2 *ngIf="!sospensioneParams.numeroDocumento" class="text-center mb-3">Il documento è ancora una proposta</h2>
+    <div class="mb-3">
+        <app-lista-iter-con-permessi (selectedRow)="selectedRowChanged($event)" [userInfo]="userInfo" [sospensioneParams]="sospensioneParams"></app-lista-iter-con-permessi>
+    </div>
+
+    <hr class="m-4"/>
+
+    <h3 class="mb-3 text-center">{{selectedIter}}</h3>
+
+    <!-- Lascio commentata questa parte perchè quando verra riadottato il passaggio di fase servirà -->
+    <!-- <div *ngIf="sospensioneParams.idIter" class="offset-4 col-4 mb-3">   
+        <dx-lookup
+            [items]="lookupItems"
+            placeholder="Seleziona un operazione"
+            [showPopupTitle]="false"
+            [searchEnabled]="false"
+            [showCancelButton]="false"
+            (onValueChanged)="lookupValueChanged($event)"
+            [value]="lookupValue">
+        </dx-lookup>
+    </div> -->
+
+    <div class="mb-3 text-center">
+        <div class="d-inline-block col col-lg-8">
+            <!-- Lascio commentata questa parte perchè quando verra riadottato il passaggio di fase servirà -->
+            <!-- <app-cambio-di-stato-box *ngIf="!sospensioneParams.isFaseDiChiusura 
+                && sospensioneParams.idStatoCorrente!==3 
+                && lookupValue === 'Cambio di stato'" 
+                [sospensioneParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="false">
+            </app-cambio-di-stato-box>
+            <app-passaggio-di-fase *ngIf="!sospensioneParams.isFaseDiChiusura 
+                && sospensioneParams.idStatoCorrente===1 
+                && lookupValue === 'Passaggio di fase'" 
+                [idIter]="sospensioneParams.idIter" [isOpenedAsPopup]="false">
+            </app-passaggio-di-fase> -->
+            <app-cambio-di-stato-box  *ngIf="sospensioneParams.idIter && sospensioneParams.azione === 'cambio_di_stato'"
+                [sospensioneParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="false">
+            </app-cambio-di-stato-box>
+
+            <app-documento-iter-associazione-semplice *ngIf="sospensioneParams.idIter && sospensioneParams.azione === 'associazione'"
+                [associaParams]="sospensioneParams" [userInfo]="userInfo" [isOpenedAsPopup]="false">
+            </app-documento-iter-associazione-semplice>
+        </div>
+    </div>
+</div>

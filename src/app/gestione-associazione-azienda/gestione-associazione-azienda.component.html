@@ -1,0 +1,76 @@
+<!--PER GESTIRE L'IMPAGINAZIONE DEGLI ELEMENTI, UTILIZZIAMO 2 RISOLUZIONI DI RIFERIMENTO: sm,lg. LE RISOLUZIONI VENGONO CALCOLATE ALL'INTERNO DEL .TS CORRISPONDENTE A QUESTA PAGINA HTML LA PROPRIETA' SCREEN SERVE PER nCARE IL CAMBIO DI LAYOUT AL CAMBIO
+DELLA RISOLUZIONE
+-->
+<app-buttons-bar (onReloadButton)="onReload()" (onSaveButton)="onSave()" (onBackButton)="onBack()" (onRestoreButton)="onRestore()"
+    [backButton]="backBtn" [saveButton]="saveBtn" [reloadButton]="reloadBtn" [restoreButton]="restoreBtn">
+</app-buttons-bar>
+
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col" style="text-align: center">
+        <h3>
+            <span class="header-font">Tipo procedimento:</span>
+            <i>{{[(testoHeaderTipoProcedimento)]}}</i>
+        </h3>
+        <h3>
+            <span class="header-font">Azienda:</span>
+            <i>{{[(testoHeaderAzienda)]}}</i>
+        </h3>
+        <h3 *ngIf="nuovaAssociazione">
+            <span class="header-italic-font">Nuova Associazione:</span>
+        </h3>
+        <div class="status-page {{statusPage}}"></div>
+    </div>
+    <div class="col-2"></div>
+</div>
+
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col">
+        <div class="center-div">
+            <dx-form id="form" #myform [(formData)]="aziendaTipoProcedimento" [readOnly]="readOnly" [showColonAfterLabel]="showColon"
+                [labelLocation]="labelLocation" [minColWidth]="minColWidth" [colCount]="colCount" [width]="width" (onFieldDataChanged)="formFieldDataChanged($event)">
+                <dxi-item dataField="descrizioneTipoProcedimento" editorType="dxTextArea" [label]="{text: 'Descrizione'}" [editorOptions]="{ height:70,disabled: false }"></dxi-item>
+                <dxi-item dataField="modoApertura" [label]="{text: 'Modo apertura'}" [editorOptions]="{ disabled: true }"></dxi-item>
+                <dxi-item dataField="normaRiferimento" [label]="{text: 'Norma di riferimento'}" [editorOptions]="{ disabled: true }"></dxi-item>
+                <dxi-item dataField="dataInizio" [label]="{text: 'Valido dal'}" editorType="dxDateBox" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+                <dxi-item dataField="dataFine" [label]="{text: 'Al'}" editorType="dxDateBox" [editorOptions]="{ disabled: false, displayFormat: 'dd/MM/yyyy' }"></dxi-item>
+                <dxi-item dataField="durataMassimaSospensione" [label]="{text: 'Durata massima sospensione (gg)'}" [editorOptions]="{ disabled: false }"></dxi-item>
+                <dxi-item dataField="obbligoEsitoConclusivo" editorType="dxCheckBox" [label]="{text: 'Obbligo Esito Conclusivo'}" [editorOptions]="{ disabled: false }"></dxi-item>
+                <dxi-item dataField="idTitolo" [label]="{text: 'Classificazione'}" editorType="dxLookup" [editorOptions]="{
+                dataSource: dataSourceClassificazione,
+                displayExpr: customDisplayExprClassificazione,
+                closeOnOutsideClick: true,
+                showPopupTitle: false,
+                showCancelButton: false,
+                placeholder: 'Seleziona una voce...',
+                searchPlaceholder: 'Cerca...',
+                valueExpr: 'this'
+                }"></dxi-item> 
+            </dx-form>
+        </div>
+    </div>
+    <div class="col-3"></div>
+</div>
+
+<div class="row" id="button-row-1">
+    <div class="col-3"></div>
+    <div class="col button-div">
+        <dx-button class="padding-button" (onClick)="buttonVediAssociazioni(aziendaTipoProcedimento)" text="Vedi Associazioni" hint="Associazioni"></dx-button>
+    </div>
+    <div class="col button-div">
+        <dx-button class="padding-button" (onClick)="buttonAnnullaClicked($event)" text="{{testoBottoneAnnulla}}" hint="Annulla le modifiche"></dx-button>
+    </div>
+    <div class="col-3"></div>
+</div>
+
+<div class="row" id="button-row-2">
+    <div class="col-3"></div>
+    <div class="col button-div">
+
+    </div>
+    <div class="col button-div">
+        <dx-button class="padding-button" (onClick)="buttonConfermaClicked($event)" text="{{testoBottoneConferma}}" hint="Conferma"></dx-button>
+    </div>
+    <div class="col-3"></div>
+</div>

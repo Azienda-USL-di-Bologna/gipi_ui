@@ -1,0 +1,89 @@
+<form action="your-action" (submit)="onFormSubmit($event)">
+    <div class="container-fluid">
+        <!-- Prima riga: fasi -->
+        <div class="row">
+            <div class="col fase">
+                <h4>Fase attuale</h4>
+                <p>{{passaggioFaseParams ? passaggioFaseParams.currentFaseName : ""}}</p>
+            </div>
+
+            <div class="col">
+                <img class="freccia" src="assets/images/right_arrow.png">
+            </div>
+
+            <div class="col fase">
+                <h4>Fase successiva</h4>
+                <p>{{passaggioFaseParams ? passaggioFaseParams.nextFaseName : ""}}</p>
+            </div>
+        </div>
+
+        <br>
+
+        <!-- Seconda riga: dati passaggio fase -->
+        <!-- Seconda riga: dati passaggio fase -->
+        <div class="row">
+
+            <!-- I DATI    -->
+            <div class="col">
+
+                <dx-form itemType="group" [formData]="iterParams" [colCount]="12" [showValidationSummary]="true" validationGroup="passaggioFase">
+                    <dxi-item [colSpan]="12" dataField="dataPassaggio" editorType="dxDateBox" [label]="{text: 'Data Passaggio'}" [editorOptions]="{ disabled: false, value: dataIniziale, displayFormat: 'dd/MM/yyyy' }">
+                        <dxi-validation-rule type="required" message="La data di passaggio è obbligatoria">
+                        </dxi-validation-rule>
+                    </dxi-item>
+                    <dxi-item [colSpan]="4" dataField="codiceRegistroDocumento" [editorOptions]="{ disabled: !isOpenedAsPopup }">
+                        <dxo-label text="Reg."></dxo-label>
+                        <dxi-validation-rule type="required" message="Il registro è obbligatorio">
+                        </dxi-validation-rule>
+                    </dxi-item>
+                    <dxi-item [colSpan]="5" dataField="numeroDocumento" [editorOptions]="{disabled: !isOpenedAsPopup }">
+                        <dxo-label text="Num"></dxo-label>
+                        <dxi-validation-rule type="required" message="Il numero registro è obbligatorio">
+                        </dxi-validation-rule>
+                    </dxi-item>
+                    <dxi-item [colSpan]="3" dataField="annoDocumento" [editorOptions]="{disabled: !isOpenedAsPopup}">
+                        <dxo-label text="Anno"></dxo-label>
+                        <dxi-validation-rule type="required" message="L'anno registro è obbligatorio">
+                        </dxi-validation-rule>
+                    </dxi-item>
+                    <dxi-item [colSpan]="12" dataField="notePassaggio" [label]="{text: 'Note Passaggio'}" editorType="dxTextArea" [editorOptions]="{ height:70,disabled: false}"></dxi-item>
+                    <dxi-item [colSpan]="12" dataField="esito" [label]="{text: 'Esito'}" [editorOptions]="{ height:70,disabled: false }" [visible]="passaggioFaseParams.isNextFaseDiChiusura"></dxi-item>
+                    <dxi-item [colSpan]="12" dataField="motivazioneEsito" [label]="{text: 'Motivo Esito'}" [editorOptions]="{ height:70,disabled: false}" [visible]="passaggioFaseParams.isNextFaseDiChiusura"></dxi-item>
+                </dx-form>
+
+            </div>
+        </div>
+
+        <br>
+
+        <!-- Terza riga: 'Salva o annulla' -->
+        <div class="text-right">
+            <div class="button-div d-inline-block">
+                <dx-button class="bottoni" text="Annulla" type="normal" (onClick)="handleAnnulla($event)"></dx-button>
+            </div>
+            <div class="button-div d-inline-block">
+                <dx-button class="bottoni" text="Procedi" type="default" (onClick)="showConfirm()" [useSubmitBehavior]="true" validationGroup="passaggioFase"></dx-button>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+<dx-popup
+class="popup"
+[width]="700"
+[height]="200"
+[showTitle]="true"
+[title]="'Avviso'"
+[dragEnabled]="false"
+[closeOnOutsideClick]="false"
+[(visible)]="showPopupAnnullamento">
+  <div *dxTemplate="let data of 'content'">
+      <h3>Annullando le modifiche apportate non verranno salvate. Procedere comunque?</h3> 
+      <div class="text-right mt-4">
+          <dx-button class="d-inline-block" text="NO" (click)="handleAnnulla($event)"></dx-button>
+          <dx-button class="d-inline-block" text="SI" (click)="handleClose($event)"></dx-button>
+      </div>
+  </div>
+</dx-popup>

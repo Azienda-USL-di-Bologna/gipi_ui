@@ -1,0 +1,106 @@
+<div>
+    <app-buttons-bar (onBackButton)="onBack()" [backButton]="backBtn">
+    </app-buttons-bar>
+    <h4 style="text-align: center; margin-bottom: 30px;">Procedimento: <b>{{procedimento.nome}}</b></h4>
+    <div class="row">
+        <div class="col">
+
+
+
+            <div style="margin-bottom: 8px; overflow: auto;">
+                <div class="dx-field-label">Descrizione</div>
+                <!-- descrizione -->
+                <div class="dx-field-value">
+                    <dx-text-area [height]="90" [(value)]="procedimento.descrizioneDefault" [readOnly]="true" focusStateEnabled="false">
+                    </dx-text-area>
+                </div>
+                <!-- end descrizione -->
+            </div>
+
+            <div style="margin-bottom: 8px; overflow: auto;">
+                <div class="dx-field-label">Modo apertura</div>
+                <!-- modo apertura -->
+                <div class="dx-field-value">
+                    <dx-text-box [value]="procedimento.modoApertura" [readOnly]="true" focusStateEnabled="false">
+                    </dx-text-box>
+                </div>
+                <!-- end mod apertura -->
+            </div>
+
+            <div style="margin-bottom: 8px; overflow: auto;">
+                <div class="dx-field-label">Norma di riferimento</div>
+                <!-- norma di rifermineto -->
+                <div class="dx-field-value">
+                    <dx-text-area [height]="90" [(value)]="procedimento.normaRiferimento" [readOnly]="true" focusStateEnabled="false">
+                    </dx-text-area>
+                </div>
+                <!-- end norma di rifermineto -->
+            </div>
+
+            <div style="margin-bottom: 8px; overflow: auto;">
+                <div class="dx-field-label">Valido dal</div>
+                <!-- valido dal -->
+                <div class="dx-field-value">
+                    <dx-date-box type="date" [displayFormat]="'dd/MM/yyyy'" [readOnly]="true" [value]="procedimento.dataInizioValidita">
+                    </dx-date-box>
+                </div>
+                <!-- end valido dal -->
+            </div>
+
+            <div style="margin-bottom: 8px; overflow: auto;">
+                <div class="dx-field-label">Valido al</div>
+                <!-- valido al -->
+                <div class="dx-field-value">
+                    <dx-date-box type="date" [displayFormat]="'dd/MM/yyyy'" [readOnly]="true" [value]="procedimento.dataFineValidita">
+                    </dx-date-box>
+                </div>
+                <!-- end valido al -->
+            </div>
+
+            <div style="margin-bottom: 8px; overflow: auto;">
+                <div class="dx-field-label">Durata massima sospensione (gg)</div>
+                <!-- durata max sospensione -->
+                <div class="dx-field-value">
+                    <dx-text-box [value]="procedimento.durataMassimaSospensione" [readOnly]="true" focusStateEnabled="false">
+                    </dx-text-box>
+                </div>
+                <!-- end durata max sospensione -->
+            </div>
+        </div>
+        <div class="col">
+
+
+
+
+            <h4 style="text-align: center; margin-bottom: 30px;">Aziende Associate</h4>
+            <div style="margin-bottom: 8px;" *ngFor="let azienda of aziende">
+                <div class="row">
+                    <div class="col">
+                        <dx-check-box [value]="procedimento.aziendeAssociate[azienda.id] ? true : false" [readOnly]="true" #checkAssociata></dx-check-box>
+                        <span>{{azienda.descrizione}}</span>
+                    </div>
+
+                    <div class="col" align="center">  <!-- messo center al posto di right per #20446 -->
+                        <div *ngIf="loggedUser.isCI()">
+                        <!-- commentato per RM #20446 e sostituito con dx-button sotto
+                            <dx-button *ngIf="checkAssociata.value" [text]="'Disassocia'" (onClick)="buttonClicked(azienda, 'disassocia')" [type]="confirm"></dx-button>
+                            <dx-button *ngIf="!checkAssociata.value" [text]="'Associa'" (onClick)="buttonClicked(azienda, 'associa')" [type]="confirm"></dx-button> 
+                        -->
+                            <dx-button [text]="!checkAssociata.value ? 'Associa' : 'Associata'" (onClick)="buttonClicked(azienda, 'associa')" [type]="'confirm'" [disabled]='checkAssociata.value'></dx-button>
+                        </div>
+                    </div>
+                <!-- commentato per RM #20446
+                    <div class="col">
+                        <div *ngIf="loggedUser.isCA() && idAziendaUtente == azienda.id">
+                            <dx-button *ngIf="checkAssociata.value" [text]="'Gestisci associazione'" (onClick)="buttonClicked(azienda, 'gestisciAssociazione')"
+                                [type]="confirm"></dx-button>
+                        </div>
+                    </div> 
+                -->
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

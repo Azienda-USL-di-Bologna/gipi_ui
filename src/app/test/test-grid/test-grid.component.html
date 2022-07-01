@@ -1,0 +1,34 @@
+<dx-data-grid
+        allowColumnResizing="true"
+        hoverStateEnabled="true"
+        columnResizingMode="nextColumn"
+        wordWrapEnabled="true"
+        [dataSource] = "dataSource"
+        (onRowUpdating)="handleEvent('RowUpdating',$event)"
+        noDataText="Non ci sono dati da visualizzare">
+  <dxo-editing
+          mode="row"
+          [allowUpdating]="true"
+          [allowDeleting]="true"
+          [allowAdding]="true">
+  </dxo-editing>
+
+  <dxo-filter-row [visible]="true" ></dxo-filter-row>
+  <dxo-paging [pageSize]="10"></dxo-paging>
+  <dxo-search-panel
+          [visible]="true"
+          [width]="240"
+          placeholder="Cerca.." >
+  </dxo-search-panel>
+
+  <dxi-column dataField="numero" [width]="100"></dxi-column>
+  <dxi-column dataField="oggetto" [minWidth]="200"></dxi-column>
+  <dxi-column dataField="idResponsabileProcedimento.idPersona.descrizione" caption="Responsabile procedimento" [minWidth]="200"></dxi-column>
+  <dxi-column dataField="stato"[width]="100"></dxi-column>
+  <dxi-column dataField="dataAvvio" caption="Aperto il" [width]="100"></dxi-column>
+  <dxi-column dataField="dataChiusura" caption="Chiuso il" [width]="100"></dxi-column>
+
+  <dxi-column caption="Apri" cellTemplate="buttonCellTemplate" [width]="60"></dxi-column>
+
+  <!-- <dxi-column caption="Apri" [width]="50"></dxi-column> -->
+</dx-data-grid>
